@@ -5,8 +5,9 @@
 
 	<groupId>com.shinwootns.swt</groupId>
 	<artifactId>SwtManager</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<version>0.0.1</version>
+	<packaging>jar</packaging>	<!-- Tomcat: war -->
+	
 
 	<name>SwtManager</name>
 	<description>SwtManager</description>
