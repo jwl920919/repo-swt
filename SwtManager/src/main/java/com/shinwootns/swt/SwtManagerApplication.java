@@ -14,7 +14,6 @@ public class SwtManagerApplication {
 		// SpringApplication
 		SpringApplication app = new SpringApplication(SwtManagerApplication.class);
 		
-		// run
 		app.run(args);
 	}
 }
