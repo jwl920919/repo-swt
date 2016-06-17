@@ -1,4 +1,4 @@
-package com.shinwootns.swt;
+package com.shinwootns.swt.scheduled;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -11,7 +11,7 @@ public class ScheduledTasks {
 	
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-//	// fixedRate
+	// fixedRate
 //    @Scheduled(fixedRate = 5000)
 //    public void ScheduledFixedRate() {
 //    	
