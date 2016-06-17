@@ -1,0 +1,17 @@
+﻿{	
+	"Title":										"스마트 IPM",
+	"Login":										"로그인",
+	"ID":											"아이디",
+	"Password":										"비밀번호",
+	"Signintostartyoursession":						"로그인을 해주세요",
+	"Iforgotmypassword":							"비밀번호 변경",
+	"Registermembership":							"사용자 등록",
+	"PleaseenteryourID":							"아이디를 입력해주세요.",
+	"Pleaseenterapassword":							"비밀번호를 입력해주세요.",
+	"ko-KR":										"한국어",
+	"en-US":										"영어",
+	"ch-CN":										"중국어",
+	"warning":										"경고",
+	"IDdonotmatch":									"일치하는 아이디가 없습니다.",
+	"Passwordsdonotmatch":							"비밀번호가 일치하지 않습니다."
+}
