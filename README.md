@@ -2,7 +2,7 @@
 
 ### swt-common 연동 (Maven)
 
-연동 할 프로젝트의 ***pom.xml***에 아래 코드 추가
+***pom.xml***에 코드 추가
 
 ```xml
 	<repositories>
