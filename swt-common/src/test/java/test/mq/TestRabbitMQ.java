@@ -19,40 +19,45 @@ public class TestRabbitMQ {
 	
 	private static SmartThreadPool pool = new SmartThreadPool(logger);
 	
-	@Test
-	public void testRabbitMQ() throws InterruptedException {
+	public static void main() throws InterruptedException {
 		
-		BasicConfigurator.configure();
-		
-		Scanner sc = new Scanner(System.in);
-		
-		while(true)
+		try
 		{
-			System.out.println("\n[Command List] : single, workqueue, publish, routing, topics, stop, exit\n");
-			System.out.print(">>");
+			BasicConfigurator.configure();
+			
+			Scanner sc = new Scanner(System.in);
+			
+			while(true)
+			{
+				System.out.println("\n[Command List] : single, workqueue, publish, routing, topics, stop, exit\n");
+				System.out.print(">>");
+		
+				String command = sc.nextLine().toLowerCase();
 	
-			String command = sc.nextLine().toLowerCase();
-
-			if (command.toLowerCase().equals("single")
-					|| command.toLowerCase().equals("workqueue")
-					|| command.toLowerCase().equals("publish")
-					|| command.toLowerCase().equals("routing")
-					|| command.toLowerCase().equals("topics")
-					)
-			{
-				StartThread(command);
-			}
-			else if (command.toLowerCase().equals("stop"))
-			{
-				StopThread();
-			}
-			else if (command.toLowerCase().equals("exit"))
-			{
-				StopThread();
-				break;
+				if (command.toLowerCase().equals("single")
+						|| command.toLowerCase().equals("workqueue")
+						|| command.toLowerCase().equals("publish")
+						|| command.toLowerCase().equals("routing")
+						|| command.toLowerCase().equals("topics")
+						)
+				{
+					StartThread(command);
+				}
+				else if (command.toLowerCase().equals("stop"))
+				{
+					StopThread();
+				}
+				else if (command.toLowerCase().equals("exit"))
+				{
+					StopThread();
+					break;
+				}
 			}
 		}
-		
+		catch(Exception ex) {
+			ex.printStackTrace();
+		}
+			
 		System.out.println("Terminated.");
 	}
 	

@@ -16,8 +16,7 @@ public class TestRedis {
 
 	private static final Logger logger = Logger.getLogger(TestRedis.class);
 	
-	@Test
-	public void testRedis() {
+	public static void main() {
 
 		// Basic Configurator
 		BasicConfigurator.configure();

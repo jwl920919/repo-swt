@@ -13,8 +13,7 @@ public class TestThreadPool {
 
 	private static final Logger logger = Logger.getLogger(TestThreadPool.class);
 	
-	@Test
-	public void testThreadPool() {
+	public static void main() {
 		
 		BasicConfigurator.configure();
 		

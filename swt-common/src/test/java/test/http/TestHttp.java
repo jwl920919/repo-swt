@@ -20,8 +20,7 @@ public class TestHttp {
 
 	private static final Logger logger = Logger.getLogger(TestHttp.class);
 
-	@Test
-	public static void testHttpClient() {
+	public static void main() {
 		
 		BasicConfigurator.configure();
 

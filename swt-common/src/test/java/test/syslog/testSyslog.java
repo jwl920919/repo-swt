@@ -4,8 +4,7 @@ import org.junit.Test;
 
 public class testSyslog {
 	
-	@Test
-	public void testSyslog()
+	public static void main()
 	{
 		
 	}
