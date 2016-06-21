@@ -3,7 +3,7 @@
 
 ### swt-common 연동 방법(Maven)
 
-***pom.xml***에 코드 추가
+- ***pom.xml***에 코드 추가
 
 ```xml
 ...
