@@ -35,7 +35,7 @@ public class SystemPropertiesValidator implements Validator {
 
 	private boolean checkVersion(String license) {
 		
-		
+		// ...
 		
 		return true;
 	}
