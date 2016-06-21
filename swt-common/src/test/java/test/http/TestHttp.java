@@ -11,6 +11,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.junit.Test;
 
 import com.shinwootns.common.http.HttpClient;
 import com.shinwootns.common.utils.StringUtils;
@@ -19,7 +20,8 @@ public class TestHttp {
 
 	private static final Logger logger = Logger.getLogger(TestHttp.class);
 
-	public static void main(String[] args) {
+	@Test
+	public static void testHttpClient() {
 		
 		BasicConfigurator.configure();
 

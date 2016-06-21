@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
+import org.junit.Test;
 
 import com.shinwootns.common.cache.RedisClient;
 import com.shinwootns.common.cache.RedisManager;
@@ -15,7 +16,8 @@ public class TestRedis {
 
 	private static final Logger logger = Logger.getLogger(TestRedis.class);
 	
-	public static void main(String[] args) {
+	@Test
+	public void testRedis() {
 
 		// Basic Configurator
 		BasicConfigurator.configure();

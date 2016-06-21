@@ -2,6 +2,8 @@ package test.thread;
 
 import java.util.Date;
 
+import org.junit.Test;
+
 import com.shinwootns.common.stp.SmartThreadPool;
 
 public class TestThread extends Thread {

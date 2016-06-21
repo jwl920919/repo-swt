@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
+import org.junit.Test;
 
 import com.shinwootns.common.snmp.SnmpResult;
 import com.shinwootns.common.snmp.SnmpUtil;
@@ -12,7 +13,8 @@ public class TestSnmp {
 
 	private static final Logger logger = Logger.getLogger(TestSnmp.class);
 
-	public static void main(String[] args) {
+	@Test
+	public void testSnmp() {
 		
 		BasicConfigurator.configure();
 
@@ -21,8 +23,8 @@ public class TestSnmp {
 		try {
 
 			//SnmpUtil snmpUtil = new SnmpUtil("127.0.0.1", "public", logger);
-			//SnmpUtil snmpUtil = new SnmpUtil("192.168.1.28", "public",logger);
-			SnmpUtil snmpUtil = new SnmpUtil("192.168.1.80", "public", logger);
+			SnmpUtil snmpUtil = new SnmpUtil("192.168.1.11", "public",logger);
+			//SnmpUtil snmpUtil = new SnmpUtil("192.168.1.80", "public", logger);
 
 			// ===================================================================
 			// SnmpGet

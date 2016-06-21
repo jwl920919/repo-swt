@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.junit.Test;
 
 import com.shinwootns.common.stp.SmartThreadPool;
 
@@ -18,7 +19,8 @@ public class TestRabbitMQ {
 	
 	private static SmartThreadPool pool = new SmartThreadPool(logger);
 	
-	public static void main(String[] args) throws InterruptedException {
+	@Test
+	public void testRabbitMQ() throws InterruptedException {
 		
 		BasicConfigurator.configure();
 		

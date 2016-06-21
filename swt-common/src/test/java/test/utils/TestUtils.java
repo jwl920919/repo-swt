@@ -3,6 +3,7 @@ package test.utils;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.junit.Test;
 
 import com.shinwootns.common.utils.CryptoUtils;
 import com.shinwootns.common.utils.IPRange;
@@ -13,7 +14,8 @@ public class TestUtils {
 
 	private static final Logger logger = Logger.getLogger(TestUtils.class);
 	
-	public static void main(String[] args) {
+	@Test
+	public void testTestUtils() {
 		
 		BasicConfigurator.configure();
 		

@@ -2,6 +2,8 @@ package test.mq;
 
 import java.util.ArrayList;
 
+import org.junit.Test;
+
 import com.shinwootns.common.mq.MQManager;
 import com.shinwootns.common.mq.WorkQueueClient;
 import com.shinwootns.common.mq.MQManager.MQClientType;
