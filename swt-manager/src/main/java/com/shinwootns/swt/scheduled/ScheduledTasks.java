@@ -3,13 +3,22 @@ package com.shinwootns.swt.scheduled;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.concurrent.ScheduledExecutorFactoryBean;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ScheduledTasks {
 	
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+	
+	@Bean
+	public ScheduledExecutorFactoryBean scheduledExecutorService() {
+		ScheduledExecutorFactoryBean bean = new ScheduledExecutorFactoryBean();
+		bean.setPoolSize(5);
+		return bean;
+	}
 
 //	// fixedRate
 //    @Scheduled(fixedRate = 5000)
