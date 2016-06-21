@@ -25,7 +25,7 @@
 	<dependency>
 		<groupId>com.shinwootns</groupId>
 		<artifactId>swt-common</artifactId>
-		<version>0.1.1</version>
+		<version>0.1.5.SNAPSHOT</version>
 	</dependency>
 	...
 </dependencies>
