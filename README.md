@@ -5,6 +5,8 @@
 ***pom.xml***에 코드 추가
 
 ```xml
+	...
+	
 	<repositories>
 		<repository>
 			<id>songagi-mvn-repo</id>
@@ -18,9 +20,13 @@
 	
 	...
 	
-	<dependency>
-		<groupId>com.shinwootns</groupId>
-		<artifactId>swt-common</artifactId>
-		<version>0.1.1</version>
-	</dependency>
+	<dependencies>
+	...
+		<dependency>
+			<groupId>com.shinwootns</groupId>
+			<artifactId>swt-common</artifactId>
+			<version>0.1.1</version>
+		</dependency>
+	...
+	</dependencies>
 ```
