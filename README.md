@@ -1,4 +1,4 @@
-# SinwooTNS Repository
+# SinwooTNS Github Repository
 
 
 ### swt-common 연동 방법(Maven)
