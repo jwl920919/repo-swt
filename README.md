@@ -15,7 +15,9 @@
 			</snapshots>
 		</repository>
 	</repositories>
+	
 	...
+	
 	<dependency>
 		<groupId>com.shinwootns</groupId>
 		<artifactId>swt-common</artifactId>
