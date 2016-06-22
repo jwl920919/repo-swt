@@ -3,6 +3,7 @@ package com.shinwootns.swt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 //import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -21,7 +22,7 @@ import com.shinwootns.swt.service.SyslogHandlerService;
 @EnableAsync
 @EnableScheduling
 @SpringBootApplication
-public class SWTManagerApplication implements CommandLineRunner{
+public class SWTManagerApplication{
 	
 	@Autowired
 	private SystemProperties properties;
@@ -34,19 +35,6 @@ public class SWTManagerApplication implements CommandLineRunner{
 		return new SystemPropertiesValidator();
 	}
 
-	@Override
-	public void run(String... args) throws Exception {
-		
-		System.out.println("=========================================");
-		System.out.println("system.name: " + this.properties.getName());
-		System.out.println("system.version: " + this.properties.getVersion());
-		System.out.println("=========================================");
-		
-		System.out.println("StartService()... Call() Start");
-		syslogHandlerService.startService();
-		System.out.println("StartService()... Call() End");
-	}
-	
 	public static void main(String[] args) {
 
 		SpringApplicationBuilder appBuilder = new SpringApplicationBuilder(SWTManagerApplication.class);

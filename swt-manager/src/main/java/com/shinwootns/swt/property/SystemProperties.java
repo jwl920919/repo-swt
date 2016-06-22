@@ -1,9 +1,15 @@
 package com.shinwootns.swt.property;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.stereotype.Component;
 
 @Component
+@PropertySources({
+	@PropertySource(value="file:app.properties", ignoreResourceNotFound=true),
+	@PropertySource("classpath:application.properties")
+})
 @ConfigurationProperties(prefix = "system")
 public class SystemProperties {
 
