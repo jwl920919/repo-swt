@@ -151,6 +151,8 @@ public class TestHttp {
 			} else {
 				System.out.println("Connection failed.");
 			}
+			
+			sc.close();
 
 		} catch (Exception e) {
 			e.printStackTrace();

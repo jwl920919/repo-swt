@@ -53,6 +53,8 @@ public class TestRabbitMQ {
 					break;
 				}
 			}
+			
+			sc.close();
 		}
 		catch(Exception ex) {
 			ex.printStackTrace();

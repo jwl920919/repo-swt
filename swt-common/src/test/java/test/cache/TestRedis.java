@@ -60,6 +60,8 @@ public class TestRedis {
 			}
 		}
 		
+		sc.close();
+		
 		System.out.println("Terminated.");
 		
 	}

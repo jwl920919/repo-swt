@@ -3,82 +3,176 @@ package com.shinwootns.common.network;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.SocketException;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
+import com.shinwootns.common.utils.LogUtils;
+import com.shinwootns.common.utils.TimeUtils;
 
 public class SyslogServer extends Thread {
+	
 	private final static int PACKET_SIZE = 1024;
 	private final static int SYSLOG_PORT = 514;
+	
+	private Logger _logger = null;
+	private SyslogHandler _handler = null;
+	private DatagramSocket _serverSocket = null;
+	private boolean _stopFlag = false;
+	
+	
+	public SyslogServer(Logger logger, SyslogHandler handler) {
+		this._logger = logger;
+		this._handler = handler;
+	}
+	
+	public synchronized boolean bindSocket() {
+		
+		try
+		{
+			if (_serverSocket == null)
+			{
+				_serverSocket = new DatagramSocket(SYSLOG_PORT);
+				
+				LogUtils.WriteLog(_logger, Level.INFO, "bindSocket()... ok.");
+				
+				return true;
+			}
+		}
+		catch(Exception ex) {
+			LogUtils.WriteLog(_logger, Level.ERROR, ex);
+			
+			LogUtils.WriteLog(_logger, Level.ERROR, "bindSocket()... failed.");
+		}
+		
+		return false;
+	}
+	
+	public synchronized void setStopFlag(boolean stopFlag) {
+		this._stopFlag = stopFlag;
+	}
+	
+	public synchronized boolean getStopFlag() {
+		return this._stopFlag;
+	}
+	
+	public synchronized void closeSocket() {
+		
+		if ( _serverSocket != null ) {
+			
+			try {
+				_serverSocket.close();
+			}
+			catch(Exception ex) {}
+			finally {
+				_serverSocket = null;
+			}
+			
+			try {
+				this.wait();
+			}
+			catch(Exception ex) {}
+			
+			LogUtils.WriteLog(_logger, Level.INFO, "closeSocket()... ok.");
+		}
+	}
+	
+	private void receiveSyslog(SyslogHandler handler) {
+		
+		int nPriority= 0;
+		int nFacility = 0;
+		int nSeverity = 0;
+		
+		if (_serverSocket == null)
+			return;
+		
+		byte[] buff = new byte[PACKET_SIZE];
+		DatagramPacket receivePacket = new DatagramPacket(buff, buff.length);
+		
+		LogUtils.WriteLog(_logger, Level.INFO, "receiveSyslog()... start.");
+
+		try {
+
+			while (this.getStopFlag() == false) {
+				
+				// Receive
+				_serverSocket.receive(receivePacket);
+				
+				try
+				{
+					// IP
+					InetAddress ipAddr = receivePacket.getAddress();
+					
+					// Raw Syslog
+					String rawSyslog = new String(receivePacket.getData()).trim();
+					
+					if (rawSyslog.isEmpty()) continue;
+					//if (rawSyslog.charAt(0) != '<') continue;
+					
+					if ( rawSyslog.charAt(0) != '<' )
+					{
+						int nIndex2 = rawSyslog.indexOf('>', 1);
+						
+						if (nIndex2 > 0)
+						{
+							String sPriority = rawSyslog.substring(1, nIndex2);
+							
+							nPriority = Integer.parseInt( sPriority );
+							
+							nFacility = (int)(nPriority / 7);
+							nSeverity = nPriority % 8;
+						}
+					}
+					
+					SyslogEntity syslog = new SyslogEntity();
+					syslog.setHost(ipAddr.getHostAddress().toString());
+					syslog.setData(rawSyslog);
+					syslog.setSeverity(nSeverity);
+					syslog.setFacility(nFacility);
+					syslog.setRecvTime(System.currentTimeMillis());
+					
+					//System.out.println(String.format("[%s, %s] - %s", syslog.getHost(), TimeUtils.convertToStringTime(syslog.getRecvTime()), syslog.getData()));
+					//LogUtils.WriteLog(_logger, Level.DEBUG , String.format("[%s, %s] - %s", syslog.getHost(), TimeUtils.convertToStringTime(syslog.getRecvTime()), syslog.getData()));
+					
+					if (handler != null)
+					{
+						handler.processSyslog(syslog);
+					}
+					
+					/*
+					CommonSyslog.queue_lock.lock();
+					CommonSyslog.queue.add(syslog);
+					CommonSyslog.queue_lock.unlock();
+	
+					// Update Stats
+					CommonSyslog.rcv_lock.lock();
+					if (CommonSyslog.rcv_count == 0)
+						CommonSyslog.sampleMsg = syslog.getData();
+					CommonSyslog.rcv_count++;
+					CommonSyslog.rcv_lock.unlock();
+					*/
+				}
+				catch(Exception ex) {
+					LogUtils.WriteLog(_logger, Level.ERROR, ex);
+				}
+			}
+		
+		} catch (SocketException ex1) {
+			// Socket Close
+		} catch (Exception ex2) {
+			LogUtils.WriteLog(_logger, Level.ERROR, ex2);
+		} finally {
+			LogUtils.WriteLog(_logger, Level.INFO, "receiveSyslog()... stop.");
+		}
+	}
 	
 	@Override
 	public void run() {
 		
-		DatagramSocket serverSocket = null;
-
-		try {
-			
-			serverSocket = new DatagramSocket(SYSLOG_PORT);
-
-			byte[] empty = new byte[PACKET_SIZE];
-			byte[] buff = new byte[PACKET_SIZE];
-			
-			while (true) {
-				System.arraycopy(empty, 0, buff, 0, buff.length);
-				
-				DatagramPacket receivePacket = new DatagramPacket(buff, buff.length);
-
-				// Receive
-				serverSocket.receive(receivePacket);
-
-				// IP
-				InetAddress ipAddr = receivePacket.getAddress();
-				
-				// Raw Syslog
-				String rawSyslog = new String(receivePacket.getData()).trim();
-				
-				if (rawSyslog.isEmpty()) continue;
-				if (rawSyslog.charAt(0) != '<') continue;
-				
-				int nIndex2 = rawSyslog.indexOf('>', 1);
-				 
-				String sPriority = rawSyslog.substring(1, nIndex2);
-				
-				int nPriority = Integer.parseInt( sPriority );
-				
-				int nFacility = (int)(nPriority / 7);
-				int nSeverity = nPriority % 8;
-				
-				System.out.println(rawSyslog);
-				
-				
-				// Put data queue
-				/*
-				RawSyslog syslog = new RawSyslog();
-				syslog.setHost(ipAddr.getHostAddress().toString());
-				syslog.setType("syslog");
-				syslog.setData(sSyslog);
-				syslog.setSeverity(nSeverity);
-				syslog.setFacility(nFacility);
-				syslog.setRecvTime(System.currentTimeMillis());
-				
-				CommonSyslog.queue_lock.lock();
-				CommonSyslog.queue.add(syslog);
-				CommonSyslog.queue_lock.unlock();
-
-				// Update Stats
-				CommonSyslog.rcv_lock.lock();
-				if (CommonSyslog.rcv_count == 0)
-					CommonSyslog.sampleMsg = syslog.getData();
-				CommonSyslog.rcv_count++;
-				CommonSyslog.rcv_lock.unlock();
-				*/
-			}
-			
-			//client.close();
-			
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		} finally {
-			if (serverSocket != null)
-				serverSocket.close();
-		}
+		setStopFlag(false);
+		
+		receiveSyslog(this._handler);
 	}
+	
 }
