@@ -68,41 +68,41 @@
    		...
 		<server>
 			<id>github</id>
-			<username>github-user</username>
-			<password>password</password>
+			<username>Github-ID</username>
+			<password>Password</password>
 		</server>
 		...
 	</servers>
 	```
 
-- [참고] Password 암호화 입력 방법
+- [참고] Password 암호화 방법
 
-	- master password 생성
+	1. master 암호키 생성
 		```
 		mvn --encrypt-master-password <PASSWORD>
 		{nDpn1bE1vX4HABCDEFGOriBubJhppqAOuy4=}
 		```
 
-	- 아래 경로에 settings-security.xml 파일 생성 후, 마스터 암호키 입력 
+	2. 아래 경로에 settings-security.xml 파일 생성 후, 마스터 암호키 입력 
 	( settings-security.xml 파일의 경로 변경 안됨 )
 		```
 		C:\Users\{UserName}\.m2\settings-security.xml
 		```
 
-	settings-security.xml
+		settings-security.xml
 		```xml
 		<settingsSecurity>  
 			<master>{nDpn1bE1vX4HABCDEFGOriBubJhppqAOuy4=}</master>  
 		</settingsSecurity> 
 		```
 
-	- Password 암호키 생성
+	3. Password 암호키 생성
 		```
 		mvn --encrypt-password <PASSWORD>
 		{X/Mnlwkfm90HVsadbsadsadlsakdsalfdlfdhfldsfldslE3LQ8g4=}
 		```
 
-	- setting.xml에 암호 키 입력 ( {MAVEN_PATH}/conf/setting.xml )
+	4. setting.xml에 암호 키 입력 ( {MAVEN_PATH}/conf/setting.xml )
 		```xml
 		<servers>
 	   		...
