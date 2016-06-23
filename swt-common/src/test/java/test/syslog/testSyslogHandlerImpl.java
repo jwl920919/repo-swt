@@ -10,8 +10,10 @@ import com.shinwootns.common.utils.TimeUtils;
 public class testSyslogHandlerImpl implements SyslogHandler {
 
 	public void processSyslog(SyslogEntity syslog) {
+
+		System.out.println(String.format("[%s, %s] - %s", syslog.getHost(),
+				TimeUtils.convertToStringTime(syslog.getRecvTime()), syslog.getData()));
 		
-		LogUtils.WriteLog(null, Level.DEBUG , String.format("[%s, %s] - %s", syslog.getHost(), TimeUtils.convertToStringTime(syslog.getRecvTime()), syslog.getData()));
-		
+		// ...
 	}
 }

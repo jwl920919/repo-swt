@@ -37,7 +37,7 @@ public class PropertyUtils {
 			// Is exist?
 			File file = new File(filepath);
 			if (file.exists() == false) {
-				LogUtils.WriteLog(_logger, Level.ERROR, String.format("ERROR - Not exist properties file : '%s'", filepath));
+				_logger.error(String.format("ERROR - Not exist properties file : '%s'", filepath));
 				return false;
 			}
 			
@@ -51,7 +51,7 @@ public class PropertyUtils {
 		}
 		catch(Exception ex)
 		{
-			LogUtils.WriteLog(_logger, Level.ERROR, ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		finally {
 
@@ -80,7 +80,7 @@ public class PropertyUtils {
 			return true;
 		}
 		catch(Exception ex) {
-			LogUtils.WriteLog(_logger, Level.ERROR, ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		finally {
 			
@@ -99,7 +99,7 @@ public class PropertyUtils {
 		
 		if ( _properties.containsKey(key) == false )
 		{
-			LogUtils.WriteLog(_logger, Level.ERROR, String.format("ERROR - Not defined properties key : '%s'", key));
+			_logger.error(String.format("ERROR - Not defined properties key : '%s'", key));
 			return defaultValue;
 		}
 		
@@ -110,7 +110,7 @@ public class PropertyUtils {
 		
 		if ( _properties.containsKey(key) == false )
 		{
-			LogUtils.WriteLog(_logger, Level.ERROR, String.format("ERROR - Not defined properties key : '%s'", key));
+			_logger.error(String.format("ERROR - Not defined properties key : '%s'", key));
 			return defaultValue;
 		}
 		
@@ -123,7 +123,7 @@ public class PropertyUtils {
 		}
 		catch(Exception ex)
 		{
-			LogUtils.WriteLog(_logger, Level.ERROR, String.format("ERROR - Invalid properties number value : '%s'", sVlaue));
+			_logger.error(String.format("ERROR - Invalid properties number value : '%s'", sVlaue));
 		}
 		
 		return defaultValue;

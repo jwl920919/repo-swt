@@ -44,7 +44,7 @@ public class SingleClient extends BaseClient {
 		}
 		catch(Exception ex)
 		{
-			LogUtils.WriteLog(_logger, Level.ERROR, ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		
 		return false;
@@ -65,7 +65,7 @@ public class SingleClient extends BaseClient {
 		}
 		catch(Exception ex)
 		{
-			LogUtils.WriteLog(_logger, Level.ERROR, ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		
 		return false;
@@ -128,7 +128,7 @@ public class SingleClient extends BaseClient {
 			}
 			
 		} catch(Exception ex) {
-			LogUtils.WriteLog(_logger, Level.ERROR, ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		
 		return listData;

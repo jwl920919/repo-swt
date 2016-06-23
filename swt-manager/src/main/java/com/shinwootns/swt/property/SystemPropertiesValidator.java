@@ -25,7 +25,7 @@ public class SystemPropertiesValidator implements Validator {
 	@Override
 	public void validate(Object obj, Errors errors) {
 		
-		LogUtils.WriteLog(_logger, Level.INFO, "Validate property.... start");
+		_logger.info("Validate property.... start");
 		
 		// Check empty
 		ValidationUtils.rejectIfEmpty(errors, "name", "system.name");
@@ -41,7 +41,7 @@ public class SystemPropertiesValidator implements Validator {
 			errors.rejectValue("version", "Invalid version.");
 		}
 		
-		LogUtils.WriteLog(_logger, Level.INFO, "Validate property.... end");
+		_logger.info("Validate property.... end");
 	}
 
 	private boolean checkVersion(String license) {

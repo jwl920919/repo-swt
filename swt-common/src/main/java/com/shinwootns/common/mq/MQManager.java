@@ -66,7 +66,7 @@ public class MQManager {
 			}
 			catch(Exception ex)
 			{
-				LogUtils.WriteLog(_logger, Level.ERROR, ex);
+				_logger.error(ex.getMessage(), ex);
 			}
 		}
 		
@@ -104,7 +104,7 @@ public class MQManager {
 			}
 			catch(Exception ex)
 			{
-				LogUtils.WriteLog(_logger, Level.ERROR, ex);
+				_logger.error(ex.getMessage(), ex);
 			}
 			
 		}
@@ -149,7 +149,7 @@ public class MQManager {
 		}
 		catch(Exception ex)
 		{
-			LogUtils.WriteLog(_logger, Level.ERROR, ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 			
 		return null;
@@ -166,7 +166,7 @@ public class MQManager {
 		}
 		catch(Exception ex)
 		{
-			LogUtils.WriteLog(_logger, Level.ERROR, ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		finally {
 			this._channel = null;
@@ -179,7 +179,7 @@ public class MQManager {
 		}
 		catch(Exception ex)
 		{
-			LogUtils.WriteLog(_logger, Level.ERROR, ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		finally {
 			this._connection = null;

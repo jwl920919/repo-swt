@@ -49,7 +49,7 @@ public class RedisManager {
 					return true;
 			}
 			catch(Exception ex) {
-				LogUtils.WriteLog(_logger, Level.ERROR, ex);
+				_logger.error(ex.getMessage(), ex);
 			}
 		
 			
@@ -67,7 +67,7 @@ public class RedisManager {
 				_redisPool.close();
 		}
 		catch(Exception ex) {
-			LogUtils.WriteLog(_logger, Level.ERROR, ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		finally {
 			_redisPool = null;
@@ -86,10 +86,10 @@ public class RedisManager {
 			return new RedisClient(redis); 
 		}
 		catch(JedisConnectionException ex) {
-			LogUtils.WriteLog(_logger, Level.ERROR, ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		catch(Exception ex) {
-			LogUtils.WriteLog(_logger, Level.ERROR, ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		
 		return null;

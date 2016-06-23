@@ -36,7 +36,6 @@ import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-import com.shinwootns.common.cache.RedisManager;
 import com.shinwootns.common.utils.LogUtils;
 
 public class HttpClient {
@@ -108,7 +107,7 @@ public class HttpClient {
 				bResult = true;
 
 		} catch (Exception ex) {
-			LogUtils.WriteLog(_logger, Level.ERROR, ex);
+			_logger.error(ex.getMessage(), ex);
 			bResult = false;
 		}
 
@@ -186,7 +185,7 @@ public class HttpClient {
 			}
 
 		} catch (Exception ex) {
-			LogUtils.WriteLog(_logger, Level.ERROR, ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 
 		return value;
@@ -254,7 +253,7 @@ public class HttpClient {
 			}
 
 		} catch (Exception ex) {
-			LogUtils.WriteLog(_logger, Level.ERROR, ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 
 		return value;
@@ -321,7 +320,7 @@ public class HttpClient {
 			}
 
 		} catch (Exception ex) {
-			LogUtils.WriteLog(_logger, Level.ERROR, ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 
 		return value;

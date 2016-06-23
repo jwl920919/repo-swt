@@ -16,7 +16,7 @@ public class SyslogHandlerImpl implements SyslogHandler {
 
 	public void processSyslog(SyslogEntity syslog) {
 		
-		LogUtils.WriteLog(null, Level.DEBUG , String.format("[%s, %s] - %s", syslog.getHost(), TimeUtils.convertToStringTime(syslog.getRecvTime()), syslog.getData()));
+		_logger.debug(String.format("[%s, %s] - %s", syslog.getHost(), TimeUtils.convertToStringTime(syslog.getRecvTime()), syslog.getData()));
 		
 	}
 }

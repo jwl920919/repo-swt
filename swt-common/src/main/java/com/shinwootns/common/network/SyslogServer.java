@@ -35,15 +35,15 @@ public class SyslogServer extends Thread {
 			{
 				_serverSocket = new DatagramSocket(SYSLOG_PORT);
 				
-				LogUtils.WriteLog(_logger, Level.INFO, "bindSocket()... ok.");
+				_logger.info("bindSocket()... ok.");
 				
 				return true;
 			}
 		}
 		catch(Exception ex) {
-			LogUtils.WriteLog(_logger, Level.ERROR, ex);
+			_logger.error(ex.getMessage(), ex);
 			
-			LogUtils.WriteLog(_logger, Level.ERROR, "bindSocket()... failed.");
+			_logger.error("bindSocket()... failed.");
 		}
 		
 		return false;
@@ -74,7 +74,7 @@ public class SyslogServer extends Thread {
 			}
 			catch(Exception ex) {}
 			
-			LogUtils.WriteLog(_logger, Level.INFO, "closeSocket()... ok.");
+			_logger.info("closeSocket()... ok.");
 		}
 	}
 	
@@ -90,7 +90,7 @@ public class SyslogServer extends Thread {
 		byte[] buff = new byte[PACKET_SIZE];
 		DatagramPacket receivePacket = new DatagramPacket(buff, buff.length);
 		
-		LogUtils.WriteLog(_logger, Level.INFO, "receiveSyslog()... start.");
+		_logger.info("receiveSyslog()... start.");
 
 		try {
 
@@ -154,16 +154,16 @@ public class SyslogServer extends Thread {
 					*/
 				}
 				catch(Exception ex) {
-					LogUtils.WriteLog(_logger, Level.ERROR, ex);
+					_logger.error(ex.getMessage(), ex);
 				}
 			}
 		
 		} catch (SocketException ex1) {
 			// Socket Close
 		} catch (Exception ex2) {
-			LogUtils.WriteLog(_logger, Level.ERROR, ex2);
+			_logger.error(ex2.getMessage(), ex2);
 		} finally {
-			LogUtils.WriteLog(_logger, Level.INFO, "receiveSyslog()... stop.");
+			_logger.info("receiveSyslog()... stop.");
 		}
 	}
 	

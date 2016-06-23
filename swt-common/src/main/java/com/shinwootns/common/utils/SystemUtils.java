@@ -10,10 +10,11 @@ import org.apache.log4j.Logger;
 
 public class SystemUtils {
 
+	private static final Logger _logger = Logger.getLogger(SystemUtils.class);
 	
-	public static void executeCommandAsync(CommandLine command, Logger logger) {
+	public static void executeCommandAsync(CommandLine command) {
 		
-		LogUtils.WriteLog(logger, Level.INFO, String.format("execAsync(). command: " + command.toString()));
+		_logger.info(String.format("execAsync(). command: " + command.toString()));
 		
 		DefaultExecutor executor = new DefaultExecutor();
 		  
@@ -23,15 +24,15 @@ public class SystemUtils {
 			executor.execute(new CommandLine(command), new DefaultExecuteResultHandler());
 			
 		} catch (Exception ex) {
-			LogUtils.WriteLog(logger, Level.ERROR, ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		
 		executor = null;
 	}
 	
-	public static String executeCommand(CommandLine command, Logger logger) {
+	public static String executeCommand(CommandLine command) {
 		
-		LogUtils.WriteLog(logger, Level.INFO, String.format("executeCommand(). command: " + command.toString()));
+		_logger.info(String.format("executeCommand(). command: " + command.toString()));
 		
 		String result = "";
 		
@@ -51,11 +52,11 @@ public class SystemUtils {
 			
 			result = baos.toString();
 			
-			LogUtils.WriteLog(logger, Level.DEBUG, "executeCommand() - exitCode : " + exitCode);
-			LogUtils.WriteLog(logger, Level.DEBUG, "executeCommand() - outputStr : " + result);
+			_logger.debug("executeCommand() - exitCode : " + exitCode);
+			_logger.debug("executeCommand() - outputStr : " + result);
 			
 		} catch (Exception ex) {
-			LogUtils.WriteLog(logger, Level.ERROR, ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		finally {
 			if (baos != null)

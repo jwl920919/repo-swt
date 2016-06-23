@@ -1,7 +1,5 @@
 package com.shinwootns.swt;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -10,7 +8,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.validation.Validator;
 
-import com.shinwootns.common.utils.LogUtils;
 import com.shinwootns.swt.property.SystemPropertiesValidator;
 
 @ComponentScan

@@ -28,23 +28,23 @@ public class ServiceController {
 	@PostConstruct
 	public void startService() {
 		
-		LogUtils.WriteLog(_logger, Level.INFO, "startService()... start");
+		_logger.info("startService()... start");
 		
 		// Start SyslogHandler
 		startSyslogHandler();
 		
-		LogUtils.WriteLog(_logger, Level.INFO, "endService()... start");
+		_logger.info("endService()... start");
 	}
 	
 	@PreDestroy
 	public void stopService() {
 		
-		LogUtils.WriteLog(_logger, Level.INFO, "stopService()... start");
+		_logger.info("stopService()... start");
 		
 		// Stop SyslogHandler
 		stopSyslogHandler();
 		
-		LogUtils.WriteLog(_logger, Level.INFO, "stopService()... end");
+		_logger.info("stopService()... end");
 	}
 	
 	private void startSyslogHandler() {

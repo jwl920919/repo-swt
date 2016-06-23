@@ -85,7 +85,7 @@ public class TestUtils {
 		}
 		catch(Exception ex)
 		{
-			LogUtils.WriteLog(_logger, Level.ERROR, ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 	}
 

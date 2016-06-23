@@ -7,7 +7,6 @@ import org.apache.log4j.Logger;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.QueueingConsumer;
-import com.shinwootns.common.http.HttpClient;
 import com.shinwootns.common.utils.LogUtils;
 
 abstract class BaseClient {
@@ -33,7 +32,7 @@ abstract class BaseClient {
 				this._channel.basicQos(count);
 				
 			} catch (IOException ex) {
-				LogUtils.WriteLog(_logger, Level.ERROR, ex);
+				_logger.error(ex.getMessage(), ex);
 			}
 		}
 	}

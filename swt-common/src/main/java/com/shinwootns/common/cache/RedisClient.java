@@ -35,7 +35,7 @@ public class RedisClient {
 				return true;
 		}
 		catch(Exception ex) {
-			LogUtils.WriteLog(_logger, Level.ERROR, ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		
 		return false;
@@ -66,7 +66,7 @@ public class RedisClient {
 			}
 		}
 		catch(Exception ex) {
-			LogUtils.WriteLog(_logger, Level.ERROR, ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		return false;
 	}
@@ -81,7 +81,7 @@ public class RedisClient {
 			}
 		}
 		catch(Exception ex) {
-			LogUtils.WriteLog(_logger, Level.ERROR, ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		return null;
 	}
@@ -93,7 +93,7 @@ public class RedisClient {
 				return this._redis.del(key);
 		}
 		catch(Exception ex) {
-			LogUtils.WriteLog(_logger, Level.ERROR, ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		return null;
 	}
@@ -105,7 +105,7 @@ public class RedisClient {
 				return this._redis.exists(key);
 		}
 		catch(Exception ex) {
-			LogUtils.WriteLog(_logger, Level.ERROR, ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		return null;
 	}
@@ -119,7 +119,7 @@ public class RedisClient {
 				return this._redis.expire(key, seconds);
 		}
 		catch(Exception ex) {
-			LogUtils.WriteLog(_logger, Level.ERROR, ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		return null;
 	}
@@ -131,7 +131,7 @@ public class RedisClient {
 				return this._redis.expireAt(key, unixTime);
 		}
 		catch(Exception ex) {
-			LogUtils.WriteLog(_logger, Level.ERROR, ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		return null;
 	}
@@ -146,7 +146,7 @@ public class RedisClient {
 				return this._redis.incr(key);
 		}
 		catch(Exception ex) {
-			LogUtils.WriteLog(_logger, Level.ERROR, ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		return null;
 	}
@@ -158,7 +158,7 @@ public class RedisClient {
 				return this._redis.decr(key);
 		}
 		catch(Exception ex) {
-			LogUtils.WriteLog(_logger, Level.ERROR, ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		return null;
 	}
@@ -173,7 +173,7 @@ public class RedisClient {
 				return this._redis.append(key, value);
 		}
 		catch(Exception ex) {
-			LogUtils.WriteLog(_logger, Level.ERROR, ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		return null;
 	}
@@ -185,7 +185,7 @@ public class RedisClient {
 				return this._redis.rpop(key);
 		}
 		catch(Exception ex) {
-			LogUtils.WriteLog(_logger, Level.ERROR, ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		return null;
 	}
@@ -197,7 +197,7 @@ public class RedisClient {
 				return this._redis.lpop(key);
 		}
 		catch(Exception ex) {
-			LogUtils.WriteLog(_logger, Level.ERROR, ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		return null;
 	}
@@ -211,7 +211,7 @@ public class RedisClient {
 				return this._redis.zadd(key, scoreMembers);
 		}
 		catch(Exception ex) {
-			LogUtils.WriteLog(_logger, Level.ERROR, ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		return null;
 	}
@@ -223,7 +223,7 @@ public class RedisClient {
 				return this._redis.zcount(key, min, max);
 		}
 		catch(Exception ex) {
-			LogUtils.WriteLog(_logger, Level.ERROR, ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		return null;
 	}
@@ -235,7 +235,7 @@ public class RedisClient {
 				return this._redis.zrank(key, member);
 		}
 		catch(Exception ex) {
-			LogUtils.WriteLog(_logger, Level.ERROR, ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		return null;
 	}
@@ -247,7 +247,7 @@ public class RedisClient {
 				return this._redis.zrange(key, start, end);
 		}
 		catch(Exception ex) {
-			LogUtils.WriteLog(_logger, Level.ERROR, ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		return null;
 	}
@@ -259,7 +259,7 @@ public class RedisClient {
 				return this._redis.zrevrange(key, start, end);
 		}
 		catch(Exception ex) {
-			LogUtils.WriteLog(_logger, Level.ERROR, ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		return null;
 	}
@@ -271,7 +271,7 @@ public class RedisClient {
 				return this._redis.zrangeByScore(key, min, max, offset, count);
 		}
 		catch(Exception ex) {
-			LogUtils.WriteLog(_logger, Level.ERROR, ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		return null;
 	}
@@ -283,7 +283,7 @@ public class RedisClient {
 				return this._redis.zrevrangeByScore(key, min, max, offset, count);
 		}
 		catch(Exception ex) {
-			LogUtils.WriteLog(_logger, Level.ERROR, ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		return null;
 	}
@@ -295,7 +295,7 @@ public class RedisClient {
 				return this._redis.zrangeByLex(key, min, max);
 		}
 		catch(Exception ex) {
-			LogUtils.WriteLog(_logger, Level.ERROR, ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		return null;
 	}
@@ -307,7 +307,7 @@ public class RedisClient {
 				return this._redis.zrevrangeByLex(key, max, min);
 		}
 		catch(Exception ex) {
-			LogUtils.WriteLog(_logger, Level.ERROR, ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		return null;
 	}
