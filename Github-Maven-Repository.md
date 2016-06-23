@@ -5,9 +5,7 @@
 
 ***1) Repository 생성***
 
-- Github에 Maven Repository 생성 
-- 
-- ex) https://github.com/songagi/mvn-repo
+- Github에 Maven Repository 생성 ( ex. https://github.com/songagi/mvn-repo )
 
 
 ***2) Target Maven Project 설정***
