@@ -30,7 +30,7 @@ public class ServiceController {
 		
 		_logger.info("startService()... start");
 		
-		// Start SyslogHandler
+		// Syslog
 		startSyslogHandler();
 		
 		_logger.info("endService()... start");
@@ -41,7 +41,7 @@ public class ServiceController {
 		
 		_logger.info("stopService()... start");
 		
-		// Stop SyslogHandler
+		// Syslog
 		stopSyslogHandler();
 		
 		_logger.info("stopService()... end");
