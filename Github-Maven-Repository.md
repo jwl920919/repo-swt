@@ -5,12 +5,12 @@
 
 ***1) Repository 생성***
 
-* Maven 용 Github Repository 생성 ( ex. https://github.com/songagi/mvn-repo)
+- Maven 용 Github Repository 생성 ( ex. https://github.com/songagi/mvn-repo)
 
 
 ***2) Target Maven Project 설정***
 
-* pom.xml 코드 추가
+- pom.xml 코드 추가
 
 ```xml
 ...
@@ -62,7 +62,7 @@
 
 ***3) maven setting.xml 수정***
 
-* 경로 : {MAVEN_PATH}/conf/setting.xml
+- 경로 : {MAVEN_PATH}/conf/setting.xml
 
 ```xml
 <servers>
@@ -76,46 +76,44 @@
 </servers>
 ```
 
-* [참고] Password 암호화 입력 방법
+- [참고] Password 암호화 입력 방법
 
-- master password 생성
-```
-mvn --encrypt-master-password <PASSWORD>
-{nDpn1bE1vX4HABCDEFGOriBubJhppqAOuy4=}
-```
+	- master password 생성
+	```
+	mvn --encrypt-master-password <PASSWORD>
+	{nDpn1bE1vX4HABCDEFGOriBubJhppqAOuy4=}
+	```
 
-- 아래 경로에 settings-security.xml 파일 생성 후, 마스터 암호키 입력
-```
-C:\Users\{사용자계정}\.m2\settings-security.xml
-```
+	- 아래 경로에 settings-security.xml 파일 생성 후, 마스터 암호키 입력
+	```
+	C:\Users\{사용자계정}\.m2\settings-security.xml
+	```
 
-settings-security.xml
+	settings-security.xml
+	```xml
+	<settingsSecurity>  
+		<master>{nDpn1bE1vX4HABCDEFGOriBubJhppqAOuy4=}</master>  
+	</settingsSecurity> 
+	```
 
-```xml
-<settingsSecurity>  
-	<master>{nDpn1bE1vX4HABCDEFGOriBubJhppqAOuy4=}</master>  
-</settingsSecurity> 
-```
+	- Password 암호키 생성
+	```
+	mvn --encrypt-password <PASSWORD>
+	{X/Mnlwkfm90HVsadbsadsadlsakdsalfdlfdhfldsfldslE3LQ8g4=}
+	```
 
-- Password 암호키 생성
-
-```
-mvn --encrypt-password <PASSWORD>
-{X/Mnlwkfm90HVsadbsadsadlsakdsalfdlfdhfldsfldslE3LQ8g4=}
-```
-
-- setting.xml에 암호 키 입력 ( {MAVEN_PATH}/conf/setting.xml )
-```xml
-<servers>
-   	...
-	<server>
-		<id>github</id>
-		<username>github-user</username>
-		<password>{X/Mnlwkfm90HVsadbsadsadlsakdsalfdlfdhfldsfldslE3LQ8g4=}</password>
-	</server>
-	...
-</servers>
-```
+	- setting.xml에 암호 키 입력 ( {MAVEN_PATH}/conf/setting.xml )
+	```xml
+	<servers>
+   		...
+		<server>
+			<id>github</id>
+			<username>github-user</username>
+			<password>{X/Mnlwkfm90HVsadbsadsadlsakdsalfdlfdhfldsfldslE3LQ8g4=}</password>
+		</server>
+		...
+	</servers>
+	```
 
 ***4) Github Repository에 Deploy***
 
