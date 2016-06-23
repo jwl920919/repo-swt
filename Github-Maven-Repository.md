@@ -83,12 +83,13 @@
 		{nDpn1bE1vX4HABCDEFGOriBubJhppqAOuy4=}
 		```
 
-	- 아래 경로에 settings-security.xml 파일 생성 후, 마스터 암호키 입력
+	- 아래 경로에 settings-security.xml 파일 생성 후, 마스터 암호키 입력 
+	( settings-security.xml 파일의 경로 변경 안됨 )
 		```
-		C:\Users\{사용자계정}\.m2\settings-security.xml
+		C:\Users\{UserName}\.m2\settings-security.xml
 		```
 
-		settings-security.xml
+	settings-security.xml
 		```xml
 		<settingsSecurity>  
 			<master>{nDpn1bE1vX4HABCDEFGOriBubJhppqAOuy4=}</master>  
