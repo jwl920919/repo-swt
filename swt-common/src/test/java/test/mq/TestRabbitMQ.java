@@ -13,11 +13,11 @@ import com.shinwootns.common.stp.SmartThreadPool;
 
 public class TestRabbitMQ {
 	
-	private static final Logger logger = Logger.getLogger(TestRabbitMQ.class);
+	private final Logger _logger = Logger.getLogger(this.getClass());
 
 	private static ConcurrentLinkedQueue<BaseTask> listTask = new ConcurrentLinkedQueue<BaseTask>();
 	
-	private static SmartThreadPool pool = new SmartThreadPool(logger);
+	private static SmartThreadPool pool = new SmartThreadPool();
 	
 	public static void main() throws InterruptedException {
 		

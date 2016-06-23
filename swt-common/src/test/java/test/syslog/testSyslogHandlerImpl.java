@@ -7,7 +7,7 @@ import com.shinwootns.common.network.SyslogHandler;
 import com.shinwootns.common.utils.LogUtils;
 import com.shinwootns.common.utils.TimeUtils;
 
-public class SyslogHandlerImpl implements SyslogHandler {
+public class testSyslogHandlerImpl implements SyslogHandler {
 
 	public void processSyslog(SyslogEntity syslog) {
 		

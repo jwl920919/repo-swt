@@ -12,12 +12,12 @@ import redis.clients.jedis.Jedis;
 
 public class RedisClient {
 	
-	private Logger _logger = null;
+	private final Logger _logger = Logger.getLogger(this.getClass());
+	
 	private Jedis _redis = null;
 	
-	public RedisClient(Jedis redis, Logger logger) {
+	public RedisClient(Jedis redis) {
 		this._redis = redis;
-		this._logger = logger;
 	}
 	
 	//region isConnection / Close

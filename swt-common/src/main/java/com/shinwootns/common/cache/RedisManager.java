@@ -12,7 +12,7 @@ import redis.clients.jedis.exceptions.JedisConnectionException;
 
 public class RedisManager {
 
-	private Logger _logger = null;
+	private final Logger _logger = Logger.getLogger(this.getClass());
 	
 	private JedisPoolConfig _config = null;
 	private JedisPool _redisPool = null;
@@ -20,8 +20,7 @@ public class RedisManager {
 	private String _host;
 	private int _port, _timeout;
 
-	public RedisManager(Logger logger) {
-		this._logger = logger;
+	public RedisManager() {
 	}
 	
 	public boolean connect(String host, int port, String password, int dbnum) {
@@ -84,7 +83,7 @@ public class RedisManager {
 			if (redis == null)
 				return null;
 			
-			return new RedisClient(redis, _logger); 
+			return new RedisClient(redis); 
 		}
 		catch(JedisConnectionException ex) {
 			LogUtils.WriteLog(_logger, Level.ERROR, ex);

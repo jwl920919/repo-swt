@@ -14,7 +14,7 @@ import org.apache.log4j.Logger;
 
 public class SmartThreadPool {
 
-	protected Logger _logger = null;
+	private final Logger _logger = Logger.getLogger(this.getClass());
 
 	protected int _coreThreadCount = 4;
 	protected int _limitThreadCount = 8; // Only when queue is full
@@ -24,10 +24,6 @@ public class SmartThreadPool {
 
 	protected BlockingQueue<Runnable> _taskQueue = null;
 	protected ThreadPoolExecutor _executor = null;
-
-	public SmartThreadPool(Logger logger) {
-		this._logger = logger;
-	}
 
 	public boolean createPool(int coreThreadCount, int limitThreadCount, int maxQueueCount) {
 

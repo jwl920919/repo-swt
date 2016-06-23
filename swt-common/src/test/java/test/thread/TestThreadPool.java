@@ -11,7 +11,7 @@ import com.shinwootns.common.stp.SmartThreadPool;
 
 public class TestThreadPool {
 
-	private static final Logger logger = Logger.getLogger(TestThreadPool.class);
+	private final Logger _logger = Logger.getLogger(this.getClass());
 	
 	public static void main() {
 		

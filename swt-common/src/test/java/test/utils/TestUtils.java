@@ -12,7 +12,7 @@ import com.shinwootns.common.utils.NetworkUtils;
 
 public class TestUtils {
 
-	private static final Logger logger = Logger.getLogger(TestUtils.class);
+	private final Logger _logger = Logger.getLogger(this.getClass());
 	
 	@Test
 	public void testTestUtils() {
@@ -85,7 +85,7 @@ public class TestUtils {
 		}
 		catch(Exception ex)
 		{
-			LogUtils.WriteLog(logger, Level.ERROR, ex);
+			LogUtils.WriteLog(_logger, Level.ERROR, ex);
 		}
 	}
 

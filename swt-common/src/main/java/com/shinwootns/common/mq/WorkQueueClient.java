@@ -13,10 +13,12 @@ import com.shinwootns.common.utils.LogUtils;
 
 public class WorkQueueClient extends BaseClient {
 	
+	private final Logger _logger = Logger.getLogger(this.getClass());
+	
 	//region Constructor
-	public WorkQueueClient(Logger logger, Channel channel)
+	public WorkQueueClient(Channel channel)
 	{
-		super(logger, channel);
+		super(channel);
 		
 		super.setPrefetchCount(1);
 	}
@@ -47,7 +49,7 @@ public class WorkQueueClient extends BaseClient {
 		}
 		catch(Exception ex)
 		{
-			LogUtils.WriteLog(super._logger, Level.ERROR, ex);
+			LogUtils.WriteLog(_logger, Level.ERROR, ex);
 		}
 		
 		return false;

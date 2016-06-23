@@ -4,28 +4,27 @@ import org.apache.log4j.Logger;
 
 public class SyslogManager {
 	
+	private final Logger _logger = Logger.getLogger(this.getClass());
+	
 	// Singleton
 	private static SyslogManager _instance;
-	private SyslogManager(Logger logger) {
-		this._logger = logger;
-	}
-	public static synchronized SyslogManager getInstance(Logger logger) {
+	private SyslogManager() {}
+	public static synchronized SyslogManager getInstance() {
 
 		if (_instance == null) {
-			_instance = new SyslogManager(logger);
+			_instance = new SyslogManager();
 		}
 		return _instance;
 	}
 	
 	// Syslog Server
 	private SyslogServer syslogServer = null;
-	private Logger _logger = null;
 
 	public boolean start(SyslogHandler handler) {
 		
 		if (syslogServer == null) {
 			
-			syslogServer = new SyslogServer(this._logger, handler);
+			syslogServer = new SyslogServer(handler);
 			
 			// bind socket
 			if ( syslogServer.bindSocket() == false)

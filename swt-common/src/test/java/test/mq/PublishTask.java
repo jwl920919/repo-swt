@@ -2,6 +2,8 @@ package test.mq;
 
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
+
 import com.shinwootns.common.mq.MQManager;
 import com.shinwootns.common.mq.WorkQueueClient;
 import com.shinwootns.common.mq.MQManager.MQClientType;
@@ -9,6 +11,8 @@ import com.shinwootns.common.mq.PublishClient;
 import com.shinwootns.common.utils.TimeUtils;
 
 public class PublishTask extends BaseTask {
+	
+	private final Logger _logger = Logger.getLogger(this.getClass());
 	
 	private String type = "";
 	private int index = 0;
@@ -33,7 +37,7 @@ public class PublishTask extends BaseTask {
 		System.out.println(String.format("Producer#%d start.", index));
 		
 		try {
-			MQManager manager = new MQManager(null);
+			MQManager manager = new MQManager();
 			
 			//String uri = "amqp://admin:shinwoo123!@192.168.1.81:5672/";
 			//if (manager.Connect(uri))
@@ -78,7 +82,7 @@ public class PublishTask extends BaseTask {
 		
 		try {
 			
-			MQManager manager = new MQManager(null);
+			MQManager manager = new MQManager();
 			
 			//String uri = "amqp://admin:shinwoo123!@192.168.1.81:5672/";
 			//if (manager.Connect(uri))

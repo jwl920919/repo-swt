@@ -9,7 +9,7 @@ import com.shinwootns.common.network.SyslogManager;
 
 public class testSyslog {
 	
-	private static final Logger logger = Logger.getLogger(testSyslog.class);
+	private final Logger _logger = Logger.getLogger(this.getClass());
 	
 	public static void main(String[] args) {
 		
@@ -17,7 +17,7 @@ public class testSyslog {
 		{
 			BasicConfigurator.configure();
 			
-			SyslogManager.getInstance(logger).start(new SyslogHandlerImpl());
+			SyslogManager.getInstance().start(new testSyslogHandlerImpl());
 			
 			
 			Scanner sc = new Scanner(System.in);
@@ -37,7 +37,7 @@ public class testSyslog {
 				}
 			}
 			
-			SyslogManager.getInstance(logger).stop();
+			SyslogManager.getInstance().stop();
 			
 			sc.close();
 		}

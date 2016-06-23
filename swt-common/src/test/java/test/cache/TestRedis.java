@@ -14,14 +14,14 @@ import test.utils.TestUtils;
 
 public class TestRedis {
 
-	private static final Logger logger = Logger.getLogger(TestRedis.class);
+	private final Logger _logger = Logger.getLogger(this.getClass());
 	
 	public static void main() {
 
 		// Basic Configurator
 		BasicConfigurator.configure();
 		
-		RedisManager rm = new RedisManager(logger);
+		RedisManager rm = new RedisManager();
 		
 		if (rm.connect("192.168.1.81", 6379, "shinwoo123!", 0) == false)
 		{

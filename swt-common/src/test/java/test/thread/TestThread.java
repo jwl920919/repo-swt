@@ -8,7 +8,7 @@ import com.shinwootns.common.stp.SmartThreadPool;
 
 public class TestThread extends Thread {
 
-	public SmartThreadPool pool = new SmartThreadPool(null);
+	public SmartThreadPool pool = new SmartThreadPool();
 
 	int taskIndex = 0;
 	

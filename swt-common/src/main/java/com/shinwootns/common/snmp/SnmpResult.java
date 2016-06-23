@@ -7,6 +7,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.util.LinkedList;
 
+import org.apache.log4j.Logger;
 import org.snmp4j.smi.OID;
 import org.snmp4j.smi.OctetString;
 import org.snmp4j.smi.SMIConstants;
@@ -17,6 +18,8 @@ import com.ibm.icu.text.CharsetDetector;
 import com.ibm.icu.text.CharsetMatch;
 
 public class SnmpResult {
+	
+	private final Logger _logger = Logger.getLogger(this.getClass());
 
 	private VariableBinding _varBind = null;
 

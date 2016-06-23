@@ -23,19 +23,16 @@ import org.snmp4j.util.TreeEvent;
 import org.snmp4j.util.TreeUtils;
 
 public class SnmpUtil {
+	
+	private final Logger _logger = Logger.getLogger(this.getClass());
+	
 	private int _port = 161;
 	private String _ip = "127.0.0.1";
 	private String _community = "public";
-	private Logger _logger = null;
 
-	public SnmpUtil(Logger logger) {
-		this._logger = logger;
-	}
-
-	public SnmpUtil(String ip, String community, Logger logger) {
+	public SnmpUtil(String ip, String community) {
 		this._ip = ip;
 		this._community = community;
-		this._logger = logger;
 	}
 
 	// Default Port = 161

@@ -18,7 +18,7 @@ import com.shinwootns.common.utils.StringUtils;
 
 public class TestHttp {
 
-	private static final Logger logger = Logger.getLogger(TestHttp.class);
+	private final Logger _logger = Logger.getLogger(this.getClass());
 
 	public static void main() {
 		
@@ -26,7 +26,7 @@ public class TestHttp {
 
 		Scanner sc = new Scanner(System.in);
 
-		HttpClient restClient = new HttpClient(logger);
+		HttpClient restClient = new HttpClient();
 		
 		restClient.setEncoding("UTF-8");
 		

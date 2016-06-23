@@ -10,7 +10,8 @@ import org.apache.log4j.Logger;
 
 public class PropertyUtils {
 
-	private Logger _logger = null;
+	private final Logger _logger = Logger.getLogger(this.getClass());
+	
 	private Properties _properties = new Properties();
 	
 	// Singleton
@@ -26,10 +27,6 @@ public class PropertyUtils {
 		return _instance;
 	}
 	
-	public void setLogger(Logger logger) {
-		this._logger = logger;
-	}
-
 	//region Load Properties
 	public boolean loadProperties(String filepath) {
 

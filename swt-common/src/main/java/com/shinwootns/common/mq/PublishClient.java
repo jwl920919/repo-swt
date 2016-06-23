@@ -13,15 +13,17 @@ import com.shinwootns.common.utils.LogUtils;
 
 public class PublishClient extends BaseClient {
 	
+	private final Logger _logger = Logger.getLogger(this.getClass());
+	
 	private String _queueName = null;
 	
 	//region Constructor
-	public PublishClient(Logger logger, Channel channel)
+	public PublishClient(Channel channel)
 	{
-		super(logger, channel);
+		super(channel);
 	}
 	//endregion
-
+	
 	// Publish Mode
     //==========================================================
     //   X(Fanout)에 의해, 여러 큐에 모두 동일한 메시지가 삽입

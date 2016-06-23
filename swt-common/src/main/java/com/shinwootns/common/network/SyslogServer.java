@@ -13,17 +13,17 @@ import com.shinwootns.common.utils.TimeUtils;
 
 public class SyslogServer extends Thread {
 	
+	private final Logger _logger = Logger.getLogger(this.getClass());
+	
 	private final static int PACKET_SIZE = 1024;
 	private final static int SYSLOG_PORT = 514;
 	
-	private Logger _logger = null;
 	private SyslogHandler _handler = null;
 	private DatagramSocket _serverSocket = null;
 	private boolean _stopFlag = false;
 	
 	
-	public SyslogServer(Logger logger, SyslogHandler handler) {
-		this._logger = logger;
+	public SyslogServer(SyslogHandler handler) {
 		this._handler = handler;
 	}
 	

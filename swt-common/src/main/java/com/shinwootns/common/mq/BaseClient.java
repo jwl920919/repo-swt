@@ -7,17 +7,18 @@ import org.apache.log4j.Logger;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.QueueingConsumer;
+import com.shinwootns.common.http.HttpClient;
 import com.shinwootns.common.utils.LogUtils;
 
 abstract class BaseClient {
 	
-	protected Logger _logger = null;
+	private final Logger _logger = Logger.getLogger(this.getClass());
+	
 	protected Channel _channel = null;
 	QueueingConsumer _consumer = null;
 
 	//region Constructor
-	public BaseClient(Logger logger, Channel channel) {
-		this._logger = logger;
+	public BaseClient(Channel channel) {
 		this._channel = channel;
 	}
 	//endregion

@@ -11,20 +11,20 @@ import com.shinwootns.common.snmp.SnmpUtil;
 
 public class TestSnmp {
 
-	private static final Logger logger = Logger.getLogger(TestSnmp.class);
+	private final Logger _logger = Logger.getLogger(this.getClass());
 
 	@Test
 	public void testSnmp() {
 		
 		BasicConfigurator.configure();
 
-		logger.info("Test Start...");
+		_logger.info("Test Start...");
 
 		try {
 
-			//SnmpUtil snmpUtil = new SnmpUtil("127.0.0.1", "public", logger);
-			SnmpUtil snmpUtil = new SnmpUtil("192.168.1.11", "public",logger);
-			//SnmpUtil snmpUtil = new SnmpUtil("192.168.1.80", "public", logger);
+			//SnmpUtil snmpUtil = new SnmpUtil("127.0.0.1", "public");
+			SnmpUtil snmpUtil = new SnmpUtil("192.168.1.11", "public");
+			//SnmpUtil snmpUtil = new SnmpUtil("192.168.1.80", "public");
 
 			// ===================================================================
 			// SnmpGet
@@ -76,10 +76,10 @@ public class TestSnmp {
 			
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
-			logger.error(e.getMessage(), e);
+			_logger.error(e.getMessage(), e);
 		}
 
-		logger.info("Test End.");
+		_logger.info("Test End.");
 	}
 
 }

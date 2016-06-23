@@ -13,11 +13,13 @@ import com.shinwootns.common.utils.LogUtils;
 
 public class TopicsClient extends BaseClient {
 	
+	private final Logger _logger = Logger.getLogger(this.getClass());
+	
 	private String _queueName = null;
 	
-	public TopicsClient(Logger logger, Channel channel)
+	public TopicsClient(Channel channel)
 	{
-		super(logger, channel);
+		super(channel);
 	}
 
 	// Topics Mode

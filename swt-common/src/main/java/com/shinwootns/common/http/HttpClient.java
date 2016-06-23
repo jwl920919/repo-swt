@@ -36,12 +36,13 @@ import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import com.shinwootns.common.cache.RedisManager;
 import com.shinwootns.common.utils.LogUtils;
 
 public class HttpClient {
 
 	//region Variables
-	private Logger _logger = null;
+	private final Logger _logger = Logger.getLogger(this.getClass());
 
 	private String _baseURL;
 	private String _id;
@@ -55,12 +56,6 @@ public class HttpClient {
 	private CloseableHttpClient _httpClient = null;
 	//endregion
 	
-	//region Constructor
-	public HttpClient(Logger logger) {
-		this._logger = logger;
-	}
-	//endregion
-
 	//region Connect / Close
 	public boolean Connect_Https(String baseURL, String id, String pwd) {
 

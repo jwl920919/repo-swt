@@ -13,10 +13,12 @@ import com.shinwootns.common.utils.LogUtils;
 
 public class SingleClient extends BaseClient {
 
+	private final Logger _logger = Logger.getLogger(this.getClass());
+	
 	//region Constructor
-	public SingleClient(Logger logger, Channel channel)
+	public SingleClient(Channel channel)
 	{
-		super(logger, channel);
+		super(channel);
 	}
 	//endregion
 	
