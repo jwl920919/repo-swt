@@ -129,9 +129,13 @@
 					<includes>
 						<include>**/*</include>
 					</includes>
-					<merge>true</merge>								<!-- don't delete old artifacts -->
+					
+					<!-- <merge>true</merge> -->								<!-- don't delete old artifacts -->
+					<merge>true</merge>
+					
 					<repositoryName>mvn-repo</repositoryName>		<!-- github repo name -->
 					<repositoryOwner>songagi</repositoryOwner>		<!-- github username -->
+					
 				</configuration>
 				<executions>
 					<execution>
