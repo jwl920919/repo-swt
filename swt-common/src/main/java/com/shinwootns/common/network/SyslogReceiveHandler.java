@@ -1,6 +1,6 @@
 package com.shinwootns.common.network;
 
-public interface SyslogHandler {
+public interface SyslogReceiveHandler {
 	
 	public abstract void processSyslog(SyslogEntity syslog) ;
 	

@@ -18,12 +18,12 @@ public class SyslogServer extends Thread {
 	private final static int PACKET_SIZE = 1024;
 	private final static int SYSLOG_PORT = 514;
 	
-	private SyslogHandler _handler = null;
+	private SyslogReceiveHandler _handler = null;
 	private DatagramSocket _serverSocket = null;
 	private boolean _stopFlag = false;
 	
 	
-	public SyslogServer(SyslogHandler handler) {
+	public SyslogServer(SyslogReceiveHandler handler) {
 		this._handler = handler;
 	}
 	
@@ -78,7 +78,7 @@ public class SyslogServer extends Thread {
 		}
 	}
 	
-	private void receiveSyslog(SyslogHandler handler) {
+	private void receiveSyslog(SyslogReceiveHandler handler) {
 		
 		int nPriority= 0;
 		int nFacility = 0;

@@ -6,21 +6,21 @@ import com.shinwootns.common.network.SyslogEntity;
 import com.shinwootns.common.stp.PoolStatus;
 import com.shinwootns.common.stp.SmartThreadPool;
 
-public class SyslogAnalyzer {
+public class ServiceManager {
 	
 	private final Logger _logger = Logger.getLogger(this.getClass());
 	
-	private static final int WORKER_MIN_COUNT = 4;
-	private static final int WORKER_MAX_COUNT = 8;
-	private static final int WORKER_LIMIT = 32;
+	private static final int WORKER_MIN_COUNT = 16;
+	private static final int WORKER_MAX_COUNT = 64;
+	private static final int WORKER_LIMIT = 128;
 	
 	// Singleton
-	private static SyslogAnalyzer _instance = null;
-	private SyslogAnalyzer() {}
-	public static synchronized SyslogAnalyzer getInstance() {
+	private static ServiceManager _instance = null;
+	private ServiceManager() {}
+	public static synchronized ServiceManager getInstance() {
 
 		if (_instance == null) {
-			_instance = new SyslogAnalyzer();
+			_instance = new ServiceManager();
 		}
 		return _instance;
 	}
@@ -29,9 +29,9 @@ public class SyslogAnalyzer {
 	private SmartThreadPool _workerPool = new SmartThreadPool();
 	
 	// Start
-	public void start() {
+	public synchronized void start() {
 
-		_logger.info("SyslogAnalyzer... start");
+		_logger.info("ServiceManager... start");
 
 		if (_workerPool.createPool(WORKER_MIN_COUNT, WORKER_MAX_COUNT, WORKER_LIMIT)) {
 			_logger.info("Creating syslog-analyzer worker pool ");
@@ -41,18 +41,20 @@ public class SyslogAnalyzer {
 		}
 	}
 	
-	public void addTask(SyslogEntity syslog) {
-		_workerPool.addTask(new SyslogTask(syslog));
+	// Add Syslog Task
+	public synchronized void addSyslogTask(SyslogEntity syslog) {
+		_workerPool.addTask(new SyslogTask(_logger, syslog));
 	}
 	
-	public PoolStatus GetPoolStatus() {
+	// Pool Status
+	public synchronized PoolStatus GetPoolStatus() {
 		return _workerPool.getPoolStatus();
 	}
 	
-	public void stop()
+	public synchronized void stop()
 	{
 		_workerPool.shutdownAndWait();
 		
-		_logger.info("SyslogAnalyzer....... stop");
+		_logger.info("ServiceManager....... stop");
 	}
 }

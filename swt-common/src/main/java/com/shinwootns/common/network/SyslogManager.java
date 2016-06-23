@@ -20,7 +20,7 @@ public class SyslogManager {
 	// Syslog Server
 	private SyslogServer syslogServer = null;
 
-	public boolean start(SyslogHandler handler) {
+	public boolean start(SyslogReceiveHandler handler) {
 		
 		if (syslogServer == null) {
 			
