@@ -1,7 +1,7 @@
 # Github Maven Repository 연동 방법
 
 
-## Github Maven Repository 생성
+## Maven Repository 생성
 
 ***1) Repository 생성***
 
@@ -132,7 +132,7 @@ mvn clean deploy
 ```
 
 
-## Maven 연동
+## Maven Repository 연동
 
 - 연동할 프로젝트의 pom.xml에 아래 코드 추가
 
