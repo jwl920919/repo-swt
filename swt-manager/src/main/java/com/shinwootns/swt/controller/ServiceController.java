@@ -1,20 +1,15 @@
-package com.shinwootns.swt.service;
+package com.shinwootns.swt.controller;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Controller;
 
 import com.shinwootns.common.network.SyslogManager;
-import com.shinwootns.common.utils.LogUtils;
-import com.shinwootns.swt.SWTManagerApplication;
-import com.shinwootns.swt.property.SystemProperties;
+import com.shinwootns.swt.service.SyslogAnalyzer;
+import com.shinwootns.swt.service.SyslogReceiveHandler;
 
 @EnableAsync
 @Controller
@@ -22,15 +17,16 @@ public class ServiceController {
 	
 	private final Logger _logger = Logger.getLogger(this.getClass());
 	
-	@Autowired
-	private SystemProperties properties;
+	private SyslogAnalyzer analyzer = null;
+	
+	//@Autowired
+	//private SystemProperties properties;
 	
 	@PostConstruct
 	public void startService() {
 		
 		_logger.info("startService()... start");
-		
-		// Syslog
+
 		startSyslogHandler();
 		
 		_logger.info("endService()... start");
@@ -48,11 +44,20 @@ public class ServiceController {
 	}
 	
 	private void startSyslogHandler() {
-		SyslogManager.getInstance().start(new SyslogHandlerImpl());
+		
+		SyslogAnalyzer.getInstance().start();
+		
+		// Start receive handler
+		SyslogManager.getInstance().start(new SyslogReceiveHandler());
 	}
 	
 	private void stopSyslogHandler() {
+
+		// Stop receive handler
 		SyslogManager.getInstance().stop();
+		
+		// Stop Analyzer
+		SyslogAnalyzer.getInstance().stop();
 	}
 }
 

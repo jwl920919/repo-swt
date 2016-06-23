@@ -96,6 +96,9 @@ public class SyslogServer extends Thread {
 
 			while (this.getStopFlag() == false) {
 				
+				// Initialize
+				receivePacket.setLength(buff.length);
+				
 				// Receive
 				_serverSocket.receive(receivePacket);
 				

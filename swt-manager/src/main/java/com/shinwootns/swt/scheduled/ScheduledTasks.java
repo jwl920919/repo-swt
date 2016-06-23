@@ -3,14 +3,19 @@ package com.shinwootns.swt.scheduled;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.concurrent.ScheduledExecutorFactoryBean;
 import org.springframework.stereotype.Component;
 
+import com.shinwootns.common.stp.PoolStatus;
+import com.shinwootns.swt.service.SyslogAnalyzer;
+
 @Component
 public class ScheduledTasks {
 	
+	private final Logger _logger = Logger.getLogger(this.getClass());
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 	
 	@Bean
@@ -20,16 +25,16 @@ public class ScheduledTasks {
 		return bean;
 	}
 
-//	// fixedRate
-//    @Scheduled(fixedRate = 5000)
-//    public void ScheduledFixedRate() {
-//    	
-//    	try { Thread.sleep(1000); } 
-//    	catch (InterruptedException e) {}
-//    	
-//        System.out.println("Scheduled-FixedRate : " + dateFormat.format(new Date()));
-//    }
-//    
+	// fixedRate
+    @Scheduled(fixedRate = 5000)
+    public void monitorPoolStatus() {
+    	
+    	PoolStatus syslogPoolstatus = SyslogAnalyzer.getInstance().GetPoolStatus();
+    	
+    	//_logger.debug(String.format("[Syslog-Pool] %s", syslogPoolstatus.toString()));
+    	System.out.println(String.format("[Syslog-Pool] %s", syslogPoolstatus.toString()));
+    }
+    
 //    // fixedDelay
 //    @Scheduled(fixedDelay = 5000)
 //    public void ScheduledFixedDelay() {

@@ -1,14 +1,10 @@
 package test.mq;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.junit.Test;
-
 import com.shinwootns.common.stp.SmartThreadPool;
 
 public class TestRabbitMQ {

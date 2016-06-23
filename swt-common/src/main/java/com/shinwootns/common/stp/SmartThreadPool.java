@@ -92,6 +92,17 @@ public class SmartThreadPool {
 
 		return (int) _executor.getCompletedTaskCount();
 	}
+	
+	public PoolStatus getPoolStatus() {
+
+		PoolStatus poolStatus = new PoolStatus();
+		poolStatus.setActiveCount(getActiveCount());
+		poolStatus.setPoolSize(getPoolSize());
+		poolStatus.setTaskQueueSize(getTaskQueueSize());
+		poolStatus.setCompletedCount(getCompletedTaskCount());
+		
+		return poolStatus;
+	}
 
 	public boolean addTask(Runnable task) {
 
