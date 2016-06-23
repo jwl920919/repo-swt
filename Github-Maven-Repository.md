@@ -119,11 +119,11 @@
 
 - Eclipse 이용 시:
 
-	1. (Target Project) > **Run As** > **Maven Build...**
+	- Project > Run As > Maven Build...
 
-	2. Goals 입력 창: ***'clean deploy'*** 입력
+	- Goals 입력: ***'clean deploy'*** 입력
 
-	3. **Run** 실행
+	- Run 실행
 
 - Command 이용 시:
 
