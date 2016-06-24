@@ -5,8 +5,9 @@ import org.apache.log4j.Logger;
 import com.shinwootns.common.network.SyslogEntity;
 import com.shinwootns.common.stp.PoolStatus;
 import com.shinwootns.common.stp.SmartThreadPool;
+import com.shinwootns.swt.service.syslog.SyslogTask;
 
-public class ServiceManager {
+public class WorkerPoolManager {
 	
 	private final Logger _logger = Logger.getLogger(this.getClass());
 	
@@ -15,12 +16,12 @@ public class ServiceManager {
 	private static final int WORKER_LIMIT = 128;
 	
 	// Singleton
-	private static ServiceManager _instance = null;
-	private ServiceManager() {}
-	public static synchronized ServiceManager getInstance() {
+	private static WorkerPoolManager _instance = null;
+	private WorkerPoolManager() {}
+	public static synchronized WorkerPoolManager getInstance() {
 
 		if (_instance == null) {
-			_instance = new ServiceManager();
+			_instance = new WorkerPoolManager();
 		}
 		return _instance;
 	}

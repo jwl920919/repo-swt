@@ -1,8 +1,9 @@
-package com.shinwootns.swt.service;
+package com.shinwootns.swt.service.syslog;
 
 import org.apache.log4j.Logger;
 import com.shinwootns.common.network.SyslogEntity;
 import com.shinwootns.common.network.SyslogReceiveHandler;
+import com.shinwootns.swt.service.WorkerPoolManager;
 
 public class SyslogReceiveHandlerImpl implements SyslogReceiveHandler {
 	
@@ -11,6 +12,6 @@ public class SyslogReceiveHandlerImpl implements SyslogReceiveHandler {
 	public void processSyslog(SyslogEntity syslog) {
 
 		// Add task
-		ServiceManager.getInstance().addSyslogTask(syslog);
+		WorkerPoolManager.getInstance().addSyslogTask(syslog);
 	}
 }

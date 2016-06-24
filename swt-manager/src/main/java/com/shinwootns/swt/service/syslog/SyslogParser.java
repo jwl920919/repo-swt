@@ -1,7 +1,4 @@
-package com.shinwootns.swt.service;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+package com.shinwootns.swt.service.syslog;
 
 import org.apache.log4j.Logger;
 import org.junit.Test;

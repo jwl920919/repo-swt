@@ -8,8 +8,9 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Controller;
 
 import com.shinwootns.common.network.SyslogManager;
-import com.shinwootns.swt.service.ServiceManager;
-import com.shinwootns.swt.service.SyslogReceiveHandlerImpl;
+import com.shinwootns.common.network.SyslogReceiveHandler;
+import com.shinwootns.swt.service.WorkerPoolManager;
+import com.shinwootns.swt.service.syslog.SyslogReceiveHandlerImpl;
 
 @EnableAsync
 @Controller
@@ -17,7 +18,7 @@ public class ServiceController {
 	
 	private final Logger _logger = Logger.getLogger(this.getClass());
 	
-	private ServiceManager analyzer = null;
+	private WorkerPoolManager analyzer = null;
 	
 	//@Autowired
 	//private SystemProperties properties;
@@ -45,7 +46,7 @@ public class ServiceController {
 	
 	private void startSyslogHandler() {
 		
-		ServiceManager.getInstance().start();
+		WorkerPoolManager.getInstance().start();
 		
 		// Start receive handler
 		SyslogManager.getInstance().start(new SyslogReceiveHandlerImpl());
@@ -57,7 +58,7 @@ public class ServiceController {
 		SyslogManager.getInstance().stop();
 		
 		// Stop Analyzer
-		ServiceManager.getInstance().stop();
+		WorkerPoolManager.getInstance().stop();
 	}
 }
 

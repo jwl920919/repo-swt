@@ -1,4 +1,4 @@
-package com.shinwootns.swt.service;
+package com.shinwootns.swt.service.syslog;
 
 import org.apache.log4j.Logger;
 
