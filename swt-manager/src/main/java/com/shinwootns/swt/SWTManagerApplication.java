@@ -1,4 +1,4 @@
-package com.shinwootns.swt.main;
+package com.shinwootns.swt;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,10 +10,10 @@ import org.springframework.validation.Validator;
 
 import com.shinwootns.swt.main.SystemPropertiesValidator;
 
-@ComponentScan
+//@ComponentScan(basePackages = "com.shinwootns.swt.controller")
 @EnableScheduling
 @SpringBootApplication
-public class SWTManagerApplication{
+public class SWTManagerApplication {
 	
 	@Bean
 	public Validator configurationPropertiesValidator() {

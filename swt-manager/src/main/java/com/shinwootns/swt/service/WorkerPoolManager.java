@@ -11,7 +11,7 @@ public class WorkerPoolManager {
 	
 	private final Logger _logger = Logger.getLogger(this.getClass());
 	
-	private static final int WORKER_MIN_COUNT = 16;
+	private static final int WORKER_MIN_COUNT = 1;
 	private static final int WORKER_MAX_COUNT = 64;
 	private static final int WORKER_LIMIT = 128;
 	

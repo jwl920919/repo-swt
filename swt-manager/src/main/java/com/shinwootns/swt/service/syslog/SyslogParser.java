@@ -1,125 +1,160 @@
 package com.shinwootns.swt.service.syslog;
 
-import org.apache.log4j.Logger;
-import org.junit.Test;
+import org.json.simple.JSONObject;
+
+import com.shinwootns.common.network.SyslogEntity;
 
 public class SyslogParser {
 	
-	private final Logger _logger = Logger.getLogger(this.getClass());
-	
-	public class ExtractResult {
-		public boolean resultFlag;
-		public String value;
-		public int lastIndex;
-	}
-	
-	@Test
-	public void testDHCP()
+	public static JSONObject processSyslog(String rawMessage)
 	{
-		//String message = "DHCPACK to 192.168.1.115 (28:e3:47:4c:45:14) via eth1";
-        String message = "DHCPACK on 192.168.1.19 to 30:52:cb:0c:f8:17 (JS) via eth1 relay eth1 lease-duration 10 (RENEW) uid 01:30:52:cb:0c:f8:17";
-        // String message = "DHCPACK on 192.168.1.169 to 20:55:31:89:89:ed (android - 11c2831a49d6d571) via eth1 relay eth1 lease - duration 43198(RENEW) uid 01:20:55:31:89:89:ed"
-		
-		processDHCPAck(message);
+    	// ex) Feb 24 17:38:33 192.168.1.11 dhcpd[22231]: DHCPREQUEST for 192.168.1.12 from 6c:29:95:05:38:a4 (BJPARK) via eth1 uid 01:6c:29:95:05:38:a4 (RENEW)
+    	
+    	int nIndex1 = rawMessage.indexOf("dhcpd[", 23);
+    	if (nIndex1 <= 0)
+    		return null;
+    	
+    	int nIndex2 = rawMessage.indexOf("]: ", nIndex1);
+        if (nIndex2 <= 0)
+        	return null;
+        
+        int nIndex3 = rawMessage.indexOf(" ", nIndex2+3);
+        if (nIndex3 <= 0)
+        	return null;
+
+        // Keyword (DHCPDISCOVER, DHCPOFFER, ...)
+        String keyword = rawMessage.substring(nIndex2+3, nIndex3);
+        
+        JSONObject result = null;
+        
+        // Discover (C->S)
+        if (keyword.equals("DHCPDISCOVER"))
+        {
+        	result = processDISCOVER(rawMessage.substring(nIndex3+1));
+        }
+        // Offer (S->C)
+        else if (keyword.equals("DHCPOFFER"))
+        {
+        	result = processOFFER(rawMessage.substring(nIndex3+1));
+        }
+        // Reqeust (C->S)
+        else if (keyword.equals("DHCPREQUEST"))
+        {
+        	result = processDHCPREQUEST(rawMessage.substring(nIndex3+1));
+        }
+        // Ack (S->C)
+        else if (keyword.equals("DHCPACK"))
+        {
+        	result = processDHCPACK(rawMessage.substring(nIndex3+1));
+        }
+        // Not-Ack (S->C)
+        else if (keyword.equals("DHCPNACK"))
+        {
+        	result = processNACK(rawMessage.substring(nIndex3+1));
+        }
+        // Inform (C->S)
+        else if (keyword.equals("DHCPINFORM"))
+        {
+        	result = processINFORM(rawMessage.substring(nIndex3+1));
+        }
+        // Expire (S->C)
+        else if (keyword.equals("DHCPEXPIRE"))
+        {
+        	result = processEXPIRE(rawMessage.substring(nIndex3+1));
+        }
+        // Release (C->S)
+        else if (keyword.equals("DHCPRELEASE"))
+        {
+        	result = processRELEASE(rawMessage.substring(nIndex3+1));
+        }
+        
+        return result;
 	}
 	
-	private ExtractResult ExtractData(String sMessage, int nStartIndex, String sTokenKey, int nLastIndex)
+	private static SyslogExtractEntity ExtractData(String message, int startIndex, String startToken, String endToken)
     {
-		ExtractResult result = new ExtractResult();
-		
-		result.resultFlag = false;
-		result.value = "";
-		result.lastIndex = -1;
-		
-        if (nStartIndex < 0)
-            nStartIndex = 0;
+		SyslogExtractEntity result = new SyslogExtractEntity();
+	
+        if (startIndex < 0)
+        	startIndex = 0;
 
-        int nIndex = sMessage.indexOf(sTokenKey + " ", nStartIndex);
-        if (nIndex >= 0)
+        int index1 = message.indexOf(startToken + " ", startIndex);
+        if (index1 >= 0)
         {
-            int nIndex2 = sMessage.indexOf(" ", nIndex + sTokenKey.length() + 1);
+            int nIndex2 = message.indexOf(endToken, index1 + startToken.length() + 1);
 
-            if (nIndex2 >= 0)
+            if (nIndex2 >= 0 && endToken != null)
             {
-            	int startIndex = nIndex + sTokenKey.length() + 1;
-            	int valueLength = nIndex2 - (nIndex + sTokenKey.length() + 1);
+            	int tmpStartIndex = index1 + startToken.length() + 1;
+            	int valueLength = nIndex2 - (index1 + startToken.length() + 1);
             	
-            	result.value = sMessage.substring(startIndex, startIndex + valueLength);
-            	result.lastIndex = nIndex2 + 1;
+            	result.setValue( message.substring(tmpStartIndex, tmpStartIndex + valueLength) );
+            	result.setLastIndex(nIndex2 + 1);
 
-                if (result.value != null && result.value.length() > 0)
-                	result.resultFlag = true;
+                if (result.getValue() != null && result.getValue().length() > 0)
+                	result.setFindFlag(true);
             }
             else
             {
-            	result.value = sMessage.substring(nIndex + sTokenKey.length() + 1);
-            	result.lastIndex = -1;
+            	result.setValue(message.substring(index1 + startToken.length() + 1));
+            	result.setLastIndex(-1);
 
-                if (result.value !=null && result.value.length() > 0)
-                	result.resultFlag = true;
+                if (result.getValue() !=null && result.getValue().length() > 0)
+                	result.setFindFlag( true );
             }
         }
 
         return result;
     }
 	
-	public int process_DISCOVER(String sMsg, int nLastIndex) {
-        String sIP="", sMac="";
+	private static JSONObject processDISCOVER(String message) {
 
-        // [DHCPDISCOVER]
-        // DHCPDISCOVER from 00:26:66:d1:69:69 via eth1 : network 192.168.1.0 / 24: no free leases
-        // DHCPDISCOVER from 00:19:99:e4:ea:7f (ClickShare-ShinwooTNS-C1) via eth1 uid 01:00:19:99:e4:ea:7f
+		// [DHCPDISCOVER]
+        // from 00:26:66:d1:69:69 via eth1 : network 192.168.1.0 / 24: no free leases
+        // from 00:19:99:e4:ea:7f (ClickShare-ShinwooTNS-C1) via eth1 uid 01:00:19:99:e4:ea:7f
 
-        // DHCPDISCOVER from [MAC] ~~
-        /*
-        if (ExtractData(sMsg, "DHCPDISCOVER".length(), "from", out sMac, ref nLastIndex))
-        {
-            // Find OUI
-            String sCoperation="";
-            //SyslogManager.Instance.FindOUI(sMac, out sCoperation);
-
-            // Is Renew ?
-            boolean bRenew = (nLastIndex > 0 && sMsg.indexOf("(RENEW)", nLastIndex) > 0) ? true : false;
-
-            // Print
-            DebugPrint("DISCOVER", bRenew, sIP, sMac, sCoperation);
-        }
-        */
-        return nLastIndex;
+        // from [MAC] ~~
+        
+        SyslogExtractEntity result1 = ExtractData(message, 0, "from", " ");
+		if (result1.isFindFlag() == false)
+			return null;
+		
+		JSONObject result = new JSONObject();
+		result.put("type", "DHCPDISCOVER");
+		result.put("ip", "");
+		result.put("mac", result1.getValue());
+		result.put("renew", (message.indexOf("(RENEW)") > 0)? true : false);
+		result.put("result", true);
+        
+        return result;
     }
 
-	public int process_OFFER(String sMsg, int nLastIndex) {
-        String sIP = "", sMac = "";
+	private static JSONObject processOFFER(String message) {
 
-        // [DHCPOFFER]
+		// [DHCPOFFER]
         // DHCPOFFER on 192.168.1.20 to 00:26:66:d1:69:69 via eth1 relay eth1 lease-duration 120 offered-duration 10 uid 01:00:26:66:d1:69:69
         // DHCPOFFER on 192.168.1.12 to 00:19:99:e4:ea:7f (ClickShare-ShinwooTNS-C1) via eth1 relay eth1 lease-duration 10 uid 01:00:19:99:e4:ea:7f
         // DHCPOFFER on 192.168.1.13 to d0:7e:35:7e:93:1b (LDK-PC) via eth1 relay eth1 lease-duration 120 offered-duration 10 uid 01:d0:7e:35:7e:93:1b
 
-        /*
-        // DHCPOFFER on [IP] ~ to [MAC] ~~
-        if (ExtractData(sMsg, "DHCPOFFER".Length, "on", out sIP, ref nLastIndex)
-            && ExtractData(sMsg, nLastIndex, "to", out sMac, ref nLastIndex))
-        {
-            // Find OUI
-            string sCoperation;
-            SyslogManager.Instance.FindOUI(sMac, out sCoperation);
-
-            // Is automatic registion OUI?
-            bool bAutoRegist = SyslogManager.Instance.IsAutoRegistOUI(sMac);
-
-            // Is Renew ?
-            bool bRenew = (nLastIndex > 0 && sMsg.IndexOf("(RENEW)", nLastIndex) > 0) ? true : false;
-
-            // Print
-            DebugPrint("OFFER", bRenew, sIP, sMac, bAutoRegist, sCoperation);
-        }
-        */
+        SyslogExtractEntity result1 = ExtractData(message, 0, "on", " ");
+		if (result1.isFindFlag() == false)
+			return null;
+		
+		SyslogExtractEntity result2 = ExtractData(message, result1.getLastIndex(), "to", " ");
+		if (result2.isFindFlag() == false)
+			return null;
+		
+		JSONObject result = new JSONObject();
+		result.put("type", "DHCPOFFER");
+		result.put("ip", result1.getValue());
+		result.put("mac", result2.getValue());
+		result.put("renew", (message.indexOf("(RENEW)") > 0)? true : false);
+		result.put("result", true);
         
-        return nLastIndex;
+        return result;
 	}
 	
-	public int _Process_REQUEST(String sMsg, int nLastIndex)
+	private static JSONObject processDHCPREQUEST(String message)
     {
         String sIP = "", sMac = "";
 
@@ -129,201 +164,139 @@ public class SyslogParser {
         // DHCPREQUEST for 192.168.1.192 from 18:f6:43:24:06:4d via eth1 : unknown lease 192.168.1.192.
         // DHCPREQUEST for 192.168.1.101 from 98:83:89:14:4f:9e via eth1
 
-        /*
-        // DHCPREQUEST for [IP] ~ from [MAC] ~~
-        if (ExtractData(sMsg, "DHCPREQUEST".Length, "for", out sIP, ref nLastIndex)
-            && ExtractData(sMsg, nLastIndex, "from", out sMac, ref nLastIndex))
-        {
-
-            // Find OUI
-            string sCoperation;
-            SyslogManager.Instance.FindOUI(sMac, out sCoperation);
-
-            // Is automatic registion OUI?
-            bool bAutoRegist = SyslogManager.Instance.IsAutoRegistOUI(sMac);
-
-            // Is Renew ?
-            bool bRenew = (nLastIndex > 0 && sMsg.IndexOf("(RENEW)", nLastIndex) > 0) ? true : false;
-
-            // Print
-            DebugPrint("REQUEST", bRenew, sIP, sMac, bAutoRegist, sCoperation);
-        }
-        */
+        SyslogExtractEntity result1 = ExtractData(message, 0, "for", " ");
+		if (result1.isFindFlag() == false)
+			return null;
+		
+		SyslogExtractEntity result2 = ExtractData(message, result1.getLastIndex(), "from", " ");
+		if (result2.isFindFlag() == false)
+			return null;
+		
+		JSONObject result = new JSONObject();
+		result.put("type", "DHCPREQUEST");
+		result.put("ip", result1.getValue());
+		result.put("mac", result2.getValue());
+		result.put("renew", (message.indexOf("(RENEW)") > 0)? true : false);
+		result.put("result", true);
         
-        return nLastIndex;
+        return result;
     }
 	
-	public void processDHCPAck(String message)
+	private static JSONObject processDHCPACK(String message)
     {
-        String ipAddr = "", macAddr = "";
-
         // [DHCPACK]
-        // DHCPACK to 192.168.1.115 (28:e3:47:4c:45:14) via eth1
-        // DHCPACK on 192.168.1.19 to 30:52:cb:0c:f8:17 (JS) via eth1 relay eth1 lease-duration 10 (RENEW) uid 01:30:52:cb:0c:f8:17
-        // DHCPACK on 192.168.1.169 to 20:55:31:89:89:ed (android - 11c2831a49d6d571) via eth1 relay eth1 lease - duration 43198(RENEW) uid 01:20:55:31:89:89:ed
+        // to 192.168.1.115 (28:e3:47:4c:45:14) via eth1
+        // on 192.168.1.19 to 30:52:cb:0c:f8:17 (JS) via eth1 relay eth1 lease-duration 10 (RENEW) uid 01:30:52:cb:0c:f8:17
+        // on 192.168.1.169 to 20:55:31:89:89:ed (android - 11c2831a49d6d571) via eth1 relay eth1 lease - duration 43198(RENEW) uid 01:20:55:31:89:89:ed
         
-        // #1. DHCPACK on [IP] ~ to [MAC] ~     // Inform-Ack
-        // #2. DHCPACK to [IP] ~                // Request-Ack
-        
-        int lastIndex = -1;
-        
-        ExtractResult result1 = ExtractData(message, "DHCPACK".length(), "on", lastIndex);
-        
-        if (result1.resultFlag == true)
-        {
-        	lastIndex = result1.lastIndex;
-        	ipAddr = result1.value;
-        	
-        	ExtractResult result2 = ExtractData(message, lastIndex, "to", lastIndex);
-        	if ( result2.resultFlag == true ) {
-        		
-        		macAddr = result2.value;
-        		
-        		System.out.println("IP="+ipAddr + ", MAC="+macAddr);
-        	}
-        }
-        
-            // Is Target IP?
-            /*bool bTargetIP = SyslogManager.Instance.IsTargetIP(sIP);
+        // #1. on [IP] ~ to [MAC] ~     // Inform-Ack   <-- Target Message
+        // #2. to [IP] ~                // Request-Ack (Ignore)
+		
+		SyslogExtractEntity result1 = ExtractData(message, 0, "on", " ");
+		if (result1.isFindFlag() == false)
+			return null;
+		
+		SyslogExtractEntity result2 = ExtractData(message, result1.getLastIndex(), "to", " ");
+		if (result2.isFindFlag() == false)
+			return null;
+		
+		JSONObject result = new JSONObject();
+		result.put("type", "DHCPACK");
+		result.put("ip", result1.getValue());
+		result.put("mac", result2.getValue());
+		result.put("renew", (message.indexOf("(RENEW)") > 0)? true : false);
+		result.put("result", true);	
 
-            if (bTargetIP)  // Only Target Range
-            {
-                // Find OUI
-                string sCoperation;
-                SyslogManager.Instance.FindOUI(sMac, out sCoperation);
-
-                // Is automatic registion OUI?
-                bool bAutoRegist = SyslogManager.Instance.IsAutoRegistOUI(sMac);
-
-                // Is Renew ?
-                bool bRenew = (nLastIndex > 0 && sMsg.IndexOf("(RENEW)", nLastIndex) > 0) ? true : false;
-
-                if (bRenew == false)    // Exclude Renew
-                {
-                    // Print
-                    //DebugPrint("ACK", bRenew, sIP, sMac, bAutoRegist, sCoperation);
-
-                    PushToUI(sIP, sMac, bRenew, bAutoRegist, sCoperation);
-                }
-            }
-            */
+		return result;
     }
 
-	private int _Process_NACK(String sMsg, int nLastIndex)
+	private static JSONObject processNACK(String message)
     {
-        String sIP = "", sMac = "";
-
         // [DHCPNAK]
-        // DHCPNAK on 192.168.1.103 to d0:7e:35:7e:93:1b via eth1
+        // on 192.168.1.103 to d0:7e:35:7e:93:1b via eth1
 
-        /*
-        // DHCPNAK on [IP] ~ to [MAC] ~
-        if (ExtractData(sMsg, "DHCPNACK".Length, "on", out sIP, ref nLastIndex)
-            && ExtractData(sMsg, nLastIndex, "to", out sMac, ref nLastIndex))
-        {
-            // Find OUI
-            string sCoperation;
-            SyslogManager.Instance.FindOUI(sMac, out sCoperation);
-
-            // Is automatic registion OUI?
-            bool bAutoRegist = SyslogManager.Instance.IsAutoRegistOUI(sMac);
-
-            // Is Renew ?
-            bool bRenew = (nLastIndex > 0 && sMsg.IndexOf("(RENEW)", nLastIndex) > 0) ? true : false;
-
-            // Print
-            DebugPrint("NACK", bRenew, sIP, sMac, bAutoRegist, sCoperation);
-        }
-        */
-        return nLastIndex;
+        SyslogExtractEntity result1 = ExtractData(message, 0, "on", " ");
+		if (result1.isFindFlag() == false)
+			return null;
+		
+		SyslogExtractEntity result2 = ExtractData(message, result1.getLastIndex(), "to", " ");
+		if (result2.isFindFlag() == false)
+			return null;
+		
+		JSONObject result = new JSONObject();
+		result.put("type", "DHCPNAK");
+		result.put("ip", result1.getValue());
+		result.put("mac", result2.getValue());
+		result.put("renew", (message.indexOf("(RENEW)") > 0)? true : false);
+		result.put("result", true);
+		
+		return result;
     }
 
-	private int _Process_INFORM(String sMsg, int nLastIndex)
+	private static JSONObject processINFORM(String message)
     {
-        String sIP = "", sMac = "";
-
         // [DHCPINFORM]
-        // DHCPINFORM from 192.168.1.115 via eth1
+        // from 192.168.1.115 via eth1
 
-        /*
-        // DHCPINFORM from [IP] ~
-        if (ExtractData(sMsg, "DHCPINFORM".Length, "from", out sIP, ref nLastIndex))
-        {
-            // Find OUI
-            string sCoperation;
-            SyslogManager.Instance.FindOUI(sMac, out sCoperation);
-
-            // Is automatic registion OUI?
-            bool bAutoRegist = SyslogManager.Instance.IsAutoRegistOUI(sMac);
-
-            // Is Renew ?
-            bool bRenew = (nLastIndex > 0 && sMsg.IndexOf("(RENEW)", nLastIndex) > 0) ? true : false;
-
-            // Print
-            DebugPrint("INFORM", bRenew, sIP, sMac, bAutoRegist, sCoperation);
-        }
-        */
+        SyslogExtractEntity result1 = ExtractData(message, 0, "from", " ");
+		if (result1.isFindFlag() == false)
+			return null;
+		
+		JSONObject result = new JSONObject();
+		result.put("type", "DHCPINFORM");
+		result.put("ip", result1.getValue());
+		result.put("mac", "");
+		result.put("renew", (message.indexOf("(RENEW)") > 0)? true : false);
+		result.put("result", true);
         
-        return nLastIndex;
+        return result;
     }
 
-	private int _Process_EXPIRE(String sMsg, int nLastIndex)
+	private static JSONObject processEXPIRE(String message)
     {
         String sIP = "", sMac = "";
 
         // [DHCPEXPIRE]
-        // DHCPEXPIRE on 192.168.1.19 to 30:52:cb:0c:f8:17
+        // on 192.168.1.19 to 30:52:cb:0c:f8:17
 
-        /*
-        // DHCPEXPIRE on [IP] ~ to [MAC] ~
-        if (ExtractData(sMsg, "DHCPEXPIRE".Length, "on", out sIP, ref nLastIndex)
-            && ExtractData(sMsg, nLastIndex, "to", out sMac, ref nLastIndex))
-        {
-            // Find OUI
-            string sCoperation;
-            SyslogManager.Instance.FindOUI(sMac, out sCoperation);
-
-            // Is automatic registion OUI?
-            bool bAutoRegist = SyslogManager.Instance.IsAutoRegistOUI(sMac);
-
-            // Is Renew ?
-            bool bRenew = (nLastIndex > 0 && sMsg.IndexOf("(RENEW)", nLastIndex) > 0) ? true : false;
-
-            // Print
-            DebugPrint("EXPIRE", bRenew, sIP, sMac, bAutoRegist, sCoperation);
-        }
-        */
+        SyslogExtractEntity result1 = ExtractData(message, 0, "on", " ");
+		if (result1.isFindFlag() == false)
+			return null;
+		
+		SyslogExtractEntity result2 = ExtractData(message, result1.getLastIndex(), "to", " ");
+		if (result2.isFindFlag() == false)
+			return null;
+		
+		JSONObject result = new JSONObject();
+		result.put("type", "DHCPEXPIRE");
+		result.put("ip", result1.getValue());
+		result.put("mac", result2.getValue());
+		result.put("renew", (message.indexOf("(RENEW)") > 0)? true : false);
+		result.put("result", true);
         
-        return nLastIndex;
+        return result;
     }
 
-	private int _Process_RELEASE(String sMsg, int nLastIndex)
+	private static JSONObject processRELEASE(String message)
     {
-        String sIP = "", sMac = "";
-
         // [DHCPRELEASE]
-        // DHCPRELEASE of 192.168.1.101 from 98:83:89:14:4f:9e (JS) via eth1 (found)uid 01:98:83:89:14:4f:9e
+        // of 192.168.1.101 from 98:83:89:14:4f:9e (JS) via eth1 (found)uid 01:98:83:89:14:4f:9e
 
-        /*
-        // DHCPRELEASE of [IP] ~ from [MAC] ~
-        if (ExtractData(sMsg, "DHCPRELEASE".Length, "of", out sIP, ref nLastIndex)
-            && ExtractData(sMsg, nLastIndex, "from", out sMac, ref nLastIndex))
-        {
-            // Find OUI
-            string sCoperation;
-            SyslogManager.Instance.FindOUI(sMac, out sCoperation);
-
-            // Is automatic registion OUI?
-            bool bAutoRegist = SyslogManager.Instance.IsAutoRegistOUI(sMac);
-
-            // Is Renew ?
-            bool bRenew = (nLastIndex > 0 && sMsg.IndexOf("(RENEW)", nLastIndex) > 0) ? true : false;
-
-            // Print
-            DebugPrint("RELEASE", bRenew, sIP, sMac, bAutoRegist, sCoperation);
-        }
-        */
+        SyslogExtractEntity result1 = ExtractData(message, 0, "of", " ");
+		if (result1.isFindFlag() == false)
+			return null;
+		
+		SyslogExtractEntity result2 = ExtractData(message, result1.getLastIndex(), "from", " ");
+		if (result2.isFindFlag() == false)
+			return null;
+		
+		JSONObject result = new JSONObject();
+		result.put("type", "DHCPRELEASE");
+		result.put("ip", result1.getValue());
+		result.put("mac", result2.getValue());
+		result.put("renew", (message.indexOf("(RENEW)") > 0)? true : false);
+		result.put("result", true);
         
-        return nLastIndex;
+        return result;
     }
 }

@@ -26,13 +26,12 @@ public class ScheduledTasks {
 	}
 
 	// fixedRate
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 10000)
     public void monitorPoolStatus() {
     	
     	PoolStatus syslogPoolstatus = WorkerPoolManager.getInstance().GetPoolStatus();
     	
-    	//_logger.debug(String.format("[Syslog-Pool] %s", syslogPoolstatus.toString()));
-    	System.out.println(String.format("[Syslog-Pool] %s", syslogPoolstatus.toString()));
+    	_logger.debug(String.format("[WorkerPool] %s", syslogPoolstatus.toString()));
     }
     
 //    // fixedDelay

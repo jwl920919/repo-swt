@@ -1,6 +1,7 @@
 package com.shinwootns.swt.service.syslog;
 
 import org.apache.log4j.Logger;
+import org.json.simple.JSONObject;
 
 import com.shinwootns.common.network.SyslogEntity;
 import com.shinwootns.common.utils.TimeUtils;
@@ -19,92 +20,45 @@ public class SyslogTask implements Runnable {
 	@Override
 	public void run() {
 
-		// System.out.println(String.format("[%s, %s] - %s", _syslog.getHost(),
-		// TimeUtils.convertToStringTime(_syslog.getRecvTime()),
-		// _syslog.getData()));
+		// Process Infoblox DHCP
+		try
+		{
+			String rawData = _syslog.getData();
 
-		ParseSyslog();
+			// Remove Carriage-Return & Line-Feed
+			rawData = rawData.replaceAll("\\r\\n|\\r|\\n", " ");
+			
+			// Trim
+			rawData = rawData.trim();
+			
+			JSONObject jResult = SyslogParser.processSyslog(rawData);
+			
+			// Check Result
+	        if (jResult != null && jResult.containsKey("result") && jResult.get("result") == Boolean.TRUE)
+	        {
+	        	System.out.println(String.format("%s", jResult.toJSONString()));
+	        	
+	        	return;
+	        }
+	        else
+	        {
+	        	System.out.println(String.format("[Unknown] %s", rawData));
+	        }
+
+		}
+		catch(Exception ex)
+		{
+			_logger.error(ex.getMessage(), ex);
+		}
+		
+		/*
+		System.out.println(String.format("[%s, %s] - %s", _syslog.getHost(),
+				TimeUtils.convertToStringTime(_syslog.getRecvTime()),
+				_syslog.getData())
+		);*/
 	}
 
-	private void ParseSyslog()
-	{
-		// Syslog Samples
-        // Feb 24 17:38:33 192.168.1.11 dhcpd[22231]: DHCPREQUEST for 192.168.1.12 from 6c:29:95:05:38:a4 (BJPARK) via eth1 uid 01:6c:29:95:05:38:a4 (RENEW)
-
-        try
-        {
-        	String message = _syslog.getData(); 
-        	
-            int nIndex = message.indexOf("]: ", 26);
-
-            if (nIndex > 0)
-            {
-                String tmpMessage = message.substring(nIndex + 3);
-
-                //Console.WriteLine(tmpMessage);
-
-                int nLastIndex = 0;
-
-                int nIndex2 = tmpMessage.indexOf(" ");
-                if (nIndex2 > 4)
-                {
-                    String sKeyword = tmpMessage.substring(0, nIndex2);
-
-                    // Discover (C->S)
-                    if (sKeyword.equals("DHCPDISCOVER"))
-                    {
-                    	//nLastIndex = _Process_DISCOVER(tmpMessage, nLastIndex);
-                    }
-                    // Offer (S->C)
-                    else if (sKeyword.equals("DHCPOFFER"))
-                    {
-                    	//nLastIndex = _Process_OFFER(tmpMessage, nLastIndex);
-                    }
-                    // Reqeust (C->S)
-                    else if (sKeyword.equals("DHCPREQUEST"))
-                    {
-                    	//nLastIndex = _Process_REQUEST(tmpMessage, nLastIndex);
-                    }
-                    // Ack (S->C)
-                    else if (sKeyword.equals("DHCPACK"))
-                    {
-                    	//SyslogParser.processDHCPAck(tmpMessage);
-                    }
-                    // Not-Ack (S->C)
-                    else if (sKeyword.equals("DHCPNACK"))
-                    {
-                    	//nLastIndex = _Process_NACK(tmpMessage, nLastIndex);
-                    }
-                    // Inform (C->S)
-                    else if (sKeyword.equals("DHCPINFORM"))
-                    {
-                    	//nLastIndex = _Process_INFORM(tmpMessage, nLastIndex);
-                    }
-                    // Expire (S->C)
-                    else if (sKeyword.equals("DHCPEXPIRE"))
-                    {
-                    	//nLastIndex = _Process_EXPIRE(tmpMessage, nLastIndex);
-                    }
-                    // Release (C->S)
-                    else if (sKeyword.equals("DHCPRELEASE"))
-                    {
-                    	//nLastIndex = _Process_RELEASE(tmpMessage, nLastIndex);
-                    }
-                }
-
-                return;
-            }
-            else
-            {
-                //Console.WriteLine(message);
-            }
-        }
-        catch (Exception ex)
-        {
-        	_logger.error(ex.getMessage(), ex);
-        }
-	}
-	
+	/*
 	private void DebugPrint(String sKeyword, boolean bRenew, String sIP, String sMac, String sCoperation)
     {
         String sDHCP = sKeyword;
@@ -115,4 +69,5 @@ public class SyslogTask implements Runnable {
         	, sDHCP, sIP, sMac, sCoperation)
         );
     }
+    */
 }

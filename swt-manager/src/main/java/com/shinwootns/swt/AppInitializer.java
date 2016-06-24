@@ -1,4 +1,4 @@
-package com.shinwootns.swt.main;
+package com.shinwootns.swt;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
