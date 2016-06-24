@@ -42,7 +42,7 @@ public class SyslogTask implements Runnable {
 	        }
 	        else
 	        {
-	        	System.out.println(String.format("[Unknown] %s", rawData));
+	        	//System.out.println(String.format("[Unknown] %s", rawData));
 	        }
 
 		}
