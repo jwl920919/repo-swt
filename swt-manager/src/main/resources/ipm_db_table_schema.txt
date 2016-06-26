@@ -1,0 +1,11 @@
+CREATE TABLE public.tb_dhcp_mac_filter
+(
+  filter_id integer NOT NULL DEFAULT nextval('tb_dhcp_mac_filter_filter_id_seq'::regclass),
+  filter_name character varying(128)[],
+  CONSTRAINT tb_dhcp_mac_filter_pkey PRIMARY KEY (filter_id)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE public.tb_dhcp_mac_filter
+  OWNER TO postgres;
