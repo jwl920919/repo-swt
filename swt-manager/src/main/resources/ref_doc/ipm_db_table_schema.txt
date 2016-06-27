@@ -35,11 +35,6 @@ CREATE TABLE public.auth_type
   CONSTRAINT auth_type_id_pkey PRIMARY KEY (auth_type_id)
 );
 
-INSERT INTO public.auth_type (auth_type_id, auth_name, auth_type) VALUES (1, 'Active Directory', 'ldap');
-INSERT INTO public.auth_type (auth_type_id, auth_name, auth_type) VALUES (2, 'Radius', 'radius');
-INSERT INTO public.auth_type (auth_type_id, auth_name, auth_type) VALUES (3, 'mySingle', 'esb');
-
-
 -- AUTH_ORDER
 CREATE TABLE public.auth_order
 (
@@ -62,7 +57,6 @@ CREATE TABLE public.auth_ldap_group
   group_type character varying(64) NOT NULL,
   CONSTRAINT ldap_group_id_pkey PRIMARY KEY (ldap_group_id)
 );
-
 
 -- AUTH_SETUP_ID Sequence
 CREATE SEQUENCE public.auth_setup_id_seq;
