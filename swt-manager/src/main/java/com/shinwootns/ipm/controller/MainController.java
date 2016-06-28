@@ -20,12 +20,15 @@ public class MainController {
 	@Autowired
 	private AuthTypeMapper mapper;
 
+	/*
 	@RequestMapping("/")
 	public String greeting(String name) {
 		String output = "Hi " + name + " !!!";
 		return output;
 	}
+	*/
 	
+	/*
 	@RequestMapping("/AuthType")
     public @ResponseBody List<AuthType> getUserList() {
 		
@@ -33,4 +36,5 @@ public class MainController {
 		
         return result;
     }
+    */
 }

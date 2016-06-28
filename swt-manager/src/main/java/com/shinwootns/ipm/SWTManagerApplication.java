@@ -33,15 +33,6 @@ import com.shinwootns.ipm.property.SystemPropertiesValidator;
 @SpringBootApplication
 public class SWTManagerApplication implements CommandLineRunner {
 
-	@Autowired
-	private AuthTypeMapper mapper;
-	
-
-//	@Bean
-//	public Validator configurationPropertiesValidator() {
-//		return new SystemPropertiesValidator();
-//	}
-
 //	@Bean
 //	public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
 //		SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
@@ -60,13 +51,6 @@ public class SWTManagerApplication implements CommandLineRunner {
 	
 	@Override
 	public void run(String... arg0) throws Exception {
-		
 		System.out.println("Application Start...");
-
-		//System.out.println(mapper.findById(1));
-		
-		for (AuthType data : mapper.findAll()) {
-			 System.out.println(data.toString()); 
-		}
 	}
 }
