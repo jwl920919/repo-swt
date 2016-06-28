@@ -6,8 +6,12 @@
         
 <mapper namespace="mybatis.mapper.ipmDBMapper">
 
-    <select id="selectSiteInfoById" resultType="SiteInfo">
-        select * from site_info where site_id = #{id}
+	<select id="findAll" resultType="com.shinwootns.swt.data.entity.AuthType">
+        SELECT * FROM auth_type
+    </select>
+
+    <select id="findById" resultType="com.shinwootns.swt.data.entity.AuthType">
+        select * from auth_type where auth_type_id = #{auth_type_id}
     </select>
     
 </mapper>

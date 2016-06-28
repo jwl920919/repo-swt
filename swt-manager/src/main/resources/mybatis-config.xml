@@ -11,7 +11,7 @@
     </typeAliases>
     
     <mappers>
-        <mapper resource="mybatis/mapper/ipm_db_mapper.xml"/>
+        <mapper resource="mybatis/**/*.xml"/>
     </mappers>
     
 </configuration>
