@@ -5,13 +5,19 @@
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
         
 <configuration>
-    
+
+	<!-- 
     <typeAliases>
-        <package name="mybatis.domain"/>
+        <package name="com.shinwootns.ipm.data.entiy"/>
     </typeAliases>
     
     <mappers>
-        <mapper resource="mybatis/**/*.xml"/>
+
+        <mapper resource="com/shinwootns/ipm/data/mapper/AuthTypeMapper.xml"/> 
+        
     </mappers>
     
+    -->
+ 
 </configuration>
+

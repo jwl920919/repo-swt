@@ -6,7 +6,6 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/swt-manager"/>
 	<classpathentry kind="lib" path="lib/postgresql-9.4.1208.jar"/>
 	<classpathentry kind="lib" path="lib/persistence-api-1.0.2.jar"/>
 	<classpathentry kind="output" path="build/classes"/>

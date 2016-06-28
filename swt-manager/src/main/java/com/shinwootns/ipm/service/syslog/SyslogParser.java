@@ -2,8 +2,6 @@ package com.shinwootns.ipm.service.syslog;
 
 import org.json.simple.JSONObject;
 
-import com.shinwootns.common.network.SyslogEntity;
-
 public class SyslogParser {
 	
 	public static JSONObject processSyslog(String rawMessage)

@@ -1,16 +1,12 @@
 package com.shinwootns.ipm.service.wapi;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.http.entity.ContentType;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-
 import com.shinwootns.common.http.HttpClient;
 import com.shinwootns.common.utils.JsonUtils;
 import com.shinwootns.common.utils.StringUtils;

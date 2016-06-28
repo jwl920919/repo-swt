@@ -1,4 +1,4 @@
-package com.shinwootns.ipm.entity;
+package com.shinwootns.ipm.data.entity;
 
 import java.io.Serializable;
 import javax.persistence.*;

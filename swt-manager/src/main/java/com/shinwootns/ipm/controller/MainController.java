@@ -1,20 +1,24 @@
 package com.shinwootns.ipm.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-//import com.shinwootns.swt.data.entity.AuthType;
-//import com.shinwootns.swt.data.repository.AuthTypeRepository;
+import com.shinwootns.ipm.data.entity.AuthType;
+import com.shinwootns.ipm.data.mapper.AuthTypeMapper;
+
+//import com.shinwootns.ipm.data.entity.AuthType;
+//import com.shinwootns.ipm.data.repository.AuthTypeRepository;
 
 @RestController
 public class MainController {
 	
-	//@Autowired 
-	//private AuthTypeRepository repository;
+	@Autowired
+	private AuthTypeMapper mapper;
 
 	@RequestMapping("/")
 	public String greeting(String name) {
@@ -22,8 +26,11 @@ public class MainController {
 		return output;
 	}
 	
-	/*@RequestMapping("/AuthType")
+	@RequestMapping("/AuthType")
     public @ResponseBody List<AuthType> getUserList() {
-        return repository.findAll();
-    }*/
+		
+		List<AuthType> result = mapper.findAll();
+		
+        return result;
+    }
 }

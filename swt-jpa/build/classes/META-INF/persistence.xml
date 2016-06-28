@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
 	<persistence-unit name="swt-jpa">
-		<class>com.shinwootns.ipm.entity.AuthLdapGroup</class>
-		<class>com.shinwootns.ipm.entity.AuthOrder</class>
-		<class>com.shinwootns.ipm.entity.AuthOrderPK</class>
-		<class>com.shinwootns.ipm.entity.AuthSetupEsb</class>
-		<class>com.shinwootns.ipm.entity.AuthSetupLdap</class>
-		<class>com.shinwootns.ipm.entity.AuthSetupRadius</class>
-		<class>com.shinwootns.ipm.entity.AuthType</class>
-		<class>com.shinwootns.ipm.entity.DhcpMacFilter</class>
-		<class>com.shinwootns.ipm.entity.DhcpNetwork</class>
-		<class>com.shinwootns.ipm.entity.SiteInfo</class>
-		<class>com.shinwootns.ipm.entity.SystemUserGroup</class>
-		<class>com.shinwootns.ipm.entity.SystemUserInfo</class>
+		<class>com.shinwootns.ipm.data.entity.AuthLdapGroup</class>
+		<class>com.shinwootns.ipm.data.entity.AuthOrder</class>
+		<class>com.shinwootns.ipm.data.entity.AuthOrderPK</class>
+		<class>com.shinwootns.ipm.data.entity.AuthSetupEsb</class>
+		<class>com.shinwootns.ipm.data.entity.AuthSetupLdap</class>
+		<class>com.shinwootns.ipm.data.entity.AuthSetupRadius</class>
+		<class>com.shinwootns.ipm.data.entity.AuthType</class>
+		<class>com.shinwootns.ipm.data.entity.DhcpMacFilter</class>
+		<class>com.shinwootns.ipm.data.entity.DhcpNetwork</class>
+		<class>com.shinwootns.ipm.data.entity.SiteInfo</class>
+		<class>com.shinwootns.ipm.data.entity.SystemUserGroup</class>
+		<class>com.shinwootns.ipm.data.entity.SystemUserInfo</class>
 	</persistence-unit>
 </persistence>
