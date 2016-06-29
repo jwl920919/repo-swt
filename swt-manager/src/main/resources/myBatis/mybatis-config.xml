@@ -6,17 +6,12 @@
         
 <configuration>
 
-	<!-- 
     <typeAliases>
         <package name="com.shinwootns.ipm.data.entiy"/>
     </typeAliases>
     
     <mappers>
-
-        <mapper resource="com/shinwootns/ipm/data/mapper/AuthTypeMapper.xml"/> 
-        
+        <mapper resource="myBatis/mapper/SiteInfoMapper.xml"/>
     </mappers>
-    
-    -->
  
 </configuration>

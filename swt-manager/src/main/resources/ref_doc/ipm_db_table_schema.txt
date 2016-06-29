@@ -22,6 +22,27 @@ CREATE TABLE public.site_info
   CONSTRAINT site_info_pkey PRIMARY KEY (site_id)
 );
 
+
+--==========================================================================================
+-- EVENT
+--==========================================================================================
+
+CREATE SEQUENCE public.event_id_seq;
+
+-- EVENT_LOG
+CREATE TABLE public.event_log
+(
+  event_id integer NOT NULL DEFAULT nextval('event_id_seq'::regclass),
+  device_id integer,
+  host_ip character varying(16),
+  event_type character varying(32) NOT NULL,
+  severity integer NOT NULL,
+  collect_time timestamp DEFAULT current_timestamp,
+  message character varying(512) NOT NULL,
+  CONSTRAINT event_id_pkey PRIMARY KEY (event_id)
+);
+
+
 --==========================================================================================
 -- AUTH
 --==========================================================================================

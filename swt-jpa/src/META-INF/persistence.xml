@@ -13,5 +13,11 @@
 		<class>com.shinwootns.ipm.data.entity.SiteInfo</class>
 		<class>com.shinwootns.ipm.data.entity.SystemUserGroup</class>
 		<class>com.shinwootns.ipm.data.entity.SystemUserInfo</class>
+		<class>com.shinwootns.ipm.data.entity.DashboardSetting</class>
+		<class>com.shinwootns.ipm.data.entity.DashboardSettingPK</class>
+		<class>com.shinwootns.ipm.data.entity.EventLog</class>
+		<class>com.shinwootns.ipm.data.entity.MenuMaster</class>
+		<class>com.shinwootns.ipm.data.entity.MenuSub</class>
+		<class>com.shinwootns.ipm.data.entity.MenuSubPK</class>
 	</persistence-unit>
 </persistence>
