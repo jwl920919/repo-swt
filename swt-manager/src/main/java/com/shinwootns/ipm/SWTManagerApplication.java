@@ -11,6 +11,7 @@ import org.apache.log4j.PropertyConfigurator;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -18,6 +19,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -36,19 +38,22 @@ import com.shinwootns.ipm.property.SystemPropertiesValidator;
 @SpringBootApplication
 public class SWTManagerApplication implements CommandLineRunner {
 
-	//@Autowired
-	//private SiteInfoMapper siteMapper;
+	@Autowired
+	private SiteInfoMapper siteMapper;
 	
-	//@Autowired
-	//private AuthTypeMapper autTypeMapper;
+	@Autowired
+	private AuthTypeMapper autTypeMapper;
 	
 	public static void main(String[] args) {
 		
-		BasicConfigurator.configure();
+		//BasicConfigurator.configure();
 		
 		SpringApplicationBuilder appBuilder = new SpringApplicationBuilder(SWTManagerApplication.class);
 		SpringApplication app = appBuilder.build();
-		app.run(args);
+		
+		ConfigurableApplicationContext context = app.run(args);
+		
+		ApplicationContextProvider.getInstance().setApplicationContext( context );
 	}
 	
 	@Override
@@ -56,7 +61,6 @@ public class SWTManagerApplication implements CommandLineRunner {
 		
 		System.out.println("Application Start...");
 		
-		/*
 		//findAll
 		System.out.println("===============================================");
 		for(AuthType authType : autTypeMapper.findAll()) {
@@ -68,6 +72,5 @@ public class SWTManagerApplication implements CommandLineRunner {
 		SiteInfo site = siteMapper.findById(1);
 		System.out.println(String.format("[SITE] id:%d, code:%s, name:%s", site.getSiteId(), site.getSiteCode(), site.getSiteName()));
 		System.out.println("===============================================");
-		*/
 	}
 }
