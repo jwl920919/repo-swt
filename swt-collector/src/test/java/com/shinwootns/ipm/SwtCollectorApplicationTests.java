@@ -1,19 +1,18 @@
 package com.shinwootns.ipm;
 
-import org.json.simple.JSONArray;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.shinwootns.ipm.ManagerApplication;
-import com.shinwootns.ipm.service.wapi.InfobloxWAPIHandler;
+import com.shinwootns.ipm.collector.CollectorApplication;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = ManagerApplication.class)
-public class SwtManagerApplicationTests {
+@SpringApplicationConfiguration(classes = CollectorApplication.class)
+public class SwtCollectorApplicationTests {
 
 	@Test
 	public void contextLoads() {
 	}
+
 }

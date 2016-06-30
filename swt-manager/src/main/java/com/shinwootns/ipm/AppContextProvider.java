@@ -4,17 +4,17 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ApplicationContextProvider {
+public class AppContextProvider {
 	
 	private static ConfigurableApplicationContext _context;
 
 	// Singleton
-	private static ApplicationContextProvider _instance;
-	private ApplicationContextProvider() {}
-	public static synchronized ApplicationContextProvider getInstance() {
+	private static AppContextProvider _instance;
+	private AppContextProvider() {}
+	public static synchronized AppContextProvider getInstance() {
 
 		if (_instance == null) {
-			_instance = new ApplicationContextProvider();
+			_instance = new AppContextProvider();
 		}
 		return _instance;
 	}

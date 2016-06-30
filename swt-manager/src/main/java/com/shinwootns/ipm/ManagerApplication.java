@@ -36,7 +36,7 @@ import com.shinwootns.ipm.property.SystemPropertiesValidator;
 //@EnableAutoConfiguration(exclude = {HibernateJpaAutoConfiguration.class})
 @EnableScheduling
 @SpringBootApplication
-public class SWTManagerApplication implements CommandLineRunner {
+public class ManagerApplication implements CommandLineRunner {
 
 	/*
 	@Autowired
@@ -50,12 +50,12 @@ public class SWTManagerApplication implements CommandLineRunner {
 		
 		//BasicConfigurator.configure();
 		
-		SpringApplicationBuilder appBuilder = new SpringApplicationBuilder(SWTManagerApplication.class);
+		SpringApplicationBuilder appBuilder = new SpringApplicationBuilder(ManagerApplication.class);
 		SpringApplication app = appBuilder.build();
 		
 		ConfigurableApplicationContext context = app.run(args);
 		
-		ApplicationContextProvider.getInstance().setApplicationContext( context );
+		AppContextProvider.getInstance().setApplicationContext( context );
 	}
 	
 	@Override

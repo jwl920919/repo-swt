@@ -7,7 +7,7 @@
 	</configSuffixes>
 	<enableImports><![CDATA[false]]></enableImports>
 	<configs>
-		<config>java:com.shinwootns.ipm.collector.ManagerApplication</config>
+		<config>java:com.shinwootns.ipm.collector.CollectorApplication</config>
 	</configs>
 	<autoconfigs>
 	</autoconfigs>

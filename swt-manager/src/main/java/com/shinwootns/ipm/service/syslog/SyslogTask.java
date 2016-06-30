@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.shinwootns.common.network.SyslogEntity;
 import com.shinwootns.common.utils.TimeUtils;
-import com.shinwootns.ipm.ApplicationContextProvider;
+import com.shinwootns.ipm.AppContextProvider;
 import com.shinwootns.ipm.data.entity.AuthType;
 import com.shinwootns.ipm.data.entity.SiteInfo;
 import com.shinwootns.ipm.data.mapper.AuthTypeMapper;
