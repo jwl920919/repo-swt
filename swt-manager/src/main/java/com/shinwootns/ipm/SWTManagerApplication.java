@@ -38,11 +38,13 @@ import com.shinwootns.ipm.property.SystemPropertiesValidator;
 @SpringBootApplication
 public class SWTManagerApplication implements CommandLineRunner {
 
+	/*
 	@Autowired
 	private SiteInfoMapper siteMapper;
 	
 	@Autowired
 	private AuthTypeMapper autTypeMapper;
+	*/
 	
 	public static void main(String[] args) {
 		
@@ -60,7 +62,8 @@ public class SWTManagerApplication implements CommandLineRunner {
 	public void run(String... arg0) throws Exception {
 		
 		System.out.println("Application Start...");
-		
+	
+		/*
 		//findAll
 		System.out.println("===============================================");
 		for(AuthType authType : autTypeMapper.findAll()) {
@@ -72,5 +75,6 @@ public class SWTManagerApplication implements CommandLineRunner {
 		SiteInfo site = siteMapper.findById(1);
 		System.out.println(String.format("[SITE] id:%d, code:%s, name:%s", site.getSiteId(), site.getSiteCode(), site.getSiteName()));
 		System.out.println("===============================================");
+		*/
 	}
 }
