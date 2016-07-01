@@ -104,14 +104,17 @@ public class SmartThreadPool {
 		return poolStatus;
 	}
 
-	public boolean addTask(Runnable task) {
+	public synchronized boolean addTask(Runnable task) {
 
 		if (_executor != null) {
 			try {
+				
 				_executor.submit(task);
 
 				return true;
+				
 			} catch (Exception ex) {
+				_logger.error(ex.getMessage(), ex);
 			}
 		}
 		return false;

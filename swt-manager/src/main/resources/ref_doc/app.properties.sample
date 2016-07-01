@@ -16,3 +16,11 @@ logging.path=D:/logs/
 logging.level.org.springframework.web=INFO
 logging.level.com.shinwootns.*=DEBUG
 logging.level.*=DEBUG
+
+
+# ===============
+# Execute Sample
+# ===============
+#
+# java -jar swt-manager-0.0.1.jar --spring.config.location=app.properties
+#

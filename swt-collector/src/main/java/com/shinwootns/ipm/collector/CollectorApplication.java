@@ -1,5 +1,8 @@
 package com.shinwootns.ipm.collector;
 
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Logger;
+import org.json.simple.JSONObject;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,15 +11,20 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import com.shinwootns.common.network.SyslogEntity;
 import com.shinwootns.common.network.SyslogManager;
 import com.shinwootns.common.utils.TimeUtils;
+import com.shinwootns.ipm.collector.service.RabbitMQHandler;
 import com.shinwootns.ipm.collector.service.SyslogReceiveHandlerImpl;
 import com.shinwootns.ipm.collector.service.WorkerPoolManager;
 
+@EnableScheduling
 @SpringBootApplication
 public class CollectorApplication implements CommandLineRunner {
+	
+	private final Logger _logger = Logger.getLogger(this.getClass());
 	
 	@Autowired
 	RabbitTemplate rabbitTemplate;
@@ -48,6 +56,7 @@ public class CollectorApplication implements CommandLineRunner {
 	}
 	*/
 	
+	/*
 	class TestThread extends Thread{
 		@Override
 		public void run() {
@@ -61,29 +70,56 @@ public class CollectorApplication implements CommandLineRunner {
 			
 			System.out.println("Test Start.");
 			
-			int count = 10000;
+			int count = 100000;
 			long startTime = TimeUtils.currentTimeMilis();
 			
-			for(int i=0; i<count; i++) {
-				SyslogEntity syslog = new SyslogEntity();
-				syslog.setHost("1.1.1.1");
-				syslog.setFacility(1);
-				syslog.setSeverity(i%7);
-				syslog.setRecvTime(TimeUtils.currentTimeMilis());
-				syslog.setData(String.format("This is test message #%d", i));
+			for(int i=1; i<=count; i++) {
 				
-				WorkerPoolManager.getInstance().addSyslogTask(syslog);				
+				// Test 1
+//				{
+//					SyslogEntity syslog = new SyslogEntity();
+//					syslog.setHost("1.1.1.1");
+//					syslog.setFacility(1);
+//					syslog.setSeverity(i%7);
+//					syslog.setRecvTime(TimeUtils.currentTimeMilis());
+//					syslog.setData(String.format("This is test message #%d", i));
+//					
+//					WorkerPoolManager.getInstance().addSyslogData(syslog);
+//				}
+				
+				// Test 2
+//				{
+//					JSONObject jobj = new JSONObject();
+//					jobj.put("host", "1.1.1.1");
+//					jobj.put("facility", 1);
+//					jobj.put("severity", i%7);
+//					jobj.put("recv_time", TimeUtils.currentTimeMilis());
+//					jobj.put("message", String.format("This is test message #%d", i));
+//					
+//					RabbitMQHandler.SendData(jobj, _logger);
+//				}
+			}
+			
+			try {
+				while(WorkerPoolManager.getInstance().syslogQueue.size() > 0) {
+					Thread.sleep(1);
+				}
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 			
 			long elapsed = TimeUtils.currentTimeMilis()-startTime;
 			
 			System.out.println("Test End.");
 			
-			System.out.println(String.format("Count: %d,  Elapsed: %d ms, CPS: %.2f", count, elapsed, (elapsed/(float)count)*1000.0));
+			System.out.println(String.format("Count: %d,  Elapsed: %d ms, CPS: %.2f", count, elapsed, 1000.0/((float)elapsed/(float)count)));
 		}
 	}
+	*/
 	
 	public static void main(String[] args) {
+		
+		BasicConfigurator.configure();
 		
 		ConfigurableApplicationContext context = SpringApplication.run(CollectorApplication.class, args);
 				
@@ -98,8 +134,8 @@ public class CollectorApplication implements CommandLineRunner {
 		
 		startSyslogHandler();
 		
-		TestThread thread = new TestThread();
-		thread.start();
+		//TestThread thread = new TestThread();
+		//thread.start();
 	}
 		
 	private void startSyslogHandler() {
