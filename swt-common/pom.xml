@@ -105,13 +105,6 @@
 			<version>1.0.2</version>
 		</dependency>
 
-		<!-- http://mvnrepository.com/artifact/org.postgresql/postgresql -->
-		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<version>9.4.1208</version>
-		</dependency>
-
 	</dependencies>
 
 
