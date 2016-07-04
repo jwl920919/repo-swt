@@ -7,13 +7,13 @@
 //	// Javascript에서 Language갑 가져오기 예제 2
 //	// alert(getLanguage("Title"));
 //});
-changeframe = function(url, acticeid) {
+changeframe = function(url, acticeid, masterKey, subKey) {
 
 	try {
 		if (url != "#") {
 			// alert(url);
 			// alert(acticeid);
-
+			
 			console.log("url:" + url + ", acticeid :" + acticeid);
 			$("#content_frame").load(url);
 
@@ -27,6 +27,11 @@ changeframe = function(url, acticeid) {
 						$(menu[i]).attr('class', 'treeview');
 					}
 					$("#menu_" + acticeid).attr('class', 'treeview active');
+					
+					//ContentHeader 변경
+					$("#contentHeaderDepth1li").attr('style', 'display: display;');
+					$("#contentHeaderDepth2li").attr('style', 'display: none;');
+					$("#contentHeaderDepth1").text(getLanguage(masterKey));
 
 					// 데시보드가 아닌 다른 메뉴의 ul테그 닫기
 					var vUlMenu = $("[name='ulMenu']");
@@ -44,6 +49,12 @@ changeframe = function(url, acticeid) {
 						} else {
 							$(menusub[i]).attr('class', '');
 						}
+
+						//ContentHeader 변경
+						$("#contentHeaderDepth1li").attr('style', 'display: display;');
+						$("#contentHeaderDepth2li").attr('style', 'display: display;');
+						$("#contentHeaderDepth1").text(getLanguage(masterKey));
+						$("#contentHeaderDepth2").text(getLanguage(subKey));
 					}
 					if (acticeid != '') {
 						// 데시보드가 아닌 다른 메뉴 선택 시 데시보드 Polling데이터 조회 기능 정지

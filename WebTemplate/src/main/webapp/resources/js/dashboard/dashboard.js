@@ -2,20 +2,21 @@ var m_systemStatusAjaxCall;
 var m_guestIPAssignStatusAjaxCall;
 var m_certifyProcessAjaxCall;
 var m_dnsStatusAjaxCall;
-var m_leaseIPAvailableAjaxCall;
+var m_segmentLeasingIPAssignedAjaxCall;
 
 $(document).ready(
 		function() {
-			$("#contentHeaderDepth1li").attr('style', 'display: none;');
-			$("#contentHeaderDepth2li").attr('style', 'display: none;');
+//			$("#contentHeaderDepth1li").attr('style', 'display: none;');
+//			$("#contentHeaderDepth2li").attr('style', 'display: none;');
 
 			ivalue = 0;
 			AllClearAjaxCall();
 			m_systemStatusAjaxCall = setInterval(systemStatusAjaxCall, 0);// 페이지 로딩 후 바로 데이터 조회
 			m_guestIPAssignStatusAjaxCall = setInterval(
 					guestIPAssignStatusAjaxCall, 0);
-			m_dnsStatusAjaxCall = setInterval(dnsStatusAjaxCall, 0);
 			certifyProcessAjaxCall();
+			m_dnsStatusAjaxCall = setInterval(dnsStatusAjaxCall, 0);
+			m_segmentLeasingIPAssignedAjaxCall = setInterval(segmentLeasingIPAssignedAjaxCall, 0);
 
 			jQueryKnob(); // jQueryKnob 차트관련 스크립트
 
@@ -456,7 +457,7 @@ function clearCertifyProcessAjaxCall() {
 	clearInterval(m_certifyProcessAjaxCall);
 }
 
-//DNS 현황 Ajax Call 메서드
+// DNS 현황 Ajax Call 메서드
 function dnsStatusAjaxCall() {
 
 	try {
@@ -509,65 +510,68 @@ function dnsStatusAjaxCall() {
 	}
 }
 
-//DNS 현황 Ajax Call Clear 메서드
+// DNS 현황 Ajax Call Clear 메서드
 function cleardnsStatusAjaxCall() {
 	clearInterval(m_dnsStatusAjaxCall);
 }
 
-//lease IP 가용 현황  Ajax Call 메서드
-function leaseIPAvailableAjaxCall() {
+// 세그먼트별 lease IP 할당 현황  Ajax Call 메서드
+function segmentLeasingIPAssignedAjaxCall() {
 
 	try {
+		var vCritical = "progress-bar-red";
+		var vWarnning = "progress-bar-warning";
+		var vNormal = "progress-bar-aqua";
+		
 		var vTop1 = Math.floor(Math.random() * 101);
 		var vTop2 = Math.floor(Math.random() * 101);
 		var vTop3 = Math.floor(Math.random() * 101);
 		var vTop4 = Math.floor(Math.random() * 101);
 		var vTop5 = Math.floor(Math.random() * 101);
 
-		var data = "{\"LeaseIPAvailable\": [{\"segment\": \"10.10.10.0/24\",\"value\": "+vSucess+"},{"+
-								     		"\"segment\": \"192.168.1.0/24\",\"value\": "+vReferr+"},{"+
-								     		"\"segment\": \"100.100.100.0/24\",\"value\": "+vNXRRSe+"},{"+
-								     		"\"segment\": \"12.12.15.0/24\",\"value\": "+vNXDoma+"},{"+
-								     		"\"segment\": \"25.25.1.0/24\",\"value\": "+vFailur+"}]}";
+		var data = "{\"LeaseIPAvailable\": [{\"segment\": \"10.10.10.0/24\",\"value\": "+vTop1+"},{"+
+								     		"\"segment\": \"192.168.1.0/24\",\"value\": "+vTop2+"},{"+
+								     		"\"segment\": \"100.100.100.100/255\",\"value\": "+vTop3+"},{"+
+								     		"\"segment\": \"12.12.15.0/24\",\"value\": "+vTop4+"},{"+
+								     		"\"segment\": \"25.25.1.0/24\",\"value\": "+vTop5+"}]}";
 		//console.log(data);
 		var jsonObj = eval("(" + data + ')'); // JSonString 형식의 데이터를
 		// Ojbect형식으로 변경
 		if (jsonObj != '') {
-
-			if (jsonObj.DNSSTATUS != '') {
-				$.each(jsonObj.DNSSTATUS, function(index, obj) {
-					if (obj.class == "Sucess") {
-						$('#lSuccess').text(obj.value);
+			if (jsonObj.LeaseIPAvailable != '') {
+				var vhtml = "<div class=\"progress-group\"><table class=\"col-xs-12\" border=0 style=\"height:135px\">";
+				$.each(jsonObj.LeaseIPAvailable, function(index, obj) {
+					var vSeverity = vNormal;
+					if (obj.value >= 80) {
+						vSeverity = vCritical;
 					}
-					else if (obj.class == "Referral") {
-						$('#lReferral').text(obj.value);
+					else if (obj.value < 80 && obj.value >= 60) {
+						vSeverity = vWarnning;
 					}
-					else if (obj.class == "NXRRSet") {
-						$('#lNXRRSet').text(obj.value);
-					}
-					else if (obj.class == "NXDomain") {
-						$('#lNXDomain').text(obj.value);
-					}
-					else if (obj.class == "Recursion") {
-						$('#lRecursion').text(obj.value);
-					}
-					else if (obj.class == "Failure") {
-						$('#lFailure').text(obj.value);
-					}
+					
+					vhtml = vhtml + "<tr><td style=\"width:42%; text-align:left\"><span class=\"progress-text\">" + obj.segment + "</span></td>" +
+									"<td style=\"width:43%\">" +
+									"	<div class=\"progress sm\">" +
+									"		<div class=\"progress-bar " + vSeverity + " \" style=\"width: " + obj.value + "%;\"></div>" +
+									"	</div>"+
+									"</td>" +
+									"<td style=\"width:15%\"><span class=\"progress-number\"><b>" + obj.value + " %</b></span></td></tr>";					
 				});
-			};
+			};			
+			html = vhtml + "</table></div>";
+			$('#divleaseIPAvailable').html(vhtml);
 		};
 
-		cleardnsStatusAjaxCall();
-		m_dnsStatusAjaxCall = setInterval(dnsStatusAjaxCall, 5000);// 페이지 로딩 데이터 조회 후 polling 시간 변경
+		clearsegmentLeasingIPAssignedAjaxCall();
+		m_segmentLeasingIPAssignedAjaxCall = setInterval(segmentLeasingIPAssignedAjaxCall, 5000);// 페이지 로딩 데이터 조회 후 polling 시간 변경
 	} catch (e) {
 		console.log("dashboard.js dnsStatusAjaxCall() Error Log : " + e.message);
 	}
 }
 
-//lease IP 가용 현황  Ajax Call Clear 메서드
-function clearleaseIPAvailableAjaxCall() {
-	clearInterval(m_leaseIPAvailableAjaxCall);
+// 세그먼트별 lease IP 할당 현황  Ajax Call Clear 메서드
+function clearsegmentLeasingIPAssignedAjaxCall() {
+	clearInterval(m_segmentLeasingIPAssignedAjaxCall);
 }
 
 // Ajax Call All Clear 메서드
@@ -576,9 +580,10 @@ function AllClearAjaxCall() {
 	clearInterval(m_guestIPAssignStatusAjaxCall);
 	clearInterval(m_certifyProcessAjaxCall);
 	clearInterval(m_dnsStatusAjaxCall);
-	clearInterval(m_leaseIPAvailableAjaxCall);
+	clearInterval(m_segmentLeasingIPAssignedAjaxCall);
 }
 
+// 인증 처리 현황 차트 옵션
 function chartOption() {
 	var chartOptions = {
 		animation : false,
