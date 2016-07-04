@@ -359,7 +359,7 @@
 								<!-- ./ tools -->
 							</div>
 							<div class="box-body">
-								<div class="col-md-4" id="divleaseIPAvailable">
+								<div class="col-xs-12" id="divleaseIPAvailable">
 								</div>
 							</div>
 						</div>
