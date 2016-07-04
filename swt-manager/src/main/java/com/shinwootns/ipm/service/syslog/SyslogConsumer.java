@@ -1,18 +1,10 @@
 package com.shinwootns.ipm.service.syslog;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
-
-import com.shinwootns.common.network.SyslogEntity;
 import com.shinwootns.common.utils.JsonUtils;
 import com.shinwootns.common.utils.TimeUtils;
 import com.shinwootns.ipm.AppContextProvider;
@@ -37,13 +29,17 @@ public class SyslogConsumer implements Runnable {
 	public void run() {
 		
 		ConfigurableApplicationContext context = AppContextProvider.getInstance().getApplicationContext();
-		if (context == null)
+		if (context == null) {
+			_logger.error("AppContextProvider.getInstance().getApplicationContext().... failed");
 			return;
+		}
 		
 		EventLogMapper eventLogMapper = context.getBean("eventLogMapper", EventLogMapper.class);
 
-		if (eventLogMapper == null)
+		if (eventLogMapper == null) {
+			_logger.error("getBean('eventLogMapper').... failed");
 			return;
+		}
 		
 		if ( _logger != null)
 			_logger.info(String.format("Syslog Consumer#%d... start.", this._index));
@@ -75,6 +71,9 @@ public class SyslogConsumer implements Runnable {
 						eventLog.setCollectTime(JsonUtils.getValueToTimestamp(jObj, "recv_time", TimeUtils.currentTimeMilis() ));
 						
 						eventLogMapper.insert(eventLog);
+						
+						_logger.info(jObj.toJSONString());
+						
 						
 					} catch (Exception ex) {
 						_logger.error(ex.getMessage(), ex);
