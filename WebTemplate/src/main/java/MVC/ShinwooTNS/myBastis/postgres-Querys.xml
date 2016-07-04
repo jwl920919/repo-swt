@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="UI_Query" >
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-06-21 -->
+	<!-- Insert User : 김창민 -->
+	<!-- Description : 데시보드 메뉴 데이터 조회 -->
+	<!-- Controller :  -->
+	<select id="select_UI_MENU_MASTER" resultType="java.util.HashMap">
+  		SELECT "menu_master"."master_cd", "menu_master"."master_namekey", "menu_master"."master_desc", 
+  		       "menu_master"."master_order", "menu_master"."master_url", "menu_master"."master_icon",
+  		       "menu_sub"."sub_cd", "menu_sub"."subname_key", "menu_sub"."sub_desc", "menu_sub"."sub_order",
+	           "menu_sub"."sub_Url", "menu_sub"."sub_icon", "menu_sub"."controller_mapping" 
+		  FROM "menu_master"
+		 RIGHT OUTER JOIN "menu_sub"
+		    ON "menu_master"."master_cd" = "menu_sub"."master_cd"
+		 WHERE "menu_sub"."display_yn" = TRUE
+		 ORDER BY "menu_master"."master_order", "menu_sub"."sub_order";
+	</select>
+</mapper>
+
+<!-- <mapper namespace="testSqlMap" > -->
+<!-- 	<select id="selectTestTable" resultType="java.util.HashMap"> -->
+
+<!-- 		SELECT * FROM "UI_MENU_MASTER" -->
+
+<!-- 	</select> -->
+<!-- </mapper> -->
+
+

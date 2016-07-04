@@ -1,9 +1,13 @@
 
-//-- [다국어]코드별 다국어
+//-- [다국어]코드별 다국어(아래 스크립트 추가)
+//<script src="../resources/js/common/multyLanguages.js"></script>
+//<script src="../resources/js/main/main.js"></script>
 function getLanguage(key_cd) {
 	
   var url = "resources/Language/ko-KR.txt";
 
+//  alert("multyLanguage");
+//  alert(getCookie("Language"));
   if (getCookie("Language") == "en-US")
       url = "resources/Language/en-US.txt";
   else if (getCookie("Language") == "ch-CN") {

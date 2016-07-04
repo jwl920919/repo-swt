@@ -15,14 +15,17 @@ $(document).ready(function() {
 	//쿠키에 언어 설정이 되어 있지 않다면 기본적으로 한국어로 radio 버튼 체크
 	if (getCookie("Language") != "undefined") {
 		$('input:radio[name=rLanguage]:input[value='+getCookie("Language")+']').attr("checked", true);
+		
+		var vUserLanguae = $(":input:radio[name='rLanguage']:checked").val();
+		setCookie("Language", vUserLanguae, 365);
 	}
 
 	//다국어 설정 radio 버튼 이벤트 핸들러
 	$(":input:radio[name='rLanguage']").bind("change", function() {
 
-		// alert("설정 전 : " + getCookie("Language"));
-		// alert("설정 값 : " + $(":input:radio[name='rLanguage']:checked").val());
-		var vUserLanguae = $(":input:radio[name='rLanguage']:checked").val();
+//		 alert("설정 전 : " + getCookie("Language"));
+//		 alert("설정 값 : " + $(":input:radio[name='rLanguage']:checked").val());
+		var vUserLanguae = $(":input:radio[name='rLanguage']:checked").val();		
 		setCookie("Language", vUserLanguae, 365);
 		history.go(-1);
 		//window.reload();

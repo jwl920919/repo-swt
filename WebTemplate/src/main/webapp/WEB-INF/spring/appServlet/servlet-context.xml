@@ -56,4 +56,5 @@
 	<beans:bean id="/setChangeLocale.do" class="Common.Controller.SessionLocaleController" />
 	<!-- 세션에 locale 정보를 업데이트 하는 세션 컨트롤러 -->
 	<!-- 다국어 처리 MessageResource 사용 End -->
+	
 </beans:beans>

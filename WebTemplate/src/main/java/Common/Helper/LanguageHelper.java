@@ -46,7 +46,7 @@ public class LanguageHelper {
 		}
 
 		// instance.readFile("Language/ko-KR.txt");
-		instance.GetResouce();
+		LanguageHelper.GetResouce();
 		return instance;
 	}
 
@@ -56,7 +56,7 @@ public class LanguageHelper {
 		}
 
 		fileName = strLanguage;
-		instance.GetResouce();
+		LanguageHelper.GetResouce();
 		return instance;
 	}
 
@@ -80,7 +80,7 @@ public class LanguageHelper {
 			fileName = Locale.KOREA.toLanguageTag();
 			break;
 		}
-		instance.GetResouce();
+		LanguageHelper.GetResouce();
 		return instance;
 	}
 
@@ -90,6 +90,7 @@ public class LanguageHelper {
 	// endregion
 
 	// regoin (사용안함) ClassLoader을 이용하여 Resource에서 파일 가져오는 예제
+	@SuppressWarnings("unused")
 	private JSONArray readFile(String fileName) throws IOException {
 		FileInputStream inputStream = null;
 		try {
@@ -151,7 +152,8 @@ public class LanguageHelper {
 				JSONParser parser = new JSONParser();
 				JSONObject obj = (JSONObject) parser.parse(tmp);
 
-				languageMap = JSONHelper.getInstance().JSONObjecttoMap(obj);
+				JSONHelper.getInstance();
+				languageMap = JSONHelper.JSONObjecttoMap(obj);
 
 				// System.out.println(toMap.size());
 				// System.out.println(toMap.get("Title"));

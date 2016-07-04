@@ -1,17 +1,12 @@
 package MVC.ShinwooTNS.com;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.text.MessageFormat;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.ws.rs.POST;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +39,7 @@ public class LoginController {
 			System.out.println("Login PW : " + pw);
 			
 			if (id != null && pw != null && !id.isEmpty() && !pw.isEmpty()) {
-				String sql = "SELECT * FROM \"UI_USER_INFO\" where \"sUserID\" = '" + id + "';";
+				String sql = "SELECT * FROM \"system_user_info\" where \"user_id\" = '" + id + "';";
 				System.out.println("Query : " + sql);
 				ResultSet rs = dbHelper.executeQuery(sql);
 				
@@ -56,15 +51,16 @@ public class LoginController {
 					
 					boolean bSignCheck = false;
 					while (rs.next()) {
-						System.out.println("db Password : " + rs.getString("sPassword"));
+						System.out.println("db Password : " + rs.getString("user_pw"));
 						System.out.println("UR Password : " + pw);
-						System.out.println("UR sDeptName : " + rs.getString("sDeptName").trim());
+						System.out.println("UR sDeptName : " + rs.getString("dept_name").trim());
 						
-						if (rs.getString("sPassword").trim().equals(pw)) {
+						if (rs.getString("user_pw").trim().equals(pw)) {
 							session.setAttribute("login_chk", true);// Session에 "login_chk"로 값을 저장.
-							session.setAttribute("nUserID", rs.getString("nUserID").trim());// Session에 "login_chk"로 값을 저장.
-							session.setAttribute("sUserID", rs.getString("sUserID").trim());// Session에 "login_chk"로 값을 저장.
-							session.setAttribute("sUserName", rs.getString("sUserName").trim());// Session에 "login_chk"로 값을 저장.							
+							session.setAttribute("site_id", rs.getString("site_id").trim());// Session에 "login_chk"로 값을 저장.
+							session.setAttribute("user_seq", rs.getString("user_seq").trim());// Session에 "login_chk"로 값을 저장.
+							session.setAttribute("user_id", rs.getString("user_id").trim());// Session에 "login_chk"로 값을 저장.
+							session.setAttribute("user_name", rs.getString("user_name").trim());// Session에 "login_chk"로 값을 저장.							
 							bSignCheck = true;
 						}
 					}
@@ -73,14 +69,14 @@ public class LoginController {
 						System.out.println("비밀번호가 일치하지 않습니다.");
 						model.addAttribute("errorMessage", LanguageHelper.GetLanguage("Passwordsdonotmatch"));
 						model.addAttribute("txtID", id);
-						return "/Login/login";
+						return "/loginManagement/login";
 					}
 				} else {
 					//일치하는 아이디가 없습니다.
 					System.out.println("일치하는 아이디가 없습니다.");
 					model.addAttribute("errorMessage", LanguageHelper.GetLanguage("IDdonotmatch"));
 					model.addAttribute("txtID", "");
-					return "/Login/login";
+					return "/loginManagement/login";
 				}
 			}
 		} catch (SQLException e) {
@@ -90,9 +86,9 @@ public class LoginController {
 			dbHelper.close();
 		}
 
-		System.out.println(session.getAttribute("login_chk"));
+		System.out.println("login_chk : " + session.getAttribute("login_chk"));
 		if (session.getAttribute("login_chk") == null)
-			return "/Login/login";
+			return "/loginManagement/login";
 		else
 			return "redirect:/main";
 	}
@@ -104,9 +100,10 @@ public class LoginController {
 
 		HttpSession session = request.getSession(true);
 		session.removeAttribute("login_chk");// Session에 "login_chk"로 값 삭제.
-		session.removeAttribute("nUserID");// Session에 "login_chk"로 값 삭제.
-		session.removeAttribute("sUserID");// Session에 "login_chk"로 값 삭제.
-		session.removeAttribute("sUserName");// Session에 "login_chk"로 값 삭제.	
+		session.removeAttribute("site_id");// Session에 "login_chk"로 값 삭제.
+		session.removeAttribute("user_seq");// Session에 "login_chk"로 값 삭제.
+		session.removeAttribute("user_id");// Session에 "login_chk"로 값 삭제.
+		session.removeAttribute("user_name");// Session에 "login_chk"로 값 삭제.	
 		
 		return "redirect:/";
 	}
