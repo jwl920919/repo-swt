@@ -18,6 +18,7 @@ public class TestRedis {
 	
 	public static void main() {
 
+		
 		// Basic Configurator
 		BasicConfigurator.configure();
 		
