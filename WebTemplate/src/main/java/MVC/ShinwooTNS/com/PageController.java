@@ -77,7 +77,7 @@ public class PageController {
 		System.out.println(MessageFormat.format("Login Check : {0}", session.getAttribute("login_chk")));
 
 		if (session.getAttribute("login_chk") != null)
-			return "/main";
+			return "redirect:/main";
 		else
 			return "redirect:/login";
 		// endregion Login Session check
@@ -175,7 +175,7 @@ public class PageController {
 		model.addAttribute("menuHTML", sb.toString());
 		// endregion 메뉴 데이터 생성
 
-		return "main";
+		return "/main";
 	}
 
 	// TEST
