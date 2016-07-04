@@ -91,7 +91,7 @@ $(document).ready(function() {
 	$("#ulMenuArea").append("${menuHTML}");
 	$("#divVersion").append("<b>Version</b> 1.0.0");
 	
-	changeframe("/dashboard/dashboard", '');
+	changeframe("/dashboard/dashboard", '', '', '');
 	$("#contentTitle").text(getLanguage("dashboard"));
     $("#contentTitleSmall").text("Control panel");
 

@@ -9,11 +9,6 @@
 <script src="../resources/js/common/multyLanguages.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
-		//Content Header 설정
-		$("#contentHeaderDepth1li").attr('style', 'display: display;');
-		$("#contentHeaderDepth2li").attr('style', 'display: display;');
-		$("#contentHeaderDepth1").text(getLanguage("ipManagement"));
-		$("#contentHeaderDepth2").text(getLanguage("staticIPStatus"));
 	});
 </script>
 </head>
