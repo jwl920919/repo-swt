@@ -537,16 +537,14 @@ function segmentLeasingIPAssignedAjaxCall() {
 			var vhtml = '';
 			if (jsonObj.LeaseIPAvailable != '') {
 				$.each(jsonObj.LeaseIPAvailable, function(index, obj) {
-					vhtml = vhtml + "<div class=\"progress-group\">"
-					  			  + "	<div>";
-								  + "		<span class=\"progress-text\">" + obj.segment + "</span>"
-								  + "	</div>";
-					  			  + "	<div>";
-								  + "		<span class=\"progress-number\"><b>" + obj.value + " %</b></span>"
-								  + "		<div class=\"progress sm\">"
-								  + "			<div class=\"progress-bar progress-bar-aqua\" style=\"width: " + obj.value + "%\"></div>"
-								  + "		</div>"
-								  + "	</div>";
+					vhtml = vhtml + "<div class=\"progress-text\">" + obj.segment 
+					  			  + "</div>";
+								  + "<div class=\"progress-group\">"
+								  //+ "	<span class=\"progress-text\">" + obj.segment + "</span>"
+								  + "	<span class=\"progress-number\"><b>" + obj.value + " %</b></span>"
+								  + "	<div class=\"progress sm\">"
+								  + "		<div class=\"progress-bar progress-bar-aqua\" style=\"width: " + obj.value + "%\"></div>"
+								  + "	</div>"
 								  + "</div>";
 				});
 			};			
