@@ -1,5 +1,6 @@
 package com.shinwootns.common.utils;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -41,4 +42,7 @@ public class TimeUtils {
 		return dayTime.format(new Date(miliSecond));
 	}
 
+	public static Timestamp convertLongToTimestamp(long time) {
+		return new Timestamp(time);
+	}
 }

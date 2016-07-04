@@ -7,7 +7,7 @@ import java.io.Serializable;
  * The persistent class for the site_info database table.
  * 
  */
-public class SiteInfo implements Serializable {
+public class SiteInfoEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 

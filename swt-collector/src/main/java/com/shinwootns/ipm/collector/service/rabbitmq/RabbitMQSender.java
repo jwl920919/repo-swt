@@ -1,4 +1,4 @@
-package com.shinwootns.ipm.collector.service;
+package com.shinwootns.ipm.collector.service.rabbitmq;
 
 import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
@@ -7,7 +7,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import com.shinwootns.ipm.collector.AppContextProvider;
 
-public class RabbitMQHandler {
+public class RabbitMQSender {
 	
 	public static void SendData(JSONObject jobj, Logger _logger) {
 		

@@ -1,4 +1,4 @@
-package com.shinwootns.ipm.collector.service;
+package com.shinwootns.ipm.collector.service.syslog;
 
 import java.util.List;
 
@@ -10,6 +10,8 @@ import org.springframework.context.ConfigurableApplicationContext;
 import com.shinwootns.common.network.SyslogEntity;
 import com.shinwootns.common.utils.LogUtils;
 import com.shinwootns.ipm.collector.AppContextProvider;
+import com.shinwootns.ipm.collector.service.WorkerPoolManager;
+import com.shinwootns.ipm.collector.service.rabbitmq.RabbitMQSender;
 
 public class SyslogProducer implements Runnable {
 
@@ -57,7 +59,7 @@ public class SyslogProducer implements Runnable {
 					jobj.put("recv_time", syslog.getRecvTime());
 					jobj.put("message", rawData);
 					
-					RabbitMQHandler.SendData(jobj, _logger);
+					RabbitMQSender.SendData(jobj, _logger);
 				}
 				
 				listSyslog.clear();
@@ -76,8 +78,6 @@ public class SyslogProducer implements Runnable {
 		}
 		
 		if ( this._logger != null)
-		{
 			_logger.info(String.format("Syslog Producer#%d... end.", this._index));
-		}
 	}
 }
