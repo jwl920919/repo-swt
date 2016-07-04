@@ -1,0 +1,26 @@
+# ----------------------------------------
+# SYSTEM PROPERTIES
+# ----------------------------------------
+
+server.port = 80
+server.session-timeout = 3000
+
+# ----------------------------------------
+# LOGGING PROPERTIES
+# ----------------------------------------
+
+# LOGGING
+logging.file=D:/logs/swt-manager.log
+logging.path=D:/logs/
+
+logging.level.org.springframework.web=INFO
+logging.level.com.shinwootns.*=DEBUG
+logging.level.*=DEBUG
+
+
+# ===============
+# Execute Sample
+# ===============
+#
+# java -jar swt-manager-0.0.1.jar --spring.config.location=app.properties
+#

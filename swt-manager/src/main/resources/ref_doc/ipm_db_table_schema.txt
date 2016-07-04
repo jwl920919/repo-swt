@@ -1,0 +1,173 @@
+--==========================================================================================
+-- SYSTEM
+--==========================================================================================
+
+-- SITE_INFO
+CREATE SEQUENCE public.site_info_id_seq;
+CREATE TABLE public.site_info
+(
+  site_id integer NOT NULL DEFAULT nextval('site_info_id_seq'::regclass),
+  site_name character varying(128) NOT NULL,
+  site_code character varying(8) NOT NULL,
+  dhcp_ipaddr character varying(16) NOT NULL,
+  dhcp_version character varying(32) DEFAULT '1.1',
+  dhcp_userid character varying(64) NOT NULL,
+  dhcp_password character varying(256) NOT NULL,
+  dhcp_snmp_community character varying(128) NOT NULL,
+  dhcp_snmp_version int DEFAULT 2,
+  blacklist_enable boolean DEFAULT false,
+  blacklist_filter_name character varying(128) DEFAULT '',
+  blacklist_time_sec int DEFAULT 30,
+  description character varying(512),
+  CONSTRAINT site_info_pkey PRIMARY KEY (site_id)
+);
+
+
+--==========================================================================================
+-- EVENT
+--==========================================================================================
+
+CREATE SEQUENCE public.event_id_seq;
+
+-- EVENT_LOG
+CREATE TABLE public.event_log
+(
+  event_id integer NOT NULL DEFAULT nextval('event_id_seq'::regclass),
+  device_id integer,
+  host_ip character varying(16),
+  event_type character varying(32) NOT NULL,
+  severity integer NOT NULL,
+  collect_time timestamp DEFAULT current_timestamp,
+  message character varying(512) NOT NULL,
+  CONSTRAINT event_id_pkey PRIMARY KEY (event_id)
+);
+
+
+--==========================================================================================
+-- AUTH
+--==========================================================================================
+
+-- AUTH_TYPE
+CREATE TABLE public.auth_type
+(
+  auth_type_id integer NOT NULL,
+  auth_name character varying(64) NOT NULL,
+  auth_type character varying(32) NOT NULL,
+  CONSTRAINT auth_type_id_pkey PRIMARY KEY (auth_type_id)
+);
+
+-- AUTH_ORDER
+CREATE TABLE public.auth_order
+(
+  site_id integer NOT NULL,
+  sequence_type character varying(32) DEFAULT 'sequence',
+  auth_type_id integer NOT NULL,
+  auth_order integer NOT NULL,
+  CONSTRAINT auth_order_id_pkey PRIMARY KEY (site_id, auth_type_id, auth_order)
+);
+
+
+-- AUTH_LDAP_GROUP
+CREATE SEQUENCE public.auth_ldap_group_id_seq;
+CREATE TABLE public.auth_ldap_group
+(
+  ldap_group_id integer NOT NULL DEFAULT nextval('auth_ldap_group_id_seq'::regclass),
+  auth_type_id integer DEFAULT 1,
+  domain_name character varying(512) NOT NULL,
+  group_name character varying(512) NOT NULL,
+  group_type character varying(64) NOT NULL,
+  CONSTRAINT ldap_group_id_pkey PRIMARY KEY (ldap_group_id)
+);
+
+-- AUTH_SETUP_ID Sequence
+CREATE SEQUENCE public.auth_setup_id_seq;
+
+-- AUTH_SETUP_LDAP
+CREATE TABLE public.auth_setup_ldap
+(
+  setup_id integer NOT NULL DEFAULT nextval('auth_setup_id_seq'::regclass),
+  site_id integer NOT NULL,
+  host character varying(64) NOT NULL,
+  port integer NOT NULL,
+  ssl_enable boolean NOT NULL DEFAULT false,
+  
+  auth_type character varying(32) NOT NULL,
+  bind_domain character varying(128) NOT NULL,
+  bind_passwd character varying(64) NOT NULL,
+  base_domain character varying(128) NOT NULL,
+  user_class character varying(128) NOT NULL,
+  user_attr character varying(128) NOT NULL,
+  user_name_attr character varying(128) NOT NULL,
+  user_memberof_attr character varying(128) NOT NULL,
+  
+  group_class character varying(128) NOT NULL,
+  group_name_attr character varying(128) NOT NULL,
+  group_member_attr character varying(128) NOT NULL,
+  
+  kerberos_enable boolean NOT NULL DEFAULT false,
+  kerberos_host character varying(64),
+  kerberos_port integer,
+  kerberos_realm character varying(128),
+  
+  CONSTRAINT auth_setup_ldap_id_pkey PRIMARY KEY (setup_id)
+);
+
+-- AUTH_SETUP_ESB
+CREATE TABLE public.auth_setup_esb
+(
+  setup_id integer NOT NULL DEFAULT nextval('auth_setup_id_seq'::regclass),
+  site_id integer NOT NULL,
+  url character varying(256) NOT NULL,
+  user_id character varying(64) NOT NULL,
+  user_passwd character varying(64) NOT NULL,
+  
+  CONSTRAINT auth_setup_esb_id_pkey PRIMARY KEY (setup_id)
+);
+
+-- AUTH_SETUP_RADIUS
+CREATE TABLE public.auth_setup_radius
+(
+  setup_id integer NOT NULL DEFAULT nextval('auth_setup_id_seq'::regclass),
+  site_id integer NOT NULL,
+  host character varying(64) NOT NULL,
+  password character varying(128) NOT NULL,
+  auth_port integer NOT NULL,
+  acct_port integer NOT NULL,
+  timeout_sec integer DEFAULT 3,
+  nas_ip character varying(32) NOT NULL,
+  nas_identifier character varying(64) NOT NULL,
+  service_type character varying(64) DEFAULT 'Login-User',
+  called_station_id character varying(64) NOT NULL,
+  
+  CONSTRAINT auth_setup_radius_id_pkey PRIMARY KEY (setup_id)
+);
+
+
+--==========================================================================================
+-- DHCP
+--==========================================================================================
+
+-- DHCP_MAC_FILTER
+CREATE SEQUENCE dhcp_mac_filter_id_seq;
+CREATE TABLE public.dhcp_mac_filter
+(
+  filter_id integer NOT NULL DEFAULT nextval('dhcp_mac_filter_id_seq'::regclass),
+  site_id integer NOT NULL,
+  filter_name character varying(128) NOT NULL,
+  filter_desc character varying(512),
+  CONSTRAINT dhcp_mac_filter_pkey PRIMARY KEY (filter_id)
+);
+
+-- DHCP_NETWORK
+CREATE SEQUENCE public.dhcp_network_id_seq;
+CREATE TABLE public.dhcp_network
+(
+  dhcp_network_id integer NOT NULL DEFAULT nextval('dhcp_network_id_seq'::regclass),
+  site_id integer NOT NULL,
+  network character varying(32) NOT NULL,
+  start_ip character varying(16) NOT NULL,
+  end_ip character varying(16) NOT NULL,
+  
+  filter_name character varying(128),
+  CONSTRAINT dhcp_network_id_pkey PRIMARY KEY (dhcp_network_id)
+);

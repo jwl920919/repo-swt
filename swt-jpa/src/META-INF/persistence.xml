@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+	<persistence-unit name="swt-jpa">
+		<class>com.shinwootns.ipm.data.entity.AuthLdapGroup</class>
+		<class>com.shinwootns.ipm.data.entity.AuthOrder</class>
+		<class>com.shinwootns.ipm.data.entity.AuthOrderPK</class>
+		<class>com.shinwootns.ipm.data.entity.AuthSetupEsb</class>
+		<class>com.shinwootns.ipm.data.entity.AuthSetupLdap</class>
+		<class>com.shinwootns.ipm.data.entity.AuthSetupRadius</class>
+		<class>com.shinwootns.ipm.data.entity.AuthType</class>
+		<class>com.shinwootns.ipm.data.entity.DhcpMacFilter</class>
+		<class>com.shinwootns.ipm.data.entity.DhcpNetwork</class>
+		<class>com.shinwootns.ipm.data.entity.SiteInfo</class>
+		<class>com.shinwootns.ipm.data.entity.SystemUserGroup</class>
+		<class>com.shinwootns.ipm.data.entity.SystemUserInfo</class>
+		<class>com.shinwootns.ipm.data.entity.DashboardSetting</class>
+		<class>com.shinwootns.ipm.data.entity.DashboardSettingPK</class>
+		<class>com.shinwootns.ipm.data.entity.EventLog</class>
+		<class>com.shinwootns.ipm.data.entity.MenuMaster</class>
+		<class>com.shinwootns.ipm.data.entity.MenuSub</class>
+		<class>com.shinwootns.ipm.data.entity.MenuSubPK</class>
+	</persistence-unit>
+</persistence>
