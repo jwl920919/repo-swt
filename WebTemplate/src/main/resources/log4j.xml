@@ -10,6 +10,11 @@
 		</layout>
 	</appender>
 	
+	
+	
+	
+	
+	
 	<!-- Application Loggers -->
 	<logger name="MVC.ShinwooTNS.com">
 		<level value="info" />
