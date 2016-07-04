@@ -88,6 +88,7 @@
 <script type="text/javascript">
 $(document).ready(function() {
 
+	console.log("menu : " + "${menuHTML}");
 	$("#ulMenuArea").append("${menuHTML}");
 	$("#divVersion").append("<b>Version</b> 1.0.0");
 	

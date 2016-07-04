@@ -14,7 +14,7 @@ changeframe = function(url, acticeid, masterKey, subKey) {
 			// alert(url);
 			// alert(acticeid);
 			
-			console.log("url:" + url + ", acticeid :" + acticeid);
+			//console.log("url:" + url + ", acticeid :" + acticeid);
 			$("#content_frame").load(url);
 
 			var menu = $("[id^='menu_']");
