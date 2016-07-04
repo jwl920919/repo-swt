@@ -19,6 +19,16 @@ public class MainController {
 	
 	@Autowired
 	private AuthTypeMapper mapper;
+	
+	/*
+	@PostConstruct
+	public void startService() {
+	}
+	
+	@PreDestroy
+	public void stopService() {
+	}
+	*/
 
 	/*
 	@RequestMapping("/")

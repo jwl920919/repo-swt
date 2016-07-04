@@ -22,7 +22,7 @@ import com.shinwootns.ipm.collector.service.WorkerPoolManager;
 
 @EnableScheduling
 @SpringBootApplication
-public class CollectorApplication implements CommandLineRunner {
+public class MainApplication implements CommandLineRunner {
 	
 	private final Logger _logger = Logger.getLogger(this.getClass());
 	
@@ -121,7 +121,7 @@ public class CollectorApplication implements CommandLineRunner {
 		
 		BasicConfigurator.configure();
 		
-		ConfigurableApplicationContext context = SpringApplication.run(CollectorApplication.class, args);
+		ConfigurableApplicationContext context = SpringApplication.run(MainApplication.class, args);
 				
 		AppContextProvider.getInstance().setApplicationContext( context );
 	}
