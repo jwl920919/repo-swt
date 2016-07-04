@@ -6,9 +6,8 @@ var m_segmentLeasingIPAssignedAjaxCall;
 
 $(document).ready(
 		function() {
-			alert("test");
-			$("#contentHeaderDepth1li").attr('style', 'display: none;');
-			$("#contentHeaderDepth2li").attr('style', 'display: none;');
+//			$("#contentHeaderDepth1li").attr('style', 'display: none;');
+//			$("#contentHeaderDepth2li").attr('style', 'display: none;');
 
 			ivalue = 0;
 			AllClearAjaxCall();
@@ -520,6 +519,10 @@ function cleardnsStatusAjaxCall() {
 function segmentLeasingIPAssignedAjaxCall() {
 
 	try {
+		var vCritical = "progress-bar-red";
+		var vWarnning = "progress-bar-warning";
+		var vNormal = "progress-bar-aqua";
+		
 		var vTop1 = Math.floor(Math.random() * 101);
 		var vTop2 = Math.floor(Math.random() * 101);
 		var vTop3 = Math.floor(Math.random() * 101);
@@ -528,27 +531,34 @@ function segmentLeasingIPAssignedAjaxCall() {
 
 		var data = "{\"LeaseIPAvailable\": [{\"segment\": \"10.10.10.0/24\",\"value\": "+vTop1+"},{"+
 								     		"\"segment\": \"192.168.1.0/24\",\"value\": "+vTop2+"},{"+
-								     		"\"segment\": \"100.100.100.0/24\",\"value\": "+vTop3+"},{"+
+								     		"\"segment\": \"100.100.100.100/255\",\"value\": "+vTop3+"},{"+
 								     		"\"segment\": \"12.12.15.0/24\",\"value\": "+vTop4+"},{"+
 								     		"\"segment\": \"25.25.1.0/24\",\"value\": "+vTop5+"}]}";
 		//console.log(data);
 		var jsonObj = eval("(" + data + ')'); // JSonString 형식의 데이터를
 		// Ojbect형식으로 변경
 		if (jsonObj != '') {
-			var vhtml = '';
 			if (jsonObj.LeaseIPAvailable != '') {
+				var vhtml = "<div class=\"progress-group\"><table class=\"col-xs-12\" border=0 style=\"height:135px\">";
 				$.each(jsonObj.LeaseIPAvailable, function(index, obj) {
-					vhtml = vhtml + "<div class=\"progress-text\">" + obj.segment 
-					  			  + "</div>";
-								  + "<div class=\"progress-group\">"
-								  //+ "	<span class=\"progress-text\">" + obj.segment + "</span>"
-								  + "	<span class=\"progress-number\"><b>" + obj.value + " %</b></span>"
-								  + "	<div class=\"progress sm\">"
-								  + "		<div class=\"progress-bar progress-bar-aqua\" style=\"width: " + obj.value + "%\"></div>"
-								  + "	</div>"
-								  + "</div>";
+					var vSeverity = vNormal;
+					if (obj.value >= 80) {
+						vSeverity = vCritical;
+					}
+					else if (obj.value < 80 && obj.value >= 60) {
+						vSeverity = vWarnning;
+					}
+					
+					vhtml = vhtml + "<tr><td style=\"width:42%; text-align:left\"><span class=\"progress-text\">" + obj.segment + "</span></td>" +
+									"<td style=\"width:43%\">" +
+									"	<div class=\"progress sm\">" +
+									"		<div class=\"progress-bar " + vSeverity + " \" style=\"width: " + obj.value + "%;\"></div>" +
+									"	</div>"+
+									"</td>" +
+									"<td style=\"width:15%\"><span class=\"progress-number\"><b>" + obj.value + " %</b></span></td></tr>";					
 				});
 			};			
+			html = vhtml + "</table></div>";
 			$('#divleaseIPAvailable').html(vhtml);
 		};
 

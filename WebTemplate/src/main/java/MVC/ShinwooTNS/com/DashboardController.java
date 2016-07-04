@@ -40,14 +40,16 @@ import net.sf.json.JSON;
 import scala.annotation.meta.setter;
 
 @Controller
+@RequestMapping(value="/dashboard/")
 public class DashboardController {
+	private final static String parentPath = "/dashboard/";
 	private final static java.text.SimpleDateFormat SIMPLE_DATE_FORMAT = new java.text.SimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss");
 	private static final Logger logger = LoggerFactory.getLogger(PageController.class);
 	private Gson gson = new Gson();		
 	private AjaxResult result = new AjaxResult();
 	
-	@RequestMapping(value = "/dashboard/dashboard", method = RequestMethod.GET)
+	@RequestMapping(value = "dashboard", method = RequestMethod.GET)
 	public String Main(Locale locale, Model model, HttpServletRequest request, HttpServletResponse response) {
 		logger.info("dashboard : " + request.getLocalAddr());
 		System.out.println("dashboard Controller");
@@ -57,6 +59,6 @@ public class DashboardController {
 		if (session.getAttribute("login_chk") == null)
 			return "redirect:login";
 
-		return "/dashboard/dashboard";
+		return parentPath + "dashboard";
 	}
 }

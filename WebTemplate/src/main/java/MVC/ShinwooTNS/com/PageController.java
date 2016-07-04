@@ -104,15 +104,19 @@ public class PageController {
 		StringBuilder sb = new StringBuilder();
 		String sMasterCD = null;
 		String sSubCD = null;
+		String sMasterNameKey = null;
+		String ssubNameKey = null;
 		for (int i = 0; i < listMenu.size(); i++) {
 			System.out.println(listMenu.get(i));
 			// System.out.println(listMenu.get(i).get("sSubDiscription"));
 
 			if (sMasterCD == null) {
 				sMasterCD = listMenu.get(i).get("master_cd").toString();
+				sMasterNameKey = listMenu.get(i).get("master_namekey").toString();
+				ssubNameKey = listMenu.get(i).get("subname_key").toString();
 				sb.append("<li class='active treeview' id='menu_" + sMasterCD +"'>");
 //				sb.append("	<a href='" + listMenu.get(i).get("sMasterURL").toString() + "'>");
-				sb.append("	<a onclick='changeframe(&quot;" + listMenu.get(i).get("master_url").toString() + "&quot;, &quot;" + sMasterCD + "&quot;);' style='cursor:pointer' >");
+				sb.append("	<a onclick='changeframe(&quot;" + listMenu.get(i).get("master_url").toString() + "&quot;, &quot;" + sMasterCD + "&quot;, &quot;" + sMasterNameKey + "&quot;, &quot;" + ssubNameKey + "&quot;);' style='cursor:pointer' >");
 				sb.append("		<i class='fa " + listMenu.get(i).get("master_icon").toString() + "'></i>");
 				sb.append("		<span>" + LanguageHelper.GetLanguage(listMenu.get(i).get("master_namekey").toString())
 						+ "</span>");
@@ -124,7 +128,7 @@ public class PageController {
 					sb.append("	<ul class='treeview-menu' name='ulMenu'>");
 					sb.append("		<li class='active' id='menu_" + sSubCD +"'>");
 //					sb.append("			<a href='" + listMenu.get(i).get("sSubUrl").toString() + "'>");
-					sb.append("			<a onclick='changeframe(&quot;" + listMenu.get(i).get("sub_Url").toString() + "&quot;, &quot;" + sSubCD + "&quot;);' style='cursor:pointer' >");
+					sb.append("			<a onclick='changeframe(&quot;" + listMenu.get(i).get("sub_Url").toString() + "&quot;, &quot;" + sSubCD + "&quot;, &quot;" + sMasterNameKey + "&quot;, &quot;" + ssubNameKey + "&quot;);' style='cursor:pointer' >");
 					sb.append("				<i class='fa fa-circle-o'></i>");
 					sb.append(LanguageHelper.GetLanguage(listMenu.get(i).get("subname_key").toString()));
 					sb.append("			</a></li>");
@@ -133,9 +137,10 @@ public class PageController {
 				// 같은 Master 메뉴 처리
 				if (!sMasterCD.equals("M01")) {
 					sSubCD = listMenu.get(i).get("sub_cd").toString();
+					ssubNameKey = listMenu.get(i).get("subname_key").toString();
 					sb.append("		<li id='menu_" + sSubCD +"'>");
 //					sb.append("			<a href='" + listMenu.get(i).get("sSubUrl").toString() + "'>");
-					sb.append("			<a onclick='changeframe(&quot;" + listMenu.get(i).get("sub_Url").toString() + "&quot;, &quot;" + sSubCD + "&quot;);' style='cursor:pointer' >");
+					sb.append("			<a onclick='changeframe(&quot;" + listMenu.get(i).get("sub_Url").toString() + "&quot;, &quot;" + sSubCD + "&quot;, &quot;" + sMasterNameKey + "&quot;, &quot;" + ssubNameKey + "&quot;);' style='cursor:pointer' >");
 					sb.append("				<i class='fa fa-circle-o'></i>");
 					sb.append(LanguageHelper.GetLanguage(listMenu.get(i).get("subname_key").toString()));
 					sb.append("			</a></li>");
@@ -144,6 +149,8 @@ public class PageController {
 				// 다른 Master 메뉴 처리
 				sMasterCD = listMenu.get(i).get("master_cd").toString();
 				sSubCD = listMenu.get(i).get("sub_cd").toString();
+				sMasterNameKey = listMenu.get(i).get("master_namekey").toString();
+				ssubNameKey = listMenu.get(i).get("subname_key").toString();
 				sb.append("	</ul>");
 				sb.append("</li>");
 				sb.append("<li class='treeview' id='menu_" + sMasterCD +"'>");
@@ -156,7 +163,7 @@ public class PageController {
 				sb.append("	<ul class='treeview-menu' name='ulMenu'>");
 				sb.append("		<li class='active' id='menu_" + sSubCD +"'>");
 //				sb.append("			<a href='" + listMenu.get(i).get("sSubUrl").toString() + "'>");
-				sb.append("			<a onclick='changeframe(&quot;" + listMenu.get(i).get("sub_Url").toString() + "&quot;, &quot;" + sSubCD + "&quot;);' style='cursor:pointer' >");
+				sb.append("			<a onclick='changeframe(&quot;" + listMenu.get(i).get("sub_Url").toString() + "&quot;, &quot;" + sSubCD + "&quot;, &quot;" + sMasterNameKey + "&quot;, &quot;" + ssubNameKey + "&quot;);' style='cursor:pointer' >");
 				sb.append("				<i class='fa fa-circle-o'></i>");
 				sb.append(LanguageHelper.GetLanguage(listMenu.get(i).get("subname_key").toString()));
 				sb.append("			</a></li>");
