@@ -77,7 +77,7 @@ public class PageController {
 		System.out.println(MessageFormat.format("Login Check : {0}", session.getAttribute("login_chk")));
 
 		if (session.getAttribute("login_chk") != null)
-			return "main";
+			return "redirect:/main";
 		else
 			return "redirect:/login";
 		// endregion Login Session check
@@ -96,7 +96,7 @@ public class PageController {
 		if (session.getAttribute("login_chk") == null)
 			return "redirect:login";
 
-		List<HashMap<String, Object>> listMenu = new ArrayList<HashMap<String, Object>>();
+		List<HashMap<String, Object>> listMenu = new ArrayList<>();
 		listMenu = memuMasterService.select_UI_MENU_MASTER();
 		// listMenu = myappService.selectTestTable();
 
@@ -171,10 +171,11 @@ public class PageController {
 		}
 		sb.append("	</ul>");
 		sb.append("</li>");
+		System.out.println(sb.toString());
 		model.addAttribute("menuHTML", sb.toString());
 		// endregion 메뉴 데이터 생성
 
-		return "main";
+		return "/main";
 	}
 
 	// TEST
@@ -211,29 +212,5 @@ public class PageController {
 	public String angularJSSample(ModelMap map) throws InterruptedException {
 
 		return "ajaxPollingTest";
-	}
-
-	// TEST
-	@RequestMapping(value = "/ajaxPollingTest.do", method = RequestMethod.POST)
-	public @ResponseBody Object isAnonymous(HttpServletRequest request) {
-		System.out.println("ajaxPollingTest.do");
-		
-	 	String param1 = request.getParameter("param1");
-	 	String param2 = request.getParameter("param2");
-	 	System.out.println("param1 : " + param1);
-	 	System.out.println("param2 : " + param2);
-		
-		Map<String, Object> mData  = new HashMap<String, Object>();
-		mData.put("param1", Integer.parseInt(param1) + 1);
-		mData.put("param2", (new Date()).toString());
-
-		result.result = true;
-		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		list.add(mData);
-		
-		result.data = list;
-		
-		//return date.toString();		
-		return gson.toJson(result);
 	}
 }
