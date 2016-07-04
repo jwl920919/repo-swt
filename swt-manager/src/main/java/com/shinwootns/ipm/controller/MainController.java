@@ -38,7 +38,6 @@ public class MainController {
 	}
 	*/
 	
-	/*
 	@RequestMapping("/AuthType")
     public @ResponseBody List<AuthType> getUserList() {
 		
@@ -46,5 +45,4 @@ public class MainController {
 		
         return result;
     }
-    */
 }
