@@ -2412,12 +2412,12 @@ deg
 
 .info-box {
 	display: block;
-	min-height: 90px;
+/* 	min-height: 90px; */
 	background: #fff;
 	width: 100%;
 	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 	border-radius: 2px;
-	margin-bottom: 15px
+	margin-bottom: 5px
 }
 
 .info-box small {
@@ -2445,16 +2445,17 @@ deg
 	border-bottom-left-radius: 2px;
 	display: block;
 	float: left;
-	height: 90px;
+	height: 42px;
 	width: 90px;
 	text-align: center;
-	font-size: 45px;
-	line-height: 90px;
-	background: rgba(0, 0, 0, 0.2)
+	font-size: 30px;
+/* 	line-height: 90px; */
+	background: rgba(0, 0, 0, 0.2);
+	padding: 5px 
 }
 
 .info-box-icon>img {
-	max-width: 100%
+	max-width: 100%;
 }
 
 .info-box-content {

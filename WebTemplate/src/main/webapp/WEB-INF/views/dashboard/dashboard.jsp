@@ -386,7 +386,42 @@
 								</div>
 								<!-- ./ tools -->
 							</div>
-							<div class="box-body"></div>
+							<div class="box-body" style="text-align: center; height: 155px; margin-top: -15px;">
+								<!-- 고정 IP 할당 현황 -->
+								<div class="info-box bg-yellow">
+									<span class="info-box-icon"><i class="fa fa-lock"></i></span>						
+						            <div class="info-box-content">
+						            	<span class="progress-description">Increase in 30 Days
+						            	</span>
+						            	<div class="progress">
+						            		<div class="progress-bar" style="width: 50%"></div>
+						            	</div>
+						            </div>
+								</div>
+								<!-- ./고정 IP 할당 현황 -->
+								<!-- 고정 IP 할당 현황 -->
+								<div class="info-box bg-green">
+									<span class="info-box-icon"><i class="fa fa-user"></i></span>						
+						            <div class="info-box-content">
+						            	<span class="progress-description">50% Increase in 30 Days</span>
+						            	<div class="progress">
+						            		<div class="progress-bar" style="width: 30%"></div>
+						            	</div>
+						            </div>
+								</div>
+								<!-- ./고정 IP 할당 현황 -->
+								<!-- 고정 IP 할당 현황 -->
+								<div class="info-box bg-aqua">
+									<span class="info-box-icon"><i class="fa fa-user-times"></i></span>						
+						            <div class="info-box-content">
+						            	<span class="progress-description">50% Increase in 30 Days</span>
+						            	<div class="progress">
+						            		<div class="progress-bar" style="width: 80%"></div>
+						            	</div>
+						            </div>
+								</div>						
+							
+							</div>
 						</div>
 					</section>
 					<!-- ./고정, 리스, 미사용 IP 할당 현황  -->
@@ -413,7 +448,7 @@
 							</div>
 							<!-- ./ tools -->
 						</div>
-						<div class="box-body"></div>
+						<div class="box-body" style="text-align: center; height: 135px; margin-top: -15px;"></div>
 					</div>
 					<!-- ./IP 신청 현황  -->
 				</div>					
