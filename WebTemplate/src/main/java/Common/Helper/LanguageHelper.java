@@ -66,20 +66,15 @@ public class LanguageHelper {
 		}
 
 		// System.out.println("Locale.US : " + Locale.US.toString());
-		switch (locale.toLanguageTag()) {
-		case "ko":
+		if (locale.toLanguageTag().equals("ko"))
 			fileName = Locale.KOREA.toLanguageTag();
-			break;
-		case "en":
+		else if (locale.toLanguageTag().equals("en"))
 			fileName = Locale.US.toLanguageTag();
-			break;
-		case "zh":
+		else if (locale.toLanguageTag().equals("zh"))
 			fileName = Locale.CHINA.toLanguageTag();
-			break;
-		default:
+		else
 			fileName = Locale.KOREA.toLanguageTag();
-			break;
-		}
+		
 		LanguageHelper.GetResouce();
 		return instance;
 	}

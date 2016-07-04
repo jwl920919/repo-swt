@@ -216,12 +216,12 @@ public class PageController {
 	 	System.out.println("param1 : " + param1);
 	 	System.out.println("param2 : " + param2);
 		
-		Map<String, Object> mData  = new HashMap<>();
+		Map<String, Object> mData  = new HashMap<String, Object>();
 		mData.put("param1", Integer.parseInt(param1) + 1);
 		mData.put("param2", (new Date()).toString());
 
 		result.result = true;
-		List<Map<String, Object>> list = new ArrayList<>();
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		list.add(mData);
 		
 		result.data = list;
