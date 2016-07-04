@@ -1,0 +1,17 @@
+﻿{	
+	"Title":										"Smart IPM",
+	"Login":										"LOGIN",
+	"ID":											"ID",
+	"Password":										"Password",
+	"Signintostartyoursession":						"Sign in to start your session",
+	"Iforgotmypassword":							"I forgot my password",
+	"Registermembership":							"Register a new membership",
+	"PleaseenteryourID":							"Please enter your ID.",
+	"Pleaseenterapassword":							"Please enter a password.",
+	"ko-KR":										"Korean",
+	"en-US":										"English",
+	"ch-CN":										"Chinese",
+	"warning":										"Warning",
+	"IDdonotmatch":									"ID do not match.",
+	"Passwordsdonotmatch":							"Passwords do not match."
+}
