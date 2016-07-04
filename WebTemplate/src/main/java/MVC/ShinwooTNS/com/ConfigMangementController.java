@@ -18,25 +18,25 @@ import com.google.gson.Gson;
 import Common.DTO.AjaxResult;
 
 @Controller
-@RequestMapping(value = "/configuration/")
-public class ConfigurationController {
+@RequestMapping(value = "/configMangement/")
+public class ConfigMangementController {
 	private final static java.text.SimpleDateFormat SIMPLE_DATE_FORMAT = new java.text.SimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss");
-	private final static String parentPath = "/configuration/";
-	private static final Logger logger = LoggerFactory.getLogger(ConfigurationController.class);
+	private final static String parentPath = "/configMangement/";
+	private static final Logger logger = LoggerFactory.getLogger(ConfigMangementController.class);
 	private Gson gson = new Gson();
 	private AjaxResult result = new AjaxResult();
 
-	@RequestMapping(value = "systemUserInfo", method = RequestMethod.GET)
+	@RequestMapping(value = "systemUserManagement", method = RequestMethod.GET)
 	public String Main(Locale locale, Model model, HttpServletRequest request, HttpServletResponse response) {
-		logger.info("systemUserInfo : " + request.getLocalAddr());
-		System.out.println("systemUserInfo Controller");
+		logger.info("systemUserManagement : " + request.getLocalAddr());
+		System.out.println("systemUserManagement Controller");
 		// Session에 로그인 정보가 있는지 체크
 		HttpSession session = request.getSession(true);
 		System.out.println(session.getAttribute("login_chk"));
 		if (session.getAttribute("login_chk") == null)
 			return "redirect:login";
 
-		return parentPath + "systemUserInfo";
+		return parentPath + "systemUserManagement";
 	}
 }
