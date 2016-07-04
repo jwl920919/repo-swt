@@ -1,5 +1,7 @@
 package com.shinwootns.common.utils;
 
+import java.sql.Timestamp;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -25,5 +27,56 @@ public class JsonUtils {
 			return (JSONObject)obj;
 		
 		return null;
+	}
+	
+	public static String getValueToString(JSONObject jObj, String key, String defaultValue) {
+		
+		if (jObj == null)
+			return defaultValue;
+		
+		Object value = jObj.get(key);
+		
+		if (value == null)
+			return defaultValue;
+		
+		return (String)value;
+	}
+	
+	public static long getValueToNumber(JSONObject jObj, String key, long defaultValue) {
+		
+		if (jObj == null)
+			return defaultValue;
+		
+		Object value = jObj.get(key);
+		
+		if (value == null)
+			return defaultValue;
+		
+		if (value instanceof Integer)
+			return (Long)value;
+		else if (value instanceof String)
+			return Long.parseLong((String)value);
+		
+		return (Long)value;
+	}
+	
+	public static Timestamp getValueToTimestamp(JSONObject jObj, String key, long defaultValue) {
+		
+		if (jObj == null)
+			return new Timestamp(defaultValue);
+		
+		Object value = jObj.get(key);
+
+		if (value == null)
+			return new Timestamp(defaultValue);
+		
+		long time = defaultValue; 
+		
+		if (value instanceof Long)
+			time = (Long)value;
+		else if (value instanceof String)
+			time = Long.parseLong((String)value);
+
+		return new Timestamp(time);
 	}
 }

@@ -2,7 +2,7 @@ package com.shinwootns.ipm.data.entity;
 
 import java.io.Serializable;
 
-public class AuthType implements Serializable {
+public class AuthTypeEntity implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 

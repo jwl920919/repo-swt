@@ -6,7 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.shinwootns.ipm.data.entity.AuthType;
+import com.shinwootns.ipm.data.entity.AuthTypeEntity;
 
 /*
 @Component

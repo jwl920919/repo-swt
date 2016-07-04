@@ -12,6 +12,7 @@
     
     <mappers>
         <mapper resource="myBatis/mapper/SiteInfoMapper.xml"/>
+        <mapper resource="myBatis/mapper/EventLogMapper.xml"/>
     </mappers>
  
 </configuration>

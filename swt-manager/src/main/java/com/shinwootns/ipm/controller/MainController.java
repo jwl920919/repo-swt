@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.shinwootns.ipm.data.entity.AuthType;
+import com.shinwootns.ipm.data.entity.AuthTypeEntity;
 import com.shinwootns.ipm.data.mapper.AuthTypeMapper;
 
 //import com.shinwootns.ipm.data.entity.AuthType;
@@ -17,8 +17,8 @@ import com.shinwootns.ipm.data.mapper.AuthTypeMapper;
 @RestController
 public class MainController {
 	
-	@Autowired
-	private AuthTypeMapper mapper;
+	//@Autowired
+	//private AuthTypeMapper mapper;
 	
 	/*
 	@PostConstruct
@@ -38,11 +38,11 @@ public class MainController {
 	}
 	*/
 	
-	@RequestMapping("/AuthType")
-    public @ResponseBody List<AuthType> getUserList() {
+	/*@RequestMapping("/AuthType")
+    public @ResponseBody List<AuthTypeEntity> getUserList() {
 		
-		List<AuthType> result = mapper.findAll();
+		List<AuthTypeEntity> result = mapper.findAll();
 		
         return result;
-    }
+    }*/
 }

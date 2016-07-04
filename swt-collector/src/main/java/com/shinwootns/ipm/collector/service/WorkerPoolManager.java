@@ -11,6 +11,7 @@ import com.shinwootns.common.network.SyslogEntity;
 import com.shinwootns.common.stp.PoolStatus;
 import com.shinwootns.common.stp.SmartThreadPool;
 import com.shinwootns.common.utils.TimeUtils;
+import com.shinwootns.ipm.collector.service.syslog.SyslogProducer;
 
 public class WorkerPoolManager {
 	
