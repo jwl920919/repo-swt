@@ -342,8 +342,9 @@ function certifyProcessAjaxCall() {
 			// We use an inline data source in the example, usually data would
 			// be fetched from a server
 			// Get context with jQuery - using jQuery's .get() method.
-			var certifyProcessChartCanvas = $("#certifyProcessChart").get(0)
-					.getContext("2d");
+
+			$("#certifyProcessChart").html('');
+			var certifyProcessChartCanvas = $("#certifyProcessChart").get(0).getContext("2d");
 			// This will get the first returned node in the jQuery collection.
 			var certifyProcessChart = new Chart(certifyProcessChartCanvas);
 			var data1 = [], data2 = [], labels = [], totalPoints = 100;
