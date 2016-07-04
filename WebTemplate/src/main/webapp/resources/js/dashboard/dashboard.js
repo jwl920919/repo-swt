@@ -6,8 +6,8 @@ var m_segmentLeasingIPAssignedAjaxCall;
 
 $(document).ready(
 		function() {
-			$("#contentHeaderDepth1li").attr('style', 'display: none;');
-			$("#contentHeaderDepth2li").attr('style', 'display: none;');
+//			$("#contentHeaderDepth1li").attr('style', 'display: none;');
+//			$("#contentHeaderDepth2li").attr('style', 'display: none;');
 
 			ivalue = 0;
 			AllClearAjaxCall();

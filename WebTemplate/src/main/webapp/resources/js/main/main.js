@@ -13,7 +13,7 @@ changeframe = function(url, acticeid, masterKey, subKey) {
 		if (url != "#") {
 			// alert(url);
 			// alert(acticeid);
-
+			
 			console.log("url:" + url + ", acticeid :" + acticeid);
 			$("#content_frame").load(url);
 
@@ -27,10 +27,12 @@ changeframe = function(url, acticeid, masterKey, subKey) {
 						$(menu[i]).attr('class', 'treeview');
 					}
 					$("#menu_" + acticeid).attr('class', 'treeview active');
-
-					$("#contentHeaderDepth1li").attr('style', 'display: none;');
-					$("#contentHeaderDepth2li").attr('style', 'display: none;');
 					
+					//ContentHeader 변경
+					$("#contentHeaderDepth1li").attr('style', 'display: display;');
+					$("#contentHeaderDepth2li").attr('style', 'display: none;');
+					$("#contentHeaderDepth1").text(getLanguage(masterKey));
+
 					// 데시보드가 아닌 다른 메뉴의 ul테그 닫기
 					var vUlMenu = $("[name='ulMenu']");
 					for (var i = 0; i < vUlMenu.length; i++) {
@@ -48,6 +50,7 @@ changeframe = function(url, acticeid, masterKey, subKey) {
 							$(menusub[i]).attr('class', '');
 						}
 
+						//ContentHeader 변경
 						$("#contentHeaderDepth1li").attr('style', 'display: display;');
 						$("#contentHeaderDepth2li").attr('style', 'display: display;');
 						$("#contentHeaderDepth1").text(getLanguage(masterKey));
