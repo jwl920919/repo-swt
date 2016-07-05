@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
+import com.shinwootns.common.mq.client.*;
 import com.shinwootns.common.utils.LogUtils;
 
 public class MQManager {
@@ -90,6 +91,7 @@ public class MQManager {
 				_factory.setUri(uri);
 				
 				_factory.setHandshakeTimeout(10000);
+				//_factory.setRequestedHeartbeat(10000);
 				
 				// Connection
 				_connection = _factory.newConnection();

@@ -6,11 +6,11 @@ import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import com.shinwootns.common.mq.MQManager;
-import com.shinwootns.common.mq.WorkQueueClient;
+import com.shinwootns.common.mq.client.*;
 import com.shinwootns.common.mq.MQManager.MQClientType;
 import com.shinwootns.common.utils.TimeUtils;
 
-public class WorkqueueTask extends BaseTask {
+public class WorkqueueTask extends testBaseTask {
 	
 	private final Logger _logger = Logger.getLogger(this.getClass());
 	

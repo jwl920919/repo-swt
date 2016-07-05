@@ -6,12 +6,11 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import com.shinwootns.common.mq.MQManager;
-import com.shinwootns.common.mq.RoutingClient;
-import com.shinwootns.common.mq.TopicsClient;
+import com.shinwootns.common.mq.client.*;
 import com.shinwootns.common.mq.MQManager.MQClientType;
 import com.shinwootns.common.utils.TimeUtils;
 
-public class TopicsTask extends BaseTask {
+public class TopicsTask extends testBaseTask {
 	
 	private final Logger _logger = Logger.getLogger(this.getClass());
 	

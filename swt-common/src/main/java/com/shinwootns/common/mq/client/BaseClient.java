@@ -1,4 +1,4 @@
-package com.shinwootns.common.mq;
+package com.shinwootns.common.mq.client;
 
 import java.io.IOException;
 
@@ -9,7 +9,7 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.QueueingConsumer;
 import com.shinwootns.common.utils.LogUtils;
 
-abstract class BaseClient {
+public abstract class BaseClient {
 	
 	private final Logger _logger = Logger.getLogger(this.getClass());
 	
@@ -35,6 +35,24 @@ abstract class BaseClient {
 				_logger.error(ex.getMessage(), ex);
 			}
 		}
+	}
+	//endregion
+	
+	//region Set prefetch count
+	public boolean checkConnection()
+	{
+		if (this._channel != null)
+		{
+			try {
+				
+				return this._channel.isOpen();
+				
+			} catch (Exception ex) {
+				_logger.error(ex.getMessage(), ex);
+			}
+		}
+		
+		return false;
 	}
 	//endregion
 

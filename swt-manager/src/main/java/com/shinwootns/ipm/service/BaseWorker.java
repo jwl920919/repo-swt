@@ -1,6 +1,6 @@
-package test.mq;
+package com.shinwootns.ipm.service;
 
-abstract class BaseTask implements Runnable {
+public abstract class BaseWorker implements Runnable {
 
 	private boolean stopFlag = false;
 

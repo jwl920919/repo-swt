@@ -37,7 +37,7 @@ CREATE TABLE public.event_log
   host_ip character varying(16),
   event_type character varying(32) NOT NULL,
   severity integer NOT NULL,
-  collect_time timestamp DEFAULT current_timestamp,
+  collect_time timestamp with time zone DEFAULT current_timestamp,
   message character varying(512) NOT NULL,
   CONSTRAINT event_id_pkey PRIMARY KEY (event_id)
 );
