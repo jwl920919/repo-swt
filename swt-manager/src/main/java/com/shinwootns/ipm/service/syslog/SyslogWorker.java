@@ -2,39 +2,41 @@ package com.shinwootns.ipm.service.syslog;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.json.simple.JSONObject;
 import org.springframework.context.ConfigurableApplicationContext;
 import com.shinwootns.common.utils.JsonUtils;
 import com.shinwootns.common.utils.TimeUtils;
-import com.shinwootns.ipm.AppContextProvider;
+import com.shinwootns.ipm.SpringBeanProvider;
 import com.shinwootns.ipm.data.SharedData;
 import com.shinwootns.ipm.data.entity.EventLogEntity;
 import com.shinwootns.ipm.data.mapper.EventLogMapper;
+import com.shinwootns.ipm.service.BaseWorker;
 
-public class SyslogConsumer implements Runnable {
+public class SyslogWorker extends BaseWorker {
 
-	private Logger _logger = null;
+	private final Log _logger = LogFactory.getLog(getClass());
 	private int _index = 0;
 	
-	public SyslogConsumer(int index, Logger logger) {
+	public SyslogWorker(int index) {
 		this._index = _index;
-		this._logger = logger;
 	}
 	
-	//@Autowired
-	//private EventLogMapper eventLogMapper;
-
 	@Override
 	public void run() {
 		
-		ConfigurableApplicationContext context = AppContextProvider.getInstance().getApplicationContext();
+		/*
+		ConfigurableApplicationContext context = ContextProvider.getInstance().getApplicationContext();
 		if (context == null) {
 			_logger.error("AppContextProvider.getInstance().getApplicationContext().... failed");
 			return;
 		}
 		
 		EventLogMapper eventLogMapper = context.getBean("eventLogMapper", EventLogMapper.class);
+		*/
+		
+		EventLogMapper eventLogMapper = SpringBeanProvider.getInstance().getEventLogMapper();
 
 		if (eventLogMapper == null) {
 			_logger.error("getBean('eventLogMapper').... failed");

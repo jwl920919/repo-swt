@@ -25,14 +25,14 @@ public class ScheduledTasks {
 		return bean;
 	}
 
-	// fixedRate
-    @Scheduled(fixedRate = 10000)
-    public void monitorPoolStatus() {
-    	
-    	PoolStatus syslogPoolstatus = WorkerPoolManager.getInstance().GetPoolStatus();
-    	
-    	_logger.debug(String.format("[WorkerPool] %s", syslogPoolstatus.toString()));
-    }
+//	// fixedRate
+//    @Scheduled(fixedRate = 10000)
+//    public void monitorPoolStatus() {
+//    	
+//    	PoolStatus syslogPoolstatus = WorkerPoolManager.getInstance().GetPoolStatus();
+//    	
+//    	_logger.debug(String.format("[WorkerPool] %s", syslogPoolstatus.toString()));
+//    }
     
 //    // fixedDelay
 //    @Scheduled(fixedDelay = 5000)
