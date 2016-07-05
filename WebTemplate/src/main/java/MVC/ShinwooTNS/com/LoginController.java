@@ -2,6 +2,8 @@ package MVC.ShinwooTNS.com;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
@@ -54,6 +56,9 @@ public class LoginController {
 						System.out.println("db Password : " + rs.getString("user_pw"));
 						System.out.println("UR Password : " + pw);
 						System.out.println("UR sDeptName : " + rs.getString("dept_name").trim());
+						Date date = rs.getTimestamp("insert_date");
+						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+						System.out.println("user_info dateTime : " + sdf.format(date));
 						
 						if (rs.getString("user_pw").trim().equals(pw)) {
 							session.setAttribute("login_chk", true);// Session에 "login_chk"로 값을 저장.

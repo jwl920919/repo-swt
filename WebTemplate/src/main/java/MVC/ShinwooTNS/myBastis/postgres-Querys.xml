@@ -18,6 +18,10 @@
 		 WHERE "menu_sub"."display_yn" = TRUE
 		 ORDER BY "menu_master"."master_order", "menu_sub"."sub_order";
 	</select>
+	
+	<select id="select_SYSTEM_USER_INFO" resultType="Common.DTO.SYSTEM_USER_INFO_DTO">
+		SELECT site_id,user_seq,group_id,user_id,user_pw,user_name,dept_name,posion_name,phone_num,mobile_num,email,mysingle_yn,insert_date,modify_date FROM SYSTEM_USER_INFO;
+	</select>
 </mapper>
 
 <!-- <mapper namespace="testSqlMap" > -->

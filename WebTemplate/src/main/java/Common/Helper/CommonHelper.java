@@ -1,5 +1,7 @@
 package Common.Helper;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
@@ -27,5 +29,10 @@ public class CommonHelper {
 		}
 
 		return sRet;
+	}
+	
+	private final static SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+	public static String convertTimestampToString(Timestamp timeStamp) {
+		return SIMPLE_DATE_FORMAT.format(timeStamp);
 	}
 }

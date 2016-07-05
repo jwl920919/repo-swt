@@ -33,4 +33,12 @@
 	<bean id="memuMasterDao" class="Common.DAOImpl.UI_MEMU_MASTER_Impl">
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
+	
+	<bean id="userInfoService" class="Common.ServiceImpl.SYSTEM_USER_INFO_Service_Impl">
+		<property name="SYSTEM_USER_INFO_dao" ref="userInfoDao"/>
+	</bean>
+
+	<bean id="userInfoDao" class="Common.DAOImpl.SYSTEM_USER_INFO_Impl">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
 </beans>
