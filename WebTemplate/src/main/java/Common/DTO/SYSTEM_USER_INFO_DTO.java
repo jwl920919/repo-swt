@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class SYSTEM_USER_INFO_DTO {
 	private int site_id,user_seq,group_id;
-	private String user_id,user_pw,user_name,dept_name,posion_name,phone_num,mobile_num,email;
+	private String user_id,user_pw,user_name,dept_name,position_name,phone_num,mobile_num,email;
 	private boolean mysingle_yn;
 	private Timestamp insert_date,modify_date;
 	
@@ -24,7 +24,7 @@ public class SYSTEM_USER_INFO_DTO {
 		this.user_pw = user_pw;
 		this.user_name = user_name;
 		this.dept_name = dept_name;
-		this.posion_name = posion_name;
+		this.position_name = posion_name;
 		this.phone_num = phone_num;
 		this.mobile_num = mobile_num;
 		this.email = email;
@@ -76,12 +76,17 @@ public class SYSTEM_USER_INFO_DTO {
 	public void setDept_name(String dept_name) {
 		this.dept_name = dept_name;
 	}
-	public String getPosion_name() {
-		return posion_name;
+	
+	public String getPosition_name() {
+		return position_name;
 	}
-	public void setPosion_name(String posion_name) {
-		this.posion_name = posion_name;
+
+
+	public void setPosition_name(String position_name) {
+		this.position_name = position_name;
 	}
+
+
 	public String getPhone_num() {
 		return phone_num;
 	}
@@ -131,7 +136,7 @@ public class SYSTEM_USER_INFO_DTO {
 	public String toString() {
 		return "SYSTEM_USER_INFO_DTO [site_id=" + site_id + ", user_seq=" + user_seq + ", group_id=" + group_id
 				+ ", user_id=" + user_id + ", user_pw=" + user_pw + ", user_name=" + user_name + ", dept_name="
-				+ dept_name + ", posion_name=" + posion_name + ", phone_num=" + phone_num + ", mobile_num=" + mobile_num
+				+ dept_name + ", posion_name=" + position_name + ", phone_num=" + phone_num + ", mobile_num=" + mobile_num
 				+ ", email=" + email + ", mysingle_yn=" + mysingle_yn + ", insert_date=" + Common.Helper.CommonHelper.convertTimestampToString(insert_date)
 				+ ", modify_date=" + Common.Helper.CommonHelper.convertTimestampToString(modify_date) + "]";
 	}
