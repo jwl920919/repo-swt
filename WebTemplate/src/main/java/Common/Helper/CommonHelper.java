@@ -1,5 +1,7 @@
 package Common.Helper;
 
+import java.util.Date;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
@@ -27,5 +29,12 @@ public class CommonHelper {
 		}
 
 		return sRet;
+	}
+	
+	public Date convertTimestampToDate(String timeStamp) {
+		
+		Date retDate = new Date();
+		
+		return retDate;
 	}
 }
