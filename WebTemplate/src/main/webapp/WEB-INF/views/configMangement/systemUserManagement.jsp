@@ -22,11 +22,10 @@
 			<div class="box box-primary">
 				<div class="box-body">
 					<center>
-						<table id="datatable" class="essential-table"
-							style="width: 98%">
+						<table id="datatable" class="essential-table" style="width: 98%">
 							<thead>
 								<tr>
-									<th><input type="checkbox"/></th>
+									<th><input type="checkbox" /></th>
 									<th width="48%">아이디</th>
 									<th width="48%">이름</th>
 								</tr>
@@ -95,6 +94,10 @@
 											});
 
 						});
+		$('tr').click(function() {
+			$(this).addClass("selected").siblings().removeClass("selected");
+			alert($(this).children().eq(1).text());
+		})
 	</script>
 </body>
 </html>
