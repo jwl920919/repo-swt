@@ -1,12 +1,13 @@
 package Common.DTO;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 public class SYSTEM_USER_INFO_DTO {
 	private int site_id,user_seq,group_id;
-	private String user_id,user_pw,user_name,dept_name,posion_name,phone_num,mobile_num,email;
+	private String user_id,user_pw,user_name,dept_name,position_name,phone_num,mobile_num,email;
 	private boolean mysingle_yn;
-	private Date insert_date,modify_date;
+	private Timestamp insert_date,modify_date;
 	
 	public SYSTEM_USER_INFO_DTO() {
 	}
@@ -14,7 +15,7 @@ public class SYSTEM_USER_INFO_DTO {
 	
 	public SYSTEM_USER_INFO_DTO(int site_id, int user_seq, int group_id, String user_id, String user_pw, String user_name,
 			String dept_name, String posion_name, String phone_num, String mobile_num, String email,
-			boolean mysingle_yn, Date insert_date, Date modify_date) {
+			boolean mysingle_yn, Timestamp insert_date, Timestamp modify_date) {
 		super();
 		this.site_id = site_id;
 		this.user_seq = user_seq;
@@ -23,7 +24,7 @@ public class SYSTEM_USER_INFO_DTO {
 		this.user_pw = user_pw;
 		this.user_name = user_name;
 		this.dept_name = dept_name;
-		this.posion_name = posion_name;
+		this.position_name = posion_name;
 		this.phone_num = phone_num;
 		this.mobile_num = mobile_num;
 		this.email = email;
@@ -75,12 +76,17 @@ public class SYSTEM_USER_INFO_DTO {
 	public void setDept_name(String dept_name) {
 		this.dept_name = dept_name;
 	}
-	public String getPosion_name() {
-		return posion_name;
+	
+	public String getPosition_name() {
+		return position_name;
 	}
-	public void setPosion_name(String posion_name) {
-		this.posion_name = posion_name;
+
+
+	public void setPosition_name(String position_name) {
+		this.position_name = position_name;
 	}
+
+
 	public String getPhone_num() {
 		return phone_num;
 	}
@@ -106,23 +112,22 @@ public class SYSTEM_USER_INFO_DTO {
 		this.mysingle_yn = mysingle_yn;
 	}
 
-
-	public Date getInsert_date() {
+	public Timestamp getInsert_date() {
 		return insert_date;
 	}
 
 
-	public void setInsert_date(Date insert_date) {
+	public void setInsert_date(Timestamp insert_date) {
 		this.insert_date = insert_date;
 	}
 
 
-	public Date getModify_date() {
+	public Timestamp getModify_date() {
 		return modify_date;
 	}
 
 
-	public void setModify_date(Date modify_date) {
+	public void setModify_date(Timestamp modify_date) {
 		this.modify_date = modify_date;
 	}
 
@@ -131,9 +136,9 @@ public class SYSTEM_USER_INFO_DTO {
 	public String toString() {
 		return "SYSTEM_USER_INFO_DTO [site_id=" + site_id + ", user_seq=" + user_seq + ", group_id=" + group_id
 				+ ", user_id=" + user_id + ", user_pw=" + user_pw + ", user_name=" + user_name + ", dept_name="
-				+ dept_name + ", posion_name=" + posion_name + ", phone_num=" + phone_num + ", mobile_num=" + mobile_num
-				+ ", email=" + email + ", mysingle_yn=" + mysingle_yn + ", insert_date=" + insert_date
-				+ ", modify_date=" + modify_date + "]";
+				+ dept_name + ", posion_name=" + position_name + ", phone_num=" + phone_num + ", mobile_num=" + mobile_num
+				+ ", email=" + email + ", mysingle_yn=" + mysingle_yn + ", insert_date=" + Common.Helper.CommonHelper.convertTimestampToString(insert_date)
+				+ ", modify_date=" + Common.Helper.CommonHelper.convertTimestampToString(modify_date) + "]";
 	}
 	
 	

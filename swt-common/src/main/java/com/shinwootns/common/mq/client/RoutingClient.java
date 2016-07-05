@@ -1,39 +1,42 @@
-package com.shinwootns.common.mq;
+package com.shinwootns.common.mq.client;
 
 import java.util.ArrayList;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-import com.rabbitmq.client.AMQP.Exchange;
-import com.rabbitmq.client.QueueingConsumer.Delivery;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.QueueingConsumer;
+import com.rabbitmq.client.AMQP.Exchange;
+import com.rabbitmq.client.QueueingConsumer.Delivery;
 import com.shinwootns.common.utils.LogUtils;
 
-public class PublishClient extends BaseClient {
+public class RoutingClient extends BaseClient {
 	
 	private final Logger _logger = Logger.getLogger(this.getClass());
 	
 	private String _queueName = null;
-	
+
 	//region Constructor
-	public PublishClient(Channel channel)
+	public RoutingClient(Channel channel)
 	{
 		super(channel);
 	}
 	//endregion
-	
-	// Publish Mode
+
+	// Routing Mode
     //==========================================================
-    //   X(Fanout)에 의해, 여러 큐에 모두 동일한 메시지가 삽입
-    //   C1, C2가 모두 동일한 메시지를 받지만, 하는 일은 다름
+    //   X(direct)에 의해 Routing Key가 일치하는 큐에 데이터를 전달.
+    //   큐 마다 여러 개의 Key를 지정할 수 있으며, Key가 일치하는 큐에 동일 데이터가 들어감.
+	//   주의) Topic하고는 다르게 Key가 정확하게 일치해야만 들어감.
     //
-    //                        (type=fanout)
+    //                        (type=direct)
     //                   [P] ------[X]----[Q1]--- [C1]
-    //                              |
+    //                              |  error
     //                              +-----[Q2]--- [C2]
-    //
+	//                              |  info
+	//                              +-----[Q2]--- [C2]
+	//                               error,info,warning
 	
 	//region Declare Exchange
 	public boolean DeclareExchange(String exchangeName, boolean durable)
@@ -47,7 +50,7 @@ public class PublishClient extends BaseClient {
 			// autoDelete : exchanges is deleted when all queues have finished using it.
 			
 			// Declare Exchange
-			Exchange.DeclareOk result = _channel.exchangeDeclare(exchangeName, "fanout", durable);
+			Exchange.DeclareOk result = _channel.exchangeDeclare(exchangeName, "direct", durable);
 			
 			return true;
 		}
@@ -60,21 +63,20 @@ public class PublishClient extends BaseClient {
 	}
 	//endregion
 	
-	//region DeclareQueue - Publish Mode
-	public boolean DeclareQueue_PublishMode(String exchangeName)
+	//region DeclareQueue - Routing Mode
+	public boolean DeclareQueue_RoutingMode(String exchangeName, String[] routingKeys)
 	{
 		try
 		{
-			//super.DeclareExchange(exchangeName, "fanout", durable)
-			
 			// Declare Exchange
-			Exchange.DeclareOk exchangeRusult = _channel.exchangeDeclare(exchangeName, "fanout");
+			Exchange.DeclareOk exchangeRusult = _channel.exchangeDeclare(exchangeName, "direct");
 			
 			// Declare Queue
 			this._queueName = _channel.queueDeclare().getQueue();
 			
 			// Bind Exchange & Queue
-			_channel.queueBind(_queueName, exchangeName, "");
+			for(String rountingKey : routingKeys)
+				_channel.queueBind(_queueName, exchangeName, rountingKey);
 			
 			return true;
 		}
@@ -87,7 +89,7 @@ public class PublishClient extends BaseClient {
 	}
 	//endregion
 	
-	//region get QueueName
+	//region Get QueueName
 	public String getQueueName()
 	{
 		return this._queueName;
@@ -95,14 +97,14 @@ public class PublishClient extends BaseClient {
 	//endregion
 	
 	//region Send Data 
-	public boolean SendData(String exchangeName, byte[] bytes)
+	public boolean SendData(String exchangeName, String routingKey, byte[] bytes)
 	{
 		if (_channel == null)
 			return false;
 		
 		try
 		{
-			_channel.basicPublish(exchangeName, "", null, bytes);
+			_channel.basicPublish(exchangeName, routingKey, null, bytes);
 			
 			return true;
 		}

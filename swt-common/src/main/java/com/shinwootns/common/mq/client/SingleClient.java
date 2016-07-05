@@ -1,4 +1,4 @@
-package com.shinwootns.common.mq;
+package com.shinwootns.common.mq.client;
 
 import java.util.ArrayList;
 
