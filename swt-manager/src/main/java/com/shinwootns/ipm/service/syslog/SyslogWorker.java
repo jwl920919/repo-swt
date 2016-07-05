@@ -70,7 +70,7 @@ public class SyslogWorker extends BaseWorker {
 						eventLog.setEventType("syslog");
 						eventLog.setSeverity((int)JsonUtils.getValueToNumber(jObj, "severity", 6));
 						eventLog.setMessage(JsonUtils.getValueToString(jObj, "message", ""));
-						eventLog.setCollectTime(JsonUtils.getValueToTimestamp(jObj, "recv_time", TimeUtils.currentTimeMilis() ));
+						eventLog.setCollectTime(JsonUtils.getValueToTimestamp(jObj, "recv_time", 0 ));
 						
 						eventLogMapper.insert(eventLog);
 						

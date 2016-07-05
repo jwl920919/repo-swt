@@ -20,14 +20,15 @@
 <script src="../resources/plugins/knob/jquery.knob.js"></script>
 <!-- ChartJS 1.0.1 -->
 <script src="../resources/plugins/chartjs/Chart.min.js"></script>
-<!-- <!-- FLOT CHARTS -->
-<!-- <script src="../resources/plugins/flot/jquery.flot.min.js"></script> -->
-<!-- <!-- FLOT RESIZE PLUGIN - allows the chart to redraw when the window is resized -->
-<!-- <script src="../resources/plugins/flot/jquery.flot.resize.min.js"></script> -->
-<!-- <!-- FLOT PIE PLUGIN - also used to draw donut charts -->
-<!-- <script src="../resources/plugins/flot/jquery.flot.pie.min.js"></script> -->
-<!-- <!-- FLOT CATEGORIES PLUGIN - Used to draw bar charts -->
-<!-- <script src="../resources/plugins/flot/jquery.flot.categories.min.js"></script> -->
+
+<!-- FLOT CHARTS -->
+<script src="../resources/plugins/flot/jquery.flot.min.js"></script>
+<!-- FLOT RESIZE PLUGIN - allows the chart to redraw when the window is resized -->
+<script src="../resources/plugins/flot/jquery.flot.resize.min.js"></script>
+<!-- FLOT PIE PLUGIN - also used to draw donut charts -->
+<script src="../resources/plugins/flot/jquery.flot.pie.min.js"></script>
+<!-- FLOT CATEGORIES PLUGIN - Used to draw bar charts -->
+<script src="../resources/plugins/flot/jquery.flot.categories.min.js"></script>
 
 <script src="../resources/js/dashboard/dashboard.js"></script>
 
@@ -301,7 +302,11 @@
 								</div>
 								<!-- ./ tools -->
 							</div>
-							<div class="box-body"></div>
+							<div class="box-body">
+								<div class="chart-responsive">
+									<div id="hwPieChart" style="height: 130px; margin-top: -15px;"></div>
+                  				</div>
+							</div>
 						</div>
 					</section>
 					<!-- ./HW별 사용 현황 -->
@@ -325,7 +330,11 @@
 								</div>
 								<!-- ./ tools -->
 							</div>
-							<div class="box-body"></div>
+							<div class="box-body">
+								<div class="chart-responsive">
+									<div id="osPieChart" style="height: 130px; margin-top: -15px;"></div>
+                  				</div>
+							</div>
 						</div>
 					</section>
 					<!-- ./OS별 사용 현황 -->
@@ -475,7 +484,10 @@
 								</div>
 								<!-- ./ tools -->
 							</div>
-							<div class="box-body"></div>
+							<div class="box-body">							
+								<div class="chart-responsive">
+									<div id="servicePieChart" style="height: 130px; margin-top: -15px;"></div>
+                  				</div></div>
 						</div>
 					</section>
 					<!-- ./서비스별 사용 현황 -->
@@ -499,7 +511,11 @@
 								</div>
 								<!-- ./ tools -->
 							</div>
-							<div class="box-body"></div>
+							<div class="box-body">
+								<div class="chart-responsive">
+									<div id="vendorPieChart" style="height: 130px; margin-top: -15px;"></div>
+                  				</div>
+							</div>
 						</div>
 					</section>
 					<!-- ./더별 사용 현황 -->

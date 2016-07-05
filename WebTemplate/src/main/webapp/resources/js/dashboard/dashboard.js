@@ -3,6 +3,10 @@ var m_guestIPAssignStatusAjaxCall;
 var m_certifyProcessAjaxCall;
 var m_dnsStatusAjaxCall;
 var m_segmentLeasingIPAssignedAjaxCall;
+var m_hwUsedStatusAjaxCall;
+var m_osUsedStatusAjaxCall;
+var m_serviceUsedStatusAjaxCall;
+var m_vendorUsedStatusAjaxCall;
 
 $(document).ready(
 		function() {
@@ -18,9 +22,19 @@ $(document).ready(
 			m_dnsStatusAjaxCall = setInterval(dnsStatusAjaxCall, 0);
 			m_segmentLeasingIPAssignedAjaxCall = setInterval(segmentLeasingIPAssignedAjaxCall, 0);
 
+			m_hwUsedStatusAjaxCall = setInterval(hwUsedStatusAjaxCall, 0);
+			m_osUsedStatusAjaxCall = setInterval(osUsedStatusAjaxCall, 0);
+			m_serviceUsedStatusAjaxCall = setInterval(serviceUsedStatusAjaxCall, 0);
+			m_vendorUsedStatusAjaxCall = setInterval(vendorUsedStatusAjaxCall, 0);
+
 			jQueryKnob(); // jQueryKnob 차트관련 스크립트
 
-		});
+			//Pie Chart Tooltip Bind
+			fnPieChartTooltipBind($("#osPieChart"));
+			fnPieChartTooltipBind($("#hwPieChart"));
+			fnPieChartTooltipBind($("#servicePieChart"));
+			fnPieChartTooltipBind($("#vendorPieChart"));
+});
 
 // jQueryKnob 차트관련 스크립트
 function jQueryKnob() {
@@ -566,13 +580,257 @@ function segmentLeasingIPAssignedAjaxCall() {
 		clearsegmentLeasingIPAssignedAjaxCall();
 		m_segmentLeasingIPAssignedAjaxCall = setInterval(segmentLeasingIPAssignedAjaxCall, 5000);// 페이지 로딩 데이터 조회 후 polling 시간 변경
 	} catch (e) {
-		console.log("dashboard.js dnsStatusAjaxCall() Error Log : " + e.message);
+		console.log("dashboard.js segmentLeasingIPAssignedAjaxCall() Error Log : " + e.message);
 	}
 }
 
 // 세그먼트별 lease IP 할당 현황  Ajax Call Clear 메서드
 function clearsegmentLeasingIPAssignedAjaxCall() {
 	clearInterval(m_segmentLeasingIPAssignedAjaxCall);
+}
+
+// HW별 사용 현황  Ajax Call 메서드
+function hwUsedStatusAjaxCall() {
+
+	try {		
+		var vTop1 = Math.floor(Math.random() * 100) + 1;
+		var vTop2 = Math.floor(Math.random() * 100) + 1;
+		var vTop3 = Math.floor(Math.random() * 100) + 1;
+		var vTop4 = Math.floor(Math.random() * 100) + 1;
+		var vTop5 = Math.floor(Math.random() * 100) + 1;
+
+		var data = "{\"UsedStatus\": [{\"label\": \"Router\",\"data\": "+vTop1+"},{"+
+								      "\"label\": \"Swich\",\"data\": "+vTop2+"},{"+
+								      "\"label\": \"Dhub\",\"data\": "+vTop3+"},{"+
+								      "\"label\": \"AP\",\"data\": "+vTop4+"},{"+
+								      "\"label\": \"Server\",\"data\": "+vTop5+"}]}";
+		
+		//console.log(data);
+		var jsonObj = eval("(" + data + ')'); // JSonString 형식의 데이터를
+		// Ojbect형식으로 변경
+		if (jsonObj != '') {
+			if (jsonObj.UsedStatus != '') {
+		
+				$.plot("#hwPieChart", jsonObj.UsedStatus, {
+					series: {
+							pie: {
+								show: true,
+								radius: 1,
+//								innerRadius: 0.5,
+								label: {
+									show: true,
+									radius: 2 / 3,
+									formatter: labelFormatter,
+									threshold: 0.1
+								}
+							}
+					},
+					legend: {
+						show: true
+					},
+				    grid: {
+				        hoverable: true,
+				        clickable: true
+				    }
+				});
+			};
+		};
+
+		clearHWUsedStatusAjaxCall();
+		m_hwUsedStatusAjaxCall = setInterval(hwUsedStatusAjaxCall, 5000);// 페이지 로딩 데이터 조회 후 polling 시간 변경
+	} catch (e) {
+		console.log("dashboard.js hwUsedStatusAjaxCall() Error Log : " + e.message);
+	}
+}
+
+// HW별 사용  현황  Ajax Call Clear 메서드
+function clearHWUsedStatusAjaxCall() {
+	clearInterval(m_hwUsedStatusAjaxCall);
+}
+
+//OS별 사용 현황  Ajax Call 메서드
+function osUsedStatusAjaxCall() {
+
+	try {		
+		var vTop1 = Math.floor(Math.random() * 100) + 1;
+		var vTop2 = Math.floor(Math.random() * 100) + 1;
+		var vTop3 = Math.floor(Math.random() * 100) + 1;
+		var vTop4 = Math.floor(Math.random() * 100) + 1;
+		var vTop5 = Math.floor(Math.random() * 100) + 1;
+
+		var data = "{\"UsedStatus\": [{\"label\": \"Windows\",\"data\": "+vTop1+"},{"+
+								      "\"label\": \"Server 2012\",\"data\": "+vTop2+"},{"+
+								      "\"label\": \"Linux\",\"data\": "+vTop3+"},{"+
+								      "\"label\": \"IOS\",\"data\": "+vTop4+"},{"+
+								      "\"label\": \"ETC\",\"data\": "+vTop5+"}]}";
+		
+		//console.log(data);
+		var jsonObj = eval("(" + data + ')'); // JSonString 형식의 데이터를
+		// Ojbect형식으로 변경
+		if (jsonObj != '') {
+			if (jsonObj.UsedStatus != '') {
+		
+				$.plot("#osPieChart", jsonObj.UsedStatus, {
+					series: {
+							pie: {
+								show: true,
+								radius: 1,
+	//							innerRadius: 0.5,
+								label: {
+									show: true,
+									radius: 2 / 3,
+									formatter: labelFormatter,
+									threshold: 0.1
+								}
+							}
+					},
+					legend: {
+						show: true
+					},
+				    grid: {
+				        hoverable: true,
+				        clickable: true
+				    }
+				});
+			};
+		};
+
+		clearOSUsedStatusAjaxCall();
+		m_osUsedStatusAjaxCall = setInterval(osUsedStatusAjaxCall, 5000);// 페이지 로딩 데이터 조회 후 polling 시간 변경
+	} catch (e) {
+		console.log("dashboard.js osUsedStatusAjaxCall() Error Log : " + e.message);
+	}
+}
+
+//OS별 사용  현황  Ajax Call Clear 메서드
+function clearOSUsedStatusAjaxCall() {
+	clearInterval(m_osUsedStatusAjaxCall);
+}
+
+//Service별 사용 현황  Ajax Call 메서드
+function serviceUsedStatusAjaxCall() {
+
+	try {		
+		var vTop1 = Math.floor(Math.random() * 100) + 1;
+		var vTop2 = Math.floor(Math.random() * 100) + 1;
+		var vTop3 = Math.floor(Math.random() * 100) + 1;
+		var vTop4 = Math.floor(Math.random() * 100) + 1;
+		var vTop5 = Math.floor(Math.random() * 100) + 1;
+
+		var data = "{\"UsedStatus\": [{\"label\": \"Mobile\",\"data\": "+vTop1+"},{"+
+								      "\"label\": \"Desktop\",\"data\": "+vTop2+"},{"+
+								      "\"label\": \"Server\",\"data\": "+vTop3+"},{"+
+								      "\"label\": \"Network\",\"data\": "+vTop4+"},{"+
+								      "\"label\": \"ETC\",\"data\": "+vTop5+"}]}";
+		
+		//console.log(data);
+		var jsonObj = eval("(" + data + ')'); // JSonString 형식의 데이터를
+		// Ojbect형식으로 변경
+		if (jsonObj != '') {
+			if (jsonObj.UsedStatus != '') {
+		
+				$.plot("#servicePieChart", jsonObj.UsedStatus, {
+						series: {
+							pie: {
+								show: true,
+								radius: 1,
+	//							innerRadius: 0.5,
+								label: {
+									show: true,
+									radius: 2 / 3,
+									formatter: labelFormatter,
+									threshold: 0.1
+								}
+							}
+					},
+					legend: {
+						show: true
+					},
+				    grid: {
+				        hoverable: true,
+				        clickable: true
+				    }
+				});
+			};
+		};
+
+		clearServiceUsedStatusAjaxCall();
+		m_serviceUsedStatusAjaxCall = setInterval(serviceUsedStatusAjaxCall, 5000);// 페이지 로딩 데이터 조회 후 polling 시간 변경
+	} catch (e) {
+		console.log("dashboard.js serviceUsedStatusAjaxCall() Error Log : " + e.message);
+	}
+}
+
+//Service별 사용  현황  Ajax Call Clear 메서드
+function clearServiceUsedStatusAjaxCall() {
+	clearInterval(m_serviceUsedStatusAjaxCall);
+}
+
+//Vendor별 사용 현황  Ajax Call 메서드
+function vendorUsedStatusAjaxCall() {
+
+	try {		
+		var vTop1 = Math.floor(Math.random() * 100) + 1;
+		var vTop2 = Math.floor(Math.random() * 100) + 1;
+		var vTop3 = Math.floor(Math.random() * 100) + 1;
+		var vTop4 = Math.floor(Math.random() * 100) + 1;
+		var vTop5 = Math.floor(Math.random() * 100) + 1;
+
+		var data = "{\"UsedStatus\": [{\"label\": \"Samsung\",\"data\": "+vTop1+"},{"+
+								      "\"label\": \"Cisco\",\"data\": "+vTop2+"},{"+
+								      "\"label\": \"Apple\",\"data\": "+vTop3+"},{"+
+								      "\"label\": \"HP\",\"data\": "+vTop4+"},{"+
+								      "\"label\": \"Juniper\",\"data\": "+vTop5+"}]}";
+		
+		//console.log(data);
+		var jsonObj = eval("(" + data + ')'); // JSonString 형식의 데이터를
+		// Ojbect형식으로 변경
+		if (jsonObj != '') {
+			if (jsonObj.UsedStatus != '') {
+		
+				$.plot("#vendorPieChart", jsonObj.UsedStatus, {
+						series: {
+							pie: {
+								show: true,
+								radius: 1,
+	//							innerRadius: 0.5,
+								label: {
+									show: true,
+									radius: 2 / 3,
+									formatter: labelFormatter,
+									threshold: 0.1
+								}
+							}
+					},
+					legend: {
+						show: true
+					},
+				    grid: {
+				        hoverable: true,
+				        clickable: true
+				    }
+				});
+			};
+		};
+
+		clearVendorUsedStatusAjaxCall();
+		m_vendorUsedStatusAjaxCall = setInterval(vendorUsedStatusAjaxCall, 5000);// 페이지 로딩 데이터 조회 후 polling 시간 변경
+	} catch (e) {
+		console.log("dashboard.js vendorUsedStatusAjaxCall() Error Log : " + e.message);
+	}
+}
+
+//Vendor별 사용  현황  Ajax Call Clear 메서드
+function clearVendorUsedStatusAjaxCall() {
+	clearInterval(m_vendorUsedStatusAjaxCall);
+}
+
+
+
+
+//Flot Pie 차트  Label Format
+function labelFormatter(label, series) {
+	return "<div style='font-size:8pt; text-align:center; padding:2px; color:white;'>" + label + "<br/>" + Math.round(series.percent) + "%</div>";
 }
 
 // Ajax Call All Clear 메서드
@@ -582,6 +840,10 @@ function AllClearAjaxCall() {
 	clearInterval(m_certifyProcessAjaxCall);
 	clearInterval(m_dnsStatusAjaxCall);
 	clearInterval(m_segmentLeasingIPAssignedAjaxCall);
+	clearInterval(m_hwUsedStatusAjaxCall);
+	clearInterval(m_osUsedStatusAjaxCall);
+	clearInterval(m_serviceUsedStatusAjaxCall);
+	clearInterval(m_vendorUsedStatusAjaxCall);
 }
 
 // 인증 처리 현황 차트 옵션
@@ -664,6 +926,51 @@ function chartOption() {
 	return chartOptions;
 }
 
+//Pie Chart Tooltip Bind
+function fnPieChartTooltipBind(chart){
+	function showTooltip(x, y, contents) { 
+	    $('<div id="tooltip">' + contents + '</div>').css( { 
+	        position: 'absolute', 
+	        display: 'none', 
+	        top: y + 10, 
+	        left: x + 10, 
+	        border: '1px solid #fdd', 
+	        padding: '2px', 
+	        'background-color': '#f2f2f2', 
+	        color: '#000000', 
+	        opacity: 0.9 
+	    }).appendTo("body").fadeIn(200); 
+	}
+	
+	var previousPoint = null; 
+	chart.bind("plothover", function (event, pos, item) { 
+	    $("#x").text(pos.pageX); 
+	    $("#y").text(pos.pageY);
+	        if (item) { 
+
+	//          alert(typeof item.series.label === 'string');
+	//        	alert(item.series.label + ", " +item.series.data);
+	        	if (previousPoint != item.datapoint) { 
+	                previousPoint = item.datapoint; 
+	                $("#tooltip").remove(); 
+	//                showTooltip(pos.pageX, pos.pageY, "Hover @" + pos.pageX + " , " + pos.pageY); 
+	                showTooltip(pos.pageX, pos.pageY, item.series.label + " : " + item.series.data); 
+	            } 
+	        } 
+	        else { 
+	            $("#tooltip").remove(); 
+	            previousPoint = null; 
+	        } 
+	}); 
+	
+	chart.bind("plotclick", function (event, pos, item) { 
+	    if (item) { 
+	        $("#clickdata").text("You clicked point " + item.dataIndex + " in " + item.series.label + "."); 
+	        //plot.highlight(item.series, item.datapoint); 
+	
+	    } 
+	}); 
+}
 // 차트 임시데이터 생성 메서드
 function tempChartData() {
 	var data = "{\"CERTIFYPRECESS\": ["
