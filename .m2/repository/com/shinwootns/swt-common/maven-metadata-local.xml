@@ -3,7 +3,7 @@
   <groupId>com.shinwootns</groupId>
   <artifactId>swt-common</artifactId>
   <versioning>
-    <release>0.1.6</release>
+    <release>0.1.7</release>
     <versions>
       <version>0.1.0</version>
       <version>0.1.1</version>
@@ -15,7 +15,8 @@
       <version>0.1.5.SHAPSHOT</version>
       <version>0.1.5.SNAPSHOT</version>
       <version>0.1.6</version>
+      <version>0.1.7</version>
     </versions>
-    <lastUpdated>20160628090908</lastUpdated>
+    <lastUpdated>20160704094917</lastUpdated>
   </versioning>
 </metadata>

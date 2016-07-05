@@ -1,47 +1,24 @@
 package com.shinwootns.ipm;
 
-import java.util.List;
-
-import javax.persistence.EntityManagerFactory;
-import javax.sql.DataSource;
-
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
-import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
-import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.validation.Validator;
-
-import com.shinwootns.common.network.SyslogManager;
-import com.shinwootns.ipm.data.entity.AuthTypeEntity;
-import com.shinwootns.ipm.data.entity.SiteInfoEntity;
-import com.shinwootns.ipm.data.mapper.AuthTypeMapper;
-import com.shinwootns.ipm.data.mapper.SiteInfoMapper;
-import com.shinwootns.ipm.property.SystemPropertiesValidator;
 import com.shinwootns.ipm.service.WorkerPoolManager;
 import com.shinwootns.ipm.service.rabbitmq.MQReceiver;
 
-@ComponentScan(basePackages = "com.*")
+//@ComponentScan(basePackages = "com.shinwootns.ipm.*")
 @EnableScheduling
 @SpringBootApplication
 public class MainApplication implements CommandLineRunner {
@@ -100,6 +77,8 @@ public class MainApplication implements CommandLineRunner {
 	public void run(String... arg0) throws Exception {
 		
 		System.out.println("Application Start...");
+		
+		Thread.sleep(3000);
 		
 		startService();
 	
