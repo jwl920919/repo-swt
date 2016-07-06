@@ -40,9 +40,8 @@ import net.sf.json.JSON;
 import scala.annotation.meta.setter;
 
 @Controller
-@RequestMapping(value="/dashboard/Action")
+@RequestMapping(value="/dashboard/")
 public class DashboardActionController {
-	private final static String parentPath = "/dashboard/";
 	private final static java.text.SimpleDateFormat SIMPLE_DATE_FORMAT = new java.text.SimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss");
 	private static final Logger logger = LoggerFactory.getLogger(DashboardActionController.class);

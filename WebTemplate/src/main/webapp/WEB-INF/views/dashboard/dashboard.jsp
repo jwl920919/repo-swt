@@ -401,10 +401,14 @@
 								<div class="info-box bg-yellow">
 									<span class="info-box-icon"><i class="fa fa-lock"></i></span>						
 						            <div class="info-box-content" id="divStaticIP">
-						            	<span class="progress-description"></span>
-						            	<div class="progress">
-						            		<div class="progress-bar"  style="width: 0%"></div>
-						            	</div>
+<!-- 						            	<span class="progress-description"></span> -->
+<!-- 						            	<div class="progress"> -->
+<!-- 						            		<div class="progress-bar"  style="width: 0%"></div> -->
+<!-- 						            	</div> -->
+										<span class="progress-description">미사용 IP</span>
+										<div class="progress sm">
+											<div class="progress-bar progress-bar-red" style="width: 87.6%"></div>
+										</div>
 						            </div>
 								</div>
 								<!-- ./고정 IP 할당 현황 -->

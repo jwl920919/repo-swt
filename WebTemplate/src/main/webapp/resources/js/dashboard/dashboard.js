@@ -621,26 +621,26 @@ function assignmentIPStatusAjaxCall() {
 					vTotalValue = parseInt(jsonObj.ASSIGNMENTIPSTATUS.total);
 				}
 				
-				if (vTotalValue > 0) {						
-					if (jsonObj.ASSIGNMENTIPSTATUS.staticip != '') {
-						vStaticipValue = (parseInt(jsonObj.ASSIGNMENTIPSTATUS.staticip) * 100) / vTotalValue;
-						vhtml = String.format(vformat, getLanguage("staticIP"), getProgressSeverity(vStaticipValue), vStaticipValue);
-						console.log("divStaticIP.html : " + vhtml + ", 토탈 : " + parseInt(jsonObj.ASSIGNMENTIPSTATUS.staticip) + ", 페센트 : " + parseInt(vStaticipValue));
-						$('#divStaticIP').html(vhtml);
-					}
-					if (jsonObj.ASSIGNMENTIPSTATUS.leaseip != '') {
-						vLeaseipValue = (parseInt(jsonObj.ASSIGNMENTIPSTATUS.leaseip) * 100) / vTotalValue;
-						vhtml = String.format(vformat, getLanguage("leaseIP"), getProgressSeverity(vLeaseipValue), vLeaseipValue);
-						console.log("divLeaseIP.html : " + vhtml + ", 토탈 : " + parseInt(jsonObj.ASSIGNMENTIPSTATUS.leaseip) + ", 페센트 : " + parseInt(vLeaseipValue));
-						$('#divLeaseIP').html(vhtml);
-					}
-					if (jsonObj.ASSIGNMENTIPSTATUS.unusedip != '') {
-						vUnusedipValue = (parseInt(jsonObj.ASSIGNMENTIPSTATUS.unusedip) * 100) / vTotalValue;
-						vhtml = String.format(vformat, getLanguage("unUsedIP"), getProgressSeverity(vUnusedipValue), vUnusedipValue);
-						console.log("divUnusedIP.html : " + vhtml + ", 토탈 : " + parseInt(jsonObj.ASSIGNMENTIPSTATUS.unusedip) + ", 페센트 : " + parseInt(vUnusedipValue));
-						$('#divUnusedIP').html(vhtml);
-					}				
-				}
+//				if (vTotalValue > 0) {						
+//					if (jsonObj.ASSIGNMENTIPSTATUS.staticip != '') {
+//						vStaticipValue = (parseInt(jsonObj.ASSIGNMENTIPSTATUS.staticip) * 100) / vTotalValue;
+//						vhtml = String.format(vformat, getLanguage("staticIP"), getProgressSeverity(vStaticipValue), vStaticipValue);
+//						console.log("divStaticIP.html : " + vhtml + ", 토탈 : " + parseInt(jsonObj.ASSIGNMENTIPSTATUS.staticip) + ", 페센트 : " + parseInt(vStaticipValue));
+//						$('#divStaticIP').html(vhtml);
+//					}
+//					if (jsonObj.ASSIGNMENTIPSTATUS.leaseip != '') {
+//						vLeaseipValue = (parseInt(jsonObj.ASSIGNMENTIPSTATUS.leaseip) * 100) / vTotalValue;
+//						vhtml = String.format(vformat, getLanguage("leaseIP"), getProgressSeverity(vLeaseipValue), vLeaseipValue);
+//						console.log("divLeaseIP.html : " + vhtml + ", 토탈 : " + parseInt(jsonObj.ASSIGNMENTIPSTATUS.leaseip) + ", 페센트 : " + parseInt(vLeaseipValue));
+//						$('#divLeaseIP').html(vhtml);
+//					}
+//					if (jsonObj.ASSIGNMENTIPSTATUS.unusedip != '') {
+//						vUnusedipValue = (parseInt(jsonObj.ASSIGNMENTIPSTATUS.unusedip) * 100) / vTotalValue;
+//						vhtml = String.format(vformat, getLanguage("unUsedIP"), getProgressSeverity(vUnusedipValue), vUnusedipValue);
+//						console.log("divUnusedIP.html : " + vhtml + ", 토탈 : " + parseInt(jsonObj.ASSIGNMENTIPSTATUS.unusedip) + ", 페센트 : " + parseInt(vUnusedipValue));
+//						$('#divUnusedIP').html(vhtml);
+//					}				
+//				}
 			};
 		};
 
