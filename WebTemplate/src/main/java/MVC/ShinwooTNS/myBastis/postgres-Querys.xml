@@ -20,7 +20,7 @@
 	</select>
 	
 	<select id="select_SYSTEM_USER_INFO" resultType="Common.DTO.SYSTEM_USER_INFO_DTO">
-		SELECT site_id,user_seq,group_id,user_id,user_pw,user_name,dept_name,posion_name,phone_num,mobile_num,email,mysingle_yn,insert_date,modify_date FROM SYSTEM_USER_INFO;
+		SELECT site_id,user_seq,group_id,user_id,user_pw,user_name,dept_name,position_name,phone_num,mobile_num,email,mysingle_yn,insert_date,modify_date FROM SYSTEM_USER_INFO;
 	</select>
 </mapper>
 
