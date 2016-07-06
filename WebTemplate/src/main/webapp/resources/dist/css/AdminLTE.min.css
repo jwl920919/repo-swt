@@ -2438,6 +2438,16 @@ deg
 	background: #fff
 }
 
+.info-box .progress .progress-bar-danger {
+	border-radius: 0;
+	background: #dd4b39 !important
+}
+
+.info-box .progress .progress-bar-warning {
+	border-radius: 0;
+	background: #f39c12 !important
+}
+
 .info-box-icon {
 	border-top-left-radius: 2px;
 	border-top-right-radius: 0;
