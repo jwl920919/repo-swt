@@ -1,12 +1,8 @@
+<!-- 
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
         
-<mapper namespace="com.shinwootns.ipm.data.mapper.EventLogMapper">
-
-	<select id="finAll" resultType="com.shinwootns.ipm.data.entity.EventLogEntity">
-		SELECT event_id, device_id, host_ip, event_type, severity, collect_time, message FROM event_log
-		FROM event_log
-	</select>
+<mapper namespace="com.shinwootns.ipm.data.mapper.EventMapper">
 
     <insert id="insert" parameterType="com.shinwootns.ipm.data.entity.EventLogEntity">
         INSERT INTO event_log (device_id, host_ip, event_type, severity, collect_time, message)
@@ -21,3 +17,5 @@
     </insert>
     
 </mapper>
+
+-->

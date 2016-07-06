@@ -1,5 +1,5 @@
 --==========================================================================================
--- SYSTEM
+-- SITE
 --==========================================================================================
 
 -- SITE_INFO
@@ -9,18 +9,91 @@ CREATE TABLE public.site_info
   site_id integer NOT NULL DEFAULT nextval('site_info_id_seq'::regclass),
   site_name character varying(128) NOT NULL,
   site_code character varying(8) NOT NULL,
-  dhcp_ipaddr character varying(16) NOT NULL,
-  dhcp_version character varying(32) DEFAULT '1.1',
-  dhcp_userid character varying(64) NOT NULL,
-  dhcp_password character varying(256) NOT NULL,
-  dhcp_snmp_community character varying(128) NOT NULL,
-  dhcp_snmp_version int DEFAULT 2,
+  description character varying(512),
+  CONSTRAINT site_info_pkey PRIMARY KEY (site_id)
+);
+
+CREATE SEQUENCE public.site_blacklist_id_seq;
+CREATE TABLE public.site_blacklist_info
+(
+  blacklist_id integer NOT NULL DEFAULT nextval('site_blacklist_id_seq'::regclass),
+  site_id integer NOT NULL,
   blacklist_enable boolean DEFAULT false,
   blacklist_filter_name character varying(128) DEFAULT '',
   blacklist_time_sec int DEFAULT 30,
   description character varying(512),
-  CONSTRAINT site_info_pkey PRIMARY KEY (site_id)
+  insert_time timestamp with time zone DEFAULT current_timestamp,
+  update_time timestamp with time zone DEFAULT current_timestamp,
+  CONSTRAINT site_blacklist_info_pkey PRIMARY KEY (blacklist_id)
 );
+
+--==========================================================================================
+-- DEVICE
+--==========================================================================================
+CREATE SEQUENCE public.device_id_seq;
+CREATE TABLE public.device_info
+(
+  device_id integer NOT NULL DEFAULT nextval('device_id_seq'::regclass),
+  site_id integer NOT NULL,
+  ipv4 character varying(16) DEFAULT '',
+  ipv6 character varying(40) DEFAULT '',
+  device_name character varying(128),
+  device_type character varying(32) NOT NULL,
+  snmp_community character varying(64) DEFAULT '',
+  snmp_version integer DEFAULT 2,
+  vendor character varying(64),
+  model character varying(128),
+  service_type integer,
+  sys_oid character varying(256),
+  sys_location character varying(256),
+  api_type character varying(64),
+  api_version character varying(64),
+  api_userid character varying(64),
+  api_password character varying(256),
+  description character varying(512),
+  insert_time timestamp with time zone DEFAULT current_timestamp,
+  update_time timestamp with time zone DEFAULT current_timestamp,
+  CONSTRAINT device_info_pkey PRIMARY KEY (device_id),
+  CONSTRAINT device_ip_unique UNIQUE (ipv4, ipv6)
+);
+COMMENT ON COLUMN public.device_info.api_type IS 'WAPI, TELNET, ...';
+COMMENT ON COLUMN public.device_info.device_type IS 'DHCP, SWITCH, FIREWALL, ...';
+
+
+
+CREATE TABLE public.device_interface
+(
+  device_id integer NOT NULL,
+  if_number integer NOT NULL,
+  if_name character varying(128),
+  if_desc character varying(256),
+  if_speed integer NOT NULL,
+  if_macaddr character varying(20),
+  if_alias character varying(128),
+  admin_stauts integer DEFAULT 0,
+  oper_stauts integer DEFAULT 0,
+  user_desc character varying(256),
+  last_used_octect float,
+  last_used_time timestamp with time zone,
+  insert_time timestamp with time zone DEFAULT current_timestamp,
+  update_time timestamp with time zone DEFAULT current_timestamp,
+  CONSTRAINT device_interface_pkey PRIMARY KEY (device_id, if_number)
+);
+COMMENT ON COLUMN public.device_interface.if_speed IS 'Mbps';
+
+
+CREATE TABLE public.device_interface_ip
+(
+  device_id integer NOT NULL,
+  if_number integer NOT NULL,
+  if_ipaddr character varying(16),
+  network_ip character varying(16),
+  network_mask character varying(16),
+  insert_time timestamp with time zone DEFAULT current_timestamp,
+  update_time timestamp with time zone DEFAULT current_timestamp,
+  CONSTRAINT device_interface_ip_pkey PRIMARY KEY (device_id, if_number, if_ipaddr)
+);
+
 
 
 --==========================================================================================
@@ -41,6 +114,9 @@ CREATE TABLE public.event_log
   message character varying(512) NOT NULL,
   CONSTRAINT event_id_pkey PRIMARY KEY (event_id)
 );
+COMMENT ON COLUMN public.event_log.event_type IS 'syslog, ...';
+
+CREATE INDEX event_log_idx ON public.event_log USING btree (device_id, collect_time);
 
 
 --==========================================================================================

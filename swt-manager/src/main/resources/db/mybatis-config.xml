@@ -10,9 +10,13 @@
         <package name="com.shinwootns.ipm.data.entiy"/>
     </typeAliases>
     
+    
     <mappers>
-        <mapper resource="myBatis/mapper/SiteInfoMapper.xml"/>
-        <mapper resource="myBatis/mapper/EventLogMapper.xml"/>
+    	<!-- 
+        <mapper resource="myBatis/mapper/SiteMapper.xml"/>
+        <mapper resource="myBatis/mapper/DeviceMapper.xml"/>
+        <mapper resource="myBatis/mapper/EventMapper.xml"/>
+        -->
     </mappers>
  
 </configuration>
