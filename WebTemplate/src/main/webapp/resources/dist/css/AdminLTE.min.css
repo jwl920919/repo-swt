@@ -1,5 +1,5 @@
 @import
-	url(css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic)
+	url(/resources/dist/css.css?family=Source Sans Pro:300,400,600,700,300italic,400italic,600italic)
 	; /*!
  *   AdminLTE v2.3.3
  *   Author: Almsaeed Studio
@@ -2436,6 +2436,16 @@ deg
 
 .info-box .progress .progress-bar {
 	background: #fff
+}
+
+.info-box .progress .progress-bar-danger {
+	border-radius: 0;
+	background: #dd4b39 !important
+}
+
+.info-box .progress .progress-bar-warning {
+	border-radius: 0;
+	background: #f39c12 !important
 }
 
 .info-box-icon {

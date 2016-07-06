@@ -11,7 +11,7 @@ import com.shinwootns.common.utils.TimeUtils;
 import com.shinwootns.ipm.SpringBeanProvider;
 import com.shinwootns.ipm.data.SharedData;
 import com.shinwootns.ipm.data.entity.EventLogEntity;
-import com.shinwootns.ipm.data.mapper.EventLogMapper;
+import com.shinwootns.ipm.data.mapper.EventMapper;
 import com.shinwootns.ipm.service.BaseWorker;
 
 public class SyslogWorker extends BaseWorker {
@@ -36,10 +36,9 @@ public class SyslogWorker extends BaseWorker {
 		EventLogMapper eventLogMapper = context.getBean("eventLogMapper", EventLogMapper.class);
 		*/
 		
-		EventLogMapper eventLogMapper = SpringBeanProvider.getInstance().getEventLogMapper();
+		EventMapper eventMapper = SpringBeanProvider.getInstance().getEventMapper();
 
-		if (eventLogMapper == null) {
-			_logger.error("getBean('eventLogMapper').... failed");
+		if (eventMapper == null) {
 			return;
 		}
 		
@@ -72,7 +71,7 @@ public class SyslogWorker extends BaseWorker {
 						eventLog.setMessage(JsonUtils.getValueToString(jObj, "message", ""));
 						eventLog.setCollectTime(JsonUtils.getValueToTimestamp(jObj, "recv_time", 0 ));
 						
-						eventLogMapper.insert(eventLog);
+						eventMapper.insert(eventLog);
 						
 						_logger.info(jObj.toJSONString());
 						

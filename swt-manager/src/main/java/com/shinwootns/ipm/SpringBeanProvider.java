@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
-import com.shinwootns.ipm.data.mapper.EventLogMapper;
+import com.shinwootns.ipm.data.mapper.EventMapper;
 
 @Component
 public class SpringBeanProvider {
@@ -54,21 +54,22 @@ public class SpringBeanProvider {
     	return appProperties;
     }
     
-    public EventLogMapper getEventLogMapper() {
+    public EventMapper getEventMapper() {
     	
     	if (_context == null)
     		return null;
     	
-    	EventLogMapper eventLogMapper = null;
+    	EventMapper eventMapper = null;
     	
     	try
     	{
-    		eventLogMapper = _context.getBean("eventLogMapper", EventLogMapper.class);
+    		eventMapper = _context.getBean("eventMapper", EventMapper.class);
     	}
     	catch(Exception ex) {
+    		_logger.error("SpringBeanProvider.getEventMapper().... failed");
     		_logger.error(ex.getMessage(), ex);
     	}
     	
-    	return eventLogMapper;
+    	return eventMapper;
     }
 }

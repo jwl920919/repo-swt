@@ -19,8 +19,8 @@ import com.shinwootns.ipm.ApplicationProperties;
 import com.shinwootns.ipm.MainApplication;
 import com.shinwootns.ipm.SpringBeanProvider;
 import com.shinwootns.ipm.data.entity.AuthTypeEntity;
-import com.shinwootns.ipm.data.mapper.AuthTypeMapper;
-import com.shinwootns.ipm.data.mapper.EventLogMapper;
+import com.shinwootns.ipm.data.mapper.AuthMapper;
+import com.shinwootns.ipm.data.mapper.EventMapper;
 import com.shinwootns.ipm.service.WorkerPoolManager;
 
 //import com.shinwootns.ipm.data.entity.AuthType;
@@ -32,11 +32,8 @@ public class MainController {
 	
 	private final Log _logger = LogFactory.getLog(this.getClass());
 	
-	//@Autowired
-	//private AuthTypeMapper mapper;
-	
 	@Autowired(required=true)
-	private EventLogMapper eventLogMapper;
+	private EventMapper eventMapper;
 
 	@Autowired(required=true)
 	private ApplicationProperties appProperties;

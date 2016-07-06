@@ -8,17 +8,18 @@ import org.apache.ibatis.annotations.Select;
 import com.shinwootns.ipm.data.entity.SiteInfoEntity;
 
 @Mapper
-public interface SiteInfoMapper {
+public interface SiteMapper {
 
-	/*
 	@Select(""
-			+ "SELECT site_id, site_name, site_code, dhcp_ipaddr, dhcp_version, dhcp_userid," 
-			+ " dhcp_password, dhcp_snmp_community, dhcp_snmp_version, blacklist_enable," 
-			+ " blacklist_filter_name, blacklist_time_sec, description"
+			+ " SELECT site_id, site_name, site_code "
 			+ " FROM public.site_info;"
-			)
-	*/
+	)
 	List<SiteInfoEntity> findAll();
 	
+	@Select(""
+			+ " SELECT site_id, site_name, site_code "
+			+ " FROM public.site_info;"
+			+ " WHERE site_id=#{site_id}"
+	)
 	SiteInfoEntity findById(int site_id);
 }

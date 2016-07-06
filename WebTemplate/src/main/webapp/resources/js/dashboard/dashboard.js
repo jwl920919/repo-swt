@@ -24,6 +24,7 @@ $(document).ready(
 			m_segmentLeasingIPAssignedAjaxCall = setInterval(segmentLeasingIPAssignedAjaxCall, 0);
 			m_assignmentIPStatusAjaxCall = setInterval(assignmentIPStatusAjaxCall, 0);
 
+			askIPStatusAjaxCall();
 			m_hwUsedStatusAjaxCall = setInterval(hwUsedStatusAjaxCall, 0);
 			m_osUsedStatusAjaxCall = setInterval(osUsedStatusAjaxCall, 0);
 			m_serviceUsedStatusAjaxCall = setInterval(serviceUsedStatusAjaxCall, 0);
@@ -353,12 +354,12 @@ function certifyProcessAjaxCall() {
 			};
 
 			/*
-			 * RealTime Chart (Flot Interactive Chart) -----------------------
+			 * RealTime Chart (Chartjs) -----------------------
 			 */
-			// We use an inline data source in the example, usually data would
-			// be fetched from a server
-			// Get context with jQuery - using jQuery's .get() method.
 
+		    //-------------
+		    //- LINE CHART -
+		    //--------------
 			$("#certifyProcessChart").html('');
 			var certifyProcessChartCanvas = $("#certifyProcessChart").get(0).getContext("2d");
 			// This will get the first returned node in the jQuery collection.
@@ -434,7 +435,7 @@ function certifyProcessAjaxCall() {
 				// Since the axes don't change, we don't need to call
 				// plot.setupGrid()
 				//console.log("getdata : " + data1.length);
-				certifyProcessChart.Line(getData(), chartOption());
+				certifyProcessChart.Line(getData(), lineChartOption());
 				if (realtime === "on")
 					setTimeout(update, updateInterval);
 			}
@@ -457,7 +458,7 @@ function certifyProcessAjaxCall() {
 			 */
 
 			// Create the line chart
-			certifyProcessChart.Line(getData(), chartOption());
+			certifyProcessChart.Line(getData(), lineChartOption());
 
 			// clearCertifyProcessAjaxCall();
 			// m_certifyProcessAjaxCall = setInterval(certifyProcessAjaxCall,
@@ -472,6 +473,135 @@ function certifyProcessAjaxCall() {
 // 인증 처리 현황 Ajax Call Clear 메서드
 function clearCertifyProcessAjaxCall() {
 	clearInterval(m_certifyProcessAjaxCall);
+}
+
+// IP 신청 현황  Ajax Call 메서드
+function askIPStatusAjaxCall() {
+	try {
+		var data = tempChartData();
+		var jsonObj = eval("(" + data + ')'); // JSonString 형식의 데이터를
+		// Ojbect형식으로 변경
+
+		if (jsonObj != '') {
+
+//			if (jsonObj.CERTIFYPRECESS != '') {
+//				$.each(jsonObj.CERTIFYPRECESS, function(index, obj) {
+//					// console.log("certifyProcessAjaxCall data : " + obj.time +
+//					// ", 요청 : " + obj.request + ", 처리 :" + obj.complete);
+//				});
+//			};
+
+		    //-------------
+		    //- BAR CHART -
+		    //-------------
+			var askIPStatusChartCanvas = $("#askIPStatusChart").get(0).getContext("2d");
+			var barChart = new Chart(askIPStatusChartCanvas);
+			var data1 = [], data2 = [], labels = [], totalPoints = 10;
+
+		    barChart.Bar(getData(), barChartOption());
+		    
+		    
+			function getData() {
+				var barChartData = {
+					labels : getRandomLabels(labels),
+					datasets : [ {
+						label : "Electronics",
+						fillColor : "rgb(210, 214, 222)",
+						strokeColor : "rgb(210, 214, 222)",
+						pointColor : "rgb(210, 214, 222)",
+						pointStrokeColor : "#c1c7d1",
+						pointHighlightFill : "#fff",
+						pointHighlightStroke : "rgb(220,220,220)",
+						data : getRandomData(data1)
+					}, {
+						label : "Digital Goods",
+						fillColor : "rgba(60,141,188,0.9)",
+						strokeColor : "rgba(60,141,188,0.8)",
+						pointColor : "#3b8bba",
+						pointStrokeColor : "rgba(60,141,188,1)",
+						pointHighlightFill : "#fff",
+						pointHighlightStroke : "rgba(60,141,188,1)",
+						data : getRandomData(data2)
+					} ]
+				};
+				return barChartData;
+			}
+
+			function getRandomLabels(labels) {
+				if (labels.length > 0) {
+					labels.shift();// shift()는 맨 앞의 원소를 제거합니다.
+					labels.push(parseInt(labels[labels.length - 1]) + 1);
+				} else {
+					// Zip the generated y values with the x values
+					for (var i = 0; i < totalPoints; ++i) {
+						labels.push(i);
+					}
+				}
+				return labels;
+			}
+			function getRandomData(data) {
+				if (data.length > 0) {
+					data.shift();// shift()는 맨 앞의 원소를 제거합니다.
+				}
+				// Do a random walk
+				while (data.length < totalPoints) {
+					var prev = data.length > 0 ? data[data.length - 1] : 50, y = prev
+							+ Math.random() * 10 - 5;
+
+					if (y < 0) {
+						y = 0;
+					} else if (y > 100) {
+						y = 100;
+					}
+
+					data.push(y);
+				}
+				
+//				data.datasets[1].fillColor = "#00a65a";
+//				data.datasets[1].strokeColor = "#00a65a";
+//				data.datasets[1].pointColor = "#00a65a";
+			    
+				return data;
+			}
+
+			var updateInterval = 1000; // Fetch data ever x milliseconds
+			var realtime = "on"; // If == to on then fetch data every x
+									// seconds. else stop fetching
+			function update() {
+			    barChart.Bar(getData(), barChartOption());
+				if (realtime === "on")
+					setTimeout(update, updateInterval);
+			}
+
+			// INITIALIZE REALTIME DATA FETCHING
+			if (realtime === "on") {
+				update();
+			}
+			// REALTIME TOGGLE
+			$("#realtime .btn").click(function() {
+				if ($(this).data("toggle") === "on") {
+					realtime = "on";
+				} else {
+					realtime = "off";
+				}
+				update();
+			});
+			/*
+			 * END INTERACTIVE CHART
+			 */
+
+			// Create the line chartvar 
+		    barChart.Bar(getData(), barChartOption());
+		}
+	} catch (e) {
+		console.log("dashboard.js askIPStatusAjaxCall() Error Log : "
+				+ e.message);
+	}
+}
+
+// IP 신청 현황  Ajax Call Clear 메서드
+function clearAskIPStatusAjaxCall() {
+	clearInterval(m_askIPStatusAjaxCall);
 }
 
 // DNS 현황 Ajax Call 메서드
@@ -611,36 +741,39 @@ function assignmentIPStatusAjaxCall() {
 		if (jsonObj != '') {
 			if (jsonObj.ASSIGNMENTIPSTATUS != '') {
 				var vhtml;				
-				var vformat = "<span class=\"progress-description\">{0}</span>" +
+				var vformat = "<span class=\"progress-description\">{0} - {1}%</span>" +
 								"<div class=\"progress\">" +
-								"<div class=\"{1}\" style=\"width: {2}%\"></div></div>";
+								"<div class=\"{2}\" style=\"width: {3}%\"></div></div>";
 				
-				var vTotalValue, vStaticipValue, vLeaseipValue, vUnusedipValue = 0;
+				var vTotalValue, vStaticipPer, vLeaseipPer, vUnusedipPer = 0;
 
 				if (jsonObj.ASSIGNMENTIPSTATUS.total != '') {
 					vTotalValue = parseInt(jsonObj.ASSIGNMENTIPSTATUS.total);
 				}
 				
-//				if (vTotalValue > 0) {						
-//					if (jsonObj.ASSIGNMENTIPSTATUS.staticip != '') {
-//						vStaticipValue = (parseInt(jsonObj.ASSIGNMENTIPSTATUS.staticip) * 100) / vTotalValue;
-//						vhtml = String.format(vformat, getLanguage("staticIP"), getProgressSeverity(vStaticipValue), vStaticipValue);
-//						console.log("divStaticIP.html : " + vhtml + ", 토탈 : " + parseInt(jsonObj.ASSIGNMENTIPSTATUS.staticip) + ", 페센트 : " + parseInt(vStaticipValue));
-//						$('#divStaticIP').html(vhtml);
-//					}
-//					if (jsonObj.ASSIGNMENTIPSTATUS.leaseip != '') {
-//						vLeaseipValue = (parseInt(jsonObj.ASSIGNMENTIPSTATUS.leaseip) * 100) / vTotalValue;
-//						vhtml = String.format(vformat, getLanguage("leaseIP"), getProgressSeverity(vLeaseipValue), vLeaseipValue);
-//						console.log("divLeaseIP.html : " + vhtml + ", 토탈 : " + parseInt(jsonObj.ASSIGNMENTIPSTATUS.leaseip) + ", 페센트 : " + parseInt(vLeaseipValue));
-//						$('#divLeaseIP').html(vhtml);
-//					}
-//					if (jsonObj.ASSIGNMENTIPSTATUS.unusedip != '') {
-//						vUnusedipValue = (parseInt(jsonObj.ASSIGNMENTIPSTATUS.unusedip) * 100) / vTotalValue;
-//						vhtml = String.format(vformat, getLanguage("unUsedIP"), getProgressSeverity(vUnusedipValue), vUnusedipValue);
-//						console.log("divUnusedIP.html : " + vhtml + ", 토탈 : " + parseInt(jsonObj.ASSIGNMENTIPSTATUS.unusedip) + ", 페센트 : " + parseInt(vUnusedipValue));
-//						$('#divUnusedIP').html(vhtml);
-//					}				
-//				}
+				if (vTotalValue > 0) {						
+					if (jsonObj.ASSIGNMENTIPSTATUS.staticip != '') {
+						vStaticipPer = (parseInt(jsonObj.ASSIGNMENTIPSTATUS.staticip) * 100) / vTotalValue;
+						vhtml = String.format(vformat, getLanguage("staticIP"), vStaticipPer, 
+								getProgressSeverity(vStaticipPer), vStaticipPer);
+						//console.log("divStaticIP.html : " + vhtml + ", 토탈 : " + parseInt(jsonObj.ASSIGNMENTIPSTATUS.staticip) + ", 페센트 : " + parseInt(vStaticipValue));
+						$('#divStaticIP').html(vhtml);
+					}
+					if (jsonObj.ASSIGNMENTIPSTATUS.leaseip != '') {
+						vLeaseipPer = (parseInt(jsonObj.ASSIGNMENTIPSTATUS.leaseip) * 100) / vTotalValue;
+						vhtml = String.format(vformat, getLanguage("leaseIP"), vLeaseipPer, 
+								getProgressSeverity(vLeaseipPer), vLeaseipPer);
+						//console.log("divLeaseIP.html : " + vhtml + ", 토탈 : " + parseInt(jsonObj.ASSIGNMENTIPSTATUS.leaseip) + ", 페센트 : " + parseInt(vLeaseipValue));
+						$('#divLeaseIP').html(vhtml);
+					}
+					if (jsonObj.ASSIGNMENTIPSTATUS.unusedip != '') {
+						vUnusedipPer = (parseInt(jsonObj.ASSIGNMENTIPSTATUS.unusedip) * 100) / vTotalValue;
+						vhtml = String.format(vformat, getLanguage("unUsedIP"), vUnusedipPer, 
+								getProgressSeverity(vUnusedipPer), vUnusedipPer);
+						//console.log("divUnusedIP.html : " + vhtml + ", 토탈 : " + parseInt(jsonObj.ASSIGNMENTIPSTATUS.unusedip) + ", 페센트 : " + parseInt(vUnusedipValue));
+						$('#divUnusedIP').html(vhtml);
+					}				
+				}
 			};
 		};
 
@@ -648,7 +781,7 @@ function assignmentIPStatusAjaxCall() {
 		function getProgressSeverity(value) {
 			var vRet = "progress-bar";
 			if (value >= 80) {
-				vRet = "progress-bar progress-bar-red";
+				vRet = "progress-bar progress-bar-danger";
 			}
 			else if (60 <= value && value < 80) {
 				vRet = "progress-bar progress-bar-warning";
@@ -667,15 +800,6 @@ function assignmentIPStatusAjaxCall() {
 function clearassignmentIPStatus() {
 	clearInterval(m_assignmentIPStatusAjaxCall);
 }
-
-
-
-
-
-
-
-
-
 
 // HW별 사용 현황  Ajax Call 메서드
 function hwUsedStatusAjaxCall() {
@@ -934,8 +1058,8 @@ function AllClearAjaxCall() {
 	clearInterval(m_vendorUsedStatusAjaxCall);
 }
 
-// 인증 처리 현황 차트 옵션
-function chartOption() {
+// 인증 처리 현황 라인 차트 옵션
+function lineChartOption() {
 	var chartOptions = {
 		animation : false,
 		// Boolean - If we should show the scale at all
@@ -1014,6 +1138,45 @@ function chartOption() {
 	return chartOptions;
 }
 
+// IP 신청 현황 바 차트 옵션
+function barChartOption() {
+	var barChartOptions = {
+			animation : false,
+			max : 100,
+	min : 0,
+	stepSize : 50,
+			
+		      //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
+		      scaleBeginAtZero: true,
+		      //Boolean - Whether grid lines are shown across the chart
+		      scaleShowGridLines: true,
+		      //String - Colour of the grid lines
+		      scaleGridLineColor: "rgba(0,0,0,.05)",
+		      //Number - Width of the grid lines
+		      scaleGridLineWidth: 1,
+		      //Boolean - Whether to show horizontal lines (except X axis)
+		      scaleShowHorizontalLines: true,
+		      //Boolean - Whether to show vertical lines (except Y axis)
+		      scaleShowVerticalLines: true,
+		      //Boolean - If there is a stroke on each bar
+		      barShowStroke: true,
+		      //Number - Pixel width of the bar stroke
+		      barStrokeWidth: 2,
+		      //Number - Spacing between each of the X value sets
+		      barValueSpacing: 5,
+		      //Number - Spacing between data sets within X values
+		      barDatasetSpacing: 1,
+		      //String - A legend template
+		      legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].fillColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>",
+		      //Boolean - whether to make the chart responsive
+		      responsive: true,
+		      maintainAspectRatio: true
+		    };
+    
+	barChartOptions.datasetFill = false;
+	return barChartOptions;
+}
+
 //Pie Chart Tooltip Bind
 function fnPieChartTooltipBind(chart){
 	function showTooltip(x, y, contents) { 
@@ -1059,6 +1222,7 @@ function fnPieChartTooltipBind(chart){
 	    } 
 	}); 
 }
+
 // 차트 임시데이터 생성 메서드
 function tempChartData() {
 	var data = "{\"CERTIFYPRECESS\": ["

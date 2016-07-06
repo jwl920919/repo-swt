@@ -42,8 +42,8 @@ public class SystemUserInfo implements Serializable {
 	@Column(name="phone_num")
 	private String phoneNum;
 
-	@Column(name="posion_name")
-	private String posionName;
+	@Column(name="position_name")
+	private String positionName;
 
 	@Column(name="site_id")
 	private Integer siteId;
@@ -132,12 +132,12 @@ public class SystemUserInfo implements Serializable {
 		this.phoneNum = phoneNum;
 	}
 
-	public String getPosionName() {
-		return this.posionName;
+	public String getPositionName() {
+		return this.positionName;
 	}
 
-	public void setPosionName(String posionName) {
-		this.posionName = posionName;
+	public void setPositionName(String positionName) {
+		this.positionName = positionName;
 	}
 
 	public Integer getSiteId() {

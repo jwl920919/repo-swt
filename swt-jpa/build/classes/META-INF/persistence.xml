@@ -19,5 +19,11 @@
 		<class>com.shinwootns.ipm.data.entity.MenuMaster</class>
 		<class>com.shinwootns.ipm.data.entity.MenuSub</class>
 		<class>com.shinwootns.ipm.data.entity.MenuSubPK</class>
+		<class>com.shinwootns.ipm.data.entity.DeviceInfo</class>
+		<class>com.shinwootns.ipm.data.entity.DeviceInterface</class>
+		<class>com.shinwootns.ipm.data.entity.DeviceInterfacePK</class>
+		<class>com.shinwootns.ipm.data.entity.DeviceInterfaceIp</class>
+		<class>com.shinwootns.ipm.data.entity.DeviceInterfaceIpPK</class>
+		<class>com.shinwootns.ipm.data.entity.SiteBlacklistInfo</class>
 	</persistence-unit>
 </persistence>

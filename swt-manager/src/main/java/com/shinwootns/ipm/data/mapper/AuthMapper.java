@@ -9,7 +9,7 @@ import com.shinwootns.ipm.data.entity.AuthTypeEntity;
 
 
 @Mapper
-public interface AuthTypeMapper {
+public interface AuthMapper {
 	
 	@Select("SELECT auth_type_id, auth_name, auth_type FROM auth_type;")
 	List<AuthTypeEntity> findAll();
