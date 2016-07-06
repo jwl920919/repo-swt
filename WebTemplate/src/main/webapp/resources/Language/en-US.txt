@@ -82,5 +82,8 @@
 	"fixedleaseunusedipallocationstatus":			"고정, 리스, 미사용 IP 할당 현황",
 	"total":										"Total",
 	"ipAssignCount":								"할당 IP 수",
-	"usingAbleIPCount":								"가용 IP 수"
+	"usingAbleIPCount":								"가용 IP 수",
+	"staticIP":										"고정 IP",
+	"leaseIP":										"리스 IP",
+	"unUsedIP":										"미사용 IP"
 }

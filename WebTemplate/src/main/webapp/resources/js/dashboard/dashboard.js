@@ -3,6 +3,7 @@ var m_guestIPAssignStatusAjaxCall;
 var m_certifyProcessAjaxCall;
 var m_dnsStatusAjaxCall;
 var m_segmentLeasingIPAssignedAjaxCall;
+var m_assignmentIPStatusAjaxCall;
 var m_hwUsedStatusAjaxCall;
 var m_osUsedStatusAjaxCall;
 var m_serviceUsedStatusAjaxCall;
@@ -21,6 +22,7 @@ $(document).ready(
 			certifyProcessAjaxCall();
 			m_dnsStatusAjaxCall = setInterval(dnsStatusAjaxCall, 0);
 			m_segmentLeasingIPAssignedAjaxCall = setInterval(segmentLeasingIPAssignedAjaxCall, 0);
+			m_assignmentIPStatusAjaxCall = setInterval(assignmentIPStatusAjaxCall, 0);
 
 			m_hwUsedStatusAjaxCall = setInterval(hwUsedStatusAjaxCall, 0);
 			m_osUsedStatusAjaxCall = setInterval(osUsedStatusAjaxCall, 0);
@@ -589,6 +591,92 @@ function clearsegmentLeasingIPAssignedAjaxCall() {
 	clearInterval(m_segmentLeasingIPAssignedAjaxCall);
 }
 
+// 고정, 리스, 미사용 IP 할당 현황  Ajax Call 메서드
+function assignmentIPStatusAjaxCall() {
+
+	try {		
+		var vTop1 = Math.floor(Math.random() * 1001);
+		var vTop2 = Math.floor(Math.random() * 1001);
+		var vTop3 = Math.floor(Math.random() * 1001);
+
+		var data = "{\"ASSIGNMENTIPSTATUS\": {" +
+						"\"total\": 1000," +
+						"\"staticip\": "+vTop1+"," +
+						"\"leaseip\": "+vTop2+"," +
+						"\"unusedip\": "+vTop3+"}}";
+		
+		//console.log(data);
+		var jsonObj = eval("(" + data + ')'); // JSonString 형식의 데이터를
+		// Ojbect형식으로 변경
+		if (jsonObj != '') {
+			if (jsonObj.ASSIGNMENTIPSTATUS != '') {
+				var vhtml;				
+				var vformat = "<span class=\"progress-description\">{0}</span>" +
+								"<div class=\"progress\">" +
+								"<div class=\"{1}\" style=\"width: {2}%\"></div></div>";
+				
+				var vTotalValue, vStaticipValue, vLeaseipValue, vUnusedipValue = 0;
+
+				if (jsonObj.ASSIGNMENTIPSTATUS.total != '') {
+					vTotalValue = parseInt(jsonObj.ASSIGNMENTIPSTATUS.total);
+				}
+				
+				if (vTotalValue > 0) {						
+					if (jsonObj.ASSIGNMENTIPSTATUS.staticip != '') {
+						vStaticipValue = (parseInt(jsonObj.ASSIGNMENTIPSTATUS.staticip) * 100) / vTotalValue;
+						vhtml = String.format(vformat, getLanguage("staticIP"), getProgressSeverity(vStaticipValue), vStaticipValue);
+						console.log("divStaticIP.html : " + vhtml + ", 토탈 : " + parseInt(jsonObj.ASSIGNMENTIPSTATUS.staticip) + ", 페센트 : " + parseInt(vStaticipValue));
+						$('#divStaticIP').html(vhtml);
+					}
+					if (jsonObj.ASSIGNMENTIPSTATUS.leaseip != '') {
+						vLeaseipValue = (parseInt(jsonObj.ASSIGNMENTIPSTATUS.leaseip) * 100) / vTotalValue;
+						vhtml = String.format(vformat, getLanguage("leaseIP"), getProgressSeverity(vLeaseipValue), vLeaseipValue);
+						console.log("divLeaseIP.html : " + vhtml + ", 토탈 : " + parseInt(jsonObj.ASSIGNMENTIPSTATUS.leaseip) + ", 페센트 : " + parseInt(vLeaseipValue));
+						$('#divLeaseIP').html(vhtml);
+					}
+					if (jsonObj.ASSIGNMENTIPSTATUS.unusedip != '') {
+						vUnusedipValue = (parseInt(jsonObj.ASSIGNMENTIPSTATUS.unusedip) * 100) / vTotalValue;
+						vhtml = String.format(vformat, getLanguage("unUsedIP"), getProgressSeverity(vUnusedipValue), vUnusedipValue);
+						console.log("divUnusedIP.html : " + vhtml + ", 토탈 : " + parseInt(jsonObj.ASSIGNMENTIPSTATUS.unusedip) + ", 페센트 : " + parseInt(vUnusedipValue));
+						$('#divUnusedIP').html(vhtml);
+					}				
+				}
+			};
+		};
+
+
+		function getProgressSeverity(value) {
+			var vRet = "progress-bar";
+			if (value >= 80) {
+				vRet = "progress-bar progress-bar-red";
+			}
+			else if (60 <= value && value < 80) {
+				vRet = "progress-bar progress-bar-warning";
+			}		
+			return vRet;
+		}
+		
+		clearassignmentIPStatus();
+		m_assignmentIPStatusAjaxCall = setInterval(assignmentIPStatusAjaxCall, 5000);// 페이지 로딩 데이터 조회 후 polling 시간 변경
+	} catch (e) {
+		console.log("dashboard.js assignmentIPStatusAjaxCall() Error Log : " + e.message);
+	}
+}
+
+// 고정, 리스, 미사용 IP 할당 현황  Ajax Call Clear 메서드
+function clearassignmentIPStatus() {
+	clearInterval(m_assignmentIPStatusAjaxCall);
+}
+
+
+
+
+
+
+
+
+
+
 // HW별 사용 현황  Ajax Call 메서드
 function hwUsedStatusAjaxCall() {
 
@@ -599,7 +687,7 @@ function hwUsedStatusAjaxCall() {
 		var vTop4 = Math.floor(Math.random() * 100) + 1;
 		var vTop5 = Math.floor(Math.random() * 100) + 1;
 
-		var data = "{\"UsedStatus\": [{\"label\": \"Router\",\"data\": "+vTop1+"},{"+
+		var data = "{\"USEDSTATUS\": [{\"label\": \"Router\",\"data\": "+vTop1+"},{"+
 								      "\"label\": \"Swich\",\"data\": "+vTop2+"},{"+
 								      "\"label\": \"Dhub\",\"data\": "+vTop3+"},{"+
 								      "\"label\": \"AP\",\"data\": "+vTop4+"},{"+
@@ -609,9 +697,9 @@ function hwUsedStatusAjaxCall() {
 		var jsonObj = eval("(" + data + ')'); // JSonString 형식의 데이터를
 		// Ojbect형식으로 변경
 		if (jsonObj != '') {
-			if (jsonObj.UsedStatus != '') {
+			if (jsonObj.USEDSTATUS != '') {
 		
-				$.plot("#hwPieChart", jsonObj.UsedStatus, {
+				$.plot("#hwPieChart", jsonObj.USEDSTATUS, {
 					series: {
 							pie: {
 								show: true,
@@ -658,7 +746,7 @@ function osUsedStatusAjaxCall() {
 		var vTop4 = Math.floor(Math.random() * 100) + 1;
 		var vTop5 = Math.floor(Math.random() * 100) + 1;
 
-		var data = "{\"UsedStatus\": [{\"label\": \"Windows\",\"data\": "+vTop1+"},{"+
+		var data = "{\"USEDSTATUS\": [{\"label\": \"Windows\",\"data\": "+vTop1+"},{"+
 								      "\"label\": \"Server 2012\",\"data\": "+vTop2+"},{"+
 								      "\"label\": \"Linux\",\"data\": "+vTop3+"},{"+
 								      "\"label\": \"IOS\",\"data\": "+vTop4+"},{"+
@@ -668,9 +756,9 @@ function osUsedStatusAjaxCall() {
 		var jsonObj = eval("(" + data + ')'); // JSonString 형식의 데이터를
 		// Ojbect형식으로 변경
 		if (jsonObj != '') {
-			if (jsonObj.UsedStatus != '') {
+			if (jsonObj.USEDSTATUS != '') {
 		
-				$.plot("#osPieChart", jsonObj.UsedStatus, {
+				$.plot("#osPieChart", jsonObj.USEDSTATUS, {
 					series: {
 							pie: {
 								show: true,
@@ -717,7 +805,7 @@ function serviceUsedStatusAjaxCall() {
 		var vTop4 = Math.floor(Math.random() * 100) + 1;
 		var vTop5 = Math.floor(Math.random() * 100) + 1;
 
-		var data = "{\"UsedStatus\": [{\"label\": \"Mobile\",\"data\": "+vTop1+"},{"+
+		var data = "{\"USEDSTATUS\": [{\"label\": \"Mobile\",\"data\": "+vTop1+"},{"+
 								      "\"label\": \"Desktop\",\"data\": "+vTop2+"},{"+
 								      "\"label\": \"Server\",\"data\": "+vTop3+"},{"+
 								      "\"label\": \"Network\",\"data\": "+vTop4+"},{"+
@@ -727,9 +815,9 @@ function serviceUsedStatusAjaxCall() {
 		var jsonObj = eval("(" + data + ')'); // JSonString 형식의 데이터를
 		// Ojbect형식으로 변경
 		if (jsonObj != '') {
-			if (jsonObj.UsedStatus != '') {
+			if (jsonObj.USEDSTATUS != '') {
 		
-				$.plot("#servicePieChart", jsonObj.UsedStatus, {
+				$.plot("#servicePieChart", jsonObj.USEDSTATUS, {
 						series: {
 							pie: {
 								show: true,
@@ -776,7 +864,7 @@ function vendorUsedStatusAjaxCall() {
 		var vTop4 = Math.floor(Math.random() * 100) + 1;
 		var vTop5 = Math.floor(Math.random() * 100) + 1;
 
-		var data = "{\"UsedStatus\": [{\"label\": \"Samsung\",\"data\": "+vTop1+"},{"+
+		var data = "{\"USEDSTATUS\": [{\"label\": \"Samsung\",\"data\": "+vTop1+"},{"+
 								      "\"label\": \"Cisco\",\"data\": "+vTop2+"},{"+
 								      "\"label\": \"Apple\",\"data\": "+vTop3+"},{"+
 								      "\"label\": \"HP\",\"data\": "+vTop4+"},{"+
@@ -786,9 +874,9 @@ function vendorUsedStatusAjaxCall() {
 		var jsonObj = eval("(" + data + ')'); // JSonString 형식의 데이터를
 		// Ojbect형식으로 변경
 		if (jsonObj != '') {
-			if (jsonObj.UsedStatus != '') {
+			if (jsonObj.USEDSTATUS != '') {
 		
-				$.plot("#vendorPieChart", jsonObj.UsedStatus, {
+				$.plot("#vendorPieChart", jsonObj.USEDSTATUS, {
 						series: {
 							pie: {
 								show: true,

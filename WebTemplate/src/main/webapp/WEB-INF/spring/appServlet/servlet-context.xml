@@ -24,7 +24,7 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 
-	<context:component-scan base-package="MVC.ShinwooTNS.com" />
+	<context:component-scan base-package="MVC.ShinwooTNS.com, MVC.ShinwooTNS.action" />
 
 
 	<!-- 다국어 처리 MessageResource 사용 Start -->

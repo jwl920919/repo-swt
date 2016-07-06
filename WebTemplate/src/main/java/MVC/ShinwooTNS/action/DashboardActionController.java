@@ -41,11 +41,11 @@ import scala.annotation.meta.setter;
 
 @Controller
 @RequestMapping(value="/dashboard/Action")
-public class DashboardController {
+public class DashboardActionController {
 	private final static String parentPath = "/dashboard/";
 	private final static java.text.SimpleDateFormat SIMPLE_DATE_FORMAT = new java.text.SimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss");
-	private static final Logger logger = LoggerFactory.getLogger(PageController.class);
+	private static final Logger logger = LoggerFactory.getLogger(DashboardActionController.class);
 	private Gson gson = new Gson();		
 	private AjaxResult result = new AjaxResult();
 	

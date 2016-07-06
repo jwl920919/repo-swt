@@ -40,10 +40,10 @@ import net.sf.json.JSON;
 import scala.annotation.meta.setter;
 
 @Controller
-public class PageController {
+public class PageActionController {
 	private final static java.text.SimpleDateFormat SIMPLE_DATE_FORMAT = new java.text.SimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss");
-	private static final Logger logger = LoggerFactory.getLogger(PageController.class);
+	private static final Logger logger = LoggerFactory.getLogger(PageActionController.class);
 	private Gson gson = new Gson();		
 	private AjaxResult result = new AjaxResult();
 		
