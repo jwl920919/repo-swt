@@ -27,11 +27,11 @@
 		"menu_sub"."sub_order";
 	</select>
 
-	<select id="select_SYSTEM_USER_INFO" resultType="Common.DTO.SYSTEM_USER_INFO_DTO">
-		SELECT
-		site_id,user_seq,group_id,user_id,user_pw,user_name,dept_name,position_name,phone_num,mobile_num,email,mysingle_yn,insert_date,modify_date
-		FROM SYSTEM_USER_INFO;
-	</select>
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-07-07 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : systemUserManagement.jsp 페이지 테이블 행 개수 조회-->
+	<!-- Controller : -->
 	<select id="select_SYSTEM_USER_INFO_CONDITIONAL_SEARCH_TOTAL_COUNT"
 		parameterType="hashmap" resultType="Integer">
 		SELECT count(*) AS total 
@@ -39,6 +39,12 @@
 		WHERE user_id like #{searchValue} OR user_name
 		like #{searchValue}
 	</select>
+	
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-07-07 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : systemUserManagement.jsp 페이지 테이블 정보 조회 -->
+	<!-- Controller : -->
 	<select id="select_SYSTEM_USER_INFO_CONDITIONAL_SEARCH"
 		parameterType="hashmap" resultType="Common.DTO.SYSTEM_USER_INFO_DTO">
 		SELECT

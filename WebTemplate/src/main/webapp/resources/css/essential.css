@@ -23,37 +23,48 @@
 	border: 0px !important;
 }
 
+
+
 .essential-table>thead>tr>th {
 	border-bottom: 0.2rem solid #d2d6de !important;
 }
-
+.essential-table>tbody>tr>td {
+	border: 0.2rem solid #d2d6de !important;
+}
 .essential-table>thead>tr>th:first-of-type {
 	border-right: 0.2rem solid #d2d6de !important;
+	border-left: hidden !important;
 }
 
 .essential-table>thead>tr>th:last-of-type {
 	border-left: 0.2rem solid #d2d6de !important;
+	border-right: hidden !important;
 }
 
-.essential-table>thead>tr>th:not (:first-of-type ):not (:last-of-type )
-	{
+.essential-table>thead>tr>th {
 	border-left: 0.2rem solid #d2d6de !important;
 	border-right: 0.2rem solid #d2d6de !important;
 }
 
-.essential-table>tbody>tr>td {
-	border: 0.2rem solid #d2d6de !important;
-}
 
 .essential-table>tbody>tr:nth-of-type(odd) {
 	background-color: #efefef;
+}
+#datatable_paginate {
+	text-align:center;
+} 
+
+div.datatable_filter {
+	text-align: left;
+	margin-left: 10px;
 }
 
 div.dataTables_length {
 	text-align: right;
 	margin-right: 10px;
 }
-div.dataTables_info {
+
+div.dataTables_filter,div.dataTables_info {
 	text-align: left;
 	margin-left: 10px;
 }
@@ -64,7 +75,7 @@ div.dataTables_length label {
 	white-space: nowrap;
 }
 
-div.dataTables_paginate.paging_simple_numbers, div.dataTables_filter {
+div.dataTables_paginate.paging_simple_numbers {
 	margin-right: 10px;
 }
 
@@ -73,9 +84,6 @@ div.dataTables_length select {
 	display: inline-block;
 }
 
-div.dataTables_filter {
-	text-align: right;
-}
 
 div.dataTables_filter label {
 	font-weight: normal;

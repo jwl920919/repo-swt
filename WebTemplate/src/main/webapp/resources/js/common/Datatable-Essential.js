@@ -1,15 +1,9 @@
-var rows;
 $('#datatable').on('draw.dt', function() {
-    rows = $('#datatable').find("tbody > tr ");
-    // for (var i = 0; i < values.length; i++) {
-    // if ($(values[i]).children(':eq(2)').text() == '192.168.1.157') {
-    // $(values[i]).children(':eq(2)').parent().css(
-    // 'background-color', 'gray');
-    // }
-    // }
+    //기본 Datatable 스크립트에서 지정한 크기를 변경해줌
+    $('#datatable_paginate').parent().addClass("col-sm-12").removeClass("col-sm-7");
 });
 //trClickEvent는 만들어져있는  Method가 아니기 때문에 직접 구현해주어야함 
-$('#datatable').delegate('tr', 'click', function() {
+$('#datatable').delegate('tbody>tr', 'click', function() {
     $(this).addClass("selected").siblings().removeClass("selected");
     trClickEvent(this);
 });
