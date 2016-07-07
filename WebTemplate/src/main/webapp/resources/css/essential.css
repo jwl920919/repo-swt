@@ -64,7 +64,7 @@ div.dataTables_length {
 	margin-right: 10px;
 }
 
-div.dataTables_info {
+div.dataTables_filter,div.dataTables_info {
 	text-align: left;
 	margin-left: 10px;
 }
@@ -84,9 +84,6 @@ div.dataTables_length select {
 	display: inline-block;
 }
 
-div.dataTables_filter {
-	text-align: right;
-}
 
 div.dataTables_filter label {
 	font-weight: normal;
