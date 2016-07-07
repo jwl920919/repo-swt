@@ -47,43 +47,72 @@ docker run \
 
 ### ipm-base images 생성
 
- - 기본 container 생성
+ * 기본 container 생성
 ```
 docker pull centos
 
 docker run \
- --name=ipm-base \
+ --name=ipm-temp \
  -d \
  centos \
  /bin/bash
 ```
 
-	- container로 jdk 설치 파일 복사 (rpm)
+	* container로 jdk 설치 파일 복사 (rpm)
 ```
- docker cp jdk-8u91-linux-x64.rpm ipm-base:/
+ docker cp jdk-8u91-linux-x64.rpm ipm-temp:/
 ```
  
- - ipm-base 접속
+ * Container 기본 설정
+
+		- container 접속
 ```
- docker exec -it ipm-base /bin/bash
+$ docker exec -it ipm-temp /bin/bash
 ```
-	- jdk 설치
+		- jdk 설치
 ```
- yum install jdk-8u91-linux-x64.rpm
+$ yum install jdk-8u91-linux-x64.rpm
 ```
 
- * docker-entrypoint.sh 파일 생성
+		- docker-entrypoint.sh 생성
 
 ```
-vi /docker-entrypoint.sh
+$ vi /docker-entrypoint.sh
 ```
 ```
 #!/bin/bash
 
 java -jar /ipm/swt-manager-0.0.1.jar --spring.config.location=/ipm/app.properties
 ```
+		- 실행 권한 설정
 ```
-chmod 755 /docker-entrypoint.sh
+$ chmod 755 /docker-entrypoint.sh
+```
+
+	* ipm-base 기본 이미지 생성 (ipm-base)
+
+```
+$ docker commit ipm-temp ipm-base
+```
+
+	* ipm-base 이미지 Build
+
+		- Dockerfile 생성
+```
+vi Dockerfile
+```
+```
+FROM ipm-base
+MAINTAINER songagi <songagi@gmail.com>
+
+RUN yum update
+
+ENTRYPOINT ["/docker-entrypoint.sh", "-D", "FOREGROUD"]
+```
+
+	* 이미지 Build
+```
+docker build --tag ipm-base:1.0 .
 ```
 
 
