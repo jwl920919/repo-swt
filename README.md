@@ -69,6 +69,7 @@ docker run \
 ```
 $ docker exec -it ipm-temp /bin/bash
 ```
+  
   - jdk 설치
 ```
 $ yum install jdk-8u91-linux-x64.rpm
