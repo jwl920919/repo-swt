@@ -29,14 +29,15 @@
 
 .essential-table>thead>tr>th:first-of-type {
 	border-right: 0.2rem solid #d2d6de !important;
+	border-left: none !important;
 }
 
 .essential-table>thead>tr>th:last-of-type {
 	border-left: 0.2rem solid #d2d6de !important;
+	border-right: none !important;
 }
 
-.essential-table>thead>tr>th:not (:first-of-type ):not (:last-of-type )
-	{
+.essential-table>thead>tr>th {
 	border-left: 0.2rem solid #d2d6de !important;
 	border-right: 0.2rem solid #d2d6de !important;
 }
@@ -53,6 +54,7 @@ div.dataTables_length {
 	text-align: right;
 	margin-right: 10px;
 }
+
 div.dataTables_info {
 	text-align: left;
 	margin-left: 10px;
