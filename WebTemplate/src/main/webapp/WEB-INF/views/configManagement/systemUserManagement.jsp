@@ -48,7 +48,6 @@
 				</div>
 			</div>
 		</div>
-		test
 	</div>
 	</section>
 	<!--

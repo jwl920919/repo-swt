@@ -23,18 +23,23 @@
 	border: 0px !important;
 }
 
+
+
+
 .essential-table>thead>tr>th {
 	border-bottom: 0.2rem solid #d2d6de !important;
 }
-
+.essential-table>tbody>tr>td {
+	border: 0.2rem solid #d2d6de !important;
+}
 .essential-table>thead>tr>th:first-of-type {
 	border-right: 0.2rem solid #d2d6de !important;
-	border-left: none !important;
+	border-left: hidden !important;
 }
 
 .essential-table>thead>tr>th:last-of-type {
 	border-left: 0.2rem solid #d2d6de !important;
-	border-right: none !important;
+	border-right: hidden !important;
 }
 
 .essential-table>thead>tr>th {
@@ -42,9 +47,6 @@
 	border-right: 0.2rem solid #d2d6de !important;
 }
 
-.essential-table>tbody>tr>td {
-	border: 0.2rem solid #d2d6de !important;
-}
 
 .essential-table>tbody>tr:nth-of-type(odd) {
 	background-color: #efefef;

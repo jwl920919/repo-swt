@@ -9,7 +9,7 @@ $('#datatable').on('draw.dt', function() {
     // }
 });
 //trClickEvent는 만들어져있는  Method가 아니기 때문에 직접 구현해주어야함 
-$('#datatable').delegate('tr', 'click', function() {
+$('#datatable').delegate('tbody>tr', 'click', function() {
     $(this).addClass("selected").siblings().removeClass("selected");
     trClickEvent(this);
 });
