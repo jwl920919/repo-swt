@@ -193,6 +193,7 @@ var m_hwUsedStatusAjaxCall;
 var m_osUsedStatusAjaxCall;
 var m_serviceUsedStatusAjaxCall;
 var m_vendorUsedStatusAjaxCall;
+var m_eventLogAjaxCall
 
 $(document).ready(
 		function() {
@@ -1223,7 +1224,6 @@ function clearVendorUsedStatusAjaxCall() {
 	clearInterval(m_vendorUsedStatusAjaxCall);
 }
 
-
 // EventLog  Ajax Call 메서드
 function eventLogAjaxCall() {
 
@@ -1641,16 +1641,18 @@ function tempChartData() {
 
 function tempIntegrationLogData(){
 	
+	console.log(new Date().format("yyyy-MM-dd"));
+	
 	return "{\"EVENTLOG\": ["+
     "{"+
-      "\"datetime\": \"2016-07-07 00:52:38\","+
+      "\"datetime\": \""+ new Date().format("yyyy-MM-dd HH:mm:ss") +"\","+
       "\"facility\": \"daemon\","+
       "\"level\": \"INFO\","+
       "\"server\": \"dhcpd[29594]\","+
       "\"message\": \"DHCPOFFER on 192.168.1.219 to 64:e5:99:a3:cf:f8 via eth1 relay eth1 lease-duration 119 offered-duration 86400 uid 01:64:e5:99:a3:cf:f8\""+
     "},"+
     "{"+
-      "\"datetime\": \"2016-07-07 00:52:37\","+
+     "\"datetime\": \""+ new Date().format("yyyy-MM-dd HH:mm:ss") +"\","+
       "\"facility\": \"daemon\","+
       "\"level\": \"INFO\","+
       "\"server\": \"dhcpd[29594]\","+
