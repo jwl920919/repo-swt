@@ -33,10 +33,6 @@
 							<tbody>
 							</tbody>
 						</table>
-						<select id="search_select" class="form-control input-sm">
-							<option>아이디</option>
-							<option>이름</option>
-						</select>
 					</center>
 				</div>
 			</div>

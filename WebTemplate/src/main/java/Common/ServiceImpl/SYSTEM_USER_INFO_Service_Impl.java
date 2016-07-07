@@ -14,11 +14,6 @@ public class SYSTEM_USER_INFO_Service_Impl implements SYSTEM_USER_INFO_Service_I
 		this.userInfoDao = userDao;
 	}
 
-	public List<Common.DTO.SYSTEM_USER_INFO_DTO> select_SYSTEM_USER_INFO() {
-		// TODO Auto-generated method stub
-		return userInfoDao.select_SYSTEM_USER_INFO();
-	}
-
 	@Override
 	public List<SYSTEM_USER_INFO_DTO> select_SYSTEM_USER_INFO_CONDITIONAL_SEARCH(HashMap<String, Object> parameters) {
 		// TODO Auto-generated method stub

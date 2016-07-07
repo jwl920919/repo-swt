@@ -21,10 +21,6 @@ $(document)
                                             "jsonp" : "callback",
                                             "data" : function(data) {
                                                 data.search_key = data.search.value;
-                                                data.searchColumn = $(
-                                                '#search_select option')
-                                                .index(
-                                                        $('#search_select option:selected'));
                                             }
 
                                         },
@@ -55,7 +51,6 @@ $(document)
                         var d_filter = $('#datatable_wrapper .row:first .col-sm-6:eq(1)');
                         d_length.append(d_filter);
                         d_wrap.prepend(d_filter);
-                        d_filter.children().append($('#search_select'));
                     });
                 });
 //trClickEvent 구현 ( Datatable-Essential.js에서 사용하기 위하여 )
