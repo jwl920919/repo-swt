@@ -1037,9 +1037,7 @@ function clearVendorUsedStatusAjaxCall() {
 	clearInterval(m_vendorUsedStatusAjaxCall);
 }
 
-
-
-<<<<<<< HEAD
+function eventLogAjaxCall() {
 	try {		
 		var vTop1 = Math.floor(Math.random() * 100) + 1;
 		var vTop2 = Math.floor(Math.random() * 100) + 1;
@@ -1080,8 +1078,6 @@ function clearVendorUsedStatusAjaxCall() {
 function clearEventLogAjaxCall() {
 	clearInterval(m_eventLogAjaxCall);
 }
-=======
->>>>>>> branch 'master' of https://github.com/songagi/repo-swt.git
 
 //Flot Pie 차트  Label Format
 function labelFormatter(label, series) {
@@ -1264,6 +1260,10 @@ function fnPieChartTooltipBind(chart){
 	
 	    } 
 	}); 
+}
+
+function tempIntegrationLogData(){
+	
 }
 
 // 차트 임시데이터 생성 메서드
