@@ -17,7 +17,7 @@
        folder instead of downloading all of them to reduce the load. -->
 <link rel="stylesheet" href="../resources/dist/css/skins/_all-skins.min.css">
 <!-- Datatable style -->
-<link rel="stylesheet" href="..resources/css/essential.css">
+<link rel="stylesheet" href="../resources/css/essential.css">
 
 <!-- jQuery Knob -->
 <script src="../resources/plugins/knob/jquery.knob.js"></script>

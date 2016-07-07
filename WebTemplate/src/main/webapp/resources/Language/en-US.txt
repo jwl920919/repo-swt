@@ -89,5 +89,17 @@
 	"datetime":										"Time",
 	"type":											"Type",
 	"server":										"Sever",
-	"message":										"Message"
+	"message":										"Message",
+	"sunday":										"일요일",
+	"monday":										"월요일",
+	"tuesday":										"화요일",
+	"wednesday":									"수요일",
+	"thursday":										"목요일",
+	"friday":										"금요일",
+	"saturday":										"토요일",
+	"hour":											"시",
+	"minute":										"분",
+	"second":										"초",
+	"am":											"오전",
+	"pm":											"오후"
 }
