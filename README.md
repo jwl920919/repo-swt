@@ -58,23 +58,23 @@ docker run \
  /bin/bash
 ```
 
-	* container로 jdk 설치 파일 복사 (rpm)
+ * container로 jdk 설치 파일 복사 (rpm)
 ```
  docker cp jdk-8u91-linux-x64.rpm ipm-temp:/
 ```
  
  * Container 기본 설정
 
-		- container 접속
+  - container 접속
 ```
 $ docker exec -it ipm-temp /bin/bash
 ```
-		- jdk 설치
+  - jdk 설치
 ```
 $ yum install jdk-8u91-linux-x64.rpm
 ```
 
-		- docker-entrypoint.sh 생성
+  - docker-entrypoint.sh 생성
 
 ```
 $ vi /docker-entrypoint.sh
@@ -84,20 +84,20 @@ $ vi /docker-entrypoint.sh
 
 java -jar /ipm/swt-manager-0.0.1.jar --spring.config.location=/ipm/app.properties
 ```
-		- 실행 권한 설정
+  - 실행 권한 설정
 ```
 $ chmod 755 /docker-entrypoint.sh
 ```
 
-	* ipm-base 기본 이미지 생성 (ipm-base)
+ * ipm-base 기본 이미지 생성 (ipm-base)
 
 ```
 $ docker commit ipm-temp ipm-base
 ```
 
-	* ipm-base 이미지 Build
+ * ipm-base 이미지 Build
 
-		- Dockerfile 생성
+  - Dockerfile 생성
 ```
 vi Dockerfile
 ```
@@ -110,12 +110,10 @@ RUN yum update
 ENTRYPOINT ["/docker-entrypoint.sh", "-D", "FOREGROUD"]
 ```
 
-	* 이미지 Build
+ * 이미지 Build
 ```
 docker build --tag ipm-base:1.0 .
 ```
-
-
 
 
 ### swt-common 연동 방법(Maven)
