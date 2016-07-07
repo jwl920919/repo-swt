@@ -1057,9 +1057,9 @@ function eventLogAjaxCall() {
 		// Ojbect형식으로 변경
 		if (jsonObj != '') {
 			if (jsonObj.EVENTLOG != '') {
-				table = $('#datatable').DataTable();
-				
-				table.DataTable( {
+				$('#datatable').dataTable().fnClearTable();
+				$('#datatable').dataTable().fnDestroy();				
+				$('#datatable').dataTable( {
 				    data: jsonObj.EVENTLOG,
 				    columns: [
 	                   { data: "datetime"},
