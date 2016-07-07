@@ -1,5 +1,6 @@
-package com.shinwootns.ipm.service.rabbitmq;
+package com.shinwootns.ipm.service.amqp;
 
+/*
 import java.util.ArrayList;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -20,7 +21,7 @@ import com.shinwootns.ipm.SpringBeanProvider;
 import com.shinwootns.ipm.ApplicationProperties;
 import com.shinwootns.ipm.data.SharedData;
 
-public class RabbitmqWorker extends BaseWorker {
+public class AmqpWorker extends BaseWorker {
 	
 	private final Log _logger = LogFactory.getLog(getClass());
 
@@ -33,7 +34,7 @@ public class RabbitmqWorker extends BaseWorker {
 	
 	private int _index = 0;
 	
-	public RabbitmqWorker(int index) {
+	public AmqpWorker(int index) {
 		this._index = _index;
 	}
 
@@ -161,3 +162,4 @@ public class RabbitmqWorker extends BaseWorker {
 		return false;
 	}
 }
+*/

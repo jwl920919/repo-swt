@@ -27,7 +27,7 @@ public class SharedData {
 	
 	
 	// Add Syslog Task
-	public boolean addSyslogData(JSONObject jobj) {
+	public boolean addSyslog(JSONObject jobj) {
 		
 		boolean bResult = false;
 		
@@ -47,7 +47,7 @@ public class SharedData {
 		return bResult;
 	}
 	
-	public List<JSONObject> popSyslogList(int popCount, int timeout) {
+	public List<JSONObject> popSyslog(int popCount, int timeout) {
 		
 		List<JSONObject> resultList = new ArrayList<JSONObject>();
 		

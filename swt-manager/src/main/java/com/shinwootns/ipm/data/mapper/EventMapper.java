@@ -18,6 +18,7 @@ public interface EventMapper {
 			+ " , #{severity}"
 			+ " , #{collect_time}" 
 			+ " , #{message}"
+			+ ");"
 	)
 	public void insert(EventLogEntity eventLog);
 

@@ -7,7 +7,7 @@ import org.apache.log4j.Logger;
 import com.shinwootns.common.network.SyslogEntity;
 import com.shinwootns.common.stp.PoolStatus;
 import com.shinwootns.common.stp.SmartThreadPool;
-import com.shinwootns.ipm.service.rabbitmq.RabbitmqWorker;
+//import com.shinwootns.ipm.service.amqp.AmqpWorker;
 import com.shinwootns.ipm.service.syslog.SyslogWorker;
 
 public class WorkerPoolManager {
@@ -18,8 +18,8 @@ public class WorkerPoolManager {
 	private static final int WORKER_MAX_COUNT = 32;
 	private static final int WORKER_LIMIT = 32;
 	
-	private static final int SYSLOG_WORKER_COUNT = 1;
-	private static final int MQ_WORKER_COUNT = 1;
+	private static final int SYSLOG_WORKER_COUNT = 3;
+	//private static final int MQ_WORKER_COUNT = 1;
 	
 	// Singleton
 	private static WorkerPoolManager _instance = null;
@@ -51,10 +51,10 @@ public class WorkerPoolManager {
 			}
 			
 			// Start MQ Worker
-			for(int i=1; i<=MQ_WORKER_COUNT; i++)
+			/*for(int i=1; i<=MQ_WORKER_COUNT; i++)
 			{
-				_workerPool.addTask(new RabbitmqWorker(i));
-			}
+				_workerPool.addTask(new AmqpWorker(i));
+			}*/
 			
 		} else {
 			_logger.fatal("[FATAL] Failed to create syslog-analyzer worker pool !!!");

@@ -25,31 +25,20 @@ public class SyslogWorker extends BaseWorker {
 	
 	@Override
 	public void run() {
-		
-		/*
-		ConfigurableApplicationContext context = ContextProvider.getInstance().getApplicationContext();
-		if (context == null) {
-			_logger.error("AppContextProvider.getInstance().getApplicationContext().... failed");
-			return;
-		}
-		
-		EventLogMapper eventLogMapper = context.getBean("eventLogMapper", EventLogMapper.class);
-		*/
-		
+
+		// get EventMapper
 		EventMapper eventMapper = SpringBeanProvider.getInstance().getEventMapper();
-
-		if (eventMapper == null) {
+		if (eventMapper == null)
 			return;
-		}
 		
-		if ( _logger != null)
-			_logger.info(String.format("Syslog Consumer#%d... start.", this._index));
+		_logger.info(String.format("Syslog Consumer#%d... start.", this._index));
 		
-		List<JSONObject> listSyslog = SharedData.getInstance().popSyslogList(1000, 500);
 
+		List<JSONObject> listSyslog = null;
+		
 		while(true)
 		{
-			listSyslog = SharedData.getInstance().popSyslogList(1000, 500);
+			listSyslog = SharedData.getInstance().popSyslog(1000, 500);
 			
 			if (listSyslog != null && listSyslog.size() > 0)
 			{
@@ -71,6 +60,7 @@ public class SyslogWorker extends BaseWorker {
 						eventLog.setMessage(JsonUtils.getValueToString(jObj, "message", ""));
 						eventLog.setCollectTime(JsonUtils.getValueToTimestamp(jObj, "recv_time", 0 ));
 						
+						// Insert event_log
 						eventMapper.insert(eventLog);
 						
 						_logger.info(jObj.toJSONString());
@@ -105,10 +95,14 @@ public class SyslogWorker extends BaseWorker {
 				try {
 					Thread.sleep(10);
 				} catch (InterruptedException e) {
-					//e.printStackTrace();
 					break;
 				}
 			}
+		}
+		
+		if (listSyslog != null) {
+			listSyslog.clear();
+			listSyslog = null;
 		}
 		
 		if ( this._logger != null)

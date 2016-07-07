@@ -8,9 +8,15 @@ import javax.annotation.PreDestroy;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
+import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +28,7 @@ import com.shinwootns.ipm.data.entity.AuthTypeEntity;
 import com.shinwootns.ipm.data.mapper.AuthMapper;
 import com.shinwootns.ipm.data.mapper.EventMapper;
 import com.shinwootns.ipm.service.WorkerPoolManager;
+import com.shinwootns.ipm.service.amqp.AmqpReceiver;
 
 //import com.shinwootns.ipm.data.entity.AuthType;
 //import com.shinwootns.ipm.data.repository.AuthTypeRepository;
@@ -37,6 +44,33 @@ public class ServiceController {
 
 	@Autowired(required=true)
 	private ApplicationProperties appProperties;
+	
+	@Autowired
+	RabbitTemplate rabbitTemplate;
+	
+	@Bean
+	Queue queue() {
+		return new Queue("ipm.syslog", false);
+	}
+	
+	@Bean
+	AmqpReceiver receiver() {
+        return new AmqpReceiver();
+    }
+	
+	@Bean
+	MessageListenerAdapter listenerAdapter(AmqpReceiver receiver) {
+		return new MessageListenerAdapter(receiver, "receiveMessage");
+	}
+	
+	@Bean
+	SimpleMessageListenerContainer container(ConnectionFactory connectionFactory, MessageListenerAdapter listenerAdapter) {
+		SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
+		container.setConnectionFactory(connectionFactory);
+		container.setQueueNames("ipm.syslog");
+		container.setMessageListener(listenerAdapter);
+		return container;
+	}
 	
 	@Autowired
 	private ApplicationContext context;
