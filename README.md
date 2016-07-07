@@ -1,7 +1,7 @@
 # SinwooTNS - Github Repository
 
 
-### Docker 설정
+## Docker 설정
 
  * Rabbitmq 설치
 ```
@@ -45,7 +45,7 @@ docker run \
  postgres
 ```
 
-### ipm-base 이미지 생성
+#### ipm-base 이미지 생성
 
  * 기본 container 생성
 ```
@@ -63,7 +63,7 @@ docker run \
  docker cp jdk-8u91-linux-x64.rpm ipm-temp:/
 ```
  
- * Container 기본 설정
+#### Container 기본 설정
 
   - container 접속
 ```
@@ -96,7 +96,7 @@ $ chmod 755 /docker-entrypoint.sh
 $ docker commit ipm-temp ipm-base
 ```
 
- * ipm-base 이미지 Build
+##### ipm-base 이미지 Build
 
   - Dockerfile 생성
 ```
