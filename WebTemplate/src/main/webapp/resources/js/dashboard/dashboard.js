@@ -1039,6 +1039,49 @@ function clearVendorUsedStatusAjaxCall() {
 
 
 
+<<<<<<< HEAD
+	try {		
+		var vTop1 = Math.floor(Math.random() * 100) + 1;
+		var vTop2 = Math.floor(Math.random() * 100) + 1;
+		var vTop3 = Math.floor(Math.random() * 100) + 1;
+		var vTop4 = Math.floor(Math.random() * 100) + 1;
+		var vTop5 = Math.floor(Math.random() * 100) + 1;
+
+		var dataSet = tempIntegrationLogData();
+		
+		console.log(dataSet);
+		var jsonObj = eval("(" + dataSet + ')'); // JSonString 형식의 데이터를
+		// Ojbect형식으로 변경
+		if (jsonObj != '') {
+			if (jsonObj.EVENTLOG != '') {
+				$('#datatable').dataTable().fnClearTable();
+				$('#datatable').dataTable().fnDestroy();				
+				$('#datatable').dataTable( {
+				    data: jsonObj.EVENTLOG,
+				    columns: [
+	                   { data: "datetime"},
+	                   { data: "facility"},
+	                   { data: "level"},
+	                   { data: "server"},
+	                   { data: "message"}
+	               ]
+				} );
+			};
+		};
+
+		clearEventLogAjaxCall();
+		m_eventLogAjaxCall = setInterval(eventLogAjaxCall, 5000);// 페이지 로딩 데이터 조회 후 polling 시간 변경
+	} catch (e) {
+		console.log("dashboard.js eventLogAjaxCall() Error Log : " + e.message);
+	}
+}
+
+// EventLog  Ajax Call Clear 메서드
+function clearEventLogAjaxCall() {
+	clearInterval(m_eventLogAjaxCall);
+}
+=======
+>>>>>>> branch 'master' of https://github.com/songagi/repo-swt.git
 
 //Flot Pie 차트  Label Format
 function labelFormatter(label, series) {
