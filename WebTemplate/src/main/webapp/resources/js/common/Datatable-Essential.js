@@ -12,4 +12,4 @@ $('#datatable').on('draw.dt', function() {
 $('#datatable').delegate('tr', 'click', function() {
     $(this).addClass("selected").siblings().removeClass("selected");
     trClickEvent(this);
-})
+});

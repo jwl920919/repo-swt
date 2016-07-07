@@ -57,7 +57,7 @@ public class ConfigManagementActionController {
 			columnCondition = searchValue.equals("") ? "" : " where " + searchColumn + " like '%" + searchValue + "%' ";
 			DBHelper dbHelper = new DBHelper();
 			java.sql.ResultSet rs = dbHelper.executeQuery(
-					"select count(*) as total from system_user_info");
+					"select count(*) as total from system_user_info "+ columnCondition);
 			rs.next();
 			int sortedListSize = rs.getInt("total");
 			dbHelper.close();
