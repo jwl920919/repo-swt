@@ -1236,7 +1236,7 @@ function eventLogAjaxCall() {
 
 		var dataSet = tempIntegrationLogData();
 		
-		console.log(dataSet);
+		//console.log(dataSet);
 		var jsonObj = eval("(" + dataSet + ')'); // JSonString 형식의 데이터를
 		// Ojbect형식으로 변경
 		if (jsonObj != '') {
@@ -1285,6 +1285,7 @@ function AllClearAjaxCall() {
 	clearInterval(m_osUsedStatusAjaxCall);
 	clearInterval(m_serviceUsedStatusAjaxCall);
 	clearInterval(m_vendorUsedStatusAjaxCall);
+	clearInterval(m_eventLogAjaxCall);
 }
 
 // 인증 처리 현황 라인 차트 옵션
@@ -1641,7 +1642,7 @@ function tempChartData() {
 
 function tempIntegrationLogData(){
 	
-	console.log(new Date().format("yyyy-MM-dd"));
+	//console.log(new Date().format("yyyy-MM-dd"));
 	
 	return "{\"EVENTLOG\": ["+
     "{"+
