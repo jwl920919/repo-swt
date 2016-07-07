@@ -3,7 +3,7 @@
 
 ### Docker 설정
 
-	* Rabbitmq 설치
+ * Rabbitmq 설치
 ```
 docker pull rabbitmq
 
@@ -18,7 +18,7 @@ docker run \
  rabbitmq:3-management
 ```
 
-	* Redis 설치
+ * Redis 설치
 ```
 docker pull redis
 
@@ -31,7 +31,7 @@ docker run \
  redis
 ```
 
-	* PostgreSQL 설치
+ * PostgreSQL 설치
 ```
 docker pull postgres
 
