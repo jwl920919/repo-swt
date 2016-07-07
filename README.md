@@ -45,6 +45,30 @@ docker run \
  postgres
 ```
 
+ * ipm-manager
+```
+docker run \
+ --name=ipm-manager \
+ -d \
+ -p 8080:8080/udp \
+ -v /logs/ipm-manager:/logs \
+ --restart always \
+ ipm-base:0.1 \
+ /bin/bash
+```
+
+* ipm-collector
+```
+docker run \
+ --name=ipm-collector \
+ -itd \
+ -p 514:514/udp \
+ -v /logs/ipm-collector:/logs \
+ --restart always \
+ ipm-base:0.1 \
+ /bin/bash
+```
+
 #### ipm-base 이미지 생성
 
  * 기본 container 생성
