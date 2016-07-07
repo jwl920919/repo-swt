@@ -49,7 +49,7 @@ docker run \
 ```
 docker run \
  --name=ipm-manager \
- -d \
+ -itd \
  -p 8080:8080/udp \
  -v /logs/ipm-manager:/logs \
  --restart always \
