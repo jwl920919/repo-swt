@@ -10,7 +10,7 @@ $(document)
                                         "searching" : true,
                                         "lengthChange" : true,
                                         "ordering" : true,
-                                        "info" : true,
+                                        "info" : false,
                                         "autoWidth" : true,
                                         "processing" : true,
                                         "serverSide" : true,
@@ -60,6 +60,5 @@ $(document)
                 });
 //trClickEvent 구현 ( Datatable-Essential.js에서 사용하기 위하여 )
 function trClickEvent(clickedTr) {
-    console.log($(clickedTr).children(':eq(1)').text());
     $('#test').text($(clickedTr).children(':eq(1)').text());
 }

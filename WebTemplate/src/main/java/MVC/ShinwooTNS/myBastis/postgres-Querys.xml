@@ -1,35 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="UI_Query" >
+<mapper namespace="UI_Query">
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
 	<!-- Insert Date : 2016-06-21 -->
 	<!-- Insert User : 김창민 -->
 	<!-- Description : 데시보드 메뉴 데이터 조회 -->
-	<!-- Controller :  -->
+	<!-- Controller : -->
 	<select id="select_UI_MENU_MASTER" resultType="java.util.HashMap">
-  		SELECT "menu_master"."master_cd", "menu_master"."master_namekey", "menu_master"."master_desc", 
-  		       "menu_master"."master_order", "menu_master"."master_url", "menu_master"."master_icon",
-  		       "menu_sub"."sub_cd", "menu_sub"."subname_key", "menu_sub"."sub_desc", "menu_sub"."sub_order",
-	           "menu_sub"."sub_Url", "menu_sub"."sub_icon", "menu_sub"."controller_mapping" 
-		  FROM "menu_master"
-		 RIGHT OUTER JOIN "menu_sub"
-		    ON "menu_master"."master_cd" = "menu_sub"."master_cd"
-		 WHERE "menu_sub"."display_yn" = TRUE
-		 ORDER BY "menu_master"."master_order", "menu_sub"."sub_order";
+		SELECT
+		"menu_master"."master_cd", "menu_master"."master_namekey",
+		"menu_master"."master_desc",
+		"menu_master"."master_order",
+		"menu_master"."master_url", "menu_master"."master_icon",
+		"menu_sub"."sub_cd", "menu_sub"."subname_key", "menu_sub"."sub_desc",
+		"menu_sub"."sub_order",
+		"menu_sub"."sub_Url", "menu_sub"."sub_icon",
+		"menu_sub"."controller_mapping"
+		FROM "menu_master"
+		RIGHT OUTER JOIN
+		"menu_sub"
+		ON "menu_master"."master_cd" = "menu_sub"."master_cd"
+		WHERE
+		"menu_sub"."display_yn" = TRUE
+		ORDER BY "menu_master"."master_order",
+		"menu_sub"."sub_order";
 	</select>
-	
+
 	<select id="select_SYSTEM_USER_INFO" resultType="Common.DTO.SYSTEM_USER_INFO_DTO">
-		SELECT site_id,user_seq,group_id,user_id,user_pw,user_name,dept_name,position_name,phone_num,mobile_num,email,mysingle_yn,insert_date,modify_date FROM SYSTEM_USER_INFO;
+		SELECT
+		site_id,user_seq,group_id,user_id,user_pw,user_name,dept_name,position_name,phone_num,mobile_num,email,mysingle_yn,insert_date,modify_date
+		FROM SYSTEM_USER_INFO;
+	</select>
+	<select id="select_SYSTEM_USER_INFO_CONDITIONAL_SEARCH_TOTAL_COUNT"
+		parameterType="hashmap" resultType="Integer">
+		SELECT count(*) AS total 
+		FROM SYSTEM_USER_INFO
+		WHERE user_id like #{searchValue} OR user_name
+		like #{searchValue}
+	</select>
+	<select id="select_SYSTEM_USER_INFO_CONDITIONAL_SEARCH"
+		parameterType="hashmap" resultType="Common.DTO.SYSTEM_USER_INFO_DTO">
+		SELECT
+		site_id,user_seq,group_id,user_id,user_pw,user_name,dept_name,position_name,phone_num,mobile_num,email,mysingle_yn,insert_date,modify_date
+		FROM SYSTEM_USER_INFO
+		WHERE user_id like #{searchValue} OR user_name
+		like #{searchValue}
+		<trim prefix="ORDER BY">
+			<if test="orderColumn == 'user_id'"> user_id </if>
+			<if test="orderColumn == 'user_name'"> user_name </if>
+			<if test="orderType == 'asc'"> ASC </if>
+			<if test="orderType == 'desc'"> DESC </if>
+		</trim>
+		offset #{startIndex} limit #{length};
+
 	</select>
 </mapper>
 
 <!-- <mapper namespace="testSqlMap" > -->
-<!-- 	<select id="selectTestTable" resultType="java.util.HashMap"> -->
+<!-- <select id="selectTestTable" resultType="java.util.HashMap"> -->
 
-<!-- 		SELECT * FROM "UI_MENU_MASTER" -->
+<!-- SELECT * FROM "UI_MENU_MASTER" -->
 
-<!-- 	</select> -->
+<!-- </select> -->
 <!-- </mapper> -->
 
 
