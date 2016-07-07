@@ -33,13 +33,19 @@
 							<tbody>
 							</tbody>
 						</table>
+						<select id="search_select" class="form-control input-sm">
+							<option>아이디</option>
+							<option>이름</option>
+						</select>
 					</center>
 				</div>
 			</div>
 		</div>
 		<div class="col-md-6">
 			<div class="box box-primary">
-				<div class="box-body">test</div>
+				<div class="box-body">
+				<div id="test"></div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -47,56 +53,7 @@
 	<!--
 		 </div>
 	</div> -->
+	<script src="resources/js/common/Datatable-Essential.js"></script>
 	<script src="resources/js/configMangement/systemUserManagement.js"></script>
-	<script>
-        var table;
-        $(document)
-                .ready(
-                        function() {
-                            table = $('#datatable')
-                                    .DataTable(
-                                            {
-                                                "destroy" : true,
-                                                "paging" : true,
-                                                "searching" : true,
-                                                "lengthChange" : true,
-                                                "ordering" : true,
-                                                "info" : true,
-                                                "autoWidth" : true,
-                                                "processing" : true,
-                                                "serverSide" : true,
-                                                "ajax" : {
-                                                    url : 'configManagement/getSystemUserManagementDatatableDatas',
-                                                    "dataType" : "jsonp",
-                                                    "type":"POST",
-                                                    "jsonp" : "callback",
-                                                    "data" : function(data) {
-                                                    }
-
-                                                },
-                                                'columnDefs' : [ {
-                                                    'targets' : 0,
-                                                    'data' : "active",
-                                                    'searchable' : false,
-                                                    'orderable' : false,
-                                                    'width' : '1%',
-                                                    'className' : "dt-body-center",
-                                                    'render' : function(data,
-                                                            type, row) {
-                                                        if (type === 'display') {
-                                                            return '<input type="checkbox" name="checkbox-active" class="editor-active">';
-                                                        }
-                                                        return data;
-                                                    }
-                                                } ],
-                                                'order' : [ [ 1, 'asc' ] ],
-                                                "columns" : [ {}, {
-                                                    "data" : "user_id"
-                                                }, {
-                                                    "data" : "user_name"
-                                                }, ],
-                                            });
-                        });
-    </script>
 </body>
 </html>

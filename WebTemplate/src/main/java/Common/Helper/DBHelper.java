@@ -6,8 +6,6 @@ import java.text.MessageFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sun.istack.internal.NotNull;
-
 public class DBHelper {
 	private static final Logger logger = LoggerFactory.getLogger(DBHelper.class);
 	private static final String driverName = "org.postgresql.Driver";
@@ -18,8 +16,15 @@ public class DBHelper {
 
 	private Connection conn = null;
 	private Statement stat = null;
+	private PreparedStatement pstat = null;
 	private ResultSet rs = null;
-
+	static {
+		try {
+			Class.forName(driverName);
+		} catch (ClassNotFoundException e) {
+			logger.error(e.getMessage());
+		}
+	}
 	// static {
 	// try {
 	// Class.forName("org.postgresql.Driver");
@@ -77,7 +82,6 @@ public class DBHelper {
 	 **/
 	public ResultSet executeQuery(String sql) {
 		try {
-			Class.forName(driverName);
 			conn = DriverManager.getConnection(MessageFormat.format("{0}{1}", jdbcUrl, dbName), dbId, dbPwd);
 			conn.setAutoCommit(false);
 			stat = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -89,13 +93,11 @@ public class DBHelper {
 
 		} catch (SQLException sqle) {
 			logger.error(sqle.getMessage());
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 
 		return rs;
 	}
+	
 
 	/**
 	 * <p>
@@ -109,7 +111,6 @@ public class DBHelper {
 	public int executeUpdate(String sql) {
 		int req = 0;
 		try {
-			Class.forName(driverName);
 			conn = DriverManager.getConnection(MessageFormat.format("{0}{1}", jdbcUrl, dbName), dbId, dbPwd);
 			conn.setAutoCommit(false);
 			stat = conn.createStatement();
@@ -122,15 +123,11 @@ public class DBHelper {
 			if (conn != null)
 				rollback(conn);
 			logger.error(sqle.getMessage());
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			if (conn != null)
-				rollback(conn);
-			e.printStackTrace();
 		}
 
 		return req;
 	}
+	
 
 	public void close() {
 		try {

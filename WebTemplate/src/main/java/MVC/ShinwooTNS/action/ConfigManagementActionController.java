@@ -1,12 +1,17 @@
 package MVC.ShinwooTNS.action;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +24,7 @@ import com.google.gson.Gson;
 
 import Common.DTO.AjaxResult;
 import Common.DTO.SYSTEM_USER_INFO_DTO;
+import Common.Helper.DBHelper;
 import Common.ServiceInterface.SYSTEM_USER_INFO_Service_Interface;
 
 @Controller
@@ -30,55 +36,74 @@ public class ConfigManagementActionController {
 	private Gson gson = new Gson();
 	private AjaxResult result = new AjaxResult();
 
-	
 	@Autowired
-	private SYSTEM_USER_INFO_Service_Interface userInfoService;
-	
-	@RequestMapping(value = "getSystemUserManagementDatatableDatas", method = RequestMethod.GET)
-	public String getSystemUserManagementDatatableDatas(Locale locale, Model model, HttpServletRequest request, HttpServletResponse response) {
+//	private SYSTEM_USER_INFO_Service_Interface userInfoService;
+	private final static String[] USER_COLUMNS = { "user_id", "user_name" };
+
+	@RequestMapping(value = "getSystemUserManagementDatatableDatas", method = RequestMethod.POST)
+	public void getSystemUserManagementDatatableDatas(Locale locale, Model model, HttpServletRequest request,
+			HttpServletResponse response) {
 		logger.info("getSystemUserManagementDatatableDatas : " + request.getLocalAddr());
 		System.out.println("getSystemUserManagementDatatableDatas Controller");
-		// Session에 로그인 정보가 있는지 체크
-//		HttpSession session = request.getSession(true);
-//		System.out.println(session.getAttribute("login_chk"));
-//		if (session.getAttribute("login_chk") == null)
-//			return "redirect:login";
-//		
-		List<SYSTEM_USER_INFO_DTO> userDataList = userInfoService.select_SYSTEM_USER_INFO();
-		
-		result.result = true;
-		result.resultValue = userDataList;
 		try {
-			response.getWriter().println("test");
+			String orderColumn = USER_COLUMNS[Integer.parseInt(request.getParameter("order[0][column]")) - 1],
+					orderType = request.getParameter("order[0][dir]"),
+					searchColumn = USER_COLUMNS[Integer.parseInt(request.getParameter("searchColumn"))],
+					searchValue = request.getParameter("search[value]");
+			int startIndex = Integer.parseInt(request.getParameter("start")),
+					length = Integer.parseInt(request.getParameter("length"));
+//			List<SYSTEM_USER_INFO_DTO> userDataList = userInfoService.select_SYSTEM_USER_INFO();
+			String columnCondition = " where " + searchColumn;
+			columnCondition = searchValue.equals("") ? "" : " where " + searchColumn + " like '%" + searchValue + "%' ";
+			DBHelper dbHelper = new DBHelper();
+			java.sql.ResultSet rs = dbHelper.executeQuery(
+					"select count(*) as total from system_user_info");
+			rs.next();
+			int sortedListSize = rs.getInt("total");
+			dbHelper.close();
+			rs = dbHelper.executeQuery("select count(*) as total from system_user_info");
+			rs.next();
+			int listSize = rs.getInt("total");
+			dbHelper.close();
+			rs = dbHelper.executeQuery(MessageFormat.format("select user_id,user_name from system_user_info {0} order by {1} {2} offset {3} limit {4}",
+					columnCondition, orderColumn, orderType, startIndex, length));
+			JSONArray jsonArray = new JSONArray();
+			while (rs.next()) {
+				JSONObject jObj = new JSONObject();
+				jObj.put("user_id", rs.getString("user_id"));
+				jObj.put("user_name", rs.getString("user_name"));
+				jObj.put("active", 1);
+				jsonArray.add(jObj);
+			}
+			dbHelper.close();
+
+			StringBuffer sb = new StringBuffer("");
+			sb.append(request.getParameter("callback"));
+			sb.append("({");
+			sb.append("\"draw\": ");
+			sb.append(request.getParameter("draw"));
+			sb.append(',');
+			sb.append("\"recordsFiltered\": ");
+			sb.append(sortedListSize);
+			sb.append(',');
+			sb.append("\"recordsTotal\": ");
+			sb.append(listSize);
+			sb.append(',');
+			sb.append("\"data\": ");
+			sb.append(jsonArray);
+			sb.append(',');
+			sb.append("})");
+			response.setContentType("Application/json;charset=utf-8");
+
+			response.getWriter().println(sb.toString());
 			response.getWriter().flush();
+			response.getWriter().close();
+		} catch (SQLException e) {
+			logger.error(e.getMessage());
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
+		} catch (Exception e) {
+			logger.error(e.getMessage());
 		}
-		
-		
-		return gson.toJson(result);
-	}
-	@RequestMapping(value = "*")
-	public void default_go(Locale locale, Model model, HttpServletRequest request, HttpServletResponse response) {
-		logger.info("getSystemUserManagementDatatableDatas : " + request.getLocalAddr());
-		System.out.println("getSystemUserManagementDatatableDatas Controller");
-		// Session에 로그인 정보가 있는지 체크
-//		HttpSession session = request.getSession(true);
-//		System.out.println(session.getAttribute("login_chk"));
-//		if (session.getAttribute("login_chk") == null)
-//			return "redirect:login";
-//		
-		List<SYSTEM_USER_INFO_DTO> userDataList = userInfoService.select_SYSTEM_USER_INFO();
-		
-		result.result = true;
-		result.resultValue = userDataList;
-		try {
-			response.getWriter().println("test");
-			response.getWriter().flush();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		
 	}
 }
