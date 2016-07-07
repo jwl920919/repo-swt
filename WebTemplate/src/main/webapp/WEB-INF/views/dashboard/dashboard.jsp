@@ -16,6 +16,9 @@
 <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
 <link rel="stylesheet" href="../resources/dist/css/skins/_all-skins.min.css">
+<!-- Datatable style -->
+<link rel="stylesheet" href="../resources/css/essential.css">
+
 <!-- jQuery Knob -->
 <script src="../resources/plugins/knob/jquery.knob.js"></script>
 <!-- ChartJS 1.0.1 -->
@@ -29,6 +32,10 @@
 <script src="../resources/plugins/flot/jquery.flot.pie.min.js"></script>
 <!-- FLOT CATEGORIES PLUGIN - Used to draw bar charts -->
 <script src="../resources/plugins/flot/jquery.flot.categories.min.js"></script>
+<!-- Datatable JS -->
+<script src="../resources/js/common/Datatable-Essential.js"></script>
+<script src="../resources/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="../resources/plugins/datatables/dataTables.bootstrap.min.js"></script>
 
 <script src="../resources/js/common/Common.js"></script>
 <script src="../resources/js/dashboard/dashboard.js"></script>
@@ -553,7 +560,21 @@
 					</div>
 					<!-- ./ tools -->
 				</div>
-				<div class="box-body"></div>
+				<div class="box-body">				
+					<table id="datatable" name="eventLog" class="essential-table" style="width: 98%">
+						<thead>
+							<tr>
+								<th width="25%"><%=LanguageHelper.GetLanguage("datetime")%></th>
+								<th width="25%">Facility</th>
+								<th width="25%"><%=LanguageHelper.GetLanguage("type")%></th>
+								<th width="25%"><%=LanguageHelper.GetLanguage("server")%></th>
+								<th width="25%"><%=LanguageHelper.GetLanguage("message")%></th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
 			</div>
 		</div>
 		<!-- ./통합이벤트 -->		
