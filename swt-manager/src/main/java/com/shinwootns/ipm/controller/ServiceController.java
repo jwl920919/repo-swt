@@ -27,8 +27,8 @@ import com.shinwootns.ipm.service.WorkerPoolManager;
 //import com.shinwootns.ipm.data.repository.AuthTypeRepository;
 
 @RestController
-@SpringApplicationConfiguration(classes = MainApplication.class)
-public class MainController {
+//@SpringApplicationConfiguration(classes = MainApplication.class)
+public class ServiceController {
 	
 	private final Log _logger = LogFactory.getLog(this.getClass());
 	
@@ -44,7 +44,7 @@ public class MainController {
 	@PostConstruct
 	public void startService() {
 		
-		_logger.info("Start service all.");
+		_logger.info("Start ServiceController.");
 		
 		System.out.println(context.toString());
 		
@@ -60,22 +60,6 @@ public class MainController {
 		// Stop
 		WorkerPoolManager.getInstance().stop();
 		
-		//_logger.info("Stop service all.");
+		_logger.info("Stop ServiceController.");
 	}
-
-	/*
-	@RequestMapping("/")
-	public String greeting(String name) {
-		String output = "Hi " + name + " !!!";
-		return output;
-	}
-	*/
-	
-	/*@RequestMapping("/AuthType")
-    public @ResponseBody List<AuthTypeEntity> getUserList() {
-		
-		List<AuthTypeEntity> result = mapper.findAll();
-		
-        return result;
-    }*/
 }

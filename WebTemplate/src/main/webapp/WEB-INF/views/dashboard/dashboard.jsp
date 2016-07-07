@@ -30,6 +30,7 @@
 <!-- FLOT CATEGORIES PLUGIN - Used to draw bar charts -->
 <script src="../resources/plugins/flot/jquery.flot.categories.min.js"></script>
 
+<script src="../resources/js/common/Common.js"></script>
 <script src="../resources/js/dashboard/dashboard.js"></script>
 
 <!-- Small boxes (System Status box) -->
@@ -263,14 +264,14 @@
 							</div>
 							<!-- ./ tools -->
 						</div>
-						<div class="box-body">
+						<div class="box-body" style="margin-top: -10px;">
 		                  	<!-- chart-responsive -->
-							<p class="text-center">
-								<strong>Sales: 1 Jan, 2014 - 30 Jul, 2014</strong>
-							</p>
+<!-- 							<p class="text-center"> -->
+<!-- 								<strong>Sales: 1 Jan, 2014 - 30 Jul, 2014</strong> -->
+<!-- 							</p> -->
 
 		                  	<div class="chart">
-			                    <canvas id="certifyProcessChart" style="height: 150px;"></canvas>
+			                    <canvas id="certifyProcessChart" style="height: 150px; margin-top: -5px;"></canvas>
 			                    
 <!--               					<div id="interactive" style="height: 120px;"></div> -->
 		                  	</div>
@@ -397,39 +398,38 @@
 							</div>
 							<div class="box-body" style="text-align: center; height: 155px; margin-top: -15px;">
 								<!-- 고정 IP 할당 현황 -->
-								<div class="info-box bg-yellow">
+								<div class="info-box bg-light-blue">
 									<span class="info-box-icon"><i class="fa fa-lock"></i></span>						
-						            <div class="info-box-content">
-						            	<span class="progress-description">Increase in 30 Days
-						            	</span>
-						            	<div class="progress">
-						            		<div class="progress-bar" style="width: 50%"></div>
-						            	</div>
+						            <div class="info-box-content" id="divStaticIP">
+<!-- 										<span class="progress-description">미사용 IP</span> -->
+<!-- 										<div class="progress"> -->
+<!-- 											<div class="progress-bar progress-bar-danger" style="width: 87.6%"></div> -->
+<!-- 										</div> -->
 						            </div>
 								</div>
 								<!-- ./고정 IP 할당 현황 -->
-								<!-- 고정 IP 할당 현황 -->
+								<!-- 리스 IP 할당 현황 -->
 								<div class="info-box bg-green">
 									<span class="info-box-icon"><i class="fa fa-user"></i></span>						
-						            <div class="info-box-content">
-						            	<span class="progress-description">50% Increase in 30 Days</span>
-						            	<div class="progress">
-						            		<div class="progress-bar" style="width: 30%"></div>
-						            	</div>
+						            <div class="info-box-content" id="divLeaseIP">>
+<!-- 						            	<span class="progress-description"></span> -->
+<!-- 						            	<div class="progress"> -->
+<!-- 						            		<div class="progress-bar progress-bar-warning" style="width: 60%"></div> -->
+<!-- 						            	</div> -->
 						            </div>
 								</div>
-								<!-- ./고정 IP 할당 현황 -->
-								<!-- 고정 IP 할당 현황 -->
+								<!-- ./리스 IP 할당 현황 -->
+								<!-- 미사용 IP 할당 현황 -->
 								<div class="info-box bg-aqua">
 									<span class="info-box-icon"><i class="fa fa-user-times"></i></span>						
-						            <div class="info-box-content">
-						            	<span class="progress-description">50% Increase in 30 Days</span>
-						            	<div class="progress">
-						            		<div class="progress-bar" style="width: 80%"></div>
-						            	</div>
+						            <div class="info-box-content" id="divUnusedIP">>
+<!-- 						            	<span class="progress-description"></span> -->
+<!-- 						            	<div class="progress"> -->
+<!-- 						            		<div class="progress-bar" style="width: 50%"></div> -->
+<!-- 						            	</div> -->
 						            </div>
-								</div>						
-							
+								</div>
+								<!-- ./미사용 IP 할당 현황 -->
 							</div>
 						</div>
 					</section>
@@ -457,7 +457,13 @@
 							</div>
 							<!-- ./ tools -->
 						</div>
-						<div class="box-body" style="text-align: center; height: 135px; margin-top: -15px;"></div>
+						<div class="box-body" style="margin-top: -10px;">
+		                  	<!-- chart-responsive -->
+		                  	<div class="chart">
+			                    <canvas id="askIPStatusChart" style="height: 150px; margin-top: -5px;"></canvas>
+		                  	</div>
+		                  	<!-- /.chart-responsive -->
+						</div>
 					</div>
 					<!-- ./IP 신청 현황  -->
 				</div>					
