@@ -3,7 +3,7 @@
 
 ### Docker 설정
 
-	* Rabbitmq
+	* Rabbitmq 설치
 ```
 docker pull rabbitmq
 
@@ -18,7 +18,7 @@ docker run \
  rabbitmq:3-management
 ```
 
-	* Redis
+	* Redis 설치
 ```
 docker pull redis
 
@@ -31,7 +31,7 @@ docker run \
  redis
 ```
 
-	* Redis
+	* PostgreSQL 설치
 ```
 docker pull postgres
 
@@ -45,7 +45,7 @@ docker run \
  postgres
 ```
 
-### ipm-base images 생성
+### ipm-base 이미지 생성
 
  * 기본 container 생성
 ```
