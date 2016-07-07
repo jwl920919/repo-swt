@@ -29,7 +29,8 @@ $(document).ready(
 			m_osUsedStatusAjaxCall = setInterval(osUsedStatusAjaxCall, 0);
 			m_serviceUsedStatusAjaxCall = setInterval(serviceUsedStatusAjaxCall, 0);
 			m_vendorUsedStatusAjaxCall = setInterval(vendorUsedStatusAjaxCall, 0);
-
+			eventLogAjaxCall();
+			
 			jQueryKnob(); // jQueryKnob 차트관련 스크립트
 
 			//Pie Chart Tooltip Bind
@@ -1038,7 +1039,49 @@ function clearVendorUsedStatusAjaxCall() {
 }
 
 
+// EventLog  Ajax Call 메서드
+function eventLogAjaxCall() {
 
+	try {		
+		var vTop1 = Math.floor(Math.random() * 100) + 1;
+		var vTop2 = Math.floor(Math.random() * 100) + 1;
+		var vTop3 = Math.floor(Math.random() * 100) + 1;
+		var vTop4 = Math.floor(Math.random() * 100) + 1;
+		var vTop5 = Math.floor(Math.random() * 100) + 1;
+
+		var dataSet = tempIntegrationLogData();
+		
+		console.log(dataSet);
+		var jsonObj = eval("(" + dataSet + ')'); // JSonString 형식의 데이터를
+		// Ojbect형식으로 변경
+		if (jsonObj != '') {
+			if (jsonObj.EVENTLOG != '') {
+		
+//				$('#datatable').datasource = data;
+				$('#datatable').DataTable( {
+				    data: dataSet,
+				    columns: [
+	                   { title: "EVENTLOG.datetime"},
+	                   { title: "EVENTLOG.facility"},
+	                   { title: "EVENTLOG.level"},
+	                   { title: "EVENTLOG.server"},
+	                   { title: "EVENTLOG.message"}
+	               ]
+				} );
+			};
+		};
+
+		clearEventLogAjaxCall();
+		m_eventLogAjaxCall = setInterval(eventLogAjaxCall, 5000);// 페이지 로딩 데이터 조회 후 polling 시간 변경
+	} catch (e) {
+		console.log("dashboard.js eventLogAjaxCall() Error Log : " + e.message);
+	}
+}
+
+// EventLog  Ajax Call Clear 메서드
+function clearEventLogAjaxCall() {
+	clearInterval(m_eventLogAjaxCall);
+}
 
 //Flot Pie 차트  Label Format
 function labelFormatter(label, series) {
@@ -1223,6 +1266,7 @@ function fnPieChartTooltipBind(chart){
 	}); 
 }
 
+//========================================================//
 // 차트 임시데이터 생성 메서드
 function tempChartData() {
 	var data = "{\"CERTIFYPRECESS\": ["
@@ -1407,4 +1451,143 @@ function tempChartData() {
 			+ "{\"time\": \"2016-06-30 03:58:00\",\"request\": 87,\"complete\": 852},"
 			+ "{\"time\": \"2016-06-30 03:59:00\",\"request\": 344,\"complete\": 66}]}";
 	return data;
+}
+
+function tempIntegrationLogData(){
+	
+	return "{\"EVENTLOG\": ["+
+    "{"+
+      "\"datetime\": \"2016-07-07 00:52:38\","+
+      "\"facility\": \"daemon\","+
+      "\"level\": \"INFO\","+
+      "\"server\": \"dhcpd[29594]\","+
+      "\"message\": \"DHCPOFFER on 192.168.1.219 to 64:e5:99:a3:cf:f8 via eth1 relay eth1 lease-duration 119 offered-duration 86400 uid 01:64:e5:99:a3:cf:f8\""+
+    "},"+
+    "{"+
+      "\"datetime\": \"2016-07-07 00:52:37\","+
+      "\"facility\": \"daemon\","+
+      "\"level\": \"INFO\","+
+      "\"server\": \"dhcpd[29594]\","+
+      "\"message\": \"DHCPDISCOVER from 64:e5:99:a3:cf:f8 via eth1 uid 01:64:e5:99:a3:cf:f8\""+
+    "},"+
+    "{"+
+      "\"datetime\": \"2016-07-07 00:52:18\","+
+      "\"facility\": \"syslog\","+
+      "\"level\": \"NOTICE\","+
+      "\"server\": \"syslog-ng[13068]\","+
+      "\"message\": \"Syslog connection broken; fd='21', server='AF_INET(192.168.1.81:514)', time_reopen='30'\""+
+    "},"+
+    "{"+
+      "\"datetime\": \"2016-07-07 00:52:18\","+
+      "\"facility\": \"daemon\","+
+      "\"level\": \"INFO\","+
+      "\"server\": \"dhcpd[29594]\","+
+      "\"message\": \"Dynamic DNS update timeout count in last 5/15/60/1440 minutes: 0/0/0/0\""+
+    "},"+
+    "{"+
+      "\"datetime\": \"2016-07-07 00:52:18\","+
+      "\"facility\": \"daemon\","+
+      "\"level\": \"INFO\","+
+      "\"server\": \"dhcpd[29594]\","+
+      "\"message\": \"Average 5/15/60/1440 dynamic DNS update latency: 0/0/0/0 micro seconds\""+
+    "},"+
+    "{"+
+      "\"datetime\": \"2016-07-07 00:52:10\","+
+      "\"facility\": \"syslog\","+
+      "\"level\": \"NOTICE\","+
+      "\"server\": \"syslog-ng[13068]\","+
+      "\"message\": \"Syslog connection established; fd='21', server='AF_INET(192.168.1.81:514)', local='AF_INET(0.0.0.0:0)'\""+
+    "},"+
+    "{"+
+      "\"datetime\": \"2016-07-07 00:52:10\","+
+      "\"facility\": \"syslog\","+
+      "\"level\": \"NOTICE\","+
+      "\"server\": \"syslog-ng[13068]\","+
+      "\"message\": \"Syslog connection established; fd='18', server='AF_INET(192.168.1.112:514)', local='AF_INET(0.0.0.0:0)'\""+
+    "},"+
+    "{"+
+      "\"datetime\": \"2016-07-07 00:51:40\","+
+      "\"facility\": \"syslog\","+
+      "\"level\": \"NOTICE\","+
+      "\"server\": \"syslog-ng[13068]\","+
+      "\"message\": \"Syslog connection broken; fd='21', server='AF_INET(192.168.1.81:514)', time_reopen='30'\""+
+    "},"+
+    "{"+
+      "\"datetime\": \"2016-07-07 00:51:40\","+
+      "\"facility\": \"syslog\","+
+      "\"level\": \"NOTICE\","+
+      "\"server\": \"syslog-ng[13068]\","+
+      "\"message\": \"Syslog connection broken; fd='18', server='AF_INET(192.168.1.112:514)', time_reopen='30'\""+
+    "},"+
+    "{"+
+      "\"datetime\": \"2016-07-07 00:51:40\","+
+      "\"facility\": \"syslog\","+
+      "\"level\": \"NOTICE\","+
+      "\"server\": \"syslog-ng[13068]\","+
+      "\"message\": \"Syslog connection established; fd='21', server='AF_INET(192.168.1.81:514)', local='AF_INET(0.0.0.0:0)'\""+
+    "},"+
+    "{"+
+      "\"datetime\": \"2016-07-07 00:51:40\","+
+      "\"facility\": \"syslog\","+
+      "\"level\": \"NOTICE\","+
+      "\"server\": \"syslog-ng[13068]\","+
+      "\"message\": \"Syslog connection established; fd='18', server='AF_INET(192.168.1.112:514)', local='AF_INET(0.0.0.0:0)'\""+
+    "},"+
+    "{"+
+      "\"datetime\": \"2016-07-07 00:51:36\","+
+      "\"facility\": \"daemon\","+
+      "\"level\": \"INFO\","+
+      "\"server\": \"dhcpd[29594]\","+
+      "\"message\": \"DHCPOFFER on 192.168.1.219 to 64:e5:99:a3:cf:f8 via eth1 relay eth1 lease-duration 120 offered-duration 86400 uid 01:64:e5:99:a3:cf:f8\""+
+    "},"+
+    "{"+
+      "\"datetime\": \"2016-07-07 00:51:36\","+
+      "\"facility\": \"daemon\","+
+      "\"level\": \"INFO\","+
+      "\"server\": \"dhcpd[29594]\","+
+      "\"message\": \"DHCPDISCOVER from 64:e5:99:a3:cf:f8 via eth1 uid 01:64:e5:99:a3:cf:f8\""+
+    "},"+
+    "{"+
+      "\"datetime\": \"2016-07-07 00:51:25\","+
+      "\"facility\": \"daemon\","+
+      "\"level\": \"INFO\","+
+      "\"server\": \"dhcpd[29594]\","+
+      "\"message\": \"DHCPACK on 192.168.1.162 to 00:11:a9:d8:eb:d6 (SIPPhone0011A9D8EBD6) via eth1 relay eth1 lease-duration 86400 (RENEW) uid 01:00:11:a9:d8:eb:d6\""+
+    "},"+
+    "{"+
+      "\"datetime\": \"2016-07-07 00:51:25\","+
+      "\"facility\": \"daemon\","+
+      "\"level\": \"INFO\","+
+      "\"server\": \"dhcpd[29594]\","+
+      "\"message\": \"DHCPREQUEST for 192.168.1.162 from 00:11:a9:d8:eb:d6 (SIPPhone0011A9D8EBD6) via eth1 uid 01:00:11:a9:d8:eb:d6 (RENEW)\""+
+    "},"+
+    "{"+
+      "\"datetime\": \"2016-07-07 00:51:25\","+
+      "\"facility\": \"daemon\","+
+      "\"level\": \"INFO\","+
+      "\"server\": \"dhcpd[29594]\","+
+      "\"message\": \"r-l-e:192.168.1.162,Renewed,SIPPhone0011A9D8EBD6,00:11:a9:d8:eb:d6,1467852685,1467939085,,No Match$default,192.168.1.0,24,192.168.1.100-192.168.1.220\""+
+    "},"+
+    "{"+
+      "\"datetime\": \"2016-07-07 00:51:23\","+
+      "\"facility\": \"daemon\","+
+      "\"level\": \"INFO\","+
+      "\"server\": \"dhcpd[29594]\","+
+      "\"message\": \"DHCPOFFER on 192.168.1.219 to 64:e5:99:a3:cf:f8 via eth1 relay eth1 lease-duration 120 offered-duration 86400 uid 01:64:e5:99:a3:cf:f8\""+
+    "},"+
+    "{"+
+      "\"datetime\": \"2016-07-07 00:51:23\","+
+      "\"facility\": \"daemon\","+
+      "\"level\": \"INFO\","+
+      "\"server\": \"dhcpd[29594]\","+
+      "\"message\": \"DHCPDISCOVER from 64:e5:99:a3:cf:f8 via eth1 uid 01:64:e5:99:a3:cf:f8\""+
+    "},"+
+    "{"+
+      "\"datetime\": \"2016-07-07 00:51:23\","+
+      "\"facility\": \"daemon\","+
+      "\"level\": \"INFO\","+
+      "\"server\": \"dhcpd[29594]\","+
+      "\"message\": \"DHCPOFFER on 192.168.1.219 to 64:e5:99:a3:cf:f8 via eth1 relay eth1 lease-duration 120 offered-duration 86400 uid 01:64:e5:99:a3:cf:f8\""+
+    "}"+
+  "]}";
 }

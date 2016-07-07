@@ -7,7 +7,7 @@
 	<!-- PostgreSQL JDBC setting -->
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource" >
 		<property name="driverClass" value="org.postgresql.Driver" />
-		<property name="url" value="jdbc:postgresql://192.168.1.81:5432/ipm_db" />
+		<property name="url" value="jdbc:postgresql://shinwootnskr.iptime.org:5432/ipm_db" />
 		<property name="username" value="postgres" />
 		<property name="password" value="shinwoo123!" />
 	</bean>

@@ -85,5 +85,9 @@
 	"usingAbleIPCount":								"가용 IP 수",
 	"staticIP":										"고정 IP",
 	"leaseIP":										"리스 IP",
-	"unUsedIP":										"미사용 IP"
+	"unUsedIP":										"미사용 IP",
+	"datetime":										"시간",
+	"type":											"타입",
+	"server":										"서버",
+	"message":										"메세지"
 }

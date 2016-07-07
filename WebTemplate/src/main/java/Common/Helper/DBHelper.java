@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 public class DBHelper {
 	private static final Logger logger = LoggerFactory.getLogger(DBHelper.class);
 	private static final String driverName = "org.postgresql.Driver";
-	private static final String jdbcUrl = "jdbc:postgresql://192.168.1.81:5432/";
+	private static final String jdbcUrl = "jdbc:postgresql://shinwootnskr.iptime.org:5432/";
 	private static final String dbName = "ipm_db";
 	private static final String dbId = "postgres";
 	private static final String dbPwd = "shinwoo123!";
