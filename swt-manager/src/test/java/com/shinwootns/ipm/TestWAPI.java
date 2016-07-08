@@ -76,6 +76,7 @@ public class TestWAPI {
 	}
 	*/
 	
+	/*
 	@Test
 	public void testWAPI_LeaseIPList() {
 
@@ -95,4 +96,5 @@ public class TestWAPI {
 			System.out.println("Count = " + jArray.size());
 		}
 	}
+	*/
 }

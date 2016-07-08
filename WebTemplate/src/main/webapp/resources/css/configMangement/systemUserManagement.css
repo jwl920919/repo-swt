@@ -16,8 +16,8 @@
 	margin-bottom: 9px;
 }
 
-.btn {
-	margin-top: 0.15rem;
+#delete-button, #add-button, #modify-button {
+	margin-top: 0.35rem;
 }
 
 .send-row {
@@ -28,8 +28,26 @@
 .send-row label:first-child {
 	width:88px;
 }
-
-.send-row label:not(:first-child) {
+.id-check-button {
+	font-size: 12px;
+    height: 26px;
+    vertical-align: middle;
+    border-radius: 3px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border: 1px solid transparent;
+    display: inline-block;
+    margin-bottom: 0;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    margin-bottom: 2px;
+}
+.send-row label:not(:first-child), #id-check-button {
 	margin-left:10px;
 	width:88px;
 }

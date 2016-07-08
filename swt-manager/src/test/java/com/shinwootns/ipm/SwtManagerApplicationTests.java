@@ -1,3 +1,4 @@
+/*
 package com.shinwootns.ipm;
 
 import org.json.simple.JSONArray;
@@ -17,3 +18,4 @@ public class SwtManagerApplicationTests {
 	public void contextLoads() {
 	}
 }
+*/
