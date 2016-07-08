@@ -10,6 +10,21 @@ var m_serviceUsedStatusAjaxCall;
 var m_vendorUsedStatusAjaxCall;
 var m_eventLogAjaxCall
 
+
+var systemStatusCallTime = 1000;
+var guestIPAssignStatusCallTime = 5000;
+var certifyProcessCallTime = 5000;
+var askIPStatusCallTime = 5000;
+var dnsStatusCallTime = 5000;
+var segmentLeasingIPAssignedCallTime = 5000;
+var assignmentIPStatusCallTime = 5000;
+var hwUsedStatusCallTime = 5000;
+var osUsedStatusCallTime = 5000;
+var serviceUsedStatusCallTime = 5000;
+var vendorUsedStatusCallTime = 5000;
+var eventLogCallTime = 5000;
+
+
 $(document).ready(
 		function() {
 //			$("#contentHeaderDepth1li").attr('style', 'display: none;');
@@ -113,7 +128,7 @@ function systemStatusAjaxCall() {
 		// console.log("ajaxCall count : " + ivalue);
 
 		clearSystemStatusAjaxCall();
-		m_systemStatusAjaxCall = setInterval(systemStatusAjaxCall, 1000);// 페이지로딩데이터 조회 후 polling 시간 변경
+		m_systemStatusAjaxCall = setInterval(systemStatusAjaxCall, systemStatusCallTime);// 페이지로딩데이터 조회 후 polling 시간 변경
 
 		var vCPU1 = Math.floor(Math.random() * 101);
 		var vCPU2 = Math.floor(Math.random() * 101);
@@ -324,7 +339,7 @@ function guestIPAssignStatusAjaxCall() {
 			}
 
 			clearGuestIPAssignStatusAjaxCall();
-			m_guestIPAssignStatusAjaxCall = setInterval(guestIPAssignStatusAjaxCall, 5000);// 페이지 로딩 데이터 조회 후 polling 시간 변경
+			m_guestIPAssignStatusAjaxCall = setInterval(guestIPAssignStatusAjaxCall, guestIPAssignStatusCallTime);// 페이지 로딩 데이터 조회 후 polling 시간 변경
 		}
 	} catch (e) {
 		console.log("dashboard.js guestIPAssignStatusAjaxCall() Error Log : "
@@ -429,7 +444,6 @@ function certifyProcessAjaxCall() {
 				return data;
 			}
 
-			var updateInterval = 1000; // Fetch data ever x milliseconds
 			var realtime = "on"; // If == to on then fetch data every x
 									// seconds. else stop fetching
 			function update() {
@@ -439,7 +453,7 @@ function certifyProcessAjaxCall() {
 				//console.log("getdata : " + data1.length);
 				certifyProcessChart.Line(getData(), lineChartOption());
 				if (realtime === "on")
-					setTimeout(update, updateInterval);
+					setTimeout(update, certifyProcessCallTime);
 			}
 
 			// INITIALIZE REALTIME DATA FETCHING
@@ -566,13 +580,12 @@ function askIPStatusAjaxCall() {
 				return data;
 			}
 
-			var updateInterval = 1000; // Fetch data ever x milliseconds
 			var realtime = "on"; // If == to on then fetch data every x
 									// seconds. else stop fetching
 			function update() {
 			    barChart.Bar(getData(), barChartOption());
 				if (realtime === "on")
-					setTimeout(update, updateInterval);
+					setTimeout(update, askIPStatusCallTime);
 			}
 
 			// INITIALIZE REALTIME DATA FETCHING
@@ -653,7 +666,7 @@ function dnsStatusAjaxCall() {
 		};
 
 		cleardnsStatusAjaxCall();
-		m_dnsStatusAjaxCall = setInterval(dnsStatusAjaxCall, 5000);// 페이지 로딩 데이터 조회 후 polling 시간 변경
+		m_dnsStatusAjaxCall = setInterval(dnsStatusAjaxCall, dnsStatusCallTime);// 페이지 로딩 데이터 조회 후 polling 시간 변경
 	} catch (e) {
 		console.log("dashboard.js dnsStatusAjaxCall() Error Log : " + e.message);
 	}
@@ -712,7 +725,7 @@ function segmentLeasingIPAssignedAjaxCall() {
 		};
 
 		clearsegmentLeasingIPAssignedAjaxCall();
-		m_segmentLeasingIPAssignedAjaxCall = setInterval(segmentLeasingIPAssignedAjaxCall, 5000);// 페이지 로딩 데이터 조회 후 polling 시간 변경
+		m_segmentLeasingIPAssignedAjaxCall = setInterval(segmentLeasingIPAssignedAjaxCall, segmentLeasingIPAssignedCallTime);// 페이지 로딩 데이터 조회 후 polling 시간 변경
 	} catch (e) {
 		console.log("dashboard.js segmentLeasingIPAssignedAjaxCall() Error Log : " + e.message);
 	}
@@ -792,7 +805,7 @@ function assignmentIPStatusAjaxCall() {
 		}
 		
 		clearassignmentIPStatus();
-		m_assignmentIPStatusAjaxCall = setInterval(assignmentIPStatusAjaxCall, 5000);// 페이지 로딩 데이터 조회 후 polling 시간 변경
+		m_assignmentIPStatusAjaxCall = setInterval(assignmentIPStatusAjaxCall, assignmentIPStatusCallTime);// 페이지 로딩 데이터 조회 후 polling 시간 변경
 	} catch (e) {
 		console.log("dashboard.js assignmentIPStatusAjaxCall() Error Log : " + e.message);
 	}
@@ -851,7 +864,7 @@ function hwUsedStatusAjaxCall() {
 		};
 
 		clearHWUsedStatusAjaxCall();
-		m_hwUsedStatusAjaxCall = setInterval(hwUsedStatusAjaxCall, 5000);// 페이지 로딩 데이터 조회 후 polling 시간 변경
+		m_hwUsedStatusAjaxCall = setInterval(hwUsedStatusAjaxCall, hwUsedStatusCallTime);// 페이지 로딩 데이터 조회 후 polling 시간 변경
 	} catch (e) {
 		console.log("dashboard.js hwUsedStatusAjaxCall() Error Log : " + e.message);
 	}
@@ -910,7 +923,7 @@ function osUsedStatusAjaxCall() {
 		};
 
 		clearOSUsedStatusAjaxCall();
-		m_osUsedStatusAjaxCall = setInterval(osUsedStatusAjaxCall, 5000);// 페이지 로딩 데이터 조회 후 polling 시간 변경
+		m_osUsedStatusAjaxCall = setInterval(osUsedStatusAjaxCall, osUsedStatusCallTime);// 페이지 로딩 데이터 조회 후 polling 시간 변경
 	} catch (e) {
 		console.log("dashboard.js osUsedStatusAjaxCall() Error Log : " + e.message);
 	}
@@ -969,7 +982,7 @@ function serviceUsedStatusAjaxCall() {
 		};
 
 		clearServiceUsedStatusAjaxCall();
-		m_serviceUsedStatusAjaxCall = setInterval(serviceUsedStatusAjaxCall, 5000);// 페이지 로딩 데이터 조회 후 polling 시간 변경
+		m_serviceUsedStatusAjaxCall = setInterval(serviceUsedStatusAjaxCall, serviceUsedStatusCallTime);// 페이지 로딩 데이터 조회 후 polling 시간 변경
 	} catch (e) {
 		console.log("dashboard.js serviceUsedStatusAjaxCall() Error Log : " + e.message);
 	}
@@ -1028,7 +1041,7 @@ function vendorUsedStatusAjaxCall() {
 		};
 
 		clearVendorUsedStatusAjaxCall();
-		m_vendorUsedStatusAjaxCall = setInterval(vendorUsedStatusAjaxCall, 5000);// 페이지 로딩 데이터 조회 후 polling 시간 변경
+		m_vendorUsedStatusAjaxCall = setInterval(vendorUsedStatusAjaxCall, vendorUsedStatusCallTime);// 페이지 로딩 데이터 조회 후 polling 시간 변경
 	} catch (e) {
 		console.log("dashboard.js vendorUsedStatusAjaxCall() Error Log : " + e.message);
 	}
@@ -1073,7 +1086,7 @@ function eventLogAjaxCall() {
 		};
 
 		clearEventLogAjaxCall();
-		m_eventLogAjaxCall = setInterval(eventLogAjaxCall, 5000);// 페이지 로딩 데이터 조회 후 polling 시간 변경
+		//m_eventLogAjaxCall = setInterval(eventLogAjaxCall, eventLogCallTime);// 페이지 로딩 데이터 조회 후 polling 시간 변경
 	} catch (e) {
 		console.log("dashboard.js eventLogAjaxCall() Error Log : " + e.message);
 	}

@@ -40,6 +40,8 @@
 <script src="../resources/js/common/Common.js"></script>
 <script src="../resources/js/dashboard/dashboard.js"></script>
 
+
+<section class="dashboard_form">
 <!-- Small boxes (System Status box) -->
 <div class="row" id="dashboardSystemStatus">
 	<!-- CPU 사용량 -->
@@ -584,4 +586,5 @@
 </div>
 <!-- ./main row -->
 
+</section>
 
