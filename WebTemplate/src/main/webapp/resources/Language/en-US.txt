@@ -114,4 +114,7 @@
 	"modify":										"수정",
 	"delete":										"삭제",
 	"save":											"저장"
+	"loading":										"Loading.",
+	"processing":									"Processing.",
+	"search":										"Search."
 }

@@ -1080,7 +1080,18 @@ function eventLogAjaxCall() {
 	                   { data: "level"},
 	                   { data: "server"},
 	                   { data: "message"}
-	               ]
+	               ],
+                "destroy" : false,
+                "paging" : true,
+                "searching" : false,
+                "lengthChange" : false,
+                "pageLength": 5,
+                "ordering" : true,
+                "info" : false,
+                "autoWidth" : false,
+                "processing" : true,
+                "serverSide" : false,
+                "order" : [ [ 1, 'desc' ] ]
 				} );
 			};
 		};
