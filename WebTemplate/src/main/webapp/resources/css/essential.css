@@ -3,8 +3,17 @@
 	background: #fff;
 	border: 1px solid #f4f4f4;
 	padding-left: 15px;
-    padding-top: 5px;
-    padding-right: 15px;
+	padding-top: 5px;
+	padding-right: 15px;
+}
+
+div.row {
+	margin-right: -15px;
+	margin-left: -15px;
+	margin-bottom: -3px;
+}
+div.box-body {
+	margin-bottom:-11px;
 }
 
 .essential-table tbody tr.selected {
@@ -25,14 +34,14 @@
 	border: 0px !important;
 }
 
-
-
 .essential-table>thead>tr>th {
 	border-bottom: 0.2rem solid #d2d6de !important;
 }
+
 .essential-table>tbody>tr>td {
 	border: 0.2rem solid #d2d6de !important;
 }
+
 .essential-table>thead>tr>th:first-of-type {
 	border-right: 0.2rem solid #d2d6de !important;
 	border-left: hidden !important;
@@ -48,13 +57,13 @@
 	border-right: 0.2rem solid #d2d6de !important;
 }
 
-
 .essential-table>tbody>tr:nth-of-type(odd) {
 	background-color: #efefef;
 }
+
 #datatable_paginate {
-	text-align:center;
-} 
+	text-align: center;
+}
 
 div.datatable_filter {
 	text-align: left;
@@ -66,7 +75,7 @@ div.dataTables_length {
 	margin-right: 10px;
 }
 
-div.dataTables_filter,div.dataTables_info {
+div.dataTables_filter, div.dataTables_info {
 	text-align: left;
 	margin-left: 10px;
 }
@@ -85,7 +94,6 @@ div.dataTables_length select {
 	width: 75px;
 	display: inline-block;
 }
-
 
 div.dataTables_filter label {
 	font-weight: normal;

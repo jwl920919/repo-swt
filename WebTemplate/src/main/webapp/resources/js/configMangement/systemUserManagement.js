@@ -57,7 +57,7 @@ $(document)
 function trClickEvent(clickedTr) {
     $('#idTxt').val($(clickedTr).children(':eq(1)').text());
     $('#modify-label').addClass("selected-label").siblings().removeClass("selected-label");
-    $('#id-row').addClass("hidden-row");
+    $('#idTxt').attr("readOnly",true);
 }
 //datatable_paginate의 위치 조정
 $('#datatable_paginate').css('margin-right','60px');
@@ -66,5 +66,9 @@ $('#datatable_paginate').parent().prepend($('#delete-button').parent());
 
 $('#add-button').click(function() {
     $('#add-label').addClass("selected-label").siblings().removeClass("selected-label");
-    $('#id-row').removeClass("hidden-row");
+    $('#idTxt').attr("readOnly",false);
+    var sendDataFileds =  $('.send-body>input');
+    for ( var sendDataFiled in sendDataFileds) {
+        
+    }
 });
