@@ -115,5 +115,8 @@
 	"add":											"추가",
 	"modify":										"수정",
 	"delete":										"삭제",
-	"save":											"저장"
+	"save":											"저장",
+	"loading":										"조회 중입니다.",
+	"processing":									"처리 중입니다.",
+	"search":										"검색 중입니다."
 }

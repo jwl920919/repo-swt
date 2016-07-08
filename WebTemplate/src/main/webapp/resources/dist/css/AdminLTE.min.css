@@ -1809,6 +1809,11 @@ deg
 	}
 }
 
+.dashboard-box {
+	margin-top: -5px !important;
+	margin-bottom: 15px !important;
+}
+
 .box {
 	position: relative;
 	border-radius: 3px;

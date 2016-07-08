@@ -40,6 +40,8 @@
 <script src="../resources/js/common/Common.js"></script>
 <script src="../resources/js/dashboard/dashboard.js"></script>
 
+
+<section class="dashboard_form">
 <!-- Small boxes (System Status box) -->
 <div class="row" id="dashboardSystemStatus">
 	<!-- CPU 사용량 -->
@@ -144,7 +146,7 @@
 				<div>
 					<!-- Guest IP 할당현황 -->
 					<section class="col-lg-6">
-						<div class="box box-success">
+						<div class="box dashboard-box box-success">
 							<div class="box-header">
 								<i class="fa fa-bar-chart-o"></i>
 	
@@ -186,7 +188,7 @@
 					
 					<!-- DNS 할당 현황  -->
 					<section class="col-lg-6">
-						<div class="box box-info">
+						<div class="box dashboard-box box-info">
 							<div class="box-header">
 								<i class="fa fa-envelope"></i>
 
@@ -248,7 +250,7 @@
 				<!-- left col - 2 row -->
 				<div class="col-lg-12">				
 					<!-- 인증 처리 현황 -->
-					<div class="box box-warning">
+					<div class="box dashboard-box box-warning">
 						<div class="box-header">
 							<i class="fa fa-envelope"></i>
 
@@ -292,7 +294,7 @@
 				<div>
 					<!-- HW별 사용 현황 -->
 					<section class="col-lg-6">
-						<div class="box box-blue">
+						<div class="box dashboard-box box-blue">
 							<div class="box-header">
 								<i class="fa fa-envelope"></i>
 	
@@ -320,7 +322,7 @@
 					<!-- ./HW별 사용 현황 -->
 					<!-- OS별 사용 현황 -->
 					<section class="col-lg-6">
-						<div class="box box-red">
+						<div class="box dashboard-box box-red">
 							<div class="box-header">
 								<i class="fa fa-envelope"></i>
 
@@ -357,7 +359,7 @@
 				<div >
 					<!-- 세그먼트별 Lease IP 할당 현황 -->
 					<section class="col-lg-6">
-						<div class="box box-yellow">
+						<div class="box dashboard-box box-yellow">
 							<div class="box-header">
 								<i class="fa fa-envelope"></i>
 
@@ -385,7 +387,7 @@
 					
 					<!-- 고정, 리스, 미사용 IP 할당 현황  -->
 					<section class="col-lg-6">
-						<div class="box box-green">
+						<div class="box dashboard-box box-green">
 							<div class="box-header">
 								<i class="fa fa-envelope"></i>
 
@@ -446,7 +448,7 @@
 				<!-- right col - 2 row -->
 				<div class="col-lg-12">
 					<!-- IP 신청 현황  -->
-					<div class="box box-gray">
+					<div class="box dashboard-box box-gray">
 						<div class="box-header">
 							<i class="fa fa-envelope"></i>
 
@@ -479,7 +481,7 @@
 				<div>
 					<!-- 서비스별 사용 현황 -->
 					<section class="col-lg-6">
-						<div class="box box-cyan">
+						<div class="box dashboard-box box-cyan">
 							<div class="box-header">
 								<i class="fa fa-envelope"></i>
 
@@ -506,7 +508,7 @@
 					<!-- ./서비스별 사용 현황 -->
 					<!-- 벤더별 사용 현황 -->
 					<section class="col-lg-6-noPadding">
-						<div class="box box-brown">
+						<div class="box dashboard-box box-brown">
 							<div class="box-header">
 								<i class="fa fa-envelope"></i>
 
@@ -542,7 +544,7 @@
 		<!-- main bottom row -->		
 		<!-- 통합이벤트 -->
 		<div class="col-lg-12">
-			<div class="box box-purple">
+			<div class="box dashboard-box box-purple">
 				<div class="box-header">
 					<i class="fa fa-envelope"></i>
 	
@@ -584,4 +586,5 @@
 </div>
 <!-- ./main row -->
 
+</section>
 
