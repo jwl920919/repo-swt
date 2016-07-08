@@ -68,6 +68,7 @@ public class ServiceController {
 		SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
 		container.setConnectionFactory(connectionFactory);
 		container.setQueueNames("ipm.syslog");
+		container.setRecoveryInterval(5000);		// try reconnect interval
 		container.setMessageListener(listenerAdapter);
 		return container;
 	}

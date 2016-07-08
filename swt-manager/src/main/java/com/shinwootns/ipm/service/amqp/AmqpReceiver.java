@@ -18,19 +18,18 @@ public class AmqpReceiver {
 			if (message == null)
 				return;
 					
-			// Json Parse
+			// Parse
 			JSONObject jObj = JsonUtils.parseJSONObject(message);
 			
 			// Put Queue
-			if ( SharedData.getInstance().syslogRecvQueue.add(jObj) )
+			if ( SharedData.getInstance().syslogQueue.put(jObj) )
 			{
 				// Process OK.
 				_logger.info(message + "==> OK.");
-				
 			}
 			else
 			{
-				_logger.info(message + "==> Failed... Try retry.");
+				_logger.warn(message + "==> failed");
 			}
 		}
 		catch(Exception ex) {

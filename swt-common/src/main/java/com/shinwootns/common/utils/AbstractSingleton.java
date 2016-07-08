@@ -1,3 +1,4 @@
+/*
 package com.shinwootns.common.utils;
 
 import java.util.HashMap;
@@ -21,3 +22,4 @@ public abstract class AbstractSingleton {
 		return instances.get(cls);
 	}
 }
+*/

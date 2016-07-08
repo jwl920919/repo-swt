@@ -29,25 +29,7 @@ public class ApplicationProperties {
 	@Value("${ipm.version}")
 	private String version;
 
-	//===================================
-	// RabbitMQ
-	//===================================
-	@Value("${ipm.rabbitmq.host}")
-	private String rabbitmqHost;
-	
-	@Value("${ipm.rabbitmq.port}")
-	private int rabbitmqPort;
-	
-	@Value("${ipm.rabbitmq.username}")
-	private String rabbitmqUsername;
-	
-	@Value("${ipm.rabbitmq.password}")
-	private String rabbitmqPassword;
-	
-	@Value("${ipm.rabbitmq.vhost}")
-	private String rabbitmqVhost;
 
-	
 	public String getName() {
 		return name;
 	}
@@ -62,45 +44,5 @@ public class ApplicationProperties {
 
 	public void setVersion(String version) {
 		this.version = version;
-	}
-
-	public String getRabbitmqHost() {
-		return rabbitmqHost;
-	}
-
-	public void setRabbitmqHost(String rabbitmqHost) {
-		this.rabbitmqHost = rabbitmqHost;
-	}
-
-	public int getRabbitmqPort() {
-		return rabbitmqPort;
-	}
-
-	public void setRabbitmqPort(int rabbitmqPort) {
-		this.rabbitmqPort = rabbitmqPort;
-	}
-
-	public String getRabbitmqUsername() {
-		return rabbitmqUsername;
-	}
-
-	public void setRabbitmqUsername(String rabbitmqUsername) {
-		this.rabbitmqUsername = rabbitmqUsername;
-	}
-
-	public String getRabbitmqPassword() {
-		return rabbitmqPassword;
-	}
-
-	public void setRabbitmqPassword(String rabbitmqPassword) {
-		this.rabbitmqPassword = rabbitmqPassword;
-	}
-
-	public String getRabbitmqVhost() {
-		return rabbitmqVhost;
-	}
-
-	public void setRabbitmqVhost(String rabbitmqVhost) {
-		this.rabbitmqVhost = rabbitmqVhost;
 	}
 }

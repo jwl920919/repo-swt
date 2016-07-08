@@ -26,87 +26,43 @@ public class SyslogWorker extends BaseWorker {
 	@Override
 	public void run() {
 
-		// get EventMapper
-		EventMapper eventMapper = SpringBeanProvider.getInstance().getEventMapper();
-		if (eventMapper == null)
-			return;
-		
 		_logger.info(String.format("Syslog Consumer#%d... start.", this._index));
 		
-
 		List<JSONObject> listSyslog = null;
 		
 		while(true)
 		{
-			listSyslog = SharedData.getInstance().popSyslog(1000, 500);
+			listSyslog = SharedData.getInstance().syslogQueue.pop(500, 100);
+			if (listSyslog == null)
+				continue;
 			
-			if (listSyslog != null && listSyslog.size() > 0)
+			for(JSONObject jObj : listSyslog)
 			{
-				int count = listSyslog.size();
+				if (jObj == null) 
+					continue;
 				
-				for(JSONObject jObj : listSyslog)
-				{
-					if (jObj == null)
-						continue;
-					
-					try {
-						
-						EventLogEntity eventLog = new EventLogEntity(); 
-
-						eventLog.setHostIp(JsonUtils.getValueToString(jObj, "host", ""));
-						eventLog.setDeviceId(0);
-						eventLog.setEventType("syslog");
-						eventLog.setSeverity((int)JsonUtils.getValueToNumber(jObj, "severity", 6));
-						eventLog.setMessage(JsonUtils.getValueToString(jObj, "message", ""));
-						eventLog.setCollectTime(JsonUtils.getValueToTimestamp(jObj, "recv_time", 0 ));
-						
-						// Insert event_log
-						eventMapper.insert(eventLog);
-						
-						_logger.info(jObj.toJSONString());
-						
-						
-					} catch (Exception ex) {
-						_logger.error(ex.getMessage(), ex);
-					}
-
-					/*
-					String rawData = jObj.getData();
-	
-					// Remove Carriage-Return & Line-Feed
-					rawData = rawData.replaceAll("\\r\\n|\\r|\\n", " ");
-					
-					// Trim
-					rawData = rawData.trim();
-					
-					JSONObject jobj = new JSONObject();
-					jobj.put("host", syslog.getHost());
-					jobj.put("facility", syslog.getFacility());
-					jobj.put("severity", syslog.getSeverity());
-					jobj.put("recv_time", syslog.getRecvTime());
-					jobj.put("message", rawData);
-					*/
-				}
-				
-				listSyslog.clear();
-			}
-			else
-			{
 				try {
-					Thread.sleep(10);
-				} catch (InterruptedException e) {
-					break;
+					
+					//_logger.info(jObj.toJSONString());
+					
+					// Parsing
+					parseSyslog(jObj);
+					
+					// Insert Event Queue
+					insertEventQueue(jObj);
+					
+				}					
+				catch (Exception ex) {
+					_logger.error(ex.getMessage(), ex);
 				}
 			}
-		}
-		
-		if (listSyslog != null) {
+			
 			listSyslog.clear();
 			listSyslog = null;
 		}
 		
-		if ( this._logger != null)
-			_logger.info(String.format("Syslog Consumer#%d... end.", this._index));
+		//if ( this._logger != null)
+		//	_logger.info(String.format("Syslog Consumer#%d... end.", this._index));
 		
 		/*
 		// Process Infoblox DHCP
@@ -140,5 +96,40 @@ public class SyslogWorker extends BaseWorker {
 			_logger.error(ex.getMessage(), ex);
 		}
 		*/
+	}
+	
+	private void parseSyslog(JSONObject jObj) {
+		/*
+		String rawData = jObj.getData();
+
+		// Remove Carriage-Return & Line-Feed
+		rawData = rawData.replaceAll("\\r\\n|\\r|\\n", " ");
+		
+		// Trim
+		rawData = rawData.trim();
+		
+		JSONObject jobj = new JSONObject();
+		jobj.put("host", syslog.getHost());
+		jobj.put("facility", syslog.getFacility());
+		jobj.put("severity", syslog.getSeverity());
+		jobj.put("recv_time", syslog.getRecvTime());
+		jobj.put("message", rawData);
+		*/
+
+	}
+	
+	private void insertEventQueue(JSONObject jObj) {
+		
+		EventLogEntity eventLog = new EventLogEntity(); 
+
+		eventLog.setHostIp(JsonUtils.getValueToString(jObj, "host", ""));
+		eventLog.setDeviceId((int)JsonUtils.getValueToNumber(jObj, "device_id", 0));
+		eventLog.setEventType("syslog");
+		eventLog.setSeverity((int)JsonUtils.getValueToNumber(jObj, "severity", 6));
+		eventLog.setMessage(JsonUtils.getValueToString(jObj, "message", ""));
+		eventLog.setCollectTime(JsonUtils.getValueToTimestamp(jObj, "recv_time", 0 ));
+		
+		// Put Event Queue
+		SharedData.getInstance().eventQueue.put(eventLog);
 	}
 }

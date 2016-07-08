@@ -93,6 +93,7 @@
 			<optional>true</optional>
 		</dependency>
 
+		<!-- Exclude default spring logging service -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
@@ -103,6 +104,7 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<!-- Use log4j -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-log4j</artifactId>
