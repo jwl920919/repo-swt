@@ -69,7 +69,7 @@
 								<div id="id-row" class="send-row">
 									<label class="send-label"><%=LanguageHelper.GetLanguage("ID")%></label>
 									<input type="text" id="idTxt" name="idTxt">
-									<input type="button" value="<%=LanguageHelper.GetLanguage("checkRepetition")%>" />
+									<input type="button" class="btn-info id-check-button" id="id-check-button" value="<%=LanguageHelper.GetLanguage("checkRepetition")%>" />
 								</div>
 								<div id="pw-row" class="send-row">
 									<label class="send-label"><%=LanguageHelper.GetLanguage("Password")%></label>

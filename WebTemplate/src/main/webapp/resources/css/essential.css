@@ -60,6 +60,12 @@ div.box-body {
 .essential-table>tbody>tr:nth-of-type(odd) {
 	background-color: #efefef;
 }
+.btn {
+	height: 30px;
+    font-size: 12px;
+    vertical-align: middle;
+    padding: 5px 10px 5px 10px;
+}
 
 #datatable_paginate {
 	text-align: center;
