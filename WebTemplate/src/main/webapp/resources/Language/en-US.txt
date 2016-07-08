@@ -2,7 +2,13 @@
 	"Title":										"Smart IPM",
 	"Login":										"LOGIN",
 	"ID":											"ID",
+	"Name":											"Name",
 	"Password":										"Password",
+	"phone":										"전화번호",
+	"mobile":										"휴대폰",
+	"email":										"이메일",
+	"department":									"부서",
+	"position":										"직급",
 	"Signintostartyoursession":						"Sign in to start your session",
 	"Iforgotmypassword":							"I forgot my password",
 	"Registermembership":							"Register a new membership",
@@ -60,6 +66,7 @@
 	"userCertifyReport":							"사용자 인증 정보",
 	"useStatusReport":								"HW, OS, 서비스별 사용현황",
 	"systemUserManagement":							"시스템 사용자 관리",
+	"systemGroup":									"시스템 그룹",
 	"systemGroupManagement":						"시스템 그룹 관리",
 	"systemMenuAuthrity":							"메뉴권한 관리",
 	"dashboardSetting":								"데시보드 설정",
@@ -101,5 +108,6 @@
 	"minute":										"분",
 	"second":										"초",
 	"am":											"오전",
-	"pm":											"오후"
+	"pm":											"오후",
+	"placeOfBusiness":								"사업장"
 }

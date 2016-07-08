@@ -55,5 +55,9 @@ $(document)
                 });
 //trClickEvent 구현 ( Datatable-Essential.js에서 사용하기 위하여 )
 function trClickEvent(clickedTr) {
-    $('#test').text($(clickedTr).children(':eq(1)').text());
+    $('#idTxt').val($(clickedTr).children(':eq(1)').text());
 }
+//datatable_paginate의 위치 조정
+$('#datatable_paginate').css('margin-right','60px');
+//삭제버튼 위치변경
+$('#datatable_paginate').parent().prepend($('.delete-button').parent());

@@ -1,0 +1,14 @@
+.send-rows-room {
+	padding-top:5px;
+    padding-bottom: 5px;
+    border-bottom: 2px;
+    border-bottom-style: inset;
+    border-bottom-color: #b6ddfb;
+}
+.send-row {
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+.send-label {
+	margin-right: 10px;
+}
