@@ -1074,6 +1074,7 @@ function eventLogAjaxCall() {
 				$('#datatable').dataTable().fnDestroy();				
 				$('#datatable').dataTable( {
 				    data: jsonObj.EVENTLOG,
+				    columnDefs: [{ className: "essential-td-left", "targets": [ 4 ] }],
 				    columns: [
 	                   { data: "datetime"},
 	                   { data: "facility"},

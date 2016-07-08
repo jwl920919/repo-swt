@@ -29,6 +29,14 @@ div.box-body {
 	text-align: center;
 }
 
+.essential-td-right {
+	text-align: right !important;
+}
+
+.essential-td-left {
+	text-align: left !important;
+}
+
 .essential-table>thead>tr>td, .essential-table>tbody>tr>th,
 	.essential-table>tfoot>tr>th, .essential-table>tfoot>tr>td {
 	border: 0px !important;

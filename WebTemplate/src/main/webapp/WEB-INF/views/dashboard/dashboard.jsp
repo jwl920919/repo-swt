@@ -566,11 +566,11 @@
 					<table id="datatable" name="eventLog" class="essential-table" style="width: 98%">
 						<thead>
 							<tr>
-								<th width="25%"><%=LanguageHelper.GetLanguage("datetime")%></th>
-								<th width="25%">Facility</th>
-								<th width="25%"><%=LanguageHelper.GetLanguage("type")%></th>
-								<th width="25%"><%=LanguageHelper.GetLanguage("server")%></th>
-								<th width="25%"><%=LanguageHelper.GetLanguage("message")%></th>
+								<th width="160px"><%=LanguageHelper.GetLanguage("datetime")%></th>
+								<th width="150px">Facility</th>
+								<th width="150px"><%=LanguageHelper.GetLanguage("type")%></th>
+								<th width="200px"><%=LanguageHelper.GetLanguage("server")%></th>
+								<th width="*"><%=LanguageHelper.GetLanguage("message")%></th>
 							</tr>
 						</thead>
 						<tbody>
