@@ -1,8 +1,7 @@
-.send-rows-room {
-	padding-top: 5px; padding-bottom : 5px;
-	border-bottom: 2px;
+.send-head, .send-foot {
+	border-bottom: 1px;
 	border-bottom-style: inset;
-	border-bottom-color: #b6ddfb;
+	border-bottom-color: #d2d6de;
 	padding-bottom: 5px;
 }
 
