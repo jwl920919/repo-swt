@@ -49,8 +49,9 @@
 			<div class="box box-primary">
 				<div class="box-body">
 					<form id="send-to-server">
+
 						<!-- 최상단 Line -->
-						<div class="send-rows-room">
+						<div class="send-rows-top">
 							<div class="row">
 								<div class="col-sm-6 send-top-row-left">
 									<label id="add-label" class="selected-label"><%=LanguageHelper.GetLanguage("add")%></label>&nbsp;&nbsp;/&nbsp;&nbsp;
@@ -62,70 +63,66 @@
 								</div>
 							</div>
 						</div>
-						<!-- 아이디,패스워드,이름 -->
-						<div class="send-rows-room">
-							<div id="id-row" class="send-row">
-								<label class="send-label"><%=LanguageHelper.GetLanguage("ID")%></label>
-								<input type="text" id="idTxt" name="idTxt"
-									placeholder="<%=LanguageHelper.GetLanguage("ID")%>">
+						<div class="send-body">
+							<!-- 아이디,패스워드,이름 -->
+							<div class="send-rows-room">
+								<div id="id-row" class="send-row">
+									<label class="send-label"><%=LanguageHelper.GetLanguage("ID")%></label>
+									<input type="text" id="idTxt" name="idTxt">
+									<input type="button" value="<%=LanguageHelper.GetLanguage("checkRepetition")%>" />
+								</div>
+								<div id="pw-row" class="send-row">
+									<label class="send-label"><%=LanguageHelper.GetLanguage("Password")%></label>
+									<input type="password" id="passwordTxt" name="passwordTxt">
+									<label class="send-label"><%=LanguageHelper.GetLanguage("checkPassword")%></label>
+									<input type="password" id="passwordChkTxt" name="passwordChkTxt">
+								</div>
+								<div id="name-row" class="send-row">
+									<label class="send-label"><%=LanguageHelper.GetLanguage("Name")%></label>
+									<input type="text" id="nameTxt" name="nameTxt">
+								</div>
 							</div>
-							<div id="pw-row" class="send-row">
-								<label class="send-label"><%=LanguageHelper.GetLanguage("Password")%></label>
-								<input type="password" id="passwordTxt" name="passwordTxt"
-									placeholder="<%=LanguageHelper.GetLanguage("Password")%>">
+							<!-- 사용자그룹,사업장,부서,직급 -->
+							<div class="send-rows-room">
+								<div id="group-row" class="send-row">
+									<label class="send-label"><%=LanguageHelper.GetLanguage("systemGroup")%></label>
+									<input type="text" id="groupTxt" name="groupTxt">
+								</div>
+								<div id="pob-row" class="send-row">
+									<label class="send-label"><%=LanguageHelper.GetLanguage("placeOfBusiness")%></label>
+									<input type="text" id="placeOfBusinessTxt"
+										name="placeOfBusinessTxt">
+								</div>
+								<div id="dept-row" class="send-row">
+									<label class="send-label"><%=LanguageHelper.GetLanguage("department")%></label>
+									<input type="text" id="departmentTxt" name="departmentTxt">
+								</div>
+								<div id="position-row" class="send-row">
+									<label class="send-label"><%=LanguageHelper.GetLanguage("position")%></label>
+									<input type="text" id="positionTxt" name="positionTxt">
+								</div>
 							</div>
-							<div id="name-row" class="send-row">
-								<label class="send-label"><%=LanguageHelper.GetLanguage("Name")%></label>
-								<input type="text" id="nameTxt" name="nameTxt"
-									placeholder="<%=LanguageHelper.GetLanguage("Name")%>">
-							</div>
-						</div>
-						<!-- 사용자그룹,사업장,부서,직급 -->
-						<div class="send-rows-room">
-							<div id="group-row" class="send-row">
-								<label class="send-label"><%=LanguageHelper.GetLanguage("systemGroup")%></label>
-								<input type="text" id="groupTxt" name="groupTxt"
-									placeholder="<%=LanguageHelper.GetLanguage("systemGroup")%>">
-							</div>
-							<div id="pob-row" class="send-row">
-								<label class="send-label"><%=LanguageHelper.GetLanguage("placeOfBusiness")%></label>
-								<input type="text" id="placeOfBusinessTxt"
-									name="placeOfBusinessTxt"
-									placeholder="<%=LanguageHelper.GetLanguage("placeOfBusiness")%>">
-							</div>
-							<div id="dept-row" class="send-row">
-								<label class="send-label"><%=LanguageHelper.GetLanguage("department")%></label>
-								<input type="text" id="departmentTxt" name="departmentTxt"
-									placeholder="<%=LanguageHelper.GetLanguage("department")%>">
-							</div>
-							<div id="position-row" class="send-row">
-								<label class="send-label"><%=LanguageHelper.GetLanguage("position")%></label>
-								<input type="text" id="positionTxt" name="positionTxt"
-									placeholder="<%=LanguageHelper.GetLanguage("position")%>">
-							</div>
-						</div>
-						<!-- 전화,휴대폰,이메일 -->
-						<div class="send-rows-room">
-							<div id="email-row" class="send-row">
-								<label class="send-label"><%=LanguageHelper.GetLanguage("email")%></label>
-								<input type="text" id="emailTxt" name="emailTxt"
-									placeholder="<%=LanguageHelper.GetLanguage("email")%>">
-							</div>
-							<div id="phone-row" class="send-row">
-								<label class="send-label"><%=LanguageHelper.GetLanguage("phone")%></label>
-								<input type="text" id="phoneTxt" name="phoneTxt"
-									placeholder="<%=LanguageHelper.GetLanguage("phone")%>">
-							</div>
-							<div id="mobile-row" class="send-row">
-								<label class="send-label"><%=LanguageHelper.GetLanguage("mobile")%></label>
-								<input type="text" id="mobileTxt" name="mobileTxt"
-									placeholder="<%=LanguageHelper.GetLanguage("mobile")%>">
+							<!-- 전화,휴대폰,이메일 -->
+							<div class="send-rows-room">
+								<div id="email-row" class="send-row">
+									<label class="send-label"><%=LanguageHelper.GetLanguage("email")%></label>
+									<input type="text" id="emailTxt" name="emailTxt">
+								</div>
+								<div id="phone-row" class="send-row">
+									<label class="send-label"><%=LanguageHelper.GetLanguage("phone")%></label>
+									<input type="text" id="phoneTxt" name="phoneTxt">
+								</div>
+								<div id="mobile-row" class="send-row">
+									<label class="send-label"><%=LanguageHelper.GetLanguage("mobile")%></label>
+									<input type="text" id="mobileTxt" name="mobileTxt">
+								</div>
 							</div>
 						</div>
-						<div id="save-row" style="margin-top: 5px;text-align: right;">
+						<div id="save-row" style="margin-top: 5px; text-align: right;">
 							<button type="submit" class="btn btn-primary" id="save-button"
 								name="save-button"><%=LanguageHelper.GetLanguage("save")%></button>
 						</div>
+
 					</form>
 				</div>
 			</div>

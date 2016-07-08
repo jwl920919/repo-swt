@@ -4,6 +4,8 @@
 	"ID":											"ID",
 	"Name":											"Name",
 	"Password":										"Password",
+	"checkPassword":								"비밀번호확인",
+	"checkRepetition"								"중복체크",
 	"phone":										"전화번호",
 	"mobile":										"휴대폰",
 	"email":										"이메일",

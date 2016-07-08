@@ -1,13 +1,37 @@
-.send-head, .send-foot {
+.send-body {
+	border-top: 1px;
+	border-top-style: solid;
+	border-top-color: #d2d6de;
 	border-bottom: 1px;
-	border-bottom-style: inset;
+	border-bottom-style: solid;
 	border-bottom-color: #d2d6de;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	padding-top: 5px;
 	padding-bottom: 5px;
+	min-height: 416px;
+}
+
+.send-rows-top {
+	margin-bottom: 9px;
+}
+
+.btn {
+	margin-top: 0.15rem;
 }
 
 .send-row {
 	padding-top: 5px;
 	padding-bottom: 5px;
+}
+
+.send-row label:first-child {
+	width:88px;
+}
+
+.send-row label:not(:first-child) {
+	margin-left:10px;
+	width:88px;
 }
 
 .send-label {
@@ -19,19 +43,17 @@
 }
 
 .send-top-row-left {
-	text-align: left;
-	padding-left: 14px;
-	margin-bottom: 5px;
-	margin-top: 9px;
+	 text-align: left;
+    padding-left: 14px;
+    margin-top: 5px;
 }
 
 .send-top-row-right {
 	padding-right: 15px;
-	text-align: right;
-	margin-top: 5px;
-	margin-bottom: 5px;
+    text-align: right;
+    margin-top: -3px;
 }
 
-.hidden-row {
-	display: none;
+#save-button {
+	margin-top: 5px;
 }
