@@ -29,11 +29,11 @@ div.box-body {
 	text-align: center;
 }
 
-.essential-td-right {
+td.essential-td-right {
 	text-align: right !important;
 }
 
-.essential-td-left {
+td.essential-td-left {
 	text-align: left !important;
 }
 
