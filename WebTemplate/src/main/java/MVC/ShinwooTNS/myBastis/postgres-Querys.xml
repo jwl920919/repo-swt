@@ -30,8 +30,8 @@
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
 	<!-- Insert Date : 2016-07-07 -->
 	<!-- Insert User : 이재원 -->
-	<!-- Description : systemUserManagement.jsp 페이지 테이블 행 개수 조회-->
-	<!-- Controller : -->
+	<!-- Description : systemUserManagement.jsp 페이지 테이블 행 개수 조회 -->
+	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
 	<select id="select_SYSTEM_USER_INFO_CONDITIONAL_SEARCH_TOTAL_COUNT"
 		parameterType="hashmap" resultType="Integer">
 		SELECT count(*) AS total 
@@ -44,7 +44,7 @@
 	<!-- Insert Date : 2016-07-07 -->
 	<!-- Insert User : 이재원 -->
 	<!-- Description : systemUserManagement.jsp 페이지 테이블 정보 조회 -->
-	<!-- Controller : -->
+	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
 	<select id="select_SYSTEM_USER_INFO_CONDITIONAL_SEARCH"
 		parameterType="hashmap" resultType="Common.DTO.SYSTEM_USER_INFO_DTO">
 		SELECT
@@ -60,6 +60,23 @@
 		</trim>
 		offset #{startIndex} limit #{length};
 
+	</select>
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-07-11 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : 시스템 유저 그룹 정보 조회 -->
+	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
+	<select id="select_SYSTEM_USER_GROUP_INFO" resultType="Common.DTO.SYSTEM_USER_GROUP_DTO">
+		SELECT site_id,group_id,group_name,group_desc FROM system_user_group;
+	</select>
+	
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-07-11 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : 사업장 정보 조회 -->
+	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
+	<select id="select_SITE_INFO" resultType="Common.DTO.SITE_INFO_DTO">
+		SELECT site_id,site_name,site_code,description FROM site_info;
 	</select>
 </mapper>
 

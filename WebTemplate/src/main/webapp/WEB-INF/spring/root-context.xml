@@ -47,4 +47,20 @@
 	<bean id="userInfoDao" class="Common.DAOImpl.SYSTEM_USER_INFO_Impl">
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
+
+	<bean id="systemUserGroupInfoService" class="Common.ServiceImpl.SYSTEM_USER_GROUP_INFO_Service_Impl">
+		<property name="SYSTEM_USER_GROUP_INFO_dao" ref="systemUserGroupInfoDao" />
+	</bean>
+
+	<bean id="systemUserGroupInfoDao" class="Common.DAOImpl.SYSTEM_USER_GROUP_INFO_Impl">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+
+	<bean id="siteInfoService" class="Common.ServiceImpl.SITE_INFO_Service_Impl">
+		<property name="SITE_INFO_dao" ref="siteInfoDao" />
+	</bean>
+
+	<bean id="siteInfoDao" class="Common.DAOImpl.SITE_INFO_Impl">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
 </beans>
