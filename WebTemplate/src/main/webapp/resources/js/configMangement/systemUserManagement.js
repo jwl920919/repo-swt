@@ -55,13 +55,28 @@ $(document)
                 });
 // trClickEvent 구현 ( Datatable-Essential.js에서 사용하기 위하여 )
 function trClickEvent(clickedTr) {
-    $('#idTxt').val($(clickedTr).children(':eq(1)').text());
+    var id = $(clickedTr).children(':eq(1)').text();
+    $('#idTxt').val(id);
     $('#modify-label').addClass("selected-label").siblings().removeClass(
             "selected-label");
     $('#idTxt').attr("readOnly", true);
     $('#id-check-button').addClass("hidden");
     $('#passwordTxt').val('');
     $('#passwordChkTxt').val('');
+
+    var jObj = Object();
+    jObj.user_id = id;
+    $.ajax({
+        url : "/configManagement/updateUserInfo",
+        type : "POST",
+        data : JSON.stringify(jObj),
+        dataType : "json",
+        
+    }).done(function() {
+       console.log('done'); 
+    }).fail(function() {
+        console.log('fail');
+    });
 }
 // datatable_paginate의 위치 조정
 $('#datatable_paginate').css('margin-right', '60px');

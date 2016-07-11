@@ -24,4 +24,9 @@ public class SYSTEM_USER_INFO_Service_Impl implements SYSTEM_USER_INFO_Service_I
 	public int select_SYSTEM_USER_INFO_CONDITIONAL_SEARCH_TOTAL_COUNT(HashMap<String, Object> parameters) {
 		return userInfoDao.select_SYSTEM_USER_INFO_CONDITIONAL_SEARCH_TOTAL_COUNT(parameters);
 	}
+
+	@Override
+	public SYSTEM_USER_INFO_DTO select_SYSTEM_USER_INFO_ONE_SEARCH(HashMap<String, Object> parameters) {
+		return userInfoDao.select_SYSTEM_USER_INFO_ONE_SEARCH(parameters);
+	}
 }

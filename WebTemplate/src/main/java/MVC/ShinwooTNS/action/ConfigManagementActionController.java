@@ -19,13 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import Common.DTO.AjaxResult;
-import Common.DTO.SITE_INFO_DTO;
-import Common.DTO.SYSTEM_USER_GROUP_DTO;
 import Common.DTO.SYSTEM_USER_INFO_DTO;
-import Common.ServiceInterface.SITE_INFO_Service_interface;
-import Common.ServiceInterface.SYSTEM_USER_GROUP_INFO_Service_interface;
 import Common.ServiceInterface.SYSTEM_USER_INFO_Service_Interface;
 
 @Controller
@@ -36,31 +33,16 @@ public class ConfigManagementActionController {
 	private static final Logger logger = LoggerFactory.getLogger(ConfigManagementActionController.class);
 	private Gson gson = new Gson();
 	private AjaxResult result = new AjaxResult();
-
 	@Autowired
 	private SYSTEM_USER_INFO_Service_Interface userInfoService;
-	@Autowired
-	private SYSTEM_USER_GROUP_INFO_Service_interface userGroupInfoService;
-	@Autowired
-	private SITE_INFO_Service_interface siteInfoService;
-	
+	//region getSystemUserManagementDatatableDatas
 	private final static String[] USER_COLUMNS = { "user_id", "user_name" };
-
 	@RequestMapping(value = "getSystemUserManagementDatatableDatas", method = RequestMethod.POST)
 	public void getSystemUserManagementDatatableDatas(Locale locale, Model model, HttpServletRequest request,
 			HttpServletResponse response) {
 		logger.info("getSystemUserManagementDatatableDatas : " + request.getLocalAddr());
 		System.out.println("getSystemUserManagementDatatableDatas Controller");
 		try {
-			List<SYSTEM_USER_GROUP_DTO> test =userGroupInfoService.select_SYSTEM_USER_GROUP_INFO();
-			List<SITE_INFO_DTO> test2 =siteInfoService.select_SITE_INFO();
-			
-			for(SYSTEM_USER_GROUP_DTO sugd : test) {
-				System.out.println(sugd);
-			}
-			for(SITE_INFO_DTO sid : test2) {
-				System.out.println(sid);
-			}
 			
 			String orderColumn = USER_COLUMNS[Integer.parseInt(request.getParameter("order[0][column]")) - 1],
 					orderType = request.getParameter("order[0][dir]"),
@@ -112,4 +94,22 @@ public class ConfigManagementActionController {
 			logger.error(e.getMessage());
 		}
 	}
+	//endregion
+	
+	//region updateUserInfo
+	@RequestMapping(value = "updateUserInfo", method = RequestMethod.POST)
+	public void updateUserInfo(Locale locale, Model model, HttpServletRequest request,
+			HttpServletResponse response) {
+		logger.info("updateUserInfo : " + request.getLocalAddr());
+		System.out.println("updateUserInfo Controller");
+		
+		try {
+			java.lang.reflect.Type listType = new TypeToken<HashMap<String,Object>>() {}.getType();
+			HashMap<String,Object> map = gson.fromJson(request.getReader(), listType);
+			System.out.println(userInfoService.select_SYSTEM_USER_INFO_ONE_SEARCH(map));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	}
+	//endregion
 }
