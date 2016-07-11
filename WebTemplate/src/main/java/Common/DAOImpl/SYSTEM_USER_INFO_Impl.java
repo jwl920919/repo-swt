@@ -38,6 +38,18 @@ public class SYSTEM_USER_INFO_Impl extends SqlSessionDaoSupport implements SYSTE
 		}
 		return total;
 	}
+
+	@Override
+	public Common.DTO.SYSTEM_USER_INFO_DTO select_SYSTEM_USER_INFO_ONE_SEARCH(HashMap<String, Object> parameters) {
+		Common.DTO.SYSTEM_USER_INFO_DTO systemUserInfo = null;
+		try {
+			System.out.println(getSqlSession());
+			systemUserInfo = getSqlSession().selectOne("UI_Query.select_SYSTEM_USER_INFO_ONE_SEARCH",parameters);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+		return systemUserInfo;
+	}
 	
 	
 

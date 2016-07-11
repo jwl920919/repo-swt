@@ -20,7 +20,10 @@
 .send-rows-top {
 	margin-bottom: 9px;
 }
-
+.send-select {
+	width: 174px;
+	height: 28px;
+}
 #delete-button, #add-button, #modify-button {
 	margin-top: 0.35rem;
 }

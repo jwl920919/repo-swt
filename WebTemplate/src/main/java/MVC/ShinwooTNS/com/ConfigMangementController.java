@@ -8,14 +8,18 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
 
 import Common.DTO.AjaxResult;
+import Common.ServiceInterface.SITE_INFO_Service_interface;
+import Common.ServiceInterface.SYSTEM_USER_GROUP_INFO_Service_interface;
 
 @Controller
 @RequestMapping(value = "/configManagement/")
@@ -27,7 +31,10 @@ public class ConfigMangementController {
 	private Gson gson = new Gson();
 	private AjaxResult result = new AjaxResult();
 
-	
+	@Autowired
+	private SYSTEM_USER_GROUP_INFO_Service_interface userGroupInfoService;
+	@Autowired
+	private SITE_INFO_Service_interface siteInfoService;
 	
 	@RequestMapping(value = "systemUserManagement", method = RequestMethod.GET)
 	public String Main(Locale locale, Model model, HttpServletRequest request, HttpServletResponse response) {
@@ -41,5 +48,6 @@ public class ConfigMangementController {
 		
 		return parentPath + "systemUserManagement";
 	}
+	
 	
 }
