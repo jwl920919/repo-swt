@@ -31,7 +31,9 @@ changeframe = function(url, acticeid, masterKey, subKey) {
 					//ContentHeader 변경
 					$("#contentHeaderDepth1li").attr('style', 'display: display;');
 					$("#contentHeaderDepth2li").attr('style', 'display: none;');
+
 					$("#contentHeaderDepth1").text(getLanguage(masterKey));
+					$("#contentTitle").text(getLanguage(masterKey));
 
 					// 데시보드가 아닌 다른 메뉴의 ul테그 닫기
 					var vUlMenu = $("[name='ulMenu']");
@@ -55,6 +57,8 @@ changeframe = function(url, acticeid, masterKey, subKey) {
 						$("#contentHeaderDepth2li").attr('style', 'display: display;');
 						$("#contentHeaderDepth1").text(getLanguage(masterKey));
 						$("#contentHeaderDepth2").text(getLanguage(subKey));
+						$("#contentTitle").text(getLanguage(subKey));
+					    $("#contentTitleSmall").text("");
 					}
 					if (acticeid != '') {
 						// 데시보드가 아닌 다른 메뉴 선택 시 데시보드 Polling데이터 조회 기능 정지
