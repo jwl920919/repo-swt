@@ -1,7 +1,6 @@
 package Common.DTO;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 public class SYSTEM_USER_INFO_DTO {
 	private int site_id,user_seq,group_id;

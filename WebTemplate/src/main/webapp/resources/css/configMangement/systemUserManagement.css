@@ -1,3 +1,7 @@
+.hidden {
+	display: none;
+}
+
 .send-body {
 	border-top: 1px;
 	border-top-style: solid;
@@ -7,9 +11,10 @@
 	border-bottom-color: #d2d6de;
 	margin-top: 5px;
 	margin-bottom: 5px;
-	padding-top: 5px;
+	padding-top: 9px;
 	padding-bottom: 5px;
 	min-height: 416px;
+	
 }
 
 .send-rows-top {
@@ -22,7 +27,7 @@
 
 .send-row {
 	padding-top: 5px;
-	padding-bottom: 5px;
+	padding-bottom: 7px;
 }
 
 .send-row label:first-child {
@@ -54,6 +59,7 @@
 
 .send-label {
 	margin-right: 10px;
+	margin-left: 15px;
 }
 
 .selected-label {

@@ -53,22 +53,34 @@ $(document)
                         d_wrap.prepend(d_filter);
                     });
                 });
-//trClickEvent 구현 ( Datatable-Essential.js에서 사용하기 위하여 )
+// trClickEvent 구현 ( Datatable-Essential.js에서 사용하기 위하여 )
 function trClickEvent(clickedTr) {
     $('#idTxt').val($(clickedTr).children(':eq(1)').text());
-    $('#modify-label').addClass("selected-label").siblings().removeClass("selected-label");
-    $('#idTxt').attr("readOnly",true);
+    $('#modify-label').addClass("selected-label").siblings().removeClass(
+            "selected-label");
+    $('#idTxt').attr("readOnly", true);
+    $('#id-check-button').addClass("hidden");
+    $('#passwordTxt').val('');
+    $('#passwordChkTxt').val('');
 }
-//datatable_paginate의 위치 조정
-$('#datatable_paginate').css('margin-right','60px');
-//삭제버튼 위치변경
+// datatable_paginate의 위치 조정
+$('#datatable_paginate').css('margin-right', '60px');
+// 삭제버튼 위치변경
 $('#datatable_paginate').parent().prepend($('#delete-button').parent());
 
-$('#add-button').click(function() {
-    $('#add-label').addClass("selected-label").siblings().removeClass("selected-label");
-    $('#idTxt').attr("readOnly",false);
-    var sendDataFileds =  $('.send-body>input');
-    for ( var sendDataFiled in sendDataFileds) {
-        
-    }
-});
+$('#add-button').click(
+        function() {
+            $('#add-label').addClass("selected-label").siblings().removeClass(
+                    "selected-label");
+            $('#idTxt').attr("readOnly", false);
+            $('#id-check-button').removeClass("hidden");
+            $('#idTxt').val('');
+            $('#passwordTxt').val('');
+            $('#passwordChkTxt').val('');
+            $('#nameTxt').val('');
+            $('#departmentTxt').val('');
+            $('#positionTxt').val('');
+            $('#emailTxt').val('');
+            $('#phoneTxt').val('');
+            $('#mobileTxt').val('');
+        });
