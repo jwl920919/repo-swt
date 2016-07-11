@@ -93,7 +93,7 @@ $(document).ready(function() {
 	$("#divVersion").append("<b>Version</b> 1.0.0");
 	
 	$("#contentTitle").text(getLanguage("dashboard"));
-    $("#contentTitleSmall").text("Control panel");
+    //$("#contentTitleSmall").text("Control panel");
  	changeframe("/dashboard/dashboard", 'M01', 'dashboard', '');
 });
 </script>
@@ -366,7 +366,7 @@ $(document).ready(function() {
 			<!-- Content Header (Page header) -->
 			<section class="content-header">
 			<h1>
-				<LABEL id="contentTitle">Dashboard</LABEL> <small><LABEL id="contentTitleSmall">Control panel</LABEL></small>
+				<LABEL id="contentTitle">Dashboard</LABEL> <small><LABEL id="contentTitleSmall"></LABEL></small>
 			</h1>
 			<ol class="breadcrumb">
 				<li>

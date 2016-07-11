@@ -1,9 +1,12 @@
 package MVC.ShinwooTNS.action;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,15 +20,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonWriter;
 
 import Common.DTO.AjaxResult;
-import Common.DTO.SITE_INFO_DTO;
-import Common.DTO.SYSTEM_USER_GROUP_DTO;
 import Common.DTO.SYSTEM_USER_INFO_DTO;
-import Common.ServiceInterface.SITE_INFO_Service_interface;
-import Common.ServiceInterface.SYSTEM_USER_GROUP_INFO_Service_interface;
 import Common.ServiceInterface.SYSTEM_USER_INFO_Service_Interface;
 
 @Controller
@@ -36,14 +38,9 @@ public class ConfigManagementActionController {
 	private static final Logger logger = LoggerFactory.getLogger(ConfigManagementActionController.class);
 	private Gson gson = new Gson();
 	private AjaxResult result = new AjaxResult();
-
 	@Autowired
 	private SYSTEM_USER_INFO_Service_Interface userInfoService;
-	@Autowired
-	private SYSTEM_USER_GROUP_INFO_Service_interface userGroupInfoService;
-	@Autowired
-	private SITE_INFO_Service_interface siteInfoService;
-	
+	// region getSystemUserManagementDatatableDatas
 	private final static String[] USER_COLUMNS = { "user_id", "user_name" };
 
 	@RequestMapping(value = "getSystemUserManagementDatatableDatas", method = RequestMethod.POST)
@@ -52,16 +49,7 @@ public class ConfigManagementActionController {
 		logger.info("getSystemUserManagementDatatableDatas : " + request.getLocalAddr());
 		System.out.println("getSystemUserManagementDatatableDatas Controller");
 		try {
-			List<SYSTEM_USER_GROUP_DTO> test =userGroupInfoService.select_SYSTEM_USER_GROUP_INFO();
-			List<SITE_INFO_DTO> test2 =siteInfoService.select_SITE_INFO();
-			
-			for(SYSTEM_USER_GROUP_DTO sugd : test) {
-				System.out.println(sugd);
-			}
-			for(SITE_INFO_DTO sid : test2) {
-				System.out.println(sid);
-			}
-			
+
 			String orderColumn = USER_COLUMNS[Integer.parseInt(request.getParameter("order[0][column]")) - 1],
 					orderType = request.getParameter("order[0][dir]"),
 					searchValue = request.getParameter("search[value]");
@@ -112,4 +100,37 @@ public class ConfigManagementActionController {
 			logger.error(e.getMessage());
 		}
 	}
+	// endregion
+
+	// region updateUserInfo
+	@RequestMapping(value = "updateUserInfo", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+	public @ResponseBody Object updateUserInfo(HttpServletRequest request) {
+		logger.info("updateUserInfo : " + request.getLocalAddr());
+		System.out.println("updateUserInfo Controller");
+		try {
+			SYSTEM_USER_INFO_DTO systemUserInfo = userInfoService.select_SYSTEM_USER_INFO_ONE_SEARCH(
+					gson.fromJson(request.getReader(), new TypeToken<HashMap<String, Object>>() {
+					}.getType()));
+			Map<String, Object> mData  = new HashMap<String, Object>();
+			mData.put("user_name", systemUserInfo.getUser_name());
+			mData.put("group_id", systemUserInfo.getGroup_id());
+			mData.put("site_id", systemUserInfo.getSite_id());
+			mData.put("dept_name", systemUserInfo.getDept_name());
+			mData.put("position_name", systemUserInfo.getPosition_name());
+			mData.put("email", systemUserInfo.getEmail());
+			mData.put("phone_num", systemUserInfo.getPhone_num());
+			mData.put("mobile_num", systemUserInfo.getMobile_num());
+			
+			result.result = true;
+			List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+			list.add(mData);
+			result.data =list;
+			return gson.toJson(result);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			result.result = false;
+			return gson.toJson(result);
+		}
+	}
+	// endregion
 }

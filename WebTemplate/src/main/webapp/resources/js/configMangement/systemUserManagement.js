@@ -55,13 +55,38 @@ $(document)
                 });
 // trClickEvent 구현 ( Datatable-Essential.js에서 사용하기 위하여 )
 function trClickEvent(clickedTr) {
-    $('#idTxt').val($(clickedTr).children(':eq(1)').text());
+    var user_id = $(clickedTr).children(':eq(1)').text();
+    $('#idTxt').val(user_id);
     $('#modify-label').addClass("selected-label").siblings().removeClass(
             "selected-label");
     $('#idTxt').attr("readOnly", true);
     $('#id-check-button').addClass("hidden");
     $('#passwordTxt').val('');
     $('#passwordChkTxt').val('');
+    var jObj = Object();
+    jObj.user_id = user_id;
+    $.ajax({
+        url : "/configManagement/updateUserInfo",
+        type : "POST",
+        data : JSON.stringify(jObj),
+        dataType : "text",
+        success : function(data) {
+            console.log(eval("(" + data + ')'));
+            var jsonObj = eval("(" + data + ')');
+            if (jsonObj.result == true) {
+                $.each(jsonObj.data, function(index, obj) {
+                    $('#nameTxt').val(obj.user_name);
+                    $('#groupSel').val(obj.group_id);
+                    $('#placeOfBusinessSel').val(obj.site_id);
+                    $('#departmentTxt').val(obj.dept_name);
+                    $('#positionTxt').val(obj.position_name);
+                    $('#emailTxt').val(obj.email);
+                    $('#phoneTxt').val(obj.phone_num);
+                    $('#mobileTxt').val(obj.mobile_num);
+                });
+            }
+        }
+    })
 }
 // datatable_paginate의 위치 조정
 $('#datatable_paginate').css('margin-right', '60px');
@@ -78,6 +103,8 @@ $('#add-button').click(
             $('#passwordTxt').val('');
             $('#passwordChkTxt').val('');
             $('#nameTxt').val('');
+            $('#groupSel').val(1);
+            $('#placeOfBusinessSel').val(1);
             $('#departmentTxt').val('');
             $('#positionTxt').val('');
             $('#emailTxt').val('');

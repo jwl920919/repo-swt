@@ -59,7 +59,18 @@
 			<if test="orderType == 'desc'"> DESC </if>
 		</trim>
 		offset #{startIndex} limit #{length};
-
+	</select>
+	
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-07-11 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : 유저 정보 조회 (Only Record One) -->
+	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
+	<select id="select_SYSTEM_USER_INFO_ONE_SEARCH"
+		parameterType="hashmap" resultType="Common.DTO.SYSTEM_USER_INFO_DTO">
+		SELECT
+		site_id,user_seq,group_id,user_id,user_pw,user_name,dept_name,position_name,phone_num,mobile_num,email,mysingle_yn,insert_date,modify_date
+		FROM SYSTEM_USER_INFO WHERE user_id=#{user_id};
 	</select>
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
 	<!-- Insert Date : 2016-07-11 -->

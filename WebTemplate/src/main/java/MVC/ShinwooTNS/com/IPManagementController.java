@@ -21,6 +21,7 @@ import Common.DTO.AjaxResult;
 public class IPManagementController {
 	private final static java.text.SimpleDateFormat SIMPLE_DATE_FORMAT = new java.text.SimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss");
+	private final static String parentPath = "/ipManagement/";
 	private static final Logger logger = LoggerFactory.getLogger(PageController.class);
 	private Gson gson = new Gson();		
 	private AjaxResult result = new AjaxResult();
@@ -36,7 +37,7 @@ public class IPManagementController {
 			return "redirect:login";
 
 		
-		return "staticIPStatus";
+		return parentPath + "staticIPStatus";
 	}
 	
 	@RequestMapping(value = "staticIPSetting", method = RequestMethod.GET)
@@ -50,6 +51,6 @@ public class IPManagementController {
 			return "redirect:login";
 
 		
-		return "staticIPSetting";
+		return parentPath + "staticIPSetting";
 	}
 }
