@@ -118,5 +118,10 @@
 	"save":											"저장",
 	"loading":										"조회 중입니다.",
 	"processing":									"처리 중입니다.",
-	"search":										"검색 중입니다."
+	"searching":									"검색 중입니다.",
+	"search":										"검색",
+	"desctription":									"설명",
+	"comment":										"설명",
+	"site":											"사업장",
+	"siteName":										"사업장명"
 }
