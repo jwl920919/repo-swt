@@ -68,7 +68,6 @@
 			<div class="box box-primary">
 				<div class="box-body">
 					<form id="send-to-server">
-
 						<!-- 최상단 Line -->
 						<div class="send-rows-top">
 							<div class="row">
@@ -154,12 +153,13 @@
 									<input type="text" id="mobileTxt" name="mobileTxt">
 								</div>
 							</div>
+							<label id='pw-state-label' class='pw-state-label'></label>
 						</div>
 						<div id="save-row" style="margin-top: 5px; text-align: right;">
-							<button type="submit" class="btn btn-primary" id="save-button"
+							<button type="button" class="btn btn-primary" id="save-button"
 								name="save-button"><%=LanguageHelper.GetLanguage("save")%></button>
 						</div>
-
+						
 					</form>
 				</div>
 			</div>

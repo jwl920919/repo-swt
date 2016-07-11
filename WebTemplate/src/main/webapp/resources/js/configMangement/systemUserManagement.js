@@ -53,8 +53,15 @@ $(document)
                         d_wrap.prepend(d_filter);
                     });
                 });
+// switching [ add(1), modify(2) ]
+var sw = 1;
+function switching(num) {
+    sw = num;
+    console.log(sw);
+}
 // trClickEvent 구현 ( Datatable-Essential.js에서 사용하기 위하여 )
 function trClickEvent(clickedTr) {
+    switching(2);
     var user_id = $(clickedTr).children(':eq(1)').text();
     $('#idTxt').val(user_id);
     $('#modify-label').addClass("selected-label").siblings().removeClass(
@@ -66,12 +73,11 @@ function trClickEvent(clickedTr) {
     var jObj = Object();
     jObj.user_id = user_id;
     $.ajax({
-        url : "/configManagement/updateUserInfo",
+        url : "/configManagement/getUserInfo",
         type : "POST",
         data : JSON.stringify(jObj),
         dataType : "text",
         success : function(data) {
-            console.log(eval("(" + data + ')'));
             var jsonObj = eval("(" + data + ')');
             if (jsonObj.result == true) {
                 $.each(jsonObj.data, function(index, obj) {
@@ -88,6 +94,7 @@ function trClickEvent(clickedTr) {
         }
     })
 }
+
 // datatable_paginate의 위치 조정
 $('#datatable_paginate').css('margin-right', '60px');
 // 삭제버튼 위치변경
@@ -95,6 +102,7 @@ $('#datatable_paginate').parent().prepend($('#delete-button').parent());
 
 $('#add-button').click(
         function() {
+            switching(1);
             $('#add-label').addClass("selected-label").siblings().removeClass(
                     "selected-label");
             $('#idTxt').attr("readOnly", false);
@@ -111,3 +119,113 @@ $('#add-button').click(
             $('#phoneTxt').val('');
             $('#mobileTxt').val('');
         });
+
+var pwd1 = $("#passwordTxt");
+var pwd2 = $("#passwordChkTxt");
+$(pwd1).change(function() {
+    console.log(passwordCheck());
+});
+$(pwd2).change(function() {
+    console.log(passwordCheck());
+});
+
+var desc = [ "8자리 ~ 20자리 이내로 입력해주세요.", "비밀번호는 공백없이 입력해주세요.",
+        "영문,숫자, 특수문자를 혼합하여 입력해주세요.", "사용가능한 패스워드입니다.", "패스워드가 일치하지 않습니다." ];
+function passwordCheck() {
+    var validate = passwordValidation();
+    var sameCheck = samePasswordCheck();
+    if (pwd1.val() == '' && pwd2.val() == '') {
+        $('#pw-state-label').addClass("hidden");
+        return true;
+    } else if (validate.stat && sameCheck) {
+        $('#pw-state-label').removeClass("hidden");
+        $('#pw-state-label').css('color', "#3c8dbc");
+        $('#pw-state-label').text(desc[validate.desc]);
+        return true;
+    } else {
+        $('#pw-state-label').removeClass("hidden");
+        $('#pw-state-label').css('color', "#f72929");
+        if (validate.desc == 3)
+            $('#pw-state-label').text(desc[validate.desc + 1]);
+        else
+            $('#pw-state-label').text(desc[validate.desc]);
+        return false;
+    }
+}
+
+function passwordValidation() {
+    var pw = $(pwd1).val();
+    var num = pw.search(/[0-9]/g);
+    var eng = pw.search(/[a-z]/ig);
+    var spe = pw.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi);
+    var obj = new Object();
+    if (pw.length < 8 || pw.length > 20) {
+        obj.stat = false;
+        obj.desc = 0;
+    } else if (pw.search(/₩s/) != -1) {
+        obj.stat = false;
+        obj.desc = 1;
+    } else if (num < 0 || eng < 0 || spe < 0) {
+        obj.stat = false;
+        obj.desc = 2;
+    } else {
+        obj.stat = true;
+        obj.desc = 3;
+    }
+    return obj;
+
+}
+
+function samePasswordCheck() {
+    if ($(pwd1).val() == $(pwd2).val()) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+$('#save-button').click(function() {
+    switch (sw) {
+    case 1:
+        break;
+    case 2:
+        if (passwordCheck()) {
+            var jObj = Object();
+            jObj.user_id = $('#idTxt').val();
+            jObj.user_pw = $('#passwordTxt').val();
+            jObj.user_name = $('#nameTxt').val();
+            jObj.group_id = $('#groupSel').val();
+            jObj.site_id = $('#placeOfBusinessSel').val();
+            jObj.dept_name = $('#departmentTxt').val();
+            jObj.position_name = $('#positionTxt').val();
+            jObj.email = $('#emailTxt').val();
+            jObj.phone_num = $('#phoneTxt').val();
+            jObj.mobile_num = $('#mobileTxt').val();
+            console.log(jObj);
+            $.ajax({
+                url : "/configManagement/updateUserInfo",
+                type : "POST",
+                data : JSON.stringify(jObj),
+                dataType : "text",
+                success : function(data) {
+                    // var jsonObj = eval("(" + data + ')');
+                    // if (jsonObj.result == true) {
+                    // $.each(jsonObj.data, function(index, obj) {
+                    // $('#nameTxt').val(obj.user_name);
+                    // $('#groupSel').val(obj.group_id);
+                    // $('#placeOfBusinessSel').val(obj.site_id);
+                    // $('#departmentTxt').val(obj.dept_name);
+                    // $('#positionTxt').val(obj.position_name);
+                    // $('#emailTxt').val(obj.email);
+                    // $('#phoneTxt').val(obj.phone_num);
+                    // $('#mobileTxt').val(obj.mobile_num);
+                    // });
+                    // }
+                }
+            })
+        } else {
+            console.log("패스워드를 확인하세요");
+        }
+        break;
+    }
+});
