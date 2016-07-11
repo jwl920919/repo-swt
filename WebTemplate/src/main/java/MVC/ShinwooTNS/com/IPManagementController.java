@@ -17,6 +17,7 @@ import com.google.gson.Gson;
 import Common.DTO.AjaxResult;
 
 @Controller
+@RequestMapping(value = "/ipManagement/")
 public class IPManagementController {
 	private final static java.text.SimpleDateFormat SIMPLE_DATE_FORMAT = new java.text.SimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss");
@@ -24,7 +25,7 @@ public class IPManagementController {
 	private Gson gson = new Gson();		
 	private AjaxResult result = new AjaxResult();
 	
-	@RequestMapping(value = "/ipManagement/staticIPStatus", method = RequestMethod.GET)
+	@RequestMapping(value = "staticIPStatus", method = RequestMethod.GET)
 	public String staticIPStatus(Locale locale, Model model, HttpServletRequest request, HttpServletResponse response) {
 		logger.info("staticIPStatus : " + request.getLocalAddr());
 		System.out.println("IPManagenentController Controller");
@@ -35,10 +36,10 @@ public class IPManagementController {
 			return "redirect:login";
 
 		
-		return "/ipManagement/staticIPStatus";
+		return "staticIPStatus";
 	}
 	
-	@RequestMapping(value = "/ipManagement/staticIPSetting", method = RequestMethod.GET)
+	@RequestMapping(value = "staticIPSetting", method = RequestMethod.GET)
 	public String staticIPSetting(Locale locale, Model model, HttpServletRequest request, HttpServletResponse response) {
 		logger.info("staticIPSetting : " + request.getLocalAddr());
 		System.out.println("IPManagenentController Controller");
@@ -49,6 +50,6 @@ public class IPManagementController {
 			return "redirect:login";
 
 		
-		return "/ipManagement/staticIPSetting";
+		return "staticIPSetting";
 	}
 }

@@ -118,5 +118,10 @@
 	"save":											"저장"
 	"loading":										"Loading.",
 	"processing":									"Processing.",
-	"search":										"Search."
+	"searching":									"Searching.",
+	"search":										"Search",
+	"desctription":									"Desctription",
+	"comment":										"Comment",
+	"site":											"Site",
+	"siteName":										"Site Name"
 }
