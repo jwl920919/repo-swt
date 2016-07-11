@@ -34,4 +34,9 @@ public class SYSTEM_USER_INFO_Service_Impl implements SYSTEM_USER_INFO_Service_I
 	public int update_SYSTEM_USER_INFO_ONE_RECORD(HashMap<String, Object> parameters) {
 		return userInfoDao.update_SYSTEM_USER_INFO_ONE_RECORD(parameters);
 	}
+
+	@Override
+	public int insert_SYSTEM_USER_INFO_ONE_RECORD(HashMap<String, Object> parameters) {
+		return userInfoDao.insert_SYSTEM_USER_INFO_ONE_RECORD(parameters);
+	}
 }

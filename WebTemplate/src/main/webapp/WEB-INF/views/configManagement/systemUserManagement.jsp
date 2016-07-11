@@ -90,6 +90,7 @@
 										type="button" class="btn-info id-check-button"
 										id="id-check-button"
 										value="<%=LanguageHelper.GetLanguage("checkRepetition")%>" />
+									<label id='id-state-label' class='id-state-label'></label>
 								</div>
 								<div id="pw-row" class="send-row">
 									<label class="send-label"><%=LanguageHelper.GetLanguage("Password")%></label>
@@ -97,6 +98,7 @@
 									<label class="send-label"><%=LanguageHelper.GetLanguage("checkPassword")%></label>
 									<input type="password" id="passwordChkTxt"
 										name="passwordChkTxt">
+										<label id='pw-state-label' class='pw-state-label'></label>
 								</div>
 								<div id="name-row" class="send-row">
 									<label class="send-label"><%=LanguageHelper.GetLanguage("Name")%></label>
@@ -119,7 +121,8 @@
 								</div>
 								<div id="pob-row" class="send-row">
 									<label class="send-label"><%=LanguageHelper.GetLanguage("placeOfBusiness")%></label>
-									<select class="send-select" id="placeOfBusinessSel" name="placeOfBusinessSel">
+									<select class="send-select" id="placeOfBusinessSel"
+										name="placeOfBusinessSel">
 										<%
 											for (SITE_INFO_DTO siteInfo : siteInfoList) {
 										%>
@@ -153,13 +156,13 @@
 									<input type="text" id="mobileTxt" name="mobileTxt">
 								</div>
 							</div>
-							<label id='pw-state-label' class='pw-state-label'></label>
+							
 						</div>
 						<div id="save-row" style="margin-top: 5px; text-align: right;">
 							<button type="button" class="btn btn-primary" id="save-button"
 								name="save-button"><%=LanguageHelper.GetLanguage("save")%></button>
 						</div>
-						
+
 					</form>
 				</div>
 			</div>

@@ -105,7 +105,7 @@ public class ConfigManagementActionController {
 	}
 	// endregion
 
-	// region updateUserInfo
+	// region getUserInfo
 	@RequestMapping(value = "getUserInfo", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object getUserInfo(HttpServletRequest request) {
 		logger.info("getUserInfo : " + request.getLocalAddr());
@@ -114,7 +114,7 @@ public class ConfigManagementActionController {
 			SYSTEM_USER_INFO_DTO systemUserInfo = userInfoService.select_SYSTEM_USER_INFO_ONE_SEARCH(
 					gson.fromJson(request.getReader(), new TypeToken<HashMap<String, Object>>() {
 					}.getType()));
-			Map<String, Object> mData  = new HashMap<String, Object>();
+			Map<String, Object> mData = new HashMap<String, Object>();
 			mData.put("user_name", systemUserInfo.getUser_name());
 			mData.put("group_id", systemUserInfo.getGroup_id());
 			mData.put("site_id", systemUserInfo.getSite_id());
@@ -123,11 +123,11 @@ public class ConfigManagementActionController {
 			mData.put("email", systemUserInfo.getEmail());
 			mData.put("phone_num", systemUserInfo.getPhone_num());
 			mData.put("mobile_num", systemUserInfo.getMobile_num());
-			
+
 			result.result = true;
 			List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 			list.add(mData);
-			result.data =list;
+			result.data = list;
 			return gson.toJson(result);
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -135,15 +135,16 @@ public class ConfigManagementActionController {
 			return gson.toJson(result);
 		}
 	}
-	// endregion 
-	
-	//region updateUserInfo
+	// endregion
+
+	// region updateUserInfo
 	@RequestMapping(value = "updateUserInfo", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object updateUserInfo(HttpServletRequest request) {
 		logger.info("updateUserInfo : " + request.getLocalAddr());
 		try {
-			Map map = gson.fromJson(request.getReader(), new TypeToken<HashMap<String, Object>>() {}.getType());
-			HashMap<String,Object> typeCastMap = new HashMap<>();
+			Map map = gson.fromJson(request.getReader(), new TypeToken<HashMap<String, Object>>() {
+			}.getType());
+			HashMap<String, Object> typeCastMap = new HashMap<>();
 			typeCastMap.put("user_pw", map.get("user_pw"));
 			typeCastMap.put("mobile_num", map.get("mobile_num"));
 			typeCastMap.put("user_id", map.get("user_id"));
@@ -154,14 +155,75 @@ public class ConfigManagementActionController {
 			typeCastMap.put("dept_name", map.get("dept_name"));
 			typeCastMap.put("phone_num", map.get("phone_num"));
 			typeCastMap.put("email", map.get("email"));
-			userInfoService.update_SYSTEM_USER_INFO_ONE_RECORD(typeCastMap);
-			result.result = true;
+			int cnt = userInfoService.update_SYSTEM_USER_INFO_ONE_RECORD(typeCastMap);
+			if (cnt > 0)
+				result.result = true;
+			else
+				result.result = false;
 			return gson.toJson(result);
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return null;
 	}
-	//endregion
+	// endregion
+
+	// region checkId
+	@RequestMapping(value = "checkId", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+	public @ResponseBody Object checkId(HttpServletRequest request) {
+		logger.info("checkId : " + request.getLocalAddr());
+		try {
+			HashMap<String, Object> map = gson.fromJson(request.getReader(), new TypeToken<HashMap<String, Object>>() {
+			}.getType());
+			SYSTEM_USER_INFO_DTO systemUserInfo = userInfoService.select_SYSTEM_USER_INFO_ONE_SEARCH(map);
+			if (systemUserInfo == null) {
+				if (map.get("user_id").toString().equals(""))
+					result.result = false;
+				else
+					result.result = true;
+			} else {
+				result.result = false;
+			}
+			return gson.toJson(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+	// endregion
+
+	// region checkId
+	@RequestMapping(value = "addUser", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+	public @ResponseBody Object addUser(HttpServletRequest request) {
+		logger.info("addUser : " + request.getLocalAddr());
+		try {
+			Map map = gson.fromJson(request.getReader(), new TypeToken<HashMap<String, Object>>() {
+			}.getType());
+			HashMap<String, Object> typeCastMap = new HashMap<>();
+			typeCastMap.put("user_pw", map.get("user_pw"));
+			typeCastMap.put("mobile_num", map.get("mobile_num"));
+			typeCastMap.put("user_id", map.get("user_id"));
+			typeCastMap.put("group_id", Integer.parseInt(map.get("group_id").toString()));
+			typeCastMap.put("user_name", map.get("user_name"));
+			typeCastMap.put("site_id", Integer.parseInt(map.get("site_id").toString()));
+			typeCastMap.put("position_name", map.get("position_name"));
+			typeCastMap.put("dept_name", map.get("dept_name"));
+			typeCastMap.put("phone_num", map.get("phone_num"));
+			typeCastMap.put("email", map.get("email"));
+			int cnt = userInfoService.insert_SYSTEM_USER_INFO_ONE_RECORD(typeCastMap);
+			if (cnt > 0)
+				result.result = true;
+			else
+				result.result = false;
+			return gson.toJson(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+	// endregion
+
 }

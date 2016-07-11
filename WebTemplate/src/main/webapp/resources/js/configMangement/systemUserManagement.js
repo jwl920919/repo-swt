@@ -55,6 +55,7 @@ $(document)
                 });
 // switching [ add(1), modify(2) ]
 var sw = 1;
+var idState = false;
 function switching(num) {
     sw = num;
     console.log(sw);
@@ -68,6 +69,7 @@ function trClickEvent(clickedTr) {
             "selected-label");
     $('#idTxt').attr("readOnly", true);
     $('#id-check-button').addClass("hidden");
+    $('#id-state-label').addClass("hidden");
     $('#passwordTxt').val('');
     $('#passwordChkTxt').val('');
     var jObj = Object();
@@ -103,10 +105,13 @@ $('#datatable_paginate').parent().prepend($('#delete-button').parent());
 $('#add-button').click(
         function() {
             switching(1);
+            idState = false;
             $('#add-label').addClass("selected-label").siblings().removeClass(
                     "selected-label");
             $('#idTxt').attr("readOnly", false);
+            $('#id-state-label').text('');
             $('#id-check-button').removeClass("hidden");
+            $('#id-state-label').removeClass("hidden");
             $('#idTxt').val('');
             $('#passwordTxt').val('');
             $('#passwordChkTxt').val('');
@@ -183,10 +188,64 @@ function samePasswordCheck() {
         return false;
     }
 }
+$('#id-check-button').click(function() {
+    var jObj = Object();
+    jObj.user_id = $('#idTxt').val();
+    $.ajax({
+        url : "/configManagement/checkId",
+        type : "POST",
+        data : JSON.stringify(jObj),
+        dataType : "text",
+        success : function(data) {
+            var jsonObj = eval("(" + data + ')');
+            idState = jsonObj.result;
+            if (idState == true) {
+                $('#id-state-label').text('사용 가능한 아이디입니다.');
+                $('#id-state-label').css('color', "#3c8dbc");
+            } else {
+                $('#id-state-label').text('사용 불가능한 아이디입니다.');
+                $('#id-state-label').css('color', "#f72929");
+            }
+        }
+    });
+});
 
 $('#save-button').click(function() {
     switch (sw) {
     case 1:
+        if (passwordCheck()) {
+            if (idState) {
+                var jObj = Object();
+                jObj.user_id = $('#idTxt').val();
+                jObj.user_pw = $('#passwordTxt').val();
+                jObj.user_name = $('#nameTxt').val();
+                jObj.group_id = $('#groupSel').val();
+                jObj.site_id = $('#placeOfBusinessSel').val();
+                jObj.dept_name = $('#departmentTxt').val();
+                jObj.position_name = $('#positionTxt').val();
+                jObj.email = $('#emailTxt').val();
+                jObj.phone_num = $('#phoneTxt').val();
+                jObj.mobile_num = $('#mobileTxt').val();
+                $.ajax({
+                    url : "/configManagement/addUser",
+                    type : "POST",
+                    data : JSON.stringify(jObj),
+                    dataType : "text",
+                    success : function(data) {
+                        var jsonObj = eval("(" + data + ')');
+                        if (jsonObj.result == true) {
+                            console.log('계정 생성 성공');
+                        } else {
+                            console.log('계정 생성 실패');
+                        }
+                    }
+                })
+            } else {
+                console.log("아이디 중복 확인하세요");
+            }
+        } else {
+            console.log("패스워드를 확인하세요");
+        }
         break;
     case 2:
         if (passwordCheck()) {
@@ -201,26 +260,12 @@ $('#save-button').click(function() {
             jObj.email = $('#emailTxt').val();
             jObj.phone_num = $('#phoneTxt').val();
             jObj.mobile_num = $('#mobileTxt').val();
-            console.log(jObj);
             $.ajax({
                 url : "/configManagement/updateUserInfo",
                 type : "POST",
                 data : JSON.stringify(jObj),
                 dataType : "text",
                 success : function(data) {
-                    // var jsonObj = eval("(" + data + ')');
-                    // if (jsonObj.result == true) {
-                    // $.each(jsonObj.data, function(index, obj) {
-                    // $('#nameTxt').val(obj.user_name);
-                    // $('#groupSel').val(obj.group_id);
-                    // $('#placeOfBusinessSel').val(obj.site_id);
-                    // $('#departmentTxt').val(obj.dept_name);
-                    // $('#positionTxt').val(obj.position_name);
-                    // $('#emailTxt').val(obj.email);
-                    // $('#phoneTxt').val(obj.phone_num);
-                    // $('#mobileTxt').val(obj.mobile_num);
-                    // });
-                    // }
                 }
             })
         } else {
@@ -229,3 +274,7 @@ $('#save-button').click(function() {
         break;
     }
 });
+//   이메일 형식 체크
+//   String regex = "^[_a-zA-Z0-9-\\.]+@[\\.a-zA-Z0-9-]+\\.[a-zA-Z]+$";
+//   아이디 형식 체크
+//   String regex = "^[a-zA-Z]{1}[a-zA-Z0-9_]{4,11}$";
