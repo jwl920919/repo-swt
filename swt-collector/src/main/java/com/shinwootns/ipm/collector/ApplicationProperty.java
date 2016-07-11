@@ -16,6 +16,12 @@ public class ApplicationProperty {
 	
 	@Value("${ipm.license}")
 	private String license;
+	
+	@Value("${ipm.debug_enable:false}")
+	private boolean debug_enable;
+	
+	@Value("${ipm.debug.insert_syslog_enable:true}")
+	private boolean insert_syslog_enable;
 
 	public String getName() {
 		return name;
@@ -39,5 +45,24 @@ public class ApplicationProperty {
 
 	public void setLicense(String license) {
 		this.license = license;
+	}
+
+	public boolean isDebug_enable() {
+		return debug_enable;
+	}
+
+	public void setDebug_enable(boolean debug_enable) {
+		this.debug_enable = debug_enable;
+	}
+
+	public boolean isInsert_syslog_enable() {
+		if (this.debug_enable == false)
+			return true;
+		
+		return insert_syslog_enable;
+	}
+
+	public void setInsert_syslog_enable(boolean insert_syslog_enable) {
+		this.insert_syslog_enable = insert_syslog_enable;
 	}
 }

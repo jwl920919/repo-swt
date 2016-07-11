@@ -9,7 +9,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import com.shinwootns.common.network.SyslogEntity;
 import com.shinwootns.common.utils.LogUtils;
-import com.shinwootns.ipm.collector.AppContextProvider;
 import com.shinwootns.ipm.collector.service.WorkerPoolManager;
 import com.shinwootns.ipm.collector.service.rabbitmq.RabbitMQSender;
 

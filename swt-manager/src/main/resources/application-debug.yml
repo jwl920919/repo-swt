@@ -2,15 +2,20 @@
 # ipm
 #====================================
 ipm:
-  name: IPM
+  name: IPM-Manager(Test)
   version: 0.1.1
   license: TEST000000
+  
+  # debug mode
+  debug_mode: true
+  debug:
+    recv_syslog_enable: false
+    insert_event_enable: false
 
 #====================================
 # spring
 #====================================
 spring:
-  # db
   datasource:
     driverClassName: org.postgresql.Driver
     url: jdbc:postgresql://shinwootnskr.iptime.org:5432/ipm_db
@@ -22,14 +27,12 @@ spring:
   jpa:
     generate-ddl: false
     show-sql: true
-  # amqp
   rabbitmq:
     host: shinwootnskr.iptime.org
     port: 5672
     username: admin
     password: shinwoo123!
     virtual-host: /
-  # Redis
   redis:
     host: sinwootnskr.iptime.org
     port: 6379
