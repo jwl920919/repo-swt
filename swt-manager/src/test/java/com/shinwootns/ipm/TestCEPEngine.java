@@ -1,4 +1,5 @@
 package com.shinwootns.ipm;
+/*
 
 import java.util.LinkedList;
 import java.util.List;
@@ -31,27 +32,15 @@ public class TestCEPEngine {
 		BasicConfigurator.configure();
 		
 		String query = "" 
-				//+ "@plan:async"
 				+ " define stream dhcpStream (dhcptype string, ipaddr string, macaddr string);"
 				+ ""
 				+ " @info(name = 'dhcpResult')" 
 				+ " from dhcpStream[dhcptype == 'DHCACK']#window.timeBatch(1 sec)"
-				//+ " select dhcptype, ipaddr, macaddr, count(*) as cnt"
-				//+ " group by dhcptype, ipaddr, macaddr"
-				+ " select dhcptype, count(*) as cnt"
-				+ " group by dhcptype"
+				+ " select dhcptype, ipaddr, macaddr, count(*) as cnt"
+				+ " group by dhcptype, ipaddr, macaddr"
 				+ " having cnt > 2"
 				+ " insert into outputStream;";
 		
-		/*
-		String query = "" 
-				+ " define stream dhcpStream (timestamp long, dhcptype string, ipaddr string, macaddr string);"
-				+ ""
-				+ " @info(name = 'dhcpResult')" 
-				+ " from dhcpStream[dhcptype == 'DHCACK']"
-				+ " select dhcptype, ipaddr, macaddr"
-				+ " insert into outputStream;";
-		 */
 		try
 		{
 			
@@ -173,16 +162,5 @@ public class TestCEPEngine {
 			}
 		}
 	};
-	
-	/*
-	public class testSyslogHandler implements SyslogReceiveHandler {
-
-		public void processSyslog(SyslogEntity syslog) {
-
-			System.out.println(String.format("[%s, %s] - %s", syslog.getHost(),
-					TimeUtils.convertToStringTime(syslog.getRecvTime()), syslog.getData()));
-			
-			// ...
-		}
-	}*/
 }
+*/

@@ -18,12 +18,15 @@ public class ScheduledTasks {
 	private final Logger _logger = Logger.getLogger(this.getClass());
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 	
+	
 	@Bean
 	public ScheduledExecutorFactoryBean scheduledExecutorService() {
 		ScheduledExecutorFactoryBean bean = new ScheduledExecutorFactoryBean();
 		bean.setPoolSize(5);
 		return bean;
 	}
+	
+	
 
 //	// fixedRate
 //    @Scheduled(fixedRate = 10000)
@@ -33,6 +36,12 @@ public class ScheduledTasks {
 //    	
 //    	_logger.debug(String.format("[WorkerPool] %s", syslogPoolstatus.toString()));
 //    }
+	
+	// fixedRate
+	@Scheduled(fixedRate = 10000)
+	public void monitorPoolStatus() {
+		
+	}
     
 //    // fixedDelay
 //    @Scheduled(fixedDelay = 5000)

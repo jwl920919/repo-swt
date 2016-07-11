@@ -1,10 +1,8 @@
-package com.shinwootns.ipm;
+package com.shinwootns.ipm.collector;
 
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
-
-import com.shinwootns.ipm.data.mapper.EventMapper;
 
 @Component
 public class SpringBeanProvider {
@@ -52,24 +50,5 @@ public class SpringBeanProvider {
     public ApplicationProperty getApplicationProperties() {
     
     	return appProperties;
-    }
-    
-    public EventMapper getEventMapper() {
-    	
-    	if (_context == null)
-    		return null;
-    	
-    	EventMapper eventMapper = null;
-    	
-    	try
-    	{
-    		eventMapper = _context.getBean("eventMapper", EventMapper.class);
-    	}
-    	catch(Exception ex) {
-    		_logger.error("SpringBeanProvider.getEventMapper().... failed");
-    		_logger.error(ex.getMessage(), ex);
-    	}
-    	
-    	return eventMapper;
     }
 }

@@ -28,7 +28,7 @@ public class PageActionController {
 	private AjaxResult result = new AjaxResult();
 		
 	// TEST
-	@RequestMapping(value = "/ajaxPollingTest.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/ajaxPollingTest.do", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object isAnonymous(HttpServletRequest request) {
 		System.out.println("ajaxPollingTest.do");
 		
@@ -39,7 +39,7 @@ public class PageActionController {
 		
 		Map<String, Object> mData  = new HashMap<String, Object>();
 		mData.put("param1", Integer.parseInt(param1) + 1);
-		mData.put("param2", (new Date()).toString());
+		mData.put("param2", "현재시간 : " + (new Date()).toString());
 
 		result.result = true;
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();

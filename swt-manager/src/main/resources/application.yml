@@ -1,0 +1,57 @@
+#====================================
+# ipm
+#====================================
+ipm:
+  name: IPM
+  version: 0.1.1
+  # license
+  license: TEST000000
+
+#====================================
+# spring
+#====================================
+spring:
+  # db
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://shinwootnskr.iptime.org:5432/ipm_db
+    username: postgres
+    password: shinwoo123!
+    max-idle: 10
+    testOnBorrow: true
+    validation-query: SELECT 1
+  jpa:
+    generate-ddl: false
+    show-sql: true
+  # amqp
+  rabbitmq:
+    host: shinwootnskr.iptime.org
+    port: 5672
+    username: admin
+    password: shinwoo123!
+    virtual-host: /
+
+#====================================
+# banner
+#====================================
+banner:
+  charset: UTF-8
+  location: classpath:banner.txt
+
+#====================================
+# server
+#====================================
+server:
+  port: 8080
+  session:
+    timeout: 3000
+
+#====================================
+# logging
+#====================================
+logging:
+  file: /logs/ipm-manager.log
+  level:
+    org.springframework: INFO
+    level.com.shinwootns: DEBUG
+    root: INFO

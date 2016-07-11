@@ -14,7 +14,9 @@ import com.shinwootns.ipm.collector.service.WorkerPoolManager;
 
 @Component
 public class ScheduledTasks {
-	
+
+	/*
+
 	private final Logger _logger = Logger.getLogger(this.getClass());
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 	
@@ -25,7 +27,6 @@ public class ScheduledTasks {
 		return bean;
 	}
 
-	/*
 	// fixedRate
     @Scheduled(fixedRate = 10000)
     public void monitorPoolStatus() {
