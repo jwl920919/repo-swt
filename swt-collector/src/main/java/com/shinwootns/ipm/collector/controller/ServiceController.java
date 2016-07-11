@@ -1,4 +1,4 @@
-package com.shinwootns.ipm.controller;
+package com.shinwootns.ipm.collector.controller;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -6,20 +6,17 @@ import javax.annotation.PreDestroy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
-import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.shinwootns.ipm.ApplicationProperty;
-import com.shinwootns.ipm.SpringBeanProvider;
-import com.shinwootns.ipm.data.mapper.EventMapper;
-import com.shinwootns.ipm.service.WorkerPoolManager;
-import com.shinwootns.ipm.service.amqp.AmqpReceiver;
+import com.shinwootns.common.network.SyslogManager;
+import com.shinwootns.ipm.collector.ApplicationProperty;
+import com.shinwootns.ipm.collector.SpringBeanProvider;
+import com.shinwootns.ipm.collector.service.WorkerPoolManager;
+import com.shinwootns.ipm.collector.service.syslog.SyslogReceiveHandlerImpl;
 
 @RestController
 public class ServiceController {
@@ -27,40 +24,14 @@ public class ServiceController {
 	private final Logger _logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired(required=true)
-	private EventMapper eventMapper;
-
-	@Autowired(required=true)
 	private ApplicationProperty appProperties;
 	
 	@Autowired
 	private RabbitTemplate rabbitTemplate;
 	
-	@Autowired
-	private ApplicationProperty appProperty;
-	
 	@Bean
 	Queue queue() {
 		return new Queue("ipm.syslog", false);
-	}
-	
-	@Bean
-	AmqpReceiver receiver() {
-        return new AmqpReceiver();
-    }
-	
-	@Bean
-	MessageListenerAdapter listenerAdapter(AmqpReceiver receiver) {
-		return new MessageListenerAdapter(receiver, "receiveMessage");
-	}
-	
-	@Bean
-	SimpleMessageListenerContainer container(ConnectionFactory connectionFactory, MessageListenerAdapter listenerAdapter) {
-		SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
-		container.setConnectionFactory(connectionFactory);
-		container.setQueueNames("ipm.syslog");
-		container.setRecoveryInterval(5000);		// amqp reconnect interval
-		container.setMessageListener(listenerAdapter);
-		return container;
 	}
 	
 	@Autowired
@@ -77,10 +48,17 @@ public class ServiceController {
 		
 		// Start
 		WorkerPoolManager.getInstance().start();
+		
+		// Start receive handler
+		SyslogManager.getInstance().start(new SyslogReceiveHandlerImpl());
 	}
 	
 	@PreDestroy
 	public void stopService() {
+		
+		// Stop receive handler
+		SyslogManager.getInstance().stop();
+				
 		// Stop
 		WorkerPoolManager.getInstance().stop();
 		

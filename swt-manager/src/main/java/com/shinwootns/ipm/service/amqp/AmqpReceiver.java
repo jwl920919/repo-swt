@@ -1,15 +1,15 @@
 package com.shinwootns.ipm.service.amqp;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.shinwootns.common.utils.JsonUtils;
 import com.shinwootns.ipm.data.SharedData;
 
 public class AmqpReceiver {
 	
-	private final Log _logger = LogFactory.getLog(getClass());
+	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
 	public void receiveMessage(String message) {
 		

@@ -2,9 +2,9 @@ package com.shinwootns.ipm.service.event;
 
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.shinwootns.ipm.SpringBeanProvider;
 import com.shinwootns.ipm.data.SharedData;
@@ -14,7 +14,7 @@ import com.shinwootns.ipm.service.BaseWorker;
 
 public class EventWorker extends BaseWorker {
 
-	private final Log _logger = LogFactory.getLog(getClass());
+	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
 	private int _index = 0;
 	
