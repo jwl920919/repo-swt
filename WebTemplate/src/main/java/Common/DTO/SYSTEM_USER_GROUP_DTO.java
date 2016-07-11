@@ -38,6 +38,12 @@ public class SYSTEM_USER_GROUP_DTO {
 	public void setGroup_desc(String group_desc) {
 		this.group_desc = group_desc;
 	}
+	@Override
+	public String toString() {
+		return "SYSTEM_USER_GROUP_DTO [site_id=" + site_id + ", group_id=" + group_id + ", group_name=" + group_name
+				+ ", group_desc=" + group_desc + "]";
+	}
+	
 	
 	
 }

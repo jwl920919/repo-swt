@@ -39,6 +39,11 @@ public class SITE_INFO_DTO {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	@Override
+	public String toString() {
+		return "SITE_INFO_DTO [site_id=" + site_id + ", site_name=" + site_name + ", site_code=" + site_code
+				+ ", description=" + description + "]";
+	}
 	
 	
 }
