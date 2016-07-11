@@ -21,7 +21,7 @@ changeframe = function(url, acticeid, masterKey, subKey) {
 			if (acticeid != '') {
 				var menu = $("[id^='menu_']");
 				if (acticeid == 'M01') {
-					console.log("log - acticeid == 'M01'");
+					//console.log("log - acticeid == 'M01'");
 					// 데시보드 메뉴가 선택 되었을 경우 모든 active를 지워준다
 					for (var i = 0; i < menu.length; i++) {
 						$(menu[i]).attr('class', 'treeview');
@@ -31,7 +31,9 @@ changeframe = function(url, acticeid, masterKey, subKey) {
 					//ContentHeader 변경
 					$("#contentHeaderDepth1li").attr('style', 'display: display;');
 					$("#contentHeaderDepth2li").attr('style', 'display: none;');
+
 					$("#contentHeaderDepth1").text(getLanguage(masterKey));
+					$("#contentTitle").text(getLanguage(masterKey));
 
 					// 데시보드가 아닌 다른 메뉴의 ul테그 닫기
 					var vUlMenu = $("[name='ulMenu']");
@@ -40,7 +42,7 @@ changeframe = function(url, acticeid, masterKey, subKey) {
 						$(vUlMenu[i]).attr('style', 'display: none;');
 					}
 				} else {
-					console.log("log - acticeid == ''");
+					//console.log("log - acticeid == ''");
 					// sub메뉴 선택 일 경우 해당 메뉴를 active시켜주고 다른 sub메뉴는 모두 지워준다.
 					var menusub = $("[id^='menu_S']");
 					for (var i = 0; i < menusub.length; i++) {
@@ -55,6 +57,8 @@ changeframe = function(url, acticeid, masterKey, subKey) {
 						$("#contentHeaderDepth2li").attr('style', 'display: display;');
 						$("#contentHeaderDepth1").text(getLanguage(masterKey));
 						$("#contentHeaderDepth2").text(getLanguage(subKey));
+						$("#contentTitle").text(getLanguage(subKey));
+					    $("#contentTitleSmall").text("");
 					}
 					if (acticeid != '') {
 						// 데시보드가 아닌 다른 메뉴 선택 시 데시보드 Polling데이터 조회 기능 정지
