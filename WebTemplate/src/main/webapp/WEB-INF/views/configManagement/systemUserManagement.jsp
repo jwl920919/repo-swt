@@ -9,8 +9,7 @@
 <%@ page
 	import="Common.ServiceInterface.SYSTEM_USER_GROUP_INFO_Service_interface"%>
 <%@ page import="Common.ServiceInterface.SITE_INFO_Service_interface"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html" pageEncoding="UTF-8"%>
 <%!public void jspInit() {
 		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, getServletContext());
 	}
@@ -29,7 +28,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <title>SystemUserManagement</title>
 <!-- DataTables -->
 <link rel="stylesheet" href="resources/css/essential.css">
