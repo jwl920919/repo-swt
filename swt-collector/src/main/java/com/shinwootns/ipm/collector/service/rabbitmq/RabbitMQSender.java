@@ -5,30 +5,29 @@ import org.json.simple.JSONObject;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import com.shinwootns.ipm.collector.AppContextProvider;
+import com.shinwootns.ipm.collector.ApplicationProperty;
+import com.shinwootns.ipm.collector.SpringBeanProvider;
 
 public class RabbitMQSender {
 	
 	public static void SendData(JSONObject jobj, Logger _logger) {
 		
-		ConfigurableApplicationContext context = AppContextProvider.getInstance().getApplicationContext();
+		RabbitTemplate rabbitTemplate = SpringBeanProvider.getInstance().getRabbitTemplate();
+		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperties();
 		
 		try
 		{
-			if (context != null) {
-				RabbitTemplate rabbitTemplate = context.getBean("rabbitTemplate", RabbitTemplate.class);
-	
-				// Send
-				if (rabbitTemplate != null)
-				{
-					rabbitTemplate.convertAndSend("ipm.syslog", jobj.toJSONString());
-				}
-				else {
-					_logger.error("rabbitTemplate is null.");
-				}
+			// Debug - insert_syslog_enable
+			if (appProperty != null && appProperty.isInsert_syslog_enable() == false)
+				return;
+			
+			// Send
+			if (rabbitTemplate != null)
+			{
+				rabbitTemplate.convertAndSend("ipm.syslog", jobj.toJSONString());
 			}
 			else {
-				_logger.error("getApplicationContext()... failed.");
+				_logger.error("rabbitTemplate is null.");
 			}
 		}
 		catch(Exception ex) {
