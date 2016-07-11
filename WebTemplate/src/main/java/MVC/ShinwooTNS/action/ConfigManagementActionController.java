@@ -23,12 +23,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonWriter;
 
 import Common.DTO.AjaxResult;
 import Common.DTO.SYSTEM_USER_INFO_DTO;
 import Common.ServiceInterface.SYSTEM_USER_INFO_Service_Interface;
+import io.undertow.attribute.RequestMethodAttribute;
 
 @Controller
 @RequestMapping(value = "/configManagement/")
@@ -103,10 +106,10 @@ public class ConfigManagementActionController {
 	// endregion
 
 	// region updateUserInfo
-	@RequestMapping(value = "updateUserInfo", method = RequestMethod.POST, produces = "application/text; charset=utf8")
-	public @ResponseBody Object updateUserInfo(HttpServletRequest request) {
-		logger.info("updateUserInfo : " + request.getLocalAddr());
-		System.out.println("updateUserInfo Controller");
+	@RequestMapping(value = "getUserInfo", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+	public @ResponseBody Object getUserInfo(HttpServletRequest request) {
+		logger.info("getUserInfo : " + request.getLocalAddr());
+		System.out.println("getUserInfo Controller");
 		try {
 			SYSTEM_USER_INFO_DTO systemUserInfo = userInfoService.select_SYSTEM_USER_INFO_ONE_SEARCH(
 					gson.fromJson(request.getReader(), new TypeToken<HashMap<String, Object>>() {
@@ -132,5 +135,33 @@ public class ConfigManagementActionController {
 			return gson.toJson(result);
 		}
 	}
-	// endregion
+	// endregion 
+	
+	//region updateUserInfo
+	@RequestMapping(value = "updateUserInfo", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+	public @ResponseBody Object updateUserInfo(HttpServletRequest request) {
+		logger.info("updateUserInfo : " + request.getLocalAddr());
+		try {
+			Map map = gson.fromJson(request.getReader(), new TypeToken<HashMap<String, Object>>() {}.getType());
+			HashMap<String,Object> typeCastMap = new HashMap<>();
+			typeCastMap.put("user_pw", map.get("user_pw"));
+			typeCastMap.put("mobile_num", map.get("mobile_num"));
+			typeCastMap.put("user_id", map.get("user_id"));
+			typeCastMap.put("group_id", Integer.parseInt(map.get("group_id").toString()));
+			typeCastMap.put("user_name", map.get("user_name"));
+			typeCastMap.put("site_id", Integer.parseInt(map.get("site_id").toString()));
+			typeCastMap.put("position_name", map.get("position_name"));
+			typeCastMap.put("dept_name", map.get("dept_name"));
+			typeCastMap.put("phone_num", map.get("phone_num"));
+			typeCastMap.put("email", map.get("email"));
+			userInfoService.update_SYSTEM_USER_INFO_ONE_RECORD(typeCastMap);
+			result.result = true;
+			return gson.toJson(result);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	//endregion
 }

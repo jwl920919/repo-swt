@@ -32,7 +32,15 @@
 	padding-top: 5px;
 	padding-bottom: 7px;
 }
-
+.pw-state-label {
+	position: absolute !important;
+    top: 133px !important;
+    right: 2px !important;
+    width: 300px !important;
+    height: 26px !important;
+    font-size: smaller;
+    text-align: left;
+}
 .send-row label:first-child {
 	width:88px;
 }
