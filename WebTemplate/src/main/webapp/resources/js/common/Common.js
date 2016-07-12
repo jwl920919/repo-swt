@@ -2,19 +2,23 @@
 function systemAlert(message) {
 	systemAlert("layDiv", message)
 }
-function systemAlert(divElement, title, message) {
+function systemAlert(divElement, type, title, message) {
 	$("#layDiv").attr("style", "visibility: visible");
 	$("#alertTitle").text(title);
 	$("#alertMessage").text(message);
-	
+
+	//.alert-warning
+	//.alert-danger
+	//.alert-info
+	//.alert-success
 	var tag = "";
-	tag += "<div class='alert alert-warning alert-dismissible fade in' role='alert'>";    
+	tag += "<div class='alert " + type + " alert-dismissible fade in' role='alert'>";    
     tag += "     <button onclick='fnAlertClose(\"layDiv\")' type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>";
     tag += "     <h4><i class='icon fa fa-warning'></i><label>"+title+"</label></h4>";
     tag += "     <label >"+message+"</label> ";
     tag += "</div> ";
-	
-    $("#divAlertArea").append(tag);
+
+    $("#" + divElement).append(tag);
 	
 }
 

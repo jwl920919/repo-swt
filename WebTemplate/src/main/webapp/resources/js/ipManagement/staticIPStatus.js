@@ -1,5 +1,7 @@
 var table;
 $(document).ready(function() {
+
+	$("#layDiv").css("visibility","hidden");
 //	table = $('#datatable');
 	
 //	$.ajax({
@@ -60,7 +62,7 @@ $(document).ready(function() {
                         //console.log(data.search_key);
                     }
                 },
-			    "columnDefs": [{ className: "essential-td-left", "targets": [ 0 ] },
+			    "columnDefs": [{ className: "essential-td-left essential-td-cursor-pointer", "targets": [ 0 ] },
 			                 { className: "essential-td-left", "targets": [ 1 ] }],
                 "order" : [ [ 1, 'asc' ] ],
                 "columns" : [ {"data" : "network"},
@@ -69,19 +71,24 @@ $(document).ready(function() {
                               {"data" : "site"}, ],
             });
 	
-	
-	
-	
-	
-	
-	
-	
-	
+	//검색, 엔트리 위치 정렬
 	$(function() {
 	    var d_wrap = $('#datatable_wrapper .row:first');
 	    var d_length = $('#datatable_wrapper .row:first .col-sm-6:eq(0)');
 	    var d_filter = $('#datatable_wrapper .row:first .col-sm-6:eq(1)');
 	    d_length.append(d_filter);
 	    d_wrap.prepend(d_filter);
+	});	
+
+
+	$('#datatable').delegate('tbody>tr>td:first-child', 'click', function() {
+	    //$(this).addClass("selected").siblings().removeClass("selected");
+		console.log("td click event : " + this);
+	    tdClickEvent(this);
 	});
 });
+
+function tdClickEvent(obj){
+	systemAlert("divAlertArea", "alert-danger", getLanguage("warning"), $(obj).html());
+	//alert($(obj).html());
+}
