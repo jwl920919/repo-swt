@@ -45,7 +45,7 @@
 <body class="hold-transition login-page">
 		
 	<!-- Alert Start -->
-	<div id="layDiv" >
+	<div id="layDiv">
 		<div class="alert-box" ></div>
 		<div id="divAlertArea"></div>
 	</div>

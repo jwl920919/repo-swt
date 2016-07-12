@@ -2,6 +2,8 @@ package com.shinwootns.ipm;
 
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import com.shinwootns.ipm.data.mapper.EventMapper;
@@ -71,5 +73,23 @@ public class SpringBeanProvider {
     	}
     	
     	return eventMapper;
+    }
+    
+    public StringRedisTemplate getRedisTemplate() { 
+    	if (_context == null)
+    		return null;
+    	
+    	StringRedisTemplate redisTemplate = null;
+    	
+    	try
+    	{
+    		redisTemplate = _context.getBean(StringRedisTemplate.class);
+    	}
+    	catch(Exception ex) {
+    		_logger.error("SpringBeanProvider.getRedisTemplate().... failed");
+    		_logger.error(ex.getMessage(), ex);
+    	}
+    	
+    	return redisTemplate;
     }
 }

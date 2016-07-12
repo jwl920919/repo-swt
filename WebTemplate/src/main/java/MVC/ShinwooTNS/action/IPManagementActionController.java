@@ -44,6 +44,7 @@ public class IPManagementActionController {
 		logger.info("staticIPStatus_Segment_Select : " + request.getLocalAddr());
 		List<Map<String, Object>> dataList = null;
 		JsonArray jsonArray = null;
+		int totalCount = 0;
 				
 		try {			
 			String[] columns = { "network", "comment", "utilization", "site" };
@@ -51,7 +52,9 @@ public class IPManagementActionController {
 			
 			dataList = ipManagementService.select_IP_MANAGEMENT_SEGMENT(parameters);
 
-			//int totalCount = userInfoService.select_SYSTEM_USER_INFO_CONDITIONAL_SEARCH_TOTAL_COUNT(parameters);
+			if (dataList.size() > 0) {
+				totalCount = Integer.parseInt(((Map<String, Object>)dataList.get(0)).get("allcount").toString());
+			}
 			
 			jsonArray = gson.toJsonTree(dataList).getAsJsonArray();
 			response.setContentType("Application/json;charset=utf-8");
@@ -61,7 +64,7 @@ public class IPManagementActionController {
 			logger.error(e.getMessage());
 		}
 		finally {
-			response.getWriter().println(Common.Helper.DatatableHelper.makeCallback(request, jsonArray, 2));
+			response.getWriter().println(Common.Helper.DatatableHelper.makeCallback(request, jsonArray, totalCount));
 			response.getWriter().flush();
 			response.getWriter().close();			
 		}

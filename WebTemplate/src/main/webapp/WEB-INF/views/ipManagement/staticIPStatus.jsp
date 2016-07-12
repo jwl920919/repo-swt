@@ -1,9 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"%>
 <%@ page import="Common.Helper.LanguageHelper"%>
 
+<!-- default style -->
+<link rel="stylesheet" href="../resources/css/default.css">
+
 <script src="resources/js/common/Datatable-Essential.js"></script>
 <script src="resources/js/ipManagement/staticIPStatus.js"></script>
 
+<!-- Alert Start -->
+<div id="layDiv" >
+	<div class="alert-box" ></div>
+	<div id="divAlertArea"></div>
+</div>
 <section class="white-paper">
 	<div class="row">
 		<div class="col-lg-12">

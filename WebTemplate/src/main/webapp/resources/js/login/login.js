@@ -10,7 +10,8 @@ $(document).ready(function() {
 
 //	$("#layDiv").css("top", Math.max(0, (($(window).height() - $("#layDiv").outerHeight()) / 2) + $(window).scrollTop()) + "px");
 //	$("#layDiv").css("left", Math.max(0, (($(window).width() - $("#layDiv").outerWidth()) / 2) + $(window).scrollLeft()) + "px");
-	$("#layDiv").attr("style", "visibility: hidden");
+//	$("#layDiv").attr("style", "visibility: hidden");
+	$("#layDiv").css("visibility","hidden");
 
 	//쿠키에 언어 설정이 되어 있지 않다면 기본적으로 한국어로 radio 버튼 체크
 	if (getCookie("Language") != "undefined") {
@@ -37,7 +38,7 @@ $(document).ready(function() {
 	
 	//서버 Controller에서 넘어온 Message 출력해주기
 	if($("#hiddenError").text() != ''){
-		systemAlert("divAlert", getLanguage("warning"), $("#hiddenError").text());
+		systemAlert("divAlertArea", "alert-warning", getLanguage("warning"), $("#hiddenError").text());
 		$("#hiddenError").text('');
 	}
 
@@ -49,9 +50,9 @@ $(document).ready(function() {
 		var vID = $("#txtID").val();
 		var vPW = $("#txtPassword").val();
 		if (vID == "") {
-			systemAlert("divAlert", getLanguage("warning"), getLanguage("PleaseenteryourID"));
+			systemAlert("divAlertArea", "alert-warning", getLanguage("warning"), getLanguage("PleaseenteryourID"));
 		} else if (vPW == "") {
-			systemAlert("divAlert", getLanguage("warning"), getLanguage("Pleaseenterapassword"));
+			systemAlert("divAlertArea", "alert-warning", getLanguage("warning"), getLanguage("Pleaseenterapassword"));
 		} else {
 			bValidation = true;
 		}

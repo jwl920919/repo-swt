@@ -123,5 +123,9 @@
 	"desctription":									"Desctription",
 	"comment":										"Comment",
 	"site":											"Site",
-	"siteName":										"Site Name"
+	"siteName":										"Site Name",
+    "first": 										"First",
+    "last": 										"Last",
+    "next": 										"Next",
+    "previous": 									"Previous"
 }

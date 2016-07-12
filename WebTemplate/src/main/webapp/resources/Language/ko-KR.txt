@@ -123,5 +123,9 @@
 	"desctription":									"설명",
 	"comment":										"설명",
 	"site":											"사업장",
-	"siteName":										"사업장명"
+	"siteName":										"사업장명",
+    "first": 										"처음으로",
+    "last": 										"마지막으로",
+    "next": 										"다음",
+    "previous": 									"이전"
 }

@@ -1,5 +1,7 @@
 package test.cache;
 
+/*
+
 import java.util.Scanner;
 
 import org.apache.log4j.BasicConfigurator;
@@ -67,3 +69,5 @@ public class TestRedis {
 		
 	}
 }
+
+*/
