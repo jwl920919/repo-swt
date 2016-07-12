@@ -133,8 +133,17 @@ $(pwd1).change(function() {
 $(pwd2).change(function() {
     console.log(passwordCheck());
 });
-
-var desc = [ "8자리 ~ 20자리 이내로 입력해주세요.", "비밀번호는 공백없이 입력해주세요.",
+$('#emailTxt').change(function() {
+    var emailCheckRegex=/^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/;
+    if(emailCheckRegex.test($('#emailTxt').val())){
+        $('#email-state-label').text('올바른 이메일 형식이 맞습니다.')
+        $('#email-state-label').css('color', "#3c8dbc");
+    } else {
+        $('#email-state-label').text('올바른 이메일 형식이 아닙니다.');
+        $('#email-state-label').css('color', "#f72929");
+    } 
+});
+var pwDesc = [ "8자리 ~ 20자리 이내로 입력해주세요.", "비밀번호는 공백없이 입력해주세요.",
         "영문,숫자, 특수문자를 혼합하여 입력해주세요.", "사용가능한 패스워드입니다.", "패스워드가 일치하지 않습니다." ];
 function passwordCheck() {
     var validate = passwordValidation();
@@ -145,15 +154,15 @@ function passwordCheck() {
     } else if (validate.stat && sameCheck) {
         $('#pw-state-label').removeClass("hidden");
         $('#pw-state-label').css('color', "#3c8dbc");
-        $('#pw-state-label').text(desc[validate.desc]);
+        $('#pw-state-label').text(pwDesc[validate.desc]);
         return true;
     } else {
         $('#pw-state-label').removeClass("hidden");
         $('#pw-state-label').css('color', "#f72929");
         if (validate.desc == 3)
-            $('#pw-state-label').text(desc[validate.desc + 1]);
+            $('#pw-state-label').text(pwDesc[validate.desc + 1]);
         else
-            $('#pw-state-label').text(desc[validate.desc]);
+            $('#pw-state-label').text(pwDesc[validate.desc]);
         return false;
     }
 }
@@ -189,25 +198,35 @@ function samePasswordCheck() {
     }
 }
 $('#id-check-button').click(function() {
-    var jObj = Object();
-    jObj.user_id = $('#idTxt').val();
-    $.ajax({
-        url : "/configManagement/checkId",
-        type : "POST",
-        data : JSON.stringify(jObj),
-        dataType : "text",
-        success : function(data) {
-            var jsonObj = eval("(" + data + ')');
-            idState = jsonObj.result;
-            if (idState == true) {
-                $('#id-state-label').text('사용 가능한 아이디입니다.');
-                $('#id-state-label').css('color', "#3c8dbc");
-            } else {
-                $('#id-state-label').text('사용 불가능한 아이디입니다.');
-                $('#id-state-label').css('color', "#f72929");
+    String
+    regex = /^[a-z]+[a-z0-9]{5,19}$/g;
+    var user_id = $('#idTxt').val();
+
+    if (regex.test(user_id)) {
+        var jObj = Object();
+        jObj.user_id = user_id;
+
+        $.ajax({
+            url : "/configManagement/checkId",
+            type : "POST",
+            data : JSON.stringify(jObj),
+            dataType : "text",
+            success : function(data) {
+                var jsonObj = eval("(" + data + ')');
+                idState = jsonObj.result;
+                if (idState == true) {
+                    $('#id-state-label').text('사용 가능한 아이디입니다.');
+                    $('#id-state-label').css('color', "#3c8dbc");
+                } else {
+                    $('#id-state-label').text('사용 불가능한 아이디입니다.');
+                    $('#id-state-label').css('color', "#f72929");
+                }
             }
-        }
-    });
+        });
+    } else {
+        $('#id-state-label').text('아이디는 영문자로 시작하는 6~20자 영문자 또는 숫자이어야 합니다.');
+        $('#id-state-label').css('color', "#f72929");
+    }
 });
 
 $('#save-button').click(function() {
@@ -266,15 +285,21 @@ $('#save-button').click(function() {
                 data : JSON.stringify(jObj),
                 dataType : "text",
                 success : function(data) {
+                    var jsonObj = eval("(" + data + ')');
+                    if (jsonObj.result == true) {
+                        console.log('계정정보 변경 성공');
+                    } else {
+                        console.log('계정정보 변경 실패');
+                    }
                 }
-            })
+            });
         } else {
             console.log("패스워드를 확인하세요");
         }
         break;
     }
 });
-//   이메일 형식 체크
-//   String regex = "^[_a-zA-Z0-9-\\.]+@[\\.a-zA-Z0-9-]+\\.[a-zA-Z]+$";
-//   아이디 형식 체크
-//   String regex = "^[a-zA-Z]{1}[a-zA-Z0-9_]{4,11}$";
+// 이메일 형식 체크
+// String regex = "^[_a-zA-Z0-9-\\.]+@[\\.a-zA-Z0-9-]+\\.[a-zA-Z]+$";
+// 아이디 형식 체크
+// String regex = "^[a-zA-Z]{1}[a-zA-Z0-9_]{4,11}$";

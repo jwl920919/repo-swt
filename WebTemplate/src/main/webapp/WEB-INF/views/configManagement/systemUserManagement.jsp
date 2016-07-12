@@ -146,6 +146,7 @@
 								<div id="email-row" class="send-row">
 									<label class="send-label"><%=LanguageHelper.GetLanguage("email")%></label>
 									<input type="text" id="emailTxt" name="emailTxt">
+									<label id='email-state-label' class='email-state-label'></label>
 								</div>
 								<div id="phone-row" class="send-row">
 									<label class="send-label"><%=LanguageHelper.GetLanguage("phone")%></label>
