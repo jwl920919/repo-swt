@@ -134,7 +134,13 @@
 	<select id="select_IP_MANAGEMENT_SEGMENT" resultType="java.util.HashMap">
 		SELECT * FROM "test_dhcp_segment";
 	</select>
-
+	
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-07-11 -->
+	<!-- Insert User : KCM -->
+	<!-- Description : IP관리 > 고정IP현황 -->
+	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
+	
 </mapper>
 
 <!-- <mapper namespace="testSqlMap" > -->

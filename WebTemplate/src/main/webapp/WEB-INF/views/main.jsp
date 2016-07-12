@@ -80,11 +80,13 @@
 <script src="resources/plugins/fastclick/fastclick.js"></script>
 <!-- AdminLTE App -->
 <script src="resources/dist/js/app.min.js"></script>
-
-<script src="/resources/js/common/Common.js"></script>
-<script src="/resources/js/common/multyLanguages.js"></script>
-<script src="/resources/js/main/main.js"></script>
-
+<script src="resources/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="resources/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<!-- resources/js/common/Datatable-Essential.js은 각 페이지에 넣어주지 않으면 #datatable 객체에 접근이 불가능 하여 각 페이지에 입력해주어야됨. -->
+<script src="resources/js/base/jstz-1.0.4.min.js"></script>
+<script src="resources/js/common/Common.js"></script>
+<script src="resources/js/common/multyLanguages.js"></script>
+<script src="resources/js/main/main.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 

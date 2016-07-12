@@ -1,3 +1,4 @@
+
 $('#datatable').on('draw.dt', function() {
     //기본 Datatable 스크립트에서 지정한 크기를 변경해줌
     $('#datatable_paginate').parent().addClass("col-sm-12").removeClass("col-sm-7");
