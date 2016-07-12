@@ -109,8 +109,8 @@
 	<!-- Description : 유저 정보 삭제 -->
 	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
 	<delete id="delete_SYSTEM_USER_INFO_RECORDS" parameterType="hashmap">
-		DELETE FROM system_user_info WHERE user_id =
-		<foreach collection="list" item="item" separator=" , ">#{item}</foreach>;
+		DELETE FROM system_user_info WHERE user_id in 
+		(<foreach collection="list" item="item" separator=" , ">#{item}</foreach>);
 	</delete>
 
 

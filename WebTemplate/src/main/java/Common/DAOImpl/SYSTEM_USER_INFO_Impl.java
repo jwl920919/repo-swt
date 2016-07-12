@@ -27,7 +27,7 @@ public class SYSTEM_USER_INFO_Impl extends SqlSessionDaoSupport implements SYSTE
 
 	@Override
 	public int select_SYSTEM_USER_INFO_CONDITIONAL_SEARCH_TOTAL_COUNT(HashMap<String, Object> parameters) {
-		int total = 0;
+		int total = -1;
 		try {
 			System.out.println(getSqlSession());
 			total = getSqlSession().selectOne("UI_Query.select_SYSTEM_USER_INFO_CONDITIONAL_SEARCH_TOTAL_COUNT",
