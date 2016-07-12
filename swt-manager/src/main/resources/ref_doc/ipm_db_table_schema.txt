@@ -20,12 +20,43 @@ CREATE TABLE public.site_blacklist_info
   site_id integer NOT NULL,
   blacklist_enable boolean DEFAULT false,
   blacklist_filter_name character varying(128) DEFAULT '',
-  blacklist_time_sec int DEFAULT 30,
+  blacklist_time_sec integer DEFAULT 30,
   description character varying(512),
   insert_time timestamp with time zone DEFAULT current_timestamp,
   update_time timestamp with time zone DEFAULT current_timestamp,
   CONSTRAINT site_blacklist_info_pkey PRIMARY KEY (blacklist_id)
 );
+
+-- INSIGHT_INFO
+CREATE SEQUENCE public.site_insight_id_seq;
+CREATE TABLE public.site_insight_info
+(
+  insight_id integer NOT NULL DEFAULT nextval('site_insight_id_seq'::regclass),
+  site_id integer NOT NULL,
+  device_name character varying(64),
+  device_type character varying(64),
+  ipv4 character varying(16) DEFAULT '',
+  ipv6 character varying(40) DEFAULT '',
+  used_count integer,
+  limit_count integer,
+  enable_collect_cam boolean DEFAULT true,
+  enable_recv_syslog boolean DEFAULT true,
+  CONSTRAINT site_insight_info_pkey PRIMARY KEY (insight_id)
+);
+
+-- SEGMENT_INFO
+CREATE SEQUENCE public.site_segment_id_seq;
+CREATE TABLE public.site_segment_info
+(
+  segment_id integer NOT NULL DEFAULT nextval('site_segment_id_seq'::regclass),
+  site_id integer NOT NULL,
+  network character varying(40) NOT NULL,
+  start_ip bigint,
+  end_ip bigint,
+  ip_count integer,
+  CONSTRAINT site_segment_info_pkey PRIMARY KEY (segment_id),
+  CONSTRAINT site_segment_network_unique UNIQUE (network)
+)
 
 --==========================================================================================
 -- DEVICE
