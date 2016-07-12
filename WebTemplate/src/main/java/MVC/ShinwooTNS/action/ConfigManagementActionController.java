@@ -64,7 +64,7 @@ public class ConfigManagementActionController {
 				JSONObject jObj = new JSONObject();
 				jObj.put("user_id", suid.getUser_id());
 				jObj.put("user_name", suid.getUser_name());
-				jObj.put("active", 1);//checkbox
+				jObj.put("active", 1);
 				jsonArray.add(jObj);
 			}
 			int totalCount = userInfoService.select_SYSTEM_USER_INFO_CONDITIONAL_SEARCH_TOTAL_COUNT(parameters);
@@ -118,22 +118,15 @@ public class ConfigManagementActionController {
 	public @ResponseBody Object updateUserInfo(HttpServletRequest request) {
 		logger.info("updateUserInfo : " + request.getLocalAddr());
 		try {
-			Map map = gson.fromJson(request.getReader(), new TypeToken<HashMap<String, Object>>() {
+			HashMap<String, Object> map = gson.fromJson(request.getReader(), new TypeToken<HashMap<String, Object>>() {
 			}.getType());
-			HashMap<String, Object> typeCastMap = new HashMap<>();
-			typeCastMap.put("user_pw", map.get("user_pw"));
-			typeCastMap.put("mobile_num", map.get("mobile_num"));
-			typeCastMap.put("user_id", map.get("user_id"));
-			typeCastMap.put("group_id", Integer.parseInt(map.get("group_id").toString()));
-			typeCastMap.put("user_name", map.get("user_name"));
-			typeCastMap.put("site_id", Integer.parseInt(map.get("site_id").toString()));
-			typeCastMap.put("position_name", map.get("position_name"));
-			typeCastMap.put("dept_name", map.get("dept_name"));
-			typeCastMap.put("phone_num", map.get("phone_num"));
-			typeCastMap.put("email", map.get("email"));
-			typeCastMap.put("time_zone", map.get("time_zone"));
-
-			int cnt = userInfoService.update_SYSTEM_USER_INFO_ONE_RECORD(typeCastMap);
+			int group_id = Integer.parseInt(map.get("group_id").toString()),site_id = Integer.parseInt(map.get("site_id").toString());
+			map.remove("group_id");
+			map.remove("site_id");
+			map.put("group_id", group_id);
+			map.put("site_id", site_id);
+			map.put("time_zone", map.get("time_zone"));
+			int cnt = userInfoService.update_SYSTEM_USER_INFO_ONE_RECORD(map);
 			if (cnt > 0)
 				result.result = true;
 			else
@@ -177,22 +170,16 @@ public class ConfigManagementActionController {
 	public @ResponseBody Object addUser(HttpServletRequest request) {
 		logger.info("addUser : " + request.getLocalAddr());
 		try {
-			Map map = gson.fromJson(request.getReader(), new TypeToken<HashMap<String, Object>>() {
+			HashMap<String, Object> map = gson.fromJson(request.getReader(), new TypeToken<HashMap<String, Object>>() {
 			}.getType());
-			HashMap<String, Object> typeCastMap = new HashMap<>();
-			typeCastMap.put("user_pw", map.get("user_pw"));
-			typeCastMap.put("mobile_num", map.get("mobile_num"));
-			typeCastMap.put("user_id", map.get("user_id"));
-			typeCastMap.put("group_id", Integer.parseInt(map.get("group_id").toString()));
-			typeCastMap.put("user_name", map.get("user_name"));
-			typeCastMap.put("site_id", Integer.parseInt(map.get("site_id").toString()));
-			typeCastMap.put("position_name", map.get("position_name"));
-			typeCastMap.put("dept_name", map.get("dept_name"));
-			typeCastMap.put("phone_num", map.get("phone_num"));
-			typeCastMap.put("email", map.get("email"));
-			typeCastMap.put("time_zone", map.get("time_zone"));
+			int group_id = Integer.parseInt(map.get("group_id").toString()),site_id = Integer.parseInt(map.get("site_id").toString());
+			map.remove("group_id");
+			map.remove("site_id");
+			map.put("group_id", group_id);
+			map.put("site_id", site_id);
+			map.put("time_zone", map.get("time_zone"));
 			
-			int cnt = userInfoService.insert_SYSTEM_USER_INFO_ONE_RECORD(typeCastMap);
+			int cnt = userInfoService.insert_SYSTEM_USER_INFO_ONE_RECORD(map);
 			if (cnt > 0)
 				result.result = true;
 			else
@@ -205,5 +192,40 @@ public class ConfigManagementActionController {
 		return null;
 	}
 	// endregion
+	
+	//region deleteUser
+	@RequestMapping(value = "deleteUsers", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+	public @ResponseBody Object deleteUsers(HttpServletRequest request) {
+		logger.info("deleteUsers : " + request.getLocalAddr());
+		try {
+			Map map = gson.fromJson(request.getReader(), new TypeToken<HashMap<String, Object>>() {
+			}.getType());
+			
+//			HashMap<String, Object> typeCastMap = new HashMap<>();
+//			typeCastMap.put("user_pw", map.get("user_pw"));
+//			typeCastMap.put("mobile_num", map.get("mobile_num"));
+//			typeCastMap.put("user_id", map.get("user_id"));
+//			typeCastMap.put("group_id", Integer.parseInt(map.get("group_id").toString()));
+//			typeCastMap.put("user_name", map.get("user_name"));
+//			typeCastMap.put("site_id", Integer.parseInt(map.get("site_id").toString()));
+//			typeCastMap.put("position_name", map.get("position_name"));
+//			typeCastMap.put("dept_name", map.get("dept_name"));
+//			typeCastMap.put("phone_num", map.get("phone_num"));
+//			typeCastMap.put("email", map.get("email"));
+//			typeCastMap.put("time_zone", map.get("time_zone"));
+//			
+//			int cnt = userInfoService.insert_SYSTEM_USER_INFO_ONE_RECORD(typeCastMap);
+//			if (cnt > 0)
+//				result.result = true;
+//			else
+//				result.result = false;
+			return gson.toJson(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+	//endregion
 
 }

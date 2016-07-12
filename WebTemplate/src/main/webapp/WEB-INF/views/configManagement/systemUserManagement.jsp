@@ -45,7 +45,7 @@
 						<table id="datatable" class="essential-table" style="width: 98%">
 							<thead>
 								<tr>
-									<th><input type="checkbox" /></th>
+									<th><input name="select_all" id="checkbox_controller" type="checkbox" /></th>
 									<th width="48%"><%=LanguageHelper.GetLanguage("ID")%></th>
 									<th width="48%"><%=LanguageHelper.GetLanguage("Name")%></th>
 								</tr>

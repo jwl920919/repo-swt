@@ -98,16 +98,32 @@
 	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
 	<insert id="insert_SYSTEM_USER_INFO_ONE_RECORD" parameterType="hashmap"
 		flushCache="true" statementType="PREPARED" timeout="20">
-		SET TIME ZONE #{time_zone};
+		SET TIME ZONE
+		#{time_zone};
 		INSERT into
 		system_user_info (site_id, user_id, user_pw,
 		user_name, group_id, dept_name, position_name, phone_num,
-		mobile_num, email, mysingle_yn, insert_date, modify_date) VALUES (#{site_id}, #{user_id}, #{user_pw},
-		#{user_name}, #{group_id}, #{dept_name}, #{position_name}, #{phone_num},
-		#{mobile_num}, #{email}, false, now(), now());
+		mobile_num,
+		email, mysingle_yn, insert_date, modify_date) VALUES (#{site_id},
+		#{user_id}, #{user_pw},
+		#{user_name}, #{group_id}, #{dept_name},
+		#{position_name}, #{phone_num},
+		#{mobile_num}, #{email}, false, now(),
+		now());
 	</insert>
 
-	
+	<!-- Query Type : Delete(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-07-12 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : 유저 정보 삭제 -->
+	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
+	<delete id="delete_SYSTEM_USER_INFO_RECORDS" parameterType="hashmap"
+		flushCache="true" statementType="PREPARED" timeout="20">
+		DELETE FROM system_user_info WHERE user_id =
+		<foreach collection="list" item="item" separator=" , ">#{item}
+		</foreach>
+		;
+	</delete>
 
 
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
@@ -129,17 +145,18 @@
 		SELECT
 		site_id,site_name,site_code,description FROM site_info;
 	</select>
-	
+
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
 	<!-- Insert Date : 2016-07-11 -->
 	<!-- Insert User : KCM -->
 	<!-- Description : IP관리 > 고정IP현황 -->
 	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
 	<select id="select_IP_MANAGEMENT_SEGMENT" resultType="java.util.HashMap">
-		SELECT * FROM "test_dhcp_segment";
+		SELECT *
+		FROM "test_dhcp_segment";
 	</select>
-	
-	
+
+
 </mapper>
 
 <!-- <mapper namespace="testSqlMap" > -->

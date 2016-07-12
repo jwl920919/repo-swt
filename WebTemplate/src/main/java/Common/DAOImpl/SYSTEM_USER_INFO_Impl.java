@@ -10,7 +10,8 @@ import Common.DTO.SYSTEM_USER_INFO_DTO;
 
 
 public class SYSTEM_USER_INFO_Impl extends SqlSessionDaoSupport implements SYSTEM_USER_INFO_Interface {
-
+	
+	
 	@Override
 	public List<SYSTEM_USER_INFO_DTO> select_SYSTEM_USER_INFO_CONDITIONAL_SEARCH(HashMap<String, Object> parameters) {
 		// TODO Auto-generated method stub
@@ -76,5 +77,20 @@ public class SYSTEM_USER_INFO_Impl extends SqlSessionDaoSupport implements SYSTE
 		}
 		return cnt;
 	}
+
+	@Override
+	public int delete_SYSTEM_USER_INFO_RECORDS(HashMap<String, Object> parameters) {
+		int cnt = -1;
+		try {
+			System.out.println(getSqlSession());
+			cnt = getSqlSession().insert("UI_Query.delete_SYSTEM_USER_INFO_RECORDS",parameters);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e.getMessage());
+		}
+		return cnt;
+	}
+	
+	
 
 }
