@@ -14,6 +14,9 @@ import com.shinwootns.ipm.ApplicationProperty;
 @Configuration
 public class AmqpConfig {
 	
+	private final static String SYSLOG_QUEUE_NAME = "ipm.syslog";
+	private final static int AMQP_RECONNECT_TIME = 5000;
+	
 	@Autowired
 	private ApplicationProperty appProperty;
 	
@@ -22,7 +25,7 @@ public class AmqpConfig {
 	
 	@Bean
 	Queue queue() {
-		return new Queue("ipm.syslog", false);
+		return new Queue(SYSLOG_QUEUE_NAME, false);
 	}
 	
 	@Bean
@@ -37,17 +40,22 @@ public class AmqpConfig {
 	
 	@Bean
 	SimpleMessageListenerContainer container(ConnectionFactory connectionFactory, MessageListenerAdapter listenerAdapter) {
-		SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
 		
 		// Debug - Skip recv syslog
 		if ( appProperty.debugEnable && appProperty.enableRecvSyslog == false ) {
-			container.stop();
-			return container;
+			return null;
 		}
 		
+		SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
 		container.setConnectionFactory(connectionFactory);
-		container.setQueueNames("ipm.syslog");
-		container.setRecoveryInterval(5000);		// amqp reconnect interval
+		
+		// Set Queue
+		container.setQueueNames(SYSLOG_QUEUE_NAME);
+		
+		// Reconnect interval
+		container.setRecoveryInterval(AMQP_RECONNECT_TIME);
+		
+		// Listener
 		container.setMessageListener(listenerAdapter);
 		
 		return container;
