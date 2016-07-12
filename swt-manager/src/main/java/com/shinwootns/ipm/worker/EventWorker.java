@@ -1,4 +1,4 @@
-package com.shinwootns.ipm.service.event;
+package com.shinwootns.ipm.worker;
 
 import java.util.List;
 
@@ -11,7 +11,6 @@ import com.shinwootns.ipm.SpringBeanProvider;
 import com.shinwootns.ipm.data.SharedData;
 import com.shinwootns.ipm.data.entity.EventLogEntity;
 import com.shinwootns.ipm.data.mapper.EventMapper;
-import com.shinwootns.ipm.service.BaseWorker;
 
 public class EventWorker extends BaseWorker {
 

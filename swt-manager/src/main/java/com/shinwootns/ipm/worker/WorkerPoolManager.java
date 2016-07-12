@@ -1,15 +1,9 @@
-package com.shinwootns.ipm.service;
-
-import java.util.concurrent.ConcurrentLinkedQueue;
+package com.shinwootns.ipm.worker;
 
 import org.apache.log4j.Logger;
 
-import com.shinwootns.common.network.SyslogEntity;
 import com.shinwootns.common.stp.PoolStatus;
 import com.shinwootns.common.stp.SmartThreadPool;
-import com.shinwootns.ipm.service.event.EventWorker;
-//import com.shinwootns.ipm.service.amqp.AmqpWorker;
-import com.shinwootns.ipm.service.syslog.SyslogWorker;
 
 public class WorkerPoolManager {
 	
@@ -21,6 +15,7 @@ public class WorkerPoolManager {
 	
 	private static final int SYSLOG_WORKER_COUNT = 3;
 	private static final int EVENT_WORKER_COUNT = 2;
+	private static final int DEVICE_COLLECT_WORKER_COUNT = 1;
 	
 	// Singleton
 	private static WorkerPoolManager _instance = null;
@@ -55,6 +50,12 @@ public class WorkerPoolManager {
 			for(int i=1; i<=EVENT_WORKER_COUNT; i++)
 			{
 				_workerPool.addTask(new EventWorker(i));
+			}
+			
+			// Start Collect Device Worker
+			for(int i=1; i<=DEVICE_COLLECT_WORKER_COUNT; i++)
+			{
+				_workerPool.addTask(new DeviceCollectWorker(i));
 			}
 			
 		} else {
