@@ -83,7 +83,7 @@ public class SYSTEM_USER_INFO_Impl extends SqlSessionDaoSupport implements SYSTE
 		int cnt = -1;
 		try {
 			System.out.println(getSqlSession());
-			cnt = getSqlSession().insert("UI_Query.delete_SYSTEM_USER_INFO_RECORDS",parameters);
+			cnt = getSqlSession().delete("UI_Query.delete_SYSTEM_USER_INFO_RECORDS",parameters);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(e.getMessage());

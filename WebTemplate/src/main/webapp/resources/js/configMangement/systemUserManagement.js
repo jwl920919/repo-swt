@@ -79,7 +79,7 @@ $('#delete-button').click(function() {
     }
     var jsonInfo = JSON.stringify(jsonArray);
     $.ajax({
-        url : "/add",
+        url : "configManagement/deleteUsers",
         type : "POST",
         data : jsonInfo,
         dataType : "json"
