@@ -26,7 +26,7 @@ docker run \
  --name myRedis \
  -d \
  -p 6379:6379 \
- -e REDIS_PASS=shinwoo123! \
+ -v /myredis/conf/redis.conf:/usr/local/etc/redis/redis.conf \
  --restart always \
  redis
 ```
