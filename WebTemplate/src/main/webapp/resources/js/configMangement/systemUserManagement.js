@@ -232,7 +232,6 @@ $('#id-check-button').click(function() {
 });
 
 $('#save-button').click(function() {
-<<<<<<< HEAD
 	switch (sw) {
 	case 1:
 		if (passwordCheck()) {
@@ -301,7 +300,6 @@ $('#save-button').click(function() {
 		}
 		break;
 	}
-=======
     switch (sw) {
     case 1:
         if (passwordCheck()) {
@@ -372,5 +370,4 @@ $('#save-button').click(function() {
         }
         break;
     }
->>>>>>> branch 'master' of https://github.com/songagi/repo-swt.git
 });
