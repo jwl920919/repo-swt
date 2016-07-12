@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -44,7 +46,6 @@ public class ConfigManagementActionController {
 	@Autowired
 	private SYSTEM_USER_INFO_Service_Interface userInfoService;
 	// region getSystemUserManagementDatatableDatas
-	private final static String[] USER_COLUMNS = { "user_id", "user_name" };
 
 	@RequestMapping(value = "getSystemUserManagementDatatableDatas", method = RequestMethod.POST)
 	public void getSystemUserManagementDatatableDatas(Locale locale, Model model, HttpServletRequest request,
@@ -52,20 +53,13 @@ public class ConfigManagementActionController {
 		logger.info("getSystemUserManagementDatatableDatas : " + request.getLocalAddr());
 		System.out.println("getSystemUserManagementDatatableDatas Controller");
 		try {
+			String[] columns = { "user_id", "user_name" };
+			HashMap<String, Object> parameters = Common.Helper.DatatableHelper.getDatatableParametas(request, columns,
+					1);
 
-			String orderColumn = USER_COLUMNS[Integer.parseInt(request.getParameter("order[0][column]")) - 1],
-					orderType = request.getParameter("order[0][dir]"),
-					searchValue = request.getParameter("search[value]");
-			int startIndex = Integer.parseInt(request.getParameter("start")),
-					length = Integer.parseInt(request.getParameter("length"));
-			HashMap<String, Object> parameters = new HashMap<>();
-			parameters.put("searchValue", searchValue + "%");
-			parameters.put("orderColumn", orderColumn);
-			parameters.put("orderType", orderType);
-			parameters.put("startIndex", startIndex);
-			parameters.put("length", length);
 			List<SYSTEM_USER_INFO_DTO> userDataList = userInfoService
 					.select_SYSTEM_USER_INFO_CONDITIONAL_SEARCH(parameters);
+
 			JSONArray jsonArray = new JSONArray();
 			for (SYSTEM_USER_INFO_DTO suid : userDataList) {
 				JSONObject jObj = new JSONObject();
@@ -74,27 +68,10 @@ public class ConfigManagementActionController {
 				jObj.put("active", 1);
 				jsonArray.add(jObj);
 			}
-			// dbHelper.close();
 			int totalCount = userInfoService.select_SYSTEM_USER_INFO_CONDITIONAL_SEARCH_TOTAL_COUNT(parameters);
-			StringBuffer sb = new StringBuffer("");
-			sb.append(request.getParameter("callback"));
-			sb.append("({");
-			sb.append("\"draw\": ");
-			sb.append(request.getParameter("draw"));
-			sb.append(',');
-			sb.append("\"recordsFiltered\": ");
-			sb.append(totalCount);
-			sb.append(',');
-			sb.append("\"recordsTotal\": ");
-			sb.append(totalCount);
-			sb.append(',');
-			sb.append("\"data\": ");
-			sb.append(jsonArray);
-			sb.append(',');
-			sb.append("})");
-			response.setContentType("Application/json;charset=utf-8");
 
-			response.getWriter().println(sb.toString());
+			response.setContentType("Application/json;charset=utf-8");
+			response.getWriter().println(Common.Helper.DatatableHelper.makeCallback(request, jsonArray, totalCount));
 			response.getWriter().flush();
 			response.getWriter().close();
 		} catch (IOException e) {
@@ -142,21 +119,19 @@ public class ConfigManagementActionController {
 	public @ResponseBody Object updateUserInfo(HttpServletRequest request) {
 		logger.info("updateUserInfo : " + request.getLocalAddr());
 		try {
-			Map map = gson.fromJson(request.getReader(), new TypeToken<HashMap<String, Object>>() {
-			}.getType());
-			HashMap<String, Object> typeCastMap = new HashMap<>();
-			typeCastMap.put("user_pw", map.get("user_pw"));
-			typeCastMap.put("mobile_num", map.get("mobile_num"));
-			typeCastMap.put("user_id", map.get("user_id"));
-			typeCastMap.put("group_id", Integer.parseInt(map.get("group_id").toString()));
-			typeCastMap.put("user_name", map.get("user_name"));
-			typeCastMap.put("site_id", Integer.parseInt(map.get("site_id").toString()));
-			typeCastMap.put("position_name", map.get("position_name"));
-			typeCastMap.put("dept_name", map.get("dept_name"));
-			typeCastMap.put("phone_num", map.get("phone_num"));
-			typeCastMap.put("email", map.get("email"));
-			int cnt = userInfoService.update_SYSTEM_USER_INFO_ONE_RECORD(typeCastMap);
-			if (cnt > 0)
+			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
+					new TypeToken<HashMap<String, Object>>() {
+					}.getType());
+			int group_id = Integer.parseInt(parameters.get("group_id").toString()),
+					site_id = Integer.parseInt(parameters.get("site_id").toString());
+			String time_zone = parameters.get("time_zone").toString();
+			parameters.remove("group_id");
+			parameters.remove("site_id");
+			parameters.put("group_id", group_id);
+			parameters.put("site_id", site_id);
+
+			int cnt = userInfoService.update_SYSTEM_USER_INFO_ONE_RECORD(parameters);
+			if (cnt > -1)
 				result.result = true;
 			else
 				result.result = false;
@@ -174,11 +149,12 @@ public class ConfigManagementActionController {
 	public @ResponseBody Object checkId(HttpServletRequest request) {
 		logger.info("checkId : " + request.getLocalAddr());
 		try {
-			HashMap<String, Object> map = gson.fromJson(request.getReader(), new TypeToken<HashMap<String, Object>>() {
-			}.getType());
-			SYSTEM_USER_INFO_DTO systemUserInfo = userInfoService.select_SYSTEM_USER_INFO_ONE_SEARCH(map);
+			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
+					new TypeToken<HashMap<String, Object>>() {
+					}.getType());
+			SYSTEM_USER_INFO_DTO systemUserInfo = userInfoService.select_SYSTEM_USER_INFO_ONE_SEARCH(parameters);
 			if (systemUserInfo == null) {
-				if (map.get("user_id").toString().equals(""))
+				if (parameters.get("user_id").toString().equals(""))
 					result.result = false;
 				else
 					result.result = true;
@@ -194,26 +170,52 @@ public class ConfigManagementActionController {
 	}
 	// endregion
 
-	// region checkId
+	// region addUser
 	@RequestMapping(value = "addUser", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object addUser(HttpServletRequest request) {
 		logger.info("addUser : " + request.getLocalAddr());
 		try {
-			Map map = gson.fromJson(request.getReader(), new TypeToken<HashMap<String, Object>>() {
-			}.getType());
-			HashMap<String, Object> typeCastMap = new HashMap<>();
-			typeCastMap.put("user_pw", map.get("user_pw"));
-			typeCastMap.put("mobile_num", map.get("mobile_num"));
-			typeCastMap.put("user_id", map.get("user_id"));
-			typeCastMap.put("group_id", Integer.parseInt(map.get("group_id").toString()));
-			typeCastMap.put("user_name", map.get("user_name"));
-			typeCastMap.put("site_id", Integer.parseInt(map.get("site_id").toString()));
-			typeCastMap.put("position_name", map.get("position_name"));
-			typeCastMap.put("dept_name", map.get("dept_name"));
-			typeCastMap.put("phone_num", map.get("phone_num"));
-			typeCastMap.put("email", map.get("email"));
-			int cnt = userInfoService.insert_SYSTEM_USER_INFO_ONE_RECORD(typeCastMap);
-			if (cnt > 0)
+			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
+					new TypeToken<HashMap<String, Object>>() {
+					}.getType());
+			int group_id = Integer.parseInt(parameters.get("group_id").toString()),
+					site_id = Integer.parseInt(parameters.get("site_id").toString());
+			parameters.remove("group_id");
+			parameters.remove("site_id");
+			parameters.put("group_id", group_id);
+			parameters.put("site_id", site_id);
+			int cnt = userInfoService.insert_SYSTEM_USER_INFO_ONE_RECORD(parameters);
+			if (cnt > -1)
+				result.result = true;
+			else
+				result.result = false;
+			return gson.toJson(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+	// endregion
+
+	// region deleteUser
+	@RequestMapping(value = "deleteUsers", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+	public @ResponseBody Object deleteUsers(HttpServletRequest request) {
+		logger.info("deleteUsers : " + request.getLocalAddr());
+		try {
+			List<HashMap<String, Object>> jArray = gson.fromJson(request.getReader(),
+					new TypeToken<List<HashMap<String, Object>>>() {
+					}.getType());
+
+			ArrayList<String> userIdList = new ArrayList<String>();
+			for (HashMap<String, Object> map : jArray) {
+				userIdList.add(map.get("user_id").toString());
+			}
+			HashMap<String, Object> parameter = new HashMap<>();
+			parameter.put("list", userIdList);
+			int cnt = userInfoService.delete_SYSTEM_USER_INFO_RECORDS(parameter);
+			System.out.println(cnt);
+			if (cnt > -1)
 				result.result = true;
 			else
 				result.result = false;

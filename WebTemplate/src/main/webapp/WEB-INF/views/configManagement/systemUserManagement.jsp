@@ -34,8 +34,6 @@
 <link rel="stylesheet" href="resources/css/essential.css">
 <link rel="stylesheet"
 	href="resources/css/configMangement/systemUserManagement.css">
-<script src="resources/plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="resources/plugins/datatables/dataTables.bootstrap.min.js"></script>
 </head>
 <body>
 	<section class="white-paper">
@@ -47,7 +45,7 @@
 						<table id="datatable" class="essential-table" style="width: 98%">
 							<thead>
 								<tr>
-									<th><input type="checkbox" /></th>
+									<th><input name="select_all" id="checkbox_controller" type="checkbox" /></th>
 									<th width="48%"><%=LanguageHelper.GetLanguage("ID")%></th>
 									<th width="48%"><%=LanguageHelper.GetLanguage("Name")%></th>
 								</tr>
@@ -81,7 +79,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="send-body">
+						<div id="send-body" class="send-body">
 							<!-- 아이디,패스워드,이름 -->
 							<div class="send-rows-room">
 								<div id="id-row" class="send-row">
@@ -146,6 +144,7 @@
 								<div id="email-row" class="send-row">
 									<label class="send-label"><%=LanguageHelper.GetLanguage("email")%></label>
 									<input type="text" id="emailTxt" name="emailTxt">
+									<label id='email-state-label' class='email-state-label'></label>
 								</div>
 								<div id="phone-row" class="send-row">
 									<label class="send-label"><%=LanguageHelper.GetLanguage("phone")%></label>
@@ -169,9 +168,6 @@
 		</div>
 	</div>
 	</section>
-	<!--
-		 </div>
-	</div> -->
 	<script src="resources/js/common/Datatable-Essential.js"></script>
 	<script src="resources/js/configMangement/systemUserManagement.js"></script>
 </body>

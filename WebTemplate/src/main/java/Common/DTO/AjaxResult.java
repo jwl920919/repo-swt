@@ -1,7 +1,5 @@
 package Common.DTO;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -55,6 +53,15 @@ public class AjaxResult {
 	@JsonProperty("data")
 	public List<Map<String, Object>> data = null;
 	//new List<LinkedHashMap<String, Object>>();
+
+	/**
+	 * <p>
+	 * Ajax 리턴 error Message
+	 * </p>
+	 * 
+	 * @return String
+	 **/
+	public String errorMessage;
 	
 	protected boolean isResult() {
 		return result;
@@ -86,7 +93,11 @@ public class AjaxResult {
 	protected void setData(List<Map<String, Object>> data) {
 		this.data = data;
 	}
-	
-
+	protected String getErrorMessage() {
+		return errorMessage;
+	}
+	protected void setErrorMessage(String errorMessage) {
+		this.errorMessage = errorMessage;
+	}
 
 }

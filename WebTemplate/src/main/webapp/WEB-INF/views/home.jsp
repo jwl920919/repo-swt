@@ -3,6 +3,8 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 
 <script src="../resources/js/base/jquery-2.2.4.min.js"></script>
+<script src="../resources/js/base/jstz-1.0.4.min.js"></script>
+<script src="../resources/js/common/Common.js"></script>
 
 <%@ page session="false"%>
 <html>
@@ -10,6 +12,10 @@
 <title>Home</title>
 <script>
 	function fnload() {
+		var timezone = jstz.determine();
+		alert(timezone.name());
+
+		alert(getClientTimeZoneName());
 	};
 
 	function getLogin() {

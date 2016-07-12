@@ -6,23 +6,33 @@
 
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<!-- PostgreSQL JDBC setting -->
-	<bean id="dataSource"
-		class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
 		<property name="driverClass" value="org.postgresql.Driver" />
 		<property name="url" value="jdbc:postgresql://shinwootnskr.iptime.org:5432/ipm_db" />
 		<property name="username" value="postgres" />
 		<property name="password" value="shinwoo123!" />
 	</bean>
+	<bean id="logDataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
+		<constructor-arg ref="dataSource" />
+		<property name="logFormatter">
+			<bean class="net.sf.log4jdbc.tools.Log4JdbcCustomFormatter">
+				<property name="loggingType" value="MULTI_LINE" />
+				<property name="sqlPrefix" value="SQL:::" />
+			</bean>
+		</property>
+	</bean>
+	
 	<bean id="transactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="dataSource" />
+		<property name="dataSource" ref="logDataSource" />
 	</bean>
 	<!-- mybatis setting -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="dataSource" ref="dataSource" />
+		<property name="dataSource" ref="logDataSource" />
 		<property name="configLocation"
 			value="classpath:MVC/ShinwooTNS/myBastis/mybatis-config.xml" />
 	</bean>
+	
 
 	<!-- <bean id="myappService" class="Common.ServiceImpl.MyappServiceImpl"> -->
 	<!-- <property name="myappDao" ref="myappDao"/> -->
@@ -61,6 +71,14 @@
 	</bean>
 
 	<bean id="siteInfoDao" class="Common.DAOImpl.SITE_INFO_Impl">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+
+	<bean id="ipManagementService" class="Common.ServiceImpl.IP_MANAGEMENT_Service_Impl">
+		<property name="IP_MANAGEMENT_dao" ref="ipManagementDao" />
+	</bean>
+
+	<bean id="ipManagementDao" class="Common.DAOImpl.IP_MANAGEMENT_Impl">
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
 </beans>

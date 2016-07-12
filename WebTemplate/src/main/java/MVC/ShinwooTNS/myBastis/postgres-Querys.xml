@@ -4,7 +4,7 @@
 <mapper namespace="UI_Query">
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
 	<!-- Insert Date : 2016-06-21 -->
-	<!-- Insert User : 김창민 -->
+	<!-- Insert User : KCM -->
 	<!-- Description : 데시보드 메뉴 데이터 조회 -->
 	<!-- Controller : -->
 	<select id="select_UI_MENU_MASTER" resultType="java.util.HashMap">
@@ -37,9 +37,9 @@
 		SELECT count(*) AS total
 		FROM
 		SYSTEM_USER_INFO
-		WHERE user_id like #{searchValue} OR user_name
-		like
-		#{searchValue}
+		WHERE user_id like CONCAT('%', #{searchValue}, '%') OR
+		user_name
+		like CONCAT('%', #{searchValue}, '%')
 	</select>
 
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
@@ -52,15 +52,10 @@
 		SELECT
 		site_id,user_seq,group_id,user_id,user_pw,user_name,dept_name,position_name,phone_num,mobile_num,email,mysingle_yn,insert_date,modify_date
 		FROM SYSTEM_USER_INFO
-		WHERE user_id like #{searchValue} OR user_name
-		like #{searchValue}
-		<trim prefix="ORDER BY">
-			<if test="orderColumn == 'user_id'"> user_id </if>
-			<if test="orderColumn == 'user_name'"> user_name </if>
-			<if test="orderType == 'asc'"> ASC </if>
-			<if test="orderType == 'desc'"> DESC </if>
-		</trim>
-		offset #{startIndex} limit #{length};
+		WHERE user_id like CONCAT('%', #{searchValue},
+		'%') OR user_name
+		like CONCAT('%', #{searchValue}, '%') ORDER BY
+		${orderColumn} ${orderType} offset #{startIndex} limit #{length};
 	</select>
 
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
@@ -80,13 +75,11 @@
 	<!-- Insert User : 이재원 -->
 	<!-- Description : 유저 정보 변경 (Only Record One) -->
 	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
-	<update id="update_SYSTEM_USER_INFO_ONE_RECORD" parameterType="hashmap"
-		flushCache="true" statementType="PREPARED" timeout="20">
+	<update id="update_SYSTEM_USER_INFO_ONE_RECORD" parameterType="hashmap">
+		SET TIMEZONE TO '${time_zone}';
 		UPDATE system_user_info set
-		user_id=#{user_id},
 		<if test="user_pw != ''">user_pw=#{user_pw},</if>
-		user_name=#{user_name},group_id=#{group_id
-		},site_id=#{site_id},dept_name=#{dept_name},position_name=#{position_name},email=#{email},phone_num=#{phone_num},mobile_num=#{mobile_num},modify_date=now()
+		user_name=#{user_name},group_id=#{group_id},site_id=#{site_id},dept_name=#{dept_name},position_name=#{position_name},email=#{email},phone_num=#{phone_num},mobile_num=#{mobile_num},modify_date=now()
 		WHERE user_id=#{user_id};
 	</update>
 
@@ -95,15 +88,30 @@
 	<!-- Insert User : 이재원 -->
 	<!-- Description : 유저 정보 추가 (Only Record One) -->
 	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
-	<insert id="insert_SYSTEM_USER_INFO_ONE_RECORD" parameterType="hashmap"
-		flushCache="true" statementType="PREPARED" timeout="20">
+	<insert id="insert_SYSTEM_USER_INFO_ONE_RECORD" parameterType="hashmap">
+		SET TIMEZONE TO '${time_zone}';
 		INSERT into
-		system_user_info (site_id, user_id, user_pw,
-		user_name, group_id, dept_name, position_name, phone_num,
-		mobile_num, email, mysingle_yn, insert_date, modify_date) VALUES (#{site_id}, #{user_id}, #{user_pw},
-		#{user_name}, #{group_id}, #{dept_name}, #{position_name}, #{phone_num},
-		#{mobile_num}, #{email}, false, now(), now());
+		system_user_info (site_id,
+		user_id, user_pw,
+		user_name, group_id, dept_name, position_name,
+		phone_num,
+		mobile_num, email, mysingle_yn, insert_date, modify_date)
+		VALUES (#{site_id}, #{user_id}, #{user_pw},
+		#{user_name}, #{group_id},
+		#{dept_name}, #{position_name}, #{phone_num},
+		#{mobile_num}, #{email},
+		false, now(), now());
 	</insert>
+	
+	<!-- Query Type : Delete(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-07-12 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : 유저 정보 삭제 -->
+	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
+	<delete id="delete_SYSTEM_USER_INFO_RECORDS" parameterType="hashmap">
+		DELETE FROM system_user_info WHERE user_id in 
+		(<foreach collection="list" item="item" separator=" , ">#{item}</foreach>);
+	</delete>
 
 
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
@@ -126,7 +134,23 @@
 		site_id,site_name,site_code,description FROM site_info;
 	</select>
 
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-07-11 -->
+	<!-- Insert User : KCM -->
+	<!-- Description : IP관리 > 고정IP현황 -->
+	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
+	<select id="select_IP_MANAGEMENT_SEGMENT" resultType="java.util.HashMap">
+		SELECT * FROM "test_dhcp_segment" ,(SELECT count(*) allcount FROM "test_dhcp_segment") as allcount
+		 WHERE network like CONCAT('%', #{searchValue}, '%') OR comment like CONCAT('%', #{searchValue}, '%') OR site like CONCAT('%', #{searchValue}, '%')
+		 ORDER BY ${orderColumn} ${orderType}
+		offset #{startIndex} limit #{length};
+	</select>
+
+	
+
 </mapper>
+
+
 
 <!-- <mapper namespace="testSqlMap" > -->
 <!-- <select id="selectTestTable" resultType="java.util.HashMap"> -->
