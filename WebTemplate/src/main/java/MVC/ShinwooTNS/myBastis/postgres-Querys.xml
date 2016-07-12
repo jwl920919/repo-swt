@@ -145,6 +145,8 @@
 	
 </mapper>
 
+
+
 <!-- <mapper namespace="testSqlMap" > -->
 <!-- <select id="selectTestTable" resultType="java.util.HashMap"> -->
 
