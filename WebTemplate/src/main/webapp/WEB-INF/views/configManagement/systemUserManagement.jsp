@@ -36,6 +36,11 @@
 	href="resources/css/configMangement/systemUserManagement.css">
 </head>
 <body>
+	<!-- Alert Start -->
+	<div id="layDiv">
+		<div class="alert-box"></div>
+		<div id="divAlertArea"></div>
+	</div>
 	<section class="white-paper">
 	<div class="row">
 		<div class="col-md-6">
@@ -45,7 +50,8 @@
 						<table id="datatable" class="essential-table" style="width: 98%">
 							<thead>
 								<tr>
-									<th><input name="select_all" id="checkbox_controller" type="checkbox" /></th>
+									<th><input name="select_all" id="checkbox_controller"
+										type="checkbox" /></th>
 									<th width="48%"><%=LanguageHelper.GetLanguage("ID")%></th>
 									<th width="48%"><%=LanguageHelper.GetLanguage("Name")%></th>
 								</tr>
@@ -95,8 +101,8 @@
 									<input type="password" id="passwordTxt" name="passwordTxt">
 									<label class="send-label"><%=LanguageHelper.GetLanguage("checkPassword")%></label>
 									<input type="password" id="passwordChkTxt"
-										name="passwordChkTxt">
-										<label id='pw-state-label' class='pw-state-label'></label>
+										name="passwordChkTxt"> <label id='pw-state-label'
+										class='pw-state-label'></label>
 								</div>
 								<div id="name-row" class="send-row">
 									<label class="send-label"><%=LanguageHelper.GetLanguage("Name")%></label>
@@ -143,8 +149,8 @@
 							<div class="send-rows-room">
 								<div id="email-row" class="send-row">
 									<label class="send-label"><%=LanguageHelper.GetLanguage("email")%></label>
-									<input type="text" id="emailTxt" name="emailTxt">
-									<label id='email-state-label' class='email-state-label'></label>
+									<input type="text" id="emailTxt" name="emailTxt"> <label
+										id='email-state-label' class='email-state-label'></label>
 								</div>
 								<div id="phone-row" class="send-row">
 									<label class="send-label"><%=LanguageHelper.GetLanguage("phone")%></label>
@@ -155,7 +161,7 @@
 									<input type="text" id="mobileTxt" name="mobileTxt">
 								</div>
 							</div>
-							
+
 						</div>
 						<div id="save-row" style="margin-top: 5px; text-align: right;">
 							<button type="button" class="btn btn-primary" id="save-button"

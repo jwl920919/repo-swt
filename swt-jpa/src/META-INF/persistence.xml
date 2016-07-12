@@ -25,5 +25,7 @@
 		<class>com.shinwootns.ipm.data.entity.DeviceInterfaceIp</class>
 		<class>com.shinwootns.ipm.data.entity.DeviceInterfaceIpPK</class>
 		<class>com.shinwootns.ipm.data.entity.SiteBlacklistInfo</class>
+		<class>com.shinwootns.ipm.data.entity.SiteInsightInfo</class>
+		<class>com.shinwootns.ipm.data.entity.SiteSegmentInfo</class>
 	</persistence-unit>
 </persistence>
