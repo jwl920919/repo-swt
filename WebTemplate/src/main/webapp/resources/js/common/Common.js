@@ -2,6 +2,13 @@
 function systemAlert(message) {
 	systemAlert("layDiv", message)
 }
+
+/**
+ * divElement : alert을 가지고 있는 div ID
+ * type : alert-warning, alert-danger, alert-info, alert-success
+ * title : 경고, 주의 등의 팝업 타이틀
+ * message : 팝업 문구
+**/
 function systemAlert(divElement, type, title, message) {
 	$("#layDiv").attr("style", "visibility: visible");
 	$("#alertTitle").text(title);
@@ -22,11 +29,17 @@ function systemAlert(divElement, type, title, message) {
 	
 }
 
+/**
+ * systemAlert 팝업 close 핸들러
+**/
 function fnAlertClose(divElement) {
 	
 	$("#" + divElement).attr("style", "visibility: hidden");
 }
 
+/**
+ * 쿠키값 설정
+**/
 function setCookie(c_name, value, exdays) {
 	try {
 		var exdate = new Date();
@@ -39,6 +52,9 @@ function setCookie(c_name, value, exdays) {
 	}	
 }
 
+/**
+ * 쿠키값 조회
+**/
 function getCookie(c_name) {
 	var i, x, y, ARRcookies = document.cookie.split(";");
 	for (i = 0; i < ARRcookies.length; i++) {
@@ -52,6 +68,10 @@ function getCookie(c_name) {
 	}
 }
 
+/**
+ * String Format
+ * string.String.Format("aaa {0}-{1}", 값1, 값2);
+**/
 String.format = function() {
 	var s = arguments[0];
 	for (var i = 0; i < arguments.length - 1; i++) {       

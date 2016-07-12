@@ -80,7 +80,7 @@ $(document).ready(function() {
 	    d_wrap.prepend(d_filter);
 	});	
 
-
+	//datatable 첫번째 td 클릭 이벤트 바인딩
 	$('#datatable').delegate('tbody>tr>td:first-child', 'click', function() {
 	    //$(this).addClass("selected").siblings().removeClass("selected");
 		console.log("td click event : " + this);
@@ -88,7 +88,52 @@ $(document).ready(function() {
 	});
 });
 
+/**
+ * td 이벤트 핸들러
+**/
 function tdClickEvent(obj){
-	systemAlert("divAlertArea", "alert-danger", getLanguage("warning"), $(obj).html());
-	//alert($(obj).html());
+	//systemAlert("divAlertArea", "alert-danger", getLanguage("warning"), $(obj).html());
+	//alert($(obj).html().trim());
+	
+	$("#defaultDiv").css("display","none");
+	$("#detailDiv").css("display","block");
+	
+	$('#datatable_detail').DataTable(
+            {
+                "destroy" : true,
+                "paging" : true,
+                "searching" : true,
+                "lengthChange" : true,
+                "ordering" : true,
+                "info" : false,
+                "autoWidth" : true,
+                "processing" : true,
+                "serverSide" : true,
+                "ajax" : {
+                    url : 'ipManagement/staticIPStatus_Segment_Select',
+                    "dataType" : "jsonp",
+                    "type" : "POST",
+                    "jsonp" : "callback",
+                    "data" : function(data,type) {
+                        data.search_key = data.search.value;
+                        //console.log(data.search_key);
+                    }
+                },
+			    "columnDefs": [{ className: "essential-td-left", "targets": [ 0 ] },
+			                 { className: "essential-td-left", "targets": [ 1 ] }],
+                "order" : [ [ 1, 'asc' ] ],
+                "columns" : [ {"data" : "network"},
+                              {"data" : "comment"},
+                              {"data" : "utilization"},
+                              {"data" : "site"}, ],
+            });
+	
+	//검색, 엔트리 위치 정렬
+	$(function() {
+	    var d_wrap = $('#datatable_detail_wrapper .row:first');
+	    var d_length = $('#datatable_detail_wrapper .row:first .col-sm-6:eq(0)');
+	    var d_filter = $('#datatable_detail_wrapper .row:first .col-sm-6:eq(1)');
+	    d_length.append(d_filter);
+	    d_wrap.prepend(d_filter);
+	});	
 }
