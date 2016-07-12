@@ -42,6 +42,8 @@
 	href="resources/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
 <!-- page essential.css -->
 <link rel="stylesheet" href="resources/css/essential.css">
+<!-- default style -->
+<link rel="stylesheet" href="resources/css/default.css">
 
 <script src="resources/js/base/jstz-1.0.4.min.js"></script>
 <script src="resources/js/common/Common.js"></script>
