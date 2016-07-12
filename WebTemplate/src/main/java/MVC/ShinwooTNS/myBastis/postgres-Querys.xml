@@ -107,6 +107,8 @@
 		#{mobile_num}, #{email}, false, now(), now());
 	</insert>
 
+	
+
 
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
 	<!-- Insert Date : 2016-07-11 -->
@@ -136,6 +138,7 @@
 	<select id="select_IP_MANAGEMENT_SEGMENT" resultType="java.util.HashMap">
 		SELECT * FROM "test_dhcp_segment";
 	</select>
+	
 	
 </mapper>
 

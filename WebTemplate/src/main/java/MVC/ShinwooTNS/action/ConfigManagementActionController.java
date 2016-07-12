@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -44,7 +46,6 @@ public class ConfigManagementActionController {
 	@Autowired
 	private SYSTEM_USER_INFO_Service_Interface userInfoService;
 	// region getSystemUserManagementDatatableDatas
-	private final static String[] USER_COLUMNS = { "user_id", "user_name" };
 
 	@RequestMapping(value = "getSystemUserManagementDatatableDatas", method = RequestMethod.POST)
 	public void getSystemUserManagementDatatableDatas(Locale locale, Model model, HttpServletRequest request,
@@ -52,48 +53,24 @@ public class ConfigManagementActionController {
 		logger.info("getSystemUserManagementDatatableDatas : " + request.getLocalAddr());
 		System.out.println("getSystemUserManagementDatatableDatas Controller");
 		try {
-
-			String orderColumn = USER_COLUMNS[Integer.parseInt(request.getParameter("order[0][column]")) - 1],
-					orderType = request.getParameter("order[0][dir]"),
-					searchValue = request.getParameter("search[value]");
-			int startIndex = Integer.parseInt(request.getParameter("start")),
-					length = Integer.parseInt(request.getParameter("length"));
-			HashMap<String, Object> parameters = new HashMap<>();
-			parameters.put("searchValue", searchValue + "%");
-			parameters.put("orderColumn", orderColumn);
-			parameters.put("orderType", orderType);
-			parameters.put("startIndex", startIndex);
-			parameters.put("length", length);
+			String[] columns = { "user_id", "user_name" };
+			HashMap<String, Object> parameters = Common.Helper.DatatableHelper.getDatatableParametas(request,columns,1);
+			
 			List<SYSTEM_USER_INFO_DTO> userDataList = userInfoService
 					.select_SYSTEM_USER_INFO_CONDITIONAL_SEARCH(parameters);
+			
 			JSONArray jsonArray = new JSONArray();
 			for (SYSTEM_USER_INFO_DTO suid : userDataList) {
 				JSONObject jObj = new JSONObject();
 				jObj.put("user_id", suid.getUser_id());
 				jObj.put("user_name", suid.getUser_name());
-				jObj.put("active", 1);
+				jObj.put("active", 1);//checkbox
 				jsonArray.add(jObj);
 			}
 			int totalCount = userInfoService.select_SYSTEM_USER_INFO_CONDITIONAL_SEARCH_TOTAL_COUNT(parameters);
-			StringBuffer sb = new StringBuffer("");
-			sb.append(request.getParameter("callback"));
-			sb.append("({");
-			sb.append("\"draw\": ");
-			sb.append(request.getParameter("draw"));
-			sb.append(',');
-			sb.append("\"recordsFiltered\": ");
-			sb.append(totalCount);
-			sb.append(',');
-			sb.append("\"recordsTotal\": ");
-			sb.append(totalCount);
-			sb.append(',');
-			sb.append("\"data\": ");
-			sb.append(jsonArray);
-			sb.append(',');
-			sb.append("})");
+			
 			response.setContentType("Application/json;charset=utf-8");
-
-			response.getWriter().println(sb.toString());
+			response.getWriter().println(Common.Helper.DatatableHelper.makeCallback(request, jsonArray, totalCount));
 			response.getWriter().flush();
 			response.getWriter().close();
 		} catch (IOException e) {
