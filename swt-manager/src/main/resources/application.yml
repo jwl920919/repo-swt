@@ -5,6 +5,9 @@ ipm:
   name: IPM
   version: 0.1.1
   license: TEST000000
+  cluster:
+    mode: master    # master, slave
+    slave-index: 0  # 0 ~ 99
 
 #====================================
 # spring
@@ -31,13 +34,10 @@ spring:
     virtual-host: /
   # Redis
   redis:
-    host: sinwootnskr.iptime.org
+    host: shinwootnskr.iptime.org
     port: 6379
     password: shinwoo123!
     timeout: 0
-    #sentinel:
-      #master: 192.168.1.81 
-      #nodes: 192.168.1.82:20000,192.168.1.83:20000
 
 #====================================
 # banner

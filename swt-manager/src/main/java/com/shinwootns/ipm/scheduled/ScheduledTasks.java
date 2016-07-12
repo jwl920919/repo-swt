@@ -15,26 +15,32 @@ import com.shinwootns.common.stp.PoolStatus;
 import com.shinwootns.ipm.data.entity.DeviceInfo;
 import com.shinwootns.ipm.data.mapper.DeviceMapper;
 import com.shinwootns.ipm.data.mapper.EventMapper;
+import com.shinwootns.ipm.service.redis.RedisHandler;
 import com.shinwootns.ipm.service.WorkerPoolManager;
 
 @Component
 public class ScheduledTasks {
 	
 	private final Logger _logger = Logger.getLogger(this.getClass());
-	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+	//private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 	
 	@Autowired(required=true)
 	private DeviceMapper deviceMapper;
 	
+	/*
 	@Bean
 	public ScheduledExecutorFactoryBean scheduledExecutorService() {
 		ScheduledExecutorFactoryBean bean = new ScheduledExecutorFactoryBean();
 		bean.setPoolSize(5);
 		return bean;
+	}*/
+	
+	// fixedRate
+	@Scheduled(fixedDelay = 5000)
+	public void updateClusterINfo() {
+		RedisHandler.getInstance().updateClusterMember();
 	}
 	
-	
-
 //	// fixedRate
 //    @Scheduled(fixedRate = 10000)
 //    public void monitorPoolStatus() {

@@ -34,7 +34,7 @@ public class EventWorker extends BaseWorker {
 			return;
 		
 		// debug_insert_event_enable
-		if (appProperty.isInsert_event_enable() == false)
+		if (appProperty.enableInsertEvent == false)
 			return;
 		
 		// get EventMapper

@@ -9,74 +9,51 @@ import org.springframework.stereotype.Component;
 public class ApplicationProperty {
 	
 	@Value("${ipm.name}")
-	private String name;
+	public String name;
 	
 	@Value("${ipm.version}")
-	private String version;
+	public String version;
 	
 	@Value("${ipm.license}")
-	private String license;
+	public String license;
 	
-	// Debug Mode
-	@Value("${ipm.debug_enable:false}")
-	private boolean debug_enable;
+	// Cluster info
+	@Value("${ipm.cluster.mode}")
+	public String clusterMode;
 	
-	@Value("${ipm.debug_recv_syslog_enable:true}")
-	private boolean recv_syslog_enable;
+	@Value("${ipm.cluster.slave-index:99}")
+	public int clusterSalveIndex;
 	
-	@Value("${ipm.debug_insert_event_enable:true}")
-	private boolean insert_event_enable;
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getVersion() {
-		return version;
-	}
-
-	public void setVersion(String version) {
-		this.version = version;
-	}
-
-	public String getLicense() {
-		return license;
-	}
-
-	public void setLicense(String license) {
-		this.license = license;
-	}
-
-	public boolean isDebug_enable() {
-		return debug_enable;
-	}
-
-	public void setDebug_enable(boolean debug_enable) {
-		this.debug_enable = debug_enable;
-	}
-
-	public boolean isRecv_syslog_enable() {
-		if (this.debug_enable == false)
-			return true;
+	//{{ Debug Mode
+	@Value("${ipm.debug.enable:false}")
+	public boolean debugEnable;
+	
+	@Value("${ipm.debug.enable_recv_syslog:true}")
+	public boolean enableRecvSyslog;
+	
+	@Value("${ipm.debug.enable_insert_event:true}")
+	public boolean enableInsertEvent;
+	//}} Debug Mode
+	
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
 		
-		return recv_syslog_enable;
-	}
-
-	public void setRecv_syslog_enable(boolean recv_syslog_enable) {
-		this.recv_syslog_enable = recv_syslog_enable;
-	}
-
-	public boolean isInsert_event_enable() {
-		if (this.debug_enable == false)
-			return true;
-		return insert_event_enable;
-	}
-
-	public void setInsert_event_enable(boolean insert_event_enable) {
-		this.insert_event_enable = insert_event_enable;
+		sb.append( "====================================================\n" );
+		sb.append( String.format("%-30s = %s\n", "ipm.name", this.name ) );
+		sb.append( String.format("%-30s = %s\n", "ipm.version", this.version ) );
+		sb.append( String.format("%-30s = %s\n", "ipm.license", this.license ) );
+		sb.append( String.format("%-30s = %s\n", "ipm.cluster.mode", this.clusterMode ) );
+		sb.append( String.format("%-30s = %s\n", "ipm.cluster.slave-index", this.clusterSalveIndex ) );
+		
+		if (debugEnable) {
+			sb.append( String.format("%-30s = %s\n", "ipm.debug.enable", (this.debugEnable)? "true":"false" ) );
+			sb.append( String.format("%-30s = %s\n", "ipm.debug.enable_recv_syslog", (this.enableRecvSyslog)? "true":"false" ) );
+			sb.append( String.format("%-30s = %s\n", "ipm.debug.enable_insert_event", (this.enableInsertEvent)? "true":"false" ) );
+		}
+		sb.append( "====================================================\n" );
+		
+		return sb.toString();
 	}
 }

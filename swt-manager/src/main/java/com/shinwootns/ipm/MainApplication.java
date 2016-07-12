@@ -17,11 +17,7 @@ import com.shinwootns.ipm.data.mapper.DeviceMapper;
 @SpringBootApplication
 public class MainApplication implements CommandLineRunner {
 	
-	@Autowired
-	private ApplicationProperty appProperty;
-	
 	public static void main(String[] args) {
-		
 		SpringApplicationBuilder appBuilder = new SpringApplicationBuilder(MainApplication.class);
 		SpringApplication app = appBuilder.build();
 		app.run(args);
@@ -29,8 +25,5 @@ public class MainApplication implements CommandLineRunner {
 	
 	@Override
 	public void run(String... arg0) throws Exception {
-		
-		System.out.println( appProperty.toString() );
-		
 	}
 }
