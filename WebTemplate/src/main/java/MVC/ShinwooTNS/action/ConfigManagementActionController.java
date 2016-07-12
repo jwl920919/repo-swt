@@ -134,7 +134,6 @@ public class ConfigManagementActionController {
 				System.out.println(key + " :: " + map.get(key));
 			}
 			
-			System.out.println("******************************************"+map.get("time_zone")+"***************************");
 
 			int cnt = userInfoService.update_SYSTEM_USER_INFO_ONE_RECORD(map);
 			if (cnt > 0)

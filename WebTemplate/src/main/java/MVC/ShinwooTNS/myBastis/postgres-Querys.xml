@@ -37,9 +37,8 @@
 		SELECT count(*) AS total
 		FROM
 		SYSTEM_USER_INFO
-		WHERE user_id like #{searchValue} OR user_name
-		like
-		#{searchValue}
+		WHERE user_id like CONCAT('%', #{searchValue}, '%') OR user_name
+		like CONCAT('%', #{searchValue}, '%')
 	</select>
 
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
@@ -52,8 +51,8 @@
 		SELECT
 		site_id,user_seq,group_id,user_id,user_pw,user_name,dept_name,position_name,phone_num,mobile_num,email,mysingle_yn,insert_date,modify_date
 		FROM SYSTEM_USER_INFO
-		WHERE user_id like #{searchValue} OR user_name
-		like #{searchValue}
+		WHERE user_id like CONCAT('%', #{searchValue}, '%') OR user_name
+		like CONCAT('%', #{searchValue}, '%')
 		<trim prefix="ORDER BY">
 			<if test="orderColumn == 'user_id'"> user_id </if>
 			<if test="orderColumn == 'user_name'"> user_name </if>
