@@ -102,6 +102,16 @@
 		#{mobile_num}, #{email},
 		false, now(), now());
 	</insert>
+	
+	<!-- Query Type : Delete(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-07-12 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : 유저 정보 삭제 -->
+	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
+	<delete id="delete_SYSTEM_USER_INFO_RECORDS" parameterType="hashmap">
+		DELETE FROM system_user_info WHERE user_id =
+		<foreach collection="list" item="item" separator=" , ">#{item}</foreach>;
+	</delete>
 
 
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
@@ -130,17 +140,19 @@
 	<!-- Description : IP관리 > 고정IP현황 -->
 	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
 	<select id="select_IP_MANAGEMENT_SEGMENT" resultType="java.util.HashMap">
-		SET TIMEZONE TO 'Asia/Seoul';
+		SET
+		TIMEZONE TO 'Asia/Seoul';
 		SELECT * FROM "test_dhcp_segment"
 		WHERE
 		network like CONCAT('%', #{searchValue}, '%') OR comment like
 		CONCAT('%', #{searchValue}, '%') OR site like CONCAT('%',
 		#{searchValue}, '%')
 		ORDER BY ${orderColumn} ${orderType}
-		offset #{startIndex} limit #{length};
+		offset
+		#{startIndex} limit #{length};
 	</select>
 
-
+	
 
 </mapper>
 

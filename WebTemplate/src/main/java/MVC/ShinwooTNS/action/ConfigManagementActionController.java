@@ -129,13 +129,6 @@ public class ConfigManagementActionController {
 			map.put("group_id", group_id);
 			map.put("site_id", site_id);
 
-			Iterator iterator = map.keySet().iterator();
-			while (iterator.hasNext()) {
-				String key = iterator.next().toString();
-				System.out.println(key + " :: " + map.get(key));
-			}
-			
-
 			int cnt = userInfoService.update_SYSTEM_USER_INFO_ONE_RECORD(map);
 			if (cnt > 0)
 				result.result = true;
@@ -207,8 +200,13 @@ public class ConfigManagementActionController {
 	public @ResponseBody Object deleteUsers(HttpServletRequest request) {
 		logger.info("deleteUsers : " + request.getLocalAddr());
 		try {
-			Map map = gson.fromJson(request.getReader(), new TypeToken<HashMap<String, Object>>() {
+			HashMap<String, Object> map = gson.fromJson(request.getReader(), new TypeToken<HashMap<String, Object>>() {
 			}.getType());
+			
+			for(Iterator iter = map.keySet().iterator();iter.hasNext();) {
+				String key = iter.next().toString();
+				System.out.println(key + " :: " + map.get(key));
+			}
 			// HashMap<String, Object> typeCastMap = new HashMap<>();
 			// typeCastMap.put("user_pw", map.get("user_pw"));
 			// typeCastMap.put("mobile_num", map.get("mobile_num"));

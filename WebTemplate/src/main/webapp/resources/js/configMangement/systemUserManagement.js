@@ -290,6 +290,17 @@ $('#save-button').click(function() {
                         var jsonObj = eval("(" + data + ')');
                         if (jsonObj.result == true) {
                             console.log('계정 생성 성공');
+                            $('#idTxt').val('');
+                            $('#passwordTxt').val('');
+                            $('#passwordChkTxt').val('');
+                            $('#nameTxt').val('');
+                            $('#groupSel').val(1);
+                            $('#placeOfBusinessSel').val(1);
+                            $('#departmentTxt').val('');
+                            $('#positionTxt').val('');
+                            $('#emailTxt').val('');
+                            $('#phoneTxt').val('');
+                            $('#mobileTxt').val('');
                         } else {
                             console.log('계정 생성 실패');
                         }
