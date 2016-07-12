@@ -299,7 +299,3 @@ $('#save-button').click(function() {
         break;
     }
 });
-// 이메일 형식 체크
-// String regex = "^[_a-zA-Z0-9-\\.]+@[\\.a-zA-Z0-9-]+\\.[a-zA-Z]+$";
-// 아이디 형식 체크
-// String regex = "^[a-zA-Z]{1}[a-zA-Z0-9_]{4,11}$";
