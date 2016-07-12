@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.shinwootns.common.datatype.ExtendedQueue;
 import com.shinwootns.common.network.SyslogEntity;
@@ -12,6 +14,8 @@ import com.shinwootns.common.utils.TimeUtils;
 import com.shinwootns.ipm.data.entity.EventLogEntity;
 
 public class SharedData {
+	
+	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
 	private final static int MAX_SYSLOG_RECV_QUEUE_SIZE = 10000;
 	

@@ -5,12 +5,15 @@ ipm:
   name: IPM-Manager(Test)
   version: 0.1.1
   license: TEST000000
+  cluster:
+    mode: master    # master, slave
+    slave-index: 0  # 0 ~ 99
   
   # debug mode
-  debug_mode: true
   debug:
-    recv_syslog_enable: false
-    insert_event_enable: false
+    enable: true
+    enable_recv_syslog: false
+    enable_insert_event: false
 
 #====================================
 # spring
@@ -34,13 +37,10 @@ spring:
     password: shinwoo123!
     virtual-host: /
   redis:
-    host: sinwootnskr.iptime.org
+    host: shinwootnskr.iptime.org
     port: 6379
     password: shinwoo123!
     timeout: 0
-    #sentinel:
-      #master: 192.168.1.81 
-      #nodes: 192.168.1.82:20000,192.168.1.83:20000
 
 #====================================
 # banner

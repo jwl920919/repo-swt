@@ -1,40 +1,32 @@
 package com.shinwootns.ipm.scheduled;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.scheduling.concurrent.ScheduledExecutorFactoryBean;
 import org.springframework.stereotype.Component;
 
-import com.shinwootns.common.stp.PoolStatus;
-import com.shinwootns.ipm.data.entity.DeviceInfo;
-import com.shinwootns.ipm.data.mapper.DeviceMapper;
-import com.shinwootns.ipm.data.mapper.EventMapper;
-import com.shinwootns.ipm.service.WorkerPoolManager;
+import com.shinwootns.ipm.service.redis.RedisHandler;
 
 @Component
 public class ScheduledTasks {
 	
-	private final Logger _logger = Logger.getLogger(this.getClass());
-	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+	//private final Logger _logger = Logger.getLogger(this.getClass());
 	
-	@Autowired(required=true)
-	private DeviceMapper deviceMapper;
-	
+	/*
 	@Bean
 	public ScheduledExecutorFactoryBean scheduledExecutorService() {
 		ScheduledExecutorFactoryBean bean = new ScheduledExecutorFactoryBean();
 		bean.setPoolSize(5);
 		return bean;
+	}*/
+	
+	// fixedDelay
+	@Scheduled(fixedDelay = 5000)
+	public void updateClusterInfo() {
+		
+		RedisHandler.getInstance().updateClusterMember();
+		
 	}
 	
-	
-
 //	// fixedRate
 //    @Scheduled(fixedRate = 10000)
 //    public void monitorPoolStatus() {

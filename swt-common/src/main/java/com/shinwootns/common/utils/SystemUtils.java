@@ -1,6 +1,9 @@
 package com.shinwootns.common.utils;
 
 import java.io.ByteArrayOutputStream;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecuteResultHandler;
 import org.apache.commons.exec.DefaultExecutor;
@@ -99,6 +102,17 @@ public class SystemUtils {
 		return OS_Type.UNKNOWN;
 	}
 	
+	public static String getHostName() {
+		try {
+			return InetAddress.getLocalHost().getHostName();
+		} catch (UnknownHostException e) {}
+		
+		try {
+			return InetAddress.getLocalHost().getHostAddress();
+		} catch (UnknownHostException e) {}
+		
+		return "";
+	}
 	
 	
 	/*
