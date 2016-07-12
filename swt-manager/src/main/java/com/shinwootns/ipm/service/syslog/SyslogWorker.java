@@ -2,9 +2,9 @@ package com.shinwootns.ipm.service.syslog;
 
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import com.shinwootns.common.utils.JsonUtils;
 import com.shinwootns.common.utils.TimeUtils;
@@ -16,7 +16,7 @@ import com.shinwootns.ipm.service.BaseWorker;
 
 public class SyslogWorker extends BaseWorker {
 
-	private final Log _logger = LogFactory.getLog(getClass());
+	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	private int _index = 0;
 	
 	public SyslogWorker(int index) {

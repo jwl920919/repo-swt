@@ -1,52 +1,46 @@
 package com.shinwootns.ipm.controller;
 
-import java.util.List;
-import java.util.Map;
-
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.shinwootns.ipm.ApplicationProperties;
-import com.shinwootns.ipm.MainApplication;
+import com.shinwootns.ipm.ApplicationProperty;
 import com.shinwootns.ipm.SpringBeanProvider;
-import com.shinwootns.ipm.data.entity.AuthTypeEntity;
-import com.shinwootns.ipm.data.mapper.AuthMapper;
 import com.shinwootns.ipm.data.mapper.EventMapper;
 import com.shinwootns.ipm.service.WorkerPoolManager;
 import com.shinwootns.ipm.service.amqp.AmqpReceiver;
 
-//import com.shinwootns.ipm.data.entity.AuthType;
-//import com.shinwootns.ipm.data.repository.AuthTypeRepository;
-
 @RestController
-//@SpringApplicationConfiguration(classes = MainApplication.class)
 public class ServiceController {
 	
-	private final Log _logger = LogFactory.getLog(this.getClass());
+	private final Logger _logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired(required=true)
 	private EventMapper eventMapper;
 
 	@Autowired(required=true)
-	private ApplicationProperties appProperties;
+	private ApplicationProperty appProperties;
 	
 	@Autowired
-	RabbitTemplate rabbitTemplate;
+	private RabbitTemplate rabbitTemplate;
+	
+	@Autowired
+	private RedisTemplate redisTemplate;
+	
+	@Autowired
+	private ApplicationProperty appProperty;
 	
 	@Bean
 	Queue queue() {
@@ -68,7 +62,7 @@ public class ServiceController {
 		SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
 		container.setConnectionFactory(connectionFactory);
 		container.setQueueNames("ipm.syslog");
-		container.setRecoveryInterval(5000);		// try reconnect interval
+		container.setRecoveryInterval(5000);		// amqp reconnect interval
 		container.setMessageListener(listenerAdapter);
 		return container;
 	}
@@ -81,8 +75,7 @@ public class ServiceController {
 		
 		_logger.info("Start ServiceController.");
 		
-		System.out.println(context.toString());
-		
+		// Set BeanProvider
 		SpringBeanProvider.getInstance().setApplicationContext( context );
 		SpringBeanProvider.getInstance().setApplicationProperties( appProperties );
 		

@@ -73,6 +73,34 @@ public class SystemUtils {
 		return result;
 	}
 	
+	enum OS_Type {
+		UNKNOWN, WINDOWS, LINUX, UNIX, MAC, SOLARIS  
+	}
+	
+	public static OS_Type GetOSName() {
+		String osName = System.getProperty("os.name");
+		
+		if (osName == null)
+			return OS_Type.UNKNOWN;
+					
+		osName = osName.toUpperCase();
+		
+		 if (osName.indexOf("win") >= 0)
+			 return OS_Type.WINDOWS; 
+		 else if (osName.indexOf("linux") >= 0)
+			 return OS_Type.LINUX;
+		 else if ( osName.indexOf("nix") >= 0 || osName.indexOf("nux") >= 0 || osName.indexOf("aix") > 0 )
+			 return OS_Type.UNIX;
+		 else if (osName.indexOf("mac") >= 0)
+			 return OS_Type.MAC;
+		 else if (osName.indexOf("sunos") >= 0)
+			 return OS_Type.SOLARIS;
+		
+		return OS_Type.UNKNOWN;
+	}
+	
+	
+	
 	/*
 	public static Vector executeCommand(String command, Logger logger) {
 		

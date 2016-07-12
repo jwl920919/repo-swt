@@ -1,5 +1,7 @@
 package com.shinwootns.ipm.service.cep;
 
+/*
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 
@@ -37,48 +39,6 @@ public class CEPManager {
 
 	private SiddhiManager _manager = new SiddhiManager();;
 
-	public void start() {
-		
-		//_manager.setExtension("custom:plus", CustomFunctionExtension.class);
-		
-		/*
-		StreamDefinition streamDef = new StreamDefinition();
-		streamDef.setId("streamId");
-		
-		streamDef.attribute("symbol", Type.STRING);
-		streamDef.attribute("price", Type.FLOAT);
-		
-		Annotation annotation = new Annotation("query1");
-		streamDef.annotation(annotation);
-		
-		
-		plan.defineStream(streamDef);
-		*/
-		
-		/*
-		String executionPlan = "" 
-				+ " define stream cseEventStream (symbol string, price float, volume long);"
-				+ " @info(name = 'query1')" 
-				+ " from cseEventStream[volume < 150] " + "select symbol,price"
-				+ " insert into outputStream;";
-
-		// Generating runtime
-		ExecutionPlanRuntime runtime = _manager.createExecutionPlanRuntime(executionPlan);
-		
-		
-		// Adding callback to retrieve output events from query
-		runtime.addCallback("query1", new QueryCallback() {
-			@Override
-			public void receive(long timeStamp, Event[] inEvents, Event[] removeEvents) {
-				EventPrinter.print(timeStamp, inEvents, removeEvents);
-			}
-		});
-		
-		// Starting event processing
-		runtime.start();
-		*/
-	}
-	
 	public boolean createPlane(String planName) {
 		
 		if ( _manager.getExecutionPlanRuntime(planName) == null )
@@ -205,3 +165,5 @@ public class CEPManager {
 		}
 	}
 }
+
+*/

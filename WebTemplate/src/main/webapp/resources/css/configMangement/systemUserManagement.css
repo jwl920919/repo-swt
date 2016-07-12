@@ -32,7 +32,11 @@
 	padding-top: 5px;
 	padding-bottom: 7px;
 }
-
+.pw-state-label, .id-state-label {
+	font-size: smaller;
+    text-align: left;
+    width: 200px !important;
+}
 .send-row label:first-child {
 	width:88px;
 }

@@ -23,51 +23,11 @@ import com.shinwootns.ipm.collector.service.syslog.SyslogReceiveHandlerImpl;
 @SpringBootApplication
 public class MainApplication implements CommandLineRunner {
 	
-	private final Logger _logger = Logger.getLogger(this.getClass());
-	
-	@Autowired
-	RabbitTemplate rabbitTemplate;
-	
-	@Bean
-	Queue queue() {
-		return new Queue("ipm.syslog", false);
-	}
-	
 	public static void main(String[] args) {
-		
-		BasicConfigurator.configure();
-		
 		ConfigurableApplicationContext context = SpringApplication.run(MainApplication.class, args);
-				
-		AppContextProvider.getInstance().setApplicationContext( context );
 	}
 
 	@Override
 	public void run(String... arg0) throws Exception {
-		System.out.println("Application Start...");
-		
-		//rabbitTemplate.convertAndSend("ipm.syslog", "Hello from RabbitMQ!");
-		
-		startSyslogHandler();
-		
-		//TestThread thread = new TestThread();
-		//thread.start();
-	}
-		
-	private void startSyslogHandler() {
-		
-		WorkerPoolManager.getInstance().start();
-		
-		// Start receive handler
-		SyslogManager.getInstance().start(new SyslogReceiveHandlerImpl());
-	}
-	
-	private void stopSyslogHandler() {
-
-		// Stop receive handler
-		SyslogManager.getInstance().stop();
-		
-		// Stop Analyzer
-		WorkerPoolManager.getInstance().stop();
 	}
 }

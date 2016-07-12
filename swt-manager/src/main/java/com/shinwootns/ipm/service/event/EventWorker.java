@@ -2,10 +2,11 @@ package com.shinwootns.ipm.service.event;
 
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.shinwootns.ipm.ApplicationProperty;
 import com.shinwootns.ipm.SpringBeanProvider;
 import com.shinwootns.ipm.data.SharedData;
 import com.shinwootns.ipm.data.entity.EventLogEntity;
@@ -14,7 +15,7 @@ import com.shinwootns.ipm.service.BaseWorker;
 
 public class EventWorker extends BaseWorker {
 
-	private final Log _logger = LogFactory.getLog(getClass());
+	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
 	private int _index = 0;
 	
@@ -26,6 +27,15 @@ public class EventWorker extends BaseWorker {
 	public void run() {
 		
 		_logger.info(String.format("EventWorker#%d... start.", this._index));
+		
+		// get ApplicationProperty
+		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperties();
+		if (appProperty == null)
+			return;
+		
+		// debug_insert_event_enable
+		if (appProperty.isInsert_event_enable() == false)
+			return;
 		
 		// get EventMapper
 		EventMapper eventMapper = SpringBeanProvider.getInstance().getEventMapper();

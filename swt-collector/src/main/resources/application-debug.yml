@@ -1,0 +1,41 @@
+#====================================
+# ipm
+#====================================
+ipm:
+  name: IPM-Collector(Test)
+  version: 0.1.1
+  license: TEST000000
+  
+  # debug mode
+  debug_enable: true
+  debug:
+      insert_syslog_enable: false
+
+#====================================
+# spring
+#====================================
+spring:
+  # amqp
+  rabbitmq:
+    host: shinwootnskr.iptime.org
+    port: 5672
+    username: admin
+    password: shinwoo123!
+    virtual-host: /
+
+#====================================
+# banner
+#====================================
+banner:
+  charset: UTF-8
+  location: classpath:banner.txt
+
+#====================================
+# logging
+#====================================
+logging:
+  file: /logs/ipm-collector.log
+  level:
+    org.springframework: INFO
+    level.com.shinwootns: DEBUG
+    root: INFO

@@ -50,7 +50,31 @@ public class SYSTEM_USER_INFO_Impl extends SqlSessionDaoSupport implements SYSTE
 		}
 		return systemUserInfo;
 	}
+
+	@Override
+	public int update_SYSTEM_USER_INFO_ONE_RECORD(HashMap<String, Object> parameters) {
+		int cnt = -1;
+		try {
+			System.out.println(getSqlSession());
+			cnt = getSqlSession().update("UI_Query.update_SYSTEM_USER_INFO_ONE_RECORD",parameters);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e.getMessage());
+		}
+		return cnt;
+	}
 	
-	
+	@Override
+	public int insert_SYSTEM_USER_INFO_ONE_RECORD(HashMap<String, Object> parameters) {
+		int cnt = -1;
+		try {
+			System.out.println(getSqlSession());
+			cnt = getSqlSession().insert("UI_Query.insert_SYSTEM_USER_INFO_ONE_RECORD",parameters);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e.getMessage());
+		}
+		return cnt;
+	}
 
 }
