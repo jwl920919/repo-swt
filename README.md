@@ -19,6 +19,31 @@ docker run \
 ```
 
  * Redis 설치
+   - redis.conf
+```
+mkdir -p /redis/conf
+vi /redis/conf/redis/conf
+```
+```
+# By default, if no "bind" configuration directive is specified, Redis listens
+# for connections from all the network interfaces available on the server.
+#
+# Examples:
+#
+# bind 192.168.1.100 10.0.0.1
+# bind 127.0.0.1 ::1
+bind 127.0.0.1
+
+# Accept connections on the specified port, default is 6379 (IANA #815344).
+port 6379
+
+# TCP keepalive
+tcp-keepalive 300
+
+# Password
+requirepass shinwoo123!
+```
+   - redis 실행
 ```
 docker pull redis
 
@@ -28,7 +53,7 @@ docker run \
  -p 6379:6379 \
  -v /redis/conf/redis.conf:/usr/local/etc/redis/redis.conf \
  --restart always \
- redis
+ redis /usr/local/etc/redis/redis.conf
 ```
 
  * PostgreSQL 설치
