@@ -37,7 +37,8 @@
 		SELECT count(*) AS total
 		FROM
 		SYSTEM_USER_INFO
-		WHERE user_id like CONCAT('%', #{searchValue}, '%') OR user_name
+		WHERE user_id like CONCAT('%', #{searchValue}, '%') OR
+		user_name
 		like CONCAT('%', #{searchValue}, '%')
 	</select>
 
@@ -51,15 +52,10 @@
 		SELECT
 		site_id,user_seq,group_id,user_id,user_pw,user_name,dept_name,position_name,phone_num,mobile_num,email,mysingle_yn,insert_date,modify_date
 		FROM SYSTEM_USER_INFO
-		WHERE user_id like CONCAT('%', #{searchValue}, '%') OR user_name
-		like CONCAT('%', #{searchValue}, '%')
-		<trim prefix="ORDER BY">
-			<if test="orderColumn == 'user_id'"> user_id </if>
-			<if test="orderColumn == 'user_name'"> user_name </if>
-			<if test="orderType == 'asc'"> ASC </if>
-			<if test="orderType == 'desc'"> DESC </if>
-		</trim>
-		offset #{startIndex} limit #{length};
+		WHERE user_id like CONCAT('%', #{searchValue},
+		'%') OR user_name
+		like CONCAT('%', #{searchValue}, '%') ORDER BY
+		${orderColumn} ${orderType} offset #{startIndex} limit #{length};
 	</select>
 
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
@@ -80,8 +76,11 @@
 	<!-- Description : 유저 정보 변경 (Only Record One) -->
 	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
 	<update id="update_SYSTEM_USER_INFO_ONE_RECORD" parameterType="hashmap">
-		SET TIMEZONE to #{time_zone};
-		UPDATE system_user_info set <if test="user_pw != ''">user_pw=#{user_pw},</if> user_name=#{user_name},group_id=#{group_id},site_id=#{site_id},dept_name=#{dept_name},position_name=#{position_name},email=#{email},phone_num=#{phone_num},mobile_num=#{mobile_num},modify_date=now() WHERE user_id=#{user_id};
+		SET TIMEZONE TO '${time_zone}';
+		UPDATE system_user_info set
+		<if test="user_pw != ''">user_pw=#{user_pw},</if>
+		user_name=#{user_name},group_id=#{group_id},site_id=#{site_id},dept_name=#{dept_name},position_name=#{position_name},email=#{email},phone_num=#{phone_num},mobile_num=#{mobile_num},modify_date=now()
+		WHERE user_id=#{user_id};
 	</update>
 
 	<!-- Query Type : Insert(Select, Insert, Update, Delete) -->
@@ -90,13 +89,18 @@
 	<!-- Description : 유저 정보 추가 (Only Record One) -->
 	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
 	<insert id="insert_SYSTEM_USER_INFO_ONE_RECORD" parameterType="hashmap">
-		SET TIMEZONE to #{time_zone};
+		SET TIMEZONE TO '${time_zone}';
 		INSERT into
-		system_user_info (site_id, user_id, user_pw,
-		user_name, group_id, dept_name, position_name, phone_num,
-		mobile_num, email, mysingle_yn, insert_date, modify_date) VALUES (#{site_id}, #{user_id}, #{user_pw},
-		#{user_name}, #{group_id}, #{dept_name}, #{position_name}, #{phone_num},
-		#{mobile_num}, #{email}, false, now(), now());
+		system_user_info (site_id,
+		user_id, user_pw,
+		user_name, group_id, dept_name, position_name,
+		phone_num,
+		mobile_num, email, mysingle_yn, insert_date, modify_date)
+		VALUES (#{site_id}, #{user_id}, #{user_pw},
+		#{user_name}, #{group_id},
+		#{dept_name}, #{position_name}, #{phone_num},
+		#{mobile_num}, #{email},
+		false, now(), now());
 	</insert>
 
 
@@ -119,29 +123,25 @@
 		SELECT
 		site_id,site_name,site_code,description FROM site_info;
 	</select>
-	
+
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
 	<!-- Insert Date : 2016-07-11 -->
 	<!-- Insert User : KCM -->
 	<!-- Description : IP관리 > 고정IP현황 -->
 	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
 	<select id="select_IP_MANAGEMENT_SEGMENT" resultType="java.util.HashMap">
-		SET TIMEZONE TO 'Asia/Seoul';	
+		SET TIMEZONE TO 'Asia/Seoul';
 		SELECT * FROM "test_dhcp_segment"
-		 WHERE network like CONCAT('%', #{searchValue}, '%') OR comment like CONCAT('%', #{searchValue}, '%') OR site like CONCAT('%', #{searchValue}, '%')
-		<trim prefix="ORDER BY">
-			<if test="orderColumn == 'network'"> network </if>
-			<if test="orderColumn == 'comment'"> comment </if>
-			<if test="orderColumn == 'utilization'"> utilization </if>
-			<if test="orderColumn == 'site'"> site </if>
-			<if test="orderType == 'asc'"> ASC </if>
-			<if test="orderType == 'desc'"> DESC </if>
-		</trim>
+		WHERE
+		network like CONCAT('%', #{searchValue}, '%') OR comment like
+		CONCAT('%', #{searchValue}, '%') OR site like CONCAT('%',
+		#{searchValue}, '%')
+		ORDER BY ${orderColumn} ${orderType}
 		offset #{startIndex} limit #{length};
 	</select>
-	
-	
-	
+
+
+
 </mapper>
 
 <!-- <mapper namespace="testSqlMap" > -->
