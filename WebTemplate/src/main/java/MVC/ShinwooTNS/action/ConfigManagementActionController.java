@@ -214,7 +214,8 @@ public class ConfigManagementActionController {
 			HashMap<String, Object> parameter = new HashMap<>();
 			parameter.put("list", userIdList);
 			int cnt = userInfoService.delete_SYSTEM_USER_INFO_RECORDS(parameter);
-			if (cnt > 0)
+			System.out.println(cnt);
+			if (cnt > -1)
 				result.result = true;
 			else
 				result.result = false;

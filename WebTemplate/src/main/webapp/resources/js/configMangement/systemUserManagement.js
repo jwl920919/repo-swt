@@ -82,9 +82,18 @@ $('#delete-button').click(function() {
         url : "configManagement/deleteUsers",
         type : "POST",
         data : jsonInfo,
-        dataType : "json"
+        dataType : "text",
+        success : function(data) {
+            var jsonObj = eval("(" + data + ')');
+            if (jsonObj.result == true) {
+                table.ajax.reload();
+                console.log('삭제 성공');
+            } else {
+                console.log('삭제 실패');
+            }
+        }
     });
-    $('#datatable').ajax.reload();
+    
 });
 
 // switching [ add(1), modify(2) ]
