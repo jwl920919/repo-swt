@@ -19,7 +19,7 @@ docker run \
 ```
 
  * Redis 설치
-   - redis.conf
+  
 ```
 mkdir -p /redis/conf
 vi /redis/conf/redis/conf
@@ -43,7 +43,7 @@ tcp-keepalive 300
 # Password
 requirepass shinwoo123!
 ```
-   - redis 실행
+
 ```
 docker pull redis
 
