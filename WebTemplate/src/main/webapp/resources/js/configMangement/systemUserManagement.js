@@ -68,31 +68,32 @@ $('#checkbox_controller').click(function() {
 });
 
 $('#delete-button').click(function() {
-    var rows = $("input[name=checkbox-active]:checkbox:checked");
-    var jsonArray = new Array();
-    for (var i = 0; i < rows.length; i++) {
-        var tr = $(rows[i]).parent().parent();
-        var td = tr.children().next(); // time
-        var jObj = Object();
-        jObj.user_id = td.html();
-        jsonArray.push(jObj);
-    }
-    var jsonInfo = JSON.stringify(jsonArray);
-    $.ajax({
-        url : "configManagement/deleteUsers",
-        type : "POST",
-        data : jsonInfo,
-        dataType : "text",
-        success : function(data) {
-            var jsonObj = eval("(" + data + ')');
-            if (jsonObj.result == true) {
-                table.ajax.reload();
-                console.log('삭제 성공');
-            } else {
-                console.log('삭제 실패');
-            }
-        }
-    });
+    systemAlert("divAlert");
+//    var rows = $("input[name=checkbox-active]:checkbox:checked");
+//    var jsonArray = new Array();
+//    for (var i = 0; i < rows.length; i++) {
+//        var tr = $(rows[i]).parent().parent();
+//        var td = tr.children().next(); // time
+//        var jObj = Object();
+//        jObj.user_id = td.html();
+//        jsonArray.push(jObj);
+//    }
+//    var jsonInfo = JSON.stringify(jsonArray);
+//    $.ajax({
+//        url : "configManagement/deleteUsers",
+//        type : "POST",
+//        data : jsonInfo,
+//        dataType : "text",
+//        success : function(data) {
+//            var jsonObj = eval("(" + data + ')');
+//            if (jsonObj.result == true) {
+//                table.ajax.reload();
+//                console.log('삭제 성공');
+//            } else {
+//                console.log('삭제 실패');
+//            }
+//        }
+//    });
     
 });
 
