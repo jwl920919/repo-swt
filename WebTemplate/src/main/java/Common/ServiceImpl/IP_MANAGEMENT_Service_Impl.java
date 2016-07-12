@@ -1,5 +1,6 @@
 package Common.ServiceImpl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,8 +24,8 @@ public class IP_MANAGEMENT_Service_Impl implements IP_MANAGEMENT_Service_Interfa
 	 * IP관리 > 고정IP현황 서비스  IP세그먼트 데이터 조회.
 	 * </p> 
 	 **/
-	public List<Map<String,Object>> select_IP_MANAGEMENT_SEGMENT() {
+	public List<Map<String,Object>> select_IP_MANAGEMENT_SEGMENT(HashMap<String, Object> parameters) {
 		// TODO Auto-generated method stub
-		return ipManagementDao.select_IP_MANAGEMENT_SEGMENT();
+		return ipManagementDao.select_IP_MANAGEMENT_SEGMENT(parameters);
 	}
 }

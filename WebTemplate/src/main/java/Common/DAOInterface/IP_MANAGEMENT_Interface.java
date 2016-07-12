@@ -1,5 +1,6 @@
 package Common.DAOInterface;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,5 +10,5 @@ import java.util.Map;
  * </p> 
  **/
 public interface IP_MANAGEMENT_Interface {
-	public List<Map<String, Object>> select_IP_MANAGEMENT_SEGMENT();
+	public List<Map<String, Object>> select_IP_MANAGEMENT_SEGMENT(HashMap<String, Object> parameters);
 }

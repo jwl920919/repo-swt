@@ -13,8 +13,7 @@
 						<table id="datatable" class="essential-table" style="width: 98%">
 							<thead>
 								<tr>
-									<th><input type="checkbox" /></th>
-									<th width="25%"><%=LanguageHelper.GetLanguage("search")%></th>
+									<th width="25%"><%=LanguageHelper.GetLanguage("network")%></th>
 									<th width="25%"><%=LanguageHelper.GetLanguage("comment")%></th>
 									<th width="25%"><%=LanguageHelper.GetLanguage("utilization")%></th>
 									<th width="25%"><%=LanguageHelper.GetLanguage("site")%></th>
