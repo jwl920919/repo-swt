@@ -18,6 +18,30 @@ docker run \
  rabbitmq:3-management
 ```
 
+ * Redis (redis.conf 설정)
+  
+```
+mkdir -p /redis/conf
+vi /redis/conf/redis/conf
+```
+```
+# By default, if no "bind" configuration directive is specified, Redis listens
+# for connections from all the network interfaces available on the server.
+#
+# Examples:
+# bind 192.168.1.100 10.0.0.1
+# bind 127.0.0.1 ::1
+
+# Accept connections on the specified port, default is 6379 (IANA #815344).
+port 6379
+
+# TCP keepalive
+tcp-keepalive 300
+
+# Password
+requirepass shinwoo123!
+```
+
  * Redis 설치
 ```
 docker pull redis
@@ -26,9 +50,10 @@ docker run \
  --name myRedis \
  -d \
  -p 6379:6379 \
- -e REDIS_PASS=shinwoo123! \
+ -v /redis/conf:/usr/local/etc/redis \
  --restart always \
- redis
+ redis \
+ redis-server /usr/local/etc/redis/redis.conf
 ```
 
  * PostgreSQL 설치
