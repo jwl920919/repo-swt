@@ -127,7 +127,18 @@
 	<!-- Description : IP관리 > 고정IP현황 -->
 	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
 	<select id="select_IP_MANAGEMENT_SEGMENT" resultType="java.util.HashMap">
-		SELECT * FROM "test_dhcp_segment";
+		SET TIMEZONE TO 'Asia/Seoul';	
+		SELECT * FROM "test_dhcp_segment"
+		 WHERE network like CONCAT('%', #{searchValue}, '%') OR comment like CONCAT('%', #{searchValue}, '%') OR site like CONCAT('%', #{searchValue}, '%')
+		<trim prefix="ORDER BY">
+			<if test="orderColumn == 'network'"> network </if>
+			<if test="orderColumn == 'comment'"> comment </if>
+			<if test="orderColumn == 'utilization'"> utilization </if>
+			<if test="orderColumn == 'site'"> site </if>
+			<if test="orderType == 'asc'"> ASC </if>
+			<if test="orderType == 'desc'"> DESC </if>
+		</trim>
+		offset #{startIndex} limit #{length};
 	</select>
 	
 	
