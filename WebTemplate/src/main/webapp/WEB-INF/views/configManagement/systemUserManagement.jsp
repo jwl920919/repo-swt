@@ -34,8 +34,6 @@
 <link rel="stylesheet" href="resources/css/essential.css">
 <link rel="stylesheet"
 	href="resources/css/configMangement/systemUserManagement.css">
-<script src="resources/plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="resources/plugins/datatables/dataTables.bootstrap.min.js"></script>
 </head>
 <body>
 	<section class="white-paper">
@@ -170,9 +168,6 @@
 		</div>
 	</div>
 	</section>
-	<!--
-		 </div>
-	</div> -->
 	<script src="resources/js/common/Datatable-Essential.js"></script>
 	<script src="resources/js/configMangement/systemUserManagement.js"></script>
 </body>

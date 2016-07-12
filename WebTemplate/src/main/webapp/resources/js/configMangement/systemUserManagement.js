@@ -245,6 +245,7 @@ $('#save-button').click(function() {
                 jObj.email = $('#emailTxt').val();
                 jObj.phone_num = $('#phoneTxt').val();
                 jObj.mobile_num = $('#mobileTxt').val();
+                jObj.time_zone = getClientTimeZoneName();
                 $.ajax({
                     url : "/configManagement/addUser",
                     type : "POST",
@@ -279,6 +280,7 @@ $('#save-button').click(function() {
             jObj.email = $('#emailTxt').val();
             jObj.phone_num = $('#phoneTxt').val();
             jObj.mobile_num = $('#mobileTxt').val();
+            jObj.time_zone = getClientTimeZoneName();
             $.ajax({
                 url : "/configManagement/updateUserInfo",
                 type : "POST",

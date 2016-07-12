@@ -155,6 +155,7 @@ public class ConfigManagementActionController {
 			typeCastMap.put("dept_name", map.get("dept_name"));
 			typeCastMap.put("phone_num", map.get("phone_num"));
 			typeCastMap.put("email", map.get("email"));
+			System.out.println(map.get("time_zone"));
 			int cnt = userInfoService.update_SYSTEM_USER_INFO_ONE_RECORD(typeCastMap);
 			if (cnt > 0)
 				result.result = true;
