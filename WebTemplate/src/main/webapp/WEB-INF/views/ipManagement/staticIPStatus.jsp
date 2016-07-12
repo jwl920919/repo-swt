@@ -1,10 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"%>
 <%@ page import="Common.Helper.LanguageHelper"%>
 
-<link rel="stylesheet" href="resources/css/essential.css">
-<script src="resources/plugins/jQuery/jQuery-2.2.0.min.js"></script>
-<script src="resources/js/common/Common.js"></script>
-<script src="resources/js/common/multyLanguages.js"></script>
 <script src="resources/js/common/Datatable-Essential.js"></script>
 <script src="resources/js/ipManagement/staticIPStatus.js"></script>
 
