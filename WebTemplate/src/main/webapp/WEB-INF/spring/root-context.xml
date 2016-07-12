@@ -63,4 +63,12 @@
 	<bean id="siteInfoDao" class="Common.DAOImpl.SITE_INFO_Impl">
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
+
+	<bean id="ipManagementService" class="Common.ServiceImpl.IP_MANAGEMENT_Service_Impl">
+		<property name="IP_MANAGEMENT_dao" ref="ipManagementDao" />
+	</bean>
+
+	<bean id="ipManagementDao" class="Common.DAOImpl.IP_MANAGEMENT_Impl">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
 </beans>
