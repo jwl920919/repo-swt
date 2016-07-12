@@ -82,8 +82,18 @@ $('#delete-button').click(function() {
         url : "configManagement/deleteUsers",
         type : "POST",
         data : jsonInfo,
-        dataType : "json"
+        dataType : "text",
+        success : function(data) {
+            var jsonObj = eval("(" + data + ')');
+            if (jsonObj.result == true) {
+                table.ajax.reload();
+                console.log('삭제 성공');
+            } else {
+                console.log('삭제 실패');
+            }
+        }
     });
+    
 });
 
 // switching [ add(1), modify(2) ]
@@ -146,16 +156,7 @@ $('#add-button').click(
             $('#id-check-button').removeClass("hidden");
             $('#id-state-label').removeClass("hidden");
             $('#idTxt').val('');
-            $('#passwordTxt').val('');
-            $('#passwordChkTxt').val('');
-            $('#nameTxt').val('');
-            $('#groupSel').val(1);
-            $('#placeOfBusinessSel').val(1);
-            $('#departmentTxt').val('');
-            $('#positionTxt').val('');
-            $('#emailTxt').val('');
-            $('#phoneTxt').val('');
-            $('#mobileTxt').val('');
+            clear();
         });
 
 var pwd1 = $("#passwordTxt");
@@ -289,17 +290,19 @@ $('#save-button').click(function() {
                     success : function(data) {
                         var jsonObj = eval("(" + data + ')');
                         if (jsonObj.result == true) {
-                            console.log('계정 생성 성공');
+                            alert('계정 생성 성공');
+                            $('#idTxt').val('');
+                            clear();
                         } else {
-                            console.log('계정 생성 실패');
+                            alert('계정 생성 실패');
                         }
                     }
                 })
             } else {
-                console.log("아이디 중복 확인하세요");
+                alert("아이디 중복 확인하세요");
             }
         } else {
-            console.log("패스워드를 확인하세요");
+            alert("패스워드를 확인하세요");
         }
         break;
     case 2:
@@ -324,16 +327,32 @@ $('#save-button').click(function() {
                 success : function(data) {
                     var jsonObj = eval("(" + data + ')');
                     if (jsonObj.result == true) {
-                        console.log('계정정보 변경 성공');
+                        alert('계정정보 변경 성공');
                     } else {
-                        console.log('계정정보 변경 실패');
+                        alert('계정정보 변경 실패');
                     }
                 }
             });
         } else {
-            console.log("패스워드를 확인하세요");
+            alert("패스워드를 확인하세요");
         }
         break;
     }
 
 });
+
+function clear() {
+    $('#passwordTxt').val('');
+    $('#passwordChkTxt').val('');
+    $('#nameTxt').val('');
+    $('#groupSel').val(1);
+    $('#placeOfBusinessSel').val(1);
+    $('#departmentTxt').val('');
+    $('#positionTxt').val('');
+    $('#emailTxt').val('');
+    $('#phoneTxt').val('');
+    $('#mobileTxt').val('');
+    $('#pw-state-label').text('');
+    $('#id-state-label').text('');
+    $('#email-state-label').text('');
+}

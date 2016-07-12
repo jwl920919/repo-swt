@@ -79,7 +79,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="send-body">
+						<div id="send-body" class="send-body">
 							<!-- 아이디,패스워드,이름 -->
 							<div class="send-rows-room">
 								<div id="id-row" class="send-row">
