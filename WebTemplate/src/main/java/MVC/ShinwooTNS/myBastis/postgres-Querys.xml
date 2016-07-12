@@ -131,12 +131,9 @@
 	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
 	<select id="select_IP_MANAGEMENT_SEGMENT" resultType="java.util.HashMap">
 		SET TIMEZONE TO 'Asia/Seoul';
-		SELECT * FROM "test_dhcp_segment"
-		WHERE
-		network like CONCAT('%', #{searchValue}, '%') OR comment like
-		CONCAT('%', #{searchValue}, '%') OR site like CONCAT('%',
-		#{searchValue}, '%')
-		ORDER BY ${orderColumn} ${orderType}
+		SELECT * FROM "test_dhcp_segment" ,(SELECT count(*) allcount FROM "test_dhcp_segment") as allcount
+		 WHERE network like CONCAT('%', #{searchValue}, '%') OR comment like CONCAT('%', #{searchValue}, '%') OR site like CONCAT('%', #{searchValue}, '%')
+		 ORDER BY ${orderColumn} ${orderType}
 		offset #{startIndex} limit #{length};
 	</select>
 
