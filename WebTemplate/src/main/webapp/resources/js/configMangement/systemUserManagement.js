@@ -19,7 +19,7 @@ $(document)
                                             "dataType" : "jsonp",
                                             "type" : "POST",
                                             "jsonp" : "callback",
-                                            "data" : function(data,type) {
+                                            "data" : function(data, type) {
                                                 data.search_key = data.search.value;
                                             }
 
@@ -53,6 +53,39 @@ $(document)
                         d_wrap.prepend(d_filter);
                     });
                 });
+
+// 체크박스 전체선택
+$('#checkbox_controller').click(function() {
+    if ($(this).is(':checked')) {
+        $('tbody>tr>td>input:checkbox').each(function() {
+            this.checked = true;
+        });
+    } else {
+        $('tbody>tr>td>input:checkbox').each(function() {
+            this.checked = false;
+        });
+    }
+});
+
+$('#delete-button').click(function() {
+    var rows = $("input[name=checkbox-active]:checkbox:checked");
+    var jsonArray = new Array();
+    for (var i = 0; i < rows.length; i++) {
+        var tr = $(rows[i]).parent().parent();
+        var td = tr.children().next(); // time
+        var jObj = Object();
+        jObj.user_id = td.html();
+        jsonArray.push(jObj);
+    }
+    var jsonInfo = JSON.stringify(jsonArray);
+    $.ajax({
+        url : "configManagement/deleteUsers",
+        type : "POST",
+        data : jsonInfo,
+        dataType : "json"
+    });
+});
+
 // switching [ add(1), modify(2) ]
 var sw = 1;
 var idState = false;

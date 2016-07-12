@@ -9,22 +9,22 @@
 	<!-- Controller : -->
 	<select id="select_UI_MENU_MASTER" resultType="java.util.HashMap">
 		SELECT
-			"menu_master"."master_cd", "menu_master"."master_namekey",
-			"menu_master"."master_desc",
-			"menu_master"."master_order",
-			"menu_master"."master_url", "menu_master"."master_icon",
-			"menu_sub"."sub_cd", "menu_sub"."subname_key", "menu_sub"."sub_desc",
-			"menu_sub"."sub_order",
-			"menu_sub"."sub_Url", "menu_sub"."sub_icon",
-			"menu_sub"."controller_mapping"
+		"menu_master"."master_cd", "menu_master"."master_namekey",
+		"menu_master"."master_desc",
+		"menu_master"."master_order",
+		"menu_master"."master_url", "menu_master"."master_icon",
+		"menu_sub"."sub_cd", "menu_sub"."subname_key", "menu_sub"."sub_desc",
+		"menu_sub"."sub_order",
+		"menu_sub"."sub_Url", "menu_sub"."sub_icon",
+		"menu_sub"."controller_mapping"
 		FROM "menu_master"
-			RIGHT OUTER JOIN
-				"menu_sub"
-			ON "menu_master"."master_cd" = "menu_sub"."master_cd"
+		RIGHT OUTER JOIN
+		"menu_sub"
+		ON "menu_master"."master_cd" = "menu_sub"."master_cd"
 		WHERE
-			"menu_sub"."display_yn" = TRUE
+		"menu_sub"."display_yn" = TRUE
 		ORDER BY "menu_master"."master_order",
-			"menu_sub"."sub_order";
+		"menu_sub"."sub_order";
 	</select>
 
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
@@ -80,15 +80,9 @@
 	<!-- Insert User : 이재원 -->
 	<!-- Description : 유저 정보 변경 (Only Record One) -->
 	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
-	<update id="update_SYSTEM_USER_INFO_ONE_RECORD" parameterType="hashmap"
-		flushCache="true" statementType="PREPARED" timeout="20">
-		SET TIME ZONE #{time_zone};
-		UPDATE system_user_info set
-		user_id=#{user_id},
-		<if test="user_pw != ''">user_pw=#{user_pw},</if>
-		user_name=#{user_name},group_id=#{group_id
-		},site_id=#{site_id},dept_name=#{dept_name},position_name=#{position_name},email=#{email},phone_num=#{phone_num},mobile_num=#{mobile_num},modify_date=now()
-		WHERE user_id=#{user_id};
+	<update id="update_SYSTEM_USER_INFO_ONE_RECORD" parameterType="hashmap">
+		SET TIMEZONE to #{time_zone};
+		UPDATE system_user_info set <if test="user_pw != ''">user_pw=#{user_pw},</if> user_name=#{user_name},group_id=#{group_id},site_id=#{site_id},dept_name=#{dept_name},position_name=#{position_name},email=#{email},phone_num=#{phone_num},mobile_num=#{mobile_num},modify_date=now() WHERE user_id=#{user_id};
 	</update>
 
 	<!-- Query Type : Insert(Select, Insert, Update, Delete) -->
@@ -96,9 +90,8 @@
 	<!-- Insert User : 이재원 -->
 	<!-- Description : 유저 정보 추가 (Only Record One) -->
 	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
-	<insert id="insert_SYSTEM_USER_INFO_ONE_RECORD" parameterType="hashmap"
-		flushCache="true" statementType="PREPARED" timeout="20">
-		SET TIME ZONE #{time_zone};
+	<insert id="insert_SYSTEM_USER_INFO_ONE_RECORD" parameterType="hashmap">
+		SET TIMEZONE to #{time_zone};
 		INSERT into
 		system_user_info (site_id, user_id, user_pw,
 		user_name, group_id, dept_name, position_name, phone_num,
@@ -106,6 +99,7 @@
 		#{user_name}, #{group_id}, #{dept_name}, #{position_name}, #{phone_num},
 		#{mobile_num}, #{email}, false, now(), now());
 	</insert>
+
 
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
 	<!-- Insert Date : 2016-07-11 -->
@@ -133,19 +127,9 @@
 	<!-- Description : IP관리 > 고정IP현황 -->
 	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
 	<select id="select_IP_MANAGEMENT_SEGMENT" resultType="java.util.HashMap">
-		SET TIMEZONE TO 'Asia/Seoul';	
-		SELECT * FROM "test_dhcp_segment"
-		 WHERE network like CONCAT('%', #{searchValue}, '%') OR comment like CONCAT('%', #{searchValue}, '%') OR site like CONCAT('%', #{searchValue}, '%')
-		<trim prefix="ORDER BY">
-			<if test="orderColumn == 'network'"> network </if>
-			<if test="orderColumn == 'comment'"> comment </if>
-			<if test="orderColumn == 'utilization'"> utilization </if>
-			<if test="orderColumn == 'site'"> site </if>
-			<if test="orderType == 'asc'"> ASC </if>
-			<if test="orderType == 'desc'"> DESC </if>
-		</trim>
-		offset #{startIndex} limit #{length};
+		SELECT * FROM "test_dhcp_segment";
 	</select>
+	
 	
 	
 </mapper>
