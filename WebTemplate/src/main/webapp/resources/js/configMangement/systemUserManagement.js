@@ -247,6 +247,7 @@ $('#save-button').click(function() {
 				jObj.email = $('#emailTxt').val();
 				jObj.phone_num = $('#phoneTxt').val();
 				jObj.mobile_num = $('#mobileTxt').val();
+				jObj.time_zone = getClientTimeZoneName();
 				$.ajax({
 					url : "/configManagement/addUser",
 					type : "POST",
@@ -281,6 +282,7 @@ $('#save-button').click(function() {
 			jObj.email = $('#emailTxt').val();
 			jObj.phone_num = $('#phoneTxt').val();
 			jObj.mobile_num = $('#mobileTxt').val();
+			jObj.time_zone = getClientTimeZoneName();
 			$.ajax({
 				url : "/configManagement/updateUserInfo",
 				type : "POST",
@@ -300,74 +302,5 @@ $('#save-button').click(function() {
 		}
 		break;
 	}
-    switch (sw) {
-    case 1:
-        if (passwordCheck()) {
-            if (idState) {
-                var jObj = Object();
-                jObj.user_id = $('#idTxt').val();
-                jObj.user_pw = $('#passwordTxt').val();
-                jObj.user_name = $('#nameTxt').val();
-                jObj.group_id = $('#groupSel').val();
-                jObj.site_id = $('#placeOfBusinessSel').val();
-                jObj.dept_name = $('#departmentTxt').val();
-                jObj.position_name = $('#positionTxt').val();
-                jObj.email = $('#emailTxt').val();
-                jObj.phone_num = $('#phoneTxt').val();
-                jObj.mobile_num = $('#mobileTxt').val();
-                jObj.time_zone = getClientTimeZoneName();
-                $.ajax({
-                    url : "/configManagement/addUser",
-                    type : "POST",
-                    data : JSON.stringify(jObj),
-                    dataType : "text",
-                    success : function(data) {
-                        var jsonObj = eval("(" + data + ')');
-                        if (jsonObj.result == true) {
-                            console.log('계정 생성 성공');
-                        } else {
-                            console.log('계정 생성 실패');
-                        }
-                    }
-                })
-            } else {
-                console.log("아이디 중복 확인하세요");
-            }
-        } else {
-            console.log("패스워드를 확인하세요");
-        }
-        break;
-    case 2:
-        if (passwordCheck()) {
-            var jObj = Object();
-            jObj.user_id = $('#idTxt').val();
-            jObj.user_pw = $('#passwordTxt').val();
-            jObj.user_name = $('#nameTxt').val();
-            jObj.group_id = $('#groupSel').val();
-            jObj.site_id = $('#placeOfBusinessSel').val();
-            jObj.dept_name = $('#departmentTxt').val();
-            jObj.position_name = $('#positionTxt').val();
-            jObj.email = $('#emailTxt').val();
-            jObj.phone_num = $('#phoneTxt').val();
-            jObj.mobile_num = $('#mobileTxt').val();
-            jObj.time_zone = getClientTimeZoneName();
-            $.ajax({
-                url : "/configManagement/updateUserInfo",
-                type : "POST",
-                data : JSON.stringify(jObj),
-                dataType : "text",
-                success : function(data) {
-                    var jsonObj = eval("(" + data + ')');
-                    if (jsonObj.result == true) {
-                        console.log('계정정보 변경 성공');
-                    } else {
-                        console.log('계정정보 변경 실패');
-                    }
-                }
-            });
-        } else {
-            console.log("패스워드를 확인하세요");
-        }
-        break;
-    }
+    
 });

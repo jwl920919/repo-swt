@@ -82,6 +82,7 @@
 	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
 	<update id="update_SYSTEM_USER_INFO_ONE_RECORD" parameterType="hashmap"
 		flushCache="true" statementType="PREPARED" timeout="20">
+		SET TIME ZONE #{time_zone};
 		UPDATE system_user_info set
 		user_id=#{user_id},
 		<if test="user_pw != ''">user_pw=#{user_pw},</if>
@@ -97,6 +98,7 @@
 	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
 	<insert id="insert_SYSTEM_USER_INFO_ONE_RECORD" parameterType="hashmap"
 		flushCache="true" statementType="PREPARED" timeout="20">
+		SET TIME ZONE #{time_zone};
 		INSERT into
 		system_user_info (site_id, user_id, user_pw,
 		user_name, group_id, dept_name, position_name, phone_num,
@@ -134,12 +136,6 @@
 	<select id="select_IP_MANAGEMENT_SEGMENT" resultType="java.util.HashMap">
 		SELECT * FROM "test_dhcp_segment";
 	</select>
-	
-	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
-	<!-- Insert Date : 2016-07-11 -->
-	<!-- Insert User : KCM -->
-	<!-- Description : IP관리 > 고정IP현황 -->
-	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
 	
 </mapper>
 

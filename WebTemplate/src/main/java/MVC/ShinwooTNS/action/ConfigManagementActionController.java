@@ -74,7 +74,6 @@ public class ConfigManagementActionController {
 				jObj.put("active", 1);
 				jsonArray.add(jObj);
 			}
-			// dbHelper.close();
 			int totalCount = userInfoService.select_SYSTEM_USER_INFO_CONDITIONAL_SEARCH_TOTAL_COUNT(parameters);
 			StringBuffer sb = new StringBuffer("");
 			sb.append(request.getParameter("callback"));
@@ -155,7 +154,8 @@ public class ConfigManagementActionController {
 			typeCastMap.put("dept_name", map.get("dept_name"));
 			typeCastMap.put("phone_num", map.get("phone_num"));
 			typeCastMap.put("email", map.get("email"));
-			System.out.println(map.get("time_zone"));
+			typeCastMap.put("time_zone", map.get("time_zone"));
+
 			int cnt = userInfoService.update_SYSTEM_USER_INFO_ONE_RECORD(typeCastMap);
 			if (cnt > 0)
 				result.result = true;
@@ -195,7 +195,7 @@ public class ConfigManagementActionController {
 	}
 	// endregion
 
-	// region checkId
+	// region addUser
 	@RequestMapping(value = "addUser", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object addUser(HttpServletRequest request) {
 		logger.info("addUser : " + request.getLocalAddr());
@@ -213,6 +213,8 @@ public class ConfigManagementActionController {
 			typeCastMap.put("dept_name", map.get("dept_name"));
 			typeCastMap.put("phone_num", map.get("phone_num"));
 			typeCastMap.put("email", map.get("email"));
+			typeCastMap.put("time_zone", map.get("time_zone"));
+			
 			int cnt = userInfoService.insert_SYSTEM_USER_INFO_ONE_RECORD(typeCastMap);
 			if (cnt > 0)
 				result.result = true;
