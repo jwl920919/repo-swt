@@ -123,6 +123,7 @@ public class ConfigManagementActionController {
 			}.getType());
 			int group_id = Integer.parseInt(map.get("group_id").toString()),
 					site_id = Integer.parseInt(map.get("site_id").toString());
+			String time_zone = map.get("time_zone").toString();
 			map.remove("group_id");
 			map.remove("site_id");
 			map.put("group_id", group_id);
@@ -134,7 +135,6 @@ public class ConfigManagementActionController {
 				System.out.println(key + " :: " + map.get(key));
 			}
 			
-			System.out.println("******************************************"+map.get("time_zone")+"***************************");
 
 			int cnt = userInfoService.update_SYSTEM_USER_INFO_ONE_RECORD(map);
 			if (cnt > 0)
