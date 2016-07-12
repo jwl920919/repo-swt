@@ -4,7 +4,7 @@
 <mapper namespace="UI_Query">
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
 	<!-- Insert Date : 2016-06-21 -->
-	<!-- Insert User : 김창민 -->
+	<!-- Insert User : KCM -->
 	<!-- Description : 데시보드 메뉴 데이터 조회 -->
 	<!-- Controller : -->
 	<select id="select_UI_MENU_MASTER" resultType="java.util.HashMap">
@@ -88,6 +88,15 @@
 	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
 	<select id="select_SITE_INFO" resultType="Common.DTO.SITE_INFO_DTO">
 		SELECT site_id,site_name,site_code,description FROM site_info;
+	</select>
+	
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-07-11 -->
+	<!-- Insert User : KCM -->
+	<!-- Description : IP관리 > 고정IP현황 -->
+	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
+	<select id="select_IP_MANAGEMENT_SEGMENT" resultType="java.util.HashMap">
+		SELECT * FROM "test_dhcp_segment";
 	</select>
 </mapper>
 
