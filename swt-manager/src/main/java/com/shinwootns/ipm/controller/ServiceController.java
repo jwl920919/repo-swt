@@ -9,10 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.shinwootns.ipm.ApplicationProperty;
 import com.shinwootns.ipm.SpringBeanProvider;
-import com.shinwootns.ipm.service.redis.RedisHandler;
-import com.shinwootns.ipm.worker.WorkerPoolManager;
+import com.shinwootns.ipm.config.ApplicationProperty;
+import com.shinwootns.ipm.service.handler.RedisHandler;
+import com.shinwootns.ipm.worker.WorkerManager;
 
 @RestController
 public class ServiceController {
@@ -39,13 +39,13 @@ public class ServiceController {
 		RedisHandler.getInstance().updateClusterMember();
 		
 		// Start
-		WorkerPoolManager.getInstance().start();
+		WorkerManager.getInstance().start();
 	}
 	
 	@PreDestroy
 	public void stopService() {
 		// Stop
-		WorkerPoolManager.getInstance().stop();
+		WorkerManager.getInstance().stop();
 		
 		_logger.info("Stop ServiceController.");
 	}

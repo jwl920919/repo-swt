@@ -1,7 +1,9 @@
-package com.shinwootns.ipm.worker;
+package com.shinwootns.ipm.worker.persist;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.shinwootns.ipm.worker.BaseWorker;
 
 public class DeviceCollectWorker extends BaseWorker {
 

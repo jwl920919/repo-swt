@@ -1,10 +1,10 @@
-package com.shinwootns.ipm.service.syslog;
+package com.shinwootns.ipm.service.handler;
 
 import org.json.simple.JSONObject;
 
-public class SyslogParser {
+public class SyslogHandler {
 	
-	public static JSONObject processSyslog(String rawMessage)
+	public JSONObject processSyslog(String rawMessage)
 	{
     	// ex) Feb 24 17:38:33 192.168.1.11 dhcpd[22231]: DHCPREQUEST for 192.168.1.12 from 6c:29:95:05:38:a4 (BJPARK) via eth1 uid 01:6c:29:95:05:38:a4 (RENEW)
     	
@@ -69,9 +69,9 @@ public class SyslogParser {
         return result;
 	}
 	
-	private static SyslogExtractEntity ExtractData(String message, int startIndex, String startToken, String endToken)
+	private SyslogExtractData ExtractData(String message, int startIndex, String startToken, String endToken)
     {
-		SyslogExtractEntity result = new SyslogExtractEntity();
+		SyslogExtractData result = new SyslogExtractData();
 	
         if (startIndex < 0)
         	startIndex = 0;
@@ -105,7 +105,7 @@ public class SyslogParser {
         return result;
     }
 	
-	private static JSONObject processDISCOVER(String message) {
+	private JSONObject processDISCOVER(String message) {
 
 		// [DHCPDISCOVER]
         // from 00:26:66:d1:69:69 via eth1 : network 192.168.1.0 / 24: no free leases
@@ -113,7 +113,7 @@ public class SyslogParser {
 
         // from [MAC] ~~
         
-        SyslogExtractEntity result1 = ExtractData(message, 0, "from", " ");
+        SyslogExtractData result1 = ExtractData(message, 0, "from", " ");
 		if (result1.isFindFlag() == false)
 			return null;
 		
@@ -127,18 +127,18 @@ public class SyslogParser {
         return result;
     }
 
-	private static JSONObject processOFFER(String message) {
+	private JSONObject processOFFER(String message) {
 
 		// [DHCPOFFER]
         // DHCPOFFER on 192.168.1.20 to 00:26:66:d1:69:69 via eth1 relay eth1 lease-duration 120 offered-duration 10 uid 01:00:26:66:d1:69:69
         // DHCPOFFER on 192.168.1.12 to 00:19:99:e4:ea:7f (ClickShare-ShinwooTNS-C1) via eth1 relay eth1 lease-duration 10 uid 01:00:19:99:e4:ea:7f
         // DHCPOFFER on 192.168.1.13 to d0:7e:35:7e:93:1b (LDK-PC) via eth1 relay eth1 lease-duration 120 offered-duration 10 uid 01:d0:7e:35:7e:93:1b
 
-        SyslogExtractEntity result1 = ExtractData(message, 0, "on", " ");
+        SyslogExtractData result1 = ExtractData(message, 0, "on", " ");
 		if (result1.isFindFlag() == false)
 			return null;
 		
-		SyslogExtractEntity result2 = ExtractData(message, result1.getLastIndex(), "to", " ");
+		SyslogExtractData result2 = ExtractData(message, result1.getLastIndex(), "to", " ");
 		if (result2.isFindFlag() == false)
 			return null;
 		
@@ -152,7 +152,7 @@ public class SyslogParser {
         return result;
 	}
 	
-	private static JSONObject processDHCPREQUEST(String message)
+	private JSONObject processDHCPREQUEST(String message)
     {
         String sIP = "", sMac = "";
 
@@ -162,11 +162,11 @@ public class SyslogParser {
         // DHCPREQUEST for 192.168.1.192 from 18:f6:43:24:06:4d via eth1 : unknown lease 192.168.1.192.
         // DHCPREQUEST for 192.168.1.101 from 98:83:89:14:4f:9e via eth1
 
-        SyslogExtractEntity result1 = ExtractData(message, 0, "for", " ");
+        SyslogExtractData result1 = ExtractData(message, 0, "for", " ");
 		if (result1.isFindFlag() == false)
 			return null;
 		
-		SyslogExtractEntity result2 = ExtractData(message, result1.getLastIndex(), "from", " ");
+		SyslogExtractData result2 = ExtractData(message, result1.getLastIndex(), "from", " ");
 		if (result2.isFindFlag() == false)
 			return null;
 		
@@ -180,7 +180,7 @@ public class SyslogParser {
         return result;
     }
 	
-	private static JSONObject processDHCPACK(String message)
+	private JSONObject processDHCPACK(String message)
     {
         // [DHCPACK]
         // to 192.168.1.115 (28:e3:47:4c:45:14) via eth1
@@ -190,11 +190,11 @@ public class SyslogParser {
         // #1. on [IP] ~ to [MAC] ~     // Inform-Ack   <-- Target Message
         // #2. to [IP] ~                // Request-Ack (Ignore)
 		
-		SyslogExtractEntity result1 = ExtractData(message, 0, "on", " ");
+		SyslogExtractData result1 = ExtractData(message, 0, "on", " ");
 		if (result1.isFindFlag() == false)
 			return null;
 		
-		SyslogExtractEntity result2 = ExtractData(message, result1.getLastIndex(), "to", " ");
+		SyslogExtractData result2 = ExtractData(message, result1.getLastIndex(), "to", " ");
 		if (result2.isFindFlag() == false)
 			return null;
 		
@@ -208,16 +208,16 @@ public class SyslogParser {
 		return result;
     }
 
-	private static JSONObject processNACK(String message)
+	private JSONObject processNACK(String message)
     {
         // [DHCPNAK]
         // on 192.168.1.103 to d0:7e:35:7e:93:1b via eth1
 
-        SyslogExtractEntity result1 = ExtractData(message, 0, "on", " ");
+        SyslogExtractData result1 = ExtractData(message, 0, "on", " ");
 		if (result1.isFindFlag() == false)
 			return null;
 		
-		SyslogExtractEntity result2 = ExtractData(message, result1.getLastIndex(), "to", " ");
+		SyslogExtractData result2 = ExtractData(message, result1.getLastIndex(), "to", " ");
 		if (result2.isFindFlag() == false)
 			return null;
 		
@@ -231,12 +231,12 @@ public class SyslogParser {
 		return result;
     }
 
-	private static JSONObject processINFORM(String message)
+	private JSONObject processINFORM(String message)
     {
         // [DHCPINFORM]
         // from 192.168.1.115 via eth1
 
-        SyslogExtractEntity result1 = ExtractData(message, 0, "from", " ");
+        SyslogExtractData result1 = ExtractData(message, 0, "from", " ");
 		if (result1.isFindFlag() == false)
 			return null;
 		
@@ -250,18 +250,18 @@ public class SyslogParser {
         return result;
     }
 
-	private static JSONObject processEXPIRE(String message)
+	private JSONObject processEXPIRE(String message)
     {
         String sIP = "", sMac = "";
 
         // [DHCPEXPIRE]
         // on 192.168.1.19 to 30:52:cb:0c:f8:17
 
-        SyslogExtractEntity result1 = ExtractData(message, 0, "on", " ");
+        SyslogExtractData result1 = ExtractData(message, 0, "on", " ");
 		if (result1.isFindFlag() == false)
 			return null;
 		
-		SyslogExtractEntity result2 = ExtractData(message, result1.getLastIndex(), "to", " ");
+		SyslogExtractData result2 = ExtractData(message, result1.getLastIndex(), "to", " ");
 		if (result2.isFindFlag() == false)
 			return null;
 		
@@ -275,16 +275,16 @@ public class SyslogParser {
         return result;
     }
 
-	private static JSONObject processRELEASE(String message)
+	private JSONObject processRELEASE(String message)
     {
         // [DHCPRELEASE]
         // of 192.168.1.101 from 98:83:89:14:4f:9e (JS) via eth1 (found)uid 01:98:83:89:14:4f:9e
 
-        SyslogExtractEntity result1 = ExtractData(message, 0, "of", " ");
+        SyslogExtractData result1 = ExtractData(message, 0, "of", " ");
 		if (result1.isFindFlag() == false)
 			return null;
 		
-		SyslogExtractEntity result2 = ExtractData(message, result1.getLastIndex(), "from", " ");
+		SyslogExtractData result2 = ExtractData(message, result1.getLastIndex(), "from", " ");
 		if (result2.isFindFlag() == false)
 			return null;
 		
@@ -297,4 +297,29 @@ public class SyslogParser {
         
         return result;
     }
+	
+	public class SyslogExtractData {
+		private boolean isFindFlag = false;
+		private String value = "";
+		private int lastIndex = -1;
+		
+		public boolean isFindFlag() {
+			return isFindFlag;
+		}
+		public void setFindFlag(boolean isFindFlag) {
+			this.isFindFlag = isFindFlag;
+		}
+		public String getValue() {
+			return value;
+		}
+		public void setValue(String value) {
+			this.value = value;
+		}
+		public int getLastIndex() {
+			return lastIndex;
+		}
+		public void setLastIndex(int lastIndex) {
+			this.lastIndex = lastIndex;
+		}
+	}
 }

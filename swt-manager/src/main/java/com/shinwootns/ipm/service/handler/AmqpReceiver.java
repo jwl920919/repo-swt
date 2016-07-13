@@ -1,4 +1,4 @@
-package com.shinwootns.ipm.service.amqp;
+package com.shinwootns.ipm.service.handler;
 
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;

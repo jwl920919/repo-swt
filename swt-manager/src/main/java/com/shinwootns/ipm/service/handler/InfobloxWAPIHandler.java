@@ -1,4 +1,4 @@
-package com.shinwootns.ipm.service.wapi;
+package com.shinwootns.ipm.service.handler;
 
 import java.util.HashMap;
 import java.util.Map;

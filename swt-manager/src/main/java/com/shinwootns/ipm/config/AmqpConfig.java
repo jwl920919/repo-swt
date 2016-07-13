@@ -1,4 +1,4 @@
-package com.shinwootns.ipm.service.amqp;
+package com.shinwootns.ipm.config;
 
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.shinwootns.ipm.ApplicationProperty;
+import com.shinwootns.ipm.service.handler.AmqpReceiver;
 
 @Configuration
 public class AmqpConfig {
