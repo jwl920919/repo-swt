@@ -1,4 +1,4 @@
-package com.shinwootns.ipm.service;
+package com.shinwootns.ipm.worker;
 
 public abstract class BaseWorker implements Runnable {
 

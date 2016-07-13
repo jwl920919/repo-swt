@@ -1,17 +1,16 @@
-package com.shinwootns.ipm.service.event;
+package com.shinwootns.ipm.worker.persist;
 
 import java.util.List;
 
-import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.shinwootns.ipm.ApplicationProperty;
 import com.shinwootns.ipm.SpringBeanProvider;
+import com.shinwootns.ipm.config.ApplicationProperty;
 import com.shinwootns.ipm.data.SharedData;
 import com.shinwootns.ipm.data.entity.EventLogEntity;
 import com.shinwootns.ipm.data.mapper.EventMapper;
-import com.shinwootns.ipm.service.BaseWorker;
+import com.shinwootns.ipm.worker.BaseWorker;
 
 public class EventWorker extends BaseWorker {
 

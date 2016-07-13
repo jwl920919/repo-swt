@@ -3,8 +3,6 @@ package com.shinwootns.ipm;
 import org.json.simple.JSONArray;
 import org.junit.Test;
 
-import com.shinwootns.ipm.service.wapi.InfobloxWAPIHandler;
-
 public class TestWAPI {
 
 	/*

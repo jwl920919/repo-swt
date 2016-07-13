@@ -12,13 +12,15 @@ import com.shinwootns.ipm.data.entity.DeviceInfo;
 public interface DeviceMapper {
 	
 	@Select(""
-			+ " SELECT dev.* FROM device_info dev, SITE_INFO site"
+			+ " SELECT dev.*"
+			+ " FROM device_info dev, SITE_INFO site"
 			+ " WHERE dev.site_id = site.site_id"
 	)
 	List<DeviceInfo> selectDevice();
 
 	@Select(""
-			+ " SELECT dev.* FROM device_info dev, SITE_INFO site"
+			+ " SELECT dev.*"
+			+ " FROM device_info dev, SITE_INFO site"
 			+ " WHERE dev.site_id = site.site_id"
 			+ " AND dev.device_type = #{device_type}"
 	)

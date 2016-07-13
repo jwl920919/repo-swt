@@ -2,10 +2,10 @@ package com.shinwootns.ipm;
 
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
+import com.shinwootns.ipm.config.ApplicationProperty;
 import com.shinwootns.ipm.data.mapper.EventMapper;
 
 @Component

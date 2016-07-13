@@ -1,10 +1,10 @@
-package com.shinwootns.ipm.scheduled;
+package com.shinwootns.ipm.scheduler;
 
 import org.apache.log4j.Logger;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.shinwootns.ipm.service.redis.RedisHandler;
+import com.shinwootns.ipm.service.handler.RedisHandler;
 
 @Component
 public class ScheduledTasks {
