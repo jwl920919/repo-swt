@@ -153,7 +153,7 @@
 	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
 	<select id="select_IP_MANAGEMENT_SEGMENT_DETAIL" resultType="java.util.HashMap">
 		SELECT * FROM "test_dhcp_segment_list",(SELECT count(*) allcount FROM "test_dhcp_segment_list") as allcount
-		 WHERE segment_id = ${segmentid}
+		 WHERE segment_id = #{segmentid}
 		   AND "ip" like CONCAT('%', #{searchValue}, '%') OR "name" like CONCAT('%', #{searchValue}, '%') OR "mac" like CONCAT('%', #{searchValue}, '%')
 		    OR "status" like CONCAT('%', #{searchValue}, '%') OR "type" like CONCAT('%', #{searchValue}, '%') OR "client" like CONCAT('%', #{searchValue}, '%')
 		 ORDER BY ${orderColumn} ${orderType}
