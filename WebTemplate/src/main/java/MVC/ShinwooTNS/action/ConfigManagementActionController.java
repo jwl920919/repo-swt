@@ -43,9 +43,15 @@ public class ConfigManagementActionController {
 	private static final Logger logger = LoggerFactory.getLogger(ConfigManagementActionController.class);
 	private Gson gson = new Gson();
 	private AjaxResult result = new AjaxResult();
+	
+	// region systemUserManagement
+	
+		// region Autowired
 	@Autowired
 	private SYSTEM_USER_INFO_Service_Interface userInfoService;
-	// region getSystemUserManagementDatatableDatas
+	//endregion
+	
+		// region getSystemUserManagementDatatableDatas
 
 	@RequestMapping(value = "getSystemUserManagementDatatableDatas", method = RequestMethod.POST)
 	public void getSystemUserManagementDatatableDatas(Locale locale, Model model, HttpServletRequest request,
@@ -82,7 +88,7 @@ public class ConfigManagementActionController {
 	}
 	// endregion
 
-	// region getUserInfo
+		// region getUserInfo
 	@RequestMapping(value = "getUserInfo", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object getUserInfo(HttpServletRequest request) {
 		logger.info("getUserInfo : " + request.getLocalAddr());
@@ -114,7 +120,7 @@ public class ConfigManagementActionController {
 	}
 	// endregion
 
-	// region updateUserInfo
+		// region updateUserInfo
 	@RequestMapping(value = "updateUserInfo", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object updateUserInfo(HttpServletRequest request) {
 		logger.info("updateUserInfo : " + request.getLocalAddr());
@@ -144,7 +150,7 @@ public class ConfigManagementActionController {
 	}
 	// endregion
 
-	// region checkId
+		// region checkId
 	@RequestMapping(value = "checkId", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object checkId(HttpServletRequest request) {
 		logger.info("checkId : " + request.getLocalAddr());
@@ -170,7 +176,7 @@ public class ConfigManagementActionController {
 	}
 	// endregion
 
-	// region addUser
+		// region addUser
 	@RequestMapping(value = "addUser", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object addUser(HttpServletRequest request) {
 		logger.info("addUser : " + request.getLocalAddr());
@@ -198,7 +204,7 @@ public class ConfigManagementActionController {
 	}
 	// endregion
 
-	// region deleteUser
+		// region deleteUser
 	@RequestMapping(value = "deleteUsers", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object deleteUsers(HttpServletRequest request) {
 		logger.info("deleteUsers : " + request.getLocalAddr());
@@ -227,5 +233,6 @@ public class ConfigManagementActionController {
 		return null;
 	}
 	// endregion
-
+	
+	//endregion
 }

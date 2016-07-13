@@ -10,7 +10,7 @@
 	import="Common.ServiceInterface.SYSTEM_USER_GROUP_INFO_Service_interface"%>
 <%@ page import="Common.ServiceInterface.SITE_INFO_Service_interface"%>
 <%@ page language="java" contentType="text/html" pageEncoding="UTF-8"%>
-<%!public void jspInit() {
+<%! public void jspInit() {
 		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, getServletContext());
 	}
 
@@ -24,24 +24,22 @@
 	final List<SITE_INFO_DTO> siteInfoList = siteInfoService.select_SITE_INFO();
 %>
 
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-
-<title>SystemUserManagement</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<!-- Tell the browser to be responsive to screen width -->
+<meta
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+	name="viewport">
 <!-- DataTables -->
-<link rel="stylesheet" href="resources/css/essential.css">
 <link rel="stylesheet"
 	href="resources/css/configMangement/systemUserManagement.css">
-</head>
-<body>
-	<!-- Alert Start -->
-	<div id="layDiv">
-		<div class="alert-box"></div>
-		<div id="divAlertArea"></div>
-	</div>
-	<section class="white-paper">
+<!-- jQuery Knob -->
+<script src="../resources/plugins/knob/jquery.knob.js"></script>
+<!-- Alert Start -->
+<div id="layDiv">
+	<div class="alert-box"></div>
+	<div id="divAlertArea"></div>
+</div>
+<section class="white-paper">
 	<div class="row">
 		<div class="col-md-6">
 			<div class="box box-primary">
@@ -173,8 +171,6 @@
 			</div>
 		</div>
 	</div>
-	</section>
-	<script src="resources/js/common/Datatable-Essential.js"></script>
-	<script src="resources/js/configMangement/systemUserManagement.js"></script>
-</body>
-</html>
+</section>
+<script src="resources/js/common/Datatable-Essential.js"></script>
+<script src="resources/js/configMangement/systemUserManagement.js"></script>

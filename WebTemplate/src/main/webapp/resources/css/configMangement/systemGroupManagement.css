@@ -1,0 +1,16 @@
+/* 모양을 잡기 위해서 강제로 변경 */
+.white-paper {
+    padding-top: 5px !important;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    padding-bottom: 5px !important;
+}
+
+.scroll-box {
+    border-radius: 3px;
+    background: #fff;
+    border-top: 3px solid #3c8dbc;
+    margin-bottom: 20px;
+    width: 100%;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
