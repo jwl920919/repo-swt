@@ -4,7 +4,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.sql.Timestamp;
 
-public class DeviceInfo implements Serializable {
+public class DeviceEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -27,7 +27,7 @@ public class DeviceInfo implements Serializable {
 	private String sys_oid;
 	private String vendor;
 	
-	public DeviceInfo() {}
+	public DeviceEntity() {}
 
 	public Integer getDeviceId() {
 		return this.device_id;

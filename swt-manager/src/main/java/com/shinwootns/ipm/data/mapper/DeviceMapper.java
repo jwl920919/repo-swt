@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
-import com.shinwootns.ipm.data.entity.DeviceInfo;
+import com.shinwootns.ipm.data.entity.DeviceEntity;
 
 @Mapper
 public interface DeviceMapper {
@@ -16,7 +16,7 @@ public interface DeviceMapper {
 			+ " FROM device_info dev, SITE_INFO site"
 			+ " WHERE dev.site_id = site.site_id"
 	)
-	List<DeviceInfo> selectDevice();
+	List<DeviceEntity> selectDevice();
 
 	@Select(""
 			+ " SELECT dev.*"
@@ -24,7 +24,7 @@ public interface DeviceMapper {
 			+ " WHERE dev.site_id = site.site_id"
 			+ " AND dev.device_type = #{device_type}"
 	)
-	List<DeviceInfo> selectDeviceByType(String device_type);
+	List<DeviceEntity> selectDeviceByType(String device_type);
 	
 	
 	@Update(""
@@ -38,5 +38,5 @@ public interface DeviceMapper {
 			+ " , update_time = now()"
 			+ " WHERE device_id = #{device_id}"
     )
-	void updateDevice(DeviceInfo deviceInfo);
+	void updateDevice(DeviceEntity deviceInfo);
 }

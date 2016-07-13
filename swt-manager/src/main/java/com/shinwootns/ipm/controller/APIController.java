@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.shinwootns.ipm.data.entity.DeviceInfo;
+import com.shinwootns.ipm.data.entity.DeviceEntity;
 import com.shinwootns.ipm.data.mapper.DeviceMapper;
 
 @RestController
@@ -16,9 +16,9 @@ public class APIController {
 	private DeviceMapper deviceMapper;
 	
 	@RequestMapping("/api/device")
-	public List<DeviceInfo> device() {
+	public List<DeviceEntity> device() {
 		
-		List<DeviceInfo> listDevice = deviceMapper.selectDevice();
+		List<DeviceEntity> listDevice = deviceMapper.selectDevice();
 		
 		return listDevice;
 	}

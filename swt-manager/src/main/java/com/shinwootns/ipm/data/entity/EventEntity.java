@@ -5,7 +5,7 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 
-public class EventLogEntity implements Serializable {
+public class EventEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -23,7 +23,7 @@ public class EventLogEntity implements Serializable {
 
 	private Integer severity;
 
-	public EventLogEntity() {
+	public EventEntity() {
 	}
 
 	public Integer getEventId() {
