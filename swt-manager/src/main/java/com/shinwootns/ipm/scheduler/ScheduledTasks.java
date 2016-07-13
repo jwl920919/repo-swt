@@ -1,4 +1,4 @@
-package com.shinwootns.ipm.scheduled;
+package com.shinwootns.ipm.scheduler;
 
 import org.apache.log4j.Logger;
 import org.springframework.scheduling.annotation.Scheduled;
