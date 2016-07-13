@@ -27,7 +27,7 @@ public class ApplicationProperty {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		
-		sb.append( "====================================================\n" );
+		sb.append( "\n====================================================\n" );
 		sb.append( String.format("%-30s = %s\n", "ipm.name", this.name ) );
 		sb.append( String.format("%-30s = %s\n", "ipm.version", this.version ) );
 		sb.append( String.format("%-30s = %s\n", "ipm.license", this.license ) );

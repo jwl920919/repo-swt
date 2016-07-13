@@ -8,6 +8,14 @@ ipm:
   cluster:
     mode: master    # master, slave
     slave-index: 0  # 0 ~ 99
+    
+#====================================
+# Security
+#====================================
+security:
+  user:
+    name: admin
+    password: shinwoo123!
 
 #====================================
 # spring

@@ -26,6 +26,14 @@ public interface DeviceMapper {
 	)
 	List<DeviceEntity> selectDeviceByType(String device_type);
 	
+	@Select(""
+			+ " SELECT dev.*"
+			+ " FROM device_info dev, SITE_INFO site"
+			+ " WHERE dev.site_id = site.site_id"
+			+ " AND dev.device_id = #{device_id}"
+	)
+	DeviceEntity selectDeviceById(int device_id);
+	
 	
 	@Update(""
 			+ " UPDATE device_info"

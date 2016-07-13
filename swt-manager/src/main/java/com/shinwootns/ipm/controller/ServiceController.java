@@ -7,6 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.shinwootns.ipm.SpringBeanProvider;
@@ -27,6 +30,17 @@ public class ServiceController {
 	
 	@PostConstruct
 	public void startService() {
+		
+		SecurityContextHolder
+			.getContext()
+			.setAuthentication(
+					new UsernamePasswordAuthenticationToken(
+							"user", 
+							"N/A", 
+							AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER")
+					)
+			);
+
 		
 		_logger.info("Start Service Controller.");
 		
