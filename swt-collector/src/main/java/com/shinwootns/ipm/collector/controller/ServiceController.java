@@ -5,18 +5,15 @@ import javax.annotation.PreDestroy;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.shinwootns.common.network.SyslogManager;
-import com.shinwootns.ipm.collector.ApplicationProperty;
 import com.shinwootns.ipm.collector.SpringBeanProvider;
-import com.shinwootns.ipm.collector.service.WorkerPoolManager;
-import com.shinwootns.ipm.collector.service.syslog.SyslogReceiveHandlerImpl;
+import com.shinwootns.ipm.collector.config.ApplicationProperty;
+import com.shinwootns.ipm.collector.service.handler.SyslogReceiveHandlerImpl;
+import com.shinwootns.ipm.collector.worker.WorkerManager;
 
 @RestController
 public class ServiceController {
@@ -27,27 +24,19 @@ public class ServiceController {
 	private ApplicationProperty appProperties;
 	
 	@Autowired
-	private RabbitTemplate rabbitTemplate;
-	
-	@Bean
-	Queue queue() {
-		return new Queue("ipm.syslog", false);
-	}
-	
-	@Autowired
 	private ApplicationContext context;
 	
 	@PostConstruct
 	public void startService() {
 		
-		_logger.info("Start ServiceController.");
+		_logger.info("Start Service Controller.");
 		
 		// Set BeanProvider
 		SpringBeanProvider.getInstance().setApplicationContext( context );
 		SpringBeanProvider.getInstance().setApplicationProperties( appProperties );
 		
 		// Start
-		WorkerPoolManager.getInstance().start();
+		WorkerManager.getInstance().start();
 		
 		// Start receive handler
 		SyslogManager.getInstance().start(new SyslogReceiveHandlerImpl());
@@ -60,8 +49,8 @@ public class ServiceController {
 		SyslogManager.getInstance().stop();
 				
 		// Stop
-		WorkerPoolManager.getInstance().stop();
+		WorkerManager.getInstance().stop();
 		
-		_logger.info("Stop ServiceController.");
+		_logger.info("Stop Service Controller.");
 	}
 }

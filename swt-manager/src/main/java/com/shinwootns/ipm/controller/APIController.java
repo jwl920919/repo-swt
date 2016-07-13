@@ -15,6 +15,14 @@ public class APIController {
 	@Autowired(required=true)
 	private DeviceMapper deviceMapper;
 	
+	@RequestMapping("/api/device")
+	public List<DeviceInfo> device() {
+		
+		List<DeviceInfo> listDevice = deviceMapper.selectDevice();
+		
+		return listDevice;
+	}
+	
 	/*
 	@RequestMapping("/api/device")
 	public List<DeviceInfo> device() {

@@ -10,7 +10,6 @@ import org.springframework.scheduling.concurrent.ScheduledExecutorFactoryBean;
 import org.springframework.stereotype.Component;
 
 import com.shinwootns.common.stp.PoolStatus;
-import com.shinwootns.ipm.collector.service.WorkerPoolManager;
 
 @Component
 public class ScheduledTasks {
@@ -36,4 +35,9 @@ public class ScheduledTasks {
     	_logger.info(String.format("[WorkerPool] %s", syslogPoolstatus.toString()));
     }
 	*/
+	
+	// fixedRate
+    @Scheduled(fixedRate = 10000)
+    public void monitorPoolStatus() {
+    }
 }

@@ -28,7 +28,7 @@ public class ServiceController {
 	@PostConstruct
 	public void startService() {
 		
-		_logger.info("Start ServiceController.");
+		_logger.info("Start Service Controller.");
 		
 		// Set BeanProvider
 		SpringBeanProvider.getInstance().setApplicationContext( context );
@@ -47,6 +47,6 @@ public class ServiceController {
 		// Stop
 		WorkerManager.getInstance().stop();
 		
-		_logger.info("Stop ServiceController.");
+		_logger.info("Stop Service Controller.");
 	}
 }

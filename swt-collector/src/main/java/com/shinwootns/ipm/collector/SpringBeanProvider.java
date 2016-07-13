@@ -5,6 +5,8 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
+import com.shinwootns.ipm.collector.config.ApplicationProperty;
+
 @Component
 public class SpringBeanProvider {
 	
