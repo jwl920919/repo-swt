@@ -37,6 +37,10 @@ td.essential-td-left {
 	text-align: left !important;
 }
 
+td.essential-td-display_none {
+	display: none !important;
+}
+
 td.essential-td-cursor-pointer {
 	cursor: pointer;
 }

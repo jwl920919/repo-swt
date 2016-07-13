@@ -19,6 +19,7 @@
 						<table id="datatable" class="essential-table" style="width: 98%">
 							<thead>
 								<tr>
+									<th style="display: none;"></th>
 									<th width="25%"><%=LanguageHelper.GetLanguage("network")%></th>
 									<th width="25%"><%=LanguageHelper.GetLanguage("comment")%></th>
 									<th width="25%"><%=LanguageHelper.GetLanguage("utilization")%></th>
@@ -46,10 +47,12 @@
 						<table id="datatable_detail" class="essential-table" style="width: 98%">
 							<thead>
 								<tr>
-									<th width="25%"><%=LanguageHelper.GetLanguage("network")%> detail</th>
-									<th width="25%"><%=LanguageHelper.GetLanguage("comment")%></th>
-									<th width="25%"><%=LanguageHelper.GetLanguage("utilization")%></th>
-									<th width="25%"><%=LanguageHelper.GetLanguage("site")%></th>
+									<th width="16%"><%=LanguageHelper.GetLanguage("network")%></th>
+									<th width="16%"><%=LanguageHelper.GetLanguage("comment")%></th>
+									<th width="16%"><%=LanguageHelper.GetLanguage("utilization")%></th>
+									<th width="16%"><%=LanguageHelper.GetLanguage("site")%></th>
+									<th width="16%"><%=LanguageHelper.GetLanguage("utilization")%></th>
+									<th width="*"><%=LanguageHelper.GetLanguage("site")%></th>
 								</tr>
 							</thead>
 							<tbody>

@@ -1,5 +1,6 @@
 package Common.DAOImpl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -82,7 +83,9 @@ public class SYSTEM_USER_INFO_Impl extends SqlSessionDaoSupport implements SYSTE
 		int cnt = -1;
 		try {
 			System.out.println(getSqlSession());
-			cnt = getSqlSession().delete("UI_Query.delete_SYSTEM_USER_INFO_RECORDS", parameters);
+			//size zero로 for each를 이용한 sql 생성에서 발생하는 에러 방지
+			if(((ArrayList<String>)parameters.get("list")).size()>0)
+				cnt = getSqlSession().delete("UI_Query.delete_SYSTEM_USER_INFO_RECORDS", parameters);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(e.getMessage());

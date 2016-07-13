@@ -59,13 +59,14 @@ $(document).ready(function() {
                     "jsonp" : "callback",
                     "data" : function(data,type) {
                         data.search_key = data.search.value;
-                        //console.log(data.search_key);
                     }
                 },
-			    "columnDefs": [{ className: "essential-td-left essential-td-cursor-pointer", "targets": [ 0 ] },
-			                 { className: "essential-td-left", "targets": [ 1 ] }],
+			    "columnDefs": [{ className: "essential-td-display_none", "targets": [ 0 ] },
+			                   { className: "essential-td-left essential-td-cursor-pointer", "targets": [ 1 ] },
+			                   { className: "essential-td-left", "targets": [ 2 ] }],
                 "order" : [ [ 1, 'asc' ] ],
-                "columns" : [ {"data" : "network"},
+                "columns" : [ {"data" : "seq"},
+                              {"data" : "network"},
                               {"data" : "comment"},
                               {"data" : "utilization"},
                               {"data" : "site"}, ],
@@ -81,19 +82,24 @@ $(document).ready(function() {
 	});	
 
 	//datatable 첫번째 td 클릭 이벤트 바인딩
-	$('#datatable').delegate('tbody>tr>td:first-child', 'click', function() {
-	    //$(this).addClass("selected").siblings().removeClass("selected");
+	//$('#datatable').delegate('tbody>tr>td:first-child', 'click', function() {
+	$('#datatable').delegate('tbody>tr>td:nth-child(2)', 'click', function() {
 		console.log("td click event : " + this);
 	    tdClickEvent(this);
 	});
 });
 
+function trClickEvent (obj){
+	return false;
+}
 /**
  * td 이벤트 핸들러
 **/
 function tdClickEvent(obj){
 	//systemAlert("divAlertArea", "alert-danger", getLanguage("warning"), $(obj).html());
 	//alert($(obj).html().trim());
+	
+	var segmentid = $(obj).parent().children().html();
 	
 	$("#defaultDiv").css("display","none");
 	$("#detailDiv").css("display","block");
@@ -110,22 +116,28 @@ function tdClickEvent(obj){
                 "processing" : true,
                 "serverSide" : true,
                 "ajax" : {
-                    url : 'ipManagement/staticIPStatus_Segment_Select',
+                    url : 'ipManagement/staticIPStatus_Segment_Detail_Select',
                     "dataType" : "jsonp",
                     "type" : "POST",
                     "jsonp" : "callback",
                     "data" : function(data,type) {
                         data.search_key = data.search.value;
+                        data.segmentid = segmentid;
                         //console.log(data.search_key);
                     }
                 },
 			    "columnDefs": [{ className: "essential-td-left", "targets": [ 0 ] },
-			                 { className: "essential-td-left", "targets": [ 1 ] }],
-                "order" : [ [ 1, 'asc' ] ],
-                "columns" : [ {"data" : "network"},
-                              {"data" : "comment"},
-                              {"data" : "utilization"},
-                              {"data" : "site"}, ],
+			                   { className: "essential-td-left", "targets": [ 1 ] },
+			                   { className: "essential-td-left", "targets": [ 2 ] },
+			                   { className: "essential-td-left", "targets": [ 4 ] },
+			                   { className: "essential-td-left", "targets": [ 5 ] }],
+                "order" : [ [ 0, 'asc' ] ],
+                "columns" : [ {"data" : "ip"},
+                              {"data" : "name"},
+                              {"data" : "mac"},
+                              {"data" : "status"},
+                              {"data" : "type"},
+                              {"data" : "client"} ],
             });
 	
 	//검색, 엔트리 위치 정렬
