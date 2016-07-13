@@ -16,7 +16,6 @@ public class SYSTEM_USER_INFO_Service_Impl implements SYSTEM_USER_INFO_Service_I
 
 	@Override
 	public List<SYSTEM_USER_INFO_DTO> select_SYSTEM_USER_INFO_CONDITIONAL_SEARCH(HashMap<String, Object> parameters) {
-		// TODO Auto-generated method stub
 		return userInfoDao.select_SYSTEM_USER_INFO_CONDITIONAL_SEARCH(parameters);
 	}
 

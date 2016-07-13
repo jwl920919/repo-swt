@@ -37,7 +37,7 @@ public class ConfigMangementController {
 	private SITE_INFO_Service_interface siteInfoService;
 	
 	@RequestMapping(value = "systemUserManagement", method = RequestMethod.GET)
-	public String Main(Locale locale, Model model, HttpServletRequest request, HttpServletResponse response) {
+	public String systemUserManagement(Locale locale, Model model, HttpServletRequest request, HttpServletResponse response) {
 		logger.info("systemUserManagement : " + request.getLocalAddr());
 		System.out.println("systemUserManagement Controller");
 		// Session에 로그인 정보가 있는지 체크
@@ -47,6 +47,19 @@ public class ConfigMangementController {
 			return "redirect:login";
 		
 		return parentPath + "systemUserManagement";
+	}
+	
+	@RequestMapping(value = "systemGroupManagement", method = RequestMethod.GET)
+	public String systemGroupManagement(Locale locale, Model model, HttpServletRequest request, HttpServletResponse response) {
+		logger.info("systemGroupManagement : " + request.getLocalAddr());
+		System.out.println("systemGroupManagement Controller");
+		// Session에 로그인 정보가 있는지 체크
+		HttpSession session = request.getSession(true);
+		System.out.println(session.getAttribute("login_chk"));
+		if (session.getAttribute("login_chk") == null)
+			return "redirect:login";
+		
+		return parentPath + "systemGroupManagement";
 	}
 	
 	

@@ -1,5 +1,6 @@
 package Common.ServiceImpl;
 
+import java.util.HashMap;
 import java.util.List;
 
 import Common.DAOInterface.SITE_INFO_interface;
@@ -15,6 +16,18 @@ public class SITE_INFO_Service_Impl implements SITE_INFO_Service_interface {
 	@Override
 	public List<SITE_INFO_DTO> select_SITE_INFO() {
 		return siteInfoDao.select_SITE_INFO();
+	}
+	@Override
+	public int update_SITE_INFO_ONE_RECORD(HashMap<String, Object> parameters) {
+		return siteInfoDao.update_SITE_INFO_ONE_RECORD(parameters);
+	}
+	@Override
+	public int insert_SITE_INFO_ONE_RECORD(HashMap<String, Object> parameters) {
+		return siteInfoDao.insert_SITE_INFO_ONE_RECORD(parameters);
+	}
+	@Override
+	public int delete_SITE_INFO_RECORDS(HashMap<String, Object> parameters) {
+		return siteInfoDao.delete_SITE_INFO_RECORDS(parameters);
 	}
 
 }

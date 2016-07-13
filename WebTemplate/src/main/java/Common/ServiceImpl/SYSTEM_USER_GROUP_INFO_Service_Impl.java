@@ -1,5 +1,6 @@
 package Common.ServiceImpl;
 
+import java.util.HashMap;
 import java.util.List;
 
 import Common.DAOInterface.SYSTEM_USER_GROUP_INFO_interface;
@@ -16,6 +17,21 @@ public class SYSTEM_USER_GROUP_INFO_Service_Impl implements SYSTEM_USER_GROUP_IN
 	@Override
 	public List<SYSTEM_USER_GROUP_DTO> select_SYSTEM_USER_GROUP_INFO() {
 		return systemUserGroupInfoDao.select_SYSTEM_USER_GROUP_INFO();
+	}
+
+	@Override
+	public int update_SYSTEM_USER_GROUP_INFO_ONE_RECORD(HashMap<String, Object> parameters) {
+		return systemUserGroupInfoDao.update_SYSTEM_USER_GROUP_INFO_ONE_RECORD(parameters);
+	}
+
+	@Override
+	public int insert_SYSTEM_USER_GROUP_INFO_ONE_RECORD(HashMap<String, Object> parameters) {
+		return systemUserGroupInfoDao.insert_SYSTEM_USER_GROUP_INFO_ONE_RECORD(parameters);
+	}
+
+	@Override
+	public int delete_SYSTEM_USER_GROUP_INFO_RECORDS(HashMap<String, Object> parameters) {
+		return systemUserGroupInfoDao.delete_SYSTEM_USER_GROUP_INFO_RECORDS(parameters);
 	}
 
 }

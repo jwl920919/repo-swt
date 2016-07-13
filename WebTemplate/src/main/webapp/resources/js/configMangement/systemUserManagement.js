@@ -69,35 +69,16 @@ $('#checkbox_controller').click(function() {
     }
 });
 
-$('#delete-button').click(function() {
-    systemAlert("divAlertArea", "alert-danger", "삭제", "정말 유저 정보를 삭제하시겠습니까?");
-    // var rows = $("input[name=checkbox-active]:checkbox:checked");
-    // var jsonArray = new Array();
-    // for (var i = 0; i < rows.length; i++) {
-    // var tr = $(rows[i]).parent().parent();
-    // var td = tr.children().next(); // time
-    // var jObj = Object();
-    // jObj.user_id = td.html();
-    // jsonArray.push(jObj);
-    // }
-    // var jsonInfo = JSON.stringify(jsonArray);
-    // $.ajax({
-    // url : "configManagement/deleteUsers",
-    // type : "POST",
-    // data : jsonInfo,
-    // dataType : "text",
-    // success : function(data) {
-    // var jsonObj = eval("(" + data + ')');
-    // if (jsonObj.result == true) {
-    // table.ajax.reload();
-    // console.log('삭제 성공');
-    // } else {
-    // console.log('삭제 실패');
-    // }
-    // }
-    // });
+$('#delete-button')
+        .click(
+                function() {
+                    systemAlert(
+                            "divAlertArea",
+                            "alert-warning",
+                            "삭제",
+                    "정말 유저 정보를 삭제하시겠습니까? <input class='delete-confirm-button' class='btn btn-danger' type='button' value='삭제' style='position:absolute; top:48px; left:267px; width:73px; height:26px; font-size:14px;background-color: #e67d26;    border-color: #F3BC6E;border-style: groove; color: #FFF;' /><script>$('.delete-confirm-button').click(function(){var rows=$('input[name=checkbox-active]:checkbox:checked');var jsonArray=new Array();for(var i=0;i<rows.length;i++){var tr=$(rows[i]).parent().parent();var td=tr.children().next();var jObj=Object();jObj.user_id=td.html();jsonArray.push(jObj);}var jsonInfo=JSON.stringify(jsonArray);$.ajax({url:'configManagement/deleteUsers',type:'POST',data:jsonInfo,dataType:'text',success:function(data){var jsonObj=eval('('+data+')');if(jsonObj.result==true){table.ajax.reload();console.log('삭제성공');}else{console.log('삭제실패');}fnAlertClose(\"layDiv\")}});});</script>");
 
-});
+                });
 
 // switching [ add(1), modify(2) ]
 var sw = 1;

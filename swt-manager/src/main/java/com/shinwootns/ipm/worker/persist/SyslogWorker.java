@@ -1,17 +1,14 @@
-package com.shinwootns.ipm.worker;
+package com.shinwootns.ipm.worker.persist;
 
 import java.util.List;
-
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ConfigurableApplicationContext;
+
 import com.shinwootns.common.utils.JsonUtils;
-import com.shinwootns.common.utils.TimeUtils;
-import com.shinwootns.ipm.SpringBeanProvider;
 import com.shinwootns.ipm.data.SharedData;
 import com.shinwootns.ipm.data.entity.EventLogEntity;
-import com.shinwootns.ipm.data.mapper.EventMapper;
+import com.shinwootns.ipm.worker.BaseWorker;
 
 public class SyslogWorker extends BaseWorker {
 

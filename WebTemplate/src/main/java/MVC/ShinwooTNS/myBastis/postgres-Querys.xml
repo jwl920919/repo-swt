@@ -102,15 +102,18 @@
 		#{mobile_num}, #{email},
 		false, now(), now());
 	</insert>
-	
+
 	<!-- Query Type : Delete(Select, Insert, Update, Delete) -->
 	<!-- Insert Date : 2016-07-12 -->
 	<!-- Insert User : 이재원 -->
 	<!-- Description : 유저 정보 삭제 -->
 	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
 	<delete id="delete_SYSTEM_USER_INFO_RECORDS" parameterType="hashmap">
-		DELETE FROM system_user_info WHERE user_id in 
-		(<foreach collection="list" item="item" separator=" , ">#{item}</foreach>);
+		DELETE FROM system_user_info WHERE user_id in
+		(
+		<foreach collection="list" item="item" separator=" , ">#{item}
+		</foreach>
+		);
 	</delete>
 
 
@@ -124,6 +127,46 @@
 		site_id,group_id,group_name,group_desc FROM system_user_group;
 	</select>
 
+	<!-- Query Type : Insert(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-07-13 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : 시스템 유저 그룹 정보 추가 (Only Record One) -->
+	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
+	<insert id="insert_SYSTEM_USER_GROUP_INFO_ONE_RECORD"
+		parameterType="hashmap">
+		INSERT into
+		system_user_group (site_id, group_id,
+		group_name, group_desc)
+		VALUES (#{site_id}, #{group_id}, #{group_name},
+		#{group_desc});
+	</insert>
+
+	<!-- Query Type : Update(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-07-13 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : 시스템 유저 그룹 정보 변경 (Only Record One) -->
+	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
+	<update id="update_SYSTEM_USER_GROUP_INFO_ONE_RECORD"
+		parameterType="hashmap">
+		UPDATE system_user_group set
+		site_id=#{site_id},group_name=#{group_name},group_desc=#{group_desc}
+		WHERE group_id=#{group_id};
+	</update>
+
+	<!-- Query Type : Delete(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-07-13 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : 시스템 유저 그룹 정보 삭제 -->
+	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
+	<delete id="delete_SYSTEM_USER_GROUP_INFO_RECORDS"
+		parameterType="hashmap">
+		DELETE FROM system_user_group WHERE group_id in
+		(
+		<foreach collection="list" item="item" separator=" , ">#{item}
+		</foreach>
+		);
+	</delete>
+
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
 	<!-- Insert Date : 2016-07-11 -->
 	<!-- Insert User : 이재원 -->
@@ -134,15 +177,63 @@
 		site_id,site_name,site_code,description FROM site_info;
 	</select>
 
+	<!-- Query Type : Insert(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-07-13 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : 사업장 정보 추가 (Only Record One) -->
+	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
+	<insert id="insert_SITE_INFO_ONE_RECORD" parameterType="hashmap">
+		INSERT
+		into
+		site_info (site_id, site_name,
+		site_code, description)
+		VALUES
+		(#{site_id}, #{site_name}, #{site_code},
+		#{description});
+	</insert>
+
+	<!-- Query Type : Delete(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-07-13 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : 사업장 정보 삭제 -->
+	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
+	<delete id="delete_SITE_INFO_RECORDS" parameterType="hashmap">
+		DELETE FROM site_info WHERE site_id in
+		(
+		<foreach collection="list" item="item" separator=" , ">#{item}
+		</foreach>
+		);
+	</delete>
+
+	<!-- Query Type : Update(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-07-13 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : 사업장 정보 변경 (Only Record One) -->
+	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
+	<update id="update_SITE_INFO_ONE_RECORD" parameterType="hashmap">
+		UPDATE
+		site_info set
+		site_name=#{site_name},site_code=#{site_code},description=#{description}
+		WHERE site_id=#{site_id};
+	</update>
+
+
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
 	<!-- Insert Date : 2016-07-11 -->
 	<!-- Insert User : KCM -->
 	<!-- Description : IP관리 > 고정IP현황 - 세그먼트별 데이터 -->
 	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
 	<select id="select_IP_MANAGEMENT_SEGMENT" resultType="java.util.HashMap">
-		SELECT * FROM "test_dhcp_segment" ,(SELECT count(*) allcount FROM "test_dhcp_segment") as allcount
-		 WHERE network like CONCAT('%', #{searchValue}, '%') OR comment like CONCAT('%', #{searchValue}, '%') OR site like CONCAT('%', #{searchValue}, '%')
-		 ORDER BY ${orderColumn} ${orderType}
+		SELECT *
+		FROM "test_dhcp_segment" ,(SELECT count(*) allcount FROM
+		"test_dhcp_segment") as allcount
+		WHERE network like CONCAT('%',
+		#{searchValue}, '%') OR comment like
+		CONCAT('%', #{searchValue}, '%')
+		OR site like CONCAT('%',
+		#{searchValue}, '%')
+		ORDER BY ${orderColumn}
+		${orderType}
 		OFFSET #{startIndex} LIMIT #{length};
 	</select>
 
@@ -152,15 +243,19 @@
 	<!-- Description : IP관리 > 고정IP현황 - 세그먼트별 상세 데이터 -->
 	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
 	<select id="select_IP_MANAGEMENT_SEGMENT_DETAIL" resultType="java.util.HashMap">
-		SELECT * FROM "test_dhcp_segment_list",(SELECT count(*) allcount FROM "test_dhcp_segment_list") as allcount
-		 WHERE segment_id = #{segmentid}
-		   AND "ip" like CONCAT('%', #{searchValue}, '%') OR "name" like CONCAT('%', #{searchValue}, '%') OR "mac" like CONCAT('%', #{searchValue}, '%')
-		    OR "status" like CONCAT('%', #{searchValue}, '%') OR "type" like CONCAT('%', #{searchValue}, '%') OR "client" like CONCAT('%', #{searchValue}, '%')
-		 ORDER BY ${orderColumn} ${orderType}
+		SELECT * FROM "test_dhcp_segment_list",(SELECT count(*) allcount FROM
+		"test_dhcp_segment_list") as allcount
+		WHERE segment_id = ${segmentid}
+		AND "ip" like CONCAT('%', #{searchValue}, '%') OR "name" like CONCAT('%',
+		#{searchValue}, '%') OR "mac" like CONCAT('%', #{searchValue}, '%')
+		OR "status" like CONCAT('%', #{searchValue}, '%') OR "type" like
+		CONCAT('%', #{searchValue}, '%') OR "client" like CONCAT('%',
+		#{searchValue}, '%')
+		ORDER BY ${orderColumn} ${orderType}
 		OFFSET #{startIndex} LIMIT #{length};
 	</select>
 
-	
+
 
 </mapper>
 
