@@ -19,6 +19,7 @@
 						<table id="datatable" class="essential-table" style="width: 98%">
 							<thead>
 								<tr>
+									<th style="display: none;"></th>
 									<th width="25%"><%=LanguageHelper.GetLanguage("network")%></th>
 									<th width="25%"><%=LanguageHelper.GetLanguage("comment")%></th>
 									<th width="25%"><%=LanguageHelper.GetLanguage("utilization")%></th>

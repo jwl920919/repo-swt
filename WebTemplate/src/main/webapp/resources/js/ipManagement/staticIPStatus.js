@@ -59,10 +59,10 @@ $(document).ready(function() {
                     "jsonp" : "callback",
                     "data" : function(data,type) {
                         data.search_key = data.search.value;
-                        //console.log(data.search_key);
                     }
                 },
-			    "columnDefs": [{ className: "essential-td-left essential-td-cursor-pointer", "targets": [ 1 ] },
+			    "columnDefs": [{ className: "essential-td-display_none", "targets": [ 0 ] },
+			                   { className: "essential-td-left essential-td-cursor-pointer", "targets": [ 1 ] },
 			                   { className: "essential-td-left", "targets": [ 2 ] }],
                 "order" : [ [ 1, 'asc' ] ],
                 "columns" : [ {"data" : "seq"},
@@ -82,12 +82,16 @@ $(document).ready(function() {
 	});	
 
 	//datatable 첫번째 td 클릭 이벤트 바인딩
-	$('#datatable').delegate('tbody>tr>td:first-child', 'click', function() {
+	//$('#datatable').delegate('tbody>tr>td:first-child', 'click', function() {
+	$('#datatable').delegate('tbody>tr>td:nth-child(2)', 'click', function() {
 		console.log("td click event : " + this);
 	    tdClickEvent(this);
 	});
 });
 
+function trClickEvent (obj){
+	return false;
+}
 /**
  * td 이벤트 핸들러
 **/
@@ -95,8 +99,7 @@ function tdClickEvent(obj){
 	//systemAlert("divAlertArea", "alert-danger", getLanguage("warning"), $(obj).html());
 	//alert($(obj).html().trim());
 	
-	//var parent = $(obj).parent();
-	//alert($(obj).parent().children().html());
+	var segmentid = $(obj).parent().children().html();
 	
 	$("#defaultDiv").css("display","none");
 	$("#detailDiv").css("display","block");
@@ -119,7 +122,7 @@ function tdClickEvent(obj){
                     "jsonp" : "callback",
                     "data" : function(data,type) {
                         data.search_key = data.search.value;
-                        data.segmentid = $(obj).html().trim();
+                        data.segmentid = segmentid;
                         //console.log(data.search_key);
                     }
                 },
