@@ -8,7 +8,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import com.shinwootns.common.utils.SystemUtils;
 import com.shinwootns.ipm.SpringBeanProvider;
 import com.shinwootns.ipm.config.ApplicationProperty;
-import com.shinwootns.ipm.service.cluster.ClusterManager;
+import com.shinwootns.ipm.service.manager.ClusterManager;
 
 public class RedisHandler {
 	

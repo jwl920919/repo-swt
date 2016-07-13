@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import com.shinwootns.common.utils.JsonUtils;
 import com.shinwootns.ipm.data.SharedData;
 
-public class AmqpReceiver {
+public class AmqpRecvHandler {
 	
 	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
