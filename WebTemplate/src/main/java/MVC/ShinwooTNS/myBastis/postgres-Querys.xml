@@ -243,7 +243,7 @@
 	<!-- Description : IP관리 > 고정IP현황 - 세그먼트별 상세 데이터 -->
 	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
 	<select id="select_IP_MANAGEMENT_SEGMENT_DETAIL" resultType="java.util.HashMap">
-		SELECT * FROM "test_dhcp_segment_list",(SELECT count(*) allcount FROM "test_dhcp_segment_list") as allcount
+		SELECT * FROM "test_dhcp_segment_list",(SELECT count(*) allcount FROM "test_dhcp_segment_list" WHERE segment_id = #{segmentid}) as allcount
 		 WHERE segment_id = #{segmentid}
 		   AND ("ip" like CONCAT('%', #{searchValue}, '%') OR "name" like CONCAT('%', #{searchValue}, '%') OR "mac" like CONCAT('%', #{searchValue}, '%')
 		    OR "status" like CONCAT('%', #{searchValue}, '%') OR "type" like CONCAT('%', #{searchValue}, '%') OR "client" like CONCAT('%', #{searchValue}, '%'))
