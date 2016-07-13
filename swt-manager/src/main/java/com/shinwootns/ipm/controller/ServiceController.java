@@ -32,7 +32,9 @@ public class ServiceController {
 		
 		// Set BeanProvider
 		SpringBeanProvider.getInstance().setApplicationContext( context );
-		SpringBeanProvider.getInstance().setApplicationProperties( appProperty );
+		SpringBeanProvider.getInstance().setApplicationProperty( appProperty );
+		
+		_logger.info(appProperty.toString());
 		
 		// Cluster Info
 		RedisHandler.getInstance().registClusterRank();

@@ -28,7 +28,7 @@ public class EventWorker extends BaseWorker {
 		_logger.info(String.format("EventWorker#%d... start.", this._index));
 		
 		// get ApplicationProperty
-		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperties();
+		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
 		if (appProperty == null)
 			return;
 		

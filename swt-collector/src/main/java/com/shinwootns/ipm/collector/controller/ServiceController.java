@@ -21,7 +21,7 @@ public class ServiceController {
 	private final Logger _logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired(required=true)
-	private ApplicationProperty appProperties;
+	private ApplicationProperty appProperty;
 	
 	@Autowired
 	private ApplicationContext context;
@@ -33,7 +33,9 @@ public class ServiceController {
 		
 		// Set BeanProvider
 		SpringBeanProvider.getInstance().setApplicationContext( context );
-		SpringBeanProvider.getInstance().setApplicationProperties( appProperties );
+		SpringBeanProvider.getInstance().setApplicationProperty( appProperty );
+		
+		_logger.info(appProperty.toString());
 		
 		// Start
 		WorkerManager.getInstance().start();

@@ -10,7 +10,7 @@ public class RabbitmqSender {
 	
 	public static void SendData(JSONObject jobj, Logger _logger) {
 		
-		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperties();
+		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
 		RabbitTemplate rabbitTemplate = SpringBeanProvider.getInstance().getRabbitTemplate();
 		
 		if (appProperty == null || rabbitTemplate == null)
