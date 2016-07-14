@@ -6,11 +6,11 @@
     padding-bottom: 5px !important;
 }
 
-.scroll-box {
-    border-radius: 3px;
-    background: #fff;
-    border-top: 3px solid #3c8dbc;
-    margin-bottom: 20px;
-    width: 100%;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+/* .scroll-body-size { */
+/* 	width:99%; */
+/* } */
+
+div.row {
+    margin-right: 0px !important;
+    margin-left: 0px !important;
 }

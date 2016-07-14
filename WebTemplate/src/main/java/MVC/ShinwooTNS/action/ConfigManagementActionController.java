@@ -235,4 +235,46 @@ public class ConfigManagementActionController {
 	// endregion
 	
 	//endregion
+
+	// region systemGroupManagement
+	
+	// region SystemGroupManagementPlaceOfBusinessDatatableDatas
+	@RequestMapping(value = "getSystemGroupManagementPlaceOfBusinessDatatableDatas", method = RequestMethod.POST)
+	public void getSystemGroupManagementDatatableDatas(Locale locale, Model model, HttpServletRequest request,
+			HttpServletResponse response) {
+		logger.info("getSystemGroupManagementPlaceOfBusinessDatatableDatas : " + request.getLocalAddr());
+		System.out.println("getSystemGroupManagementPlaceOfBusinessDatatableDatas Controller");
+		try {
+			String[] columns = { "site_name", "site_code", "desc" };
+			HashMap<String, Object> parameters = Common.Helper.DatatableHelper.getDatatableParametas(request, columns,
+					1);
+
+			List<SYSTEM_USER_INFO_DTO> userDataList = userInfoService
+					.select_SYSTEM_USER_INFO_CONDITIONAL_SEARCH(parameters);
+
+			JSONArray jsonArray = new JSONArray();
+			for (SYSTEM_USER_INFO_DTO suid : userDataList) {
+				JSONObject jObj = new JSONObject();
+				jObj.put(columns[0], suid.getUser_id());
+				jObj.put(columns[1], suid.getUser_name());
+				jObj.put(columns[2], suid.getUser_name());
+				jObj.put("active", 1);
+				jsonArray.add(jObj);
+			}
+			int totalCount = userInfoService.select_SYSTEM_USER_INFO_CONDITIONAL_SEARCH_TOTAL_COUNT(parameters);
+
+			response.setContentType("Application/json;charset=utf-8");
+			response.getWriter().println(Common.Helper.DatatableHelper.makeCallback(request, jsonArray, totalCount));
+			response.getWriter().flush();
+			response.getWriter().close();
+		} catch (IOException e) {
+			logger.error(e.getMessage());
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+	}
+	// endregion
+	
+	
+	// endregion
 }
