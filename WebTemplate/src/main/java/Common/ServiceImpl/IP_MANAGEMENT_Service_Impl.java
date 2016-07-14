@@ -28,4 +28,14 @@ public class IP_MANAGEMENT_Service_Impl implements IP_MANAGEMENT_Service_Interfa
 		// TODO Auto-generated method stub
 		return ipManagementDao.select_IP_MANAGEMENT_SEGMENT(parameters);
 	}
+
+	/**
+	 * <p>
+	 * IP관리 > 고정IP현황 서비스  IP세그먼트별 상세 데이터 조회.
+	 * </p> 
+	 **/
+	public List<Map<String,Object>> select_IP_MANAGEMENT_SEGMENT_DETAIL(HashMap<String, Object> parameters) {
+		// TODO Auto-generated method stub
+		return ipManagementDao.select_IP_MANAGEMENT_SEGMENT_DETAIL(parameters);
+	}
 }

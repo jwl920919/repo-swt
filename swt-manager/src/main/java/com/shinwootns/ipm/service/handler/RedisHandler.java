@@ -35,7 +35,7 @@ public class RedisHandler {
 
 	public void registClusterRank() {
 		
-		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperties();
+		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
 		StringRedisTemplate redisTemplate = SpringBeanProvider.getInstance().getRedisTemplate();
 		if ( appProperty == null || redisTemplate == null )
 			return;
@@ -66,7 +66,7 @@ public class RedisHandler {
 	
 	public void updateClusterMember() {
 		
-		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperties();
+		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
 		StringRedisTemplate redisTemplate = SpringBeanProvider.getInstance().getRedisTemplate();
 		if ( appProperty == null || redisTemplate == null )
 			return;
@@ -130,7 +130,7 @@ public class RedisHandler {
 	
 	public boolean isClusterMaster() {
 
-		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperties();
+		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
 		StringRedisTemplate redisTemplate = SpringBeanProvider.getInstance().getRedisTemplate();
 		if ( appProperty == null || redisTemplate == null )
 			return false;

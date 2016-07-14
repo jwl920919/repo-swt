@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import com.shinwootns.ipm.SpringBeanProvider;
 import com.shinwootns.ipm.config.ApplicationProperty;
 import com.shinwootns.ipm.data.SharedData;
-import com.shinwootns.ipm.data.entity.EventLogEntity;
+import com.shinwootns.ipm.data.entity.EventEntity;
 import com.shinwootns.ipm.data.mapper.EventMapper;
 import com.shinwootns.ipm.worker.BaseWorker;
 
@@ -28,7 +28,7 @@ public class EventWorker extends BaseWorker {
 		_logger.info(String.format("EventWorker#%d... start.", this._index));
 		
 		// get ApplicationProperty
-		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperties();
+		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
 		if (appProperty == null)
 			return;
 		
@@ -41,7 +41,7 @@ public class EventWorker extends BaseWorker {
 		if (eventMapper == null)
 			return;
 		
-		List<EventLogEntity> listEvent = null;
+		List<EventEntity> listEvent = null;
 		
 		while(true)
 		{
@@ -49,7 +49,7 @@ public class EventWorker extends BaseWorker {
 			if (listEvent == null)
 				continue;
 			
-			for(EventLogEntity event : listEvent)
+			for(EventEntity event : listEvent)
 			{
 				if (event == null) 
 					continue;

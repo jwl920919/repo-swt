@@ -13,9 +13,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class MainApplication implements CommandLineRunner {
 	
 	public static void main(String[] args) {
-		//SpringApplicationBuilder appBuilder = new SpringApplicationBuilder(MainApplication.class);
-		//SpringApplication app = appBuilder.build();
-		//app.run(args);
 		SpringApplication.run(MainApplication.class, args);
 	}
 	

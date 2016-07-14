@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.shinwootns.common.utils.JsonUtils;
 import com.shinwootns.ipm.data.SharedData;
-import com.shinwootns.ipm.data.entity.EventLogEntity;
+import com.shinwootns.ipm.data.entity.EventEntity;
 import com.shinwootns.ipm.worker.BaseWorker;
 
 public class SyslogWorker extends BaseWorker {
@@ -116,7 +116,7 @@ public class SyslogWorker extends BaseWorker {
 	
 	private void insertEventQueue(JSONObject jObj) {
 		
-		EventLogEntity eventLog = new EventLogEntity(); 
+		EventEntity eventLog = new EventEntity(); 
 
 		eventLog.setHostIp(JsonUtils.getValueToString(jObj, "host", ""));
 		eventLog.setDeviceId((int)JsonUtils.getValueToNumber(jObj, "device_id", 0));

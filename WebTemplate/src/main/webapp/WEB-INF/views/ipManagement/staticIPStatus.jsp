@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"%>
 <%@ page import="Common.Helper.LanguageHelper"%>
 
+<script src="resources/js/main/main.js"></script>
 <script src="resources/js/common/Datatable-Essential.js"></script>
 <script src="resources/js/ipManagement/staticIPStatus.js"></script>
 
@@ -14,11 +15,17 @@
 	<div class="row" id="defaultDiv">
 		<div class="col-lg-12">
 			<div class="box box-primary">
+				<div class="box-header" style="margin-bottom: -10px">	
+					<h1 class="box-title-small">
+						<LABEL>default</LABEL>
+					</h2>
+				</div>
 				<div class="box-body">
 					<center>
 						<table id="datatable" class="essential-table" style="width: 98%">
 							<thead>
 								<tr>
+									<th style="display: none;"></th>
 									<th width="25%"><%=LanguageHelper.GetLanguage("network")%></th>
 									<th width="25%"><%=LanguageHelper.GetLanguage("comment")%></th>
 									<th width="25%"><%=LanguageHelper.GetLanguage("utilization")%></th>
@@ -41,15 +48,24 @@
 	<div class="row" id="detailDiv" style="display:none;">
 		<div class="col-lg-12">
 			<div class="box box-primary">
+				<div class="box-header" style="margin-bottom: -10px">	
+					<h1 class="box-title-small">
+						<LABEL><a href="javascript:void(0)" onclick="contentLoad('/ipManagement/staticIPStatus');">default</a></LABEL>
+						<LABEL> > </LABEL>
+						<LABEL id="contentTitleSmall">192.168.0.1/24</LABEL>
+					</h2>
+				</div>
 				<div class="box-body">
 					<center>
 						<table id="datatable_detail" class="essential-table" style="width: 98%">
 							<thead>
 								<tr>
-									<th width="25%"><%=LanguageHelper.GetLanguage("network")%> detail</th>
-									<th width="25%"><%=LanguageHelper.GetLanguage("comment")%></th>
-									<th width="25%"><%=LanguageHelper.GetLanguage("utilization")%></th>
-									<th width="25%"><%=LanguageHelper.GetLanguage("site")%></th>
+									<th width="16%"><%=LanguageHelper.GetLanguage("network")%></th>
+									<th width="16%"><%=LanguageHelper.GetLanguage("comment")%></th>
+									<th width="16%"><%=LanguageHelper.GetLanguage("utilization")%></th>
+									<th width="16%"><%=LanguageHelper.GetLanguage("site")%></th>
+									<th width="16%"><%=LanguageHelper.GetLanguage("utilization")%></th>
+									<th width="*"><%=LanguageHelper.GetLanguage("site")%></th>
 								</tr>
 							</thead>
 							<tbody>

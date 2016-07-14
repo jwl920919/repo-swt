@@ -7,6 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.shinwootns.ipm.SpringBeanProvider;
@@ -28,11 +31,24 @@ public class ServiceController {
 	@PostConstruct
 	public void startService() {
 		
-		_logger.info("Start ServiceController.");
+		SecurityContextHolder
+			.getContext()
+			.setAuthentication(
+					new UsernamePasswordAuthenticationToken(
+							"user", 
+							"N/A", 
+							AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER")
+					)
+			);
+
+		
+		_logger.info("Start Service Controller.");
 		
 		// Set BeanProvider
 		SpringBeanProvider.getInstance().setApplicationContext( context );
-		SpringBeanProvider.getInstance().setApplicationProperties( appProperty );
+		SpringBeanProvider.getInstance().setApplicationProperty( appProperty );
+		
+		_logger.info(appProperty.toString());
 		
 		// Cluster Info
 		RedisHandler.getInstance().registClusterRank();
@@ -47,6 +63,6 @@ public class ServiceController {
 		// Stop
 		WorkerManager.getInstance().stop();
 		
-		_logger.info("Stop ServiceController.");
+		_logger.info("Stop Service Controller.");
 	}
 }

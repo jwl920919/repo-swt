@@ -23,7 +23,7 @@ public class WorkerManager {
 	// Task
 	private static final int TASK_MIN_COUNT = 32;
 	private static final int TASK_MAX_COUNT = 32;
-	private static final int TASK_LIMIT = 32;
+	private static final int TASK_LIMIT_COUNT = 32;
 	
 	private SmartThreadPool _taskPool = new SmartThreadPool();
 	
@@ -53,7 +53,7 @@ public class WorkerManager {
 		sb.append("========================================================================\n");
 		sb.append(String.format("%-20s = %d\n", "TASK_MIN_COUNT", TASK_MIN_COUNT));
 		sb.append(String.format("%-20s = %d\n", "TASK_MAX_COUNT", TASK_MAX_COUNT));
-		sb.append(String.format("%-20s = %d\n", "TASK_LIMIT", TASK_LIMIT));
+		sb.append(String.format("%-20s = %d\n", "TASK_LIMIT_COUNT", TASK_LIMIT_COUNT));
 		sb.append("========================================================================\n");
 		
 		_logger.info(sb.toString());
@@ -84,7 +84,7 @@ public class WorkerManager {
 		
 		
 		// Task Pool
-		if (_taskPool.createPool(TASK_MIN_COUNT, TASK_MAX_COUNT, TASK_LIMIT)) {
+		if (_taskPool.createPool(TASK_MIN_COUNT, TASK_MAX_COUNT, TASK_LIMIT_COUNT)) {
 			_logger.info("Create task pool... ok");
 		}
 		else {

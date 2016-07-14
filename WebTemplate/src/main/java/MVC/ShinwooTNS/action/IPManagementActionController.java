@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.reflect.TypeToken;
 
 import Common.DTO.AjaxResult;
 import Common.DTO.SYSTEM_USER_INFO_DTO;
@@ -38,7 +39,7 @@ public class IPManagementActionController {
 	@Autowired
 	private IP_MANAGEMENT_Service_Interface ipManagementService;
 	
-	@RequestMapping(value = "/staticIPStatus_Segment_Select", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+	@RequestMapping(value = "staticIPStatus_Segment_Select", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public void staticIPStatus_Segment_Select(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		System.out.println("staticIPStatus_Segment_Select");
 		logger.info("staticIPStatus_Segment_Select : " + request.getLocalAddr());
@@ -65,6 +66,45 @@ public class IPManagementActionController {
 		}
 		finally {
 			response.getWriter().println(Common.Helper.DatatableHelper.makeCallback(request, jsonArray, totalCount));
+			response.getWriter().flush();
+			response.getWriter().close();			
+		}
+	}
+
+	@RequestMapping(value = "staticIPStatus_Segment_Detail_Select", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+	public void staticIPStatus_Segment_Detail_Select(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		System.out.println("staticIPStatus_Segment_Detail_Select");
+		logger.info("staticIPStatus_Segment_Detail_Select : " + request.getLocalAddr());
+		List<Map<String, Object>> dataList = null;
+		JsonArray jsonArray = null;
+		int totalCount = 0;
+				
+		try {			
+			String[] columns = { "ip", "name", "mac", "startus", "type", "client" };
+			
+			int m_Segmentid = Integer.parseInt(request.getParameter("segmentid"));
+			//int m_Segmentid = Integer.parseInt(request.getParameter("segmentid"));
+			
+			HashMap<String, Object> parameters = Common.Helper.DatatableHelper.getDatatableParametas(request,columns,0);
+			parameters.put("segmentid", m_Segmentid);
+			
+			dataList = ipManagementService.select_IP_MANAGEMENT_SEGMENT_DETAIL(parameters);
+
+			if (dataList.size() > 0) {
+				totalCount = Integer.parseInt(((Map<String, Object>)dataList.get(0)).get("allcount").toString());
+			}
+			
+			jsonArray = gson.toJsonTree(dataList).getAsJsonArray();
+			response.setContentType("Application/json;charset=utf-8");
+		} catch (Exception e) {
+			result.result = false;
+			result.errorMessage = e.getMessage();
+			logger.error(e.getMessage());
+		}
+		finally {
+			response.getWriter().println(Common.Helper.DatatableHelper.makeCallback(
+					
+					request, jsonArray, totalCount));
 			response.getWriter().flush();
 			response.getWriter().close();			
 		}
