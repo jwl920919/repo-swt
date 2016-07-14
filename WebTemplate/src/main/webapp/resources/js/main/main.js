@@ -71,3 +71,9 @@ changeframe = function(url, acticeid, masterKey, subKey) {
 		console.log("main.js changeframe() Error Log : " + e.message);
 	}
 }
+
+contentLoad = function(url){
+//	alert("url : " + url);
+//	alert("$(#content_frame) : " + $("#content_frame"));
+	$("#content_frame").load(url);	
+}

@@ -84,7 +84,7 @@ $(document).ready(function() {
 	//datatable 첫번째 td 클릭 이벤트 바인딩
 	//$('#datatable').delegate('tbody>tr>td:first-child', 'click', function() {
 	$('#datatable').delegate('tbody>tr>td:nth-child(2)', 'click', function() {
-		console.log("td click event : " + this);
+		//console.log("td click event : " + this);
 	    tdClickEvent(this);
 	});
 });
@@ -106,8 +106,10 @@ function tdClickEvent(obj){
 	
 	$('#datatable_detail').DataTable(
             {
+            	"scrollY": "auto",
+//              "scrollCollapse": false,
                 "destroy" : true,
-                "paging" : true,
+                "paging" : true, //"paging" : true,
                 "searching" : true,
                 "lengthChange" : true,
                 "ordering" : true,
@@ -139,7 +141,8 @@ function tdClickEvent(obj){
                               {"data" : "type"},
                               {"data" : "client"} ],
             });
-	
+	$('div.dataTables_scrollBody').css('maxHeight', 600);
+	//$("#datatable_detail tbody").css('maxHeight', 650);
 	//검색, 엔트리 위치 정렬
 	$(function() {
 	    var d_wrap = $('#datatable_detail_wrapper .row:first');
