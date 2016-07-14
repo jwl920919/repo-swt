@@ -2,6 +2,7 @@ package Common.ServiceImpl;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import Common.DAOInterface.SYSTEM_USER_GROUP_INFO_interface;
 import Common.DTO.SYSTEM_USER_GROUP_DTO;
@@ -14,11 +15,16 @@ public class SYSTEM_USER_GROUP_INFO_Service_Impl implements SYSTEM_USER_GROUP_IN
 		this.systemUserGroupInfoDao = systemUserGroupInfoDao;
 	}
 
+	
 	@Override
 	public List<SYSTEM_USER_GROUP_DTO> select_SYSTEM_USER_GROUP_INFO() {
 		return systemUserGroupInfoDao.select_SYSTEM_USER_GROUP_INFO();
 	}
 
+	public List<Map<String,Object>> select_SYSTEM_USER_GROUP_INFO_CONDITIONAL_SEARCH(HashMap<String, Object> parameters) {
+		return systemUserGroupInfoDao.select_SYSTEM_USER_GROUP_INFO_CONDITIONAL_SEARCH(parameters);
+	}
+	
 	@Override
 	public int update_SYSTEM_USER_GROUP_INFO_ONE_RECORD(HashMap<String, Object> parameters) {
 		return systemUserGroupInfoDao.update_SYSTEM_USER_GROUP_INFO_ONE_RECORD(parameters);
@@ -33,5 +39,7 @@ public class SYSTEM_USER_GROUP_INFO_Service_Impl implements SYSTEM_USER_GROUP_IN
 	public int delete_SYSTEM_USER_GROUP_INFO_RECORDS(HashMap<String, Object> parameters) {
 		return systemUserGroupInfoDao.delete_SYSTEM_USER_GROUP_INFO_RECORDS(parameters);
 	}
+
+	
 
 }

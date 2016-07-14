@@ -1,28 +1,6 @@
 <%@ page import="Common.Helper.LanguageHelper"%>
-<%@ page import="java.util.List"%>
-<%@ page import="Common.DTO.SYSTEM_USER_GROUP_DTO"%>
-<%@ page import="Common.DTO.SITE_INFO_DTO"%>
-<%@ page import="org.springframework.beans.factory.annotation.Value"%>
-<%@ page import="org.springframework.beans.factory.annotation.Autowired"%>
-<%@ page
-	import="org.springframework.web.context.support.SpringBeanAutowiringSupport"%>
-<%@ page
-	import="Common.ServiceInterface.SYSTEM_USER_GROUP_INFO_Service_interface"%>
 <%@ page import="Common.ServiceInterface.SITE_INFO_Service_interface"%>
 <%@ page language="java" contentType="text/html" pageEncoding="UTF-8"%>
-<%!public void jspInit() {
-		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, getServletContext());
-	}
-
-	@Autowired
-	private SYSTEM_USER_GROUP_INFO_Service_interface systemUserGroupInfoService;
-	@Autowired
-	private SITE_INFO_Service_interface siteInfoService;%>
-<%
-	final List<SYSTEM_USER_GROUP_DTO> systemUserGroupInfoList = systemUserGroupInfoService
-			.select_SYSTEM_USER_GROUP_INFO();
-	final List<SITE_INFO_DTO> siteInfoList = siteInfoService.select_SITE_INFO();
-%>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <!-- Tell the browser to be responsive to screen width -->
 <meta
@@ -48,23 +26,11 @@
 							<th width="10%"><input name="placeOfBusinessTable_select_all"
 								id="placeOfBusinessTable_checkbox_controller" type="checkbox" /></th>
 							<th width="30%">사업장명</th>
-							<th width="30%">그룹명</th>
+							<th width="30%">사업장코드</th>
 							<th width="30%">설명</th>
 						</tr>
 					</thead>
 					<tbody>
-						<%
-							for (int i = 0; i < 100; i++) {
-						%>
-						<tr>
-							<td></td>
-							<td>1</td>
-							<td>2</td>
-							<td>3</td>
-						</tr>
-						<%
-							}
-						%>
 					</tbody>
 				</table>
 			</div>
@@ -83,18 +49,6 @@
 						</tr>
 					</thead>
 					<tbody>
-						<%
-							for (int i = 0; i < 100; i++) {
-						%>
-						<tr>
-							<td></td>
-							<td>1</td>
-							<td>2</td>
-							<td>3</td>
-						</tr>
-						<%
-							}
-						%>
 					</tbody>
 				</table>
 			</div>

@@ -17,6 +17,11 @@ public class SITE_INFO_Service_Impl implements SITE_INFO_Service_interface {
 	public List<SITE_INFO_DTO> select_SITE_INFO() {
 		return siteInfoDao.select_SITE_INFO();
 	}
+	
+	@Override
+	public List<SITE_INFO_DTO> select_SITE_INFO_CONDITIONAL_SEARCH(HashMap<String, Object> parameters) {
+		return siteInfoDao.select_SITE_INFO_CONDITIONAL_SEARCH(parameters);
+	}
 	@Override
 	public int update_SITE_INFO_ONE_RECORD(HashMap<String, Object> parameters) {
 		return siteInfoDao.update_SITE_INFO_ONE_RECORD(parameters);
