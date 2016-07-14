@@ -14,7 +14,7 @@ public class SpringBeanProvider {
 	private final Logger _logger = Logger.getLogger(this.getClass());
 	
 	private ApplicationContext _context = null;
-	private ApplicationProperty appProperties = null;
+	private ApplicationProperty appProperty = null;
 
 	// Singleton
 	private static SpringBeanProvider _instance;
@@ -46,14 +46,12 @@ public class SpringBeanProvider {
     }
     
     // ApplicationProperties
-    
-    public void setApplicationProperties(ApplicationProperty appProperties) {
-    	this.appProperties = appProperties;
+    public void setApplicationProperty(ApplicationProperty appProperty) {
+    	this.appProperty = appProperty;
     }
     
-    public ApplicationProperty getApplicationProperties() {
-    
-    	return appProperties;
+    public ApplicationProperty getApplicationProperty() {
+    	return appProperty;
     }
     
     public EventMapper getEventMapper() {

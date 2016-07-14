@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
-import com.shinwootns.ipm.data.entity.SiteInfoEntity;
+import com.shinwootns.ipm.data.entity.SiteEntity;
 
 @Mapper
 public interface SiteMapper {
@@ -14,12 +14,12 @@ public interface SiteMapper {
 			+ " SELECT site_id, site_name, site_code "
 			+ " FROM public.site_info;"
 	)
-	List<SiteInfoEntity> findAll();
+	List<SiteEntity> findAll();
 	
 	@Select(""
 			+ " SELECT site_id, site_name, site_code "
 			+ " FROM public.site_info;"
 			+ " WHERE site_id=#{site_id}"
 	)
-	SiteInfoEntity findById(int site_id);
+	SiteEntity findById(int site_id);
 }

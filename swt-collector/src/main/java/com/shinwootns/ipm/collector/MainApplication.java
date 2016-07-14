@@ -16,15 +16,13 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import com.shinwootns.common.network.SyslogEntity;
 import com.shinwootns.common.network.SyslogManager;
 import com.shinwootns.common.utils.TimeUtils;
-import com.shinwootns.ipm.collector.service.WorkerPoolManager;
-import com.shinwootns.ipm.collector.service.syslog.SyslogReceiveHandlerImpl;
 
 @EnableScheduling
 @SpringBootApplication
 public class MainApplication implements CommandLineRunner {
 	
 	public static void main(String[] args) {
-		ConfigurableApplicationContext context = SpringApplication.run(MainApplication.class, args);
+		SpringApplication.run(MainApplication.class, args);
 	}
 
 	@Override

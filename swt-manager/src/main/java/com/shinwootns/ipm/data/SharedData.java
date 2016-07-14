@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import com.shinwootns.common.datatype.ExtendedQueue;
 import com.shinwootns.common.network.SyslogEntity;
 import com.shinwootns.common.utils.TimeUtils;
-import com.shinwootns.ipm.data.entity.EventLogEntity;
+import com.shinwootns.ipm.data.entity.EventEntity;
 
 public class SharedData {
 	
@@ -34,5 +34,5 @@ public class SharedData {
 	public ExtendedQueue<JSONObject> syslogQueue = new ExtendedQueue<JSONObject>(MAX_SYSLOG_RECV_QUEUE_SIZE);
 	
 	// Event Queue
-	public ExtendedQueue<EventLogEntity> eventQueue = new ExtendedQueue<EventLogEntity>(MAX_SYSLOG_RECV_QUEUE_SIZE);
+	public ExtendedQueue<EventEntity> eventQueue = new ExtendedQueue<EventEntity>(MAX_SYSLOG_RECV_QUEUE_SIZE);
 }
