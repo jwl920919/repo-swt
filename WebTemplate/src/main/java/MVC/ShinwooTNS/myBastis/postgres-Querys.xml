@@ -127,6 +127,26 @@
 		site_id,group_id,group_name,group_desc FROM system_user_group;
 	</select>
 
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-07-14 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : systemGroupManagement.jsp 시스템 유저 테이블 정보 조회 -->
+	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
+	<select id="select_SYSTEM_USER_GROUP_INFO_CONDITIONAL_SEARCH"
+		parameterType="hashmap" resultType="java.util.HashMap">
+		SELECT
+		si.site_name, sg.group_name,
+		sg.group_desc
+		FROM system_user_group as sg, site_info as si
+		WHERE
+		sg.site_id = si.site_id and (si.site_name like CONCAT('%',
+		#{searchValue}, '%') OR sg.group_name like CONCAT('%', #{searchValue},
+		'%') OR sg.group_desc like CONCAT('%', #{searchValue}, '%'))
+		ORDER BY
+		${orderColumn} ${orderType};
+	</select>
+
+
 	<!-- Query Type : Insert(Select, Insert, Update, Delete) -->
 	<!-- Insert Date : 2016-07-13 -->
 	<!-- Insert User : 이재원 -->
@@ -175,6 +195,24 @@
 	<select id="select_SITE_INFO" resultType="Common.DTO.SITE_INFO_DTO">
 		SELECT
 		site_id,site_name,site_code,description FROM site_info;
+	</select>
+
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-07-14 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : systemGroupManagement.jsp 사업장 테이블 정보 조회 -->
+	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
+	<select id="select_SITE_INFO_CONDITIONAL_SEARCH" parameterType="hashmap"
+		resultType="Common.DTO.SITE_INFO_DTO">
+		SELECT
+		site_id,site_name,site_code,description
+		FROM site_info
+		WHERE site_code like CONCAT('%', #{searchValue},
+		'%') OR site_name
+		like
+		CONCAT('%', #{searchValue}, '%') OR description like CONCAT('%',
+		#{searchValue}, '%') ORDER BY
+		${orderColumn} ${orderType};
 	</select>
 
 	<!-- Query Type : Insert(Select, Insert, Update, Delete) -->
@@ -243,11 +281,21 @@
 	<!-- Description : IP관리 > 고정IP현황 - 세그먼트별 상세 데이터 -->
 	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
 	<select id="select_IP_MANAGEMENT_SEGMENT_DETAIL" resultType="java.util.HashMap">
-		SELECT * FROM "test_dhcp_segment_list",(SELECT count(*) allcount FROM "test_dhcp_segment_list" WHERE segment_id = #{segmentid}) as allcount
-		 WHERE segment_id = #{segmentid}
-		   AND ("ip" like CONCAT('%', #{searchValue}, '%') OR "name" like CONCAT('%', #{searchValue}, '%') OR "mac" like CONCAT('%', #{searchValue}, '%')
-		    OR "status" like CONCAT('%', #{searchValue}, '%') OR "type" like CONCAT('%', #{searchValue}, '%') OR "client" like CONCAT('%', #{searchValue}, '%'))
-		 ORDER BY ${orderColumn} ${orderType}
+		SELECT * FROM "test_dhcp_segment_list",(SELECT count(*) allcount FROM
+		"test_dhcp_segment_list" WHERE segment_id = #{segmentid}) as allcount
+		WHERE segment_id = #{segmentid}
+		AND ("ip" like CONCAT('%',
+		#{searchValue}, '%') OR "name" like
+		CONCAT('%', #{searchValue}, '%') OR
+		"mac" like CONCAT('%',
+		#{searchValue}, '%')
+		OR "status" like CONCAT('%',
+		#{searchValue}, '%') OR "type" like
+		CONCAT('%', #{searchValue}, '%') OR
+		"client" like CONCAT('%',
+		#{searchValue}, '%'))
+		ORDER BY ${orderColumn}
+		${orderType}
 		OFFSET #{startIndex} LIMIT #{length};
 	</select>
 

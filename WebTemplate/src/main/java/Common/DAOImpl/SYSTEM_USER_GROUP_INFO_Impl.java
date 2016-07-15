@@ -3,6 +3,7 @@ package Common.DAOImpl;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 
@@ -23,6 +24,21 @@ public class SYSTEM_USER_GROUP_INFO_Impl extends SqlSessionDaoSupport implements
 		}
 		return select_SYSTEM_USER_GROUP_INFOList;
 	}
+	
+	@Override
+	public List<Map<String, Object>> select_SYSTEM_USER_GROUP_INFO_CONDITIONAL_SEARCH(HashMap<String, Object> parameters) {
+		// TODO Auto-generated method stub
+		List<Map<String, Object>> select_SYSTEM_USER_GROUP_INFOList = null;
+		try {
+			System.out.println(getSqlSession());
+			select_SYSTEM_USER_GROUP_INFOList = getSqlSession().selectList("UI_Query.select_SYSTEM_USER_GROUP_INFO_CONDITIONAL_SEARCH", parameters);
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e.getMessage());
+		}
+		return select_SYSTEM_USER_GROUP_INFOList;
+	}
+	
 
 	@Override
 	public int update_SYSTEM_USER_GROUP_INFO_ONE_RECORD(HashMap<String, Object> parameters) {
@@ -64,5 +80,7 @@ public class SYSTEM_USER_GROUP_INFO_Impl extends SqlSessionDaoSupport implements
 		}
 		return cnt;
 	}
+
+	
 
 }

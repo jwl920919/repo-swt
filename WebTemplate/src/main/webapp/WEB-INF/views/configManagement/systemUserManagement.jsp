@@ -32,8 +32,6 @@
 <!-- DataTables -->
 <link rel="stylesheet"
 	href="resources/css/configMangement/systemUserManagement.css">
-<!-- jQuery Knob -->
-<script src="../resources/plugins/knob/jquery.knob.js"></script>
 <!-- Alert Start -->
 <div id="layDiv">
 	<div class="alert-box"></div>

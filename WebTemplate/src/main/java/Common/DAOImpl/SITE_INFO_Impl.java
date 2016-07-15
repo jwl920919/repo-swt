@@ -13,16 +13,29 @@ public class SITE_INFO_Impl extends SqlSessionDaoSupport implements SITE_INFO_in
 
 	@Override
 	public List<SITE_INFO_DTO> select_SITE_INFO() {
-		List<Common.DTO.SITE_INFO_DTO> select_SYSTEM_USER_INFOList = null;
+		List<Common.DTO.SITE_INFO_DTO> select_SITE_INFOList = null;
 		try {
 			System.out.println(getSqlSession());
-			select_SYSTEM_USER_INFOList = getSqlSession().selectList("UI_Query.select_SITE_INFO");
+			select_SITE_INFOList = getSqlSession().selectList("UI_Query.select_SITE_INFO");
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.out.println(e.getMessage());
 		}
-		return select_SYSTEM_USER_INFOList;
+		return select_SITE_INFOList;
 	}
+	@Override
+	public List<SITE_INFO_DTO> select_SITE_INFO_CONDITIONAL_SEARCH(HashMap<String, Object> parameters) {
+		List<Common.DTO.SITE_INFO_DTO> select_SITE_INFOList = null;
+		try {
+			System.out.println(getSqlSession());
+			select_SITE_INFOList = getSqlSession().selectList("UI_Query.select_SITE_INFO_CONDITIONAL_SEARCH",parameters);
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e.getMessage());
+		}
+		return select_SITE_INFOList;
+	}
+	
 
 	@Override
 	public int update_SITE_INFO_ONE_RECORD(HashMap<String, Object> parameters) {
