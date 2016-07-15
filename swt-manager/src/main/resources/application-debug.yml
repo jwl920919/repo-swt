@@ -2,7 +2,7 @@
 # ipm
 #====================================
 ipm:
-  name: IPM-Manager(Test)
+  name: IPM-Manager(Debug Mode)
   version: 0.1.1
   license: TEST000000
   cluster:
@@ -66,3 +66,9 @@ logging:
     org.springframework: INFO
     level.com.shinwootns: DEBUG
     root: INFO
+    
+#====================================
+# mybatis
+#====================================
+mybatis:
+  config-location: classpath:/mybatis/mybatis-config.xml

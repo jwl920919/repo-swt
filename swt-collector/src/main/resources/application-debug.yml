@@ -2,7 +2,7 @@
 # ipm
 #====================================
 ipm:
-  name: IPM-Collector(Test)
+  name: IPM-Collector(Debug Mode)
   version: 0.1.1
   license: TEST000000
   

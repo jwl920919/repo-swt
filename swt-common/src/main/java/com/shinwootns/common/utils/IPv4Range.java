@@ -1,10 +1,10 @@
 package com.shinwootns.common.utils;
 
-public class IPRange {
+public class IPv4Range {
 	private long _startIP = 0;
 	private long _endIP = 0;
 	
-	public IPRange(long startIP, long endIP)
+	public IPv4Range(long startIP, long endIP)
 	{
 		this._startIP = startIP;
 		this._endIP = endIP;
@@ -28,11 +28,11 @@ public class IPRange {
 	
 	public String getStartIPToString()
 	{
-		return NetworkUtils.longToIP(this._startIP);
+		return NetworkUtils.longToIPv4(this._startIP);
 	}
 	
 	public String getEndIPToString()
 	{
-		return NetworkUtils.longToIP(this._endIP);
+		return NetworkUtils.longToIPv4(this._endIP);
 	}
 }
