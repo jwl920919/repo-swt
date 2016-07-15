@@ -298,7 +298,17 @@
 		${orderType}
 		OFFSET #{startIndex} LIMIT #{length};
 	</select>
-
+	
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-07-15 -->
+	<!-- Insert User : KCM -->
+	<!-- Description : IP관리 > 고정IP현황 - 세그먼트별 ip map 데이터 -->
+	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
+	<select id="select_IP_MANAGEMENT_SEGMENT_DETAIL_MAPDATA" resultType="java.util.HashMap">
+		SELECT * FROM "test_dhcp_segment_list"
+ 		 WHERE segment_id = #{segmentid}
+ 		 ORDER BY "seq", "ip"
+	</select>
 
 
 </mapper>
