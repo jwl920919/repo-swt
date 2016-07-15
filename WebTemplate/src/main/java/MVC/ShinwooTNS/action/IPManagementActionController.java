@@ -119,7 +119,7 @@ public class IPManagementActionController {
 			StringBuilder m_conflict = new StringBuilder();
 			StringBuilder m_exclusion = new StringBuilder();
 			StringBuilder m_fixed = new StringBuilder();
-			StringBuilder m_gostnotindns = new StringBuilder();
+			StringBuilder m_hostnotindns = new StringBuilder();
 			StringBuilder m_object = new StringBuilder();
 			StringBuilder m_pending = new StringBuilder();
 			StringBuilder m_range = new StringBuilder();
@@ -130,11 +130,11 @@ public class IPManagementActionController {
 			
 			List<Map<String, Object>> allDataList = ipManagementService.select_IP_MANAGEMENT_SEGMENT_DETAIL_MAPDATA(segmentid);
 			for (Map<String, Object> ipListMap : allDataList) {			
-				StringCompare(ipListMap.get("status").toString().toLowerCase(), "activeLease", ipListMap.get("ip").toString(), m_activeLease);
+				StringCompare(ipListMap.get("status").toString().toLowerCase(), "activelease", ipListMap.get("ip").toString(), m_activeLease);
 				StringCompare(ipListMap.get("status").toString().toLowerCase(), "conflict", ipListMap.get("ip").toString(), m_conflict);
 				StringCompare(ipListMap.get("status").toString().toLowerCase(), "exclusion", ipListMap.get("ip").toString(), m_exclusion);
 				StringCompare(ipListMap.get("status").toString().toLowerCase(), "fixed", ipListMap.get("ip").toString(), m_fixed);
-				StringCompare(ipListMap.get("status").toString().toLowerCase(), "gostnotindns", ipListMap.get("ip").toString(), m_gostnotindns);
+				StringCompare(ipListMap.get("status").toString().toLowerCase(), "hostnotindns", ipListMap.get("ip").toString(), m_hostnotindns);
 				StringCompare(ipListMap.get("status").toString().toLowerCase(), "object", ipListMap.get("ip").toString(), m_object);
 				StringCompare(ipListMap.get("status").toString().toLowerCase(), "pending", ipListMap.get("ip").toString(), m_pending);
 				StringCompare(ipListMap.get("status").toString().toLowerCase(), "range", ipListMap.get("ip").toString(), m_range);
@@ -148,7 +148,7 @@ public class IPManagementActionController {
 			ipMap.put("conflict", m_conflict);
 			ipMap.put("exclusion", m_exclusion);
 			ipMap.put("fixed", m_fixed);
-			ipMap.put("gostnotindns", m_gostnotindns);
+			ipMap.put("hostnotindns", m_hostnotindns);
 			ipMap.put("object", m_object);
 			ipMap.put("pending", m_pending);
 			ipMap.put("range", m_range);
