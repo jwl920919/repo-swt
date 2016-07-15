@@ -79,10 +79,6 @@ $(function() {
                             "type" : "POST",
                             "jsonp" : "callback",
                             "data" : function(data, type) {
-                                if(pob!='') {
-                                    data.search.value = pob;
-                                    pob = '';
-                                }
                                 data.search_key = data.search.value;
                             }
 
@@ -210,9 +206,7 @@ $('#userGroupTable_checkbox_controller').click(function() {
     }
 });
 function placeOfBusinessTableClickEvent(data) {
-    pob = $(data).children(':eq(1)').text();
-    userGroupTable.ajax.reload();
-    
+    userGroupTable.search($(data).children(':eq(1)').text()).draw();
 }
 function userGroupTableClickEvent(data) {
     

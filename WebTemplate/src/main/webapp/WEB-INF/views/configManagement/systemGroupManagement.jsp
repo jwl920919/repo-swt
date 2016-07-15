@@ -18,12 +18,13 @@
 <section class="white-paper" style="text-align: center">
 	<div class="row" style="width: 100%">
 		<div class="col-md-6">
-			<div id="placeOfBusinessBox" class="box">
+			<div id="placeOfBusinessBox" class="box" style="height: 560px">
 				<table id="placeOfBusinessTable" class="essential-table"
 					style="width: 98%">
 					<thead>
 						<tr>
-							<th width="10%"><input name="placeOfBusinessTable_select_all"
+							<th width="10%"><input
+								name="placeOfBusinessTable_select_all"
 								id="placeOfBusinessTable_checkbox_controller" type="checkbox" /></th>
 							<th width="30%">사업장명</th>
 							<th width="30%">사업장코드</th>
@@ -34,9 +35,20 @@
 					</tbody>
 				</table>
 			</div>
+			<div class="bottom-box">
+				<div class="box-row">
+					<label class="box-row-label">사업장명 : </label><input class="box-row-textfiled" type="text" />
+				</div>
+				<div>
+					<label> 코 드 : </label><input class="box-row-textfiled" type="text" />
+				</div>
+				<div>
+					<label> 설 명 : </label><input class="box-row-textfiled" type="text" />
+				</div>
+			</div>
 		</div>
 		<div class="col-md-6">
-			<div id="userGroupBox" class="box">
+			<div id="userGroupBox" class="box" style="height: 560px">
 				<table id="userGroupTable" class="essential-table"
 					style="width: 98%">
 					<thead>
