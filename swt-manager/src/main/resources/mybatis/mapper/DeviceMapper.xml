@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        
+<mapper namespace="com.shinwootns.ipm.data.mapper.DeviceMapper">
+
+	<select id="selectDevice" resultType="com.shinwootns.ipm.data.entity.DeviceEntity">
+		<![CDATA[
+			SELECT device_id, site_id, ipv4, ipv6, device_name, device_type, snmp_community, 
+				snmp_version, vendor, model, service_type, sys_oid, sys_location, 
+				api_type, api_version, api_userid, api_password, description, 
+				insert_time, update_time
+			FROM device_info dev, SITE_INFO site
+			WHERE dev.site_id = site.site_id
+		]]>
+	</select>
+
+
+	<select id="selectDeviceByType" resultType="com.shinwootns.ipm.data.entity.DeviceEntity">
+		<![CDATA[
+			SELECT dev.*
+			FROM device_info dev, SITE_INFO site
+			WHERE dev.site_id = site.site_id
+			AND dev.device_type = #{device_type}
+		]]>
+	</select>
+	
+	<select id="selectDeviceById" resultType="com.shinwootns.ipm.data.entity.DeviceEntity">
+		<![CDATA[
+			SELECT dev.*
+			FROM device_info dev, SITE_INFO site
+			WHERE dev.site_id = site.site_id
+			AND dev.device_id = #{device_id}
+		]]>
+	</select>
+
+	<update id="updateDevice" parameterType="com.shinwootns.ipm.data.entity.DeviceEntity">
+        UPDATE device_info 
+        SET	device_name = #{device_name}
+        	<if test="vendor != null">, vendor = #{vendor}</if>
+        	<if test="model != null">, model = #{model}</if>
+        	, service_type = #{service_type}
+        	, sys_oid = #{sys_oid}
+        	, sys_location = #{sys_location}
+        	, update_time = now()
+        WHERE device_id = #{device_id}
+    </update>
+   
+</mapper>
