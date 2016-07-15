@@ -136,7 +136,7 @@
 		parameterType="hashmap" resultType="java.util.HashMap">
 		SELECT
 		si.site_name, sg.group_name,
-		sg.group_desc
+		sg.group_desc,sg.group_id
 		FROM system_user_group as sg, site_info as si
 		WHERE
 		sg.site_id = si.site_id and (si.site_name like CONCAT('%',
@@ -155,9 +155,9 @@
 	<insert id="insert_SYSTEM_USER_GROUP_INFO_ONE_RECORD"
 		parameterType="hashmap">
 		INSERT into
-		system_user_group (site_id, group_id,
+		system_user_group (site_id, 
 		group_name, group_desc)
-		VALUES (#{site_id}, #{group_id}, #{group_name},
+		VALUES (#{site_id}, #{group_name},
 		#{group_desc});
 	</insert>
 
@@ -223,10 +223,10 @@
 	<insert id="insert_SITE_INFO_ONE_RECORD" parameterType="hashmap">
 		INSERT
 		into
-		site_info (site_id, site_name,
+		site_info ( site_name,
 		site_code, description)
 		VALUES
-		(#{site_id}, #{site_name}, #{site_code},
+		(#{site_name}, #{site_code},
 		#{description});
 	</insert>
 
