@@ -4,13 +4,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
-<script src="../resources/plugins/jQuery/jQuery-2.2.0.min.js"></script>
-<script src="../resources/js/common/Common.js"></script>
-<script src="../resources/js/common/multyLanguages.js"></script>
-<script type="text/javascript">
-	$(document).ready(function() {
-	});
-</script>
+<!-- <script src="../resources/plugins/jQuery/jQuery-2.2.0.min.js"></script> -->
+<!-- <script src="../resources/js/common/Common.js"></script> -->
+<!-- <script src="../resources/js/common/multyLanguages.js"></script> -->
+<!-- <script type="text/javascript"> -->
+// 	$(document).ready(function() {
+// 	});
+<!-- </script> -->
 </head>
 <body>고정 아이피 설정 및 예약
 </body>

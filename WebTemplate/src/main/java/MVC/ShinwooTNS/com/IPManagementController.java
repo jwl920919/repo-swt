@@ -29,7 +29,7 @@ public class IPManagementController {
 	@RequestMapping(value = "staticIPStatus", method = RequestMethod.GET)
 	public String staticIPStatus(Locale locale, Model model, HttpServletRequest request, HttpServletResponse response) {
 		logger.info("staticIPStatus : " + request.getLocalAddr());
-		System.out.println("IPManagenentController Controller");
+		System.out.println("IPManagenentController staticIPStatus");
 		// Session에 로그인 정보가 있는지 체크
 		HttpSession session = request.getSession(true);
 		System.out.println(session.getAttribute("login_chk"));
@@ -43,7 +43,7 @@ public class IPManagementController {
 	@RequestMapping(value = "staticIPSetting", method = RequestMethod.GET)
 	public String staticIPSetting(Locale locale, Model model, HttpServletRequest request, HttpServletResponse response) {
 		logger.info("staticIPSetting : " + request.getLocalAddr());
-		System.out.println("IPManagenentController Controller");
+		System.out.println("IPManagenentController staticIPSetting");
 		// Session에 로그인 정보가 있는지 체크
 		HttpSession session = request.getSession(true);
 		System.out.println(session.getAttribute("login_chk"));
