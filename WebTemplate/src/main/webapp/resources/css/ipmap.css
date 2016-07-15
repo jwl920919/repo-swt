@@ -1,21 +1,6 @@
-#mask {
-	position: fixed;
-	left: 0px;
-	top: 0px;
-	z-index: 4;
-	opacity: 0.4;
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=40)";
-	/* first!*/
-	filter: alpha(opacity = 40); /* second!*/
-	background-color: gray;
-	display: none;
-	width: 100%;
-	height: 100%;
-}
-
 #holder {
 	height: 200px;
-	width: 550px;
+	width: 623px;
 	background-color: #F5F5F5;
 	border: 1px solid #A4A4A4;
 	margin-left: 10px;
@@ -41,59 +26,51 @@
 
 #place .rectangle {
 	background: url("../images/ipmap/unused.png") no-repeat scroll 0 0 transparent;
-	height: 17px;
-	width: 17px;
+	height: 19px;
+	width: 19px;
 	display: block;
 }
 
-#place .selecting {
+#place .selecting {	
 	background-image: url("../images/ipmap/selectedip.png");
 }
-#place activeLease {
+#place .activeLease {
 	background-image: url("../images/ipmap/activeLease.png");
 }
-#place conflict {
+#place .conflict {
 	background-image: url("../images/ipmap/conflict.png");
 }
-#place exclusion {
+#place .exclusion {
 	background-image: url("../images/ipmap/dhcpexclusion.png");
 }
-#place fixed {
+#place .fixed {
 	background-image: url("../images/ipmap/Fixedaddress.png");
 }
-#place hostnotindns {
+#place .hostnotindns {
 	background-image: url("../images/ipmap/hostnotindns.png");
 }
-#place object {
+#place .object {
 	background-image: url("../images/ipmap/dnsobject.png");
 }
-#place pending {
+#place .pending {
 	background-image: url("../images/ipmap/pending.png");
 }
-#place range {
+#place .range {
 	background-image: url("../images/ipmap/dhcprange.png");
 }
-#place reservedrange {
+#place .reservedrange {
 	background-image: url("../images/ipmap/reservedrange.png");
 }
-#place unmanaged {
+#place .unmanaged {
 	background-image: url("../images/ipmap/unmanaged.png");
 }
-#place unused {
+#place .unused {
 	background-image: url("../images/ipmap/unused.png");
 }
-#place used {
+#place .used {
 	background-image: url("../images/ipmap/used.png");
 }
 
 #place .row-3, #place .row-4 {
 	/*margin-top: 10px;*/	
-}
-
-#seatDescription li {
-	list-style: none outside none;
-	padding-left: 17px;
-	height: 17px;
-	margin-top: 5px;
-	float: left;
 }

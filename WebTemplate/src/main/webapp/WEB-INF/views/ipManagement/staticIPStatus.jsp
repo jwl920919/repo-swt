@@ -91,7 +91,7 @@
 							<!-- tab_2-pane -->
 							<div class="tab-pane" id="tab_2">
 							<div class="row">
-								<section class="col-lg-6-noPadding">
+								<section class="col-lg-6-noPadding" style="width: 650px">
 									<div id="holder">
 								        <ul id="place">
 								        </ul>

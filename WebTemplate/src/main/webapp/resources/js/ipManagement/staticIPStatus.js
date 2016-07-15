@@ -48,9 +48,8 @@ console.log($('#datatable'));
 	    tdClickEvent(this);
 	});
 	
-//	fnIPMapSetting();
-//	var varr = [5, 10, 25, 31, 43, 63];
-//	fnIPMapInit(varr,varr,varr,varr,varr,varr,varr,varr,varr,varr,varr,varr);
+	//ip map 초기화
+	fnIPMapSetting();
 });
 
 /**
@@ -127,12 +126,12 @@ function tdClickEvent(obj){
 var ipMapSettings;
 function fnIPMapSetting(){
     ipMapSettings = {
-        rows: 32,
-        cols: 8,
+        rows: 8,
+        cols: 32,
         rowCssPrefix: 'row-',
         colCssPrefix: 'col-',
-        rectangleWidth: 17,
-        rectangleHeight: 17,
+        rectangleWidth: 19,
+        rectangleHeight: 19,
         rectangleCss: 'rectangle',
         activeLeaseCss: 'activeLease',
         conflictCss: 'conflict',
@@ -145,7 +144,8 @@ function fnIPMapSetting(){
         reservedrangeCss: 'reservedrange',
         unmanagedCss: 'unmanaged',
         unusedCss: 'unused',
-        usedCss: 'used'  
+        usedCss: 'used',
+        selectingCss: 'selecting'
     };
 }
 
@@ -155,7 +155,9 @@ function fnIPMapSetting(){
 var chargePerSheet;
 function fnIPMapInit (ActiveLeaseArr, ConflictArr, ExclusionArr, FixedArr, HostnotindnsArr, ObjectArr, 
 		PendingArr,	RangeArr, ReservedrangeArr, UnmanagedArr, UnusedArr, UsedArr) {
-    var str = [], ipNo = 0, className;
+    var str = [], ipNo = -1, className;
+    
+    console.log(ActiveLeaseArr);
     for (i = 0; i < ipMapSettings.rows; i++) {
         for (j = 0; j < ipMapSettings.cols; j++) {
             //ipNo = (i + j * ipMapSettings.rows + 1);
@@ -200,8 +202,9 @@ function fnIPMapInit (ActiveLeaseArr, ConflictArr, ExclusionArr, FixedArr, Hostn
             }
 
             str.push('<li class="' + className + '"' +
-                          'style="top:' + (i * ipMapSettings.rectangleHeight).toString() + 'px;left:' + (j * ipMapSettings.rectangleWidth).toString() + 'px" align=center>' +
-                          '<a title="' + ipNo + '" style=\"line-height:50px\">' + ipNo + '</a>' +
+                          'style="top:' + (i * ipMapSettings.rectangleHeight).toString() + 'px;left:' + (j * ipMapSettings.rectangleWidth).toString() + 'px"' + 
+                          'onclick=rectangleClick(this); align=center>' +
+//                          '<a title="' + ipNo + '" style=\"line-height:50px\">' + ipNo + '</a>' +
                           '</li>');
         }
     }
@@ -209,9 +212,33 @@ function fnIPMapInit (ActiveLeaseArr, ConflictArr, ExclusionArr, FixedArr, Hostn
     //chargePerSheet = $('#<%=txtAmount.ClientID %>').val();
 };
 
+/**
+ * IP Map Rectangel Click Event - Class 변경해주기
+**/
+rectangleClick = function (obj) {
+	//console.log($(obj).attr('class'));
+    if ($(obj).hasClass(ipMapSettings.usedCss)) {
+        alert('This ip is already reserved');
+    }
+    else if ($(obj).hasClass(ipMapSettings.selectingCss)) {
+    	//console.log("hasClass : " + $(obj).hasClass(ipMapSettings.selectingCss));
+    	$(obj).removeClass(ipMapSettings.selectingCss).addClass(ipMapSettings.unusedCss);
+    }
+    else if ($(obj).hasClass(ipMapSettings.unusedCss)) {
+        $(obj).removeClass(ipMapSettings.unusedCss).addClass(ipMapSettings.selectingCss);
+    }
+};
+
+/**
+ * IP Map Data Select
+**/
+//IP의 D 클래스 값을 담을 배열 선언
 function mapDataCall(segmentid){
+	var ActiveLeaseArr = [], ConflictArr = [], ExclusionArr = [], FixedArr = [], HostnotindnsArr = [], ObjectArr = []; 
+	var PendingArr = [],	RangeArr = [], ReservedrangeArr = [], UnmanagedArr = [], UnusedArr = [], UsedArr = []; 
 	var jObj = Object();
     jObj.segmentid = segmentid;
+    
     $.ajax({
         url : 'ipManagement/staticIPStatus_Segment_MapData',
         type : "POST",
@@ -219,12 +246,45 @@ function mapDataCall(segmentid){
         dataType : "text",
         success : function(data) {
             var jsonObj = eval("(" + data + ')');
-            
-            $.each(data.result, function (index, obj) {
-                console.log("obj.used : " + used);
-            });
+	            if (jsonObj.result == true) {
+            	$.each(jsonObj.data, function (index, obj) {
+//					console.log("fixed"+obj.fixed);
+//					console.log("used"+obj.used);
+            		
+            		mapDataHelper(obj.activeLease, ActiveLeaseArr);
+            		mapDataHelper(obj.conflict, ConflictArr);
+					mapDataHelper(obj.exclusion, ExclusionArr);
+					mapDataHelper(obj.fixed, FixedArr);
+					mapDataHelper(obj.hostnotindns, HostnotindnsArr);
+					mapDataHelper(obj.object, ObjectArr);
+					mapDataHelper(obj.pending, PendingArr);
+					mapDataHelper(obj.range, RangeArr);
+					mapDataHelper(obj.reservedrange, ReservedrangeArr);
+					mapDataHelper(obj.unmanaged, UnmanagedArr);
+					mapDataHelper(obj.unused, UnusedArr);
+					mapDataHelper(obj.used, UsedArr);
+
+					fnIPMapInit(ActiveLeaseArr, ConflictArr, ExclusionArr, FixedArr, HostnotindnsArr, ObjectArr,
+							PendingArr,	RangeArr, ReservedrangeArr, UnmanagedArr, UnusedArr, UsedArr);
+	            });
+            }
         }
     });
+}
+
+/**
+ * 서버에서 받은 IP리스트들에서 D 클래스 정보만 배열에 담기 위한 function
+**/
+function mapDataHelper(stringIP, array){
+	if (stringIP.length > 0) {
+		var arrIPs = stringIP.split( "," );
+		for (var i = 0; i < arrIPs.length; i++) {
+			if (checkIPv4(arrIPs[i])) {
+				var arrip = arrIPs[i].split( "." );
+				array.push(parseInt(arrip[3], 10)); 
+			}
+		}
+	}
 }
 
 

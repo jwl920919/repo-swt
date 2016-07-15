@@ -122,11 +122,25 @@ String.prototype.string = function(len){var s = '', i = 0; while (i++ < len) { s
 String.prototype.zf = function(len){return "0".string(len - this.length) + this;};
 Number.prototype.zf = function(len){return this.toString().zf(len);};
 
-
 /**
  * Client Timezone Name을 반환한다.
 **/
 function getClientTimeZoneName() {
 	var timezone = jstz.determine();
 	return timezone.name();
+}
+
+/**
+ * IPv4 유효성 검사
+**/
+function checkIPv4(strIp){
+	var arrIp = strIp.split( "." );
+	 
+	if( arrIp.length != 4 ) return false;
+	 
+	for( var i = 0; i < arrIp.length; ++i )
+	{
+		if( arrIp[i] < 0 || arrIp[i] > 255 ) return false;
+	}
+	return true;
 }
