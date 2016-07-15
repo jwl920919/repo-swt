@@ -1,6 +1,5 @@
 package MVC.ShinwooTNS.action;
 
-import java.io.Console;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,8 +9,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +22,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
 
 import Common.DTO.AjaxResult;
-import Common.DTO.SYSTEM_USER_INFO_DTO;
 import Common.ServiceInterface.IP_MANAGEMENT_Service_Interface;
-import scala.Int;
 
 @Controller
 @RequestMapping(value = "/ipManagement/")
@@ -108,24 +103,17 @@ public class IPManagementActionController {
 		}
 	}
 	
-	@SuppressWarnings("null")
 	@RequestMapping(value = "staticIPStatus_Segment_MapData", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object staticIPStatus_Segment_MapData(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		System.out.println("staticIPStatus_Segment_MapData");
 		logger.info("staticIPStatus_Segment_MapData : " + request.getLocalAddr());
 		List<Map<String, Object>> dataList = new ArrayList<Map<String, Object>>();
+		result = new AjaxResult();
 		
 		try {
-			String[] columns = { "ip", "name", "mac", "startus", "type", "client" };
-//			System.out.println("segmentid : " + request.getParameter("segmentid"));
-
 			HashMap<String, Object> param = gson.fromJson(request.getReader(),new TypeToken<HashMap<String, Object>>() {}.getType());
-			String segmentid = param.get("segmentid").toString();
-//			int m_Segmentid = Integer.parseInt(request.getParameter("segmentid"));
-			
-			HashMap<String, Object> parameters = Common.Helper.DatatableHelper.getDatatableParametas(request,columns,0);
-			//parameters.put("segmentid", m_Segmentid);
-			
+			int segmentid = Integer.parseInt(param.get("segmentid").toString());
+						
 			//region 맵에서 사용할 데이터 쿼리
 			StringBuilder m_activeLease = new StringBuilder();
 			StringBuilder m_conflict = new StringBuilder();
@@ -140,8 +128,7 @@ public class IPManagementActionController {
 			StringBuilder m_unused = new StringBuilder();
 			StringBuilder m_used = new StringBuilder();
 			
-			parameters.put("length", Int.MaxValue());
-			List<Map<String, Object>> allDataList = ipManagementService.select_IP_MANAGEMENT_SEGMENT_DETAIL(parameters);
+			List<Map<String, Object>> allDataList = ipManagementService.select_IP_MANAGEMENT_SEGMENT_DETAIL_MAPDATA(segmentid);
 			for (Map<String, Object> ipListMap : allDataList) {			
 				StringCompare(ipListMap.get("status").toString().toLowerCase(), "activeLease", ipListMap.get("ip").toString(), m_activeLease);
 				StringCompare(ipListMap.get("status").toString().toLowerCase(), "conflict", ipListMap.get("ip").toString(), m_conflict);
@@ -171,12 +158,12 @@ public class IPManagementActionController {
 			ipMap.put("used", m_used);
 			dataList.add(ipMap);
 			//endregion			
-
+			
 			result.result = true;
 			result.data = dataList;
 		}  catch (Exception e) {
-//			result.result = false;
-//			result.errorMessage = e.getMessage();
+			result.result = false;
+			result.errorMessage = e.getMessage();
 			e.printStackTrace();
 			logger.error(e.getMessage());
 		}
