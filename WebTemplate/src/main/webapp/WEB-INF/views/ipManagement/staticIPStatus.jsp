@@ -73,12 +73,12 @@
 										style="width: 98%">
 										<thead>
 											<tr>
-												<th width="16%"><%=LanguageHelper.GetLanguage("network")%></th>
-												<th width="16%"><%=LanguageHelper.GetLanguage("comment")%></th>
-												<th width="16%"><%=LanguageHelper.GetLanguage("utilization")%></th>
-												<th width="16%"><%=LanguageHelper.GetLanguage("site")%></th>
-												<th width="16%"><%=LanguageHelper.GetLanguage("utilization")%></th>
-												<th width="*"><%=LanguageHelper.GetLanguage("site")%></th>
+												<th width="16%"><%=LanguageHelper.GetLanguage("ip")%></th>
+												<th width="16%"><%=LanguageHelper.GetLanguage("user")%></th>
+												<th width="16%"><%=LanguageHelper.GetLanguage("mac")%></th>
+												<th width="16%"><%=LanguageHelper.GetLanguage("ststus")%></th>
+												<th width="16%"><%=LanguageHelper.GetLanguage("type")%></th>
+												<th width="*">client</th>
 											</tr>
 										</thead>
 										<tbody>

@@ -127,5 +127,8 @@
     "first": 										"First",
     "last": 										"Last",
     "next": 										"Next",
-    "previous": 									"Previous"
+    "previous": 									"Previous",
+    "ip"		 									"IP",
+    "mac":		 									"MAC",
+    "user":		 									"user"
 }

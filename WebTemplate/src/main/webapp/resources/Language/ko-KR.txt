@@ -127,5 +127,8 @@
     "first": 										"처음으로",
     "last": 										"마지막으로",
     "next": 										"다음",
-    "previous": 									"이전"
+    "previous": 									"이전",
+    "ip"		 									"IP",
+    "mac":		 									"MAC",
+    "user":		 									"사용자"
 }

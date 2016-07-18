@@ -137,7 +137,6 @@ public class IPManagementActionController {
 					String[] ipArr = ip.split("[.]");
 					if (ipArr.length >= 3) {
 						cClassIPAddress = ipArr[0] + "." + ipArr[1] + "." + ipArr[2];
-						System.out.println("ClassIPAddress : " + cClassIPAddress);
 					}
 				}
 				StringCompare(ipListMap.get("status").toString().toLowerCase(), "activelease", ip, m_activeLease);
