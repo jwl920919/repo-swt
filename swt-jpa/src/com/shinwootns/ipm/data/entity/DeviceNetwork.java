@@ -6,45 +6,31 @@ import java.sql.Timestamp;
 
 
 /**
- * The persistent class for the device_info database table.
+ * The persistent class for the device_network database table.
  * 
  */
 @Entity
-@Table(name="device_info")
-@NamedQuery(name="DeviceInfo.findAll", query="SELECT d FROM DeviceInfo d")
-public class DeviceInfo implements Serializable {
+@Table(name="device_network")
+@NamedQuery(name="DeviceNetwork.findAll", query="SELECT d FROM DeviceNetwork d")
+public class DeviceNetwork implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name="device_id")
 	private Integer deviceId;
 
-	@Column(name="api_password")
-	private String apiPassword;
-
-	@Column(name="api_type")
-	private String apiType;
-
-	@Column(name="api_userid")
-	private String apiUserid;
-
-	@Column(name="api_version")
-	private String apiVersion;
-
 	private String description;
-
-	@Column(name="device_name")
-	private String deviceName;
 
 	@Column(name="device_type")
 	private String deviceType;
 
+	private String host;
+
+	@Column(name="host_name")
+	private String hostName;
+
 	@Column(name="insert_time")
 	private Timestamp insertTime;
-
-	private String ipv4;
-
-	private String ipv6;
 
 	private String model;
 
@@ -71,7 +57,7 @@ public class DeviceInfo implements Serializable {
 
 	private String vendor;
 
-	public DeviceInfo() {
+	public DeviceNetwork() {
 	}
 
 	public Integer getDeviceId() {
@@ -82,52 +68,12 @@ public class DeviceInfo implements Serializable {
 		this.deviceId = deviceId;
 	}
 
-	public String getApiPassword() {
-		return this.apiPassword;
-	}
-
-	public void setApiPassword(String apiPassword) {
-		this.apiPassword = apiPassword;
-	}
-
-	public String getApiType() {
-		return this.apiType;
-	}
-
-	public void setApiType(String apiType) {
-		this.apiType = apiType;
-	}
-
-	public String getApiUserid() {
-		return this.apiUserid;
-	}
-
-	public void setApiUserid(String apiUserid) {
-		this.apiUserid = apiUserid;
-	}
-
-	public String getApiVersion() {
-		return this.apiVersion;
-	}
-
-	public void setApiVersion(String apiVersion) {
-		this.apiVersion = apiVersion;
-	}
-
 	public String getDescription() {
 		return this.description;
 	}
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public String getDeviceName() {
-		return this.deviceName;
-	}
-
-	public void setDeviceName(String deviceName) {
-		this.deviceName = deviceName;
 	}
 
 	public String getDeviceType() {
@@ -138,28 +84,28 @@ public class DeviceInfo implements Serializable {
 		this.deviceType = deviceType;
 	}
 
+	public String getHost() {
+		return this.host;
+	}
+
+	public void setHost(String host) {
+		this.host = host;
+	}
+
+	public String getHostName() {
+		return this.hostName;
+	}
+
+	public void setHostName(String hostName) {
+		this.hostName = hostName;
+	}
+
 	public Timestamp getInsertTime() {
 		return this.insertTime;
 	}
 
 	public void setInsertTime(Timestamp insertTime) {
 		this.insertTime = insertTime;
-	}
-
-	public String getIpv4() {
-		return this.ipv4;
-	}
-
-	public void setIpv4(String ipv4) {
-		this.ipv4 = ipv4;
-	}
-
-	public String getIpv6() {
-		return this.ipv6;
-	}
-
-	public void setIpv6(String ipv6) {
-		this.ipv6 = ipv6;
 	}
 
 	public String getModel() {

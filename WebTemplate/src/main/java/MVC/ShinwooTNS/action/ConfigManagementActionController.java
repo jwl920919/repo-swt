@@ -42,6 +42,7 @@ public class ConfigManagementActionController {
 	private Gson gson = new Gson();
 	private AjaxResult result = new AjaxResult();
 
+	/*****************************************************systemUserManagement*****************************************************/
 	// region systemUserManagement
 
 	// region Autowired
@@ -142,9 +143,9 @@ public class ConfigManagementActionController {
 			return gson.toJson(result);
 		} catch (Exception e) {
 			e.printStackTrace();
+			result.result = false;
+			return gson.toJson(result);
 		}
-
-		return null;
 	}
 	// endregion
 
@@ -168,9 +169,10 @@ public class ConfigManagementActionController {
 			return gson.toJson(result);
 		} catch (Exception e) {
 			e.printStackTrace();
+			result.result = false;
+			return gson.toJson(result);
 		}
 
-		return null;
 	}
 	// endregion
 
@@ -196,9 +198,9 @@ public class ConfigManagementActionController {
 			return gson.toJson(result);
 		} catch (Exception e) {
 			e.printStackTrace();
+			result.result = false;
+			return gson.toJson(result);
 		}
-
-		return null;
 	}
 	// endregion
 
@@ -226,14 +228,15 @@ public class ConfigManagementActionController {
 			return gson.toJson(result);
 		} catch (Exception e) {
 			e.printStackTrace();
+			result.result = false;
+			return gson.toJson(result);
 		}
-
-		return null;
 	}
 	// endregion
 
 	// endregion
-
+	
+	/*****************************************************systemGroupManagement*****************************************************/
 	// region systemGroupManagement
 
 	// region Autowired
@@ -250,7 +253,7 @@ public class ConfigManagementActionController {
 		logger.info("getPlaceOfBusinessDatatableDatas : " + request.getLocalAddr());
 		System.out.println("getPlaceOfBusinessDatatableDatas Controller");
 		try {
-			String[] columns = { "site_name", "site_code", "description" };
+			String[] columns = { "site_name", "site_code", "description", "site_id" };
 			HashMap<String, Object> parameters = Common.Helper.DatatableHelper.getDatatableParametas(request, columns,
 					1);
 
@@ -262,6 +265,7 @@ public class ConfigManagementActionController {
 				jObj.put(columns[0], sid.getSite_name());
 				jObj.put(columns[1], sid.getSite_code());
 				jObj.put(columns[2], sid.getDescription());
+				jObj.put(columns[3], sid.getSite_id());
 				jObj.put("active", 1);
 				jsonArray.add(jObj);
 			}
@@ -286,12 +290,12 @@ public class ConfigManagementActionController {
 		logger.info("getUserGroupDatatableDatas : " + request.getLocalAddr());
 		System.out.println("getUserGroupDatatableDatas Controller");
 		try {
-			String[] columns = { "site_name", "group_name", "group_desc" };
+			String[] columns = { "site_name", "group_name", "group_desc", "group_id" };
 			HashMap<String, Object> parameters = Common.Helper.DatatableHelper.getDatatableParametas(request, columns,
 					1);
 			List<Map<String, Object>> siteDataList = groupInfoService
 					.select_SYSTEM_USER_GROUP_INFO_CONDITIONAL_SEARCH(parameters);
-			for(Map<String,Object> siteData : siteDataList) {
+			for (Map<String, Object> siteData : siteDataList) {
 				siteData.put("active", 1);
 			}
 			JsonArray jsonArray = gson.toJsonTree(siteDataList).getAsJsonArray();
@@ -308,5 +312,191 @@ public class ConfigManagementActionController {
 	}
 	// endregion
 
+	// region getSiteNames
+	@RequestMapping(value = "getSiteNames", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+	public @ResponseBody Object getSiteNames(HttpServletRequest request) {
+		logger.info("getSiteNames : " + request.getLocalAddr());
+		try {
+			List<SITE_INFO_DTO> sitesInfoList = siteInfoService.select_SITE_INFO();
+			List<Map<String, Object>> mapList = new ArrayList<>();
+			for (SITE_INFO_DTO sid : sitesInfoList) {
+				HashMap<String, Object> map = new HashMap<>();
+				map.put("site_name", sid.getSite_name());
+				map.put("site_id", sid.getSite_id());
+				mapList.add(map);
+			}
+			result.data = mapList;
+			result.result = true;
+			return gson.toJson(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.result = false;
+			return gson.toJson(result);
+		}
+	}
+	// endregion
+
+	// region addSite
+	@RequestMapping(value = "addSite", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+	public @ResponseBody Object addSite(HttpServletRequest request) {
+		logger.info("addSite : " + request.getLocalAddr());
+		try {
+			//site_name, site_code, description
+			int cnt = siteInfoService.insert_SITE_INFO_ONE_RECORD(gson.fromJson(request.getReader(),
+					new TypeToken<HashMap<String, Object>>() {
+					}.getType()));
+			if (cnt > -1)
+				result.result = true;
+			else
+				result.result = false;
+			return gson.toJson(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.result = false;
+			return gson.toJson(result);
+		}
+	}
+	// endregion
+	
+	// region addGroup
+	@RequestMapping(value = "addGroup", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+	public @ResponseBody Object addGroup(HttpServletRequest request) {
+		logger.info("addGroup : " + request.getLocalAddr());
+		try {
+			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
+					new TypeToken<HashMap<String, Object>>() {
+					}.getType());
+			int site_id = Integer.parseInt(parameters.get("site_id").toString());
+			parameters.remove("site_id");
+			parameters.put("site_id", site_id);
+			int cnt = groupInfoService.insert_SYSTEM_USER_GROUP_INFO_ONE_RECORD(parameters);
+			
+			if (cnt > -1)
+				result.result = true;
+			else
+				result.result = false;
+			return gson.toJson(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.result = false;
+			return gson.toJson(result);
+		}
+	}
+	// endregion
+	
+	// region updateSite
+	@RequestMapping(value = "updateSite", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+	public @ResponseBody Object updateSite(HttpServletRequest request) {
+		logger.info("updateSite : " + request.getLocalAddr());
+		try {
+			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
+					new TypeToken<HashMap<String, Object>>() {
+					}.getType());
+			int site_id = Integer.parseInt(parameters.get("site_id").toString());
+			parameters.remove("site_id");
+			parameters.put("site_id", site_id);
+
+			int cnt = siteInfoService.update_SITE_INFO_ONE_RECORD(parameters);
+			if (cnt > -1)
+				result.result = true;
+			else
+				result.result = false;
+			return gson.toJson(result);
+		} catch (Exception e) {
+			result.result = false;
+			return gson.toJson(result);
+		}
+
+	}
+	// endregion
+	
+	// region updateGroup
+	@RequestMapping(value = "updateGroup", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+	public @ResponseBody Object updateGroup(HttpServletRequest request) {
+		logger.info("updateGroup : " + request.getLocalAddr());
+		try {
+			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
+					new TypeToken<HashMap<String, Object>>() {
+					}.getType());
+			int group_id = Integer.parseInt(parameters.get("group_id").toString());
+			parameters.remove("group_id");
+			parameters.put("group_id", group_id);
+			int site_id = Integer.parseInt(parameters.get("site_id").toString());
+			parameters.remove("site_id");
+			parameters.put("site_id", site_id);
+
+			int cnt = groupInfoService.update_SYSTEM_USER_GROUP_INFO_ONE_RECORD(parameters);
+			if (cnt > -1)
+				result.result = true;
+			else
+				result.result = false;
+			return gson.toJson(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.result = false;
+			return gson.toJson(result);
+		}
+	}
+	// endregion
+	
+	// region deleteSites
+	@RequestMapping(value = "deleteSites", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+	public @ResponseBody Object deleteSites(HttpServletRequest request) {
+		logger.info("deleteSites : " + request.getLocalAddr());
+		try {
+			List<HashMap<String, Object>> jArray = gson.fromJson(request.getReader(),
+					new TypeToken<List<HashMap<String, Object>>>() {
+					}.getType());
+
+			ArrayList<Integer> userIdList = new ArrayList<Integer>();
+			for (HashMap<String, Object> map : jArray) {
+				userIdList.add(Integer.parseInt(map.get("site_id").toString()));
+			}
+			HashMap<String, Object> parameter = new HashMap<>();
+			parameter.put("list", userIdList);
+			int cnt = siteInfoService.delete_SITE_INFO_RECORDS(parameter);
+			if (cnt > -1)
+				result.result = true;
+			else
+				result.result = false;
+			return gson.toJson(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+	// endregion
+	
+	// region deleteGroups
+	@RequestMapping(value = "deleteGroups", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+	public @ResponseBody Object deleteGroups(HttpServletRequest request) {
+		logger.info("deleteGroups : " + request.getLocalAddr());
+		try {
+			List<HashMap<String, Object>> jArray = gson.fromJson(request.getReader(),
+					new TypeToken<List<HashMap<String, Object>>>() {
+					}.getType());
+
+			ArrayList<Integer> groupIdList = new ArrayList<Integer>();
+			for (HashMap<String, Object> map : jArray) {
+				groupIdList.add(Integer.parseInt(map.get("group_id").toString()));
+			}
+			HashMap<String, Object> parameter = new HashMap<>();
+			parameter.put("list", groupIdList);
+			int cnt = groupInfoService.delete_SYSTEM_USER_GROUP_INFO_RECORDS(parameter);
+			if (cnt > -1)
+				result.result = true;
+			else
+				result.result = false;
+			return gson.toJson(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.result = false;
+			return gson.toJson(result);
+		}
+
+	}
+	// endregion
+	
 	// endregion
 }

@@ -1,29 +1,44 @@
 /* 모양을 잡기 위해서 강제로 변경 */
 .white-paper {
-    padding-top: 5px !important;
-    padding-left: 0px !important;
-    padding-right: 0px !important;
-    padding-bottom: 5px !important;
+	padding-top: 5px !important;
+	padding-left: 0px !important;
+	padding-right: 0px !important;
+	padding-bottom: 5px !important;
 }
 
 /* .scroll-body-size { */
 /* 	width:99%; */
 /* } */
-
 div.row {
-    margin-right: 0px !important;
-    margin-left: 0px !important;
+	margin-right: 0px !important;
+	margin-left: 0px !important;
 }
 
 div.bottom-box {
-	
+	text-align: left;
+	width: 100%;
 }
-div.box-row {
-	
+
+label.box-row-label {
+	text-align: right;
 }
-div.box-row-label {
-	
-}
+
 input.box-row-textfiled {
-	
+	margin-left: 3px;
+	margin-right: 3px;
+	width: 200px;
+}
+
+.dataTables_filter {
+	margin-top: 10px;
+}
+
+.box {
+	margin-bottom: 4px !important;
+}
+.hide_column {
+	display: none;
+}
+.box-header {
+    padding: 10px 0px 0px 5px !important;
 }

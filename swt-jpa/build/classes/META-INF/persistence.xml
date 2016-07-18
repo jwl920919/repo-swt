@@ -19,13 +19,24 @@
 		<class>com.shinwootns.ipm.data.entity.MenuMaster</class>
 		<class>com.shinwootns.ipm.data.entity.MenuSub</class>
 		<class>com.shinwootns.ipm.data.entity.MenuSubPK</class>
-		<class>com.shinwootns.ipm.data.entity.DeviceInfo</class>
-		<class>com.shinwootns.ipm.data.entity.DeviceInterface</class>
 		<class>com.shinwootns.ipm.data.entity.DeviceInterfacePK</class>
-		<class>com.shinwootns.ipm.data.entity.DeviceInterfaceIp</class>
 		<class>com.shinwootns.ipm.data.entity.DeviceInterfaceIpPK</class>
 		<class>com.shinwootns.ipm.data.entity.SiteBlacklistInfo</class>
-		<class>com.shinwootns.ipm.data.entity.SiteInsightInfo</class>
 		<class>com.shinwootns.ipm.data.entity.SiteSegmentInfo</class>
+		<class>com.shinwootns.ipm.data.entity.AuthMenu</class>
+		<class>com.shinwootns.ipm.data.entity.DeviceDhcp</class>
+		<class>com.shinwootns.ipm.data.entity.DeviceInsight</class>
+		<class>com.shinwootns.ipm.data.entity.DeviceNetwork</class>
+		<class>com.shinwootns.ipm.data.entity.DeviceProbe</class>
+		<class>com.shinwootns.ipm.data.entity.DhcpLeaseIp</class>
+		<class>com.shinwootns.ipm.data.entity.DhcpLeaseIpPK</class>
+		<class>com.shinwootns.ipm.data.entity.InterfaceCam</class>
+		<class>com.shinwootns.ipm.data.entity.InterfaceCamPK</class>
+		<class>com.shinwootns.ipm.data.entity.InterfaceCamHistory</class>
+		<class>com.shinwootns.ipm.data.entity.InterfaceCamHistoryPK</class>
+		<class>com.shinwootns.ipm.data.entity.InterfaceInfo</class>
+		<class>com.shinwootns.ipm.data.entity.InterfaceInfoPK</class>
+		<class>com.shinwootns.ipm.data.entity.InterfaceIp</class>
+		<class>com.shinwootns.ipm.data.entity.InterfaceIpPK</class>
 	</persistence-unit>
 </persistence>

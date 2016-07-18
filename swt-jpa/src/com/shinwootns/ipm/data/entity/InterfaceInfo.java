@@ -6,17 +6,17 @@ import java.sql.Timestamp;
 
 
 /**
- * The persistent class for the device_interface database table.
+ * The persistent class for the interface_info database table.
  * 
  */
 @Entity
-@Table(name="device_interface")
-@NamedQuery(name="DeviceInterface.findAll", query="SELECT d FROM DeviceInterface d")
-public class DeviceInterface implements Serializable {
+@Table(name="interface_info")
+@NamedQuery(name="InterfaceInfo.findAll", query="SELECT i FROM InterfaceInfo i")
+public class InterfaceInfo implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId
-	private DeviceInterfacePK id;
+	private InterfaceInfoPK id;
 
 	@Column(name="admin_stauts")
 	private Integer adminStauts;
@@ -39,12 +39,6 @@ public class DeviceInterface implements Serializable {
 	@Column(name="insert_time")
 	private Timestamp insertTime;
 
-	@Column(name="last_used_octect")
-	private double lastUsedOctect;
-
-	@Column(name="last_used_time")
-	private Timestamp lastUsedTime;
-
 	@Column(name="oper_stauts")
 	private Integer operStauts;
 
@@ -54,14 +48,14 @@ public class DeviceInterface implements Serializable {
 	@Column(name="user_desc")
 	private String userDesc;
 
-	public DeviceInterface() {
+	public InterfaceInfo() {
 	}
 
-	public DeviceInterfacePK getId() {
+	public InterfaceInfoPK getId() {
 		return this.id;
 	}
 
-	public void setId(DeviceInterfacePK id) {
+	public void setId(InterfaceInfoPK id) {
 		this.id = id;
 	}
 
@@ -119,22 +113,6 @@ public class DeviceInterface implements Serializable {
 
 	public void setInsertTime(Timestamp insertTime) {
 		this.insertTime = insertTime;
-	}
-
-	public double getLastUsedOctect() {
-		return this.lastUsedOctect;
-	}
-
-	public void setLastUsedOctect(double lastUsedOctect) {
-		this.lastUsedOctect = lastUsedOctect;
-	}
-
-	public Timestamp getLastUsedTime() {
-		return this.lastUsedTime;
-	}
-
-	public void setLastUsedTime(Timestamp lastUsedTime) {
-		this.lastUsedTime = lastUsedTime;
 	}
 
 	public Integer getOperStauts() {
