@@ -28,8 +28,10 @@ spring:
     testOnBorrow: true
     validation-query: SELECT 1
   jpa:
-    generate-ddl: false
-    show-sql: true
+    show-sql: false
+    hibernate:
+      ddlAuto: none
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
   rabbitmq:
     host: shinwootnskr.iptime.org
     port: 5672
@@ -41,6 +43,7 @@ spring:
     port: 6379
     password: shinwoo123!
     timeout: 0
+    
 
 #====================================
 # banner

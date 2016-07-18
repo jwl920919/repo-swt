@@ -3,6 +3,22 @@
         
 <mapper namespace="com.shinwootns.ipm.data.mapper.DeviceMapper">
 
+	<select id="selectDeviceDhcp" resultType="com.shinwootns.ipm.data.entity.DeviceDhcp">
+		<![CDATA[
+			SELECT * FROM device_dhcp
+		]]>
+	</select>
+	
+	<select id="selectDeviceDhcpBySiteId" resultType="com.shinwootns.ipm.data.entity.DeviceDhcp">
+		<![CDATA[
+			SELECT dhcp.* 
+			FROM device_dhcp dhcp, site_info site
+			WHERE dhcp.site_id = site.site_id
+			AND site.site_id = #{site_id}
+		]]>
+	</select>
+
+	<!-- 
 	<select id="selectDevice" resultType="com.shinwootns.ipm.data.entity.DeviceEntity">
 		<![CDATA[
 			SELECT device_id, site_id, ipv4, ipv6, device_name, device_type, snmp_community, 
@@ -44,5 +60,5 @@
         	, update_time = now()
         WHERE device_id = #{device_id}
     </update>
-   
+    -->
 </mapper>

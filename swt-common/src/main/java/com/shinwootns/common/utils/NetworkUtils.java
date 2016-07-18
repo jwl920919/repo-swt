@@ -115,7 +115,7 @@ public class NetworkUtils {
 		
 		return sb.toString();
 	}
-
+	
 	public static long IPv4ToLong(String ipAddress) {
 
 		long result = 0;
@@ -153,6 +153,23 @@ public class NetworkUtils {
 		sb.append((ipNumber & 0xFF));
 
 		return sb.toString();
+	}
+	
+	public static IPv4Range getIPV4Range(String network) {
+		
+		int index = network.indexOf("/");
+		
+		if (index > 0) {
+			
+			String networkIP = network.substring(0, index);
+			String bitString = network.substring(index+1);
+			
+			int bit = Integer.parseInt(bitString);
+			
+			return getIPV4Range(networkIP, bit);
+		}
+		
+		return null;
 	}
 
 	public static IPv4Range getIPV4Range(String networkIP, String netmask) {

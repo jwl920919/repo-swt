@@ -43,18 +43,14 @@ CREATE TABLE device_dhcp
   site_id integer NOT NULL,
   host character varying(128),
   device_name character varying(128),
-  device_type character varying(32) NOT NULL,
   snmp_community character varying(64) DEFAULT '',
   snmp_version integer DEFAULT 2,
   vendor character varying(64),
   model character varying(128),
-  service_type integer,
   sys_oid character varying(256),
   sys_location character varying(256),
-  api_type character varying(64),
-  api_version character varying(64),
-  api_userid character varying(64),
-  api_password character varying(256),
+  wapi_userid character varying(64),
+  wapi_password character varying(256),
   insert_time timestamp with time zone DEFAULT current_timestamp,
   update_time timestamp with time zone DEFAULT current_timestamp,
   CONSTRAINT device_dhcp_pkey PRIMARY KEY (device_id),
@@ -298,29 +294,43 @@ CREATE TABLE public.auth_setup_radius
 -- DHCP
 --==========================================================================================
 
--- DHCP_MAC_FILTER
-CREATE SEQUENCE dhcp_mac_filter_id_seq;
-CREATE TABLE public.dhcp_mac_filter
+-- DHCP NETWORK
+CREATE TABLE public.dhcp_network
 (
-  filter_id integer NOT NULL DEFAULT nextval('dhcp_mac_filter_id_seq'::regclass),
-  site_id integer NOT NULL,
-  filter_name character varying(128) NOT NULL,
-  filter_desc character varying(512),
-  CONSTRAINT dhcp_mac_filter_pkey PRIMARY KEY (filter_id)
-);
-
--- DHCP_SEGMENT
-CREATE SEQUENCE public.dhcp_segment_id_seq;
-CREATE TABLE public.dhcp_segment
-(
-  segment_id integer NOT NULL DEFAULT nextval('dhcp_segment_id_seq'::regclass),
   site_id integer NOT NULL,
   network character varying(64) NOT NULL,
   start_ip character varying(40) NOT NULL,
   end_ip character varying(40) NOT NULL,
-  description character varying(256) NOT NULL,
-  CONSTRAINT dhcp_network_id_pkey PRIMARY KEY (dhcp_network_id)
+  comment character varying(256) NOT NULL,
+  insert_time timestamp with time zone DEFAULT current_timestamp,
+  update_time timestamp with time zone DEFAULT current_timestamp,
+  CONSTRAINT dhcp_network_pkey PRIMARY KEY (site_id, network)
 );
+
+-- DHCP RANGE
+CREATE TABLE public.dhcp_range
+(
+  site_id integer NOT NULL,
+  network character varying(64) NOT NULL,
+  start_ip character varying(40) NOT NULL,
+  end_ip character varying(40) NOT NULL,
+  comment character varying(256) NOT NULL,
+  insert_time timestamp with time zone DEFAULT current_timestamp,
+  update_time timestamp with time zone DEFAULT current_timestamp,
+  CONSTRAINT dhcp_range_pkey PRIMARY KEY (site_id, network, start_ip, end_ip)
+);
+
+-- DHCP_MAC_FILTER
+CREATE TABLE public.dhcp_mac_filter
+(
+  site_id integer NOT NULL,
+  filter_name character varying(128) NOT NULL,
+  filter_desc character varying(512),
+  insert_time timestamp with time zone DEFAULT current_timestamp,
+  update_time timestamp with time zone DEFAULT current_timestamp,
+  CONSTRAINT dhcp_mac_filter_pkey PRIMARY KEY (site_id, filter_name)
+);
+
 
 -- DHCP_LEASE_IP
 CREATE TABLE public.dhcp_lease_ip

@@ -2,6 +2,7 @@ package com.shinwootns.ipm.data.entity;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 
 /**
@@ -14,33 +15,40 @@ import javax.persistence.*;
 public class DhcpNetwork implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@Column(name="dhcp_network_id")
-	private Integer dhcpNetworkId;
+	@EmbeddedId
+	private DhcpNetworkPK id;
+
+	private String comment;
 
 	@Column(name="end_ip")
 	private String endIp;
 
-	@Column(name="filter_name")
-	private String filterName;
-
-	private String network;
-
-	@Column(name="site_id")
-	private Integer siteId;
+	@Column(name="insert_time")
+	private Timestamp insertTime;
 
 	@Column(name="start_ip")
 	private String startIp;
 
+	@Column(name="update_time")
+	private Timestamp updateTime;
+
 	public DhcpNetwork() {
 	}
 
-	public Integer getDhcpNetworkId() {
-		return this.dhcpNetworkId;
+	public DhcpNetworkPK getId() {
+		return this.id;
 	}
 
-	public void setDhcpNetworkId(Integer dhcpNetworkId) {
-		this.dhcpNetworkId = dhcpNetworkId;
+	public void setId(DhcpNetworkPK id) {
+		this.id = id;
+	}
+
+	public String getComment() {
+		return this.comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 
 	public String getEndIp() {
@@ -51,28 +59,12 @@ public class DhcpNetwork implements Serializable {
 		this.endIp = endIp;
 	}
 
-	public String getFilterName() {
-		return this.filterName;
+	public Timestamp getInsertTime() {
+		return this.insertTime;
 	}
 
-	public void setFilterName(String filterName) {
-		this.filterName = filterName;
-	}
-
-	public String getNetwork() {
-		return this.network;
-	}
-
-	public void setNetwork(String network) {
-		this.network = network;
-	}
-
-	public Integer getSiteId() {
-		return this.siteId;
-	}
-
-	public void setSiteId(Integer siteId) {
-		this.siteId = siteId;
+	public void setInsertTime(Timestamp insertTime) {
+		this.insertTime = insertTime;
 	}
 
 	public String getStartIp() {
@@ -81,6 +73,14 @@ public class DhcpNetwork implements Serializable {
 
 	public void setStartIp(String startIp) {
 		this.startIp = startIp;
+	}
+
+	public Timestamp getUpdateTime() {
+		return this.updateTime;
+	}
+
+	public void setUpdateTime(Timestamp updateTime) {
+		this.updateTime = updateTime;
 	}
 
 }

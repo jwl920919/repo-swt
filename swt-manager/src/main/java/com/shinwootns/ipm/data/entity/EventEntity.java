@@ -1,26 +1,18 @@
 package com.shinwootns.ipm.data.entity;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.sql.Timestamp;
-
 
 public class EventEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	private Integer event_id;
-
 	private Timestamp collect_time;
-
 	private Integer device_id;
-
 	private String event_type;
-
 	private String host_ip;
-
 	private String message;
-
 	private Integer severity;
 
 	public EventEntity() {
