@@ -115,6 +115,7 @@ public class IPManagementActionController {
 			int segmentid = Integer.parseInt(param.get("segmentid").toString());
 						
 			//region 맵에서 사용할 데이터 쿼리
+			String cClassIPAddress = "";
 			StringBuilder m_activeLease = new StringBuilder();
 			StringBuilder m_conflict = new StringBuilder();
 			StringBuilder m_exclusion = new StringBuilder();
@@ -129,21 +130,31 @@ public class IPManagementActionController {
 			StringBuilder m_used = new StringBuilder();
 			
 			List<Map<String, Object>> allDataList = ipManagementService.select_IP_MANAGEMENT_SEGMENT_DETAIL_MAPDATA(segmentid);
-			for (Map<String, Object> ipListMap : allDataList) {			
-				StringCompare(ipListMap.get("status").toString().toLowerCase(), "activelease", ipListMap.get("ip").toString(), m_activeLease);
-				StringCompare(ipListMap.get("status").toString().toLowerCase(), "conflict", ipListMap.get("ip").toString(), m_conflict);
-				StringCompare(ipListMap.get("status").toString().toLowerCase(), "exclusion", ipListMap.get("ip").toString(), m_exclusion);
-				StringCompare(ipListMap.get("status").toString().toLowerCase(), "fixed", ipListMap.get("ip").toString(), m_fixed);
-				StringCompare(ipListMap.get("status").toString().toLowerCase(), "hostnotindns", ipListMap.get("ip").toString(), m_hostnotindns);
-				StringCompare(ipListMap.get("status").toString().toLowerCase(), "object", ipListMap.get("ip").toString(), m_object);
-				StringCompare(ipListMap.get("status").toString().toLowerCase(), "pending", ipListMap.get("ip").toString(), m_pending);
-				StringCompare(ipListMap.get("status").toString().toLowerCase(), "range", ipListMap.get("ip").toString(), m_range);
-				StringCompare(ipListMap.get("status").toString().toLowerCase(), "reservedrange", ipListMap.get("ip").toString(), m_reservedrange);
-				StringCompare(ipListMap.get("status").toString().toLowerCase(), "unmanaged", ipListMap.get("ip").toString(), m_unmanaged);
-				StringCompare(ipListMap.get("status").toString().toLowerCase(), "unused", ipListMap.get("ip").toString(), m_unused);
-				StringCompare(ipListMap.get("status").toString().toLowerCase(), "used", ipListMap.get("ip").toString(), m_used);				
+			String ip = "";
+			for (Map<String, Object> ipListMap : allDataList) {
+				ip = ipListMap.get("ip").toString();
+				if (cClassIPAddress.equals("")) {
+					String[] ipArr = ip.split("[.]");
+					if (ipArr.length >= 3) {
+						cClassIPAddress = ipArr[0] + "." + ipArr[1] + "." + ipArr[2];
+						System.out.println("ClassIPAddress : " + cClassIPAddress);
+					}
+				}
+				StringCompare(ipListMap.get("status").toString().toLowerCase(), "activelease", ip, m_activeLease);
+				StringCompare(ipListMap.get("status").toString().toLowerCase(), "conflict", ip, m_conflict);
+				StringCompare(ipListMap.get("status").toString().toLowerCase(), "exclusion", ip, m_exclusion);
+				StringCompare(ipListMap.get("status").toString().toLowerCase(), "fixed", ip, m_fixed);
+				StringCompare(ipListMap.get("status").toString().toLowerCase(), "hostnotindns", ip, m_hostnotindns);
+				StringCompare(ipListMap.get("status").toString().toLowerCase(), "object", ip, m_object);
+				StringCompare(ipListMap.get("status").toString().toLowerCase(), "pending", ip, m_pending);
+				StringCompare(ipListMap.get("status").toString().toLowerCase(), "range", ip, m_range);
+				StringCompare(ipListMap.get("status").toString().toLowerCase(), "reservedrange", ip, m_reservedrange);
+				StringCompare(ipListMap.get("status").toString().toLowerCase(), "unmanaged", ip, m_unmanaged);
+				StringCompare(ipListMap.get("status").toString().toLowerCase(), "unused", ip, m_unused);
+				StringCompare(ipListMap.get("status").toString().toLowerCase(), "used", ip, m_used);				
 			}
 			HashMap<String, Object> ipMap  = new HashMap<>();
+			ipMap.put("cClassIPAddress", cClassIPAddress);
 			ipMap.put("activeLease", m_activeLease);
 			ipMap.put("conflict", m_conflict);
 			ipMap.put("exclusion", m_exclusion);
@@ -159,6 +170,7 @@ public class IPManagementActionController {
 			dataList.add(ipMap);
 			//endregion			
 			
+			//Thread.sleep(1000);
 			result.result = true;
 			result.data = dataList;
 		}  catch (Exception e) {

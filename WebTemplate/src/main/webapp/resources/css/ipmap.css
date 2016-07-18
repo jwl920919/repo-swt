@@ -127,3 +127,7 @@
 .li_used {
 	list-style-image: url("../images/ipmap/org-used.png");
 }
+
+.ipmap-legend {
+	vertical-align: top !important;
+}

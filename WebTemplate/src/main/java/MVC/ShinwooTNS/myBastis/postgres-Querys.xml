@@ -307,7 +307,7 @@
 	<select id="select_IP_MANAGEMENT_SEGMENT_DETAIL_MAPDATA" resultType="java.util.HashMap">
 		SELECT * FROM "test_dhcp_segment_list"
  		 WHERE segment_id = #{segmentid}
- 		 ORDER BY "seq", "ip"
+ 		 ORDER BY inet("ip")
 	</select>
 
 

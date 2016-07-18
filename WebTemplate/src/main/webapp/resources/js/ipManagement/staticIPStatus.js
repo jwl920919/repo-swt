@@ -51,7 +51,15 @@ console.log($('#datatable'));
 	//ip map 초기화
 	fnIPMapSetting();
 });
-
+//$(document).ajaxStart(function() {
+//    // show loader on start
+//	alert("ajaxStart");
+//    //$("#divLoading").css("display","block");
+//}).ajaxSuccess(function() {
+//    // hide loader on success
+//	alert("ajaxSuccess");
+//    //$("#divLoading").css("display","none");
+//});
 /**
  * tr 이벤트 핸들러
 **/
@@ -62,62 +70,74 @@ function trClickEvent (obj){
 /**
  * td 이벤트 핸들러
 **/
+var selectedRow;
 function tdClickEvent(obj){
 	//systemAlert("divAlertArea", "alert-danger", getLanguage("warning"), $(obj).html());
 	//alert($(obj).html().trim());
-
-	var segmentid = $(obj).parent().children().html();
+	if (obj != "") {
+		selectedRow = obj;
+		
+		var arrIp = $(obj).html().trim().split( "/" );
+		if (checkIPv4(arrIp[0])){
+			arrIps = arrIp[0].split( "." );
+			var ipCClass = String.format("{0}.{1}.{2}.0 ~ {0}.{1}.{2}.255", arrIps[0], arrIps[1], arrIps[2]);
+			$("#segmentLabel").text(ipCClass);
+		}
+		
+		
+		var segmentid = $(obj).parent().children().html();
+		
+		$("#defaultDiv").css("display","none");
+		$("#detailDiv").css("display","block");
+		$("#selectSegment").text($(obj).html().trim());
 	
-	$("#defaultDiv").css("display","none");
-	$("#detailDiv").css("display","block");
-	$("#selectSegment").text($(obj).html().trim());
-
-	$('#datatable_detail').DataTable(
-            {
-                "destroy" : true,
-                "paging" : true, //"paging" : true,
-                "searching" : true,
-                "lengthChange" : true,
-                "ordering" : true,
-                "info" : false,
-                "autoWidth" : true,
-                "processing" : true,
-                "serverSide" : true,
-                "ajax" : {
-                    url : 'ipManagement/staticIPStatus_Segment_Detail_Select',
-                    "dataType" : "jsonp",
-                    "type" : "POST",
-                    "jsonp" : "callback",
-                    "data" : function(data,type) {
-                        data.search_key = data.search.value;
-                        data.segmentid = segmentid;
-                        //console.log(data.search_key);
-                    }
-                },
-			    "columnDefs": [{ className: "essential-td-left", "targets": [ 0 ] },
-			                   { className: "essential-td-left", "targets": [ 1 ] },
-			                   { className: "essential-td-left", "targets": [ 2 ] },
-			                   { className: "essential-td-left", "targets": [ 4 ] },
-			                   { className: "essential-td-left", "targets": [ 5 ] }],
-                "order" : [ [ 0, 'asc' ] ],
-                "columns" : [ {"data" : "ip"},
-                              {"data" : "name"},
-                              {"data" : "mac"},
-                              {"data" : "status"},
-                              {"data" : "type"},
-                              {"data" : "client"} ],
-            });
-	$('div.dataTables_scrollBody').css('maxHeight', 600);
-	//$("#datatable_detail tbody").css('maxHeight', 650);
-	//검색, 엔트리 위치 정렬
-	$(function() {
-	    var d_wrap = $('#datatable_detail_wrapper .row:first');
-	    var d_length = $('#datatable_detail_wrapper .row:first .col-sm-6:eq(0)');
-	    var d_filter = $('#datatable_detail_wrapper .row:first .col-sm-6:eq(1)');
-	    d_length.append(d_filter);
-	    d_wrap.prepend(d_filter);
-	});	
-	mapDataCall(segmentid);
+		$('#datatable_detail').DataTable(
+	            {
+	                "destroy" : true,
+	                "paging" : true, //"paging" : true,
+	                "searching" : true,
+	                "lengthChange" : true,
+	                "ordering" : true,
+	                "info" : false,
+	                "autoWidth" : true,
+	                "processing" : true,
+	                "serverSide" : true,
+	                "ajax" : {
+	                    url : 'ipManagement/staticIPStatus_Segment_Detail_Select',
+	                    "dataType" : "jsonp",
+	                    "type" : "POST",
+	                    "jsonp" : "callback",
+	                    "data" : function(data,type) {
+	                        data.search_key = data.search.value;
+	                        data.segmentid = segmentid;
+	                        //console.log(data.search_key);
+	                    }
+	                },
+				    "columnDefs": [{ className: "essential-td-left", "targets": [ 0 ] },
+				                   { className: "essential-td-left", "targets": [ 1 ] },
+				                   { className: "essential-td-left", "targets": [ 2 ] },
+				                   { className: "essential-td-left", "targets": [ 4 ] },
+				                   { className: "essential-td-left", "targets": [ 5 ] }],
+	                "order" : [ [ 0, 'asc' ] ],
+	                "columns" : [ {"data" : "ip"},
+	                              {"data" : "name"},
+	                              {"data" : "mac"},
+	                              {"data" : "status"},
+	                              {"data" : "type"},
+	                              {"data" : "client"} ],
+	            });
+		$('div.dataTables_scrollBody').css('maxHeight', 600);
+		//$("#datatable_detail tbody").css('maxHeight', 650);
+		//검색, 엔트리 위치 정렬
+		$(function() {
+		    var d_wrap = $('#datatable_detail_wrapper .row:first');
+		    var d_length = $('#datatable_detail_wrapper .row:first .col-sm-6:eq(0)');
+		    var d_filter = $('#datatable_detail_wrapper .row:first .col-sm-6:eq(1)');
+		    d_length.append(d_filter);
+		    d_wrap.prepend(d_filter);
+		});	
+		mapDataCall(segmentid);
+	}
 }
 
 /**
@@ -153,9 +173,9 @@ function fnIPMapSetting(){
  * IP Map Initialize
 **/
 var chargePerSheet;
-function fnIPMapInit (ActiveLeaseArr, ConflictArr, ExclusionArr, FixedArr, HostnotindnsArr, ObjectArr, 
+function fnIPMapInit (ipaddress, ActiveLeaseArr, ConflictArr, ExclusionArr, FixedArr, HostnotindnsArr, ObjectArr, 
 		PendingArr,	RangeArr, ReservedrangeArr, UnmanagedArr, UnusedArr, UsedArr) {
-    var str = [], ipNo = -1, className;
+    var str = [], ipNo = -1, className, address, status;
     
     console.log(ActiveLeaseArr);
     for (i = 0; i < ipMapSettings.rows; i++) {
@@ -164,44 +184,71 @@ function fnIPMapInit (ActiveLeaseArr, ConflictArr, ExclusionArr, FixedArr, Hostn
             ipNo += 1;
             className = ipMapSettings.rectangleCss + ' ' + ipMapSettings.rowCssPrefix + i.toString() + ' ' + ipMapSettings.colCssPrefix + j.toString();
             
+            console.log(String.format("{0}.{1}", ipaddress, ipNo));
             if ($.isArray(ActiveLeaseArr) && $.inArray(ipNo, ActiveLeaseArr) != -1) {
                 className += ' ' + ipMapSettings.activeLeaseCss;
+                address = String.format("{0}.{1}", ipaddress, ipNo); 
+                status = "ActiveLease";
             }
             if ($.isArray(ConflictArr) && $.inArray(ipNo, ConflictArr) != -1) {
                 className += ' ' + ipMapSettings.conflictCss;
+                address = String.format("{0}.{1}", ipaddress, ipNo); 
+                status = "Conflict";
             }
             if ($.isArray(ExclusionArr) && $.inArray(ipNo, ExclusionArr) != -1) {
                 className += ' ' + ipMapSettings.exclusionCss;
+                address = String.format("{0}.{1}", ipaddress, ipNo); 
+                status = "Exclusion";
             }
             if ($.isArray(FixedArr) && $.inArray(ipNo, FixedArr) != -1) {
                 className += ' ' + ipMapSettings.fixedCss;
+                address = String.format("{0}.{1}", ipaddress, ipNo); 
+                status = "Fixed";
             }
             if ($.isArray(HostnotindnsArr) && $.inArray(ipNo, HostnotindnsArr) != -1) {
                 className += ' ' + ipMapSettings.hostnotindnsCss;
+                address = String.format("{0}.{1}", ipaddress, ipNo); 
+                status = "Hostnotindns";
             }
             if ($.isArray(ObjectArr) && $.inArray(ipNo, ObjectArr) != -1) {
                 className += ' ' + ipMapSettings.objectCss;
+                address = String.format("{0}.{1}", ipaddress, ipNo); 
+                status = "bject";
             }
             if ($.isArray(PendingArr) && $.inArray(ipNo, PendingArr) != -1) {
                 className += ' ' + ipMapSettings.pendingCss;
+                address = String.format("{0}.{1}", ipaddress, ipNo); 
+                status = "Pending";
             }
             if ($.isArray(RangeArr) && $.inArray(ipNo, RangeArr) != -1) {
                 className += ' ' + ipMapSettings.rangeCss;
+                address = String.format("{0}.{1}", ipaddress, ipNo); 
+                status = "Range";
             }
             if ($.isArray(ReservedrangeArr) && $.inArray(ipNo, ReservedrangeArr) != -1) {
                 className += ' ' + ipMapSettings.reservedrangeCss;
+                address = String.format("{0}.{1}", ipaddress, ipNo); 
+                status = "Reservedrange";
             }
             if ($.isArray(UnmanagedArr) && $.inArray(ipNo, UnmanagedArr) != -1) {
                 className += ' ' + ipMapSettings.unmanagedCss;
+                address = String.format("{0}.{1}", ipaddress, ipNo); 
+                status = "Unmanaged";
             }
             if ($.isArray(UnusedArr) && $.inArray(ipNo, UnusedArr) != -1) {
                 className += ' ' + ipMapSettings.unusedCss;
+                address = String.format("{0}.{1}", ipaddress, ipNo); 
+                status = "Unused";
             }
             if ($.isArray(UsedArr) && $.inArray(ipNo, UsedArr) != -1) {
                 className += ' ' + ipMapSettings.usedCss;
+                address = String.format("{0}.{1}", ipaddress, ipNo); 
+                status = "Used";
             }
 
-            str.push('<li class="' + className + '"' +
+            str.push('<li class="' + className + '" data-toggle=\"tooltip\" data-html=\"true\"' +
+            			  'data-title=\"<table><tr><td style=\'text-align:left;\'>IP Address: '+address+'</td></tr>' +
+            			  '<tr><td style=\'text-align:left;\'>Ststus: '+status+'</td></tr></table>\"' +
                           'style="top:' + (i * ipMapSettings.rectangleHeight).toString() + 'px;left:' + (j * ipMapSettings.rectangleWidth).toString() + 'px"' + 
                           'onclick=rectangleClick(this); align=center>' +
 //                          '<a title="' + ipNo + '" style=\"line-height:50px\">' + ipNo + '</a>' +
@@ -238,6 +285,8 @@ function mapDataCall(segmentid){
 	var PendingArr = [],	RangeArr = [], ReservedrangeArr = [], UnmanagedArr = [], UnusedArr = [], UsedArr = []; 
 	var jObj = Object();
     jObj.segmentid = segmentid;
+
+    $('#divLoading').attr("style","visibility: visible");
     
     $.ajax({
         url : 'ipManagement/staticIPStatus_Segment_MapData',
@@ -263,11 +312,14 @@ function mapDataCall(segmentid){
 					mapDataHelper(obj.unmanaged, UnmanagedArr);
 					mapDataHelper(obj.unused, UnusedArr);
 					mapDataHelper(obj.used, UsedArr);
-
-					fnIPMapInit(ActiveLeaseArr, ConflictArr, ExclusionArr, FixedArr, HostnotindnsArr, ObjectArr,
+					
+					fnIPMapInit(obj.cClassIPAddress, ActiveLeaseArr, ConflictArr, ExclusionArr, FixedArr, HostnotindnsArr, ObjectArr,
 							PendingArr,	RangeArr, ReservedrangeArr, UnmanagedArr, UnusedArr, UsedArr);
 	            });
             }
+        },
+        complete: function(data) {
+            $('#divLoading').attr("style","visibility: hidden");
         }
     });
 }
@@ -287,5 +339,10 @@ function mapDataHelper(stringIP, array){
 	}
 }
 
-
+/**
+ * Map 데이터 재 조회 function
+**/
+function mapRefresh(){
+	tdClickEvent(selectedRow);
+}
 

@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"%>
 <%@ page import="Common.Helper.LanguageHelper"%>
-
 <!-- IP Map style -->
 <link rel="stylesheet" href="resources/css/ipmap.css">
 
@@ -95,40 +94,45 @@
 									<div id="holder">
 								        <ul id="place">
 								        </ul>
+									    <div id="divLoading" class="overlay" style="visibility: hidden;" >
+											<i class="fa fa-refresh fa-spin"></i>
+										</div>
 								    </div>
 									<div id="holder-bottom">
-								        <LABEL id="segmentLabel" style="font-size: 12px; float:right; margin: 10px;">192.168.1.0 - 192.168.1.255</LABEL>
+										<button type="button" class="btn btn-info btn-sm" style="margin: 4px 8px;" onclick="mapRefresh();">
+											<i class="fa fa-refresh"></i>
+										</button>
+								        <LABEL id="segmentLabel" style="font-size: 12px; float:right; margin: 10px;">
+											<!--192.168.1.0 - 192.168.1.255 -->
+								        </LABEL>
 								    </div>
 						        </section>
-								<section class="col-lg-6-noPadding">
-									<div id="ib-ipmap-legend-advanced">  
-							        	<span id="ipmap-legend-advanced"></span>
-							        	<table>
-							        		<tr>
-							        			<td>
-										            <ul class="ipmap-legend-ul">
-										               <li class="li_unused"><span class="li_Label">Unused</span></li>
-										               <li class="li_used"><span class="li_Label">Used</span></li>
-										               <li class="li_conflict"><span class="li_Label">Conflict</span></li>
-										               <li class="li_pending"><span class="li_Label">Pending</span></li>
-										               <li class="li_unmanaged"><span class="li_Label">Unmanaged</span></li>
-										               <li class="li_fixed"><span class="li_Label">Fixed Address / Reservation</span></li>
-										               <li class="li_object"><span class="li_Label">DNS Object</span></li>
-										               <li class="li_hostnotindns"><span class="li_Label">Host<span class="ib-ipam-freeware-hidden">Not In DNS/DHCP</span></span></li>
-										               <li class="li_activeLease"><span class="li_Label">Active Lease</span></li>
-										            </ul>
-							        			</td>
-							        			<td>
-										            <ul class="ipmap-legend-ul">
-										               <li class="li_Selecting"><span class="li_Label">Selected IP Address</span></li>
-										           	   <li class="li_range"><span class="li_Label">DHCP Range</span></li>
-										           	   <li class="li_exclusion"><span class="li_Label">DHCP Exclusion Range</span></li>
-										           	   <li class="li_reservedrange"><span class="li_Label">Reserved Range</span></li>
-										            </ul>
-							        			</td>
-							        		</tr>
-							        	</table>
-							        </div>
+								<section>
+						        	<table>
+						        		<tr>
+						        			<td>
+									            <ul>
+									               <li class="li_unused"><span class="li_Label">Unused</span></li>
+									               <li class="li_used"><span class="li_Label">Used</span></li>
+									               <li class="li_conflict"><span class="li_Label">Conflict</span></li>
+									               <li class="li_pending"><span class="li_Label">Pending</span></li>
+									               <li class="li_unmanaged"><span class="li_Label">Unmanaged</span></li>
+									               <li class="li_fixed"><span class="li_Label">Fixed Address / Reservation</span></li>
+									               <li class="li_object"><span class="li_Label">DNS Object</span></li>
+									               <li class="li_hostnotindns"><span class="li_Label">Host<span class="ib-ipam-freeware-hidden">Not In DNS/DHCP</span></span></li>
+									               <li class="li_activeLease"><span class="li_Label">Active Lease</span></li>
+									            </ul>
+						        			</td>
+						        			<td class="ipmap-legend">
+									            <ul>
+									               <li class="li_Selecting"><span class="li_Label">Selected IP Address</span></li>
+									           	   <li class="li_range"><span class="li_Label">DHCP Range</span></li>
+									           	   <li class="li_exclusion"><span class="li_Label">DHCP Exclusion Range</span></li>
+									           	   <li class="li_reservedrange"><span class="li_Label">Reserved Range</span></li>
+									            </ul>
+						        			</td>
+						        		</tr>
+						        	</table>
 						        </section>
 							</div>
 							</div>
