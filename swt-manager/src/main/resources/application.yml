@@ -71,3 +71,9 @@ logging:
     org.springframework: INFO
     level.com.shinwootns: DEBUG
     root: INFO
+
+#====================================
+# mybatis
+#====================================
+mybatis:
+  config-location: classpath:/mybatis/mybatis-config.xml

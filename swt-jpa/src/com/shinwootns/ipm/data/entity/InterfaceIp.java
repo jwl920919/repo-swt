@@ -6,17 +6,17 @@ import java.sql.Timestamp;
 
 
 /**
- * The persistent class for the device_interface_ip database table.
+ * The persistent class for the interface_ip database table.
  * 
  */
 @Entity
-@Table(name="device_interface_ip")
-@NamedQuery(name="DeviceInterfaceIp.findAll", query="SELECT d FROM DeviceInterfaceIp d")
-public class DeviceInterfaceIp implements Serializable {
+@Table(name="interface_ip")
+@NamedQuery(name="InterfaceIp.findAll", query="SELECT i FROM InterfaceIp i")
+public class InterfaceIp implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId
-	private DeviceInterfaceIpPK id;
+	private InterfaceIpPK id;
 
 	@Column(name="insert_time")
 	private Timestamp insertTime;
@@ -30,14 +30,14 @@ public class DeviceInterfaceIp implements Serializable {
 	@Column(name="update_time")
 	private Timestamp updateTime;
 
-	public DeviceInterfaceIp() {
+	public InterfaceIp() {
 	}
 
-	public DeviceInterfaceIpPK getId() {
+	public InterfaceIpPK getId() {
 		return this.id;
 	}
 
-	public void setId(DeviceInterfaceIpPK id) {
+	public void setId(InterfaceIpPK id) {
 		this.id = id;
 	}
 

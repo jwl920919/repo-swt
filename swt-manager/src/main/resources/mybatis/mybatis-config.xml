@@ -12,10 +12,11 @@
     
     
     <mappers>
+    	<mapper resource="mybatis/mapper/DeviceMapper.xml"/>
+    	
     	<!-- 
-        <mapper resource="myBatis/mapper/SiteMapper.xml"/>
-        <mapper resource="myBatis/mapper/DeviceMapper.xml"/>
-        <mapper resource="myBatis/mapper/EventMapper.xml"/>
+        <mapper resource="mybatis/mapper/SiteMapper.xml"/>
+        <mapper resource="mybatis/mapper/EventMapper.xml"/>
         -->
     </mappers>
  

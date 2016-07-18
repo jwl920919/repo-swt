@@ -18,7 +18,12 @@
 <section class="white-paper" style="text-align: center">
 	<div class="row" style="width: 100%">
 		<div class="col-md-6">
-			<div id="placeOfBusinessBox" class="box" style="height: 560px">
+			<div id="placeOfBusinessBox" class="box box-primary">
+				<div class="box-header" style="text-align: left;">
+					<i class="fa fa-cogs"></i>
+					<h3 class="box-title-small">사업장관리</h3>
+					<!-- tools box -->
+				</div>
 				<table id="placeOfBusinessTable" class="essential-table"
 					style="width: 98%">
 					<thead>
@@ -28,27 +33,48 @@
 								id="placeOfBusinessTable_checkbox_controller" type="checkbox" /></th>
 							<th width="30%">사업장명</th>
 							<th width="30%">사업장코드</th>
-							<th width="30%">설명</th>
+							<th width="30%" style="border-right-style: hidden !important;">설명</th>
+							<th class="hide_column">id</th>
 						</tr>
 					</thead>
 					<tbody>
 					</tbody>
 				</table>
+
+				<div class="bottom-box">
+					<div
+						style="width: 100%; margin-top: 5px; margin-bottom: 5px; height: 30px;">
+						<label style="position: absolute; left: 5px;"> <input
+							id='placeOfBusinessTable-delete-button' class='btn btn-primary'
+							type="button" value="<%=LanguageHelper.GetLanguage("delete")%>" /></label><label
+							style="position: absolute; right: 5px;"> <input
+							id='placeOfBusinessTable-add-button' class='btn btn-primary'
+							type="button" value="<%=LanguageHelper.GetLanguage("add")%>" />
+							<input id='placeOfBusinessTable-modify-button'
+							class='btn btn-primary' type="button"
+							value="<%=LanguageHelper.GetLanguage("modify")%>" />
+						</label>
+					</div>
+					<label class="box-row-label" style="margin-left: 5px;">사업장명
+						: <input id='pob-table-pob-text' class="box-row-textfiled"
+						type="text" />
+					</label> <label class="box-row-label">사업장코드 : <input
+						id='pob-table-code-text' class="box-row-textfiled" type="text" /></label>
+					<label class="box-row-label">설명 : <input
+						id='pob-table-desc-text' class="box-row-textfiled" type="text" /></label>
+					<input id="pob-id-text" type="hidden" />
+				</div>
+
 			</div>
-			<div class="bottom-box">
-				<div class="box-row">
-					<label class="box-row-label">사업장명 : </label><input class="box-row-textfiled" type="text" />
-				</div>
-				<div>
-					<label> 코 드 : </label><input class="box-row-textfiled" type="text" />
-				</div>
-				<div>
-					<label> 설 명 : </label><input class="box-row-textfiled" type="text" />
-				</div>
-			</div>
+
 		</div>
 		<div class="col-md-6">
-			<div id="userGroupBox" class="box" style="height: 560px">
+			<div id="userGroupBox" class="box box-primary">
+				<div class="box-header" style="text-align: left;">
+					<i class="fa fa-cog"></i>
+					<h3 class="box-title-small">그룹관리</h3>
+					<!-- tools box -->
+				</div>
 				<table id="userGroupTable" class="essential-table"
 					style="width: 98%">
 					<thead>
@@ -57,13 +83,40 @@
 								id="userGroupTable_checkbox_controller" type="checkbox" /></th>
 							<th width="30%">사업장명</th>
 							<th width="30%">그룹명</th>
-							<th width="30%">설명</th>
+							<th width="30%" style="border-right-style: hidden !important;">설명</th>
+							<th class="hide_column">id</th>
 						</tr>
 					</thead>
 					<tbody>
 					</tbody>
 				</table>
+
+				<div class="bottom-box">
+					<div
+						style="width: 100%; margin-top: 5px; margin-bottom: 5px; height: 30px;">
+						<label style="position: absolute; left: 5px;"> <input
+							id='userGroupTable-delete-button' class='btn btn-primary'
+							type="button" value="<%=LanguageHelper.GetLanguage("delete")%>" />
+						</label> <label style="position: absolute; right: 5px;"> <input
+							id='userGroupTable-add-button' class='btn btn-primary'
+							type="button" value="<%=LanguageHelper.GetLanguage("add")%>" />
+							<input id='userGroupTable-modify-button' class='btn btn-primary'
+							type="button" value="<%=LanguageHelper.GetLanguage("modify")%>" />
+						</label>
+					</div>
+					<label class="box-row-label" style="margin-left: 5px;">사업장명
+						: <select id='group-table-pob-select' class="box-row-textfiled"
+						style="width: 180px; height: 26px;">
+					</select>
+					</label> <label class="box-row-label">그룹명 : <input
+						id='group-table-group-text' class="box-row-textfiled" type="text" /></label>
+					<label class="box-row-label">설명 : <input
+						id='group-table-desc-text' class="box-row-textfiled" type="text" /></label>
+					<input id="group-id-text" type="hidden" />
+				</div>
 			</div>
+
+
 		</div>
 	</div>
 </section>

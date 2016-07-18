@@ -1,4 +1,147 @@
 --==========================================================================================
+-- DEVICE
+--==========================================================================================
+
+CREATE SEQUENCE device_id_seq;
+
+-- DEVICE_INSIGHT
+CREATE TABLE device_insight
+(
+  device_id integer NOT NULL DEFAULT nextval('device_id_seq'::regclass),
+  site_id integer NOT NULL,
+  host character varying(128) NOT NULL,
+  port integer NOT NULL DEFAULT 0,
+  version character varying(32),
+  enable_collect boolean DEFAULT true,
+  insert_time timestamp with time zone DEFAULT current_timestamp,
+  update_time timestamp with time zone DEFAULT current_timestamp,
+  CONSTRAINT device_insight_pkey PRIMARY KEY (device_id),
+  CONSTRAINT device_insight_host_unique UNIQUE (host, port)
+);
+
+-- DEVICE_PROBE
+CREATE TABLE device_probe
+(
+  device_id integer NOT NULL DEFAULT nextval('device_id_seq'::regclass),
+  site_id integer NOT NULL,
+  host character varying(128) NOT NULL,
+  port integer NOT NULL DEFAULT 0,
+  version character varying(32),
+  enable_collect_cam boolean DEFAULT true,
+  enable_control_ipv4 boolean DEFAULT false,
+  enable_control_ipv6 boolean DEFAULT true,
+  insert_time timestamp with time zone DEFAULT current_timestamp,
+  update_time timestamp with time zone DEFAULT current_timestamp,
+  CONSTRAINT device_probe_pkey PRIMARY KEY (device_id),
+  CONSTRAINT device_probe_host_unique UNIQUE (host, port)
+);
+
+-- DEVICE_DHCP
+CREATE TABLE device_dhcp
+(
+  device_id integer NOT NULL DEFAULT nextval('device_id_seq'::regclass),
+  site_id integer NOT NULL,
+  host character varying(128),
+  device_name character varying(128),
+  device_type character varying(32) NOT NULL,
+  snmp_community character varying(64) DEFAULT '',
+  snmp_version integer DEFAULT 2,
+  vendor character varying(64),
+  model character varying(128),
+  service_type integer,
+  sys_oid character varying(256),
+  sys_location character varying(256),
+  api_type character varying(64),
+  api_version character varying(64),
+  api_userid character varying(64),
+  api_password character varying(256),
+  insert_time timestamp with time zone DEFAULT current_timestamp,
+  update_time timestamp with time zone DEFAULT current_timestamp,
+  CONSTRAINT device_dhcp_pkey PRIMARY KEY (device_id),
+  CONSTRAINT device_dhcp_host_unique UNIQUE (host)
+);
+
+-- DEVICE_NETWORK
+CREATE TABLE device_network
+(
+  device_id integer NOT NULL DEFAULT nextval('device_id_seq'::regclass),
+  site_id integer NOT NULL,
+  host character varying(128),
+  device_type character varying(32) NOT NULL,
+  snmp_community character varying(64) DEFAULT '',
+  snmp_version integer DEFAULT 2,
+  host_name character varying(128),
+  vendor character varying(64),
+  model character varying(128),
+  service_type integer,
+  sys_oid character varying(256),
+  sys_location character varying(256),
+  description character varying(512),
+  insert_time timestamp with time zone DEFAULT current_timestamp,
+  update_time timestamp with time zone DEFAULT current_timestamp,
+  CONSTRAINT device_network_pkey PRIMARY KEY (device_id),
+  CONSTRAINT device_network_ip_unique UNIQUE (host)
+);
+COMMENT ON COLUMN device_network.device_type IS 'L2, L3, SWITCH, FIREWALL, ...';
+
+--==========================================================================================
+-- INTERFACE
+--==========================================================================================
+
+CREATE TABLE interface_info
+(
+  device_id integer NOT NULL,
+  if_number integer NOT NULL,
+  if_name character varying(128),
+  if_desc character varying(256),
+  if_speed integer NOT NULL,
+  if_macaddr character varying(20),
+  if_alias character varying(128),
+  admin_stauts integer DEFAULT 0,
+  oper_stauts integer DEFAULT 0,
+  user_desc character varying(256),
+  insert_time timestamp with time zone DEFAULT current_timestamp,
+  update_time timestamp with time zone DEFAULT current_timestamp,
+  CONSTRAINT interface_info_pkey PRIMARY KEY (device_id, if_number)
+);
+COMMENT ON COLUMN interface_info.if_speed IS 'Mbps';
+
+
+CREATE TABLE interface_ip
+(
+  device_id integer NOT NULL,
+  if_number integer NOT NULL,
+  if_ipaddr character varying(16),
+  network_ip character varying(16),
+  network_mask character varying(16),
+  insert_time timestamp with time zone DEFAULT current_timestamp,
+  update_time timestamp with time zone DEFAULT current_timestamp,
+  CONSTRAINT interface_ip_pkey PRIMARY KEY (device_id, if_number, if_ipaddr)
+);
+
+CREATE TABLE interface_cam
+(
+  device_id integer NOT NULL,
+  if_number integer NOT NULL,
+  macaddr character varying(18) NOT NULL DEFAULT '',
+  ipaddr character varying(40),
+  update_time timestamp with time zone DEFAULT current_timestamp,
+  CONSTRAINT interface_cam_pkey PRIMARY KEY (device_id, if_number, macaddr)
+);
+COMMENT ON COLUMN interface_cam.ipaddr IS 'IPv4 or IPv6';
+
+
+CREATE TABLE interface_cam_history
+(
+  device_id integer NOT NULL,
+  if_number integer NOT NULL,
+  macaddr character varying(18) NOT NULL,
+  ipaddr character varying(40),
+  insert_time timestamp with time zone DEFAULT current_timestamp,
+  CONSTRAINT interface_cam_history_pkey PRIMARY KEY (device_id, if_number, macaddr, insert_time)
+);
+
+--==========================================================================================
 -- SITE
 --==========================================================================================
 
@@ -26,105 +169,6 @@ CREATE TABLE public.site_blacklist_info
   update_time timestamp with time zone DEFAULT current_timestamp,
   CONSTRAINT site_blacklist_info_pkey PRIMARY KEY (blacklist_id)
 );
-
--- INSIGHT_INFO
-CREATE SEQUENCE public.site_insight_id_seq;
-CREATE TABLE public.site_insight_info
-(
-  insight_id integer NOT NULL DEFAULT nextval('site_insight_id_seq'::regclass),
-  site_id integer NOT NULL,
-  device_name character varying(64),
-  device_type character varying(64),
-  ipv4 character varying(16) DEFAULT '',
-  ipv6 character varying(40) DEFAULT '',
-  used_count integer,
-  limit_count integer,
-  enable_collect_cam boolean DEFAULT true,
-  enable_recv_syslog boolean DEFAULT true,
-  CONSTRAINT site_insight_info_pkey PRIMARY KEY (insight_id)
-);
-
--- SEGMENT_INFO
-CREATE SEQUENCE public.site_segment_id_seq;
-CREATE TABLE public.site_segment_info
-(
-  segment_id integer NOT NULL DEFAULT nextval('site_segment_id_seq'::regclass),
-  site_id integer NOT NULL,
-  network character varying(40) NOT NULL,
-  start_ip bigint,
-  end_ip bigint,
-  ip_count integer,
-  CONSTRAINT site_segment_info_pkey PRIMARY KEY (segment_id),
-  CONSTRAINT site_segment_network_unique UNIQUE (network)
-)
-
---==========================================================================================
--- DEVICE
---==========================================================================================
-CREATE SEQUENCE public.device_id_seq;
-CREATE TABLE public.device_info
-(
-  device_id integer NOT NULL DEFAULT nextval('device_id_seq'::regclass),
-  site_id integer NOT NULL,
-  ipv4 character varying(16) DEFAULT '',
-  ipv6 character varying(40) DEFAULT '',
-  device_name character varying(128),
-  device_type character varying(32) NOT NULL,
-  snmp_community character varying(64) DEFAULT '',
-  snmp_version integer DEFAULT 2,
-  vendor character varying(64),
-  model character varying(128),
-  service_type integer,
-  sys_oid character varying(256),
-  sys_location character varying(256),
-  api_type character varying(64),
-  api_version character varying(64),
-  api_userid character varying(64),
-  api_password character varying(256),
-  description character varying(512),
-  insert_time timestamp with time zone DEFAULT current_timestamp,
-  update_time timestamp with time zone DEFAULT current_timestamp,
-  CONSTRAINT device_info_pkey PRIMARY KEY (device_id),
-  CONSTRAINT device_ip_unique UNIQUE (ipv4, ipv6)
-);
-COMMENT ON COLUMN public.device_info.api_type IS 'WAPI, TELNET, ...';
-COMMENT ON COLUMN public.device_info.device_type IS 'DHCP, SWITCH, FIREWALL, ...';
-
-
-
-CREATE TABLE public.device_interface
-(
-  device_id integer NOT NULL,
-  if_number integer NOT NULL,
-  if_name character varying(128),
-  if_desc character varying(256),
-  if_speed integer NOT NULL,
-  if_macaddr character varying(20),
-  if_alias character varying(128),
-  admin_stauts integer DEFAULT 0,
-  oper_stauts integer DEFAULT 0,
-  user_desc character varying(256),
-  last_used_octect float,
-  last_used_time timestamp with time zone,
-  insert_time timestamp with time zone DEFAULT current_timestamp,
-  update_time timestamp with time zone DEFAULT current_timestamp,
-  CONSTRAINT device_interface_pkey PRIMARY KEY (device_id, if_number)
-);
-COMMENT ON COLUMN public.device_interface.if_speed IS 'Mbps';
-
-
-CREATE TABLE public.device_interface_ip
-(
-  device_id integer NOT NULL,
-  if_number integer NOT NULL,
-  if_ipaddr character varying(16),
-  network_ip character varying(16),
-  network_mask character varying(16),
-  insert_time timestamp with time zone DEFAULT current_timestamp,
-  update_time timestamp with time zone DEFAULT current_timestamp,
-  CONSTRAINT device_interface_ip_pkey PRIMARY KEY (device_id, if_number, if_ipaddr)
-);
-
 
 
 --==========================================================================================
@@ -265,16 +309,61 @@ CREATE TABLE public.dhcp_mac_filter
   CONSTRAINT dhcp_mac_filter_pkey PRIMARY KEY (filter_id)
 );
 
--- DHCP_NETWORK
-CREATE SEQUENCE public.dhcp_network_id_seq;
-CREATE TABLE public.dhcp_network
+-- DHCP_SEGMENT
+CREATE SEQUENCE public.dhcp_segment_id_seq;
+CREATE TABLE public.dhcp_segment
 (
-  dhcp_network_id integer NOT NULL DEFAULT nextval('dhcp_network_id_seq'::regclass),
+  segment_id integer NOT NULL DEFAULT nextval('dhcp_segment_id_seq'::regclass),
   site_id integer NOT NULL,
-  network character varying(32) NOT NULL,
-  start_ip character varying(16) NOT NULL,
-  end_ip character varying(16) NOT NULL,
-  
-  filter_name character varying(128),
+  network character varying(64) NOT NULL,
+  start_ip character varying(40) NOT NULL,
+  end_ip character varying(40) NOT NULL,
+  description character varying(256) NOT NULL,
   CONSTRAINT dhcp_network_id_pkey PRIMARY KEY (dhcp_network_id)
 );
+
+-- DHCP_LEASE_IP
+CREATE TABLE public.dhcp_lease_ip
+(
+  site_id integer NOT NULL,
+  segment_id integer NOT NULL,
+  ipaddr character varying(40) NOT NULL,
+  ip_type character varying(18),
+  macaddr character varying(18),
+  duid character varying(64),
+  hostname character varying(64),
+  state character varying(16),
+  username character varying(64),
+  fingerprint character varying(128),
+  OS character varying(128),  
+  lease_start_time timestamp with time zone,
+  lease_end_time timestamp with time zone,
+  last_discovered timestamp with time zone,
+  description character varying(256),
+  CONSTRAINT dhcp_lease_ip_pkey PRIMARY KEY (site_id, ipaddr)
+);
+
+
+/*
+-- client_history
+CREATE SEQUENCE client_id_seq;
+CREATE TABLE public.client_history
+(
+  client_id integer NOT NULL DEFAULT nextval('client_id_seq'::regclass),
+  
+  macaddr character varying(18),
+  duid character varying(64),
+  
+  segment_id integer NOT NULL,
+  ipaddr character varying(40) NOT NULL,
+  ip_type character varying(18),
+  
+  duid character varying(64),
+  hostname character varying(64),
+  state character varying(16),
+  
+  insert_time timestamp with time zone,
+  
+  CONSTRAINT client_history_pkey PRIMARY KEY (macaddr, duid, )
+);
+*/

@@ -122,7 +122,7 @@ function trClickEvent(clickedTr) {
                 });
             }
         }
-    })
+    });
 }
 
 // datatable_paginate의 위치 조정

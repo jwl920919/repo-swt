@@ -8,6 +8,7 @@ import org.mybatis.spring.support.SqlSessionDaoSupport;
 
 import Common.DAOInterface.SITE_INFO_interface;
 import Common.DTO.SITE_INFO_DTO;
+import scala.annotation.meta.param;
 
 public class SITE_INFO_Impl extends SqlSessionDaoSupport implements SITE_INFO_interface {
 

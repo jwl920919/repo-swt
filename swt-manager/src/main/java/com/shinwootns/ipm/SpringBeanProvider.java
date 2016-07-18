@@ -6,6 +6,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import com.shinwootns.ipm.config.ApplicationProperty;
+import com.shinwootns.ipm.data.mapper.DeviceMapper;
 import com.shinwootns.ipm.data.mapper.EventMapper;
 
 @Component
@@ -71,6 +72,25 @@ public class SpringBeanProvider {
     	}
     	
     	return eventMapper;
+    }
+    
+    public DeviceMapper getDeviceMapper() {
+    	
+    	if (_context == null)
+    		return null;
+    	
+    	DeviceMapper deviceMapper = null;
+    	
+    	try
+    	{
+    		deviceMapper = _context.getBean("deviceMapper", DeviceMapper.class);
+    	}
+    	catch(Exception ex) {
+    		_logger.error("SpringBeanProvider.getDeviceMapper().... failed");
+    		_logger.error(ex.getMessage(), ex);
+    	}
+    	
+    	return deviceMapper;
     }
     
     public StringRedisTemplate getRedisTemplate() { 
