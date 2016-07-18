@@ -1,5 +1,6 @@
 package com.shinwootns.ipm.worker.task;
 
+import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -10,11 +11,14 @@ import com.shinwootns.common.utils.NetworkUtils;
 import com.shinwootns.ipm.SpringBeanProvider;
 import com.shinwootns.ipm.data.entity.DeviceDhcp;
 import com.shinwootns.ipm.data.entity.DhcpNetwork;
+import com.shinwootns.ipm.data.entity.DhcpRange;
 import com.shinwootns.ipm.data.mapper.DhcpMapper;
 import com.shinwootns.ipm.service.handler.InfobloxWAPIHandler;
 import com.shinwootns.ipm.worker.BaseWorker;
 
 public class CollectDhcpTask extends BaseWorker{
+	
+	private final Logger _logger = Logger.getLogger(this.getClass());
 	
 	private DeviceDhcp device;
 	
@@ -45,60 +49,92 @@ public class CollectDhcpTask extends BaseWorker{
 			if (wapiHandler.Connect()) {
 				
 				// Network
-
 				jArray = wapiHandler.getNetworkInfo();
 				
-				if (jArray != null) {
-					
-					for(Object obj : jArray) {
-						
-						DhcpNetwork network = new DhcpNetwork();
-						network.setSiteId(this.device.getSiteId());
-						network.setNetwork(JsonUtils.getValueToString((JSONObject)obj, "network", ""));
-						network.setComment(JsonUtils.getValueToString((JSONObject)obj, "comment", ""));
-						
-						IPv4Range ipRange = NetworkUtils.getIPV4Range(network.getNetwork());
-						
-						if (ipRange != null) {
-							
-							String startIp = NetworkUtils.longToIPv4(ipRange.getStartIP());
-							String endIp = NetworkUtils.longToIPv4(ipRange.getEndIP());
-							
-							network.setStartIp(startIp);
-							network.setEndIp(endIp);
-							
-							int affected = dhcpMapper.updateDhcpNetwork(network);
-							
-							if (affected == 0) {
-								affected = dhcpMapper.insertDhcpNetwork(network);
-							}
-						}
-					}
-					
-					//System.out.println(jArray.toJSONString());
-				}
+				insertDhcpNetwork(dhcpMapper, jArray);
+				
+				// Range
+				jArray = wapiHandler.getRangeInfo();
+				insertDhcpRange(dhcpMapper, jArray);
 
-				System.out.println("================== Grid Info");
-
-				jArray = wapiHandler.getGridInfo();
-				if (jArray != null)
-					System.out.println(jArray.toJSONString());
-
-				System.out.println("================== Filter List");
-
+				// Filter
 				jArray = wapiHandler.getFilterInfo();
 				if (jArray != null)
 					System.out.println(jArray.toJSONString());
 
-				System.out.println("================== Range Info");
-
-				jArray = wapiHandler.getRangeInfo();
-				if (jArray != null)
-					System.out.println(jArray.toJSONString());
+				
+				
 			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	private void insertDhcpNetwork(DhcpMapper dhcpMapper, JSONArray jArray) {
+		
+		if (jArray != null) {
+			
+			for(Object obj : jArray) {
+				
+				try
+				{
+				
+					DhcpNetwork network = new DhcpNetwork();
+					network.setSiteId(this.device.getSiteId());
+					network.setNetwork(JsonUtils.getValueToString((JSONObject)obj, "network", ""));
+					network.setComment(JsonUtils.getValueToString((JSONObject)obj, "comment", ""));
+					
+					IPv4Range ipRange = NetworkUtils.getIPV4Range(network.getNetwork());
+					
+					if (ipRange != null) {
+						
+						String startIp = NetworkUtils.longToIPv4(ipRange.getStartIP());
+						String endIp = NetworkUtils.longToIPv4(ipRange.getEndIP());
+						
+						network.setStartIp(startIp);
+						network.setEndIp(endIp);
+						
+						int affected = dhcpMapper.updateDhcpNetwork(network);
+						
+						if (affected == 0) {
+							affected = dhcpMapper.insertDhcpNetwork(network);
+						}
+					}
+				}
+				catch(Exception ex) {
+					_logger.error(ex.getMessage(), ex);
+				}
+			}
+		}
+	}
+	
+	private void insertDhcpRange(DhcpMapper dhcpMapper, JSONArray jArray) {
+		
+		if (jArray != null) {
+			
+			for(Object obj : jArray) {
+				
+				try
+				{
+				
+					DhcpRange range = new DhcpRange();
+					range.setSiteId(this.device.getSiteId());
+					range.setNetwork(JsonUtils.getValueToString((JSONObject)obj, "network", ""));
+					range.setComment(JsonUtils.getValueToString((JSONObject)obj, "comment", ""));
+					range.setStartIp(JsonUtils.getValueToString((JSONObject)obj, "start_addr", ""));
+					range.setEndIp(JsonUtils.getValueToString((JSONObject)obj, "end_addr", ""));
+						
+					int affected = dhcpMapper.updateDhcpRange(range);
+					
+					if (affected == 0) {
+						affected = dhcpMapper.insertDhcpRange(range);
+					}
+				}
+				catch(Exception ex) {
+					_logger.error(ex.getMessage(), ex);
+				}
+			}
 		}
 	}
 
