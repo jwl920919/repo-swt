@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.shinwootns.ipm.data.entity.DhcpMacFilter;
 import com.shinwootns.ipm.data.entity.DhcpNetwork;
 import com.shinwootns.ipm.data.entity.DhcpRange;
 
@@ -21,4 +22,10 @@ public interface DhcpMapper {
 	int insertDhcpRange(DhcpRange range);
 	int updateDhcpRange(DhcpRange range);
 	int deleteDhcpRange(int site_id, String network, String startIP);
+	
+	// DHCP Mac Filter
+	List<DhcpMacFilter> selectDhcpFilterBySiteId(int site_id);
+	int insertDhcpFilter(DhcpMacFilter range);
+	int updateDhcpFilter(DhcpMacFilter range);
+	int deleteDhcpFilter(int site_id, String filter_name);
 }

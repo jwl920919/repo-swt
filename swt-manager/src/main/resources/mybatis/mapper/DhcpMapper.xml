@@ -60,4 +60,33 @@
 			WHERE site_id=#{site_id} AND network = #{network} AND start_ip = #{start_ip}
 		]]>
 	</delete>
+	
+	<!-- ############## DHCP Filter ##############-->
+	<select id="selectDhcpFilterBySiteId" resultType="com.shinwootns.ipm.data.entity.DhcpMacFilter">
+		<![CDATA[
+			SELECT * FROM dhcp_mac_filter WHERE site_id=#{site_id}
+		]]>
+	</select>
+	
+	<insert id="insertDhcpFilter" parameterType="com.shinwootns.ipm.data.entity.DhcpMacFilter">
+		<![CDATA[
+			INSERT INTO dhcp_mac_filter (site_id, filter_name, insert_time, update_time)
+			VALUES ( #{site_id}, #{filter_name}, now(), now() ) 
+		]]>
+	</insert>
+	
+	<update id="updateDhcpFilter" parameterType="com.shinwootns.ipm.data.entity.DhcpMacFilter">
+		<![CDATA[
+			UPDATE dhcp_mac_filter
+			SET update_time=now()
+			WHERE site_id=#{site_id} AND filter_name=#{filter_name}
+		]]>
+	</update>
+	
+	<delete id="deleteDhcpFilter">
+		<![CDATA[
+			DELETE FROM dhcp_mac_filter
+			WHERE site_id=#{site_id} AND filter_name=#{filter_name}
+		]]>
+	</delete>
 </mapper>

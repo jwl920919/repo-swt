@@ -10,6 +10,7 @@ import com.shinwootns.common.utils.JsonUtils;
 import com.shinwootns.common.utils.NetworkUtils;
 import com.shinwootns.ipm.SpringBeanProvider;
 import com.shinwootns.ipm.data.entity.DeviceDhcp;
+import com.shinwootns.ipm.data.entity.DhcpMacFilter;
 import com.shinwootns.ipm.data.entity.DhcpNetwork;
 import com.shinwootns.ipm.data.entity.DhcpRange;
 import com.shinwootns.ipm.data.mapper.DhcpMapper;
@@ -37,6 +38,7 @@ public class CollectDhcpTask extends BaseWorker{
 		
 		
 		InfobloxWAPIHandler wapiHandler;
+		
 		try {
 			
 			wapiHandler = new InfobloxWAPIHandler(
@@ -48,22 +50,20 @@ public class CollectDhcpTask extends BaseWorker{
 			
 			if (wapiHandler.Connect()) {
 				
-				// Network
+				// Collect Network
 				jArray = wapiHandler.getNetworkInfo();
 				
 				insertDhcpNetwork(dhcpMapper, jArray);
 				
-				// Range
+				// Collect Range
 				jArray = wapiHandler.getRangeInfo();
+				
 				insertDhcpRange(dhcpMapper, jArray);
 
-				// Filter
+				// Collect Filter
 				jArray = wapiHandler.getFilterInfo();
-				if (jArray != null)
-					System.out.println(jArray.toJSONString());
-
 				
-				
+				insertDhcpFilter(dhcpMapper, jArray);
 			}
 			
 		} catch (Exception e) {
@@ -79,7 +79,6 @@ public class CollectDhcpTask extends BaseWorker{
 				
 				try
 				{
-				
 					DhcpNetwork network = new DhcpNetwork();
 					network.setSiteId(this.device.getSiteId());
 					network.setNetwork(JsonUtils.getValueToString((JSONObject)obj, "network", ""));
@@ -97,9 +96,8 @@ public class CollectDhcpTask extends BaseWorker{
 						
 						int affected = dhcpMapper.updateDhcpNetwork(network);
 						
-						if (affected == 0) {
+						if (affected == 0)
 							affected = dhcpMapper.insertDhcpNetwork(network);
-						}
 					}
 				}
 				catch(Exception ex) {
@@ -127,9 +125,8 @@ public class CollectDhcpTask extends BaseWorker{
 						
 					int affected = dhcpMapper.updateDhcpRange(range);
 					
-					if (affected == 0) {
+					if (affected == 0)
 						affected = dhcpMapper.insertDhcpRange(range);
-					}
 				}
 				catch(Exception ex) {
 					_logger.error(ex.getMessage(), ex);
@@ -138,4 +135,29 @@ public class CollectDhcpTask extends BaseWorker{
 		}
 	}
 
+	private void insertDhcpFilter(DhcpMapper dhcpMapper, JSONArray jArray) {
+		
+		if (jArray != null) {
+			
+			for(Object obj : jArray) {
+				
+				try
+				{
+				
+					DhcpMacFilter filter = new DhcpMacFilter();
+					filter.setSiteId(this.device.getSiteId());
+					filter.setFilterName(JsonUtils.getValueToString((JSONObject)obj, "name", ""));
+					
+						
+					int affected = dhcpMapper.updateDhcpFilter(filter);
+					
+					if (affected == 0)
+						affected = dhcpMapper.insertDhcpFilter(filter);
+				}
+				catch(Exception ex) {
+					_logger.error(ex.getMessage(), ex);
+				}
+			}
+		}
+	}
 }
