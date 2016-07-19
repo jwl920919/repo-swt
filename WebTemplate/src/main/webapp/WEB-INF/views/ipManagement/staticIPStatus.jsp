@@ -2,9 +2,17 @@
 <%@ page import="Common.Helper.LanguageHelper"%>
 <!-- IP Map style -->
 <link rel="stylesheet" href="resources/css/ipmap.css">
+<link rel="stylesheet" href="resources/plugins/datatables/buttons.dataTables.min.css">
 
 <script src="resources/js/main/main.js"></script>
+<script src="resources/plugins/datatables/dataTables.buttons.min.js"></script>
+<script src="resources/plugins/datatables/buttons.flash.min.js"></script>
+<script src="resources/plugins/datatables/buttons.html5.min.js"></script>
+<script src="resources/plugins/datatables/buttons.colVis.min.js"></script>
+<script src="resources/plugins/datatables/pdfmake.min.js"></script>
+<script src="resources/plugins/datatables/vfs_fonts.js"></script>
 <script src="resources/js/common/Datatable-Essential.js"></script>
+<script src="resources/plugins/datatables/jszip.min.js"></script>
 <script src="resources/js/ipManagement/staticIPStatus.js"></script>
 
 <!-- Alert Start -->
@@ -37,10 +45,10 @@
 							<tbody>
 							</tbody>
 						</table>
-						<!-- 						<div class="col-sm-1"> -->
-						<!-- 							<input id='delete-button' class='btn btn-primary' type="button" -->
-						<%-- 								value="<%=LanguageHelper.GetLanguage("delete")%>" /> --%>
-						<!-- 						</div> -->
+												<div class="col-sm-1">
+													<input id='delete-button' class='btn btn-primary' type="button"
+														value="<%=LanguageHelper.GetLanguage("delete")%>"  onclick="excelExport();" />
+												</div>
 					</center>
 				</div>
 			</div>
@@ -73,10 +81,10 @@
 										style="width: 98%">
 										<thead>
 											<tr>
-												<th width="16%"><%=LanguageHelper.GetLanguage("ip")%></th>
-												<th width="16%"><%=LanguageHelper.GetLanguage("user")%></th>
+												<th width="10%"><%=LanguageHelper.GetLanguage("ip")%></th>
 												<th width="16%"><%=LanguageHelper.GetLanguage("mac")%></th>
-												<th width="16%"><%=LanguageHelper.GetLanguage("ststus")%></th>
+												<th width="16%"><%=LanguageHelper.GetLanguage("user")%></th>
+												<th width="10%"><%=LanguageHelper.GetLanguage("status")%></th>
 												<th width="16%"><%=LanguageHelper.GetLanguage("type")%></th>
 												<th width="*">client</th>
 											</tr>

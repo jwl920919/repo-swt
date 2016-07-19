@@ -12,8 +12,9 @@ div.row {
 	margin-left: -15px;
 	margin-bottom: -3px;
 }
+
 div.box-body {
-	margin-bottom:-11px;
+	margin-bottom: -11px;
 }
 
 .essential-table tbody tr.selected {
@@ -76,11 +77,12 @@ td.essential-td-cursor-pointer {
 .essential-table>tbody>tr:nth-of-type(odd) {
 	background-color: #efefef;
 }
+
 .btn {
 	height: 30px;
-    font-size: 12px;
-    vertical-align: middle;
-    padding: 5px 10px 5px 10px;
+	font-size: 12px;
+	vertical-align: middle;
+	padding: 5px 10px 5px 10px;
 }
 
 #datatable_paginate {

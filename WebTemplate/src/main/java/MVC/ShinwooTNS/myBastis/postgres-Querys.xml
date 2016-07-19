@@ -193,8 +193,7 @@
 	<!-- Description : 사업장 정보 조회 -->
 	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
 	<select id="select_SITE_INFO" resultType="Common.DTO.SITE_INFO_DTO">
-		SELECT
-		site_id,site_name,site_code,description FROM site_info;
+		SELECT site_id, site_name, site_code, description, site_master FROM site_info;
 	</select>
 
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->

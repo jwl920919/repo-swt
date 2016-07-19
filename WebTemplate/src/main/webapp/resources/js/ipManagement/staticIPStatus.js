@@ -1,7 +1,8 @@
+var table;
 $(document).ready(function() {
 console.log($('#datatable'));
 	$("#layDiv").css("visibility","hidden");		
-	$('#datatable').DataTable(
+	table = $('#datatable').DataTable(
             {
                 "destroy" : true,
                 "paging" : true,
@@ -30,6 +31,12 @@ console.log($('#datatable'));
                               {"data" : "comment"},
                               {"data" : "utilization"},
                               {"data" : "site"}, ],
+                              dom: 'Bfrtip',
+                              buttons: [{extend: 'copyHtml5',exportOptions: {columns: [ 1, ':visible' ]}},
+                                        {extend: 'excelHtml5',exportOptions: {columns: ':visible'}},
+                                        {extend: 'pdfHtml5',exportOptions: {columns: [ 1, 2, 3, 4 ]}},
+//                                  	'colvis'
+                              ]
             });
 	
 	//검색, 엔트리 위치 정렬
@@ -120,8 +127,8 @@ function tdClickEvent(obj){
 				                   { className: "essential-td-left", "targets": [ 5 ] }],
 	                "order" : [ [ 0, 'asc' ] ],
 	                "columns" : [ {"data" : "ip"},
-	                              {"data" : "name"},
 	                              {"data" : "mac"},
+	                              {"data" : "name"},
 	                              {"data" : "status"},
 	                              {"data" : "type"},
 	                              {"data" : "client"} ],
@@ -135,7 +142,9 @@ function tdClickEvent(obj){
 		    var d_filter = $('#datatable_detail_wrapper .row:first .col-sm-6:eq(1)');
 		    d_length.append(d_filter);
 		    d_wrap.prepend(d_filter);
-		});	
+		});
+		
+		
 		mapDataCall(segmentid);
 	}
 }
@@ -177,14 +186,12 @@ function fnIPMapInit (ipaddress, ActiveLeaseArr, ConflictArr, ExclusionArr, Fixe
 		PendingArr,	RangeArr, ReservedrangeArr, UnmanagedArr, UnusedArr, UsedArr) {
     var str = [], ipNo = -1, className, address, status;
     
-    console.log(ActiveLeaseArr);
     for (i = 0; i < ipMapSettings.rows; i++) {
         for (j = 0; j < ipMapSettings.cols; j++) {
             //ipNo = (i + j * ipMapSettings.rows + 1);
             ipNo += 1;
             className = ipMapSettings.rectangleCss + ' ' + ipMapSettings.rowCssPrefix + i.toString() + ' ' + ipMapSettings.colCssPrefix + j.toString();
             
-            console.log(String.format("{0}.{1}", ipaddress, ipNo));
             if ($.isArray(ActiveLeaseArr) && $.inArray(ipNo, ActiveLeaseArr) != -1) {
                 className += ' ' + ipMapSettings.activeLeaseCss;
                 address = String.format("{0}.{1}", ipaddress, ipNo); 
@@ -267,9 +274,17 @@ rectangleClick = function (obj) {
     if ($(obj).hasClass(ipMapSettings.usedCss)) {
         alert('This ip is already reserved');
     }
+    else if ($(obj).hasClass(ipMapSettings.activeLeaseCss)) {
+    	//console.log("hasClass : " + $(obj).hasClass(ipMapSettings.selectingCss));
+    	$(obj).removeClass(ipMapSettings.activeLeaseCss).addClass(ipMapSettings.activeLeaseCss+ "ORG").addClass(ipMapSettings.selectingCss);
+    }
+    else if ($(obj).hasClass(ipMapSettings.activeLeaseCss+"ORG")) {
+    	//console.log("hasClass : " + $(obj).hasClass(ipMapSettings.selectingCss));
+    	$(obj).removeClass(ipMapSettings.activeLeaseCss+ "ORG").removeClass(ipMapSettings.selectingCss).addClass(ipMapSettings.activeLeaseCss);
+    }
     else if ($(obj).hasClass(ipMapSettings.selectingCss)) {
     	//console.log("hasClass : " + $(obj).hasClass(ipMapSettings.selectingCss));
-    	$(obj).removeClass(ipMapSettings.selectingCss).addClass(ipMapSettings.unusedCss);
+    	$(obj).removeClass(ipMapSettings.selectingCss);//.addClass(ipMapSettings.unusedCss);
     }
     else if ($(obj).hasClass(ipMapSettings.unusedCss)) {
         $(obj).removeClass(ipMapSettings.unusedCss).addClass(ipMapSettings.selectingCss);
@@ -346,3 +361,22 @@ function mapRefresh(){
 	tdClickEvent(selectedRow);
 }
 
+function excelExport(){
+	console.log("excelExport");
+	console.log(table.dataTableSettings[0]);
+//	if (true) {
+//		var myTableSettings = table.dataTableSettings[0];
+//
+//		$.ajax(
+//		    {
+//		        url: "GenerateCsv",
+//		        type: "POST",
+//		        data: myTableSettings.oAjaxData,
+//		        success: function (data) {
+//		            document.location.href = 'DownloadCsv';
+//		        },
+//		        error: function () {}
+//		        });
+//	}
+	
+}
