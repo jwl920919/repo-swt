@@ -314,7 +314,6 @@ CREATE TABLE public.dhcp_range
   network character varying(64) NOT NULL,
   start_ip character varying(40) NOT NULL,
   end_ip character varying(40) NOT NULL,
-  comment character varying(256) NOT NULL,
   insert_time timestamp with time zone DEFAULT current_timestamp,
   update_time timestamp with time zone DEFAULT current_timestamp,
   CONSTRAINT dhcp_range_pkey PRIMARY KEY (site_id, network, start_ip, end_ip)

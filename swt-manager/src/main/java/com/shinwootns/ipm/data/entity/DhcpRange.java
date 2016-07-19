@@ -11,19 +11,10 @@ public class DhcpRange implements Serializable {
 	private String network;
 	private String start_ip;
 	private String end_ip;
-	private String comment;
 	private Timestamp insert_time;
 	private Timestamp update_time;
 
 	public DhcpRange() {
-	}
-
-	public String getComment() {
-		return this.comment;
-	}
-
-	public void setComment(String comment) {
-		this.comment = comment;
 	}
 
 	public Timestamp getInsertTime() {

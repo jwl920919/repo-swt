@@ -3,7 +3,7 @@
 
 <mapper namespace="com.shinwootns.ipm.data.mapper.DhcpMapper">
 
-	<!-- ############## DHCP NETWORK ##############-->
+	<!-- ############################ DHCP NETWORK ############################ -->
 	<select id="selectDhcpNetworkBySiteId" resultType="com.shinwootns.ipm.data.entity.DhcpNetwork">
 		<![CDATA[
 			SELECT * FROM dhcp_network WHERE site_id=#{site_id}
@@ -32,7 +32,7 @@
 		]]>
 	</delete>
 	
-	<!-- ############## DHCP RANGE ##############-->
+	<!-- ############################ DHCP RANGE ############################ -->
 	<select id="selectDhcpRangeBySiteId" resultType="com.shinwootns.ipm.data.entity.DhcpRange">
 		<![CDATA[
 			SELECT * FROM dhcp_range WHERE site_id=#{site_id}
@@ -41,15 +41,15 @@
 	
 	<insert id="insertDhcpRange" parameterType="com.shinwootns.ipm.data.entity.DhcpRange">
 		<![CDATA[
-			INSERT INTO dhcp_range (site_id, network, start_ip, end_ip, comment)
-			VALUES ( #{site_id}, #{network}, #{start_ip}, #{end_ip}, #{comment} ) 
+			INSERT INTO dhcp_range (site_id, network, start_ip, end_ip)
+			VALUES ( #{site_id}, #{network}, #{start_ip}, #{end_ip} ) 
 		]]>
 	</insert>
 	
 	<update id="updateDhcpRange" parameterType="com.shinwootns.ipm.data.entity.DhcpRange">
 		<![CDATA[
 			UPDATE dhcp_range
-			SET end_ip=#{end_ip}, comment=#{comment}, update_time=now()
+			SET end_ip=#{end_ip}, update_time=now()
 			WHERE site_id=#{site_id} AND network =#{network} AND start_ip = #{start_ip}
 		]]>
 	</update>
@@ -61,7 +61,7 @@
 		]]>
 	</delete>
 	
-	<!-- ############## DHCP Filter ##############-->
+	<!-- ############################ DHCP Filter ############################ -->
 	<select id="selectDhcpFilterBySiteId" resultType="com.shinwootns.ipm.data.entity.DhcpMacFilter">
 		<![CDATA[
 			SELECT * FROM dhcp_mac_filter WHERE site_id=#{site_id}

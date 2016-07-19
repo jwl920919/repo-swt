@@ -18,8 +18,6 @@ public class DhcpRange implements Serializable {
 	@EmbeddedId
 	private DhcpRangePK id;
 
-	private String comment;
-
 	@Column(name="insert_time")
 	private Timestamp insertTime;
 
@@ -35,14 +33,6 @@ public class DhcpRange implements Serializable {
 
 	public void setId(DhcpRangePK id) {
 		this.id = id;
-	}
-
-	public String getComment() {
-		return this.comment;
-	}
-
-	public void setComment(String comment) {
-		this.comment = comment;
 	}
 
 	public Timestamp getInsertTime() {

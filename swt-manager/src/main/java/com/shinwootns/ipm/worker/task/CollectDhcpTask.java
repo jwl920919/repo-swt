@@ -32,19 +32,29 @@ public class CollectDhcpTask extends BaseWorker{
 		if (this.device == null)
 			return;
 		
+		try
+		{
+			collectDhcpData(
+					this.device.getHost()
+					, this.device.getWapiUserid()
+					, CryptoUtils.Decode_AES128(this.device.getWapiPassword()));
+		}
+		catch(Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+		}
+	}
+	
+	public void collectDhcpData(String host, String userid, String password)
+	{
 		DhcpMapper dhcpMapper = SpringBeanProvider.getInstance().getDhcpMapper();
 		if (dhcpMapper == null)
 			return;
-		
 		
 		InfobloxWAPIHandler wapiHandler;
 		
 		try {
 			
-			wapiHandler = new InfobloxWAPIHandler(
-					this.device.getHost(), 
-					this.device.getWapiUserid(), 
-					CryptoUtils.Decode_AES128(this.device.getWapiPassword()));
+			wapiHandler = new InfobloxWAPIHandler(host, userid, password);
 
 			JSONArray jArray;
 			
@@ -66,8 +76,8 @@ public class CollectDhcpTask extends BaseWorker{
 				insertDhcpFilter(dhcpMapper, jArray);
 			}
 			
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception ex) {
+			_logger.error(ex.getMessage(), ex);
 		}
 	}
 	
@@ -115,11 +125,9 @@ public class CollectDhcpTask extends BaseWorker{
 				
 				try
 				{
-				
 					DhcpRange range = new DhcpRange();
 					range.setSiteId(this.device.getSiteId());
 					range.setNetwork(JsonUtils.getValueToString((JSONObject)obj, "network", ""));
-					range.setComment(JsonUtils.getValueToString((JSONObject)obj, "comment", ""));
 					range.setStartIp(JsonUtils.getValueToString((JSONObject)obj, "start_addr", ""));
 					range.setEndIp(JsonUtils.getValueToString((JSONObject)obj, "end_addr", ""));
 						
@@ -143,7 +151,6 @@ public class CollectDhcpTask extends BaseWorker{
 				
 				try
 				{
-				
 					DhcpMacFilter filter = new DhcpMacFilter();
 					filter.setSiteId(this.device.getSiteId());
 					filter.setFilterName(JsonUtils.getValueToString((JSONObject)obj, "name", ""));
