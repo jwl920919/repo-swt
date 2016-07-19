@@ -78,6 +78,60 @@ contentLoad = function(url){
 	$("#content_frame").load(url);	
 }
 
+/**
+ * 메인페이지 상단의 사업장 선택 dropdown-menu 설정
+**/
 fnGetSiteInfo = function(){
+	var str = [];
 	
+    $.ajax({
+        url : 'select_site_info',
+        type : "POST",
+        data : null,
+        dataType : "text",
+        success : function(data) {
+            var jsonObj = eval("(" + data + ')');
+	            if (jsonObj.result == true) {
+            	$.each(jsonObj.resultValue, function (index, obj) {   
+            		
+            		str.push('<li><a href="javascript:void(0);" onclick="fnChangeSiteInfo(' + obj.site_id + ',\'' + obj.site_name + '\',\'' + obj.site_master + '\');">'+
+//					str.push('<li><a href="javascript:void(0);" onclick="fnChangeSiteInfo(\"'+ obj.site_id + '\",\"' + obj.site_name + '\",\"' + obj.site_master +'\);">'+
+							 '<h3>' + obj.site_name + '	<small>(' + obj.description + ')</small>'+
+							 '</h3></a></li>');	
+
+	            });
+            	$('#mainPageSiteInfo').html(str.join(''));
+            }
+        },
+        complete: function(data) {
+        }
+    });
+}
+
+/**
+ * 메인페이지 상단의 사업장 선택 dropdown-menu의 사이트 선택 클릭 이벤트
+ * 세션의 사업장 정보를 변경해준다.
+**/
+fnChangeSiteInfo = function(siteid, siteName, master){
+var param = '';
+param += "site_id=" + siteid;
+param += "&site_name=" + siteName;
+param += "&site_master=" + master;
+	
+    $.ajax({
+        url : 'set_Sesstion',
+        type : "POST",
+        data : param,
+        dataType : "text",
+        success : function(data) {
+            var jsonObj = eval("(" + data + ')');
+            if (jsonObj.result == true) {
+            	console.log(jsonObj.resultValue.newSite_name);
+            	console.log($('#siteName').text());
+        		$('#siteName').text(jsonObj.resultValue.newSite_name); 
+            }
+        },
+        complete: function(data) {
+        }
+    });
 }
