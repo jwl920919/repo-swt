@@ -3,6 +3,7 @@
 <%
 	String userID = (String) session.getAttribute("user_id");
 	String userName = (String) session.getAttribute("user_name");
+	String siteid = (String) session.getAttribute("site_id");
 	String siteName = (String) session.getAttribute("site_name");
 	String siteMaster = (String) session.getAttribute("site_master");
 %>
@@ -92,11 +93,10 @@
 <script src="resources/plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="resources/plugins/datatables/dataTables.bootstrap.min.js"></script>
 <!-- resources/js/common/Datatable-Essential.js은 각 페이지에 넣어주지 않으면 #datatable 객체에 접근이 불가능 하여 각 페이지에 입력해주어야됨. -->
-<script src="resources/js/main/main.js"></script>
 <script type="text/javascript" type="text/javascript">
 $(document).ready(function() {
 
-	console.log("menu : " + "${menuHTML}");
+	//console.log("menu : " + "${menuHTML}");
 	$("#ulMenuArea").append("${menuHTML}");
 	$("#divVersion").append("<b>Version</b> 1.0.0");
 	
@@ -109,9 +109,14 @@ $(document).ready(function() {
  	if (siteMaster == "t") {
 		fnGetSiteInfo();
 	}
-
+ 	else{
+        $('#siteDropdown').attr("style","visibility: hidden");
+        $('#siteDropdownLi').attr("disabled","true");
+        $('#siteDropdownLi').removeClass("dropdown tasks-menu");
+ 	}
 });
 </script>
+<script src="resources/js/main/main.js"></script>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper">
@@ -234,77 +239,18 @@ $(document).ready(function() {
 <!-- 					</ul></li> -->
 				
 				<!-- Tasks: style can be found in dropdown.less -->
-				<li class="dropdown tasks-menu"><a href="#"
-					class="dropdown-toggle" data-toggle="dropdown"><span class="hidden-xs"><%=siteName%></span>
+				<li class="dropdown tasks-menu" id="siteDropdownLi"><a href="#"
+					class="dropdown-toggle" data-toggle="dropdown"><span class="hidden-xs" id="siteName"><%=siteName%></span>
 				</a>
-					<ul class="dropdown-menu">
-						<li class="header">You have 9 tasks</li>
+					<ul class="dropdown-menu" id="siteDropdown">
+						<li class="header">사업장 정보</li>
 						<li>
 							<!-- inner menu: contains the actual data -->
-							<ul class="menu">
-								<li>
-									<!-- Task item --> <a href="#">
-										<h3>
-											Design some buttons <small class="pull-right">20%</small>
-										</h3>
-										<div class="progress xs">
-											<div class="progress-bar progress-bar-aqua"
-												style="width: 20%;" role="progressbar" aria-valuenow="20"
-												aria-valuemin="0" aria-valuemax="100">
-												<span class="sr-only">20% Complete</span>
-											</div>
-										</div>
-								</a>
-								</li>
-								<!-- end task item -->
-								<li>
-									<!-- Task item --> <a href="#">
-										<h3>
-											Create a nice theme <small class="pull-right">40%</small>
-										</h3>
-										<div class="progress xs">
-											<div class="progress-bar progress-bar-green"
-												style="width: 40%;" role="progressbar" aria-valuenow="20"
-												aria-valuemin="0" aria-valuemax="100">
-												<span class="sr-only">40% Complete</span>
-											</div>
-										</div>
-								</a>
-								</li>
-								<!-- end task item -->
-								<li>
-									<!-- Task item --> <a href="#">
-										<h3>
-											Some task I need to do <small class="pull-right">60%</small>
-										</h3>
-										<div class="progress xs">
-											<div class="progress-bar progress-bar-red"
-												style="width: 60%;" role="progressbar" aria-valuenow="20"
-												aria-valuemin="0" aria-valuemax="100">
-												<span class="sr-only">60% Complete</span>
-											</div>
-										</div>
-								</a>
-								</li>
-								<!-- end task item -->
-								<li>
-									<!-- Task item --> <a href="#">
-										<h3>
-											Make beautiful transitions <small class="pull-right">80%</small>
-										</h3>
-										<div class="progress xs">
-											<div class="progress-bar progress-bar-yellow"
-												style="width: 80%;" role="progressbar" aria-valuenow="20"
-												aria-valuemin="0" aria-valuemax="100">
-												<span class="sr-only">80% Complete</span>
-											</div>
-										</div>
-								</a>
-								</li>
-								<!-- end task item -->
+							<ul class="menu" id="mainPageSiteInfo">
+								<!-- 사업장 정보가 추가 될 영역 -->
 							</ul>
 						</li>
-						<li class="footer"><a href="#">View all tasks</a></li>
+<!-- 						<li class="footer"><a href="#">View all tasks</a></li> -->
 					</ul></li>
 				<!-- User Account: style can be found in dropdown.less -->
 				<li class="dropdown user user-menu"><a href="#"

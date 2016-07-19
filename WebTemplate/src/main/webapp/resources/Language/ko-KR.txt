@@ -130,5 +130,7 @@
     "previous": 									"이전",
     "ip":		 									"IP",
     "mac":		 									"MAC",
-    "user":		 									"사용자"
+    "user":		 									"사용자",
+    "start":		 								"시작",
+    "end":		 									"끝"
 }

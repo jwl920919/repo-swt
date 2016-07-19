@@ -35,11 +35,10 @@
 						<table id="datatable" class="essential-table" style="width: 98%">
 							<thead>
 								<tr>
-									<th style="display: none;"></th>
 									<th width="25%"><%=LanguageHelper.GetLanguage("network")%></th>
+									<th width="25%"><%=LanguageHelper.GetLanguage("start")%></th>
+									<th width="25%"><%=LanguageHelper.GetLanguage("end")%></th>
 									<th width="25%"><%=LanguageHelper.GetLanguage("comment")%></th>
-									<th width="25%"><%=LanguageHelper.GetLanguage("utilization")%></th>
-									<th width="25%"><%=LanguageHelper.GetLanguage("site")%></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -81,12 +80,19 @@
 										style="width: 98%">
 										<thead>
 											<tr>
-												<th width="10%"><%=LanguageHelper.GetLanguage("ip")%></th>
-												<th width="16%"><%=LanguageHelper.GetLanguage("mac")%></th>
-												<th width="16%"><%=LanguageHelper.GetLanguage("user")%></th>
-												<th width="10%"><%=LanguageHelper.GetLanguage("status")%></th>
-												<th width="16%"><%=LanguageHelper.GetLanguage("type")%></th>
-												<th width="*">client</th>
+												<th width="16%"><%=LanguageHelper.GetLanguage("ipaddr")%></th>
+												<th width="16%"><%=LanguageHelper.GetLanguage("ip_type")%></th>
+												<th width="10%"><%=LanguageHelper.GetLanguage("macaddr")%></th>
+												<th width="16%"><%=LanguageHelper.GetLanguage("duid")%></th>
+												<th width="10%"><%=LanguageHelper.GetLanguage("hostname")%></th>
+												<th width="16%"><%=LanguageHelper.GetLanguage("state")%></th>
+												<th width="16%"><%=LanguageHelper.GetLanguage("username")%></th>
+												<th width="10%"><%=LanguageHelper.GetLanguage("fingerprint")%></th>
+												<th width="16%"><%=LanguageHelper.GetLanguage("os")%></th>
+												<th width="16%"><%=LanguageHelper.GetLanguage("lease_start_time")%></th>
+												<th width="10%"><%=LanguageHelper.GetLanguage("lease_end_time")%></th>
+												<th width="16%"><%=LanguageHelper.GetLanguage("last_discovered")%></th>
+												<th width="*"><%=LanguageHelper.GetLanguage("description")%></th>
 											</tr>
 										</thead>
 										<tbody>
