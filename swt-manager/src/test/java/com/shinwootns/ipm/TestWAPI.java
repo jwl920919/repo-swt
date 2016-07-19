@@ -3,6 +3,8 @@ package com.shinwootns.ipm;
 import org.json.simple.JSONArray;
 import org.junit.Test;
 
+import com.shinwootns.ipm.service.handler.InfobloxWAPIHandler;
+
 public class TestWAPI {
 
 	/*
@@ -74,7 +76,6 @@ public class TestWAPI {
 	}
 	*/
 	
-	/*
 	@Test
 	public void testWAPI_LeaseIPList() {
 
@@ -86,7 +87,7 @@ public class TestWAPI {
 			
 			System.out.println("================== Get Lease-IP List");
 
-			jArray = wapiHandler.getLeaseIPList(200);
+			jArray = wapiHandler.getLeaseIPList(100);
 			
 			if (jArray != null)
 				System.out.println(jArray.toJSONString());
@@ -94,5 +95,4 @@ public class TestWAPI {
 			System.out.println("Count = " + jArray.size());
 		}
 	}
-	*/
 }

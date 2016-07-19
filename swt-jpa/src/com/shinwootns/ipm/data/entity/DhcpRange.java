@@ -6,20 +6,17 @@ import java.sql.Timestamp;
 
 
 /**
- * The persistent class for the dhcp_mac_filter database table.
+ * The persistent class for the dhcp_range database table.
  * 
  */
 @Entity
-@Table(name="dhcp_mac_filter")
-@NamedQuery(name="DhcpMacFilter.findAll", query="SELECT d FROM DhcpMacFilter d")
-public class DhcpMacFilter implements Serializable {
+@Table(name="dhcp_range")
+@NamedQuery(name="DhcpRange.findAll", query="SELECT d FROM DhcpRange d")
+public class DhcpRange implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId
-	private DhcpMacFilterPK id;
-
-	@Column(name="filter_desc")
-	private String filterDesc;
+	private DhcpRangePK id;
 
 	@Column(name="insert_time")
 	private Timestamp insertTime;
@@ -27,23 +24,15 @@ public class DhcpMacFilter implements Serializable {
 	@Column(name="update_time")
 	private Timestamp updateTime;
 
-	public DhcpMacFilter() {
+	public DhcpRange() {
 	}
 
-	public DhcpMacFilterPK getId() {
+	public DhcpRangePK getId() {
 		return this.id;
 	}
 
-	public void setId(DhcpMacFilterPK id) {
+	public void setId(DhcpRangePK id) {
 		this.id = id;
-	}
-
-	public String getFilterDesc() {
-		return this.filterDesc;
-	}
-
-	public void setFilterDesc(String filterDesc) {
-		this.filterDesc = filterDesc;
 	}
 
 	public Timestamp getInsertTime() {

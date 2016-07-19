@@ -13,6 +13,7 @@
     
     <mappers>
     	<mapper resource="mybatis/mapper/DeviceMapper.xml"/>
+    	<mapper resource="mybatis/mapper/DhcpMapper.xml"/>
     	
     	<!-- 
         <mapper resource="mybatis/mapper/SiteMapper.xml"/>

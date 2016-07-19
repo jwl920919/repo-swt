@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.shinwootns.ipm.data.mapper.DhcpMapper">
+
+	<!-- ############################ DHCP NETWORK ############################ -->
+	<select id="selectDhcpNetworkBySiteId" resultType="com.shinwootns.ipm.data.entity.DhcpNetwork">
+		<![CDATA[
+			SELECT * FROM dhcp_network WHERE site_id=#{site_id}
+		]]>
+	</select>
+	
+	<insert id="insertDhcpNetwork" parameterType="com.shinwootns.ipm.data.entity.DhcpNetwork">
+		<![CDATA[
+			INSERT INTO dhcp_network (site_id, network, start_ip, end_ip, comment)
+			VALUES ( #{site_id}, #{network}, #{start_ip}, #{end_ip}, #{comment} ) 
+		]]>
+	</insert>
+	
+	<update id="updateDhcpNetwork" parameterType="com.shinwootns.ipm.data.entity.DhcpNetwork">
+		<![CDATA[
+			UPDATE dhcp_network
+			SET start_ip=#{start_ip}, end_ip=#{end_ip}, comment=#{comment}, update_time=now()
+			WHERE site_id=#{site_id} AND network =#{network}
+		]]>
+	</update>
+	
+	<delete id="deleteDhcpNetwork">
+		<![CDATA[
+			DELETE FROM dhcp_network
+			WHERE site_id=#{site_id} AND network =#{network}
+		]]>
+	</delete>
+	
+	<!-- ############################ DHCP RANGE ############################ -->
+	<select id="selectDhcpRangeBySiteId" resultType="com.shinwootns.ipm.data.entity.DhcpRange">
+		<![CDATA[
+			SELECT * FROM dhcp_range WHERE site_id=#{site_id}
+		]]>
+	</select>
+	
+	<insert id="insertDhcpRange" parameterType="com.shinwootns.ipm.data.entity.DhcpRange">
+		<![CDATA[
+			INSERT INTO dhcp_range (site_id, network, start_ip, end_ip)
+			VALUES ( #{site_id}, #{network}, #{start_ip}, #{end_ip} ) 
+		]]>
+	</insert>
+	
+	<update id="updateDhcpRange" parameterType="com.shinwootns.ipm.data.entity.DhcpRange">
+		<![CDATA[
+			UPDATE dhcp_range
+			SET end_ip=#{end_ip}, update_time=now()
+			WHERE site_id=#{site_id} AND network =#{network} AND start_ip = #{start_ip}
+		]]>
+	</update>
+	
+	<delete id="deleteDhcpRange">
+		<![CDATA[
+			DELETE FROM dhcp_range
+			WHERE site_id=#{site_id} AND network = #{network} AND start_ip = #{start_ip}
+		]]>
+	</delete>
+	
+	<!-- ############################ DHCP Filter ############################ -->
+	<select id="selectDhcpFilterBySiteId" resultType="com.shinwootns.ipm.data.entity.DhcpMacFilter">
+		<![CDATA[
+			SELECT * FROM dhcp_mac_filter WHERE site_id=#{site_id}
+		]]>
+	</select>
+	
+	<insert id="insertDhcpFilter" parameterType="com.shinwootns.ipm.data.entity.DhcpMacFilter">
+		<![CDATA[
+			INSERT INTO dhcp_mac_filter (site_id, filter_name, insert_time, update_time)
+			VALUES ( #{site_id}, #{filter_name}, now(), now() ) 
+		]]>
+	</insert>
+	
+	<update id="updateDhcpFilter" parameterType="com.shinwootns.ipm.data.entity.DhcpMacFilter">
+		<![CDATA[
+			UPDATE dhcp_mac_filter
+			SET update_time=now()
+			WHERE site_id=#{site_id} AND filter_name=#{filter_name}
+		]]>
+	</update>
+	
+	<delete id="deleteDhcpFilter">
+		<![CDATA[
+			DELETE FROM dhcp_mac_filter
+			WHERE site_id=#{site_id} AND filter_name=#{filter_name}
+		]]>
+	</delete>
+	
+	<!-- ############################ DHCP Lease IP ############################ -->
+	<select id="selectDhcpLeaseIpBySiteId" resultType="com.shinwootns.ipm.data.entity.DhcpLeaseIp">
+		<![CDATA[
+			SELECT * FROM dhcp_lease_ip WHERE site_id=#{site_id}
+		]]>
+	</select>
+	
+	<insert id="insertDhcpLeaseIp" parameterType="com.shinwootns.ipm.data.entity.DhcpLeaseIp">
+		<![CDATA[
+			INSERT INTO dhcp_lease_ip (site_id, network, ipaddr, ip_type, macaddr, duid, hostname, state, 
+       			username, fingerprint, os, lease_start_time, lease_end_time, last_discovered)
+			VALUES ( #{site_id}, #{network}, #{ipaddr}, #{ip_type}, #{macaddr}, #{duid}, #{hostname}, #{state}, 
+       			#{username}, #{fingerprint}, #{os}, #{lease_start_time}, #{lease_end_time}, #{last_discovered} ) 
+		]]>
+	</insert>
+	
+	<update id="updateDhcpLeaseIp" parameterType="com.shinwootns.ipm.data.entity.DhcpLeaseIp">
+		<![CDATA[
+			UPDATE dhcp_lease_ip
+			SET network=#{network}, ip_type=#{ip_type}, macaddr=#{macaddr}, duid=#{duid}, hostname=#{hostname}, state=#{state} 
+       			, username=#{username}, fingerprint=#{fingerprint}, os=#{os}
+       			, lease_start_time=#{lease_start_time}, lease_end_time=#{lease_end_time}, last_discovered=#{last_discovered}
+			WHERE site_id=#{site_id} AND ipaddr=#{ipaddr}
+		]]>
+	</update>
+	
+	<delete id="deleteDhcpLeaseIp">
+		<![CDATA[
+			DELETE FROM dhcp_lease_ip
+			WHERE site_id=#{site_id} AND ipaddr=#{ipaddr}
+		]]>
+	</delete>
+</mapper>

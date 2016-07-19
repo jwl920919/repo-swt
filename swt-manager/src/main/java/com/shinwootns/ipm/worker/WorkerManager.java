@@ -104,4 +104,8 @@ public class WorkerManager {
 		
 		_logger.info("ServiceManager....... stop");
 	}
+	
+	public void AddTask(BaseWorker task) {
+		_taskPool.addTask(task);
+	}
 }

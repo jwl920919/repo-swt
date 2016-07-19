@@ -38,5 +38,9 @@
 		<class>com.shinwootns.ipm.data.entity.InterfaceInfoPK</class>
 		<class>com.shinwootns.ipm.data.entity.InterfaceIp</class>
 		<class>com.shinwootns.ipm.data.entity.InterfaceIpPK</class>
+		<class>com.shinwootns.ipm.data.entity.DhcpMacFilterPK</class>
+		<class>com.shinwootns.ipm.data.entity.DhcpNetworkPK</class>
+		<class>com.shinwootns.ipm.data.entity.DhcpRange</class>
+		<class>com.shinwootns.ipm.data.entity.DhcpRangePK</class>
 	</persistence-unit>
 </persistence>

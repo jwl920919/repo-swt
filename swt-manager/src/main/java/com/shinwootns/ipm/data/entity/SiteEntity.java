@@ -3,10 +3,6 @@ package com.shinwootns.ipm.data.entity;
 import java.io.Serializable;
 
 
-/**
- * The persistent class for the site_info database table.
- * 
- */
 public class SiteEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
