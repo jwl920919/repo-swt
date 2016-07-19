@@ -45,7 +45,7 @@ public class IPManagementActionController {
 		int totalCount = 0;
 				
 		try {			
-			String[] columns = { "network", "comment", "utilization", "site" };
+			String[] columns = { "network", "start_ip", "end_ip", "comment" };
 			HashMap<String, Object> parameters = Common.Helper.DatatableHelper.getDatatableParametas(request,columns,0);
 			
 			dataList = ipManagementService.select_IP_MANAGEMENT_SEGMENT(parameters);

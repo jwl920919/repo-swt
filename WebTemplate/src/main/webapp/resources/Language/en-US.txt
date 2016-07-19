@@ -130,5 +130,7 @@
     "previous": 									"Previous",
     "ip":		 									"IP",
     "mac":		 									"MAC",
-    "user":		 									"user"
+    "user":		 									"user",
+    "start":		 								"start",
+    "end":		 									"end"
 }

@@ -22,19 +22,21 @@ console.log($('#datatable'));
                         data.search_key = data.search.value;
                     }
                 },
-			    "columnDefs": [{ className: "essential-td-display_none", "targets": [ 0 ] },
-			                   { className: "essential-td-left essential-td-cursor-pointer", "targets": [ 1 ] },
-			                   { className: "essential-td-left", "targets": [ 2 ] }],
+			    "columnDefs": [
+//			                   { className: "essential-td-display_none", "targets": [ 0 ] },
+			                   { className: "essential-td-left essential-td-cursor-pointer", "targets": [ 0 ] },
+			                   { className: "essential-td-left", "targets": [ 1 ] },
+			                   { className: "essential-td-left", "targets": [ 2 ] },
+			                   { className: "essential-td-left", "targets": [ 3 ] }],
                 "order" : [ [ 1, 'asc' ] ],
-                "columns" : [ {"data" : "seq"},
-                              {"data" : "network"},
-                              {"data" : "comment"},
-                              {"data" : "utilization"},
-                              {"data" : "site"}, ],
+                "columns" : [ {"data" : "network"},
+                              {"data" : "start_ip"},
+                              {"data" : "end_ip"},
+                              {"data" : "comment"}, ],
                               dom: 'Bfrtip',
                               buttons: [{extend: 'copyHtml5',exportOptions: {columns: [ 1, ':visible' ]}},
                                         {extend: 'excelHtml5',exportOptions: {columns: ':visible'}},
-                                        {extend: 'pdfHtml5',exportOptions: {columns: [ 1, 2, 3, 4 ]}},
+                                        {extend: 'pdfHtml5',exportOptions: {columns: [ 0, 1, 2, 3 ]}},
 //                                  	'colvis'
                               ]
             });
@@ -49,8 +51,8 @@ console.log($('#datatable'));
 	});	
 
 	//datatable 첫번째 td 클릭 이벤트 바인딩
-	//$('#datatable').delegate('tbody>tr>td:first-child', 'click', function() {
-	$('#datatable').delegate('tbody>tr>td:nth-child(2)', 'click', function() {
+	$('#datatable').delegate('tbody>tr>td:first-child', 'click', function() {
+		//$('#datatable').delegate('tbody>tr>td:nth-child(2)', 'click', function() {
 		//console.log("td click event : " + this);
 	    tdClickEvent(this);
 	});
