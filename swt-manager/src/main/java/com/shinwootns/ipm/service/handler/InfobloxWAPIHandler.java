@@ -274,10 +274,18 @@ public class InfobloxWAPIHandler {
 		 
 		  result: [
 					{
-						_ref: "lease/ZG5zLmxlYXNlJDAvMTkyLjE2OC4xLjE5MC8wLw:192.168.1.190/default",
-						address: "192.168.1.190",
-						network_view: "default"
-					}
+					"_ref": "lease/ZG5zLmxlYXNlJDAvMTkyLjE2OC4xLjIxOC8wLw:192.168.1.218/default",
+					"address": "192.168.1.218",
+					"binding_state": "ACTIVE",
+					"client_hostname": "android-f10498439ff2a2af",
+					"ends": 1468940548,
+					"hardware": "94:d7:71:fc:92:19",
+					"network": "192.168.1.0/24",
+					"never_ends": false,
+					"never_starts": false,
+					"protocol": "IPV4",
+					"starts": 1468854148
+					},
 			]
 		]*/
 		
@@ -362,5 +370,41 @@ public class InfobloxWAPIHandler {
 		}
 		
 		return resultArray;
+	}
+	
+	public JSONArray getFixedIPList() {
+		/*[
+		  	{
+				"_ref": "fixedaddress/ZG5zLmZpeGVkX2FkZHJlc3MkMTkyLjE2OC4xLjExMi4wLi4:192.168.1.112/default",
+				"comment": "jwlee-pc",
+				"disable": false,
+				"ipv4addr": "192.168.1.112",
+				"mac": "40:8d:5c:7b:50:7e",
+				"network": "192.168.1.0/24"
+			}
+		]*/
+		
+		try
+		{
+			Map params = new HashMap<String, String>();
+			params.put("_return_fields", "ipv4addr,network,mac,comment,disable,name");
+			params.put("_return_type", "json");
+		
+			String value = restClient.Get("/wapi/v2.3/fixedaddress", params);
+			
+			if (value == null)
+				return null;
+			
+			// Change unescape-unicode
+			value = StringUtils.unescapeUnicodeString(value);
+			
+			// JSONArray Parser
+			return JsonUtils.parseJSONArray(value);
+		}
+		catch(Exception ex) {
+			_logger.fatal(ex.getMessage(), ex);
+		}
+		
+		return null;
 	}
 }

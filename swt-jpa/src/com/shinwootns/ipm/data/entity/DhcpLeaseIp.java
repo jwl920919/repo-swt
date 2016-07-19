@@ -40,12 +40,14 @@ public class DhcpLeaseIp implements Serializable {
 
 	private String macaddr;
 
+	private String network;
+
 	private String os;
 
-	@Column(name="segment_id")
-	private Integer segmentId;
-
 	private String state;
+
+	@Column(name="update_time")
+	private Timestamp updateTime;
 
 	private String username;
 
@@ -132,6 +134,14 @@ public class DhcpLeaseIp implements Serializable {
 		this.macaddr = macaddr;
 	}
 
+	public String getNetwork() {
+		return this.network;
+	}
+
+	public void setNetwork(String network) {
+		this.network = network;
+	}
+
 	public String getOs() {
 		return this.os;
 	}
@@ -140,20 +150,20 @@ public class DhcpLeaseIp implements Serializable {
 		this.os = os;
 	}
 
-	public Integer getSegmentId() {
-		return this.segmentId;
-	}
-
-	public void setSegmentId(Integer segmentId) {
-		this.segmentId = segmentId;
-	}
-
 	public String getState() {
 		return this.state;
 	}
 
 	public void setState(String state) {
 		this.state = state;
+	}
+
+	public Timestamp getUpdateTime() {
+		return this.updateTime;
+	}
+
+	public void setUpdateTime(Timestamp updateTime) {
+		this.updateTime = updateTime;
 	}
 
 	public String getUsername() {

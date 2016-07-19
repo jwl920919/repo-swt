@@ -1,8 +1,11 @@
 package com.shinwootns.ipm;
 
+import java.sql.Timestamp;
+
 import org.json.simple.JSONArray;
 import org.junit.Test;
 
+import com.shinwootns.common.utils.TimeUtils;
 import com.shinwootns.ipm.service.handler.InfobloxWAPIHandler;
 
 public class TestWAPI {
@@ -78,6 +81,19 @@ public class TestWAPI {
 	
 	@Test
 	public void testWAPI_LeaseIPList() {
+		
+		/*
+		// 1467004494
+		
+		System.out.println(System.currentTimeMillis() / 1000);
+		System.out.println(1467004494);
+		
+		long temp = 1467004494;
+
+		Timestamp time = TimeUtils.convertLongToTimestamp(temp*1000);
+		
+		System.out.println(time.toString());
+		*/
 
 		InfobloxWAPIHandler wapiHandler = new InfobloxWAPIHandler("192.168.1.11", "admin", "infoblox");
 

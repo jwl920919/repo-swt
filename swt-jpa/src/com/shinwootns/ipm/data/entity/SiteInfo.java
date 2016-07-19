@@ -23,6 +23,9 @@ public class SiteInfo implements Serializable {
 	@Column(name="site_code")
 	private String siteCode;
 
+	@Column(name="site_master")
+	private Boolean siteMaster;
+
 	@Column(name="site_name")
 	private String siteName;
 
@@ -51,6 +54,14 @@ public class SiteInfo implements Serializable {
 
 	public void setSiteCode(String siteCode) {
 		this.siteCode = siteCode;
+	}
+
+	public Boolean getSiteMaster() {
+		return this.siteMaster;
+	}
+
+	public void setSiteMaster(Boolean siteMaster) {
+		this.siteMaster = siteMaster;
 	}
 
 	public String getSiteName() {

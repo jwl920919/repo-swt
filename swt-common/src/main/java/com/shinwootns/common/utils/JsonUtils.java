@@ -60,6 +60,36 @@ public class JsonUtils {
 		return (Long)value;
 	}
 	
+	public static boolean getValueToBoolean(JSONObject jObj, String key, boolean defaultValue) {
+		
+		if (jObj == null)
+			return defaultValue;
+		
+		Object value = jObj.get(key);
+		
+		if (value == null)
+			return defaultValue;
+		
+		if (value instanceof Boolean) {
+			return (Boolean)value;
+		}
+		else if (value instanceof Integer) {
+			return ((Integer)value) == 0 ? false : true;
+		}
+		else if (value instanceof String) {
+			
+			String tempValue = (String)value;
+			if ( tempValue.toUpperCase().equals("TRUE"))
+				return true;
+			else if ( ((String)value).toUpperCase().equals("FALSE") )
+				return false;
+			else
+				return defaultValue;
+		}
+		
+		return defaultValue;
+	}
+	
 	public static Timestamp getValueToTimestamp(JSONObject jObj, String key, long defaultValue) {
 		
 		if (jObj == null)
