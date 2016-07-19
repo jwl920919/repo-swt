@@ -8,8 +8,10 @@ import com.shinwootns.common.utils.CryptoUtils;
 import com.shinwootns.common.utils.IPv4Range;
 import com.shinwootns.common.utils.JsonUtils;
 import com.shinwootns.common.utils.NetworkUtils;
+import com.shinwootns.common.utils.TimeUtils;
 import com.shinwootns.ipm.SpringBeanProvider;
 import com.shinwootns.ipm.data.entity.DeviceDhcp;
+import com.shinwootns.ipm.data.entity.DhcpLeaseIp;
 import com.shinwootns.ipm.data.entity.DhcpMacFilter;
 import com.shinwootns.ipm.data.entity.DhcpNetwork;
 import com.shinwootns.ipm.data.entity.DhcpRange;
@@ -74,6 +76,11 @@ public class CollectDhcpTask extends BaseWorker{
 				jArray = wapiHandler.getFilterInfo();
 				
 				insertDhcpFilter(dhcpMapper, jArray);
+				
+				// Collect Lease IP
+				jArray = wapiHandler.getLeaseIPList(200);
+				
+				insertDhcpLeaseIP(dhcpMapper, jArray);
 			}
 			
 		} catch (Exception ex) {
@@ -160,6 +167,60 @@ public class CollectDhcpTask extends BaseWorker{
 					
 					if (affected == 0)
 						affected = dhcpMapper.insertDhcpFilter(filter);
+				}
+				catch(Exception ex) {
+					_logger.error(ex.getMessage(), ex);
+				}
+			}
+		}
+	}
+	
+	private void insertDhcpLeaseIP(DhcpMapper dhcpMapper, JSONArray jArray) {
+		
+		if (jArray != null) {
+			
+			for(Object obj : jArray) {
+				
+				try
+				{
+					DhcpLeaseIp ip = new DhcpLeaseIp();
+					ip.setSiteId(this.device.getSiteId());
+					ip.setIpaddr(JsonUtils.getValueToString((JSONObject)obj, "address", ""));
+					ip.setNetwork(JsonUtils.getValueToString((JSONObject)obj, "network", ""));
+					ip.setIpType(JsonUtils.getValueToString((JSONObject)obj, "protocol", ""));
+					ip.setMacaddr(JsonUtils.getValueToString((JSONObject)obj, "hardware", "").toUpperCase());
+					ip.setHostname(JsonUtils.getValueToString((JSONObject)obj, "client_hostname", ""));
+					
+					// Binding State ( ABANDONED, ACTIVE, BACKUP, DECLINED, EXPIRED, FREE, OFFERED, RELEASED, RESET, STATIC)
+					ip.setState(JsonUtils.getValueToString((JSONObject)obj, "binding_state", ""));
+					
+					ip.setUsername(JsonUtils.getValueToString((JSONObject)obj, "username", ""));
+					
+					long startTime = JsonUtils.getValueToNumber((JSONObject)obj, "starts", 0);
+					if (startTime > 0)
+						ip.setLeaseStartTime(TimeUtils.convertLongToTimestamp(startTime));
+					
+					long endTime = JsonUtils.getValueToNumber((JSONObject)obj, "ends", 0);
+					if (endTime > 0)
+						ip.setLeaseEndTime(TimeUtils.convertLongToTimestamp(endTime));
+					
+					long lastDiscoverd = JsonUtils.getValueToNumber((JSONObject)obj, "discovered_data.last_discovered", 0);
+					if (lastDiscoverd > 0)
+						ip.setLastDiscovered(TimeUtils.convertLongToTimestamp(lastDiscoverd));
+					
+					// Fingerprint ???
+					//ip.setFingerprint(JsonUtils.getValueToString((JSONObject)obj, "fingerprint", "").toUpperCase());
+					
+					// OS ????
+					//ip.setOs(JsonUtils.getValueToString((JSONObject)obj, "os", "").toUpperCase());
+					
+					// IPv6 duid
+					ip.setDuid(JsonUtils.getValueToString((JSONObject)obj, "ipv6_duid", "").toUpperCase());
+					
+					int affected = dhcpMapper.updateDhcpLeaseIp(ip);
+					
+					if (affected == 0)
+						affected = dhcpMapper.insertDhcpLeaseIp(ip);
 				}
 				catch(Exception ex) {
 					_logger.error(ex.getMessage(), ex);

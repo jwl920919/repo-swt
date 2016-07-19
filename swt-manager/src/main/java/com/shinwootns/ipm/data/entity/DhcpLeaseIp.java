@@ -19,7 +19,7 @@ public class DhcpLeaseIp implements Serializable {
 	private Timestamp lease_start_time;
 	private String macaddr;
 	private String os;
-	private Integer segment_id;
+	private String network;
 	private String state;
 	private String username;
 
@@ -122,12 +122,12 @@ public class DhcpLeaseIp implements Serializable {
 		this.os = os;
 	}
 
-	public Integer getSegmentId() {
-		return this.segment_id;
+	public String getNetwork() {
+		return this.network;
 	}
 
-	public void setSegmentId(Integer segmentId) {
-		this.segment_id = segmentId;
+	public void setNetwork(String network) {
+		this.network = network;
 	}
 
 	public String getState() {

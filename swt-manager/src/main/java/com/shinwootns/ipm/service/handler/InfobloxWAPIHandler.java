@@ -292,6 +292,18 @@ public class InfobloxWAPIHandler {
 			params.put("_max_results", splitCount);
 			params.put("_return_as_object", 1);
 			params.put("_return_type", "json");
+			
+			// return fields (address,network,binding_state,.....)
+			StringBuilder sb = new StringBuilder();
+			sb.append("address,network,binding_state,protocol");
+			sb.append(",client_hostname,hardware,username");
+			sb.append(",starts,ends");
+			sb.append(",never_ends,never_starts");
+			sb.append(",ipv6_duid,ipv6_iaid,ipv6_preferred_lifetime");
+			sb.append(",discovered_data.last_discovered");
+			//sb.append(",discovered_data.os");	// Search Only
+			
+			params.put("_return_fields", sb.toString());
 
 			String value = restClient.Get("/wapi/v2.3/lease", params);
 			

@@ -89,4 +89,37 @@
 			WHERE site_id=#{site_id} AND filter_name=#{filter_name}
 		]]>
 	</delete>
+	
+	<!-- ############################ DHCP Lease IP ############################ -->
+	<select id="selectDhcpLeaseIpBySiteId" resultType="com.shinwootns.ipm.data.entity.DhcpLeaseIp">
+		<![CDATA[
+			SELECT * FROM dhcp_lease_ip WHERE site_id=#{site_id}
+		]]>
+	</select>
+	
+	<insert id="insertDhcpLeaseIp" parameterType="com.shinwootns.ipm.data.entity.DhcpLeaseIp">
+		<![CDATA[
+			INSERT INTO dhcp_lease_ip (site_id, network, ipaddr, ip_type, macaddr, duid, hostname, state, 
+       			username, fingerprint, os, lease_start_time, lease_end_time, last_discovered)
+			VALUES ( #{site_id}, #{network}, #{ipaddr}, #{ip_type}, #{macaddr}, #{duid}, #{hostname}, #{state}, 
+       			#{username}, #{fingerprint}, #{os}, #{lease_start_time}, #{lease_end_time}, #{last_discovered} ) 
+		]]>
+	</insert>
+	
+	<update id="updateDhcpLeaseIp" parameterType="com.shinwootns.ipm.data.entity.DhcpLeaseIp">
+		<![CDATA[
+			UPDATE dhcp_lease_ip
+			SET network=#{network}, ip_type=#{ip_type}, macaddr=#{macaddr}, duid=#{duid}, hostname=#{hostname}, state=#{state} 
+       			, username=#{username}, fingerprint=#{fingerprint}, os=#{os}
+       			, lease_start_time=#{lease_start_time}, lease_end_time=#{lease_end_time}, last_discovered=#{last_discovered}
+			WHERE site_id=#{site_id} AND ipaddr=#{ipaddr}
+		]]>
+	</update>
+	
+	<delete id="deleteDhcpLeaseIp">
+		<![CDATA[
+			DELETE FROM dhcp_lease_ip
+			WHERE site_id=#{site_id} AND ipaddr=#{ipaddr}
+		]]>
+	</delete>
 </mapper>

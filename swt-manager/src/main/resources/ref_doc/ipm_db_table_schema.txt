@@ -332,10 +332,10 @@ CREATE TABLE public.dhcp_mac_filter
 
 
 -- DHCP_LEASE_IP
-CREATE TABLE public.dhcp_lease_ip
+CREATE TABLE dhcp_lease_ip
 (
   site_id integer NOT NULL,
-  segment_id integer NOT NULL,
+  network character varying(64) NOT NULL,
   ipaddr character varying(40) NOT NULL,
   ip_type character varying(18),
   macaddr character varying(18),
@@ -351,6 +351,7 @@ CREATE TABLE public.dhcp_lease_ip
   description character varying(256),
   CONSTRAINT dhcp_lease_ip_pkey PRIMARY KEY (site_id, ipaddr)
 );
+COMMENT ON COLUMN dhcp_lease_ip.state IS 'ABANDONED, ACTIVE, BACKUP, DECLINED, EXPIRED, FREE, OFFERED, RELEASED, RESET, STATIC';
 
 
 /*
