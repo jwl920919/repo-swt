@@ -1,8 +1,11 @@
 package com.shinwootns.ipm;
 
+import java.sql.Timestamp;
+
 import org.json.simple.JSONArray;
 import org.junit.Test;
 
+import com.shinwootns.common.utils.TimeUtils;
 import com.shinwootns.ipm.service.handler.InfobloxWAPIHandler;
 
 public class TestWAPI {
@@ -75,10 +78,11 @@ public class TestWAPI {
 		}
 	}
 	*/
-	
+
+	/*
 	@Test
 	public void testWAPI_LeaseIPList() {
-
+		
 		InfobloxWAPIHandler wapiHandler = new InfobloxWAPIHandler("192.168.1.11", "admin", "infoblox");
 
 		JSONArray jArray;
@@ -87,7 +91,7 @@ public class TestWAPI {
 			
 			System.out.println("================== Get Lease-IP List");
 
-			jArray = wapiHandler.getLeaseIPList(100);
+			jArray = wapiHandler.getLeaseIpAll(100);
 			
 			if (jArray != null)
 				System.out.println(jArray.toJSONString());
@@ -95,4 +99,5 @@ public class TestWAPI {
 			System.out.println("Count = " + jArray.size());
 		}
 	}
+	*/
 }

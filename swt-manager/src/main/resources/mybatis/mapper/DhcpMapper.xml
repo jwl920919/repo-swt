@@ -100,9 +100,9 @@
 	<insert id="insertDhcpLeaseIp" parameterType="com.shinwootns.ipm.data.entity.DhcpLeaseIp">
 		<![CDATA[
 			INSERT INTO dhcp_lease_ip (site_id, network, ipaddr, ip_type, macaddr, duid, hostname, state, 
-       			username, fingerprint, os, lease_start_time, lease_end_time, last_discovered)
+       			username, fingerprint, os, lease_start_time, lease_end_time, last_discovered, update_time)
 			VALUES ( #{site_id}, #{network}, #{ipaddr}, #{ip_type}, #{macaddr}, #{duid}, #{hostname}, #{state}, 
-       			#{username}, #{fingerprint}, #{os}, #{lease_start_time}, #{lease_end_time}, #{last_discovered} ) 
+       			#{username}, #{fingerprint}, #{os}, #{lease_start_time}, #{lease_end_time}, #{last_discovered}, now() ) 
 		]]>
 	</insert>
 	
@@ -112,6 +112,7 @@
 			SET network=#{network}, ip_type=#{ip_type}, macaddr=#{macaddr}, duid=#{duid}, hostname=#{hostname}, state=#{state} 
        			, username=#{username}, fingerprint=#{fingerprint}, os=#{os}
        			, lease_start_time=#{lease_start_time}, lease_end_time=#{lease_end_time}, last_discovered=#{last_discovered}
+       			, update_time=now()
 			WHERE site_id=#{site_id} AND ipaddr=#{ipaddr}
 		]]>
 	</update>
@@ -119,6 +120,35 @@
 	<delete id="deleteDhcpLeaseIp">
 		<![CDATA[
 			DELETE FROM dhcp_lease_ip
+			WHERE site_id=#{site_id} AND ipaddr=#{ipaddr}
+		]]>
+	</delete>
+	
+	<!-- ############################ DHCP Fixed IP ############################ -->
+	<select id="selectDhcpFixedIpBySiteId" resultType="com.shinwootns.ipm.data.entity.DhcpFixedIp">
+		<![CDATA[
+			SELECT * FROM dhcp_fixed_ip WHERE site_id=#{site_id}
+		]]>
+	</select>
+	
+	<insert id="insertDhcpFixedIp" parameterType="com.shinwootns.ipm.data.entity.DhcpFixedIp">
+		<![CDATA[
+			INSERT INTO dhcp_fixed_ip (site_id, network, ipaddr, macaddr, comment, disable, update_time)
+			VALUES ( #{site_id}, #{network}, #{ipaddr}, #{macaddr}, #{comment}, #{disable}, now() ) 
+		]]>
+	</insert>
+	
+	<update id="updateDhcpFixedIp" parameterType="com.shinwootns.ipm.data.entity.DhcpFixedIp">
+		<![CDATA[
+			UPDATE dhcp_fixed_ip
+			SET network=#{network}, macaddr=#{macaddr}, comment=#{comment}, disable=#{disable}, update_time=now()
+			WHERE site_id=#{site_id} AND ipaddr=#{ipaddr}
+		]]>
+	</update>
+	
+	<delete id="deleteDhcpFixedIp">
+		<![CDATA[
+			DELETE FROM dhcp_fixed_ip
 			WHERE site_id=#{site_id} AND ipaddr=#{ipaddr}
 		]]>
 	</delete>

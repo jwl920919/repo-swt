@@ -330,6 +330,19 @@ CREATE TABLE public.dhcp_mac_filter
   CONSTRAINT dhcp_mac_filter_pkey PRIMARY KEY (site_id, filter_name)
 );
 
+-- DHCP FIXED IP
+CREATE TABLE public.dhcp_fixed_ip
+(
+  site_id integer NOT NULL,
+  network character varying(64) NOT NULL,
+  ipaddr character varying(40) NOT NULL,
+  macaddr character varying(18),
+  comment character varying(256),
+  disable boolean DEFAULT false,
+  update_time timestamp with time zone DEFAULT current_timestamp,
+  CONSTRAINT dhcp_fixed_ip_pkey PRIMARY KEY (site_id, ipaddr)
+);
+
 
 -- DHCP_LEASE_IP
 CREATE TABLE dhcp_lease_ip
@@ -349,6 +362,7 @@ CREATE TABLE dhcp_lease_ip
   lease_end_time timestamp with time zone,
   last_discovered timestamp with time zone,
   description character varying(256),
+  update_time timestamp with time zone DEFAULT current_timestamp,
   CONSTRAINT dhcp_lease_ip_pkey PRIMARY KEY (site_id, ipaddr)
 );
 COMMENT ON COLUMN dhcp_lease_ip.state IS 'ABANDONED, ACTIVE, BACKUP, DECLINED, EXPIRED, FREE, OFFERED, RELEASED, RESET, STATIC';

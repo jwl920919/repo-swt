@@ -22,7 +22,6 @@
 		<class>com.shinwootns.ipm.data.entity.DeviceInterfacePK</class>
 		<class>com.shinwootns.ipm.data.entity.DeviceInterfaceIpPK</class>
 		<class>com.shinwootns.ipm.data.entity.SiteBlacklistInfo</class>
-		<class>com.shinwootns.ipm.data.entity.SiteSegmentInfo</class>
 		<class>com.shinwootns.ipm.data.entity.AuthMenu</class>
 		<class>com.shinwootns.ipm.data.entity.DeviceDhcp</class>
 		<class>com.shinwootns.ipm.data.entity.DeviceInsight</class>
@@ -42,5 +41,7 @@
 		<class>com.shinwootns.ipm.data.entity.DhcpNetworkPK</class>
 		<class>com.shinwootns.ipm.data.entity.DhcpRange</class>
 		<class>com.shinwootns.ipm.data.entity.DhcpRangePK</class>
+		<class>com.shinwootns.ipm.data.entity.DhcpFixedIp</class>
+		<class>com.shinwootns.ipm.data.entity.DhcpFixedIpPK</class>
 	</persistence-unit>
 </persistence>

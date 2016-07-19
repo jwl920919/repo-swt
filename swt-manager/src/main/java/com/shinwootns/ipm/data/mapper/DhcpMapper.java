@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.shinwootns.ipm.data.entity.DhcpFixedIp;
 import com.shinwootns.ipm.data.entity.DhcpLeaseIp;
 import com.shinwootns.ipm.data.entity.DhcpMacFilter;
 import com.shinwootns.ipm.data.entity.DhcpNetwork;
@@ -35,4 +36,10 @@ public interface DhcpMapper {
 	int insertDhcpLeaseIp(DhcpLeaseIp ip);
 	int updateDhcpLeaseIp(DhcpLeaseIp ip);
 	int deleteDhcpLeaseIp(int site_id, String ip);
+	
+	// DHCP Fixed IP
+	List<DhcpFixedIp> selectDhcpFixedIpBySiteId(int site_id);
+	int insertDhcpFixedIp(DhcpFixedIp fixedIp);
+	int updateDhcpFixedIp(DhcpFixedIp fixedIp);
+	int deleteDhcpFixedIp(int site_id, String ip);
 }
