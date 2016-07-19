@@ -265,7 +265,9 @@
 		 WHERE site_id = ${siteid}
 		   AND (network like CONCAT('%', #{searchValue}, '%') OR comment like CONCAT('%', #{searchValue}, '%') 
 		    OR start_ip like CONCAT('%', #{searchValue}, '%') OR end_ip like CONCAT('%', #{searchValue}, '%'))
-		ORDER BY inet(${orderColumn}) ${orderType} OFFSET #{startIndex} LIMIT #{length};
+		 ORDER BY <choose><when test="orderColumn == 'comment'"> ${orderColumn} ${orderType} </when>
+		 		          <when test="orderColumn != 'comment'"> inet(${orderColumn}) ${orderType} </when></choose>
+		OFFSET #{startIndex} LIMIT #{length};
 	</select>
 
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
@@ -274,21 +276,21 @@
 	<!-- Description : IP관리 > 고정IP현황 - 세그먼트별 상세 데이터 -->
 	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
 	<select id="select_IP_MANAGEMENT_SEGMENT_DETAIL" resultType="java.util.HashMap">
-		SELECT * FROM "test_dhcp_segment_list",(SELECT count(*) allcount FROM
-		"test_dhcp_segment_list" WHERE segment_id = #{segmentid}) as allcount
-		WHERE segment_id = #{segmentid}
-		AND ("ip" like CONCAT('%',
-		#{searchValue}, '%') OR "name" like
-		CONCAT('%', #{searchValue}, '%') OR
-		"mac" like CONCAT('%',
-		#{searchValue}, '%')
-		OR "status" like CONCAT('%',
-		#{searchValue}, '%') OR "type" like
-		CONCAT('%', #{searchValue}, '%') OR
-		"client" like CONCAT('%',
-		#{searchValue}, '%'))
-		ORDER BY ${orderColumn}
-		${orderType}
+		SELECT "network", "ipaddr", coalesce("ip_type",'') as "ip_type", coalesce("macaddr",'') as "macaddr", coalesce("duid",'') as "duid",
+			   coalesce("hostname",'') as "hostname", coalesce("state",'') as "state", coalesce("username",'') as "username", 
+			   coalesce("fingerprint",'') as "fingerprint", coalesce("os",'') as "os",
+			   coalesce(to_char("lease_start_time",'YYYYMMDD HH24:MI'),'') as "lease_start_time",
+			   coalesce(to_char("lease_end_time",'YYYYMMDD HH24:MI'),'') as "lease_end_time",
+			   coalesce(to_char("last_discovered",'YYYYMMDD HH24:MI'),'') as "last_discovered",
+			   coalesce("description",'') as "description", "allcount"
+		  FROM "dhcp_lease_ip",(SELECT count(*) allcount FROM "dhcp_lease_ip" WHERE "site_id" = #{siteid} and "network" = #{network}) as allcount
+		 WHERE "site_id" = #{siteid} and "network" = #{network}
+		   AND ("network" like CONCAT('%', #{searchValue}, '%') OR "ipaddr" like CONCAT('%', #{searchValue}, '%') OR "ip_type" like CONCAT('%', #{searchValue}, '%') 
+		        OR "macaddr" like CONCAT('%', #{searchValue}, '%') OR "duid" like CONCAT('%', #{searchValue}, '%') OR "hostname" like CONCAT('%', #{searchValue}, '%') 
+		        OR "state" like CONCAT('%', #{searchValue}, '%') OR "username" like CONCAT('%', #{searchValue}, '%') OR "fingerprint" like CONCAT('%', #{searchValue}, '%')
+		        OR "os" like CONCAT('%', #{searchValue}, '%') OR "description" like CONCAT('%', #{searchValue}, '%'))
+		 ORDER BY <choose><when test="orderColumn == 'network' or orderColumn == 'ipaddr'"> inet(${orderColumn}) ${orderType} </when>
+		 		          <when test="orderColumn != 'network' and orderColumn != 'ipaddr'"> ${orderColumn} ${orderType} </when></choose>
 		OFFSET #{startIndex} LIMIT #{length};
 	</select>
 	

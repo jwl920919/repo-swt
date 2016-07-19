@@ -28,7 +28,7 @@ console.log($('#datatable'));
 			                   { className: "essential-td-left", "targets": [ 1 ] },
 			                   { className: "essential-td-left", "targets": [ 2 ] },
 			                   { className: "essential-td-left", "targets": [ 3 ] }],
-                "order" : [ [ 1, 'asc' ] ],
+                "order" : [ [ 0, 'asc' ] ],
                 "columns" : [ {"data" : "network"},
                               {"data" : "start_ip"},
                               {"data" : "end_ip"},
@@ -85,20 +85,27 @@ function tdClickEvent(obj){
 	//alert($(obj).html().trim());
 	if (obj != "") {
 		selectedRow = obj;
+//		
+//		var arrIp = $(obj).html().trim().split( "/" );
+//		if (checkIPv4(arrIp[0])){
+//			arrIps = arrIp[0].split( "." );
+//			var ipCClass = String.format("{0}.{1}.{2}.0 ~ {0}.{1}.{2}.255", arrIps[0], arrIps[1], arrIps[2]);
+//			$("#segmentLabel").text(ipCClass);
+//		}
+//		alert("Parent1 : " + $(obj).parent().children().eq(2).html());
+
 		
-		var arrIp = $(obj).html().trim().split( "/" );
-		if (checkIPv4(arrIp[0])){
-			arrIps = arrIp[0].split( "." );
-			var ipCClass = String.format("{0}.{1}.{2}.0 ~ {0}.{1}.{2}.255", arrIps[0], arrIps[1], arrIps[2]);
-			$("#segmentLabel").text(ipCClass);
-		}
+		var ipCClass = String.format("{0} ~ {1}", $(obj).parent().children().eq(1).html(), $(obj).parent().children().eq(2).html());
+		$("#segmentLabel").text(ipCClass);
+		var segmentid = $(obj).parent().children().eq(0).html();
 		
 		
-		var segmentid = $(obj).parent().children().html();
 		
 		$("#defaultDiv").css("display","none");
 		$("#detailDiv").css("display","block");
-		$("#selectSegment").text($(obj).html().trim());
+		$("#selectSegment").text(segmentid);
+		console.log("ipCClass : " + ipCClass);
+		console.log("segmentid : " + segmentid);
 	
 		$('#datatable_detail').DataTable(
 	            {
@@ -125,15 +132,30 @@ function tdClickEvent(obj){
 				    "columnDefs": [{ className: "essential-td-left", "targets": [ 0 ] },
 				                   { className: "essential-td-left", "targets": [ 1 ] },
 				                   { className: "essential-td-left", "targets": [ 2 ] },
+				                   { className: "essential-td-left", "targets": [ 3 ] },
 				                   { className: "essential-td-left", "targets": [ 4 ] },
-				                   { className: "essential-td-left", "targets": [ 5 ] }],
+				                   { className: "essential-td-left", "targets": [ 5 ] },
+				                   { className: "essential-td-left", "targets": [ 6 ] },
+				                   { className: "essential-td-left", "targets": [ 7 ] },
+				                   { className: "essential-td-left", "targets": [ 8 ] },
+				                   { className: "essential-td-left", "targets": [ 9 ] },
+				                   { className: "essential-td-left", "targets": [ 10 ] },
+				                   { className: "essential-td-left", "targets": [ 11 ] },
+				                   { className: "essential-td-left", "targets": [ 12 ] }],
 	                "order" : [ [ 0, 'asc' ] ],
-	                "columns" : [ {"data" : "ip"},
-	                              {"data" : "mac"},
-	                              {"data" : "name"},
-	                              {"data" : "status"},
-	                              {"data" : "type"},
-	                              {"data" : "client"} ],
+	                "columns" : [ {"data" : "ipaddr"},
+	                              {"data" : "ip_type"},
+	                              {"data" : "macaddr"},
+	                              {"data" : "duid"},
+	                              {"data" : "hostname"},
+	                              {"data" : "state"},
+	                              {"data" : "username"},
+	                              {"data" : "fingerprint"},
+	                              {"data" : "os"},
+	                              {"data" : "lease_start_time"},
+	                              {"data" : "lease_end_time"},
+	                              {"data" : "last_discovered"},
+	                              {"data" : "description"}]
 	            });
 		$('div.dataTables_scrollBody').css('maxHeight', 600);
 		//$("#datatable_detail tbody").css('maxHeight', 650);
@@ -147,7 +169,7 @@ function tdClickEvent(obj){
 		});
 		
 		
-		mapDataCall(segmentid);
+		//mapDataCall(segmentid);
 	}
 }
 

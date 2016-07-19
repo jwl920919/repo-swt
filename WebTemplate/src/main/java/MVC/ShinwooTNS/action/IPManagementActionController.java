@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +41,7 @@ public class IPManagementActionController {
 	public void staticIPStatus_Segment_Select(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		System.out.println("staticIPStatus_Segment_Select");
 		logger.info("staticIPStatus_Segment_Select : " + request.getLocalAddr());
+		HttpSession session = request.getSession(true);
 		List<Map<String, Object>> dataList = null;
 		JsonArray jsonArray = null;
 		int totalCount = 0;
@@ -47,7 +49,8 @@ public class IPManagementActionController {
 		try {			
 			String[] columns = { "network", "start_ip", "end_ip", "comment" };
 			HashMap<String, Object> parameters = Common.Helper.DatatableHelper.getDatatableParametas(request,columns,0);
-			
+
+			parameters.put("siteid", session.getAttribute("site_id").toString());
 			dataList = ipManagementService.select_IP_MANAGEMENT_SEGMENT(parameters);
 
 			if (dataList.size() > 0) {
@@ -59,6 +62,7 @@ public class IPManagementActionController {
 		} catch (Exception e) {
 			result.result = false;
 			result.errorMessage = e.getMessage();
+			e.printStackTrace();
 			logger.error(e.getMessage());
 		}
 		finally {
@@ -72,28 +76,40 @@ public class IPManagementActionController {
 	public void staticIPStatus_Segment_Detail_Select(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		System.out.println("staticIPStatus_Segment_Detail_Select");
 		logger.info("staticIPStatus_Segment_Detail_Select : " + request.getLocalAddr());
+		HttpSession session = request.getSession(true);
 		List<Map<String, Object>> dataList = null;
 		JsonArray jsonArray = null;
 		int totalCount = 0;
 				
 		try {			
-			String[] columns = { "ip", "name", "mac", "startus", "type", "client" };			
-			int m_Segmentid = Integer.parseInt(request.getParameter("segmentid"));
+			String[] columns = { "ipaddr", "ip_type", "macaddr", "duid", "hostname", "state", "username", 
+					   "fingerprint", "os", "lease_start_time", "lease_end_time", "last_discovered", "description"};			
+			String m_Segmentid = request.getParameter("segmentid");
 			
 			HashMap<String, Object> parameters = Common.Helper.DatatableHelper.getDatatableParametas(request,columns,0);
-			parameters.put("segmentid", m_Segmentid);
 			
-			dataList = ipManagementService.select_IP_MANAGEMENT_SEGMENT_DETAIL(parameters);
-
-			if (dataList.size() > 0) {
-				totalCount = Integer.parseInt(((Map<String, Object>)dataList.get(0)).get("allcount").toString());
+			String siteID = session.getAttribute("site_id").toString();
+			if (!siteID.equals("")) {
+				parameters.put("siteid", Integer.parseInt(session.getAttribute("site_id").toString()));
+				parameters.put("network", m_Segmentid);
+				
+				dataList = ipManagementService.select_IP_MANAGEMENT_SEGMENT_DETAIL(parameters);
+	
+				if (dataList.size() > 0) {
+					totalCount = Integer.parseInt(((Map<String, Object>)dataList.get(0)).get("allcount").toString());
+				}
+				
+				jsonArray = gson.toJsonTree(dataList).getAsJsonArray();
+				response.setContentType("Application/json;charset=utf-8");
+				}
+			else {
+				result.result = false;
+				result.errorMessage = "Site id is Null in Session!";
 			}
-			
-			jsonArray = gson.toJsonTree(dataList).getAsJsonArray();
-			response.setContentType("Application/json;charset=utf-8");
 		} catch (Exception e) {
 			result.result = false;
 			result.errorMessage = e.getMessage();
+			e.printStackTrace();
 			logger.error(e.getMessage());
 		}
 		finally {
