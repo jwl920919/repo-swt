@@ -78,23 +78,11 @@ public class TestWAPI {
 		}
 	}
 	*/
-	
+
+	/*
 	@Test
 	public void testWAPI_LeaseIPList() {
 		
-		/*
-		// 1467004494
-		
-		System.out.println(System.currentTimeMillis() / 1000);
-		System.out.println(1467004494);
-		
-		long temp = 1467004494;
-
-		Timestamp time = TimeUtils.convertLongToTimestamp(temp*1000);
-		
-		System.out.println(time.toString());
-		*/
-
 		InfobloxWAPIHandler wapiHandler = new InfobloxWAPIHandler("192.168.1.11", "admin", "infoblox");
 
 		JSONArray jArray;
@@ -103,7 +91,7 @@ public class TestWAPI {
 			
 			System.out.println("================== Get Lease-IP List");
 
-			jArray = wapiHandler.getLeaseIPList(100);
+			jArray = wapiHandler.getLeaseIpAll(100);
 			
 			if (jArray != null)
 				System.out.println(jArray.toJSONString());
@@ -111,4 +99,5 @@ public class TestWAPI {
 			System.out.println("Count = " + jArray.size());
 		}
 	}
+	*/
 }

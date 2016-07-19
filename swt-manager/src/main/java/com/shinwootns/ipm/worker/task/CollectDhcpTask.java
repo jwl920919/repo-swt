@@ -18,6 +18,7 @@ import com.shinwootns.ipm.data.entity.DhcpNetwork;
 import com.shinwootns.ipm.data.entity.DhcpRange;
 import com.shinwootns.ipm.data.mapper.DhcpMapper;
 import com.shinwootns.ipm.service.handler.InfobloxWAPIHandler;
+import com.shinwootns.ipm.service.handler.InfobloxWAPIHandler.NextPageData;
 import com.shinwootns.ipm.worker.BaseWorker;
 
 public class CollectDhcpTask extends BaseWorker{
@@ -65,18 +66,24 @@ public class CollectDhcpTask extends BaseWorker{
 				
 				// Collect Network
 				jArray = wapiHandler.getNetworkInfo();
-				
+
 				insertDhcpNetwork(dhcpMapper, jArray);
+				
+				_logger.info(String.format("DHCP - Collect Network Info : %s.... OK (count:%d)", host, jArray.size()));
 				
 				// Collect Range
 				jArray = wapiHandler.getRangeInfo();
 				
 				insertDhcpRange(dhcpMapper, jArray);
 				
+				_logger.info(String.format("DHCP - Collect Rage Info : %s.... OK (count:%d)", host, jArray.size()));
+				
 				// Collect Fixed IP
 				jArray = wapiHandler.getFixedIPList();
 				
 				insertDhcpFixedIP(dhcpMapper, jArray);
+				
+				_logger.info(String.format("DHCP - Collect Fixed IP: %s.... OK (count:%d)", host, jArray.size()));
 
 				// Collect Filter
 				jArray = wapiHandler.getFilterInfo();
@@ -84,9 +91,30 @@ public class CollectDhcpTask extends BaseWorker{
 				insertDhcpFilter(dhcpMapper, jArray);
 				
 				// Collect Lease IP
-				jArray = wapiHandler.getLeaseIPList(200);
+				//jArray = wapiHandler.getLeaseIpAll(200);
+				//insertDhcpLeaseIP(dhcpMapper, jArray);
+
+				int splitCount = 200;
+				int leaseCount = 0;
 				
-				insertDhcpLeaseIP(dhcpMapper, jArray);
+				NextPageData nextData = wapiHandler.getLeaseIPFirst(splitCount);
+				
+				if (nextData != null && nextData.jArrayData != null) {
+					insertDhcpLeaseIP(dhcpMapper, nextData.jArrayData);
+					leaseCount += nextData.jArrayData.size();
+				}
+				
+				while(nextData != null && nextData.IsExistNextPage()) {
+					
+					nextData = wapiHandler.getLeaseIPNext(splitCount, nextData.nextPageID);
+					
+					if (nextData != null && nextData.jArrayData != null) {
+						insertDhcpLeaseIP(dhcpMapper, nextData.jArrayData);
+						leaseCount += nextData.jArrayData.size();
+					}
+				}
+				
+				_logger.info(String.format("DHCP - Collect Lease IP: %s.... OK (count:%d)", host, leaseCount));
 			}
 			
 		} catch (Exception ex) {
@@ -118,10 +146,12 @@ public class CollectDhcpTask extends BaseWorker{
 					network.setStartIp(startIp);
 					network.setEndIp(endIp);
 					
-					int affected = dhcpMapper.updateDhcpNetwork(network);
-					
-					if (affected == 0)
-						affected = dhcpMapper.insertDhcpNetwork(network);
+					if (network.getNetwork().isEmpty() == false) {
+						int affected = dhcpMapper.updateDhcpNetwork(network);
+						
+						if (affected == 0)
+							affected = dhcpMapper.insertDhcpNetwork(network);
+					}
 				}
 			}
 			catch(Exception ex) {
@@ -145,10 +175,12 @@ public class CollectDhcpTask extends BaseWorker{
 				range.setStartIp(JsonUtils.getValueToString((JSONObject)obj, "start_addr", ""));
 				range.setEndIp(JsonUtils.getValueToString((JSONObject)obj, "end_addr", ""));
 					
-				int affected = dhcpMapper.updateDhcpRange(range);
-				
-				if (affected == 0)
-					affected = dhcpMapper.insertDhcpRange(range);
+				if (range.getNetwork().isEmpty() == false) {
+					int affected = dhcpMapper.updateDhcpRange(range);
+					
+					if (affected == 0)
+						affected = dhcpMapper.insertDhcpRange(range);
+				}
 			}
 			catch(Exception ex) {
 				_logger.error(ex.getMessage(), ex);
@@ -173,10 +205,12 @@ public class CollectDhcpTask extends BaseWorker{
 				fixedIp.setComment(JsonUtils.getValueToString((JSONObject)obj, "comment", ""));
 				fixedIp.setDisable(JsonUtils.getValueToBoolean((JSONObject)obj, "disable", false));
 				
-				int affected = dhcpMapper.updateDhcpFixedIp(fixedIp);
-				
-				if (affected == 0)
-					affected = dhcpMapper.insertDhcpFixedIp(fixedIp);
+				if (fixedIp.getIpaddr().isEmpty() == false) {
+					int affected = dhcpMapper.updateDhcpFixedIp(fixedIp);
+					
+					if (affected == 0)
+						affected = dhcpMapper.insertDhcpFixedIp(fixedIp);
+				}
 			}
 			catch(Exception ex) {
 				_logger.error(ex.getMessage(), ex);
@@ -197,11 +231,12 @@ public class CollectDhcpTask extends BaseWorker{
 				filter.setSiteId(this.device.getSiteId());
 				filter.setFilterName(JsonUtils.getValueToString((JSONObject)obj, "name", ""));
 				
+				if (filter.getFilterName().isEmpty() == false) {
+					int affected = dhcpMapper.updateDhcpFilter(filter);
 					
-				int affected = dhcpMapper.updateDhcpFilter(filter);
-				
-				if (affected == 0)
-					affected = dhcpMapper.insertDhcpFilter(filter);
+					if (affected == 0)
+						affected = dhcpMapper.insertDhcpFilter(filter);
+				}
 			}
 			catch(Exception ex) {
 				_logger.error(ex.getMessage(), ex);
@@ -251,10 +286,12 @@ public class CollectDhcpTask extends BaseWorker{
 					// IPv6 duid
 					ip.setDuid(JsonUtils.getValueToString((JSONObject)obj, "ipv6_duid", "").toUpperCase());
 					
-					int affected = dhcpMapper.updateDhcpLeaseIp(ip);
-					
-					if (affected == 0)
-						affected = dhcpMapper.insertDhcpLeaseIp(ip);
+					if (ip.getIpaddr().isEmpty() == false) {
+						int affected = dhcpMapper.updateDhcpLeaseIp(ip);
+						
+						if (affected == 0)
+							affected = dhcpMapper.insertDhcpLeaseIp(ip);
+					}
 				}
 				catch(Exception ex) {
 					_logger.error(ex.getMessage(), ex);

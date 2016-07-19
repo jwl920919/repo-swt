@@ -22,6 +22,26 @@ public class InfobloxWAPIHandler {
 	private String id = "";
 	private String pwd = "";
 	
+	public class NextPageData {
+		
+		public JSONArray jArrayData = null;
+		public String nextPageID = null;
+		
+		public NextPageData(JSONArray jArrayData, String nextPageID) {
+			if (jArrayData != null) {
+				this.jArrayData = (JSONArray)jArrayData.clone();
+				this.nextPageID = nextPageID;
+			}
+		}
+		
+		public boolean IsExistNextPage() {
+			if (this.nextPageID == null || this.nextPageID.isEmpty())
+				return false;
+			else
+				return true;
+		}
+	}
+	
 	public InfobloxWAPIHandler(String ipAddr, String id, String pwd) {
 		this.baseURL = String.format("https://%s", ipAddr);
 		this.id = id;
@@ -268,7 +288,7 @@ public class InfobloxWAPIHandler {
 		return false;
 	}
 	
-	public JSONArray getLeaseIPList(int splitCount) {
+	public JSONArray getLeaseIpAll(int splitCount) {
 		/*[
 		 	next_page_id: "789c55904b6ec3300c44f7bc88b3a9113949931cc19b206..."	
 		 
@@ -309,7 +329,6 @@ public class InfobloxWAPIHandler {
 			sb.append(",never_ends,never_starts");
 			sb.append(",ipv6_duid,ipv6_iaid,ipv6_preferred_lifetime");
 			sb.append(",discovered_data.last_discovered");
-			//sb.append(",discovered_data.os");	// Search Only
 			
 			params.put("_return_fields", sb.toString());
 
@@ -370,6 +389,112 @@ public class InfobloxWAPIHandler {
 		}
 		
 		return resultArray;
+	}
+	
+	
+	public NextPageData getLeaseIPFirst(int splitCount) {
+		
+		JSONArray resultArray = new JSONArray(); 
+		
+		try
+		{
+			Map params = new HashMap<String, String>();
+			
+			// 1. First Page
+			params.put("_paging", 1);
+			params.put("_max_results", splitCount);
+			params.put("_return_as_object", 1);
+			params.put("_return_type", "json");
+			
+			// return fields (address,network,binding_state,.....)
+			StringBuilder sb = new StringBuilder();
+			sb.append("address,network,binding_state,protocol");
+			sb.append(",client_hostname,hardware,username");
+			sb.append(",starts,ends");
+			sb.append(",never_ends,never_starts");
+			sb.append(",ipv6_duid,ipv6_iaid,ipv6_preferred_lifetime");
+			sb.append(",discovered_data.last_discovered");
+			
+			params.put("_return_fields", sb.toString());
+
+			String value = restClient.Get("/wapi/v2.3/lease", params);
+			
+			if (value == null)
+				return null;
+			
+			// Change unescape-unicode
+			value = StringUtils.unescapeUnicodeString(value);
+			
+			// JSONObject Parser
+			JSONObject jObj = JsonUtils.parseJSONObject(value);
+			
+			if (jObj == null)
+				return null;
+			
+			// next_page_id
+			String nextPageId = (String)jObj.get("next_page_id");
+			
+			// result
+			JSONArray jIPAddr = (JSONArray)jObj.get("result");
+			
+			resultArray.addAll(jIPAddr);
+
+			return new NextPageData(resultArray, nextPageId);
+		}
+		catch(Exception ex) {
+			_logger.fatal(ex.getMessage(), ex);
+		}
+		
+		return null;
+	}
+	
+	
+	public NextPageData getLeaseIPNext(int splitCount, String nextPageId) {
+		
+		if (nextPageId == null || nextPageId.isEmpty())
+			return null;
+		
+		//System.out.println(nextPageId);
+		
+		JSONArray resultArray = new JSONArray(); 
+		
+		try
+		{
+			Map params = new HashMap<String, String>();
+			params.put("_max_results", splitCount);
+			params.put("_page_id", nextPageId);
+			params.put("_return_type", "json");
+
+			String value = restClient.Get("/wapi/v2.3/lease", params);
+			
+			if (value == null)
+				return null;
+			
+			// Change unescape-unicode
+			value = StringUtils.unescapeUnicodeString(value);
+			
+			// JSONObject Parser
+			JSONObject jObj = JsonUtils.parseJSONObject(value);
+			
+			if (jObj == null)
+				return null;
+
+			// next_page_id
+			nextPageId = (String)jObj.get("next_page_id");
+			
+			// result
+			JSONArray jIPAddr = (JSONArray)jObj.get("result");
+			
+			resultArray.addAll(jIPAddr);
+			
+			return new NextPageData(resultArray, nextPageId);
+			
+		}
+		catch(Exception ex) {
+			_logger.fatal(ex.getMessage(), ex);
+		}
+		
+		return null;
 	}
 	
 	public JSONArray getFixedIPList() {
