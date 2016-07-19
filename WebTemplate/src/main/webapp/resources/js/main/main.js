@@ -77,3 +77,7 @@ contentLoad = function(url){
 //	alert("$(#content_frame) : " + $("#content_frame"));
 	$("#content_frame").load(url);	
 }
+
+fnGetSiteInfo = function(){
+	
+}

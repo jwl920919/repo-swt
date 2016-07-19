@@ -41,7 +41,8 @@ public class LoginController {
 			System.out.println("Login PW : " + pw);
 			
 			if (id != null && pw != null && !id.isEmpty() && !pw.isEmpty()) {
-				String sql = "SELECT * FROM \"system_user_info\" where \"user_id\" = '" + id + "';";
+				String sql = "SELECT users.*, sites.site_name, sites.site_master FROM system_user_info users, site_info sites WHERE users.site_id = sites.site_id " + 
+							 "AND users.user_id = '" + id + "';";
 				System.out.println("Query : " + sql);
 				ResultSet rs = dbHelper.executeQuery(sql);
 				
@@ -53,9 +54,10 @@ public class LoginController {
 					
 					boolean bSignCheck = false;
 					while (rs.next()) {
-						System.out.println("db Password : " + rs.getString("user_pw"));
+						System.out.println("DB Password : " + rs.getString("user_pw"));
 						System.out.println("UR Password : " + pw);
-						System.out.println("UR sDeptName : " + rs.getString("dept_name").trim());
+						System.out.println("DB sDeptName : " + rs.getString("dept_name").trim());
+						System.out.println("DB site_master : " + rs.getString("site_master").trim());
 						Date date = rs.getTimestamp("insert_date");
 						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 						System.out.println("user_info dateTime : " + sdf.format(date));
@@ -63,6 +65,8 @@ public class LoginController {
 						if (rs.getString("user_pw").trim().equals(pw)) {
 							session.setAttribute("login_chk", true);// Session에 "login_chk"로 값을 저장.
 							session.setAttribute("site_id", rs.getString("site_id").trim());// Session에 "login_chk"로 값을 저장.
+							session.setAttribute("site_name", rs.getString("site_name").trim());// Session에 "login_chk"로 값을 저장.
+							session.setAttribute("site_master", rs.getString("site_master").trim());// Session에 "login_chk"로 값을 저장.
 							session.setAttribute("user_seq", rs.getString("user_seq").trim());// Session에 "login_chk"로 값을 저장.
 							session.setAttribute("user_id", rs.getString("user_id").trim());// Session에 "login_chk"로 값을 저장.
 							session.setAttribute("user_name", rs.getString("user_name").trim());// Session에 "login_chk"로 값을 저장.							
@@ -106,6 +110,8 @@ public class LoginController {
 		HttpSession session = request.getSession(true);
 		session.removeAttribute("login_chk");// Session에 "login_chk"로 값 삭제.
 		session.removeAttribute("site_id");// Session에 "login_chk"로 값 삭제.
+		session.removeAttribute("site_name");// Session에 "login_chk"로 값을 삭제.
+		session.removeAttribute("site_master");// Session에 "login_chk"로 값을 삭제.
 		session.removeAttribute("user_seq");// Session에 "login_chk"로 값 삭제.
 		session.removeAttribute("user_id");// Session에 "login_chk"로 값 삭제.
 		session.removeAttribute("user_name");// Session에 "login_chk"로 값 삭제.	

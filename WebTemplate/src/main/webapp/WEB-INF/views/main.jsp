@@ -3,6 +3,8 @@
 <%
 	String userID = (String) session.getAttribute("user_id");
 	String userName = (String) session.getAttribute("user_name");
+	String siteName = (String) session.getAttribute("site_name");
+	String siteMaster = (String) session.getAttribute("site_master");
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -45,6 +47,7 @@
 <!-- default style -->
 <link rel="stylesheet" href="resources/css/default.css">
 
+<script src="resources/js/base/jquery-1.12.3.js"></script>
 <script src="resources/js/base/jstz-1.0.4.min.js"></script>
 <script src="resources/js/common/Common.js"></script>
 <script src="resources/js/common/multyLanguages.js"></script>
@@ -90,7 +93,7 @@
 <script src="resources/plugins/datatables/dataTables.bootstrap.min.js"></script>
 <!-- resources/js/common/Datatable-Essential.js은 각 페이지에 넣어주지 않으면 #datatable 객체에 접근이 불가능 하여 각 페이지에 입력해주어야됨. -->
 <script src="resources/js/main/main.js"></script>
-<script type="text/javascript">
+<script type="text/javascript" type="text/javascript">
 $(document).ready(function() {
 
 	console.log("menu : " + "${menuHTML}");
@@ -100,6 +103,13 @@ $(document).ready(function() {
 	$("#contentTitle").text(getLanguage("dashboard"));
     //$("#contentTitleSmall").text("Control panel");
  	changeframe("/dashboard/dashboard", 'M01', 'dashboard', '');
+ 	
+ 	//로그인 사용사의 사업장 정보에 따라 메인 상단의 사업장 dropdown-menu 설정 
+ 	var siteMaster = "<%= siteMaster %>";
+ 	if (siteMaster == "t") {
+		fnGetSiteInfo();
+	}
+
 });
 </script>
 </head>
@@ -123,109 +133,109 @@ $(document).ready(function() {
 		<div class="navbar-custom-menu">
 			<ul class="nav navbar-nav">
 				<!-- Messages: style can be found in dropdown.less-->
-				<li class="dropdown messages-menu"><a href="#"
-					class="dropdown-toggle" data-toggle="dropdown"> <i
-						class="fa fa-envelope-o"></i> <span class="label label-success">4</span>
-				</a>
-					<ul class="dropdown-menu">
-						<li class="header">You have 4 messages</li>
-						<li>
-							<!-- inner menu: contains the actual data -->
-							<ul class="menu">
-								<li>
-									<!-- start message --> <a href="#">
-										<div class="pull-left">
-											<img src="resources/dist/img/user2-160x160.jpg"
-												class="img-circle" alt="User Image">
-										</div>
-										<h4>
-											Support Team <small><i class="fa fa-clock-o"></i> 5
-												mins</small>
-										</h4>
-										<p>Why not buy a new awesome theme?</p>
-								</a>
-								</li>
-								<!-- end message -->
-								<li><a href="#">
-										<div class="pull-left">
-											<img src="resources/dist/img/user3-128x128.jpg"
-												class="img-circle" alt="User Image">
-										</div>
-										<h4>
-											AdminLTE Design Team <small><i class="fa fa-clock-o"></i>
-												2 hours</small>
-										</h4>
-										<p>Why not buy a new awesome theme?</p>
-								</a></li>
-								<li><a href="#">
-										<div class="pull-left">
-											<img src="resources/dist/img/user4-128x128.jpg"
-												class="img-circle" alt="User Image">
-										</div>
-										<h4>
-											Developers <small><i class="fa fa-clock-o"></i> Today</small>
-										</h4>
-										<p>Why not buy a new awesome theme?</p>
-								</a></li>
-								<li><a href="#">
-										<div class="pull-left">
-											<img src="resources/dist/img/user3-128x128.jpg"
-												class="img-circle" alt="User Image">
-										</div>
-										<h4>
-											Sales Department <small><i class="fa fa-clock-o"></i>
-												Yesterday</small>
-										</h4>
-										<p>Why not buy a new awesome theme?</p>
-								</a></li>
-								<li><a href="#">
-										<div class="pull-left">
-											<img src="resources/dist/img/user4-128x128.jpg"
-												class="img-circle" alt="User Image">
-										</div>
-										<h4>
-											Reviewers <small><i class="fa fa-clock-o"></i> 2 days</small>
-										</h4>
-										<p>Why not buy a new awesome theme?</p>
-								</a></li>
-							</ul>
-						</li>
-						<li class="footer"><a href="#">See All Messages</a></li>
-					</ul></li>
-				<!-- Notifications: style can be found in dropdown.less -->
-				<li class="dropdown notifications-menu"><a href="#"
-					class="dropdown-toggle" data-toggle="dropdown"> <i
-						class="fa fa-bell-o"></i> <span class="label label-warning">10</span>
-				</a>
-					<ul class="dropdown-menu">
-						<li class="header">You have 10 notifications</li>
-						<li>
-							<!-- inner menu: contains the actual data -->
-							<ul class="menu">
-								<li><a href="#"> <i class="fa fa-users text-aqua"></i>
-										5 new members joined today
-								</a></li>
-								<li><a href="#"> <i class="fa fa-warning text-yellow"></i>
-										Very long description here that may not fit into the page and
-										may cause design problems
-								</a></li>
-								<li><a href="#"> <i class="fa fa-users text-red"></i> 5
-										new members joined
-								</a></li>
-								<li><a href="#"> <i
-										class="fa fa-shopping-cart text-green"></i> 25 sales made
-								</a></li>
-								<li><a href="#"> <i class="fa fa-user text-red"></i>
-										You changed your username
-								</a></li>
-							</ul>
-						</li>
-						<li class="footer"><a href="#">View all</a></li>
-					</ul></li>
+<!-- 				<li class="dropdown messages-menu"><a href="#" -->
+<!-- 					class="dropdown-toggle" data-toggle="dropdown"> <i -->
+<!-- 						class="fa fa-envelope-o"></i> <span class="label label-success">4</span> -->
+<!-- 				</a> -->
+<!-- 					<ul class="dropdown-menu"> -->
+<!-- 						<li class="header">You have 4 messages</li> -->
+<!-- 						<li> -->
+<!-- 							inner menu: contains the actual data -->
+<!-- 							<ul class="menu"> -->
+<!-- 								<li> -->
+<!-- 									start message <a href="#"> -->
+<!-- 										<div class="pull-left"> -->
+<!-- 											<img src="resources/dist/img/user2-160x160.jpg" -->
+<!-- 												class="img-circle" alt="User Image"> -->
+<!-- 										</div> -->
+<!-- 										<h4> -->
+<!-- 											Support Team <small><i class="fa fa-clock-o"></i> 5 -->
+<!-- 												mins</small> -->
+<!-- 										</h4> -->
+<!-- 										<p>Why not buy a new awesome theme?</p> -->
+<!-- 								</a> -->
+<!-- 								</li> -->
+<!-- 								end message -->
+<!-- 								<li><a href="#"> -->
+<!-- 										<div class="pull-left"> -->
+<!-- 											<img src="resources/dist/img/user3-128x128.jpg" -->
+<!-- 												class="img-circle" alt="User Image"> -->
+<!-- 										</div> -->
+<!-- 										<h4> -->
+<!-- 											AdminLTE Design Team <small><i class="fa fa-clock-o"></i> -->
+<!-- 												2 hours</small> -->
+<!-- 										</h4> -->
+<!-- 										<p>Why not buy a new awesome theme?</p> -->
+<!-- 								</a></li> -->
+<!-- 								<li><a href="#"> -->
+<!-- 										<div class="pull-left"> -->
+<!-- 											<img src="resources/dist/img/user4-128x128.jpg" -->
+<!-- 												class="img-circle" alt="User Image"> -->
+<!-- 										</div> -->
+<!-- 										<h4> -->
+<!-- 											Developers <small><i class="fa fa-clock-o"></i> Today</small> -->
+<!-- 										</h4> -->
+<!-- 										<p>Why not buy a new awesome theme?</p> -->
+<!-- 								</a></li> -->
+<!-- 								<li><a href="#"> -->
+<!-- 										<div class="pull-left"> -->
+<!-- 											<img src="resources/dist/img/user3-128x128.jpg" -->
+<!-- 												class="img-circle" alt="User Image"> -->
+<!-- 										</div> -->
+<!-- 										<h4> -->
+<!-- 											Sales Department <small><i class="fa fa-clock-o"></i> -->
+<!-- 												Yesterday</small> -->
+<!-- 										</h4> -->
+<!-- 										<p>Why not buy a new awesome theme?</p> -->
+<!-- 								</a></li> -->
+<!-- 								<li><a href="#"> -->
+<!-- 										<div class="pull-left"> -->
+<!-- 											<img src="resources/dist/img/user4-128x128.jpg" -->
+<!-- 												class="img-circle" alt="User Image"> -->
+<!-- 										</div> -->
+<!-- 										<h4> -->
+<!-- 											Reviewers <small><i class="fa fa-clock-o"></i> 2 days</small> -->
+<!-- 										</h4> -->
+<!-- 										<p>Why not buy a new awesome theme?</p> -->
+<!-- 								</a></li> -->
+<!-- 							</ul> -->
+<!-- 						</li> -->
+<!-- 						<li class="footer"><a href="#">See All Messages</a></li> -->
+<!-- 					</ul></li> -->
+<!-- 				Notifications: style can be found in dropdown.less -->
+<!-- 				<li class="dropdown notifications-menu"><a href="#" -->
+<!-- 					class="dropdown-toggle" data-toggle="dropdown"> <i -->
+<!-- 						class="fa fa-bell-o"></i> <span class="label label-warning">10</span> -->
+<!-- 				</a> -->
+<!-- 					<ul class="dropdown-menu"> -->
+<!-- 						<li class="header">You have 10 notifications</li> -->
+<!-- 						<li> -->
+<!-- 							inner menu: contains the actual data -->
+<!-- 							<ul class="menu"> -->
+<!-- 								<li><a href="#"> <i class="fa fa-users text-aqua"></i> -->
+<!-- 										5 new members joined today -->
+<!-- 								</a></li> -->
+<!-- 								<li><a href="#"> <i class="fa fa-warning text-yellow"></i> -->
+<!-- 										Very long description here that may not fit into the page and -->
+<!-- 										may cause design problems -->
+<!-- 								</a></li> -->
+<!-- 								<li><a href="#"> <i class="fa fa-users text-red"></i> 5 -->
+<!-- 										new members joined -->
+<!-- 								</a></li> -->
+<!-- 								<li><a href="#"> <i -->
+<!-- 										class="fa fa-shopping-cart text-green"></i> 25 sales made -->
+<!-- 								</a></li> -->
+<!-- 								<li><a href="#"> <i class="fa fa-user text-red"></i> -->
+<!-- 										You changed your username -->
+<!-- 								</a></li> -->
+<!-- 							</ul> -->
+<!-- 						</li> -->
+<!-- 						<li class="footer"><a href="#">View all</a></li> -->
+<!-- 					</ul></li> -->
+				
 				<!-- Tasks: style can be found in dropdown.less -->
 				<li class="dropdown tasks-menu"><a href="#"
-					class="dropdown-toggle" data-toggle="dropdown"> <i
-						class="fa fa-flag-o"></i> <span class="label label-danger">9</span>
+					class="dropdown-toggle" data-toggle="dropdown"><span class="hidden-xs"><%=siteName%></span>
 				</a>
 					<ul class="dropdown-menu">
 						<li class="header">You have 9 tasks</li>

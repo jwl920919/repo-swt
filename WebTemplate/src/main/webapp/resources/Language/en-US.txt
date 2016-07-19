@@ -115,7 +115,7 @@
 	"add":											"추가",
 	"modify":										"수정",
 	"delete":										"삭제",
-	"save":											"저장"
+	"save":											"저장",
 	"loading":										"Loading.",
 	"processing":									"Processing.",
 	"searching":									"Searching.",
@@ -128,7 +128,7 @@
     "last": 										"Last",
     "next": 										"Next",
     "previous": 									"Previous",
-    "ip"		 									"IP",
+    "ip":		 									"IP",
     "mac":		 									"MAC",
     "user":		 									"user"
 }
