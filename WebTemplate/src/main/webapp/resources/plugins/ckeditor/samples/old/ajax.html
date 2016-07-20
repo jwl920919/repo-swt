@@ -28,7 +28,7 @@ For licensing, see LICENSE.md or http://ckeditor.com/license
 
 			// Retrieve the editor contents. In an Ajax application, this data would be
 			// sent to the server or used in any other way.
-			document.getElementById( 'editorcontents' ).innerHTML = html = editor.getData();
+			document.getElementById( 'editorcontents' ).innerHTML = html = editor.getTdData();
 			document.getElementById( 'contents' ).style.display = '';
 
 			// Destroy the editor.
