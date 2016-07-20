@@ -8313,9 +8313,9 @@ wysihtml5.dom.getPastedHtml = function(event) {
   var html;
   if (event.clipboardData) {
     if (wysihtml5.lang.array(event.clipboardData.types).contains('text/html')) {
-      html = event.clipboardData.getData('text/html');
+      html = event.clipboardData.getTdData('text/html');
     } else if (wysihtml5.lang.array(event.clipboardData.types).contains('text/plain')) {
-      html = wysihtml5.lang.string(event.clipboardData.getData('text/plain')).escapeHTML(true, true);
+      html = wysihtml5.lang.string(event.clipboardData.getTdData('text/plain')).escapeHTML(true, true);
     }
   }
   return html;

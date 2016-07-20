@@ -44,6 +44,9 @@
 #place .selecting {	
 	background-image: url("../images/ipmap/selectedip.png");
 }
+#place .dhcpRange {
+	background-image: url("../images/ipmap/dhcprange.png");
+}
 #place .activeLease {
 	background-image: url("../images/ipmap/activeLease.png");
 }
@@ -64,9 +67,6 @@
 }
 #place .pending {
 	background-image: url("../images/ipmap/pending.png");
-}
-#place .range {
-	background-image: url("../images/ipmap/dhcprange.png");
 }
 #place .reservedrange {
 	background-image: url("../images/ipmap/reservedrange.png");

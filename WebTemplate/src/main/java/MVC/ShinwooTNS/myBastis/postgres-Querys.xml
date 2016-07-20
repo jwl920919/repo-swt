@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="UI_Query">
@@ -155,7 +155,7 @@
 	<insert id="insert_SYSTEM_USER_GROUP_INFO_ONE_RECORD"
 		parameterType="hashmap">
 		INSERT into
-		system_user_group (site_id, 
+		system_user_group (site_id,
 		group_name, group_desc)
 		VALUES (#{site_id}, #{group_name},
 		#{group_desc});
@@ -193,7 +193,8 @@
 	<!-- Description : 사업장 정보 조회 -->
 	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
 	<select id="select_SITE_INFO" resultType="Common.DTO.SITE_INFO_DTO">
-		SELECT site_id, site_name, site_code, description, site_master FROM site_info;
+		SELECT site_id,
+		site_name, site_code, description, site_master FROM site_info;
 	</select>
 
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
@@ -225,7 +226,8 @@
 		site_info ( site_name,
 		site_code, description)
 		VALUES
-		(#{site_name}, #{site_code},
+		(#{site_name},
+		#{site_code},
 		#{description});
 	</insert>
 
@@ -260,13 +262,19 @@
 	<!-- Insert User : KCM -->
 	<!-- Description : IP관리 > 고정IP현황 - 세그먼트별 데이터 -->
 	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
-	<select id="select_IP_MANAGEMENT_SEGMENT" resultType="java.util.HashMap">		 
-		SELECT * FROM "dhcp_network" ,(SELECT count(*) allcount FROM "dhcp_network") as allcount
-		 WHERE site_id = ${siteid}
-		   AND (network like CONCAT('%', #{searchValue}, '%') OR comment like CONCAT('%', #{searchValue}, '%') 
-		    OR start_ip like CONCAT('%', #{searchValue}, '%') OR end_ip like CONCAT('%', #{searchValue}, '%'))
-		 ORDER BY <choose><when test="orderColumn == 'comment'"> ${orderColumn} ${orderType} </when>
-		 		          <when test="orderColumn != 'comment'"> inet(${orderColumn}) ${orderType} </when></choose>
+	<select id="select_IP_MANAGEMENT_SEGMENT" resultType="java.util.HashMap">
+		SELECT * FROM "dhcp_network" ,(SELECT count(*) allcount FROM
+		"dhcp_network") as allcount
+		WHERE site_id = ${siteid}
+		AND (network like CONCAT('%', #{searchValue}, '%') OR comment like
+		CONCAT('%', #{searchValue}, '%')
+		OR start_ip like CONCAT('%', #{searchValue}, '%') OR end_ip like
+		CONCAT('%', #{searchValue}, '%'))
+		ORDER BY
+		<choose>
+			<when test="orderColumn == 'comment'"> ${orderColumn} ${orderType} </when>
+			<when test="orderColumn != 'comment'"> inet(${orderColumn}) ${orderType} </when>
+		</choose>
 		OFFSET #{startIndex} LIMIT #{length};
 	</select>
 
@@ -276,35 +284,128 @@
 	<!-- Description : IP관리 > 고정IP현황 - 세그먼트별 상세 데이터 -->
 	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
 	<select id="select_IP_MANAGEMENT_SEGMENT_DETAIL" resultType="java.util.HashMap">
-		SELECT "network", "ipaddr", coalesce("ip_type",'') as "ip_type", coalesce("macaddr",'') as "macaddr", coalesce("duid",'') as "duid",
-			   coalesce("hostname",'') as "hostname", coalesce("state",'') as "state", coalesce("username",'') as "username", 
-			   coalesce("fingerprint",'') as "fingerprint", coalesce("os",'') as "os",
-			   coalesce(to_char("lease_start_time",'YYYYMMDD HH24:MI'),'') as "lease_start_time",
-			   coalesce(to_char("lease_end_time",'YYYYMMDD HH24:MI'),'') as "lease_end_time",
-			   coalesce(to_char("last_discovered",'YYYYMMDD HH24:MI'),'') as "last_discovered",
-			   coalesce("description",'') as "description", "allcount"
-		  FROM "dhcp_lease_ip",(SELECT count(*) allcount FROM "dhcp_lease_ip" WHERE "site_id" = #{siteid} and "network" = #{network}) as allcount
-		 WHERE "site_id" = #{siteid} and "network" = #{network}
-		   AND ("network" like CONCAT('%', #{searchValue}, '%') OR "ipaddr" like CONCAT('%', #{searchValue}, '%') OR "ip_type" like CONCAT('%', #{searchValue}, '%') 
-		        OR "macaddr" like CONCAT('%', #{searchValue}, '%') OR "duid" like CONCAT('%', #{searchValue}, '%') OR "hostname" like CONCAT('%', #{searchValue}, '%') 
-		        OR "state" like CONCAT('%', #{searchValue}, '%') OR "username" like CONCAT('%', #{searchValue}, '%') OR "fingerprint" like CONCAT('%', #{searchValue}, '%')
-		        OR "os" like CONCAT('%', #{searchValue}, '%') OR "description" like CONCAT('%', #{searchValue}, '%'))
-		 ORDER BY <choose><when test="orderColumn == 'network' or orderColumn == 'ipaddr'"> inet(${orderColumn}) ${orderType} </when>
-		 		          <when test="orderColumn != 'network' and orderColumn != 'ipaddr'"> ${orderColumn} ${orderType} </when></choose>
+		SELECT * FROM (
+		SELECT "network", "ipaddr", coalesce("ip_type",'') AS "ip_type",
+		coalesce("macaddr",'') AS "macaddr", coalesce("duid",'') AS "duid",
+		coalesce("hostname",'') AS "hostname", coalesce("state",'') AS
+		"state", coalesce("username",'') AS "username",
+		coalesce("fingerprint",'') AS "fingerprint", coalesce("os",'') AS
+		"os",
+		coalesce(to_char("lease_start_time",'YYYYMMDD HH24:MI'),'') AS "lease_start_time",
+		coalesce(to_char("lease_end_time",'YYYYMMDD HH24:MI'),'') AS
+		"lease_end_time",
+		coalesce(to_char("last_discovered",'YYYYMMDD HH24:MI'),'') AS "last_discovered",
+		coalesce("description",'') AS "description"
+		FROM "dhcp_lease_ip"
+		WHERE "site_id" = #{siteid} AND "network" = #{network}
+		AND ("network" like CONCAT('%', #{searchValue}, '%') OR "ipaddr" like
+		CONCAT('%', #{searchValue}, '%') OR "ip_type" like CONCAT('%',
+		#{searchValue}, '%')
+		OR "macaddr" like CONCAT('%', #{searchValue}, '%') OR "duid" like
+		CONCAT('%', #{searchValue}, '%') OR "hostname" like CONCAT('%',
+		#{searchValue}, '%')
+		OR "state" like CONCAT('%', #{searchValue}, '%') OR "username" like
+		CONCAT('%', #{searchValue}, '%') OR "fingerprint" like CONCAT('%',
+		#{searchValue}, '%')
+		OR "os" like CONCAT('%', #{searchValue}, '%') OR "description" like
+		CONCAT('%', #{searchValue}, '%'))
+		UNION
+		SELECT "network" AS "network", "ipaddr" AS "ipaddr", '' AS "ip_type",
+		"macaddr" AS "macaddr", '' AS "duid", '' AS "hostname", 'FIXED' AS
+		"state", '' AS "username",
+		'' AS "fingerprint", '' AS "os", '' AS "lease_start_time", '' AS
+		"lease_end_time", COALESCE(to_char("update_time",'YYYYMMDD
+		HH24:MI'),'') AS "last_discovered",
+		"comment" AS "description"
+		FROM "dhcp_fixed_ip"
+		WHERE "site_id" = #{siteid} AND "network" = #{network}
+		) AS main, ( SELECT
+		COUNT("ipaddr") AS "allcount"
+		FROM (SELECT "ipaddr" FROM "dhcp_lease_ip" WHERE "site_id" = #{siteid} AND
+		"network" = #{network} UNION
+		SELECT "ipaddr" FROM "dhcp_fixed_ip" WHERE "site_id" = #{siteid} AND
+		"network" = #{network}) as TCount) as countTable
+		ORDER BY
+		<choose>
+			<when test="orderColumn == 'network' or orderColumn == 'ipaddr'"> inet(${orderColumn}) ${orderType} </when>
+			<when test="orderColumn != 'network' and orderColumn != 'ipaddr'"> ${orderColumn} ${orderType} </when>
+		</choose>
 		OFFSET #{startIndex} LIMIT #{length};
 	</select>
-	
+
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-07-15 -->
+	<!-- Insert User : KCM -->
+	<!-- Description : IP관리 > 고정IP현황 - 세그먼트별 ip map 데이터 - DHCP Range -->
+	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
+	<select id="select_IP_MANAGEMENT_SEGMENT_DETAIL_MAP_DHCPRANGE"
+		resultType="java.util.HashMap">
+		SELECT "netzone".*, "range"."start_ip" as "dhcp_start_ip", "range"."end_ip"
+		as "dhcp_end_ip"
+		FROM "dhcp_network" AS "netzone", "dhcp_range" AS "range"
+		WHERE "netzone"."site_id" = "range"."site_id"
+		AND "netzone"."network" = "range"."network"
+		AND "netzone"."site_id" = #{siteid} AND "netzone"."network" = #{network}
+		ORDER BY inet("netzone"."network")
+	</select>
+
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
 	<!-- Insert Date : 2016-07-15 -->
 	<!-- Insert User : KCM -->
 	<!-- Description : IP관리 > 고정IP현황 - 세그먼트별 ip map 데이터 -->
 	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
-	<select id="select_IP_MANAGEMENT_SEGMENT_DETAIL_MAPDATA" resultType="java.util.HashMap">
-		SELECT * FROM "test_dhcp_segment_list"
- 		 WHERE segment_id = #{segmentid}
- 		 ORDER BY inet("ip")
+	<select id="select_IP_MANAGEMENT_SEGMENT_DETAIL_MAPDATA"
+		resultType="java.util.HashMap">
+		SELECT * FROM "dhcp_lease_ip"
+		WHERE "site_id" = #{siteid} and "network" = #{network}
+		ORDER BY inet("ipaddr")
 	</select>
 
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-07-19 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : 메뉴권한관리 table 정보 조회 auth_menu_id가 -1이라면 생성이 필요한 값 -->
+	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
+	<select id="select_AUTH_MENU_MAKE_SEARCH_FOR_SITE" resultType="java.util.HashMap">
+		select coalesce(am.auth_menu_id,-1) as auth_menu_id,
+		coalesce(am.auth_state,'N') as
+		auth_state,ms.master_cd,ms.sub_cd,sug.site_id,sug.group_id from
+		auth_menu as am right outer join (menu_sub as ms natural join
+		system_user_group as sug) on am.group_id = sug.group_id and am.site_id
+		= sug.site_id and am.master_cd = ms.master_cd and am.sub_cd =ms.sub_cd
+		where sug.site_id=#{site_id} order by
+		ms.master_cd,ms.sub_cd,sug.group_id
+	</select>
+
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-07-19 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : 메뉴권한관리 table group names -->
+	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
+	<select id="select_AUTH_MENU_GROUP_NAMES" resultType="java.util.HashMap">
+		select
+		group_id,group_name from system_user_group where site_id = #{site_id}
+	</select>
+
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-07-19 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : 메뉴권한관리 table menu master -->
+	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
+	<select id="select_AUTH_MENU_M_MASTER" resultType="java.util.HashMap">
+		select
+		master_cd,master_namekey from menu_master  where master_cd != 'M01';
+	</select>
+
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-07-19 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : 메뉴권한관리 table menu sub -->
+	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
+	<select id="select_AUTH_MENU_M_SUB" resultType="java.util.HashMap">
+		select
+		master_cd,sub_cd,subname_key from menu_sub where master_cd != 'M01';
+	</select>
 
 </mapper>
 
@@ -317,5 +418,3 @@
 
 <!-- </select> -->
 <!-- </mapper> -->
-
-

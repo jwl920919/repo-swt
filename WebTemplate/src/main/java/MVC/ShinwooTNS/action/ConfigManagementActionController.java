@@ -3,12 +3,14 @@ package MVC.ShinwooTNS.action;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -30,6 +32,7 @@ import Common.DTO.SITE_INFO_DTO;
 import Common.DTO.SYSTEM_USER_GROUP_DTO;
 import Common.DTO.SYSTEM_USER_INFO_DTO;
 import Common.ServiceInterface.SYSTEM_USER_INFO_Service_Interface;
+import Common.ServiceInterface.AUTH_MENU_Service_interface;
 import Common.ServiceInterface.SITE_INFO_Service_interface;
 import Common.ServiceInterface.SYSTEM_USER_GROUP_INFO_Service_interface;
 
@@ -42,13 +45,19 @@ public class ConfigManagementActionController {
 	private Gson gson = new Gson();
 	private AjaxResult result = new AjaxResult();
 
-	/*****************************************************systemUserManagement*****************************************************/
-	// region systemUserManagement
-
 	// region Autowired
 	@Autowired
 	private SYSTEM_USER_INFO_Service_Interface userInfoService;
+	@Autowired
+	private SITE_INFO_Service_interface siteInfoService;
+	@Autowired
+	private SYSTEM_USER_GROUP_INFO_Service_interface groupInfoService;
+	@Autowired
+	private AUTH_MENU_Service_interface authMenuService;
 	// endregion
+
+	/***************************************************** systemUserManagement *****************************************************/
+	// region systemUserManagement
 
 	// region getSystemUserManagementDatatableDatas
 
@@ -235,16 +244,9 @@ public class ConfigManagementActionController {
 	// endregion
 
 	// endregion
-	
-	/*****************************************************systemGroupManagement*****************************************************/
-	// region systemGroupManagement
 
-	// region Autowired
-	@Autowired
-	private SITE_INFO_Service_interface siteInfoService;
-	@Autowired
-	private SYSTEM_USER_GROUP_INFO_Service_interface groupInfoService;
-	// endregion
+	/***************************************************** systemGroupManagement *****************************************************/
+	// region systemGroupManagement
 
 	// region getPlaceOfBusinessDatatableDatas
 	@RequestMapping(value = "getPlaceOfBusinessDatatableDatas", method = RequestMethod.POST)
@@ -312,38 +314,14 @@ public class ConfigManagementActionController {
 	}
 	// endregion
 
-	// region getSiteNames
-	@RequestMapping(value = "getSiteNames", method = RequestMethod.POST, produces = "application/text; charset=utf8")
-	public @ResponseBody Object getSiteNames(HttpServletRequest request) {
-		logger.info("getSiteNames : " + request.getLocalAddr());
-		try {
-			List<SITE_INFO_DTO> sitesInfoList = siteInfoService.select_SITE_INFO();
-			List<Map<String, Object>> mapList = new ArrayList<>();
-			for (SITE_INFO_DTO sid : sitesInfoList) {
-				HashMap<String, Object> map = new HashMap<>();
-				map.put("site_name", sid.getSite_name());
-				map.put("site_id", sid.getSite_id());
-				mapList.add(map);
-			}
-			result.data = mapList;
-			result.result = true;
-			return gson.toJson(result);
-		} catch (Exception e) {
-			e.printStackTrace();
-			result.result = false;
-			return gson.toJson(result);
-		}
-	}
-	// endregion
-
 	// region addSite
 	@RequestMapping(value = "addSite", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object addSite(HttpServletRequest request) {
 		logger.info("addSite : " + request.getLocalAddr());
 		try {
-			//site_name, site_code, description
-			int cnt = siteInfoService.insert_SITE_INFO_ONE_RECORD(gson.fromJson(request.getReader(),
-					new TypeToken<HashMap<String, Object>>() {
+			// site_name, site_code, description
+			int cnt = siteInfoService.insert_SITE_INFO_ONE_RECORD(
+					gson.fromJson(request.getReader(), new TypeToken<HashMap<String, Object>>() {
 					}.getType()));
 			if (cnt > -1)
 				result.result = true;
@@ -357,7 +335,7 @@ public class ConfigManagementActionController {
 		}
 	}
 	// endregion
-	
+
 	// region addGroup
 	@RequestMapping(value = "addGroup", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object addGroup(HttpServletRequest request) {
@@ -370,7 +348,7 @@ public class ConfigManagementActionController {
 			parameters.remove("site_id");
 			parameters.put("site_id", site_id);
 			int cnt = groupInfoService.insert_SYSTEM_USER_GROUP_INFO_ONE_RECORD(parameters);
-			
+
 			if (cnt > -1)
 				result.result = true;
 			else
@@ -383,7 +361,7 @@ public class ConfigManagementActionController {
 		}
 	}
 	// endregion
-	
+
 	// region updateSite
 	@RequestMapping(value = "updateSite", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object updateSite(HttpServletRequest request) {
@@ -409,7 +387,7 @@ public class ConfigManagementActionController {
 
 	}
 	// endregion
-	
+
 	// region updateGroup
 	@RequestMapping(value = "updateGroup", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object updateGroup(HttpServletRequest request) {
@@ -438,7 +416,7 @@ public class ConfigManagementActionController {
 		}
 	}
 	// endregion
-	
+
 	// region deleteSites
 	@RequestMapping(value = "deleteSites", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object deleteSites(HttpServletRequest request) {
@@ -467,7 +445,7 @@ public class ConfigManagementActionController {
 		return null;
 	}
 	// endregion
-	
+
 	// region deleteGroups
 	@RequestMapping(value = "deleteGroups", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object deleteGroups(HttpServletRequest request) {
@@ -497,6 +475,145 @@ public class ConfigManagementActionController {
 
 	}
 	// endregion
-	
+
 	// endregion
+
+	/***************************************************** systemMenuAuthorityManagement *****************************************************/
+	// region getAuthorityTable
+	@RequestMapping(value = "getAuthorityTable", method = RequestMethod.GET, produces = "application/text; charset=utf8")
+	public void getAuthorityTable(Locale locale, Model model, HttpServletRequest request,
+			HttpServletResponse response) {
+		logger.info("getAuthorityTable : " + request.getLocalAddr());
+		System.out.println("getAuthorityTable Controller");
+		try {
+			HttpSession session = request.getSession(true);
+			HashMap<String, Object> parameters = new HashMap<>();
+			parameters.put("site_id", Integer.parseInt(session.getAttribute("site_id").toString()));
+			List<Map<String, Object>> tableInfo = authMenuService.select_AUTH_MENU_MAKE_SEARCH_FOR_SITE(parameters);// body_info
+			List<Map<String, Object>> groupNames = authMenuService.select_AUTH_MENU_GROUP_NAMES(parameters);// header
+			List<Map<String, Object>> menuMaster = authMenuService.select_AUTH_MENU_M_MASTER();// body-master
+			List<Map<String, Object>> menuSub = authMenuService.select_AUTH_MENU_M_SUB();// body-sub
+			if (groupNames.size() > 0) {
+				StringBuffer sb = new StringBuffer();
+				sb.append("<table id='auth_table' >");
+				sb.append("<thead id='auth_table_head'>");
+				sb.append("<th colspan=2></th>");
+
+				Iterator<Map<String, Object>> groupNamesIterator = groupNames.iterator();
+				while (groupNamesIterator.hasNext()) {
+					Map<String, Object> groupName = groupNamesIterator.next();
+					sb.append("<th>");
+					sb.append(groupName.get("group_name").toString());
+					sb.append("</th>");
+				}
+				int count = 0;
+				sb.append("</thead>");
+				sb.append("<tbody id='auth_table_body'>");
+				for (Map<String, Object> mm : menuMaster) {
+					count++;
+					List<Object> subRemoveList = new ArrayList<>();
+					StringBuffer tmp = new StringBuffer();
+
+					for (Map<String, Object> ms : menuSub) {
+						if (mm.get("master_cd").toString().equals(ms.get("master_cd").toString())) {
+							List<Object> tiRemoveList = new ArrayList<>();
+							tmp.append("<tr>");
+							tmp.append("<td name=sub_menu");
+							tmp.append(count);
+							tmp.append(">");
+							tmp.append("<input type='hidden' name='sub_cd' value='");
+							tmp.append(ms.get("sub_cd"));
+							tmp.append("' />");
+							tmp.append(ms.get("subname_key"));
+							tmp.append("</td>");
+							for (Map<String, Object> ti : tableInfo) {
+								if (ti.get("master_cd").toString().equals(mm.get("master_cd").toString())
+										&& ti.get("sub_cd").toString().equals(ms.get("sub_cd").toString())) {
+									tmp.append("<td name=group_grant");
+									tmp.append(count);
+									tmp.append(">");
+									tmp.append("<input type='hidden' name='auth_menu_id' value='");
+									tmp.append(ti.get("auth_menu_id"));
+									tmp.append("' />");
+									String authState = ti.get("auth_state").toString();
+									tmp.append("<input type='hidden' name='auth_state' value='");
+									tmp.append(authState);
+									tmp.append("' />");
+									tmp.append("<input type='hidden' name='site_id' value='");
+									tmp.append(ti.get("site_id"));
+									tmp.append("' />");
+									tmp.append("<input type='hidden' name='group_id' value='");
+									tmp.append(ti.get("group_id"));
+									tmp.append("' />");
+									tmp.append(authState.equals("W")?"읽기/쓰기":authState.equals("R")?"읽기":"권한없음");
+									tmp.append("</td>");
+									tiRemoveList.add(ti);
+								}
+							}
+
+							for (Object ti : tiRemoveList) {
+								tableInfo.remove(ti);
+							}
+							subRemoveList.add(ms);
+							tmp.append("</tr>");
+							//test
+						}
+					}
+					sb.append("<td name=main_menu");
+					sb.append(count);
+					sb.append(" rowspan='");
+					sb.append(subRemoveList.size() + 1);// 자기자신 row
+					sb.append("'>");
+					sb.append("<input type='hidden' name='master_cd' value='");
+					sb.append(mm.get("master_cd"));
+					sb.append("' />");
+					sb.append(mm.get("master_namekey"));
+					sb.append("</td>");
+					sb.append(tmp.toString());
+					for (Object s : subRemoveList) {
+						tableInfo.remove(s);
+					}
+				}
+				sb.append("</tbody>");
+				sb.append("</table>");
+				sb.append("<script src='resources/js/configMangement/systemMenuAuthorityManagementTable.js'></script>");
+				System.out.println(sb.toString());
+				response.setCharacterEncoding("utf-8");
+				response.getWriter().print(sb.toString());
+				response.getWriter().flush();
+				response.getWriter().close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e.getMessage());
+		}
+	}
+
+	// endregion
+
+	/***************************************************** public *****************************************************/
+	// region getSiteNames
+	@RequestMapping(value = "getSiteNames", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+	public @ResponseBody Object getSiteNames(HttpServletRequest request) {
+		logger.info("getSiteNames : " + request.getLocalAddr());
+		try {
+			List<SITE_INFO_DTO> sitesInfoList = siteInfoService.select_SITE_INFO();
+			List<Map<String, Object>> mapList = new ArrayList<>();
+			for (SITE_INFO_DTO sid : sitesInfoList) {
+				HashMap<String, Object> map = new HashMap<>();
+				map.put("site_name", sid.getSite_name());
+				map.put("site_id", sid.getSite_id());
+				mapList.add(map);
+			}
+			result.data = mapList;
+			result.result = true;
+			return gson.toJson(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.result = false;
+			return gson.toJson(result);
+		}
+	}
+	// endregion
+
 }

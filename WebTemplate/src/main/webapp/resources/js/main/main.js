@@ -7,6 +7,7 @@
 //	// Javascript에서 Language갑 가져오기 예제 2
 //	// alert(getLanguage("Title"));
 //});
+var currentURL;
 changeframe = function(url, acticeid, masterKey, subKey) {
 
 	try {
@@ -16,7 +17,8 @@ changeframe = function(url, acticeid, masterKey, subKey) {
 			
 			//console.log("url:" + url + ", acticeid :" + acticeid);
 			$("#content_frame").load(url);
-
+			currentURL = url;
+			
 			var menu = $("[id^='menu_']");
 			if (acticeid != '') {
 				var menu = $("[id^='menu_']");
@@ -132,6 +134,7 @@ param += "&site_master=" + master;
             }
         },
         complete: function(data) {
+        	$("#content_frame").load(currentURL);
         }
     });
 }

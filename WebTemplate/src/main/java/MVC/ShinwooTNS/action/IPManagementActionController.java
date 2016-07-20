@@ -23,6 +23,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
 
 import Common.DTO.AjaxResult;
+import Common.Helper.CommonHelper;
 import Common.ServiceInterface.IP_MANAGEMENT_Service_Interface;
 
 @Controller
@@ -37,6 +38,7 @@ public class IPManagementActionController {
 	@Autowired
 	private IP_MANAGEMENT_Service_Interface ipManagementService;
 	
+	//고정 IP 현황 -> Segment 현황 조회
 	@RequestMapping(value = "staticIPStatus_Segment_Select", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public void staticIPStatus_Segment_Select(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		System.out.println("staticIPStatus_Segment_Select");
@@ -72,6 +74,7 @@ public class IPManagementActionController {
 		}
 	}
 
+	//고정 IP 현황 -> Segment별 상세 현황 조회
 	@RequestMapping(value = "staticIPStatus_Segment_Detail_Select", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public void staticIPStatus_Segment_Detail_Select(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		System.out.println("staticIPStatus_Segment_Detail_Select");
@@ -84,14 +87,14 @@ public class IPManagementActionController {
 		try {			
 			String[] columns = { "ipaddr", "ip_type", "macaddr", "duid", "hostname", "state", "username", 
 					   "fingerprint", "os", "lease_start_time", "lease_end_time", "last_discovered", "description"};			
-			String m_Segmentid = request.getParameter("segmentid");
+			String m_network = request.getParameter("network");
 			
 			HashMap<String, Object> parameters = Common.Helper.DatatableHelper.getDatatableParametas(request,columns,0);
 			
 			String siteID = session.getAttribute("site_id").toString();
 			if (!siteID.equals("")) {
 				parameters.put("siteid", Integer.parseInt(session.getAttribute("site_id").toString()));
-				parameters.put("network", m_Segmentid);
+				parameters.put("network", m_network);
 				
 				dataList = ipManagementService.select_IP_MANAGEMENT_SEGMENT_DETAIL(parameters);
 	
@@ -118,76 +121,111 @@ public class IPManagementActionController {
 			response.getWriter().close();			
 		}
 	}
-	
+
+	//고정 IP 현황 -> Segment별 상세 현황 IPMap 데이터 조회
 	@RequestMapping(value = "staticIPStatus_Segment_MapData", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object staticIPStatus_Segment_MapData(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		System.out.println("staticIPStatus_Segment_MapData");
 		logger.info("staticIPStatus_Segment_MapData : " + request.getLocalAddr());
+		HttpSession session = request.getSession(true);
 		List<Map<String, Object>> dataList = new ArrayList<Map<String, Object>>();
 		result = new AjaxResult();
 		
 		try {
-			HashMap<String, Object> param = gson.fromJson(request.getReader(),new TypeToken<HashMap<String, Object>>() {}.getType());
-			int segmentid = Integer.parseInt(param.get("segmentid").toString());
-						
-			//region 맵에서 사용할 데이터 쿼리
-			String cClassIPAddress = "";
-			StringBuilder m_activeLease = new StringBuilder();
-			StringBuilder m_conflict = new StringBuilder();
-			StringBuilder m_exclusion = new StringBuilder();
-			StringBuilder m_fixed = new StringBuilder();
-			StringBuilder m_hostnotindns = new StringBuilder();
-			StringBuilder m_object = new StringBuilder();
-			StringBuilder m_pending = new StringBuilder();
-			StringBuilder m_range = new StringBuilder();
-			StringBuilder m_reservedrange = new StringBuilder();
-			StringBuilder m_unmanaged = new StringBuilder();
-			StringBuilder m_unused = new StringBuilder();
-			StringBuilder m_used = new StringBuilder();
+			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),new TypeToken<HashMap<String, Object>>() {}.getType());
+			String network = parameters.get("network").toString();
 			
-			List<Map<String, Object>> allDataList = ipManagementService.select_IP_MANAGEMENT_SEGMENT_DETAIL_MAPDATA(segmentid);
-			String ip = "";
-			for (Map<String, Object> ipListMap : allDataList) {
-				ip = ipListMap.get("ip").toString();
-				if (cClassIPAddress.equals("")) {
-					String[] ipArr = ip.split("[.]");
-					if (ipArr.length >= 3) {
-						cClassIPAddress = ipArr[0] + "." + ipArr[1] + "." + ipArr[2];
+			String siteID = session.getAttribute("site_id").toString();
+			if (!siteID.equals("")) {
+				parameters.put("siteid", Integer.parseInt(siteID));
+				
+				//region 맵에서 사용할 데이터 쿼리
+				String networkStartip = "";
+				String networkEndip = "";
+				StringBuilder m_DHCP_Range = new StringBuilder();
+				
+				StringBuilder m_activeLease = new StringBuilder();
+				StringBuilder m_conflict = new StringBuilder();
+				StringBuilder m_exclusion = new StringBuilder();
+				StringBuilder m_fixed = new StringBuilder();
+				StringBuilder m_hostnotindns = new StringBuilder();
+				StringBuilder m_object = new StringBuilder();
+				StringBuilder m_pending = new StringBuilder();
+				StringBuilder m_reservedrange = new StringBuilder();
+				StringBuilder m_unmanaged = new StringBuilder();
+				StringBuilder m_unused = new StringBuilder();
+				StringBuilder m_used = new StringBuilder();
+				
+				//region DHCP Range 데이터 조회
+				List<Map<String, Object>> dhcpRange = ipManagementService.select_IP_MANAGEMENT_SEGMENT_DETAIL_MAP_DHCPRANGE(parameters);
+				if (dhcpRange.size() > 0) {					 
+					for (Map<String, Object> dhcpRangeMap : dhcpRange) {
+						networkStartip = dhcpRangeMap.get("start_ip").toString();
+						networkEndip = dhcpRangeMap.get("end_ip").toString();
+						
+						long startip = CommonHelper.IPv4ToLong(dhcpRangeMap.get("dhcp_start_ip").toString());
+						long endip = CommonHelper.IPv4ToLong(dhcpRangeMap.get("dhcp_end_ip").toString());
+						 
+						for (long i = startip; i <= endip; i++) {
+							String rangeIP = CommonHelper.longToIPv4(i);
+							m_DHCP_Range.append((m_DHCP_Range.toString().length() > 0) ? "," + rangeIP : rangeIP);
+						}
 					}
 				}
-				StringCompare(ipListMap.get("status").toString().toLowerCase(), "activelease", ip, m_activeLease);
-				StringCompare(ipListMap.get("status").toString().toLowerCase(), "conflict", ip, m_conflict);
-				StringCompare(ipListMap.get("status").toString().toLowerCase(), "exclusion", ip, m_exclusion);
-				StringCompare(ipListMap.get("status").toString().toLowerCase(), "fixed", ip, m_fixed);
-				StringCompare(ipListMap.get("status").toString().toLowerCase(), "hostnotindns", ip, m_hostnotindns);
-				StringCompare(ipListMap.get("status").toString().toLowerCase(), "object", ip, m_object);
-				StringCompare(ipListMap.get("status").toString().toLowerCase(), "pending", ip, m_pending);
-				StringCompare(ipListMap.get("status").toString().toLowerCase(), "range", ip, m_range);
-				StringCompare(ipListMap.get("status").toString().toLowerCase(), "reservedrange", ip, m_reservedrange);
-				StringCompare(ipListMap.get("status").toString().toLowerCase(), "unmanaged", ip, m_unmanaged);
-				StringCompare(ipListMap.get("status").toString().toLowerCase(), "unused", ip, m_unused);
-				StringCompare(ipListMap.get("status").toString().toLowerCase(), "used", ip, m_used);				
+				//endregion
+				
+				/**
+				List<Map<String, Object>> allDataList = ipManagementService.select_IP_MANAGEMENT_SEGMENT_DETAIL_MAPDATA(parameters);
+				String ip = "";
+				for (Map<String, Object> ipListMap : allDataList) {
+					ip = ipListMap.get("ip").toString();
+					if (cClassIPAddress.equals("")) {
+						String[] ipArr = ip.split("[.]");
+						if (ipArr.length >= 3) {
+							cClassIPAddress = ipArr[0] + "." + ipArr[1] + "." + ipArr[2];
+						}
+					}
+					StringCompare(ipListMap.get("status").toString().toLowerCase(), "DHCP_Range", ip, m_DHCP_Range); //DHCP Range
+					StringCompare(ipListMap.get("status").toString().toLowerCase(), "activelease", ip, m_activeLease);
+					StringCompare(ipListMap.get("status").toString().toLowerCase(), "conflict", ip, m_conflict);
+					StringCompare(ipListMap.get("status").toString().toLowerCase(), "exclusion", ip, m_exclusion);
+					StringCompare(ipListMap.get("status").toString().toLowerCase(), "fixed", ip, m_fixed);
+					StringCompare(ipListMap.get("status").toString().toLowerCase(), "hostnotindns", ip, m_hostnotindns);
+					StringCompare(ipListMap.get("status").toString().toLowerCase(), "object", ip, m_object);
+					StringCompare(ipListMap.get("status").toString().toLowerCase(), "pending", ip, m_pending);
+					StringCompare(ipListMap.get("status").toString().toLowerCase(), "reservedrange", ip, m_reservedrange);
+					StringCompare(ipListMap.get("status").toString().toLowerCase(), "unmanaged", ip, m_unmanaged);
+					StringCompare(ipListMap.get("status").toString().toLowerCase(), "unused", ip, m_unused);
+					StringCompare(ipListMap.get("status").toString().toLowerCase(), "used", ip, m_used);				
+				}
+				**/
+				HashMap<String, Object> ipMap  = new HashMap<>();
+				ipMap.put("DHCP_Range", m_DHCP_Range);
+				/**
+				ipMap.put("cClassIPAddress", cClassIPAddress);
+				ipMap.put("activeLease", m_activeLease);
+				ipMap.put("conflict", m_conflict);
+				ipMap.put("exclusion", m_exclusion);
+				ipMap.put("fixed", m_fixed);
+				ipMap.put("hostnotindns", m_hostnotindns);
+				ipMap.put("object", m_object);
+				ipMap.put("pending", m_pending);
+				ipMap.put("reservedrange", m_reservedrange);
+				ipMap.put("unmanaged", m_unmanaged);
+				ipMap.put("unused", m_unused);
+				ipMap.put("used", m_used);
+				**/
+				dataList.add(ipMap);
+				//endregion			
+				
+				//Thread.sleep(1000);
+				result.result = true;
+				result.data = dataList;
 			}
-			HashMap<String, Object> ipMap  = new HashMap<>();
-			ipMap.put("cClassIPAddress", cClassIPAddress);
-			ipMap.put("activeLease", m_activeLease);
-			ipMap.put("conflict", m_conflict);
-			ipMap.put("exclusion", m_exclusion);
-			ipMap.put("fixed", m_fixed);
-			ipMap.put("hostnotindns", m_hostnotindns);
-			ipMap.put("object", m_object);
-			ipMap.put("pending", m_pending);
-			ipMap.put("range", m_range);
-			ipMap.put("reservedrange", m_reservedrange);
-			ipMap.put("unmanaged", m_unmanaged);
-			ipMap.put("unused", m_unused);
-			ipMap.put("used", m_used);
-			dataList.add(ipMap);
-			//endregion			
-			
-			//Thread.sleep(1000);
-			result.result = true;
-			result.data = dataList;
+			else {
+				result.result = false;
+				result.errorMessage = "Site id is Null in Session!";
+			}
 		}  catch (Exception e) {
 			result.result = false;
 			result.errorMessage = e.getMessage();
@@ -197,6 +235,7 @@ public class IPManagementActionController {
 		return gson.toJson(result);
 	}
 
+	//문자열 추가 Help 메서드
 	private void StringCompare(String lowerCase, String key, String value, StringBuilder m_string) {
 		if (lowerCase.equals(key)) {
 			m_string.append((m_string.toString().length() > 0) ? "," + value : value);
