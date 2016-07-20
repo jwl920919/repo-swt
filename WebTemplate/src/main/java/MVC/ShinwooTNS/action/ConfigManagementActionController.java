@@ -556,6 +556,7 @@ public class ConfigManagementActionController {
 							}
 							subRemoveList.add(ms);
 							tmp.append("</tr>");
+							//test
 						}
 					}
 					sb.append("<td name=main_menu");
