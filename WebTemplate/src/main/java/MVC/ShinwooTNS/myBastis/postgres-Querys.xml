@@ -310,8 +310,12 @@
 	<!-- Description : IP관리 > 고정IP현황 - 세그먼트별 ip map 데이터  - DHCP Range -->
 	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
 	<select id="select_IP_MANAGEMENT_SEGMENT_DETAIL_MAP_DHCPRANGE" resultType="java.util.HashMap">
-		SELECT * FROM "dhcp_range"
- 		 WHERE "site_id" = #{siteid} and "network" = #{network}
+		 SELECT "netzone".*, "range"."start_ip" as "dhcp_start_ip", "range"."end_ip" as "dhcp_end_ip"
+           FROM "dhcp_network" AS "netzone", "dhcp_range" AS "range"
+		  WHERE "netzone"."site_id" = "range"."site_id" 
+		    AND "netzone"."network" = "range"."network" 
+ 		    AND "netzone"."site_id" = #{siteid} AND "netzone"."network" =  #{network}
+ 		  ORDER BY inet("netzone"."network")
 	</select>
 	
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
