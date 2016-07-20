@@ -61,6 +61,35 @@
 		]]>
 	</delete>
 	
+	<!-- ############################ DHCP Fixed IP ############################ -->
+	<select id="selectDhcpFixedIpBySiteId" resultType="com.shinwootns.ipm.data.entity.DhcpFixedIp">
+		<![CDATA[
+			SELECT * FROM dhcp_fixed_ip WHERE site_id=#{site_id}
+		]]>
+	</select>
+	
+	<insert id="insertDhcpFixedIp" parameterType="com.shinwootns.ipm.data.entity.DhcpFixedIp">
+		<![CDATA[
+			INSERT INTO dhcp_fixed_ip (site_id, network, ipaddr, macaddr, comment, disable, update_time)
+			VALUES ( #{site_id}, #{network}, #{ipaddr}, #{macaddr}, #{comment}, #{disable}, now() ) 
+		]]>
+	</insert>
+	
+	<update id="updateDhcpFixedIp" parameterType="com.shinwootns.ipm.data.entity.DhcpFixedIp">
+		<![CDATA[
+			UPDATE dhcp_fixed_ip
+			SET network=#{network}, macaddr=#{macaddr}, comment=#{comment}, disable=#{disable}, update_time=now()
+			WHERE site_id=#{site_id} AND ipaddr=#{ipaddr}
+		]]>
+	</update>
+	
+	<delete id="deleteDhcpFixedIp">
+		<![CDATA[
+			DELETE FROM dhcp_fixed_ip
+			WHERE site_id=#{site_id} AND ipaddr=#{ipaddr}
+		]]>
+	</delete>
+	
 	<!-- ############################ DHCP Filter ############################ -->
 	<select id="selectDhcpFilterBySiteId" resultType="com.shinwootns.ipm.data.entity.DhcpMacFilter">
 		<![CDATA[
@@ -90,66 +119,47 @@
 		]]>
 	</delete>
 	
-	<!-- ############################ DHCP Lease IP ############################ -->
-	<select id="selectDhcpLeaseIpBySiteId" resultType="com.shinwootns.ipm.data.entity.DhcpLeaseIp">
+	<!-- ############################ DHCP IP STATUS ############################ -->
+	<select id="selectDhcpIpStatusByNetwork" resultType="com.shinwootns.ipm.data.entity.DhcpIpStatus">
 		<![CDATA[
-			SELECT * FROM dhcp_lease_ip WHERE site_id=#{site_id}
+			SELECT * FROM dhcp_ip_status WHERE site_id=#{site_id} AND network=#{network}
 		]]>
 	</select>
 	
-	<insert id="insertDhcpLeaseIp" parameterType="com.shinwootns.ipm.data.entity.DhcpLeaseIp">
+	<insert id="insertDhcpIpStatus" parameterType="com.shinwootns.ipm.data.entity.DhcpIpStatus">
 		<![CDATA[
-			INSERT INTO dhcp_lease_ip (site_id, network, ipaddr, ip_type, macaddr, duid, hostname, state, 
-       			username, fingerprint, os, lease_start_time, lease_end_time, last_discovered, update_time)
-			VALUES ( #{site_id}, #{network}, #{ipaddr}, #{ip_type}, #{macaddr}, #{duid}, #{hostname}, #{state}, 
-       			#{username}, #{fingerprint}, #{os}, #{lease_start_time}, #{lease_end_time}, #{last_discovered}, now() ) 
+			INSERT INTO dhcp_ip_status (
+				site_id, network, ipaddr, ip_type, macaddr, duid, is_conflict
+				, conflict_types, status, lease_state, obj_types, discover_status
+				, usage, host_name, host_os, fingerprint, lease_start_time, lease_end_time
+				, last_discovered, is_never_ends, is_never_start, update_time)
+			VALUES ( 
+				#{site_id}, #{network}, #{ipaddr}, #{ip_type}, #{macaddr}, #{duid}, #{is_conflict}
+				, #{conflict_types}, #{status}, #{lease_state}, #{obj_types}, #{discover_status}
+				, #{usage}, #{host_name}, #{host_os}, #{fingerprint}, #{lease_start_time}
+				, #{lease_end_time}, #{last_discovered}, #{is_never_ends}, #{is_never_start}, now() ) 
 		]]>
 	</insert>
 	
-	<update id="updateDhcpLeaseIp" parameterType="com.shinwootns.ipm.data.entity.DhcpLeaseIp">
+	<update id="updateDhcpIpStatus" parameterType="com.shinwootns.ipm.data.entity.DhcpIpStatus">
 		<![CDATA[
-			UPDATE dhcp_lease_ip
-			SET network=#{network}, ip_type=#{ip_type}, macaddr=#{macaddr}, duid=#{duid}, hostname=#{hostname}, state=#{state} 
-       			, username=#{username}, fingerprint=#{fingerprint}, os=#{os}
-       			, lease_start_time=#{lease_start_time}, lease_end_time=#{lease_end_time}, last_discovered=#{last_discovered}
-       			, update_time=now()
+			UPDATE dhcp_ip_status
+			SET network=#{network}, ip_type=#{ip_type}, macaddr=#{macaddr}, duid=#{duid}, is_conflict=#{is_conflict}, conflict_types=#{conflict_types}
+				, status=#{status}, lease_state=#{lease_state}, obj_types=#{obj_types}, discover_status=#{discover_status}
+				, usage=#{usage}, host_name=#{host_name}, host_os=#{host_os}, fingerprint=#{fingerprint}
+				, lease_start_time=#{lease_start_time}, lease_end_time=#{lease_end_time}, last_discovered=#{last_discovered}
+				, is_never_ends=#{is_never_ends}, is_never_start=#{is_never_start}
+				, update_time=now()
 			WHERE site_id=#{site_id} AND ipaddr=#{ipaddr}
 		]]>
 	</update>
 	
-	<delete id="deleteDhcpLeaseIp">
+	<delete id="deleteDhcpIpStatus">
 		<![CDATA[
-			DELETE FROM dhcp_lease_ip
+			DELETE FROM dhcp_ip_status
 			WHERE site_id=#{site_id} AND ipaddr=#{ipaddr}
 		]]>
 	</delete>
 	
-	<!-- ############################ DHCP Fixed IP ############################ -->
-	<select id="selectDhcpFixedIpBySiteId" resultType="com.shinwootns.ipm.data.entity.DhcpFixedIp">
-		<![CDATA[
-			SELECT * FROM dhcp_fixed_ip WHERE site_id=#{site_id}
-		]]>
-	</select>
 	
-	<insert id="insertDhcpFixedIp" parameterType="com.shinwootns.ipm.data.entity.DhcpFixedIp">
-		<![CDATA[
-			INSERT INTO dhcp_fixed_ip (site_id, network, ipaddr, macaddr, comment, disable, update_time)
-			VALUES ( #{site_id}, #{network}, #{ipaddr}, #{macaddr}, #{comment}, #{disable}, now() ) 
-		]]>
-	</insert>
-	
-	<update id="updateDhcpFixedIp" parameterType="com.shinwootns.ipm.data.entity.DhcpFixedIp">
-		<![CDATA[
-			UPDATE dhcp_fixed_ip
-			SET network=#{network}, macaddr=#{macaddr}, comment=#{comment}, disable=#{disable}, update_time=now()
-			WHERE site_id=#{site_id} AND ipaddr=#{ipaddr}
-		]]>
-	</update>
-	
-	<delete id="deleteDhcpFixedIp">
-		<![CDATA[
-			DELETE FROM dhcp_fixed_ip
-			WHERE site_id=#{site_id} AND ipaddr=#{ipaddr}
-		]]>
-	</delete>
 </mapper>

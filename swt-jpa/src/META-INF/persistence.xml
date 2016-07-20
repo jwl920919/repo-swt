@@ -27,8 +27,6 @@
 		<class>com.shinwootns.ipm.data.entity.DeviceInsight</class>
 		<class>com.shinwootns.ipm.data.entity.DeviceNetwork</class>
 		<class>com.shinwootns.ipm.data.entity.DeviceProbe</class>
-		<class>com.shinwootns.ipm.data.entity.DhcpLeaseIp</class>
-		<class>com.shinwootns.ipm.data.entity.DhcpLeaseIpPK</class>
 		<class>com.shinwootns.ipm.data.entity.InterfaceCam</class>
 		<class>com.shinwootns.ipm.data.entity.InterfaceCamPK</class>
 		<class>com.shinwootns.ipm.data.entity.InterfaceCamHistory</class>
@@ -43,5 +41,9 @@
 		<class>com.shinwootns.ipm.data.entity.DhcpRangePK</class>
 		<class>com.shinwootns.ipm.data.entity.DhcpFixedIp</class>
 		<class>com.shinwootns.ipm.data.entity.DhcpFixedIpPK</class>
+		<class>com.shinwootns.ipm.data.entity.DhcpIpStatus</class>
+		<class>com.shinwootns.ipm.data.entity.DhcpIpStatusPK</class>
+		<class>com.shinwootns.ipm.data.entity.DhcpLeaseIp</class>
+		<class>com.shinwootns.ipm.data.entity.DhcpLeaseIpPK</class>
 	</persistence-unit>
 </persistence>

@@ -4,11 +4,11 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 /**
- * The primary key class for the dhcp_fixed_ip database table.
+ * The primary key class for the dhcp_ip_status database table.
  * 
  */
 @Embeddable
-public class DhcpFixedIpPK implements Serializable {
+public class DhcpIpStatusPK implements Serializable {
 	//default serial version id, required for serializable classes.
 	private static final long serialVersionUID = 1L;
 
@@ -17,7 +17,7 @@ public class DhcpFixedIpPK implements Serializable {
 
 	private String ipaddr;
 
-	public DhcpFixedIpPK() {
+	public DhcpIpStatusPK() {
 	}
 	public Integer getSiteId() {
 		return this.siteId;
@@ -36,10 +36,10 @@ public class DhcpFixedIpPK implements Serializable {
 		if (this == other) {
 			return true;
 		}
-		if (!(other instanceof DhcpFixedIpPK)) {
+		if (!(other instanceof DhcpIpStatusPK)) {
 			return false;
 		}
-		DhcpFixedIpPK castOther = (DhcpFixedIpPK)other;
+		DhcpIpStatusPK castOther = (DhcpIpStatusPK)other;
 		return 
 			this.siteId.equals(castOther.siteId)
 			&& this.ipaddr.equals(castOther.ipaddr);

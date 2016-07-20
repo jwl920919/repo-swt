@@ -344,6 +344,44 @@ CREATE TABLE public.dhcp_fixed_ip
 );
 
 
+-- DHCP IP STATUS
+CREATE TABLE dhcp_ip_status
+(
+  site_id integer NOT NULL,
+  network character varying(64) NOT NULL,
+  ipaddr character varying(40) NOT NULL,
+  ip_type character varying(18),
+  macaddr character varying(18),
+  duid character varying(64),
+  is_conflict boolean DEFAULT false,
+  conflict_types character varying(16),
+  status character varying(16),
+  lease_state character varying(16),
+  obj_types character varying(64),
+  discover_status character varying(16),
+  usage character varying(32),
+  host_name character varying(128),
+  host_os character varying(128),
+  fingerprint character varying(128),
+  is_never_ends boolean DEFAULT false,
+  is_never_start boolean DEFAULT false,
+  lease_start_time timestamp with time zone,
+  lease_end_time timestamp with time zone,
+  last_discovered timestamp with time zone,
+  update_time timestamp with time zone DEFAULT current_timestamp,
+  user_description character varying(256),
+  CONSTRAINT dhcp_ip_status_pkey PRIMARY KEY (site_id, ipaddr)
+);
+COMMENT ON COLUMN dhcp_ip_status.ip_type IS 'IPV4, IPV6';
+COMMENT ON COLUMN dhcp_ip_status.status IS 'The current status of the address (USED, UNUSED)';
+COMMENT ON COLUMN dhcp_ip_status.lease_state IS '(ABANDONED, ACTIVE, BACKUP, DECLINED, EXPIRED, FREE, OFFERED, RELEASED, RESET, STATIC)';
+COMMENT ON COLUMN dhcp_ip_status.conflict_types IS '(DEVICE_TYPE, DEVICE_VENDOR, DHCP_RANGE, DUID, MAC_ADDRESS, NONE, RESERVED_PORT, USED_RESERVED_PORT, VM_AFFILIATION)';
+COMMENT ON COLUMN dhcp_ip_status.discover_status IS '(COMPLETED, NONE, PENDING, RUNNING)';
+COMMENT ON COLUMN dhcp_ip_status.obj_types IS 'The types of associated objects (NETWORK, DHCP_RANGE, LEASE, FA, A,...)';
+COMMENT ON COLUMN dhcp_ip_status.usage IS 'Indicates whether the IP address is configured for DNS or DHCP (DHCP,DNS)';
+
+
+/*
 -- DHCP_LEASE_IP
 CREATE TABLE dhcp_lease_ip
 (
@@ -366,7 +404,7 @@ CREATE TABLE dhcp_lease_ip
   CONSTRAINT dhcp_lease_ip_pkey PRIMARY KEY (site_id, ipaddr)
 );
 COMMENT ON COLUMN dhcp_lease_ip.state IS 'ABANDONED, ACTIVE, BACKUP, DECLINED, EXPIRED, FREE, OFFERED, RELEASED, RESET, STATIC';
-
+*/
 
 /*
 -- client_history
