@@ -169,7 +169,7 @@ function tdClickEvent(obj){
 		});
 		
 		
-		//mapDataCall(segmentid);
+		mapDataCall(segmentid);
 	}
 }
 

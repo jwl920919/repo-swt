@@ -37,6 +37,7 @@ public class IPManagementActionController {
 	@Autowired
 	private IP_MANAGEMENT_Service_Interface ipManagementService;
 	
+	//고정 IP 현황 -> Segment 현황 조회
 	@RequestMapping(value = "staticIPStatus_Segment_Select", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public void staticIPStatus_Segment_Select(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		System.out.println("staticIPStatus_Segment_Select");
@@ -72,6 +73,7 @@ public class IPManagementActionController {
 		}
 	}
 
+	//고정 IP 현황 -> Segment별 상세 현황 조회
 	@RequestMapping(value = "staticIPStatus_Segment_Detail_Select", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public void staticIPStatus_Segment_Detail_Select(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		System.out.println("staticIPStatus_Segment_Detail_Select");
@@ -118,18 +120,21 @@ public class IPManagementActionController {
 			response.getWriter().close();			
 		}
 	}
-	
+
+	//고정 IP 현황 -> Segment별 상세 현황 IPMap 데이터 조회
 	@RequestMapping(value = "staticIPStatus_Segment_MapData", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object staticIPStatus_Segment_MapData(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		System.out.println("staticIPStatus_Segment_MapData");
 		logger.info("staticIPStatus_Segment_MapData : " + request.getLocalAddr());
+		HttpSession session = request.getSession(true);
 		List<Map<String, Object>> dataList = new ArrayList<Map<String, Object>>();
 		result = new AjaxResult();
 		
 		try {
 			HashMap<String, Object> param = gson.fromJson(request.getReader(),new TypeToken<HashMap<String, Object>>() {}.getType());
-			int segmentid = Integer.parseInt(param.get("segmentid").toString());
-						
+			String m_Segmentid = request.getParameter("segmentid");
+			String siteID = session.getAttribute("site_id").toString();
+			
 			//region 맵에서 사용할 데이터 쿼리
 			String cClassIPAddress = "";
 			StringBuilder m_activeLease = new StringBuilder();
@@ -197,6 +202,7 @@ public class IPManagementActionController {
 		return gson.toJson(result);
 	}
 
+	//문자열 추가 Help 메서드
 	private void StringCompare(String lowerCase, String key, String value, StringBuilder m_string) {
 		if (lowerCase.equals(key)) {
 			m_string.append((m_string.toString().length() > 0) ? "," + value : value);
