@@ -33,12 +33,12 @@ console.log($('#datatable'));
                               {"data" : "start_ip"},
                               {"data" : "end_ip"},
                               {"data" : "comment"}, ],
-                              dom: 'Bfrtip',
-                              buttons: [{extend: 'copyHtml5',exportOptions: {columns: [ 1, ':visible' ]}},
-                                        {extend: 'excelHtml5',exportOptions: {columns: ':visible'}},
-                                        {extend: 'pdfHtml5',exportOptions: {columns: [ 0, 1, 2, 3 ]}},
+//                              dom: 'Bfrtip',
+//                              buttons: [{extend: 'copyHtml5',exportOptions: {columns: [ 1, ':visible' ]}},
+//                                        {extend: 'excelHtml5',exportOptions: {columns: ':visible'}},
+//                                        {extend: 'pdfHtml5',exportOptions: {columns: [ 0, 1, 2, 3 ]}},
 //                                  	'colvis'
-                              ]
+//                              ]
             });
 	
 	//검색, 엔트리 위치 정렬
@@ -97,15 +97,14 @@ function tdClickEvent(obj){
 		
 		var ipCClass = String.format("{0} ~ {1}", $(obj).parent().children().eq(1).html(), $(obj).parent().children().eq(2).html());
 		$("#segmentLabel").text(ipCClass);
-		var segmentid = $(obj).parent().children().eq(0).html();
-		
-		
+		var network = $(obj).parent().children().eq(0).html();
+				
 		
 		$("#defaultDiv").css("display","none");
 		$("#detailDiv").css("display","block");
-		$("#selectSegment").text(segmentid);
+		$("#selectSegment").text(network);
 		console.log("ipCClass : " + ipCClass);
-		console.log("segmentid : " + segmentid);
+		console.log("network : " + network);
 	
 		$('#datatable_detail').DataTable(
 	            {
@@ -125,7 +124,7 @@ function tdClickEvent(obj){
 	                    "jsonp" : "callback",
 	                    "data" : function(data,type) {
 	                        data.search_key = data.search.value;
-	                        data.segmentid = segmentid;
+	                        data.network = network;
 	                        //console.log(data.search_key);
 	                    }
 	                },
@@ -169,7 +168,76 @@ function tdClickEvent(obj){
 		});
 		
 		
-		mapDataCall(segmentid);
+		mapDataCall(network);
+	}
+}
+
+/**
+ * IP Map Data Select
+**/
+//IP의 D 클래스 값을 담을 배열 선언
+function mapDataCall(network){
+	console.log("mapDataCall : "+network);
+	var DHCP_RangeArr = [], ActiveLeaseArr = [], ConflictArr = [], ExclusionArr = [], FixedArr = [], HostnotindnsArr = [];
+	var ObjectArr = [], PendingArr = [], ReservedrangeArr = [], UnmanagedArr = [], UnusedArr = [], UsedArr = []; 
+	var jObj = Object();
+    jObj.network = network;
+
+    $('#divLoading').attr("style","visibility: visible");
+    
+    $.ajax({
+        url : 'ipManagement/staticIPStatus_Segment_MapData',
+        type : "POST",
+        data : JSON.stringify(jObj),
+        dataType : "text",
+        success : function(data) {
+            var jsonObj = eval("(" + data + ')');
+	            if (jsonObj.result == true) {
+	            	console.log("jsonObj.data: "+jsonObj.data);
+	            	
+            	$.each(jsonObj.data, function (index, obj) {
+					console.log("DHCP_Range: "+obj.DHCP_Range);
+					console.log("DHCP_Range Tyep: " + typeof obj.DHCP_Range);
+//					console.log("used"+obj.used);
+            		
+            		mapDataHelper(obj.DHCP_Range, DHCP_RangeArr);
+            		mapDataHelper(obj.activeLease, ActiveLeaseArr);
+            		mapDataHelper(obj.conflict, ConflictArr);
+					mapDataHelper(obj.exclusion, ExclusionArr);
+					mapDataHelper(obj.fixed, FixedArr);
+					mapDataHelper(obj.hostnotindns, HostnotindnsArr);
+					mapDataHelper(obj.object, ObjectArr);
+					mapDataHelper(obj.pending, PendingArr);
+					mapDataHelper(obj.reservedrange, ReservedrangeArr);
+					mapDataHelper(obj.unmanaged, UnmanagedArr);
+					mapDataHelper(obj.unused, UnusedArr);
+					mapDataHelper(obj.used, UsedArr);
+					
+					fnIPMapInit(obj.cClassIPAddress, DHCP_RangeArr, ActiveLeaseArr, ConflictArr, ExclusionArr, FixedArr, HostnotindnsArr, ObjectArr,
+							PendingArr,	ReservedrangeArr, UnmanagedArr, UnusedArr, UsedArr);
+	            });
+            }
+        },
+        complete: function(data) {
+            $('#divLoading').attr("style","visibility: hidden");
+        }
+    });
+}
+
+/**
+ * 서버에서 받은 IP리스트들에서 D 클래스 정보만 배열에 담기 위한 function
+**/
+function mapDataHelper(stringIP, array){
+	console.log("stringIP: "+stringIP);
+	if (stringIP != undefined && stringIP.length > 0) {
+		var arrIPs = stringIP.split( "," );
+		
+		for (var i = 0; i < arrIPs.length; i++) {
+			if (checkIPv4(arrIPs[i])) {
+				var arrip = arrIPs[i].split( "." );
+				array.push(parseInt(arrip[3], 10)); 
+			}
+		}
 	}
 }
 
@@ -186,6 +254,7 @@ function fnIPMapSetting(){
         rectangleWidth: 19,
         rectangleHeight: 19,
         rectangleCss: 'rectangle',
+        dhcpRangeCss: 'dhcpRange',
         activeLeaseCss: 'activeLease',
         conflictCss: 'conflict',
         exclusionCss: 'exclusion',
@@ -193,7 +262,6 @@ function fnIPMapSetting(){
         hostnotindnsCss: 'hostnotindns',
         objectCss: 'object',
         pendingCss: 'pending',
-        rangeCss: 'range',
         reservedrangeCss: 'reservedrange',
         unmanagedCss: 'unmanaged',
         unusedCss: 'unused',
@@ -206,16 +274,22 @@ function fnIPMapSetting(){
  * IP Map Initialize
 **/
 var chargePerSheet;
-function fnIPMapInit (ipaddress, ActiveLeaseArr, ConflictArr, ExclusionArr, FixedArr, HostnotindnsArr, ObjectArr, 
-		PendingArr,	RangeArr, ReservedrangeArr, UnmanagedArr, UnusedArr, UsedArr) {
+function fnIPMapInit (ipaddress, DHCP_RangeArr, ActiveLeaseArr, ConflictArr, ExclusionArr, FixedArr, HostnotindnsArr, ObjectArr, 
+		PendingArr,	ReservedrangeArr, UnmanagedArr, UnusedArr, UsedArr) {
     var str = [], ipNo = -1, className, address, status;
+    console.log("fnIPMapInit");
     
     for (i = 0; i < ipMapSettings.rows; i++) {
         for (j = 0; j < ipMapSettings.cols; j++) {
             //ipNo = (i + j * ipMapSettings.rows + 1);
             ipNo += 1;
             className = ipMapSettings.rectangleCss + ' ' + ipMapSettings.rowCssPrefix + i.toString() + ' ' + ipMapSettings.colCssPrefix + j.toString();
-            
+
+            if ($.isArray(DHCP_RangeArr) && $.inArray(ipNo, DHCP_RangeArr) != -1) {
+                className += ' ' + ipMapSettings.dhcpRangeCss;
+                address = String.format("{0}.{1}", ipaddress, ipNo); 
+                status = "Range";
+            }
             if ($.isArray(ActiveLeaseArr) && $.inArray(ipNo, ActiveLeaseArr) != -1) {
                 className += ' ' + ipMapSettings.activeLeaseCss;
                 address = String.format("{0}.{1}", ipaddress, ipNo); 
@@ -250,11 +324,6 @@ function fnIPMapInit (ipaddress, ActiveLeaseArr, ConflictArr, ExclusionArr, Fixe
                 className += ' ' + ipMapSettings.pendingCss;
                 address = String.format("{0}.{1}", ipaddress, ipNo); 
                 status = "Pending";
-            }
-            if ($.isArray(RangeArr) && $.inArray(ipNo, RangeArr) != -1) {
-                className += ' ' + ipMapSettings.rangeCss;
-                address = String.format("{0}.{1}", ipaddress, ipNo); 
-                status = "Range";
             }
             if ($.isArray(ReservedrangeArr) && $.inArray(ipNo, ReservedrangeArr) != -1) {
                 className += ' ' + ipMapSettings.reservedrangeCss;
@@ -314,69 +383,6 @@ rectangleClick = function (obj) {
         $(obj).removeClass(ipMapSettings.unusedCss).addClass(ipMapSettings.selectingCss);
     }
 };
-
-/**
- * IP Map Data Select
-**/
-//IP의 D 클래스 값을 담을 배열 선언
-function mapDataCall(segmentid){
-	var ActiveLeaseArr = [], ConflictArr = [], ExclusionArr = [], FixedArr = [], HostnotindnsArr = [], ObjectArr = []; 
-	var PendingArr = [],	RangeArr = [], ReservedrangeArr = [], UnmanagedArr = [], UnusedArr = [], UsedArr = []; 
-	var jObj = Object();
-    jObj.segmentid = segmentid;
-
-    $('#divLoading').attr("style","visibility: visible");
-    
-    $.ajax({
-        url : 'ipManagement/staticIPStatus_Segment_MapData',
-        type : "POST",
-        data : JSON.stringify(jObj),
-        dataType : "text",
-        success : function(data) {
-            var jsonObj = eval("(" + data + ')');
-	            if (jsonObj.result == true) {
-            	$.each(jsonObj.data, function (index, obj) {
-//					console.log("fixed"+obj.fixed);
-//					console.log("used"+obj.used);
-            		
-            		mapDataHelper(obj.activeLease, ActiveLeaseArr);
-            		mapDataHelper(obj.conflict, ConflictArr);
-					mapDataHelper(obj.exclusion, ExclusionArr);
-					mapDataHelper(obj.fixed, FixedArr);
-					mapDataHelper(obj.hostnotindns, HostnotindnsArr);
-					mapDataHelper(obj.object, ObjectArr);
-					mapDataHelper(obj.pending, PendingArr);
-					mapDataHelper(obj.range, RangeArr);
-					mapDataHelper(obj.reservedrange, ReservedrangeArr);
-					mapDataHelper(obj.unmanaged, UnmanagedArr);
-					mapDataHelper(obj.unused, UnusedArr);
-					mapDataHelper(obj.used, UsedArr);
-					
-					fnIPMapInit(obj.cClassIPAddress, ActiveLeaseArr, ConflictArr, ExclusionArr, FixedArr, HostnotindnsArr, ObjectArr,
-							PendingArr,	RangeArr, ReservedrangeArr, UnmanagedArr, UnusedArr, UsedArr);
-	            });
-            }
-        },
-        complete: function(data) {
-            $('#divLoading').attr("style","visibility: hidden");
-        }
-    });
-}
-
-/**
- * 서버에서 받은 IP리스트들에서 D 클래스 정보만 배열에 담기 위한 function
-**/
-function mapDataHelper(stringIP, array){
-	if (stringIP.length > 0) {
-		var arrIPs = stringIP.split( "," );
-		for (var i = 0; i < arrIPs.length; i++) {
-			if (checkIPv4(arrIPs[i])) {
-				var arrip = arrIPs[i].split( "." );
-				array.push(parseInt(arrip[3], 10)); 
-			}
-		}
-	}
-}
 
 /**
  * Map 데이터 재 조회 function

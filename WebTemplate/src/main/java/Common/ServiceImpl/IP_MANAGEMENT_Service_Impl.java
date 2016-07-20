@@ -46,7 +46,7 @@ public class IP_MANAGEMENT_Service_Impl implements IP_MANAGEMENT_Service_Interfa
 	 **/
 	public List<Map<String,Object>> select_IP_MANAGEMENT_SEGMENT_DETAIL_MAP_DHCPRANGE(HashMap<String, Object> parameters) {
 		// TODO Auto-generated method stub
-		return ipManagementDao.select_IP_MANAGEMENT_SEGMENT_DETAIL_MAPDATA(parameters);
+		return ipManagementDao.select_IP_MANAGEMENT_SEGMENT_DETAIL_MAP_DHCPRANGE(parameters);
 	}
 
 	/**
