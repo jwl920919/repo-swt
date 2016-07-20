@@ -54,6 +54,24 @@ public class IP_MANAGEMENT_Impl extends SqlSessionDaoSupport implements IP_MANAG
 	
 	/**
 	 * <p>
+	 * IP관리 > 고정IP현황 IP세그먼트별 ip map DHCP Range 데이터 조회.
+	 * </p> 
+	 **/
+	public List<Map<String, Object>> select_IP_MANAGEMENT_SEGMENT_DETAIL_MAP_DHCPRANGE(HashMap<String, Object> parameters) {
+		// TODO Auto-generated method stub
+		List<Map<String, Object>> select_IP_MANAGEMENT_SEGMENT_DETAIL_MAP_DHCPRANGEList = new ArrayList<Map<String, Object>>();
+		try {
+			System.out.println(getSqlSession());
+			select_IP_MANAGEMENT_SEGMENT_DETAIL_MAP_DHCPRANGEList = getSqlSession().selectList("UI_Query.select_IP_MANAGEMENT_SEGMENT_DETAIL_MAP_DHCPRANGE", parameters);
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e.getMessage());
+		}
+		return select_IP_MANAGEMENT_SEGMENT_DETAIL_MAP_DHCPRANGEList;
+	}
+	
+	/**
+	 * <p>
 	 * IP관리 > 고정IP현황 IP세그먼트별 ip map 데이터 조회.
 	 * </p> 
 	 **/

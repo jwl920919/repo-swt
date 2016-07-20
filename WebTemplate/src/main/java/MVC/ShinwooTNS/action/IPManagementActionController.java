@@ -138,7 +138,10 @@ public class IPManagementActionController {
 			if (!siteID.equals("")) {
 				parameters.put("siteid", Integer.parseInt(session.getAttribute("site_id").toString()));
 				parameters.put("network", request.getParameter("network"));
-			
+
+				//DHCP Range 데이터 조회
+				List<Map<String, Object>> dhcpRange = ipManagementService.select_IP_MANAGEMENT_SEGMENT_DETAIL_MAP_DHCPRANGE(parameters);
+				
 				//region 맵에서 사용할 데이터 쿼리
 				String cClassIPAddress = "";
 				StringBuilder m_activeLease = new StringBuilder();

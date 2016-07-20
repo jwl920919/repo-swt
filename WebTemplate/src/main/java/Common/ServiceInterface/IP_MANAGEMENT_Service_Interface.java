@@ -13,6 +13,8 @@ public interface IP_MANAGEMENT_Service_Interface {
 	public List<Map<String, Object>> select_IP_MANAGEMENT_SEGMENT(HashMap<String, Object> parameters);
 	
 	public List<Map<String, Object>> select_IP_MANAGEMENT_SEGMENT_DETAIL(HashMap<String, Object> parameters);
+
+	public List<Map<String, Object>> select_IP_MANAGEMENT_SEGMENT_DETAIL_MAP_DHCPRANGE(HashMap<String, Object> parameters);
 	
 	public List<Map<String, Object>> select_IP_MANAGEMENT_SEGMENT_DETAIL_MAPDATA(HashMap<String, Object> parameters);
 }
