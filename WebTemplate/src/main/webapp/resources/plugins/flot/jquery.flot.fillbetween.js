@@ -65,7 +65,7 @@ jquery.flot.stack.js plugin, possibly some code could be shared.
 				return;
 			}
 
-			var other = findBottomSeries( s, plot.getData() );
+			var other = findBottomSeries( s, plot.getTdData() );
 
 			if ( !other ) {
 				return;

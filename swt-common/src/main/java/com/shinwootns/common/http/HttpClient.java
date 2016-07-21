@@ -1,6 +1,9 @@
 package com.shinwootns.common.http;
 
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
@@ -137,16 +140,34 @@ public class HttpClient {
 
 		try {
 
-			// Full URL
-			String url = makeFullURL(subURL);
-						
 			// Add parameters
 			if (params != null && params.size() > 0)
 			{
 				List<NameValuePair> paramList = convertParam(params);
 				
-				url += "?" + URLEncodedUtils.format(paramList, _encoding);
+				subURL += "?" + URLEncodedUtils.format(paramList, _encoding);
 			}
+			
+			return Get(subURL);
+
+		} catch (Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+		}
+
+		return value;
+	}
+	
+	public String Get(String subURL) {
+
+		if (_httpClient == null)
+			return null;
+
+		String value = null;
+
+		try {
+
+			// Full URL
+			String url = makeFullURL(subURL);
 			
 			// Create HttpGet
 			HttpGet httpGet = new HttpGet(url);
@@ -335,7 +356,7 @@ public class HttpClient {
 
 		// Remove double slash
 		url = url.replaceAll("(?<!(http:|https:))[//]+", "/");
-
+		
 		return url;
 	}
 	//endregion

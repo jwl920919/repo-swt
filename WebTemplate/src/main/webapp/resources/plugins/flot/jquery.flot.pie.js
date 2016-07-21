@@ -156,7 +156,7 @@ More detail and specific examples can be found in the included HTML file.
 				canvas = plot.getCanvas();
 				target = $(canvas).parent();
 				options = plot.getOptions();
-				plot.setData(combine(plot.getData()));
+				plot.setData(combine(plot.getTdData()));
 			}
 		}
 
@@ -303,7 +303,7 @@ More detail and specific examples can be found in the included HTML file.
 				centerLeft += options.series.pie.offset.left;
 			}
 
-			var slices = plot.getData(),
+			var slices = plot.getTdData(),
 				attempts = 0;
 
 			// Keep shrinking the pie's radius until drawPie returns true,
@@ -570,7 +570,7 @@ More detail and specific examples can be found in the included HTML file.
 
 		function findNearbySlice(mouseX, mouseY) {
 
-			var slices = plot.getData(),
+			var slices = plot.getTdData(),
 				options = plot.getOptions(),
 				radius = options.series.pie.radius > 1 ? options.series.pie.radius : maxRadius * options.series.pie.radius,
 				x, y;

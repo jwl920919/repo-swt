@@ -81,4 +81,12 @@
 	<bean id="ipManagementDao" class="Common.DAOImpl.IP_MANAGEMENT_Impl">
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
+	
+	<bean id="authMenuService" class="Common.ServiceImpl.AUTH_MENU_Service_Impl">
+		<property name="AUTH_MENU_dao" ref="authMenuDao"></property>
+	</bean>
+
+	<bean id="authMenuDao" class="Common.DAOImpl.AUTH_MENU_Impl">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
+	</bean>
 </beans>

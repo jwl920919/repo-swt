@@ -20,7 +20,11 @@ public class DhcpFixedIp implements Serializable {
 
 	private String comment;
 
+	private Boolean disable;
+
 	private String macaddr;
+
+	private String network;
 
 	@Column(name="update_time")
 	private Timestamp updateTime;
@@ -44,12 +48,28 @@ public class DhcpFixedIp implements Serializable {
 		this.comment = comment;
 	}
 
+	public Boolean getDisable() {
+		return this.disable;
+	}
+
+	public void setDisable(Boolean disable) {
+		this.disable = disable;
+	}
+
 	public String getMacaddr() {
 		return this.macaddr;
 	}
 
 	public void setMacaddr(String macaddr) {
 		this.macaddr = macaddr;
+	}
+
+	public String getNetwork() {
+		return this.network;
+	}
+
+	public void setNetwork(String network) {
+		this.network = network;
 	}
 
 	public Timestamp getUpdateTime() {
