@@ -109,7 +109,7 @@ function tdClickEvent(obj){
 		$('#datatable_detail').DataTable(
 	            {
 	                "destroy" : true,
-	                "paging" : true, //"paging" : true,
+	                "paging" : true,
 	                "searching" : true,
 	                "lengthChange" : true,
 	                "ordering" : true,
@@ -196,25 +196,33 @@ function mapDataCall(network){
 	            	console.log("jsonObj.data: "+jsonObj.data);
 	            	
             	$.each(jsonObj.data, function (index, obj) {
-					console.log("DHCP_Range: "+obj.DHCP_Range);
-					console.log("DHCP_Range Tyep: " + typeof obj.DHCP_Range);
-//					console.log("used"+obj.used);
-            		
-            		mapDataHelper(obj.DHCP_Range, DHCP_RangeArr);
-            		mapDataHelper(obj.activeLease, ActiveLeaseArr);
-            		mapDataHelper(obj.conflict, ConflictArr);
-					mapDataHelper(obj.exclusion, ExclusionArr);
-					mapDataHelper(obj.fixed, FixedArr);
-					mapDataHelper(obj.hostnotindns, HostnotindnsArr);
-					mapDataHelper(obj.object, ObjectArr);
-					mapDataHelper(obj.pending, PendingArr);
-					mapDataHelper(obj.reservedrange, ReservedrangeArr);
-					mapDataHelper(obj.unmanaged, UnmanagedArr);
-					mapDataHelper(obj.unused, UnusedArr);
-					mapDataHelper(obj.used, UsedArr);
-					
-					fnIPMapInit(obj.cClassIPAddress, DHCP_RangeArr, ActiveLeaseArr, ConflictArr, ExclusionArr, FixedArr, HostnotindnsArr, ObjectArr,
-							PendingArr,	ReservedrangeArr, UnmanagedArr, UnusedArr, UsedArr);
+            		if (obj.KEY == "DHCP_RANGE") {
+            			//DHCP의 IP대역대 Stat, End영역과 Range 영역 설정을 위한 데이터
+						var startipNumber = ipToNumber(obj.Network_Start);
+						var endipNumber = ipToNumber(obj.Network_End);
+						var row = Math.ceil((endipNumber - startipNumber + 1)/32); //0~255까지인데 255에서 0을 빼니까 항상 1을 더해줘야 256이 된다.
+						//console.log("startipNumber: " + obj.Network_Start + ", endipNumber: " + obj.Network_End + ", row: " + row);
+						ipMapSettings.rows = row; //ip영역에 따라 Row를 변경해준다.
+						
+	            		mapDataHelper(obj.DHCP_Range, DHCP_RangeArr);
+	            		mapDataHelper(obj.activeLease, ActiveLeaseArr);
+	            		mapDataHelper(obj.conflict, ConflictArr);
+						mapDataHelper(obj.exclusion, ExclusionArr);
+						mapDataHelper(obj.fixed, FixedArr);
+						mapDataHelper(obj.hostnotindns, HostnotindnsArr);
+						mapDataHelper(obj.object, ObjectArr);
+						mapDataHelper(obj.pending, PendingArr);
+						mapDataHelper(obj.reservedrange, ReservedrangeArr);
+						mapDataHelper(obj.unmanaged, UnmanagedArr);
+						mapDataHelper(obj.unused, UnusedArr);
+						mapDataHelper(obj.used, UsedArr);
+						
+						fnIPMapInit(obj.cClassIPAddress, DHCP_RangeArr, ActiveLeaseArr, ConflictArr, ExclusionArr, FixedArr, HostnotindnsArr, ObjectArr,
+								PendingArr,	ReservedrangeArr, UnmanagedArr, UnusedArr, UsedArr);
+            		}
+            		else {
+						
+					}
 	            });
             }
         },
@@ -228,7 +236,6 @@ function mapDataCall(network){
  * 서버에서 받은 IP리스트들에서 D 클래스 정보만 배열에 담기 위한 function
 **/
 function mapDataHelper(stringIP, array){
-	console.log("stringIP: "+stringIP);
 	if (stringIP != undefined && stringIP.length > 0) {
 		var arrIPs = stringIP.split( "," );
 		
@@ -270,6 +277,7 @@ function fnIPMapSetting(){
     };
 }
 
+
 /**
  * IP Map Initialize
 **/
@@ -285,11 +293,19 @@ function fnIPMapInit (ipaddress, DHCP_RangeArr, ActiveLeaseArr, ConflictArr, Exc
             ipNo += 1;
             className = ipMapSettings.rectangleCss + ' ' + ipMapSettings.rowCssPrefix + i.toString() + ' ' + ipMapSettings.colCssPrefix + j.toString();
 
+            // IP대역 설정 및 DHCP Range설정 시작
             if ($.isArray(DHCP_RangeArr) && $.inArray(ipNo, DHCP_RangeArr) != -1) {
                 className += ' ' + ipMapSettings.dhcpRangeCss;
                 address = String.format("{0}.{1}", ipaddress, ipNo); 
                 status = "Range";
             }
+            else {
+                className += ' ' + ipMapSettings.unusedCss;
+	            address = String.format("{0}.{1}", ipaddress, ipNo); 
+	            status = "Unused";
+            }
+            // IP대역 설정 및 DHCP Range설정 끝
+            
             if ($.isArray(ActiveLeaseArr) && $.inArray(ipNo, ActiveLeaseArr) != -1) {
                 className += ' ' + ipMapSettings.activeLeaseCss;
                 address = String.format("{0}.{1}", ipaddress, ipNo); 

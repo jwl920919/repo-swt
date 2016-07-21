@@ -174,6 +174,18 @@ public class IPManagementActionController {
 				}
 				//endregion
 				
+				//region DHCP의 IP대역대 Stat, End영역과 Range 영역 설정을 위한 데이터를 담음
+				HashMap<String, Object> ipMap  = new HashMap<>();
+				ipMap.put("KEY", "DHCP_RANGE");
+				ipMap.put("Network_Start", networkStartip);
+				ipMap.put("Network_End", networkEndip);
+				ipMap.put("KEY", "DHCP_RANGE");
+				ipMap.put("DHCP_Range", m_DHCP_Range);
+				dataList.add(ipMap);
+				//endregion
+				
+				
+				
 				/**
 				List<Map<String, Object>> allDataList = ipManagementService.select_IP_MANAGEMENT_SEGMENT_DETAIL_MAPDATA(parameters);
 				String ip = "";
@@ -199,8 +211,7 @@ public class IPManagementActionController {
 					StringCompare(ipListMap.get("status").toString().toLowerCase(), "used", ip, m_used);				
 				}
 				**/
-				HashMap<String, Object> ipMap  = new HashMap<>();
-				ipMap.put("DHCP_Range", m_DHCP_Range);
+				
 				/**
 				ipMap.put("cClassIPAddress", cClassIPAddress);
 				ipMap.put("activeLease", m_activeLease);
@@ -214,8 +225,8 @@ public class IPManagementActionController {
 				ipMap.put("unmanaged", m_unmanaged);
 				ipMap.put("unused", m_unused);
 				ipMap.put("used", m_used);
-				**/
 				dataList.add(ipMap);
+				**/
 				//endregion			
 				
 				//Thread.sleep(1000);
