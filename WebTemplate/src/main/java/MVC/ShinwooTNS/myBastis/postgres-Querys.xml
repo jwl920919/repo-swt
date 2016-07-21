@@ -284,48 +284,39 @@
 	<!-- Description : IP관리 > 고정IP현황 - 세그먼트별 상세 데이터 -->
 	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
 	<select id="select_IP_MANAGEMENT_SEGMENT_DETAIL" resultType="java.util.HashMap">
-		SELECT * FROM (
-		SELECT "network", "ipaddr", coalesce("ip_type",'') AS "ip_type",
-		coalesce("macaddr",'') AS "macaddr", coalesce("duid",'') AS "duid",
-		coalesce("hostname",'') AS "hostname", coalesce("state",'') AS
-		"state", coalesce("username",'') AS "username",
-		coalesce("fingerprint",'') AS "fingerprint", coalesce("os",'') AS
-		"os",
-		coalesce(to_char("lease_start_time",'YYYYMMDD HH24:MI'),'') AS "lease_start_time",
-		coalesce(to_char("lease_end_time",'YYYYMMDD HH24:MI'),'') AS
-		"lease_end_time",
-		coalesce(to_char("last_discovered",'YYYYMMDD HH24:MI'),'') AS "last_discovered",
-		coalesce("description",'') AS "description"
-		FROM "dhcp_lease_ip"
-		WHERE "site_id" = #{siteid} AND "network" = #{network}
-		AND ("network" like CONCAT('%', #{searchValue}, '%') OR "ipaddr" like
-		CONCAT('%', #{searchValue}, '%') OR "ip_type" like CONCAT('%',
-		#{searchValue}, '%')
-		OR "macaddr" like CONCAT('%', #{searchValue}, '%') OR "duid" like
-		CONCAT('%', #{searchValue}, '%') OR "hostname" like CONCAT('%',
-		#{searchValue}, '%')
-		OR "state" like CONCAT('%', #{searchValue}, '%') OR "username" like
-		CONCAT('%', #{searchValue}, '%') OR "fingerprint" like CONCAT('%',
-		#{searchValue}, '%')
-		OR "os" like CONCAT('%', #{searchValue}, '%') OR "description" like
-		CONCAT('%', #{searchValue}, '%'))
-		UNION
-		SELECT "network" AS "network", "ipaddr" AS "ipaddr", '' AS "ip_type",
-		"macaddr" AS "macaddr", '' AS "duid", '' AS "hostname", 'FIXED' AS
-		"state", '' AS "username",
-		'' AS "fingerprint", '' AS "os", '' AS "lease_start_time", '' AS
-		"lease_end_time", COALESCE(to_char("update_time",'YYYYMMDD
-		HH24:MI'),'') AS "last_discovered",
-		"comment" AS "description"
-		FROM "dhcp_fixed_ip"
-		WHERE "site_id" = #{siteid} AND "network" = #{network}
-		) AS main, ( SELECT
-		COUNT("ipaddr") AS "allcount"
-		FROM (SELECT "ipaddr" FROM "dhcp_lease_ip" WHERE "site_id" = #{siteid} AND
-		"network" = #{network} UNION
-		SELECT "ipaddr" FROM "dhcp_fixed_ip" WHERE "site_id" = #{siteid} AND
-		"network" = #{network}) as TCount) as countTable
-		ORDER BY
+		SELECT * FROM 
+            (SELECT "network", "ipaddr", COALESCE("ip_type",'') AS "ip_type", COALESCE("macaddr",'') AS "macaddr", COALESCE("duid",'') AS "duid", "is_conflict", 
+                    COALESCE("conflict_types",'') AS "conflict_types", COALESCE("status",'') AS "status", COALESCE("lease_state",'') AS "lease_state",
+                    COALESCE("obj_types",'') AS "obj_types", COALESCE("discover_status",'') AS "discover_status", COALESCE("usage",'') AS "usage", 
+		            COALESCE("host_name",'') AS "host_name", COALESCE("host_os",'') AS "host_os", COALESCE("fingerprint",'') AS "fingerprint", 
+		            COALESCE("is_never_ends", FALSE) AS "is_never_ends", COALESCE("is_never_start", FALSE) AS "is_never_start",
+                    COALESCE(to_char("lease_start_time",'YYYYMMDD HH24:MI'),'') AS "lease_start_time",
+                    COALESCE(to_char("lease_end_time",'YYYYMMDD HH24:MI'),'') AS "lease_end_time",
+                    COALESCE(to_char("last_discovered",'YYYYMMDD HH24:MI'),'') AS "last_discovered",
+                    COALESCE("user_description",'') AS "user_description"
+               FROM "dhcp_ip_status"
+              WHERE "site_id" = #{siteid} AND "network" = #{network} 
+                AND ("network" like CONCAT('%', #{searchValue}, '%') OR "ipaddr" like CONCAT('%', #{searchValue}, '%') OR 
+                     "ip_type" like CONCAT('%', #{searchValue}, '%') OR "macaddr" like CONCAT('%', #{searchValue}, '%') OR 
+                     "duid" like CONCAT('%', #{searchValue}, '%') OR "conflict_types" like CONCAT('%', #{searchValue}, '%') OR
+                     "status" like CONCAT('%', #{searchValue}, '%') OR "lease_state" like CONCAT('%', #{searchValue}, '%') OR
+                     "obj_types" like CONCAT('%', #{searchValue}, '%') OR "discover_status" like CONCAT('%', #{searchValue}, '%') OR
+                     "usage" like CONCAT('%', #{searchValue}, '%') OR "host_name" like CONCAT('%', #{searchValue}, '%') OR
+                     "host_os" like CONCAT('%', #{searchValue}, '%') OR "fingerprint" like CONCAT('%', #{searchValue}, '%') OR
+                     "user_description" like CONCAT('%', #{searchValue}, '%'))
+              UNION
+             SELECT "network" AS "network", "ipaddr" AS "ipaddr", '' AS "ip_type", "macaddr" AS "macaddr", '' AS "duid", false AS "is_conflict", '' AS "conflict_types",
+                    'FIXED' AS "status", '' AS "lease_state", '' AS "obj_types", '' AS "discover_status", '' AS "usage", '' AS "host_name", '' AS "host_os",
+                    '' AS "fingerprint", false AS "is_never_ends", false AS "is_never_start", '' AS "lease_start_time", '' AS "lease_end_time",
+                    COALESCE(to_char("update_time",'YYYYMMDD HH24:MI'),'') AS "last_discovered",
+                    "comment" AS "user_description"
+               FROM "dhcp_fixed_ip"
+              WHERE "site_id" = #{siteid} AND "network" = #{network}) AS main,
+            (SELECT COUNT("ipaddr") AS "allcount"
+		       FROM (SELECT "ipaddr" FROM "dhcp_lease_ip" WHERE "site_id" = #{siteid} AND "network" = #{network}
+		      UNION
+             SELECT "ipaddr" FROM "dhcp_fixed_ip" WHERE "site_id" = #{siteid} AND "network" = #{network}) as TCount) as countTable
+		 ORDER BY
 		<choose>
 			<when test="orderColumn == 'network' or orderColumn == 'ipaddr'"> inet(${orderColumn}) ${orderType} </when>
 			<when test="orderColumn != 'network' and orderColumn != 'ipaddr'"> ${orderColumn} ${orderType} </when>
@@ -340,13 +331,12 @@
 	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
 	<select id="select_IP_MANAGEMENT_SEGMENT_DETAIL_MAP_DHCPRANGE"
 		resultType="java.util.HashMap">
-		SELECT "netzone".*, "range"."start_ip" as "dhcp_start_ip", "range"."end_ip"
-		as "dhcp_end_ip"
-		FROM "dhcp_network" AS "netzone", "dhcp_range" AS "range"
-		WHERE "netzone"."site_id" = "range"."site_id"
-		AND "netzone"."network" = "range"."network"
-		AND "netzone"."site_id" = #{siteid} AND "netzone"."network" = #{network}
-		ORDER BY inet("netzone"."network")
+		SELECT "netzone".*, "range"."start_ip" AS "dhcp_start_ip", "range"."end_ip" AS "dhcp_end_ip"
+		  FROM "dhcp_network" AS "netzone", "dhcp_range" AS "range"
+		 WHERE "netzone"."site_id" = "range"."site_id"
+		   AND "netzone"."network" = "range"."network"
+		   AND "netzone"."site_id" = #{siteid} AND "netzone"."network" = #{network}
+		 ORDER BY inet("netzone"."network")
 	</select>
 
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
@@ -357,8 +347,8 @@
 	<select id="select_IP_MANAGEMENT_SEGMENT_DETAIL_MAPDATA"
 		resultType="java.util.HashMap">
 		SELECT * FROM "dhcp_lease_ip"
-		WHERE "site_id" = #{siteid} and "network" = #{network}
-		ORDER BY inet("ipaddr")
+		 WHERE "site_id" = #{siteid} AND "network" = #{network}
+		 ORDER BY inet("ipaddr")
 	</select>
 
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
@@ -367,8 +357,8 @@
 	<!-- Description : 메뉴권한관리 table 정보 조회 auth_menu_id가 -1이라면 생성이 필요한 값 -->
 	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
 	<select id="select_AUTH_MENU_MAKE_SEARCH_FOR_SITE" resultType="java.util.HashMap">
-		select coalesce(am.auth_menu_id,-1) as auth_menu_id,
-		coalesce(am.auth_state,'N') as
+		select COALESCE(am.auth_menu_id,-1) as auth_menu_id,
+		COALESCE(am.auth_state,'N') as
 		auth_state,ms.master_cd,ms.sub_cd,sug.site_id,sug.group_id from
 		auth_menu as am right outer join (menu_sub as ms natural join
 		system_user_group as sug) on am.group_id = sug.group_id and am.site_id
