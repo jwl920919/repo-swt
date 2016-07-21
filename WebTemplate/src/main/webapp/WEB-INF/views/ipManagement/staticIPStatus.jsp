@@ -94,8 +94,8 @@
 												<th><%=LanguageHelper.GetLanguage("host_name")%></th>
 												<th><%=LanguageHelper.GetLanguage("host_os")%></th>
 												<th><%=LanguageHelper.GetLanguage("fingerprint")%></th>
-												<th width="100px"><%=LanguageHelper.GetLanguage("is_never_ends")%></th>
-												<th width="100px"><%=LanguageHelper.GetLanguage("is_never_start")%></th>
+												<th><%=LanguageHelper.GetLanguage("is_never_ends")%></th>
+												<th><%=LanguageHelper.GetLanguage("is_never_start")%></th>
 												<th><%=LanguageHelper.GetLanguage("lease_start_time")%></th>
 												<th><%=LanguageHelper.GetLanguage("lease_end_time")%></th>
 												<th><%=LanguageHelper.GetLanguage("last_discovered")%></th>

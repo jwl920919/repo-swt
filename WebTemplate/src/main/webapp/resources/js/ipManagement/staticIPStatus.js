@@ -114,7 +114,7 @@ function tdClickEvent(obj){
 	                "lengthChange" : false,
 	                "ordering" : true,
 	                "info" : false,
-	                "bAutoWidth": false,
+	                "AutoWidth": true,
 	                "processing" : true,
 	                "serverSide" : true,
 	                "sScrollX": "100%",
@@ -130,24 +130,24 @@ function tdClickEvent(obj){
 	                        //console.log(data.search_key);
 	                    }
 	                },
-				    "columnDefs": [{ className: "essential-td-left", "width": "10px", "targets": [ 0 ] },
-				                   { className: "essential-td-left", "width": "10px", "targets": [ 1 ] },
-				                   { className: "essential-td-left", "width": "10px", "targets": [ 2 ] },
-				                   { className: "essential-td-left", "width": "10px", "targets": [ 3 ] },
-				                   { className: "essential-td-left", "width": "10px", "targets": [ 4 ] },
-				                   { className: "essential-td-left", "width": "10px", "targets": [ 5 ] },
-				                   { className: "essential-td-left", "width": "10px", "targets": [ 6 ] },
-				                   { className: "essential-td-left", "width": "10px", "targets": [ 7 ] },
-				                   { className: "essential-td-left", "width": "10px", "targets": [ 8 ] },
-				                   { className: "essential-td-left", "width": "10px", "targets": [ 9 ] },
-				                   { className: "essential-td-left", "width": "10px", "targets": [ 10 ] },
-				                   { className: "essential-td-left", "width": "10px", "targets": [ 11 ] },
-				                   { className: "essential-td-left", "width": "10px", "targets": [ 12 ] },
-				                   { className: "essential-td-left", "width": "10px", "targets": [ 13 ] },
-				                   { className: "essential-td-left", "width": "10px", "targets": [ 14 ] },
-				                   { className: "essential-td-left", "width": "10px", "targets": [ 15 ] },
-				                   { className: "essential-td-left", "width": "10px", "targets": [ 16 ] },
-				                   { className: "essential-td-left", "width": "10px", "targets": [ 17 ] }],
+				    "columnDefs": [{ className: "essential-td-left", "targets": [ 0 ] },
+				                   { className: "essential-td-left", "targets": [ 1 ] },
+				                   { className: "essential-td-left", "targets": [ 2 ] },
+				                   { className: "essential-td-left", "targets": [ 3 ] },
+				                   { className: "essential-td-left", "targets": [ 4 ] },
+				                   { className: "essential-td-left", "targets": [ 5 ] },
+				                   { className: "essential-td-left", "targets": [ 6 ] },
+				                   { className: "essential-td-left", "targets": [ 7 ] },
+				                   { className: "essential-td-left", "targets": [ 8 ] },
+				                   { className: "essential-td-left", "targets": [ 9 ] },
+				                   { className: "essential-td-left", "targets": [ 10 ] },
+				                   { className: "essential-td-left", "targets": [ 11 ] },
+				                   { className: "essential-td-left", "targets": [ 12 ] },
+				                   { className: "essential-td-left", "targets": [ 13 ] },
+				                   { className: "essential-td-left", "targets": [ 14 ] },
+				                   { className: "essential-td-left", "targets": [ 15 ] },
+				                   { className: "essential-td-left", "targets": [ 16 ] },
+				                   { className: "essential-td-left", "targets": [ 17 ] }],
 	                "order" : [ [ 0, 'asc' ] ],
 	                "columns" : [ {"data" : "ipaddr"},
 	                              {"data" : "ip_type"},
@@ -170,7 +170,7 @@ function tdClickEvent(obj){
 	                              {"data" : "last_discovered"},
 	                              {"data" : "user_description"}]
 	            });
-		$('div.dataTables_scrollBody').css('maxHeight', 600);
+		//$('div.dataTables_scrollBody').css('maxHeight', 600);
 		//$("#datatable_detail tbody").css('maxHeight', 650);
 		//검색, 엔트리 위치 정렬
 		$(function() {
