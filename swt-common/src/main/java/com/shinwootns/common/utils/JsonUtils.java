@@ -1,6 +1,7 @@
 package com.shinwootns.common.utils;
 
 import java.sql.Timestamp;
+import java.util.Iterator;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -39,7 +40,33 @@ public class JsonUtils {
 		if (value == null)
 			return defaultValue;
 		
-		return (String)value;
+		
+		if (value instanceof JSONArray) {
+			
+			StringBuilder sb = new StringBuilder();
+			
+			Iterator iter = ((JSONArray)value).iterator();
+
+			while(iter != null && iter.hasNext()) {
+				
+				Object data = (String)iter.next();
+				
+				if (sb.length() > 0)
+ 					sb.append(",");
+				
+				if (data instanceof JSONObject) {
+					sb.append( ((JSONObject)data).values().toString() );
+				}
+				else {
+					sb.append(data.toString());
+				}
+			}
+			
+			return sb.toString();
+		}
+		else {
+			return (String)value;
+		}
 	}
 	
 	public static long getValueToNumber(JSONObject jObj, String key, long defaultValue) {

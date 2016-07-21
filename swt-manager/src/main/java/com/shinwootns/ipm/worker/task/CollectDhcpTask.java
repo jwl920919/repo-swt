@@ -1,5 +1,9 @@
 package com.shinwootns.ipm.worker.task;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -12,7 +16,7 @@ import com.shinwootns.common.utils.TimeUtils;
 import com.shinwootns.ipm.SpringBeanProvider;
 import com.shinwootns.ipm.data.entity.DeviceDhcp;
 import com.shinwootns.ipm.data.entity.DhcpFixedIp;
-import com.shinwootns.ipm.data.entity.DhcpLeaseIp;
+import com.shinwootns.ipm.data.entity.DhcpIpStatus;
 import com.shinwootns.ipm.data.entity.DhcpMacFilter;
 import com.shinwootns.ipm.data.entity.DhcpNetwork;
 import com.shinwootns.ipm.data.entity.DhcpRange;
@@ -65,62 +69,232 @@ public class CollectDhcpTask extends BaseWorker{
 			if (wapiHandler.Connect()) {
 				
 				// Collect Network
-				jArray = wapiHandler.getNetworkInfo();
-
-				insertDhcpNetwork(dhcpMapper, jArray);
-				
-				_logger.info(String.format("DHCP - Collect Network Info : %s.... OK (count:%d)", host, jArray.size()));
+				HashSet<String> setNetwork = collectDhcpNetwork(wapiHandler, dhcpMapper);
 				
 				// Collect Range
-				jArray = wapiHandler.getRangeInfo();
-				
-				insertDhcpRange(dhcpMapper, jArray);
-				
-				_logger.info(String.format("DHCP - Collect Rage Info : %s.... OK (count:%d)", host, jArray.size()));
+				collectDhcpRange(wapiHandler, dhcpMapper);
 				
 				// Collect Fixed IP
-				jArray = wapiHandler.getFixedIPList();
-				
-				insertDhcpFixedIP(dhcpMapper, jArray);
-				
-				_logger.info(String.format("DHCP - Collect Fixed IP: %s.... OK (count:%d)", host, jArray.size()));
+				collectFixedIp(wapiHandler, dhcpMapper);
 
 				// Collect Filter
-				jArray = wapiHandler.getFilterInfo();
+				collectMacFilter(wapiHandler, dhcpMapper);
 				
-				insertDhcpFilter(dhcpMapper, jArray);
-				
-				// Collect Lease IP
-				//jArray = wapiHandler.getLeaseIpAll(200);
-				//insertDhcpLeaseIP(dhcpMapper, jArray);
-
-				int splitCount = 200;
-				int leaseCount = 0;
-				
-				NextPageData nextData = wapiHandler.getLeaseIPFirst(splitCount);
-				
-				if (nextData != null && nextData.jArrayData != null) {
-					insertDhcpLeaseIP(dhcpMapper, nextData.jArrayData);
-					leaseCount += nextData.jArrayData.size();
-				}
-				
-				while(nextData != null && nextData.IsExistNextPage()) {
-					
-					nextData = wapiHandler.getLeaseIPNext(splitCount, nextData.nextPageID);
-					
-					if (nextData != null && nextData.jArrayData != null) {
-						insertDhcpLeaseIP(dhcpMapper, nextData.jArrayData);
-						leaseCount += nextData.jArrayData.size();
-					}
-				}
-				
-				_logger.info(String.format("DHCP - Collect Lease IP: %s.... OK (count:%d)", host, leaseCount));
+				// Collect IP Status
+				collectIPStatus(wapiHandler, dhcpMapper, setNetwork);
 			}
 			
 		} catch (Exception ex) {
 			_logger.error(ex.getMessage(), ex);
 		}
 	}
+	
+	private HashSet<String> collectDhcpNetwork(InfobloxWAPIHandler wapiHandler, DhcpMapper dhcpMapper) {
+		
+		HashSet<String> setNetwork = new HashSet<String>(); 
+		
+		// Collect Network
+		JSONArray jArray = wapiHandler.getNetworkInfo();
+		
+		if (jArray != null)
+		for(Object obj : jArray) {
+			String network = JsonUtils.getValueToString((JSONObject)obj, "network", "");
+			if (network != null && network.isEmpty() == false)
+				setNetwork.add(network);
+		}
+
+		insertDhcpNetwork(dhcpMapper, jArray);
+		
+		_logger.info(String.format("DHCP - Collect Network Info : %s.... OK (count:%d)", this.device.getHost(), jArray.size()));
+		
+		return setNetwork;
+	}
+	
+	
+	private void collectDhcpRange(InfobloxWAPIHandler wapiHandler, DhcpMapper dhcpMapper) {
+		
+		JSONArray jArray = wapiHandler.getRangeInfo();
+		
+		insertDhcpRange(dhcpMapper, jArray);
+		
+		_logger.info(String.format("DHCP - Collect Rage Info : %s.... OK (count:%d)", this.device.getHost(), jArray.size()));
+	}
+	
+	
+	private void collectFixedIp(InfobloxWAPIHandler wapiHandler, DhcpMapper dhcpMapper) {
+		
+		JSONArray jArray = wapiHandler.getFixedIPList();
+		
+		insertDhcpFixedIP(dhcpMapper, jArray);
+		
+		_logger.info(String.format("DHCP - Collect Fixed IP: %s.... OK (count:%d)", this.device.getHost(), jArray.size()));
+	}
+	
+	private void collectMacFilter(InfobloxWAPIHandler wapiHandler, DhcpMapper dhcpMapper) {
+		
+		JSONArray jArray = wapiHandler.getFilterInfo();
+		
+		insertDhcpFilter(dhcpMapper, jArray);
+		
+		_logger.info(String.format("DHCP - Collect MacFilter: %s.... OK (count:%d)", this.device.getHost(), jArray.size()));
+	}
+	
+	private void collectIPStatus(InfobloxWAPIHandler wapiHandler, DhcpMapper dhcpMapper, HashSet<String> setNetwork) {
+		
+		int splitCount = 100;
+		int ipCount = 0;
+		
+		 for(String network : setNetwork) {
+			 
+			HashMap<String, DhcpIpStatus> mapIp = new HashMap<String, DhcpIpStatus>();
+		
+			// Collect IPv4
+			NextPageData nextData1 = wapiHandler.getIPv4AddressFirst(splitCount, network);
+			extractIpv4Data(nextData1, mapIp);
+			
+			while(nextData1 != null && nextData1.IsExistNextPage()) {
+				
+				nextData1 = wapiHandler.getIPv4AddressNext(splitCount, nextData1.nextPageID);
+				extractIpv4Data(nextData1, mapIp);
+			}
+			
+			/*
+			// Collect IPv6
+			NextPageData nextData2 = wapiHandler.getIPv6AddressFirst(splitCount, network);
+			extractIpv6Data(nextData2, mapIp);
+			
+			while(nextData2 != null && nextData2.IsExistNextPage()) {
+				
+				nextData2 = wapiHandler.getIPv6AddressNext(splitCount, nextData2.nextPageID);
+				extractIpv6Data(nextData2, mapIp);
+			}*/
+			
+			// Collect Lease IP
+			NextPageData nextData3 = wapiHandler.getLeaseIPFirst(splitCount, network);
+			extractLeaseIpData(nextData3, mapIp);
+			
+			while(nextData3 != null && nextData3.IsExistNextPage()) {
+				
+				nextData3 = wapiHandler.getLeaseIPNext(splitCount, nextData3.nextPageID);
+				extractLeaseIpData(nextData3, mapIp);
+			}
+			
+			// Insert Data
+			insertDhcpIPStatus(this.device.getSiteId(), network, dhcpMapper, mapIp);
+			
+			mapIp.clear();
+		}
+		
+		
+
+		/*
+		NextPageData nextData = wapiHandler.getLeaseIPFirst(splitCount);
+		
+		if (nextData != null && nextData.jArrayData != null) {
+			insertDhcpLeaseIP(dhcpMapper, nextData.jArrayData);
+			leaseCount += nextData.jArrayData.size();
+		}
+		
+		while(nextData != null && nextData.IsExistNextPage()) {
+			
+			nextData = wapiHandler.getLeaseIPNext(splitCount, nextData.nextPageID);
+			
+			if (nextData != null && nextData.jArrayData != null) {
+				insertDhcpLeaseIP(dhcpMapper, nextData.jArrayData);
+				leaseCount += nextData.jArrayData.size();
+			}
+		}
+		*/
+		
+		_logger.info(String.format("DHCP - Collect Lease IP: %s.... OK (count:%d)", this.device.getHost(), ipCount));
+	}
+	
+	
+	private void extractIpv4Data(NextPageData nextData, HashMap<String, DhcpIpStatus> mapIp) {
+		
+		if (nextData == null || nextData.jArrayData == null)
+			return;
+		
+		for(Object obj : nextData.jArrayData) {
+			
+			JSONObject jObj = (JSONObject)obj; 
+			
+			try
+			{
+				DhcpIpStatus ip = new DhcpIpStatus();
+				ip.setSiteId(this.device.getSiteId());
+				ip.setIpaddr(JsonUtils.getValueToString(jObj, "ip_address", ""));
+				ip.setIpType("IPV4");
+				ip.setNetwork(JsonUtils.getValueToString(jObj, "network", ""));
+				ip.setMacaddr(JsonUtils.getValueToString(jObj, "mac_address", "").toUpperCase());
+				ip.setIsConflict(JsonUtils.getValueToBoolean(jObj, "is_conflict", false));
+				ip.setConflictTypes(JsonUtils.getValueToString(jObj, "conflict_types", ""));
+				ip.setStatus(JsonUtils.getValueToString(jObj, "status", ""));
+				ip.setLeaseState(JsonUtils.getValueToString(jObj, "lease_state", ""));
+				ip.setObjTypes(JsonUtils.getValueToString(jObj, "types", ""));
+				ip.setDiscoverStatus(JsonUtils.getValueToString(jObj, "discover_now_status", ""));
+				ip.setUsage(JsonUtils.getValueToString(jObj, "usage", ""));
+				ip.setHostname(JsonUtils.getValueToString(jObj, "names", ""));
+				ip.setHostOs(JsonUtils.getValueToString(jObj, "discovered_data.os", ""));
+				ip.setFingerprint(JsonUtils.getValueToString(jObj, "fingerprint", ""));
+				
+				long lastDiscoverd = JsonUtils.getValueToNumber((JSONObject)obj, "discovered_data.last_discovered", 0);
+				if (lastDiscoverd > 0)
+					ip.setLastDiscovered(TimeUtils.convertLongToTimestamp(lastDiscoverd * 1000));
+
+				// Put Data
+				if (mapIp.containsKey(ip.getIpaddr()) == false)
+					mapIp.put(ip.getIpaddr(), ip);
+				else
+					_logger.warn("Check duplicated ipv4 address :" + ip.getIpaddr());
+			}
+			catch(Exception ex) {
+				_logger.error(ex.getMessage(), ex);
+			}
+		}
+	}
+	
+	private void extractIpv6Data(NextPageData nextData, HashMap<String, DhcpIpStatus> mapIp) {
+		
+	}
+	
+	private void extractLeaseIpData(NextPageData nextData, HashMap<String, DhcpIpStatus> mapIp) {
+		
+		if (nextData == null || nextData.jArrayData == null)
+			return;
+		
+		for(Object obj : nextData.jArrayData) {
+			
+			try
+			{
+				JSONObject jObj = (JSONObject)obj; 
+				
+				String ipAddr = JsonUtils.getValueToString(jObj, "address", "");
+				if (ipAddr == null || ipAddr.isEmpty())
+					continue;
+				
+				if (mapIp.containsKey(ipAddr))
+				{
+					DhcpIpStatus ip = mapIp.get(ipAddr);
+					
+					ip.setIsNeverEnds(JsonUtils.getValueToBoolean(jObj, "never_ends", false));
+					ip.setIsNeverStart(JsonUtils.getValueToBoolean(jObj, "never_starts", false));
+					
+					long startTime = JsonUtils.getValueToNumber((JSONObject)obj, "starts", 0);
+					if (startTime > 0)
+						ip.setLeaseStartTime(TimeUtils.convertLongToTimestamp(startTime * 1000));
+					
+					long endTime = JsonUtils.getValueToNumber((JSONObject)obj, "ends", 0);
+					if (endTime > 0)
+						ip.setLeaseEndTime(TimeUtils.convertLongToTimestamp(endTime * 1000));
+				}
+			}
+			catch(Exception ex) {
+				_logger.error(ex.getMessage(), ex);
+			}
+		}
+	}
+	
 	
 	private void insertDhcpNetwork(DhcpMapper dhcpMapper, JSONArray jArray) {
 		
@@ -244,58 +418,53 @@ public class CollectDhcpTask extends BaseWorker{
 		}
 	}
 	
-	private void insertDhcpLeaseIP(DhcpMapper dhcpMapper, JSONArray jArray) {
+	private void insertDhcpIPStatus(int site_id, String network, DhcpMapper dhcpMapper, HashMap<String, DhcpIpStatus> mapIp) {
 		
-		if (jArray != null) {
+		List<DhcpIpStatus> listPrevData = dhcpMapper.selectDhcpIpStatusByNetwork(site_id, network);
+		
+		HashSet<String> setPrevIPAddr = new HashSet<String>(); 
+
+		for(DhcpIpStatus prevIp : listPrevData) {
+			if (setPrevIPAddr.contains(prevIp.getIpaddr()) == false )
+				setPrevIPAddr.add(prevIp.getIpaddr());
+		}
+		
+		
+		for(DhcpIpStatus ip : mapIp.values()) {
 			
-			for(Object obj : jArray) {
-				
-				try
-				{
-					DhcpLeaseIp ip = new DhcpLeaseIp();
-					ip.setSiteId(this.device.getSiteId());
-					ip.setIpaddr(JsonUtils.getValueToString((JSONObject)obj, "address", ""));
-					ip.setNetwork(JsonUtils.getValueToString((JSONObject)obj, "network", ""));
-					ip.setIpType(JsonUtils.getValueToString((JSONObject)obj, "protocol", ""));
-					ip.setMacaddr(JsonUtils.getValueToString((JSONObject)obj, "hardware", "").toUpperCase());
-					ip.setHostname(JsonUtils.getValueToString((JSONObject)obj, "client_hostname", ""));
+			try
+			{
+				if (ip.getIpaddr().isEmpty() == false) {
 					
-					// Binding State ( ABANDONED, ACTIVE, BACKUP, DECLINED, EXPIRED, FREE, OFFERED, RELEASED, RESET, STATIC)
-					ip.setState(JsonUtils.getValueToString((JSONObject)obj, "binding_state", ""));
 					
-					ip.setUsername(JsonUtils.getValueToString((JSONObject)obj, "username", ""));
-					
-					long startTime = JsonUtils.getValueToNumber((JSONObject)obj, "starts", 0);
-					if (startTime > 0)
-						ip.setLeaseStartTime(TimeUtils.convertLongToTimestamp(startTime * 1000));
-					
-					long endTime = JsonUtils.getValueToNumber((JSONObject)obj, "ends", 0);
-					if (endTime > 0)
-						ip.setLeaseEndTime(TimeUtils.convertLongToTimestamp(endTime * 1000));
-					
-					long lastDiscoverd = JsonUtils.getValueToNumber((JSONObject)obj, "discovered_data.last_discovered", 0);
-					if (lastDiscoverd > 0)
-						ip.setLastDiscovered(TimeUtils.convertLongToTimestamp(lastDiscoverd * 1000));
-					
-					// Fingerprint ???
-					//ip.setFingerprint(JsonUtils.getValueToString((JSONObject)obj, "fingerprint", "").toUpperCase());
-					
-					// OS ????
-					//ip.setOs(JsonUtils.getValueToString((JSONObject)obj, "os", "").toUpperCase());
-					
-					// IPv6 duid
-					ip.setDuid(JsonUtils.getValueToString((JSONObject)obj, "ipv6_duid", "").toUpperCase());
-					
-					if (ip.getIpaddr().isEmpty() == false) {
-						int affected = dhcpMapper.updateDhcpLeaseIp(ip);
+					// DELETE
+					if ( (ip.getMacaddr() == null || ip.getMacaddr().isEmpty()) &&
+							(ip.getDuid() == null || ip.getDuid().isEmpty()) &&
+							(ip.getIsConflict() == null || ip.getIsConflict() == false) &&
+							//(ip.getStatus() == null || ip.getStatus().equals("UNUSED")) &&
+							(ip.getLeaseState() == null || ip.getLeaseState().isEmpty() || ip.getLeaseState().equals("FREE")) &&
+							(ip.getDiscoverStatus() == null || ip.getDiscoverStatus().isEmpty() || ip.getDiscoverStatus().equals("NONE")) &&
+							(ip.getObjTypes() == null || ip.getObjTypes().isEmpty() 
+								|| ip.getObjTypes().equals("DHCP_RANGE"))
+						) 
+					{
+						// Delete when previous data exist
+						if (setPrevIPAddr.contains(ip.getIpaddr())) {
+							dhcpMapper.deleteDhcpIpStatus(ip.getSiteId(), ip.getIpaddr());
+						}
+					}
+					else
+					{
+						// UPDATE & INSERT
+						int affected = dhcpMapper.updateDhcpIpStatus(ip);
 						
 						if (affected == 0)
-							affected = dhcpMapper.insertDhcpLeaseIp(ip);
+							affected = dhcpMapper.insertDhcpIpStatus(ip);
 					}
 				}
-				catch(Exception ex) {
-					_logger.error(ex.getMessage(), ex);
-				}
+			}
+			catch(Exception ex) {
+				_logger.error(ex.getMessage(), ex);
 			}
 		}
 	}
