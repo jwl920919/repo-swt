@@ -29,12 +29,12 @@ import com.google.gson.reflect.TypeToken;
 
 import Common.DTO.AjaxResult;
 import Common.DTO.SITE_INFO_DTO;
-import Common.DTO.SYSTEM_USER_GROUP_DTO;
 import Common.DTO.SYSTEM_USER_INFO_DTO;
-import Common.ServiceInterface.SYSTEM_USER_INFO_Service_Interface;
+import Common.Helper.LanguageHelper;
 import Common.ServiceInterface.AUTH_MENU_Service_interface;
 import Common.ServiceInterface.SITE_INFO_Service_interface;
 import Common.ServiceInterface.SYSTEM_USER_GROUP_INFO_Service_interface;
+import Common.ServiceInterface.SYSTEM_USER_INFO_Service_Interface;
 
 @Controller
 @RequestMapping(value = "/configManagement/")
@@ -479,6 +479,8 @@ public class ConfigManagementActionController {
 	// endregion
 
 	/***************************************************** systemMenuAuthorityManagement *****************************************************/
+	// region systemMenuAuthorityManagement
+	
 	// region getAuthorityTable
 	@RequestMapping(value = "getAuthorityTable", method = RequestMethod.GET, produces = "application/text; charset=utf8")
 	public void getAuthorityTable(Locale locale, Model model, HttpServletRequest request,
@@ -495,6 +497,7 @@ public class ConfigManagementActionController {
 			List<Map<String, Object>> menuSub = authMenuService.select_AUTH_MENU_M_SUB();// body-sub
 			if (groupNames.size() > 0) {
 				StringBuffer sb = new StringBuffer();
+				sb.append("<div class='save-box'><input class='save-button btn btn-primary' type='button' value='저장'></div>");
 				sb.append("<table id='auth_table' >");
 				sb.append("<thead id='auth_table_head'>");
 				sb.append("<th colspan=2></th>");
@@ -518,18 +521,18 @@ public class ConfigManagementActionController {
 						if (mm.get("master_cd").toString().equals(ms.get("master_cd").toString())) {
 							List<Object> tiRemoveList = new ArrayList<>();
 							tmp.append("<tr>");
-							tmp.append("<td name=sub_menu");
+							tmp.append("<td style='width:240px;background-color: #efefef;' name=sub_menu");
 							tmp.append(count);
 							tmp.append(">");
 							tmp.append("<input type='hidden' name='sub_cd' value='");
 							tmp.append(ms.get("sub_cd"));
 							tmp.append("' />");
-							tmp.append(ms.get("subname_key"));
+							tmp.append(LanguageHelper.GetLanguage(ms.get("subname_key").toString()));
 							tmp.append("</td>");
 							for (Map<String, Object> ti : tableInfo) {
 								if (ti.get("master_cd").toString().equals(mm.get("master_cd").toString())
 										&& ti.get("sub_cd").toString().equals(ms.get("sub_cd").toString())) {
-									tmp.append("<td name=group_grant");
+									tmp.append("<td style='width:240px' name=group_grant");
 									tmp.append(count);
 									tmp.append(">");
 									tmp.append("<input type='hidden' name='auth_menu_id' value='");
@@ -559,7 +562,7 @@ public class ConfigManagementActionController {
 							//test
 						}
 					}
-					sb.append("<td name=main_menu");
+					sb.append("<td style='width:180px;background-color: #efefef;' name=main_menu");
 					sb.append(count);
 					sb.append(" rowspan='");
 					sb.append(subRemoveList.size() + 1);// 자기자신 row
@@ -567,7 +570,7 @@ public class ConfigManagementActionController {
 					sb.append("<input type='hidden' name='master_cd' value='");
 					sb.append(mm.get("master_cd"));
 					sb.append("' />");
-					sb.append(mm.get("master_namekey"));
+					sb.append(LanguageHelper.GetLanguage(mm.get("master_namekey").toString()));
 					sb.append("</td>");
 					sb.append(tmp.toString());
 					for (Object s : subRemoveList) {
@@ -576,6 +579,7 @@ public class ConfigManagementActionController {
 				}
 				sb.append("</tbody>");
 				sb.append("</table>");
+				sb.append("<div class='save-box'><input class='save-button btn btn-primary' type='button' value='저장'></div>");
 				sb.append("<script src='resources/js/configMangement/systemMenuAuthorityManagementTable.js'></script>");
 				System.out.println(sb.toString());
 				response.setCharacterEncoding("utf-8");
@@ -590,7 +594,43 @@ public class ConfigManagementActionController {
 	}
 
 	// endregion
-
+	
+	// region changeGroupsAuthority
+	@RequestMapping(value = "changeGroupsAuthority", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+	public @ResponseBody Object changeGroupsAuthority(HttpServletRequest request) {
+		logger.info("changeGroupsAuthority : " + request.getLocalAddr());
+		try {
+			List<HashMap<String, Object>> jArray = gson.fromJson(request.getReader(),
+					new TypeToken<List<HashMap<String, Object>>>() {
+					}.getType());
+			for(HashMap<String, Object> m : jArray) {
+				Iterator<String> keys = m.keySet().iterator();
+				while(keys.hasNext()){
+					String key = keys.next();
+					System.out.print(key+"::"+m.get(key)+"\t");
+				}
+				System.out.println();
+			}
+//			ArrayList<Integer> userIdList = new ArrayList<Integer>();
+//			for (HashMap<String, Object> map : jArray) {
+//				userIdList.add(Integer.parseInt(map.get("site_id").toString()));
+//			}
+//			HashMap<String, Object> parameter = new HashMap<>();
+//			parameter.put("list", userIdList);
+//			int cnt = siteInfoService.delete_SITE_INFO_RECORDS(parameter);
+//			if (cnt > -1)
+//				result.result = true;
+//			else
+//				result.result = false;
+			result.result=true;
+			return gson.toJson(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.result = false;
+			return gson.toJson(result);
+		}
+	}
+	// endregion
 	/***************************************************** public *****************************************************/
 	// region getSiteNames
 	@RequestMapping(value = "getSiteNames", method = RequestMethod.POST, produces = "application/text; charset=utf8")

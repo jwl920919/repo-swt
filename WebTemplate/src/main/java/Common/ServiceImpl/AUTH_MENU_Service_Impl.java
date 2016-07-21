@@ -34,4 +34,14 @@ private AUTH_MENU_interface authMenuDao;
 		return authMenuDao.select_AUTH_MENU_M_SUB();
 	}
 
+	@Override
+	public int update_AUTH_MENU(HashMap<String, Object> parameters) {
+		return authMenuDao.update_AUTH_MENU(parameters);
+	}
+
+	@Override
+	public int insert_AUTH_MENU(HashMap<String, Object> parameters) {
+		return authMenuDao.insert_AUTH_MENU(parameters);
+	}
+
 }

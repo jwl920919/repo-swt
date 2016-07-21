@@ -63,4 +63,30 @@ public class AUTH_MENU_Impl extends SqlSessionDaoSupport implements AUTH_MENU_in
 		return select_AUTH_MENU_M_SUBList;
 	}
 
+	@Override
+	public int update_AUTH_MENU(HashMap<String, Object> parameters) {
+		int cnt = -1;
+		try {
+			System.out.println(getSqlSession());
+			cnt = getSqlSession().update("UI_Query.update_AUTH_MENU",parameters);
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e.getMessage());
+		}
+		return cnt;
+	}
+
+	@Override
+	public int insert_AUTH_MENU(HashMap<String, Object> parameters) {
+		int cnt = -1;
+		try {
+			System.out.println(getSqlSession());
+			cnt = getSqlSession().insert("UI_Query.insert_AUTH_MENU",parameters);
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e.getMessage());
+		}
+		return cnt;
+	}
+
 }

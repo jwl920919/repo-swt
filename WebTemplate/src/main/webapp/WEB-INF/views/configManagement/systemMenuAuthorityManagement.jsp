@@ -15,7 +15,6 @@
 </div>
 <section class="white-paper">
 	<div id="table-load-area">
-	
 	</div>
 </section>
 
