@@ -85,8 +85,11 @@ public class IPManagementActionController {
 		int totalCount = 0;
 				
 		try {			
-			String[] columns = { "ipaddr", "ip_type", "macaddr", "duid", "hostname", "state", "username", 
-					   "fingerprint", "os", "lease_start_time", "lease_end_time", "last_discovered", "description"};			
+			String[] columns = { "ipaddr", "ip_type", "macaddr", "duid", "is_conflict", "conflict_types", "status", "lease_state", "obj_types", "discover_status",
+					"usage", "host_name", "host_os", "fingerprint", 
+//					"is_never_ends", "is_never_start", 
+					"lease_start_time", "lease_end_time",
+					"last_discovered", "user_description", "description"};
 			String m_network = request.getParameter("network");
 			
 			HashMap<String, Object> parameters = Common.Helper.DatatableHelper.getDatatableParametas(request,columns,0);

@@ -80,19 +80,26 @@
 										style="width: 98%">
 										<thead>
 											<tr>
-												<th width="16%"><%=LanguageHelper.GetLanguage("ipaddr")%></th>
-												<th width="16%"><%=LanguageHelper.GetLanguage("ip_type")%></th>
-												<th width="10%"><%=LanguageHelper.GetLanguage("macaddr")%></th>
-												<th width="16%"><%=LanguageHelper.GetLanguage("duid")%></th>
-												<th width="10%"><%=LanguageHelper.GetLanguage("hostname")%></th>
-												<th width="16%"><%=LanguageHelper.GetLanguage("state")%></th>
-												<th width="16%"><%=LanguageHelper.GetLanguage("username")%></th>
-												<th width="10%"><%=LanguageHelper.GetLanguage("fingerprint")%></th>
-												<th width="16%"><%=LanguageHelper.GetLanguage("os")%></th>
-												<th width="16%"><%=LanguageHelper.GetLanguage("lease_start_time")%></th>
-												<th width="10%"><%=LanguageHelper.GetLanguage("lease_end_time")%></th>
-												<th width="16%"><%=LanguageHelper.GetLanguage("last_discovered")%></th>
-												<th width="*"><%=LanguageHelper.GetLanguage("description")%></th>
+												<th><%=LanguageHelper.GetLanguage("ipaddr")%></th>
+												<th><%=LanguageHelper.GetLanguage("ip_type")%></th>
+												<th><%=LanguageHelper.GetLanguage("macaddr")%></th>
+												<th><%=LanguageHelper.GetLanguage("duid")%></th>
+												<th><%=LanguageHelper.GetLanguage("is_conflict")%></th>
+												<th><%=LanguageHelper.GetLanguage("conflict_types")%></th>
+												<th><%=LanguageHelper.GetLanguage("status")%></th>
+												<th><%=LanguageHelper.GetLanguage("lease_state")%></th>
+												<th><%=LanguageHelper.GetLanguage("obj_types")%></th>
+												<th><%=LanguageHelper.GetLanguage("discover_status")%></th>
+												<th><%=LanguageHelper.GetLanguage("usage")%></th>
+												<th><%=LanguageHelper.GetLanguage("host_name")%></th>
+												<th><%=LanguageHelper.GetLanguage("host_os")%></th>
+												<th><%=LanguageHelper.GetLanguage("fingerprint")%></th>
+												<th width="100px"><%=LanguageHelper.GetLanguage("is_never_ends")%></th>
+												<th width="100px"><%=LanguageHelper.GetLanguage("is_never_start")%></th>
+												<th><%=LanguageHelper.GetLanguage("lease_start_time")%></th>
+												<th><%=LanguageHelper.GetLanguage("lease_end_time")%></th>
+												<th><%=LanguageHelper.GetLanguage("last_discovered")%></th>
+												<th><%=LanguageHelper.GetLanguage("user_description")%></th>
 											</tr>
 										</thead>
 										<tbody>

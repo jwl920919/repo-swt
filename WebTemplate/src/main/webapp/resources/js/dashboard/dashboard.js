@@ -451,7 +451,7 @@ function certifyProcessAjaxCall() {
 				// Since the axes don't change, we don't need to call
 				// plot.setupGrid()
 				//console.log("getdata : " + data1.length);
-				certifyProcessChart.Line(getTdData(), lineChartOption());
+				certifyProcessChart.Line(getData(), lineChartOption());
 				if (realtime === "on")
 					setTimeout(update, certifyProcessCallTime);
 			}
@@ -474,7 +474,7 @@ function certifyProcessAjaxCall() {
 			 */
 
 			// Create the line chart
-			certifyProcessChart.Line(getTdData(), lineChartOption());
+			certifyProcessChart.Line(getData(), lineChartOption());
 
 			// clearCertifyProcessAjaxCall();
 			// m_certifyProcessAjaxCall = setInterval(certifyProcessAjaxCall,
@@ -514,7 +514,7 @@ function askIPStatusAjaxCall() {
 			var barChart = new Chart(askIPStatusChartCanvas);
 			var data1 = [], data2 = [], labels = [], totalPoints = 10;
 
-		    barChart.Bar(getTdData(), barChartOption());
+		    barChart.Bar(getData(), barChartOption());
 		    
 		    
 			function getData() {
@@ -583,7 +583,7 @@ function askIPStatusAjaxCall() {
 			var realtime = "on"; // If == to on then fetch data every x
 									// seconds. else stop fetching
 			function update() {
-			    barChart.Bar(getTdData(), barChartOption());
+			    barChart.Bar(getData(), barChartOption());
 				if (realtime === "on")
 					setTimeout(update, askIPStatusCallTime);
 			}
@@ -606,7 +606,7 @@ function askIPStatusAjaxCall() {
 			 */
 
 			// Create the line chartvar 
-		    barChart.Bar(getTdData(), barChartOption());
+		    barChart.Bar(getData(), barChartOption());
 		}
 	} catch (e) {
 		console.log("dashboard.js askIPStatusAjaxCall() Error Log : "
