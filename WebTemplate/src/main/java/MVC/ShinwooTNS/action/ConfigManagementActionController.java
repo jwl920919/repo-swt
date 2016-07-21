@@ -480,7 +480,7 @@ public class ConfigManagementActionController {
 
 	/***************************************************** systemMenuAuthorityManagement *****************************************************/
 	// region systemMenuAuthorityManagement
-	
+
 	// region getAuthorityTable
 	@RequestMapping(value = "getAuthorityTable", method = RequestMethod.GET, produces = "application/text; charset=utf8")
 	public void getAuthorityTable(Locale locale, Model model, HttpServletRequest request,
@@ -497,7 +497,8 @@ public class ConfigManagementActionController {
 			List<Map<String, Object>> menuSub = authMenuService.select_AUTH_MENU_M_SUB();// body-sub
 			if (groupNames.size() > 0) {
 				StringBuffer sb = new StringBuffer();
-				sb.append("<div class='save-box'><input class='save-button btn btn-primary' type='button' value='저장'></div>");
+				sb.append(
+						"<div class='save-box'><input class='save-button btn btn-primary' type='button' value='저장'></div>");
 				sb.append("<table id='auth_table' >");
 				sb.append("<thead id='auth_table_head'>");
 				sb.append("<th colspan=2></th>");
@@ -548,7 +549,10 @@ public class ConfigManagementActionController {
 									tmp.append("<input type='hidden' name='group_id' value='");
 									tmp.append(ti.get("group_id"));
 									tmp.append("' />");
-									tmp.append(authState.equals("W")?"읽기/쓰기":authState.equals("R")?"읽기":"권한없음");
+									tmp.append("<input type='hidden' name='is_changed' value="
+											+ (Integer.parseInt(ti.get("auth_menu_id").toString()) == -1 ? true : false)
+											+ " />");
+									tmp.append(authState.equals("W") ? "읽기/쓰기" : authState.equals("R") ? "읽기" : "권한없음");
 									tmp.append("</td>");
 									tiRemoveList.add(ti);
 								}
@@ -559,7 +563,7 @@ public class ConfigManagementActionController {
 							}
 							subRemoveList.add(ms);
 							tmp.append("</tr>");
-							//test
+							// test
 						}
 					}
 					sb.append("<td style='width:180px;background-color: #efefef;' name=main_menu");
@@ -579,7 +583,8 @@ public class ConfigManagementActionController {
 				}
 				sb.append("</tbody>");
 				sb.append("</table>");
-				sb.append("<div class='save-box'><input class='save-button btn btn-primary' type='button' value='저장'></div>");
+				sb.append(
+						"<div class='save-box'><input class='save-button btn btn-primary' type='button' value='저장'></div>");
 				sb.append("<script src='resources/js/configMangement/systemMenuAuthorityManagementTable.js'></script>");
 				System.out.println(sb.toString());
 				response.setCharacterEncoding("utf-8");
@@ -594,7 +599,7 @@ public class ConfigManagementActionController {
 	}
 
 	// endregion
-	
+
 	// region changeGroupsAuthority
 	@RequestMapping(value = "changeGroupsAuthority", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object changeGroupsAuthority(HttpServletRequest request) {
@@ -603,26 +608,30 @@ public class ConfigManagementActionController {
 			List<HashMap<String, Object>> jArray = gson.fromJson(request.getReader(),
 					new TypeToken<List<HashMap<String, Object>>>() {
 					}.getType());
-			for(HashMap<String, Object> m : jArray) {
-				Iterator<String> keys = m.keySet().iterator();
-				while(keys.hasNext()){
-					String key = keys.next();
-					System.out.print(key+"::"+m.get(key)+"\t");
+			
+			for (HashMap<String, Object> parameters : jArray) {
+				int auth_menu_id = Integer.parseInt(parameters.get("auth_menu_id").toString());
+				int site_id = Integer.parseInt(parameters.get("site_id").toString());
+				int group_id = Integer.parseInt(parameters.get("group_id").toString());
+				parameters.remove("auth_menu_id");
+				parameters.remove("site_id");
+				parameters.remove("group_id");
+				parameters.put("auth_menu_id", auth_menu_id);
+				parameters.put("site_id", site_id);
+				parameters.put("group_id", group_id);
+				if (auth_menu_id == -1) {
+					if (authMenuService.insert_AUTH_MENU(parameters) < 0) {
+						throw new Exception();
+					}
+				} else {
+					if (parameters.get("is_changed").toString().equals("true")) {
+						if (authMenuService.update_AUTH_MENU(parameters) < 0) {
+							throw new Exception();
+						}
+					}
 				}
-				System.out.println();
 			}
-//			ArrayList<Integer> userIdList = new ArrayList<Integer>();
-//			for (HashMap<String, Object> map : jArray) {
-//				userIdList.add(Integer.parseInt(map.get("site_id").toString()));
-//			}
-//			HashMap<String, Object> parameter = new HashMap<>();
-//			parameter.put("list", userIdList);
-//			int cnt = siteInfoService.delete_SITE_INFO_RECORDS(parameter);
-//			if (cnt > -1)
-//				result.result = true;
-//			else
-//				result.result = false;
-			result.result=true;
+			result.result = true;
 			return gson.toJson(result);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -630,6 +639,8 @@ public class ConfigManagementActionController {
 			return gson.toJson(result);
 		}
 	}
+	// endregion
+
 	// endregion
 	/***************************************************** public *****************************************************/
 	// region getSiteNames

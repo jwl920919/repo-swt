@@ -373,7 +373,7 @@
 		auth_menu as am right outer join (menu_sub as ms natural join
 		system_user_group as sug) on am.group_id = sug.group_id and am.site_id
 		= sug.site_id and am.master_cd = ms.master_cd and am.sub_cd =ms.sub_cd
-		where sug.site_id=#{site_id} order by
+		where sug.site_id=#{site_id} and ms.master_cd != 'M01' order by
 		ms.master_cd,ms.sub_cd,sug.group_id
 	</select>
 
@@ -406,6 +406,28 @@
 		select
 		master_cd,sub_cd,subname_key from menu_sub where master_cd != 'M01';
 	</select>
+	
+	<!-- Query Type : Update(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-07-21 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : 페이지 권한 정보 변경 -->
+	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
+	<update id="update_AUTH_MENU" parameterType="hashmap">
+		UPDATE auth_menu SET
+		auth_state=#{auth_state} WHERE auth_menu_id=#{auth_menu_id};
+	</update>
+
+	<!-- Query Type : Insert(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-07-21 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : 페이지 권한 정보 추가 -->
+	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
+	<insert id="insert_AUTH_MENU" parameterType="hashmap">
+		INSERT
+		INTO auth_menu ("auth_state", "master_cd", "sub_cd", "site_id",
+		"group_id") VALUES
+		(#{auth_state},#{master_cd},#{sub_cd},#{site_id},#{group_id});
+	</insert>
 
 </mapper>
 
