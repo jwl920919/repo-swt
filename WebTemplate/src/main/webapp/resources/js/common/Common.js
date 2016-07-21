@@ -146,6 +146,28 @@ function checkIPv4(strIp){
 }
 
 /**
+ * IPv4를 number로 리턴
+**/
+function ipToNumber(ip) {
+	var d = ip.split('.');
+	return ((((((+d[0])*256)+(+d[1]))*256)+(+d[2]))*256)+(+d[3]);
+}
+
+/**
+ * number를 IPv4로 리턴
+**/
+function numberToIp(number) {		
+	var ip=num%256;
+	for (var i=1;i<=3;i++)
+	{
+		number=Math.floor(num/256);
+		ip=number%256+'.'+ip;
+	}
+	return ip; // As string
+}
+
+
+/**
  * Javascript Sleep function
 **/
 function sleep(milliseconds) {
