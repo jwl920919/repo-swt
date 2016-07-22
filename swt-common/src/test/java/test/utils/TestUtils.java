@@ -2,12 +2,14 @@ package test.utils;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
+import com.shinwootns.common.utils.CollectionUtils;
 import com.shinwootns.common.utils.CryptoUtils;
 import com.shinwootns.common.utils.IPv4Range;
 import com.shinwootns.common.utils.NetworkUtils;
@@ -17,7 +19,9 @@ import com.shinwootns.common.utils.NetworkUtils.InterfaceInfo;
 public class TestUtils {
 
 	private final Logger _logger = Logger.getLogger(this.getClass());
-
+	
+	
+	/*
 	@Test
 	public void testNetworkUtilsIPv4() {
 
@@ -46,7 +50,9 @@ public class TestUtils {
 		System.out.println("end IP = " + iprange.getEndIPToString());
 
 	}
+	*/
 
+	/*
 	@Test
 	public void testNetworkUtilsIPv6() {
 
@@ -67,7 +73,10 @@ public class TestUtils {
 		}
 		System.out.println("===========================");
 	}
+	*/
 
+
+	/*
 	@Test
 	public void testCryptoUtil() {
 
@@ -86,23 +95,43 @@ public class TestUtils {
 			String restoreText = CryptoUtils.Decode_AES128(AES128Key, cryptText);
 			System.out.println("RESTORE : " + restoreText);
 
-			// AES256
-			// InvalidKeyException 예외 발생 시, CyrptoUtils 주석 참고
-			/*
-			 * String AES256Key = "12345678901234567890123456789012"; //256 bit
-			 * (32 bytes)
-			 * 
-			 * System.out.println("===========================");
-			 * System.out.println("AES256");
-			 * System.out.println("===========================");
-			 * System.out.println("PLAIN   : " +plainText); cryptText =
-			 * CryptoUtils.Encode_AES256(AES256Key, plainText);
-			 * System.out.println("CRYPT   : " + cryptText); restoreText =
-			 * CryptoUtils.Decode_AES256(AES256Key, cryptText);
-			 * System.out.println("RESTORE : " + restoreText);
-			 */
+			// AES256 - InvalidKeyException 예외 발생 시, CyrptoUtils 주석 참고
+			
+//			String AES256Key = "12345678901234567890123456789012"; //256 bit (32 bytes)
+//			
+//			System.out.println("===========================");
+//			System.out.println("AES256");
+//			System.out.println("===========================");
+//			System.out.println("PLAIN   : " +plainText); cryptText =
+//			CryptoUtils.Encode_AES256(AES256Key, plainText);
+//			System.out.println("CRYPT   : " + cryptText); restoreText =
+//			CryptoUtils.Decode_AES256(AES256Key, cryptText);
+//			System.out.println("RESTORE : " + restoreText);
+
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+	}*/
+	
+	@Test
+	public void testCollectionUtils() {
+		
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		map.put("A", 93);
+		map.put("B", 83);
+		map.put("C", 98);
+		map.put("D", 73);
+		map.put("E", 100);
+		map.put("F", 88);
+		
+		LinkedHashMap<String, Integer> linkedMap = CollectionUtils.sortByValue(map);
+		
+		System.out.println(linkedMap.toString());
+		
+		LinkedHashMap<String, Integer> linkedMap2 = CollectionUtils.sortByValueDesc(map);
+		
+		System.out.println(linkedMap2.toString());
+		
 	}
+
 }
