@@ -218,10 +218,14 @@ function tdClickEvent(obj){
 //IP의 D 클래스 값을 담을 배열 선언
 function mapDataCall(network){
 	console.log("mapDataCall : "+network);
-	var DHCP_RangeArr = [], ActiveLeaseArr = [], ConflictArr = [], ExclusionArr = [], FixedArr = [], HostnotindnsArr = [];
-	var ObjectArr = [], PendingArr = [], ReservedrangeArr = [], UnmanagedArr = [], UnusedArr = [], UsedArr = []; 
+	var DHCP_RangeArr = [];	
+	var BROADCAST_Arr = [], NETWORK_Arr = [];
+	var ABANDONED_Arr = [], ACTIVE_Arr = [], BACKUP_Arr = [], DECLINED_Arr = [], EXPIRED_Arr = [];
+	var FREE_Arr = [], OFFERED_Arr = [], RELEASED_Arr = [], RESET_Arr = [], STATIC_Arr = [], FIXED_Arr = [];
+	
 	var jObj = Object();
     jObj.network = network;
+    jObj.timezone = getClientTimeZoneName();
 
     $('#divLoading').attr("style","visibility: visible");
     
@@ -233,7 +237,8 @@ function mapDataCall(network){
         success : function(data) {
             var jsonObj = eval("(" + data + ')');
 	            if (jsonObj.result == true) {
-	            	console.log("jsonObj.data: "+jsonObj.data);
+//	            	console.log("jsonObj.data : " + jsonObj.data);
+//	            	console.log("jsonObj.Value : " + jsonObj.resultValue);
 	            	
             	$.each(jsonObj.data, function (index, obj) {
             		if (obj.KEY == "DHCP_RANGE") {
@@ -245,25 +250,86 @@ function mapDataCall(network){
 						ipMapSettings.rows = row; //ip영역에 따라 Row를 변경해준다.
 						
 	            		mapDataHelper(obj.DHCP_Range, DHCP_RangeArr);
-	            		mapDataHelper(obj.activeLease, ActiveLeaseArr);
-	            		mapDataHelper(obj.conflict, ConflictArr);
-						mapDataHelper(obj.exclusion, ExclusionArr);
-						mapDataHelper(obj.fixed, FixedArr);
-						mapDataHelper(obj.hostnotindns, HostnotindnsArr);
-						mapDataHelper(obj.object, ObjectArr);
-						mapDataHelper(obj.pending, PendingArr);
-						mapDataHelper(obj.reservedrange, ReservedrangeArr);
-						mapDataHelper(obj.unmanaged, UnmanagedArr);
-						mapDataHelper(obj.unused, UnusedArr);
-						mapDataHelper(obj.used, UsedArr);
-						
-						fnIPMapInit(obj.cClassIPAddress, DHCP_RangeArr, ActiveLeaseArr, ConflictArr, ExclusionArr, FixedArr, HostnotindnsArr, ObjectArr,
-								PendingArr,	ReservedrangeArr, UnmanagedArr, UnusedArr, UsedArr);
+	            		
+//	            		mapDataHelper(obj.activeLease, ActiveLeaseArr);
+//	            		mapDataHelper(obj.conflict, ConflictArr);
+//						mapDataHelper(obj.exclusion, ExclusionArr);
+//						mapDataHelper(obj.fixed, FixedArr);
+//						mapDataHelper(obj.hostnotindns, HostnotindnsArr);
+//						mapDataHelper(obj.object, ObjectArr);
+//						mapDataHelper(obj.pending, PendingArr);
+//						mapDataHelper(obj.reservedrange, ReservedrangeArr);
+//						mapDataHelper(obj.unmanaged, UnmanagedArr);
+//						mapDataHelper(obj.unused, UnusedArr);
+//						mapDataHelper(obj.used, UsedArr);
+//						
+//						fnIPMapInit(obj.cClassIPAddress, DHCP_RangeArr, ActiveLeaseArr, ConflictArr, ExclusionArr, FixedArr, HostnotindnsArr, ObjectArr,
+//								PendingArr,	ReservedrangeArr, UnmanagedArr, UnusedArr, UsedArr);
             		}
             		else {
 						
 					}
 	            });
+            	
+            	$.each(jsonObj.resultValue, function (index, obj) {
+            		//console.log("jsonObj.Value : " + obj.ipaddr);
+            		
+            		// Javascript Class에 데이터 담기
+            	    var	classData = new MapDataClass (obj.ipaddr, obj.macaddr, obj.is_conflict, obj.conflict_types, obj.status,
+            	    		obj.lease_state, obj.obj_types, obj.usage, obj.host_name, obj.host_os, obj.fingerprint,
+            	    		obj.is_never_ends, obj.is_never_start, obj.lease_start_time, obj.lease_end_time);
+
+            	    //console.log("classData.ipaddr.toUpperCase() : " + classData.ipaddr.toUpperCase());
+            		if (classData.obj_types.toUpperCase() ==  "NETWORK") {
+            			BROADCAST_Arr.push(classData); 
+					}
+            		else if (obj.obj_types.toUpperCase() ==  "BROADCAST") {
+            			NETWORK_Arr.push(classData); 
+					}
+            		else {
+            			//ABANDONED_Arr = [], ACTIVE_Arr = [], BACKUP_Arr = [], DECLINED_Arr = [], EXPIRED_Arr = [],
+            			//FREE_Arr = [], OFFERED_Arr = [], RELEASED_Arr = [], RESET_Arr = [], STATIC_Arr = [], FIXED_Arr = [], ETC_Arr = [];
+						if (obj.lease_state.toUpperCase() ==  "ABANDONED") {
+							ABANDONED_Arr.push(classData); 
+						}
+						else if (obj.lease_state.toUpperCase() ==  "ACTIVE") {
+							ACTIVE_Arr.push(classData);
+						}
+						else if (obj.lease_state.toUpperCase() ==  "BACKUP") {
+							BACKUP_Arr.push(classData);
+						}
+						else if (obj.lease_state.toUpperCase() ==  "DECLINED") {
+							DECLINED_Arr.push(classData);
+						}
+						else if (obj.lease_state.toUpperCase() ==  "EXPIRED") {
+							EXPIRED_Arr.push(classData);
+						}
+						else if (obj.lease_state.toUpperCase() ==  "FREE") {
+							FREE_Arr.push(classData); 
+						}
+						else if (obj.lease_state.toUpperCase() ==  "OFFERED") {
+							OFFERED_Arr.push(classData); 
+						}
+						else if (obj.lease_state.toUpperCase() ==  "RELEASED") {
+							RELEASED_Arr.push(classData); 
+						}
+						else if (obj.lease_state.toUpperCase() ==  "RESET") {
+							RESET_Arr.push(classData); 
+						}
+						else if (obj.lease_state.toUpperCase() ==  "STATIC") {
+							STATIC_Arr.push(classData); 
+						}
+						else if (obj.lease_state.toUpperCase() ==  "FIXED") {
+							FIXED_Arr.push(classData); 
+						}
+						else {
+							ETC_Arr.push(classData); 
+						}
+					}
+	            });
+            	
+            	fnIPMapDraw(DHCP_RangeArr, BROADCAST_Arr, NETWORK_Arr, ABANDONED_Arr, ACTIVE_Arr, BACKUP_Arr, DECLINED_Arr, EXPIRED_Arr,
+            			FREE_Arr, OFFERED_Arr, RELEASED_Arr, RESET_Arr, STATIC_Arr, FIXED_Arr);
             }
         },
         complete: function(data) {
@@ -445,6 +511,28 @@ rectangleClick = function (obj) {
 **/
 function mapRefresh(){
 	tdClickEvent(selectedRow);
+}
+
+/**
+ * Map 데이터 Class
+**/
+function MapDataClass (ipaddr, macaddr, is_conflict, conflict_types, status, lease_state, obj_types, usage, host_name, host_os,
+				 fingerprint, is_never_ends, is_never_start, lease_start_time, lease_end_time) {
+    this.ipaddr = ipaddr;
+    this.macaddr = macaddr;
+    this.is_conflict = is_conflict;
+    this.conflict_types = conflict_types;
+    this.status = status;
+    this.lease_state = lease_state;
+    this.obj_types = obj_types;
+    this.usage = usage;
+    this.host_name = host_name;
+    this.host_os = host_os;
+    this.fingerprint = fingerprint;
+    this.is_never_ends = is_never_ends;
+    this.is_never_start = is_never_start;
+    this.lease_start_time = lease_start_time;
+    this.lease_end_time = lease_end_time;
 }
 
 function excelExport(){

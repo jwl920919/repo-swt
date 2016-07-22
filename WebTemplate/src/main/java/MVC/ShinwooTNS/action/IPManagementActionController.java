@@ -138,6 +138,7 @@ public class IPManagementActionController {
 		try {
 			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),new TypeToken<HashMap<String, Object>>() {}.getType());
 			String network = parameters.get("network").toString();
+			String m_timezone = parameters.get("timezone").toString();
 			
 			String siteID = session.getAttribute("site_id").toString();
 			if (!siteID.equals("")) {
@@ -189,9 +190,14 @@ public class IPManagementActionController {
 				//endregion
 				
 				
-				
-				/**
+				System.out.println("time_zone : " + m_timezone);
+				parameters.put("time_zone", m_timezone);
 				List<Map<String, Object>> allDataList = ipManagementService.select_IP_MANAGEMENT_SEGMENT_DETAIL_MAPDATA(parameters);
+				
+				for (Map<String, Object> ipListMap : allDataList) {
+					
+				}
+				/**
 				String ip = "";
 				for (Map<String, Object> ipListMap : allDataList) {
 					ip = ipListMap.get("ip").toString();
@@ -236,6 +242,7 @@ public class IPManagementActionController {
 				//Thread.sleep(1000);
 				result.result = true;
 				result.data = dataList;
+				result.resultValue = allDataList;
 			}
 			else {
 				result.result = false;

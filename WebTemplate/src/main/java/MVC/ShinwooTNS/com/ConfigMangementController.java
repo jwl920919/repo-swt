@@ -36,7 +36,7 @@ public class ConfigMangementController {
 		HttpSession session = request.getSession(true);
 		System.out.println(session.getAttribute("login_chk"));
 		if (session.getAttribute("login_chk") == null)
-			return "redirect:login";
+			return "redirect:/login";
 		
 		return parentPath + "systemUserManagement";
 	}
@@ -49,7 +49,7 @@ public class ConfigMangementController {
 		HttpSession session = request.getSession(true);
 		System.out.println(session.getAttribute("login_chk"));
 		if (session.getAttribute("login_chk") == null)
-			return "redirect:login";
+			return "redirect:/login";
 		
 		return parentPath + "systemGroupManagement";
 	}
@@ -62,9 +62,37 @@ public class ConfigMangementController {
 		HttpSession session = request.getSession(true);
 		System.out.println(session.getAttribute("login_chk"));
 		if (session.getAttribute("login_chk") == null)
-			return "redirect:login";
+			return "redirect:/login";
 		
 		return parentPath + "systemMenuAuthorityManagement";
+	}
+	@RequestMapping(value = "systemGroupManagementIntegration", method = RequestMethod.GET)
+	public String systemGroupManagementIntegration(Locale locale, Model model, HttpServletRequest request, HttpServletResponse response) {
+		logger.info("systemGroupManagementIntegration : " + request.getLocalAddr());
+		System.out.println("systemGroupManagementIntegration Controller");
+		// Session에 로그인 정보가 있는지 체크
+		HttpSession session = request.getSession(true);
+		System.out.println(session.getAttribute("login_chk"));
+		if (session.getAttribute("login_chk") == null)
+			return "redirect:/login";
+		
+		if (!session.getAttribute("site_master").equals("t")){
+			return "redirect:/login";
+		}
+		
+		return parentPath + "systemGroupManagementIntegration";
+	}
+	@RequestMapping(value = "systemGroupManagementNotIntegration", method = RequestMethod.GET)
+	public String systemGroupManagementNotIntegration(Locale locale, Model model, HttpServletRequest request, HttpServletResponse response) {
+		logger.info("systemGroupManagementNotIntegration : " + request.getLocalAddr());
+		System.out.println("systemGroupManagementNotIntegration Controller");
+		// Session에 로그인 정보가 있는지 체크
+		HttpSession session = request.getSession(true);
+		System.out.println(session.getAttribute("login_chk"));
+		if (session.getAttribute("login_chk") == null)
+			return "redirect:/login";
+		
+		return parentPath + "systemGroupManagementNotIntegration";
 	}
 	
 	
