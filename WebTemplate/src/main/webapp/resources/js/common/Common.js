@@ -45,8 +45,7 @@ function getWindowPoint() {
     scrollTop = $(document).scrollTop();
 };
 
-function systemAlert(divElement, type, title, message, confirmButtonValue,
-        buttonColor, fnName) {
+function systemAlert(divElement, type, title, message, confirmButtonValue, buttonColor, fnName) {
     getWindowPoint();
     $("#layDiv").attr("style", "visibility: visible");
     $("#alertTitle").text(title);
@@ -72,8 +71,8 @@ function systemAlert(divElement, type, title, message, confirmButtonValue,
     getWindowPoint();
     var alertPositionHeight = (windowHeight / 2 + scrollTop - 60) + 'px';
     $('#custom-alert').css('top', alertPositionHeight);
-
 }
+
 $(window).scroll(function() {
     if ($('#layDiv').css('visibility') == 'visible') {
         getWindowPoint();
@@ -135,10 +134,11 @@ String.format = function() {
 
 // DateTime format function
 /**
- * http://stove99.tistory.com/46 -2011년 09월 11일 오후 03시 45분 42초 console.log(new
- * Date().format("yyyy년 MM월 dd일 a/p hh시 mm분 ss초")); -2011-09-11 console.log(new
- * Date().format("yyyy-MM-dd")); -'11 09.11 console.log(new Date().format("'yy
- * MM.dd")); -2011-09-11 일요일 console.log(new Date().format("yyyy-MM-dd E"));
+ * http://stove99.tistory.com/46 
+ * -2011년 09월 11일 오후 03시 45분 42초 console.log(new Date().format("yyyy년 MM월 dd일 a/p hh시 mm분 ss초"));
+ * -2011-09-11 console.log(new Date().format("yyyy-MM-dd"));
+ * -'11 09.11 console.log(new Date().format("yy.MM.dd"));
+ * -2011-09-11 일요일 console.log(new Date().format("yyyy-MM-dd E"));
  * -현재년도 : 2011 console.log("현재년도 : " + new Date().format("yyyy"));
  */
 Date.prototype.format = function(f) {
