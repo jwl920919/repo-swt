@@ -125,7 +125,8 @@ var sw = 1;
 var idState = false;
 function switching(num) {
     sw = num;
-    console.log(sw);
+    changeGroupNames();
+    changeSiteNames();
 }
 // trClickEvent 구현 ( Datatable-Essential.js에서 사용하기 위하여 )
 function trClickEvent(clickedTr) {

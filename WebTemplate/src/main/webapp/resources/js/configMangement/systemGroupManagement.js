@@ -274,7 +274,7 @@ $('#placeOfBusinessTable-delete-button')
                             "divAlertArea",
                             "alert-warning",
                             "삭제",
-                            "정말 사업장 정보를 삭제하시겠습니까? <input class='delete-pob-confirm-button' class='btn btn-danger' type='button' value='삭제' style='position:absolute; top:48px; left:267px; width:73px; height:26px; font-size:14px;background-color: #e67d26;    border-color: #F3BC6E;border-style: groove; color: #FFF;' /><script>$('.delete-pob-confirm-button').click(function(){pobDeleteEvent();});</script>");
+                            "정말 사업장 정보를 삭제하시겠습니까? ","삭제","#ce891c",'pobDeleteEvent');
 
                 });
 $('#userGroupTable-delete-button')
@@ -284,7 +284,7 @@ $('#userGroupTable-delete-button')
                             "divAlertArea",
                             "alert-warning",
                             "삭제",
-                            "정말 그룹 정보를 삭제하시겠습니까? <input class='delete-group-confirm-button' class='btn btn-danger' type='button' value='삭제' style='position:absolute; top:48px; left:267px; width:73px; height:26px; font-size:14px;background-color: #e67d26;    border-color: #F3BC6E;border-style: groove; color: #FFF;' /><script>$('.delete-group-confirm-button').click(function(){groupDeleteEvent();});</script>");
+                            "정말 그룹 정보를 삭제하시겠습니까?","삭제","#ce891c",'groupDeleteEvent');
 
                 });
 
@@ -316,7 +316,6 @@ function pobDeleteEvent() {
 
         }
     });
-    fnAlertClose("layDiv")
 }
 function groupDeleteEvent() {
     var rows = $('input[name=group-checkbox-active]:checkbox:checked');
@@ -346,7 +345,6 @@ function groupDeleteEvent() {
 
         }
     });
-    fnAlertClose("layDiv")
 }
 
 // add event

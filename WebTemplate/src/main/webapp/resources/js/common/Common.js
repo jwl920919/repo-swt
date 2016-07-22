@@ -63,11 +63,12 @@ function systemAlert(divElement, type, title, message, confirmButtonValue,
     tag += "     <h4><i class='icon fa fa-warning'></i><label>" + title
             + "</label></h4>";
     tag += "     <label >" + message + "</label> ";
-    tag += "     <div style='width:100%;'><input onclick='" + fnName
-            + "()' class='btn' type='button' value='" + confirmButtonValue
+    tag += "     <div style='width:100%;'><input onclick='alertButtonEvent()' class='btn' type='button' value='" + confirmButtonValue
             + "' style='position: relative;left: 282px;background:"
-            + buttonColor + ";outline: none;color:#fff' /></div>";
+            + buttonColor + ";outline: none;color:#fff' /></div><script>function alertButtonEvent(){;" + fnName
+            + "(); fnAlertClose(\"layDiv\");}</script>";
     tag += "</div> ";
+    $("#" + divElement).html('');
     $("#" + divElement).append(tag);
     getWindowPoint();
     var alertPositionHeight = (windowHeight / 2 + scrollTop - 60) + 'px';
