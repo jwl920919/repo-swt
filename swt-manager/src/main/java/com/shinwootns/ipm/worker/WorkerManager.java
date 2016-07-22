@@ -46,15 +46,15 @@ public class WorkerManager {
 		_logger.info("ThreadManager... start");
 		
 		StringBuilder sb = new StringBuilder();
-		sb.append("\n\n========================================================================\n");
+		sb.append("\n------------------------------------------------------------\n");
 		sb.append(String.format("%-30s = %d\n", "SYSLOG_WORKER_COUNT", SYSLOG_WORKER_COUNT));
 		sb.append(String.format("%-30s = %d\n", "EVENT_WORKER_COUNT", EVENT_WORKER_COUNT));
 		sb.append(String.format("%-30s = %d\n", "DEVICE_COLLECT_WORKER_COUNT", DEVICE_COLLECT_WORKER_COUNT));
-		sb.append("========================================================================\n");
+		sb.append("------------------------------------------------------------\n");
 		sb.append(String.format("%-20s = %d\n", "TASK_MIN_COUNT", TASK_MIN_COUNT));
 		sb.append(String.format("%-20s = %d\n", "TASK_MAX_COUNT", TASK_MAX_COUNT));
 		sb.append(String.format("%-20s = %d\n", "TASK_LIMIT_COUNT", TASK_LIMIT_COUNT));
-		sb.append("========================================================================\n");
+		sb.append("------------------------------------------------------------");
 		
 		_logger.info(sb.toString());
 		

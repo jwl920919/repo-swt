@@ -8,13 +8,19 @@ ipm:
   cluster:
     mode: master    # master, slave
     slave-index: 0  # 0 ~ 99
-  
+  redis:
+    host: shinwootnskr.iptime.org
+    port: 6379
+    password: shinwoo123!
+    timeout: 0
+    
   # debug mode
   debug:
     enable: true
     enable_recv_syslog: false
     enable_insert_event: false
-
+    enable_device_collect: false
+    
 #====================================
 # spring
 #====================================
@@ -38,12 +44,6 @@ spring:
     username: admin
     password: shinwoo123!
     virtual-host: /
-  redis:
-    host: shinwootnskr.iptime.org
-    port: 6379
-    password: shinwoo123!
-    timeout: 0
-    
 
 #====================================
 # banner

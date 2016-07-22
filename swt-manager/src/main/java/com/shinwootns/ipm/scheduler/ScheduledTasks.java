@@ -5,6 +5,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.shinwootns.ipm.service.handler.RedisHandler;
+import com.shinwootns.ipm.service.manager.ClusterManager;
 
 @Component
 public class ScheduledTasks {
@@ -23,7 +24,8 @@ public class ScheduledTasks {
 	@Scheduled(fixedDelay = 5000)
 	public void updateClusterInfo() {
 		
-		RedisHandler.getInstance().updateClusterMember();
+		ClusterManager.getInstance().updateClusterMember();
+		ClusterManager.getInstance().checkClusterMaster();
 		
 	}
 	

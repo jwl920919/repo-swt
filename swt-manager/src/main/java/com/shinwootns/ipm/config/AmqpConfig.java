@@ -18,9 +18,6 @@ public class AmqpConfig {
 	private final static int AMQP_RECONNECT_TIME = 5000;
 	
 	@Autowired
-	private ApplicationProperty appProperty;
-	
-	@Autowired
 	private RabbitTemplate rabbitTemplate;
 	
 	@Bean
@@ -40,11 +37,6 @@ public class AmqpConfig {
 	
 	@Bean
 	SimpleMessageListenerContainer container(ConnectionFactory connectionFactory, MessageListenerAdapter listenerAdapter) {
-		
-		// Debug - Skip recv syslog
-		if ( appProperty.debugEnable && appProperty.enableRecvSyslog == false ) {
-			return null;
-		}
 		
 		SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
 		container.setConnectionFactory(connectionFactory);
