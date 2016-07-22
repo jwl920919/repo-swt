@@ -282,15 +282,16 @@
 	<!-- Description : IP관리 > 고정IP현황 - 세그먼트별 상세 데이터 -->
 	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
 	<select id="select_IP_MANAGEMENT_SEGMENT_DETAIL" resultType="java.util.HashMap">
+		SET TIMEZONE TO '${time_zone}';
 		SELECT * FROM 
             (SELECT "network", "ipaddr", COALESCE("ip_type",'') AS "ip_type", COALESCE("macaddr",'') AS "macaddr", COALESCE("duid",'') AS "duid", "is_conflict", 
                     COALESCE("conflict_types",'') AS "conflict_types", COALESCE("status",'') AS "status", COALESCE("lease_state",'') AS "lease_state",
                     COALESCE("obj_types",'') AS "obj_types", COALESCE("discover_status",'') AS "discover_status", COALESCE("usage",'') AS "usage", 
 		            COALESCE("host_name",'') AS "host_name", COALESCE("host_os",'') AS "host_os", COALESCE("fingerprint",'') AS "fingerprint", 
 		            COALESCE("is_never_ends", FALSE) AS "is_never_ends", COALESCE("is_never_start", FALSE) AS "is_never_start",
-                    COALESCE(to_char("lease_start_time",'YYYYMMDD HH24:MI'),'') AS "lease_start_time",
-                    COALESCE(to_char("lease_end_time",'YYYYMMDD HH24:MI'),'') AS "lease_end_time",
-                    COALESCE(to_char("last_discovered",'YYYYMMDD HH24:MI'),'') AS "last_discovered",
+                    COALESCE(to_char("lease_start_time",'YYYY-MM-DD HH24:MI:SS'),'') AS "lease_start_time",
+                    COALESCE(to_char("lease_end_time",'YYYY-MM-DD HH24:MI:SS'),'') AS "lease_end_time",
+                    COALESCE(to_char("last_discovered",'YYYY-MM-DD HH24:MI:SS'),'') AS "last_discovered",
                     COALESCE("user_description",'') AS "user_description"
                FROM "dhcp_ip_status"
               WHERE "site_id" = #{siteid} AND "network" = #{network} 
@@ -306,7 +307,7 @@
              SELECT "network" AS "network", "ipaddr" AS "ipaddr", '' AS "ip_type", "macaddr" AS "macaddr", '' AS "duid", false AS "is_conflict", '' AS "conflict_types",
                     'FIXED' AS "status", '' AS "lease_state", '' AS "obj_types", '' AS "discover_status", '' AS "usage", '' AS "host_name", '' AS "host_os",
                     '' AS "fingerprint", false AS "is_never_ends", false AS "is_never_start", '' AS "lease_start_time", '' AS "lease_end_time",
-                    COALESCE(to_char("update_time",'YYYYMMDD HH24:MI'),'') AS "last_discovered",
+                    COALESCE(to_char("update_time",'YYYY-MM-DD HH24:MI:SS'),'') AS "last_discovered",
                     "comment" AS "user_description"
                FROM "dhcp_fixed_ip"
               WHERE "site_id" = #{siteid} AND "network" = #{network}) AS main,

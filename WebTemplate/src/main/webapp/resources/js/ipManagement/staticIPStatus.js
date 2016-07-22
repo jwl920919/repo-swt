@@ -120,7 +120,7 @@ function tdClickEvent(obj){
 	                "processing" : true,
 	                "serverSide" : true,
 	                "sScrollX": "100%",
-	                "sScrollXInner": "150%",
+	                "sScrollXInner": "3000",
 	                "bScrollCollapse": true,
 	                "ajax" : {
 	                    url : 'ipManagement/staticIPStatus_Segment_Detail_Select',
@@ -130,10 +130,11 @@ function tdClickEvent(obj){
 	                    "data" : function(data,type) {
 	                        data.search_key = data.search.value;
 	                        data.network = network;
+	                        data.timezone = getClientTimeZoneName();
 	                    }
 	                },
-				    "columnDefs": [{ className: "essential-td-left", "targets": [ 0,1,2,3,4,5,6,7,8,9,10 ] },
-				                   { className: "essential-td-left", "targets": [ 11,12,13,14,15,16,17,18 ] }],
+				    "columnDefs": [{ className: "essential-td-left", "targets": [ 0,2,3,7,9,10 ] },
+				                   { className: "essential-td-left", "targets": [ 11,12,17,18 ] }],
 //	                "aoColumns": [
 //	                              { "data" : "ipaddr", "sWidth": "300%" }, // 1st column width 
 //	                              { "data" : "ip_type", "sWidth": "1000%" }, // 2nd column width 
@@ -175,9 +176,9 @@ function tdClickEvent(obj){
 															return data;
 														}else{
 																//return "<button class='btn btn-block btn-info btn-sm' id='pdsSelect'> 선택</button>";
-																return data;
-															}
+															return data;
 														}
+													}
 											},
 									{"data" : "status"},
 									{"data" : "lease_state"},

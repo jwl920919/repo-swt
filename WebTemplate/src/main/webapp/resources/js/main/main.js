@@ -7,6 +7,7 @@
 //	// Javascript에서 Language갑 가져오기 예제 2
 //	// alert(getLanguage("Title"));
 //});
+var ModifyExist= false;
 var currentURL;
 changeframe = function(url, acticeid, masterKey, subKey) {
 
