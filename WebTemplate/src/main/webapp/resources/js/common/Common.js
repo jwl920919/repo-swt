@@ -29,13 +29,6 @@ function systemAlert(divElement, type, title, message) {
 
 }
 
-/**
- * date : 2016-07-21 creator : 이재원 divElement : alert을 가지고 있는 div ID boxColor :
- * alert-info, alert-success title : 경고, 주의 등의 팝업 타이틀 message : 팝업 문구
- * confirmButtonValue : 버튼 메세지 buttonColor : ex1)#fff ex2)rgba(60, 141, 188,
- * 0.68) fnName : button클릭시 실행 될 function 이름 message : 팝업 문구 confirm 버튼 추가
- */
-
 /*
  * alert의 위치를 중앙에 띄우기 위해 사용
  */
@@ -45,6 +38,13 @@ function getWindowPoint() {
     scrollTop = $(document).scrollTop();
 };
 
+/**
+ * date : 2016-07-21 creator : 이재원 divElement : alert을 가지고 있는 div ID boxColor :
+ * alert-info, alert-success title : 경고, 주의 등의 팝업 타이틀 message : 팝업 문구
+ * confirmButtonValue : 버튼 메세지 buttonColor : ex1)#fff ex2)rgba(60, 141, 188,
+ * 0.68) fnName : button클릭시 실행 될 function 이름 (function이 없을시 ''로 공백문자열을 parameter값으로 주면됨)
+ * message : 팝업 문구 confirm 버튼 추가
+ */
 function systemAlert(divElement, type, title, message, confirmButtonValue, buttonColor, fnName) {
     getWindowPoint();
     $("#layDiv").attr("style", "visibility: visible");
@@ -64,8 +64,8 @@ function systemAlert(divElement, type, title, message, confirmButtonValue, butto
     tag += "     <label >" + message + "</label> ";
     tag += "     <div style='width:100%;'><input onclick='alertButtonEvent()' class='btn' type='button' value='" + confirmButtonValue
             + "' style='position: relative;left: 282px;background:"
-            + buttonColor + ";outline: none;color:#fff' /></div><script>function alertButtonEvent(){;" + fnName
-            + "(); fnAlertClose(\"layDiv\");}</script>";
+            + buttonColor + ";outline: none;color:#fff' /></div><script>function alertButtonEvent(){" + (fnName==''?fnName:(fnName+'();'))
+            + " fnAlertClose(\"layDiv\");}</script>";
     tag += "</div> ";
     $("#" + divElement).html('');
     $("#" + divElement).append(tag);
@@ -74,7 +74,11 @@ function systemAlert(divElement, type, title, message, confirmButtonValue, butto
     $('#custom-alert').css('top', alertPositionHeight);
 }
 
+/**
+ * 스크롤 변경 이벤트
+ */
 $(window).scroll(function() {
+    //alert 창 위치 지정
     if ($('#layDiv').css('visibility') == 'visible') {
         getWindowPoint();
         var alertPositionHeight = (windowHeight / 2 + scrollTop - 60) + 'px';
