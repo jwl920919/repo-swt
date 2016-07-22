@@ -55,8 +55,47 @@ $(document)
                         d_length.append(d_filter);
                         d_wrap.prepend(d_filter);
                     });
+                    
+                    changeGroupNames();
+                    changeSiteNames();
                 });
 
+function changeGroupNames() {
+    $.ajax({
+        url : "/configManagement/getGroupNames",
+        type : "POST",
+        success : function(data) {
+            var jsonObj = eval("(" + data + ')');
+            if (jsonObj.result == true) {
+                $('#ggroupSel').find('option').remove().end();
+                for (var i = 0; i < jsonObj.data.length; i++) {
+                    $('#groupSel').append(
+                            '<option value=' + jsonObj.data[i].group_id + '>'
+                                    + jsonObj.data[i].group_name + '</option>');
+                }
+            }
+        }
+    });
+
+}
+function changeSiteNames() {
+    $.ajax({
+        url : "/configManagement/getSiteNames",
+        type : "POST",
+        success : function(data) {
+            var jsonObj = eval("(" + data + ')');
+            if (jsonObj.result == true) {
+                $('#placeOfBusinessSel').find('option').remove().end();
+                for (var i = 0; i < jsonObj.data.length; i++) {
+                    $('#placeOfBusinessSel').append(
+                            '<option value=' + jsonObj.data[i].site_id + '>'
+                                    + jsonObj.data[i].site_name + '</option>');
+                }
+            }
+        }
+    });
+
+}
 // 체크박스 전체선택
 $('#checkbox_controller').click(function() {
     if ($(this).is(':checked')) {

@@ -58,7 +58,7 @@ charts or filled areas).
             if (s.stack == null || s.stack === false)
                 return;
 
-            var other = findMatchingSeries(s, plot.getTdData());
+            var other = findMatchingSeries(s, plot.getData());
             if (!other)
                 return;
 

@@ -29,6 +29,7 @@ import com.google.gson.reflect.TypeToken;
 
 import Common.DTO.AjaxResult;
 import Common.DTO.SITE_INFO_DTO;
+import Common.DTO.SYSTEM_USER_GROUP_DTO;
 import Common.DTO.SYSTEM_USER_INFO_DTO;
 import Common.Helper.LanguageHelper;
 import Common.ServiceInterface.AUTH_MENU_Service_interface;
@@ -60,7 +61,6 @@ public class ConfigManagementActionController {
 	// region systemUserManagement
 
 	// region getSystemUserManagementDatatableDatas
-
 	@RequestMapping(value = "getSystemUserManagementDatatableDatas", method = RequestMethod.POST)
 	public void getSystemUserManagementDatatableDatas(Locale locale, Model model, HttpServletRequest request,
 			HttpServletResponse response) {
@@ -243,6 +243,30 @@ public class ConfigManagementActionController {
 	}
 	// endregion
 
+	// region getGroupNames
+	@RequestMapping(value = "getGroupNames", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+	public @ResponseBody Object getGroupNames(HttpServletRequest request) {
+		logger.info("getGroupNames : " + request.getLocalAddr());
+		try {
+			List<SYSTEM_USER_GROUP_DTO> groupsInfoList = groupInfoService.select_SYSTEM_USER_GROUP_INFO();
+			List<Map<String, Object>> mapList = new ArrayList<>();
+			for (SYSTEM_USER_GROUP_DTO sugd : groupsInfoList) {
+				HashMap<String, Object> map = new HashMap<>();
+				map.put("group_name", sugd.getGroup_name());
+				map.put("group_id", sugd.getGroup_id());
+				mapList.add(map);
+			}
+			result.data = mapList;
+			result.result = true;
+			return gson.toJson(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.result = false;
+			return gson.toJson(result);
+		}
+	}
+	// endregion
+	
 	// endregion
 
 	/***************************************************** systemGroupManagement *****************************************************/
@@ -608,7 +632,7 @@ public class ConfigManagementActionController {
 			List<HashMap<String, Object>> jArray = gson.fromJson(request.getReader(),
 					new TypeToken<List<HashMap<String, Object>>>() {
 					}.getType());
-			
+
 			for (HashMap<String, Object> parameters : jArray) {
 				int auth_menu_id = Integer.parseInt(parameters.get("auth_menu_id").toString());
 				int site_id = Integer.parseInt(parameters.get("site_id").toString());

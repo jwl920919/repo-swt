@@ -53,6 +53,7 @@ public class UserAuthenticatorLDAP {
 	
 	Hashtable _groups;
 	
+	/*
 	public String GetType() {
 		return "ldap";
 	}
@@ -60,8 +61,9 @@ public class UserAuthenticatorLDAP {
 	public int GetId() {
 		return 2;
 	}
+	*/
 
-	public UserAuthenticatorLDAP(Integer id, String name)
+	public UserAuthenticatorLDAP()
     {
         //super(id, name);
         _groups = new Hashtable();
@@ -317,16 +319,20 @@ public class UserAuthenticatorLDAP {
 			properties.put("java.naming.factory.initial", "com.sun.jndi.ldap.LdapCtxFactory");
 			properties.put("java.naming.security.authentication", "simple");
 			
-			// URL
-			properties.put("java.naming.provider.url", String.format("ldaps://%s:%d/", host, port));
-			
 			// SSL
 			if (ssl.booleanValue()) {
+				
+				// URL
+				properties.put("java.naming.provider.url", String.format("ldaps://%s:%d/", host, port));
 
 				properties.put("java.naming.security.protocol", "ssl");
 				
 				// Initialize SSL
 				InitializeSSL();
+			}
+			else {
+				// URL
+				properties.put("java.naming.provider.url", String.format("ldap://%s:%d/", host, port));
 			}
 			
 			properties.put("java.naming.security.principal", bindDn);
@@ -335,11 +341,11 @@ public class UserAuthenticatorLDAP {
 			ldapContext = new InitialLdapContext(properties, null);
 			
 		} catch (AuthenticationException e) {
-			_logger.error(e);
+			_logger.error(e.getMessage(), e);
 		} catch (NamingException e) {
-			_logger.error(e);
+			_logger.error(e.getMessage(), e);
 		} catch (Exception e) {
-			_logger.error(e);
+			_logger.error(e.getMessage(), e);
 		}
 		
 		return ldapContext;
