@@ -17,14 +17,14 @@ function systemAlert(divElement, type, title, message) {
     // .alert-info
     // .alert-success
     var tag = "";
-    tag += "<div class='alert " + type
+    tag += "<div id='custom-alert' class='alert " + type
             + " alert-dismissible fade in' role='alert'>";
     tag += "     <button onclick='fnAlertClose(\"layDiv\")' type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>";
     tag += "     <h4><i class='icon fa fa-warning'></i><label>" + title
             + "</label></h4>";
     tag += "     <label >" + message + "</label> ";
     tag += "</div> ";
-
+    $("#" + divElement).html('');
     $("#" + divElement).append(tag);
 
 }
@@ -62,11 +62,12 @@ function systemAlert(divElement, type, title, message, confirmButtonValue, butto
     tag += "     <h4><i class='icon fa fa-warning'></i><label>" + title
             + "</label></h4>";
     tag += "     <label >" + message + "</label> ";
-    tag += "     <div style='width:100%;'><input onclick='" + fnName
-            + "()' class='btn' type='button' value='" + confirmButtonValue
+    tag += "     <div style='width:100%;'><input onclick='alertButtonEvent()' class='btn' type='button' value='" + confirmButtonValue
             + "' style='position: relative;left: 282px;background:"
-            + buttonColor + ";outline: none;color:#fff' /></div>";
+            + buttonColor + ";outline: none;color:#fff' /></div><script>function alertButtonEvent(){;" + fnName
+            + "(); fnAlertClose(\"layDiv\");}</script>";
     tag += "</div> ";
+    $("#" + divElement).html('');
     $("#" + divElement).append(tag);
     getWindowPoint();
     var alertPositionHeight = (windowHeight / 2 + scrollTop - 60) + 'px';
