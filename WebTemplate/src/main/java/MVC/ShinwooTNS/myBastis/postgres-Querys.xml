@@ -335,8 +335,7 @@
 	<!-- Insert User : KCM -->
 	<!-- Description : IP관리 > 고정IP현황 - 세그먼트별 ip map 데이터 - DHCP Range -->
 	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
-	<select id="select_IP_MANAGEMENT_SEGMENT_DETAIL_MAP_DHCPRANGE"
-		resultType="java.util.HashMap">
+	<select id="select_IP_MANAGEMENT_SEGMENT_DETAIL_MAP_DHCPRANGE" resultType="java.util.HashMap">
 		SELECT "netzone".*, "range"."start_ip" AS "dhcp_start_ip", "range"."end_ip" AS "dhcp_end_ip"
 		  FROM "dhcp_network" AS "netzone", "dhcp_range" AS "range"
 		 WHERE "netzone"."site_id" = "range"."site_id"
@@ -350,11 +349,22 @@
 	<!-- Insert User : KCM -->
 	<!-- Description : IP관리 > 고정IP현황 - 세그먼트별 ip map 데이터 -->
 	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
-	<select id="select_IP_MANAGEMENT_SEGMENT_DETAIL_MAPDATA"
-		resultType="java.util.HashMap">
-		SELECT * FROM "dhcp_lease_ip"
-		 WHERE "site_id" = #{siteid} AND "network" = #{network}
-		 ORDER BY inet("ipaddr")
+	<select id="select_IP_MANAGEMENT_SEGMENT_DETAIL_MAPDATA" resultType="java.util.HashMap">
+		SET TIMEZONE TO '${time_zone}';
+		SELECT * FROM (
+		    SELECT "site_id", "network", "ipaddr", "macaddr", COALESCE("is_conflict", FALSE) AS "is_conflict", "conflict_types", "status",
+		           "lease_state", "obj_types", "usage", "host_name", "host_os","fingerprint",
+		           COALESCE("is_never_ends", FALSE) AS "is_never_ends", COALESCE("is_never_start", FALSE) AS "is_never_start",
+		           COALESCE(to_char("lease_start_time",'YYYY-MM-DD HH24:MI:SS'),'') AS "lease_start_time",
+		           COALESCE(to_char("lease_end_time",'YYYY-MM-DD HH24:MI:SS'),'') AS "lease_end_time"
+		      FROM "dhcp_ip_status" AS "t_ip"
+		    UNION ALL
+		    SELECT "site_id", "network", "ipaddr", "macaddr", FALSE AS "is_conflict", '' AS  "conflict_types", 'FIXED' AS "status", 'FIXED' AS "lease_state", 
+		           '' AS "obj_types", '' AS "usage", '' AS "host_name", '' AS "host_os", '' AS "fingerprint", 
+		           FALSE AS "is_never_ends", FALSE AS "is_never_start", '' AS "lease_start_time", '' AS "lease_end_time"
+		      FROM "dhcp_fixed_ip" AS "t_fixed") as "t_map"
+		 WHERE "t_map"."site_id" = #{siteid} AND "t_map"."network" = #{network}
+		 ORDER BY inet("t_map"."ipaddr")
 	</select>
 
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->

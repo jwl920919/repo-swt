@@ -26,9 +26,9 @@
 		<div class="col-lg-12">
 			<div class="box box-primary">
 				<div class="box-header" style="margin-bottom: -10px">
-					<h1 class="box-title-small">
+					<h2 class="box-title-small">
 						<LABEL>default</LABEL>
-						</h2>
+					</h2>
 				</div>
 				<div class="box-body">
 					<center>
