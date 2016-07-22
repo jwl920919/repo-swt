@@ -75,7 +75,11 @@ function systemAlert(divElement, type, title, message, confirmButtonValue,
     $('#custom-alert').css('top', alertPositionHeight);
 
 }
+/**
+ * 스크롤 변경 이벤트
+ */
 $(window).scroll(function() {
+    //alert 창 위치 지정
     if ($('#layDiv').css('visibility') == 'visible') {
         getWindowPoint();
         var alertPositionHeight = (windowHeight / 2 + scrollTop - 60) + 'px';

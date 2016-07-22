@@ -63,14 +63,14 @@ public class ConfigManagementActionController {
 	// region getSystemUserManagementDatatableDatas
 	@RequestMapping(value = "getSystemUserManagementDatatableDatas", method = RequestMethod.POST)
 	public void getSystemUserManagementDatatableDatas(Locale locale, Model model, HttpServletRequest request,
-			HttpServletResponse response) {
+			HttpServletResponse response, HttpSession session) {
 		logger.info("getSystemUserManagementDatatableDatas : " + request.getLocalAddr());
 		System.out.println("getSystemUserManagementDatatableDatas Controller");
 		try {
 			String[] columns = { "user_id", "user_name" };
 			HashMap<String, Object> parameters = Common.Helper.DatatableHelper.getDatatableParametas(request, columns,
 					1);
-
+			parameters.put("site_id", Integer.parseInt(session.getAttribute("site_id").toString()));
 			List<SYSTEM_USER_INFO_DTO> userDataList = userInfoService
 					.select_SYSTEM_USER_INFO_CONDITIONAL_SEARCH(parameters);
 
@@ -130,7 +130,7 @@ public class ConfigManagementActionController {
 
 	// region updateUserInfo
 	@RequestMapping(value = "updateUserInfo", method = RequestMethod.POST, produces = "application/text; charset=utf8")
-	public @ResponseBody Object updateUserInfo(HttpServletRequest request) {
+	public @ResponseBody Object updateUserInfo(HttpServletRequest request, HttpSession session) {
 		logger.info("updateUserInfo : " + request.getLocalAddr());
 		try {
 			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
@@ -140,9 +140,8 @@ public class ConfigManagementActionController {
 					site_id = Integer.parseInt(parameters.get("site_id").toString());
 			String time_zone = parameters.get("time_zone").toString();
 			parameters.remove("group_id");
-			parameters.remove("site_id");
 			parameters.put("group_id", group_id);
-			parameters.put("site_id", site_id);
+			parameters.put("site_id", Integer.parseInt(session.getAttribute("site_id").toString()));
 
 			int cnt = userInfoService.update_SYSTEM_USER_INFO_ONE_RECORD(parameters);
 			if (cnt > -1)
@@ -266,7 +265,7 @@ public class ConfigManagementActionController {
 		}
 	}
 	// endregion
-	
+
 	// endregion
 
 	/***************************************************** systemGroupManagement *****************************************************/
@@ -525,7 +524,7 @@ public class ConfigManagementActionController {
 						"<div class='save-box'><input class='save-button btn btn-primary' type='button' value='저장'></div>");
 				sb.append("<table id='auth_table' >");
 				sb.append("<thead id='auth_table_head'>");
-				sb.append("<th colspan=2></th>");
+				sb.append("<th colspan=2>메뉴</th>");
 
 				Iterator<Map<String, Object>> groupNamesIterator = groupNames.iterator();
 				while (groupNamesIterator.hasNext()) {

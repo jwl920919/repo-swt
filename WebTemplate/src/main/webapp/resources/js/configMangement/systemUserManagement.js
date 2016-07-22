@@ -55,45 +55,28 @@ $(document)
                         d_length.append(d_filter);
                         d_wrap.prepend(d_filter);
                     });
-                    
+
                     changeGroupNames();
-                    changeSiteNames();
                 });
 
 function changeGroupNames() {
-    $.ajax({
-        url : "/configManagement/getGroupNames",
-        type : "POST",
-        success : function(data) {
-            var jsonObj = eval("(" + data + ')');
-            if (jsonObj.result == true) {
-                $('#ggroupSel').find('option').remove().end();
-                for (var i = 0; i < jsonObj.data.length; i++) {
-                    $('#groupSel').append(
-                            '<option value=' + jsonObj.data[i].group_id + '>'
-                                    + jsonObj.data[i].group_name + '</option>');
+    $
+            .ajax({
+                url : "/configManagement/getGroupNames",
+                type : "POST",
+                success : function(data) {
+                    var jsonObj = eval("(" + data + ')');
+                    if (jsonObj.result == true) {
+                        $('#ggroupSel').find('option').remove().end();
+                        for (var i = 0; i < jsonObj.data.length; i++) {
+                            $('#groupSel').append(
+                                    '<option value=' + jsonObj.data[i].group_id
+                                            + '>' + jsonObj.data[i].group_name
+                                            + '</option>');
+                        }
+                    }
                 }
-            }
-        }
-    });
-
-}
-function changeSiteNames() {
-    $.ajax({
-        url : "/configManagement/getSiteNames",
-        type : "POST",
-        success : function(data) {
-            var jsonObj = eval("(" + data + ')');
-            if (jsonObj.result == true) {
-                $('#placeOfBusinessSel').find('option').remove().end();
-                for (var i = 0; i < jsonObj.data.length; i++) {
-                    $('#placeOfBusinessSel').append(
-                            '<option value=' + jsonObj.data[i].site_id + '>'
-                                    + jsonObj.data[i].site_name + '</option>');
-                }
-            }
-        }
-    });
+            });
 
 }
 // 체크박스 전체선택
@@ -109,24 +92,47 @@ $('#checkbox_controller').click(function() {
     }
 });
 
-$('#delete-button')
-        .click(
-                function() {
-                    systemAlert(
-                            "divAlertArea",
-                            "alert-warning",
-                            "삭제",
-                            "정말 유저 정보를 삭제하시겠습니까? <input class='delete-confirm-button' class='btn btn-danger' type='button' value='삭제' style='position:absolute; top:48px; left:267px; width:73px; height:26px; font-size:14px;background-color: #e67d26;    border-color: #F3BC6E;border-style: groove; color: #FFF;' /><script>$('.delete-confirm-button').click(function(){var rows=$('input[name=checkbox-active]:checkbox:checked');var jsonArray=new Array();for(var i=0;i<rows.length;i++){var tr=$(rows[i]).parent().parent();var td=tr.children().next();var jObj=Object();jObj.user_id=td.html();jsonArray.push(jObj);}var jsonInfo=JSON.stringify(jsonArray);$.ajax({url:'configManagement/deleteUsers',type:'POST',data:jsonInfo,dataType:'text',success:function(data){var jsonObj=eval('('+data+')');if(jsonObj.result==true){table.ajax.reload();console.log('삭제성공');}else{console.log('삭제실패');}fnAlertClose(\"layDiv\")}});});</script>");
+$('#delete-button').click(
+        function() {
+            systemAlert("divAlertArea", "alert-warning", "삭제",
+                    "정말 유저 정보를 삭제하시겠습니까?", "삭제", "#ce891c",
+                    'userInformDeleteEvent');
 
-                });
-
+        });
+function userInformDeleteEvent() {
+    var rows = $('input[name=checkbox-active]:checkbox:checked');
+    var jsonArray = new Array();
+    for (var i = 0; i < rows.length; i++) {
+        var tr = $(rows[i]).parent().parent();
+        var td = tr.children().next();
+        var jObj = Object();
+        jObj.user_id = td.html();
+        jsonArray.push(jObj);
+    }
+    var jsonInfo = JSON.stringify(jsonArray);
+    $.ajax({
+        url : 'configManagement/deleteUsers',
+        type : 'POST',
+        data : jsonInfo,
+        dataType : 'text',
+        success : function(data) {
+            var jsonObj = eval('(' + data + ')');
+            if (jsonObj.result == true) {
+                table.ajax.reload();
+                console.log('삭제성공');
+            } else {
+                console.log('삭제실패');
+            }
+            fnAlertClose("layDiv")
+        }
+    });
+}
 // switching [ add(1), modify(2) ]
 var sw = 1;
 var idState = false;
 function switching(num) {
     sw = num;
     changeGroupNames();
-    changeSiteNames();
 }
 // trClickEvent 구현 ( Datatable-Essential.js에서 사용하기 위하여 )
 function trClickEvent(clickedTr) {
@@ -153,7 +159,6 @@ function trClickEvent(clickedTr) {
                 $.each(jsonObj.data, function(index, obj) {
                     $('#nameTxt').val(obj.user_name);
                     $('#groupSel').val(obj.group_id);
-                    $('#placeOfBusinessSel').val(obj.site_id);
                     $('#departmentTxt').val(obj.dept_name);
                     $('#positionTxt').val(obj.position_name);
                     $('#emailTxt').val(obj.email);
@@ -300,7 +305,6 @@ $('#save-button').click(function() {
                 jObj.user_pw = $('#passwordTxt').val();
                 jObj.user_name = $('#nameTxt').val();
                 jObj.group_id = $('#groupSel').val();
-                jObj.site_id = $('#placeOfBusinessSel').val();
                 jObj.dept_name = $('#departmentTxt').val();
                 jObj.position_name = $('#positionTxt').val();
                 jObj.email = $('#emailTxt').val();
@@ -315,19 +319,27 @@ $('#save-button').click(function() {
                     success : function(data) {
                         var jsonObj = eval("(" + data + ')');
                         if (jsonObj.result == true) {
-                            alert('계정 생성 성공');
+                            systemAlert("divAlertArea", "alert-info", "계정생성",
+                                    "계정생성에 성공하셨습니다.", "확인", "rgba(60, 141, 188, 0.68)",
+                                    '');
                             $('#idTxt').val('');
                             clear();
                         } else {
-                            alert('계정 생성 실패');
+                            systemAlert("divAlertArea", "alert-warning", "계정생성",
+                                    "계정생성에 실패하셨습니다.", "확인", "#ce891c",
+                                    '');
                         }
                     }
                 })
             } else {
-                alert("아이디 중복 확인하세요");
+                systemAlert("divAlertArea", "alert-warning", "아이디",
+                        "아이디 중복 확인하세요", "확인", "#ce891c",
+                        '');
             }
         } else {
-            alert("패스워드를 확인하세요");
+            systemAlert("divAlertArea", "alert-warning", "패스워드",
+                    "패스워드 일치 여부를 확인하세요", "확인", "#ce891c",
+                    '');
         }
         break;
     case 2:
@@ -337,7 +349,6 @@ $('#save-button').click(function() {
             jObj.user_pw = $('#passwordTxt').val();
             jObj.user_name = $('#nameTxt').val();
             jObj.group_id = $('#groupSel').val();
-            jObj.site_id = $('#placeOfBusinessSel').val();
             jObj.dept_name = $('#departmentTxt').val();
             jObj.position_name = $('#positionTxt').val();
             jObj.email = $('#emailTxt').val();
@@ -352,9 +363,13 @@ $('#save-button').click(function() {
                 success : function(data) {
                     var jsonObj = eval("(" + data + ')');
                     if (jsonObj.result == true) {
-                        alert('계정정보 변경 성공');
+                        systemAlert("divAlertArea", "alert-info", "계정변경",
+                                "계정변경 성공하셨습니다.", "확인", "rgba(60, 141, 188, 0.68)",
+                                '');
                     } else {
-                        alert('계정정보 변경 실패');
+                        systemAlert("divAlertArea", "alert-warning", "계정변경",
+                                "계정변경 실패하셨습니다.", "확인", "#ce891c",
+                                '');
                     }
                 }
             });
@@ -371,7 +386,6 @@ function clear() {
     $('#passwordChkTxt').val('');
     $('#nameTxt').val('');
     $('#groupSel').val(1);
-    $('#placeOfBusinessSel').val(1);
     $('#departmentTxt').val('');
     $('#positionTxt').val('');
     $('#emailTxt').val('');

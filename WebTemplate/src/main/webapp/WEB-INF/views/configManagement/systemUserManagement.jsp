@@ -91,9 +91,7 @@
 								</div>
 								<div id="pob-row" class="send-row">
 									<label class="send-label"><%=LanguageHelper.GetLanguage("placeOfBusiness")%></label>
-									<select class="send-select" id="placeOfBusinessSel"
-										name="placeOfBusinessSel">
-									</select>
+									<input type="text" id="pobTxt" name="pobTxt">
 								</div>
 								<div id="dept-row" class="send-row">
 									<label class="send-label"><%=LanguageHelper.GetLanguage("department")%></label>
