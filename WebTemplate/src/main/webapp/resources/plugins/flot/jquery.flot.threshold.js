@@ -104,9 +104,9 @@ You may need to check for this in hover events.
             thresholded.datapoints.points = threspoints;
             
             if (thresholded.datapoints.points.length > 0) {
-                var origIndex = $.inArray(s, plot.getTdData());
+                var origIndex = $.inArray(s, plot.getData());
                 // Insert newly-generated series right after original one (to prevent it from becoming top-most)
-                plot.getTdData().splice(origIndex + 1, 0, thresholded);
+                plot.getData().splice(origIndex + 1, 0, thresholded);
             }
                 
             // FIXME: there are probably some edge cases left in bars

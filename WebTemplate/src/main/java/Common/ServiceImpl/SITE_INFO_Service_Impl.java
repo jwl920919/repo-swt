@@ -34,5 +34,9 @@ public class SITE_INFO_Service_Impl implements SITE_INFO_Service_interface {
 	public int delete_SITE_INFO_RECORDS(HashMap<String, Object> parameters) {
 		return siteInfoDao.delete_SITE_INFO_RECORDS(parameters);
 	}
+	@Override
+	public SITE_INFO_DTO select_SITE_INFO_ONE_SEARCH(int site_id) {
+		return siteInfoDao.select_SITE_INFO_ONE_SEARCH(site_id);
+	}
 
 }

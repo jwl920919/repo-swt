@@ -91,13 +91,14 @@ public class IPManagementActionController {
 					"lease_start_time", "lease_end_time",
 					"last_discovered", "user_description", "description"};
 			String m_network = request.getParameter("network");
-			
+			String m_timezone = request.getParameter("timezone");
 			HashMap<String, Object> parameters = Common.Helper.DatatableHelper.getDatatableParametas(request,columns,0);
 			
 			String siteID = session.getAttribute("site_id").toString();
 			if (!siteID.equals("")) {
 				parameters.put("siteid", Integer.parseInt(session.getAttribute("site_id").toString()));
 				parameters.put("network", m_network);
+				parameters.put("time_zone", m_timezone);
 				
 				dataList = ipManagementService.select_IP_MANAGEMENT_SEGMENT_DETAIL(parameters);
 	

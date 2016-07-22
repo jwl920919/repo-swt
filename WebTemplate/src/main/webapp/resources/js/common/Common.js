@@ -17,24 +17,17 @@ function systemAlert(divElement, type, title, message) {
     // .alert-info
     // .alert-success
     var tag = "";
-    tag += "<div class='alert " + type
+    tag += "<div id='custom-alert' class='alert " + type
             + " alert-dismissible fade in' role='alert'>";
     tag += "     <button onclick='fnAlertClose(\"layDiv\")' type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>";
     tag += "     <h4><i class='icon fa fa-warning'></i><label>" + title
             + "</label></h4>";
     tag += "     <label >" + message + "</label> ";
     tag += "</div> ";
-
+    $("#" + divElement).html('');
     $("#" + divElement).append(tag);
 
 }
-
-/**
- * date : 2016-07-21 creator : 이재원 divElement : alert을 가지고 있는 div ID boxColor :
- * alert-info, alert-success title : 경고, 주의 등의 팝업 타이틀 message : 팝업 문구
- * confirmButtonValue : 버튼 메세지 buttonColor : ex1)#fff ex2)rgba(60, 141, 188,
- * 0.68) fnName : button클릭시 실행 될 function 이름 message : 팝업 문구 confirm 버튼 추가
- */
 
 /*
  * alert의 위치를 중앙에 띄우기 위해 사용
@@ -45,8 +38,14 @@ function getWindowPoint() {
     scrollTop = $(document).scrollTop();
 };
 
-function systemAlert(divElement, type, title, message, confirmButtonValue,
-        buttonColor, fnName) {
+/**
+ * date : 2016-07-21 creator : 이재원 divElement : alert을 가지고 있는 div ID boxColor :
+ * alert-info, alert-success title : 경고, 주의 등의 팝업 타이틀 message : 팝업 문구
+ * confirmButtonValue : 버튼 메세지 buttonColor : ex1)#fff ex2)rgba(60, 141, 188,
+ * 0.68) fnName : button클릭시 실행 될 function 이름 (function이 없을시 ''로 공백문자열을 parameter값으로 주면됨)
+ * message : 팝업 문구 confirm 버튼 추가
+ */
+function systemAlert(divElement, type, title, message, confirmButtonValue, buttonColor, fnName) {
     getWindowPoint();
     $("#layDiv").attr("style", "visibility: visible");
     $("#alertTitle").text(title);
@@ -63,18 +62,23 @@ function systemAlert(divElement, type, title, message, confirmButtonValue,
     tag += "     <h4><i class='icon fa fa-warning'></i><label>" + title
             + "</label></h4>";
     tag += "     <label >" + message + "</label> ";
-    tag += "     <div style='width:100%;'><input onclick='" + fnName
-            + "()' class='btn' type='button' value='" + confirmButtonValue
+    tag += "     <div style='width:100%;'><input onclick='alertButtonEvent()' class='btn' type='button' value='" + confirmButtonValue
             + "' style='position: relative;left: 282px;background:"
-            + buttonColor + ";outline: none;color:#fff' /></div>";
+            + buttonColor + ";outline: none;color:#fff' /></div><script>function alertButtonEvent(){" + (fnName==''?fnName:(fnName+'();'))
+            + " fnAlertClose(\"layDiv\");}</script>";
     tag += "</div> ";
+    $("#" + divElement).html('');
     $("#" + divElement).append(tag);
     getWindowPoint();
     var alertPositionHeight = (windowHeight / 2 + scrollTop - 60) + 'px';
     $('#custom-alert').css('top', alertPositionHeight);
-
 }
+
+/**
+ * 스크롤 변경 이벤트
+ */
 $(window).scroll(function() {
+    //alert 창 위치 지정
     if ($('#layDiv').css('visibility') == 'visible') {
         getWindowPoint();
         var alertPositionHeight = (windowHeight / 2 + scrollTop - 60) + 'px';
@@ -135,10 +139,11 @@ String.format = function() {
 
 // DateTime format function
 /**
- * http://stove99.tistory.com/46 -2011년 09월 11일 오후 03시 45분 42초 console.log(new
- * Date().format("yyyy년 MM월 dd일 a/p hh시 mm분 ss초")); -2011-09-11 console.log(new
- * Date().format("yyyy-MM-dd")); -'11 09.11 console.log(new Date().format("'yy
- * MM.dd")); -2011-09-11 일요일 console.log(new Date().format("yyyy-MM-dd E"));
+ * http://stove99.tistory.com/46 
+ * -2011년 09월 11일 오후 03시 45분 42초 console.log(new Date().format("yyyy년 MM월 dd일 a/p hh시 mm분 ss초"));
+ * -2011-09-11 console.log(new Date().format("yyyy-MM-dd"));
+ * -'11 09.11 console.log(new Date().format("yy.MM.dd"));
+ * -2011-09-11 일요일 console.log(new Date().format("yyyy-MM-dd E"));
  * -현재년도 : 2011 console.log("현재년도 : " + new Date().format("yyyy"));
  */
 Date.prototype.format = function(f) {

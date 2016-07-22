@@ -105,20 +105,23 @@ function tdClickEvent(obj){
 		$("#selectSegment").text(network);
 		console.log("ipCClass : " + ipCClass);
 		console.log("network : " + network);
-	
-		$('#datatable_detail').DataTable(
+		
+		var table = $('#datatable_detail').DataTable(
 	            {
+	            	"bJQueryUI": true,
+
 	                "destroy" : true,
 	                "paging" : true,
 	                "searching" : true,
-	                "lengthChange" : false,
+	                "lengthChange" : true,
 	                "ordering" : true,
 	                "info" : false,
-	                "AutoWidth": true,
+	                "bAutoWidth": false,
 	                "processing" : true,
 	                "serverSide" : true,
 	                "sScrollX": "100%",
-	                "sScrollXInner": "110%",
+	                "sScrollXInner": "3000",
+	                "bScrollCollapse": true,
 	                "ajax" : {
 	                    url : 'ipManagement/staticIPStatus_Segment_Detail_Select',
 	                    "dataType" : "jsonp",
@@ -127,51 +130,74 @@ function tdClickEvent(obj){
 	                    "data" : function(data,type) {
 	                        data.search_key = data.search.value;
 	                        data.network = network;
-	                        //console.log(data.search_key);
+	                        data.timezone = getClientTimeZoneName();
 	                    }
 	                },
-				    "columnDefs": [{ className: "essential-td-left", "targets": [ 0 ] },
-				                   { className: "essential-td-left", "targets": [ 1 ] },
-				                   { className: "essential-td-left", "targets": [ 2 ] },
-				                   { className: "essential-td-left", "targets": [ 3 ] },
-				                   { className: "essential-td-left", "targets": [ 4 ] },
-				                   { className: "essential-td-left", "targets": [ 5 ] },
-				                   { className: "essential-td-left", "targets": [ 6 ] },
-				                   { className: "essential-td-left", "targets": [ 7 ] },
-				                   { className: "essential-td-left", "targets": [ 8 ] },
-				                   { className: "essential-td-left", "targets": [ 9 ] },
-				                   { className: "essential-td-left", "targets": [ 10 ] },
-				                   { className: "essential-td-left", "targets": [ 11 ] },
-				                   { className: "essential-td-left", "targets": [ 12 ] },
-				                   { className: "essential-td-left", "targets": [ 13 ] },
-				                   { className: "essential-td-left", "targets": [ 14 ] },
-				                   { className: "essential-td-left", "targets": [ 15 ] },
-				                   { className: "essential-td-left", "targets": [ 16 ] },
-				                   { className: "essential-td-left", "targets": [ 17 ] }],
+				    "columnDefs": [{ className: "essential-td-left", "targets": [ 0,2,3,7,9,10 ] },
+				                   { className: "essential-td-left", "targets": [ 11,12,17,18 ] }],
+//	                "aoColumns": [
+//	                              { "data" : "ipaddr", "sWidth": "300%" }, // 1st column width 
+//	                              { "data" : "ip_type", "sWidth": "1000%" }, // 2nd column width 
+//	                              { "data" : "macaddr", "sWidth": "100%" }, // 3rd column width
+//	                              { "data" : "duid", "sWidth": "80%" }, // 4th column width
+//	                              { "data" : "is_conflict",
+//										"render":function(data,type,full,meta){	                              
+//										if(data){
+//											return data;
+//										}else{
+//												//return "<button class='btn btn-block btn-info btn-sm' id='pdsSelect'> 선택</button>";
+//												return data;
+//											}
+//										}, "sWidth": "100%" }, // 5th column width and so on 
+//	                              { "data" : "status", "sWidth": "100%" }, // 1st column width 
+//	                              { "data" : "lease_state", "sWidth": "100%" }, // 2nd column width 
+//	                              { "data" : "obj_types", "sWidth": "200%" }, // 3rd column width
+//	                              { "data" : "discover_status", "sWidth": "100%" }, // 4th column width
+//	                              { "data" : "usage", "sWidth": "100%" }, // 5th column width and so on 
+//	                              { "data" : "host_name", "sWidth": "300%" }, // 1st column width 
+//	                              { "data" : "host_os", "sWidth": "100%" }, // 2nd column width 
+//	                              { "data" : "fingerprint", "sWidth": "300%" }, // 3rd column width
+//	                              { "data" : "is_never_ends", "sWidth": "100%" }, // 4th column width
+//	                              { "data" : "is_never_start","sWidth": "100%" }, // 5th column width and so on 
+//	                              { "data" : "lease_start_time", "sWidth": "100%" }, // 1st column width 
+//	                              { "data" : "lease_end_time", "sWidth": "100%" }, // 2nd column width 
+//	                              { "data" : "last_discovered", "sWidth": "100%" }, // 3rd column width
+//	                              { "data" : "user_description", "sWidth": "320%" }
+//	                        ],
+//
 	                "order" : [ [ 0, 'asc' ] ],
-	                "columns" : [ {"data" : "ipaddr"},
-	                              {"data" : "ip_type"},
-	                              {"data" : "macaddr"},
-	                              {"data" : "duid"},
-	                              {"data" : "is_conflict"},
-	                              {"data" : "conflict_types"},
-	                              {"data" : "status"},
-	                              {"data" : "lease_state"},
-	                              {"data" : "obj_types"},
-	                              {"data" : "discover_status"},
-	                              {"data" : "usage"},
-	                              {"data" : "host_name"},
-	                              {"data" : "host_os"},
-	                              {"data" : "fingerprint"},
-	                              {"data" : "is_never_ends"},
-	                              {"data" : "is_never_start"},
-	                              {"data" : "lease_start_time"},
-	                              {"data" : "lease_end_time"},
-	                              {"data" : "last_discovered"},
-	                              {"data" : "user_description"}]
+	                "columns" : [	{"data" : "ipaddr"},
+									{"data" : "ip_type"},
+									{"data" : "macaddr"},
+									{"data" : "duid"},
+									{"data" : "is_conflict",
+											"render":function(data,type,full,meta){	                              
+														if(data){
+															return data;
+														}else{
+																//return "<button class='btn btn-block btn-info btn-sm' id='pdsSelect'> 선택</button>";
+															return data;
+														}
+													}
+											},
+									{"data" : "status"},
+									{"data" : "lease_state"},
+									{"data" : "obj_types"},
+									{"data" : "discover_status"},
+									{"data" : "usage"},
+									{"data" : "host_name"},
+									{"data" : "host_os"},
+									{"data" : "fingerprint"},
+									{"data" : "is_never_ends"},
+									{"data" : "is_never_start"},
+									{"data" : "lease_start_time"},
+									{"data" : "lease_end_time"},
+									{"data" : "last_discovered"},
+									{"data" : "user_description"}]
 	            });
 		//$('div.dataTables_scrollBody').css('maxHeight', 600);
 		//$("#datatable_detail tbody").css('maxHeight', 650);
+		
 		//검색, 엔트리 위치 정렬
 		$(function() {
 		    var d_wrap = $('#datatable_detail_wrapper .row:first');

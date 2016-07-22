@@ -1,5 +1,4 @@
 <%@ page import="Common.Helper.LanguageHelper"%>
-<%@ page import="Common.ServiceInterface.SITE_INFO_Service_interface"%>
 <%@ page language="java" contentType="text/html" pageEncoding="UTF-8"%>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <!-- Tell the browser to be responsive to screen width -->
@@ -40,7 +39,6 @@
 					<tbody>
 					</tbody>
 				</table>
-
 				<div class="bottom-box">
 					<div
 						style="width: 100%; margin-top: 5px; margin-bottom: 5px; height: 30px;">

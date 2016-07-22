@@ -55,39 +55,35 @@ function getGroupTdData(data) {
     return jObj;
 }
 
-$('.save-button').click(function() {
-    var a = $('td[name^=group_grant]');
-    var jArray = new Array();
-    
-    for (var b = 0; b < a.length; b++) {
-        jArray.push(getGroupTdData(a[b]));
-    }
-    $.ajax({
-        url : "/configManagement/changeGroupsAuthority",
-        data : JSON.stringify(jArray),
-        dataType : "text",
-        type : "POST",
-        success : function(data) {
-            var jsonObj = eval("(" + data + ')');
-            if (jsonObj.result == true) {
-                console.log('changeGroupsAuthority : ' + true);
-                systemAlert(
-                            "divAlertArea",
-                            "alert-info",
-                            "저장",
-                            "저장에 성공 하였습니다.","확인","rgba(60, 141, 188, 0.68)","test");
-//                $("#content_frame").load('/configManagement/systemMenuAuthorityManagement');
-            } else {
-                console.log('changeGroupsAuthority : ' + false);
-                systemAlert(
-                        "divAlertArea",
-                        "alert-warning",
-                        "저장",
-                        "저장에 실패 하였습니다.");
+$('.save-button').click(
+        function() {
+            var a = $('td[name^=group_grant]');
+            var jArray = new Array();
+
+            for (var b = 0; b < a.length; b++) {
+                jArray.push(getGroupTdData(a[b]));
             }
-        }
-    });
-});
-function test() {
-    console.log('test ... !!!!');
+            $.ajax({
+                url : "/configManagement/changeGroupsAuthority",
+                data : JSON.stringify(jArray),
+                dataType : "text",
+                type : "POST",
+                success : function(data) {
+                    var jsonObj = eval("(" + data + ')');
+                    if (jsonObj.result == true) {
+                        console.log('changeGroupsAuthority : ' + true);
+                        systemAlert("divAlertArea", "alert-info", "저장",
+                                "저장에 성공 하였습니다.", "확인",
+                                "rgba(60, 141, 188, 0.68)", "saveConfirm");
+                    } else {
+                        console.log('changeGroupsAuthority : ' + false);
+                        systemAlert("divAlertArea", "alert-warning", "저장",
+                                "저장에 실패 하였습니다.", "확인",
+                                "rgba(60, 141, 188, 0.68)", "saveConfirm");
+                    }
+                }
+            });
+        });
+function saveConfirm() {
+    $("#content_frame").load('/configManagement/systemMenuAuthorityManagement');
 }
