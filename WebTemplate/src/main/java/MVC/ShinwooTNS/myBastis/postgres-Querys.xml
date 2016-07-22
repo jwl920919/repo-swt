@@ -194,6 +194,16 @@
 		SELECT site_id,
 		site_name, site_code, description, site_master FROM site_info;
 	</select>
+	
+	
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-07-11 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : 사업장 정보 조회 -->
+	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
+	<select id="select_SITE_INFO_ONE_SEARCH" resultType="Common.DTO.SITE_INFO_DTO">
+		SELECT site_id, site_name, site_code, description, site_master FROM site_info where site_id=#{site_id};
+	</select>
 
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
 	<!-- Insert Date : 2016-07-14 -->
