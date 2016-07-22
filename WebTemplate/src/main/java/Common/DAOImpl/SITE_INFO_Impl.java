@@ -79,12 +79,12 @@ public class SITE_INFO_Impl extends SqlSessionDaoSupport implements SITE_INFO_in
 		return cnt;
 	}
 	@Override
-	public SITE_INFO_DTO select_SITE_INFO_ONE_SEARCH(HashMap<String, Object> parameters) {
+	public SITE_INFO_DTO select_SITE_INFO_ONE_SEARCH(int site_id) {
 		SITE_INFO_DTO siteInfoDto = null;
 		try {
 			System.out.println(getSqlSession());
 			siteInfoDto = getSqlSession().selectOne("UI_Query.select_SITE_INFO_ONE_SEARCH",
-					parameters);
+					site_id);
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.out.println(e.getMessage());

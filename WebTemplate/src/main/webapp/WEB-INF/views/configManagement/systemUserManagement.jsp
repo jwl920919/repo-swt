@@ -20,7 +20,7 @@
 			<div class="box box-primary">
 				<div class="box-body">
 					<center>
-						<table id="datatable" class="essential-table" style="width: 98%">
+						<table id="datatable" class="essential-table" name="datatable" style="width: 98%">
 							<thead>
 								<tr>
 									<th><input name="select_all" id="checkbox_controller"
@@ -91,7 +91,7 @@
 								</div>
 								<div id="pob-row" class="send-row">
 									<label class="send-label"><%=LanguageHelper.GetLanguage("placeOfBusiness")%></label>
-									<input type="text" id="pobTxt" name="pobTxt">
+									<input type="text" id="pobTxt" name="pobTxt" readonly="readonly" />
 								</div>
 								<div id="dept-row" class="send-row">
 									<label class="send-label"><%=LanguageHelper.GetLanguage("department")%></label>

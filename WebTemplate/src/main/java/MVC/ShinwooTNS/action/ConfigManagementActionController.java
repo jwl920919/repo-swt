@@ -67,6 +67,7 @@ public class ConfigManagementActionController {
 		logger.info("getSystemUserManagementDatatableDatas : " + request.getLocalAddr());
 		System.out.println("getSystemUserManagementDatatableDatas Controller");
 		try {
+			init();
 			String[] columns = { "user_id", "user_name" };
 			HashMap<String, Object> parameters = Common.Helper.DatatableHelper.getDatatableParametas(request, columns,
 					1);
@@ -102,6 +103,7 @@ public class ConfigManagementActionController {
 		logger.info("getUserInfo : " + request.getLocalAddr());
 		System.out.println("getUserInfo Controller");
 		try {
+			init();
 			SYSTEM_USER_INFO_DTO systemUserInfo = userInfoService.select_SYSTEM_USER_INFO_ONE_SEARCH(
 					gson.fromJson(request.getReader(), new TypeToken<HashMap<String, Object>>() {
 					}.getType()));
@@ -133,11 +135,11 @@ public class ConfigManagementActionController {
 	public @ResponseBody Object updateUserInfo(HttpServletRequest request, HttpSession session) {
 		logger.info("updateUserInfo : " + request.getLocalAddr());
 		try {
+			init();
 			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
 					new TypeToken<HashMap<String, Object>>() {
 					}.getType());
-			int group_id = Integer.parseInt(parameters.get("group_id").toString()),
-					site_id = Integer.parseInt(parameters.get("site_id").toString());
+			int group_id = Integer.parseInt(parameters.get("group_id").toString());
 			String time_zone = parameters.get("time_zone").toString();
 			parameters.remove("group_id");
 			parameters.put("group_id", group_id);
@@ -162,6 +164,7 @@ public class ConfigManagementActionController {
 	public @ResponseBody Object checkId(HttpServletRequest request) {
 		logger.info("checkId : " + request.getLocalAddr());
 		try {
+			init();
 			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
 					new TypeToken<HashMap<String, Object>>() {
 					}.getType());
@@ -186,18 +189,17 @@ public class ConfigManagementActionController {
 
 	// region addUser
 	@RequestMapping(value = "addUser", method = RequestMethod.POST, produces = "application/text; charset=utf8")
-	public @ResponseBody Object addUser(HttpServletRequest request) {
+	public @ResponseBody Object addUser(HttpServletRequest request,HttpSession session) {
 		logger.info("addUser : " + request.getLocalAddr());
 		try {
+			init();
 			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
 					new TypeToken<HashMap<String, Object>>() {
 					}.getType());
-			int group_id = Integer.parseInt(parameters.get("group_id").toString()),
-					site_id = Integer.parseInt(parameters.get("site_id").toString());
+			int group_id = Integer.parseInt(parameters.get("group_id").toString());
 			parameters.remove("group_id");
-			parameters.remove("site_id");
 			parameters.put("group_id", group_id);
-			parameters.put("site_id", site_id);
+			parameters.put("site_id", Integer.parseInt(session.getAttribute("site_id").toString()));
 			int cnt = userInfoService.insert_SYSTEM_USER_INFO_ONE_RECORD(parameters);
 			if (cnt > -1)
 				result.result = true;
@@ -217,6 +219,7 @@ public class ConfigManagementActionController {
 	public @ResponseBody Object deleteUsers(HttpServletRequest request) {
 		logger.info("deleteUsers : " + request.getLocalAddr());
 		try {
+			init();
 			List<HashMap<String, Object>> jArray = gson.fromJson(request.getReader(),
 					new TypeToken<List<HashMap<String, Object>>>() {
 					}.getType());
@@ -247,6 +250,7 @@ public class ConfigManagementActionController {
 	public @ResponseBody Object getGroupNames(HttpServletRequest request) {
 		logger.info("getGroupNames : " + request.getLocalAddr());
 		try {
+			init();
 			List<SYSTEM_USER_GROUP_DTO> groupsInfoList = groupInfoService.select_SYSTEM_USER_GROUP_INFO();
 			List<Map<String, Object>> mapList = new ArrayList<>();
 			for (SYSTEM_USER_GROUP_DTO sugd : groupsInfoList) {
@@ -278,6 +282,7 @@ public class ConfigManagementActionController {
 		logger.info("getPlaceOfBusinessDatatableDatas : " + request.getLocalAddr());
 		System.out.println("getPlaceOfBusinessDatatableDatas Controller");
 		try {
+			init();
 			String[] columns = { "site_name", "site_code", "description", "site_id" };
 			HashMap<String, Object> parameters = Common.Helper.DatatableHelper.getDatatableParametas(request, columns,
 					1);
@@ -315,6 +320,7 @@ public class ConfigManagementActionController {
 		logger.info("getUserGroupDatatableDatas : " + request.getLocalAddr());
 		System.out.println("getUserGroupDatatableDatas Controller");
 		try {
+			init();
 			String[] columns = { "site_name", "group_name", "group_desc", "group_id" };
 			HashMap<String, Object> parameters = Common.Helper.DatatableHelper.getDatatableParametas(request, columns,
 					1);
@@ -342,6 +348,7 @@ public class ConfigManagementActionController {
 	public @ResponseBody Object addSite(HttpServletRequest request) {
 		logger.info("addSite : " + request.getLocalAddr());
 		try {
+			init();
 			// site_name, site_code, description
 			int cnt = siteInfoService.insert_SITE_INFO_ONE_RECORD(
 					gson.fromJson(request.getReader(), new TypeToken<HashMap<String, Object>>() {
@@ -364,6 +371,7 @@ public class ConfigManagementActionController {
 	public @ResponseBody Object addGroup(HttpServletRequest request) {
 		logger.info("addGroup : " + request.getLocalAddr());
 		try {
+			init();
 			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
 					new TypeToken<HashMap<String, Object>>() {
 					}.getType());
@@ -390,6 +398,7 @@ public class ConfigManagementActionController {
 	public @ResponseBody Object updateSite(HttpServletRequest request) {
 		logger.info("updateSite : " + request.getLocalAddr());
 		try {
+			init();
 			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
 					new TypeToken<HashMap<String, Object>>() {
 					}.getType());
@@ -416,6 +425,7 @@ public class ConfigManagementActionController {
 	public @ResponseBody Object updateGroup(HttpServletRequest request) {
 		logger.info("updateGroup : " + request.getLocalAddr());
 		try {
+			init();
 			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
 					new TypeToken<HashMap<String, Object>>() {
 					}.getType());
@@ -445,6 +455,7 @@ public class ConfigManagementActionController {
 	public @ResponseBody Object deleteSites(HttpServletRequest request) {
 		logger.info("deleteSites : " + request.getLocalAddr());
 		try {
+			init();
 			List<HashMap<String, Object>> jArray = gson.fromJson(request.getReader(),
 					new TypeToken<List<HashMap<String, Object>>>() {
 					}.getType());
@@ -474,6 +485,7 @@ public class ConfigManagementActionController {
 	public @ResponseBody Object deleteGroups(HttpServletRequest request) {
 		logger.info("deleteGroups : " + request.getLocalAddr());
 		try {
+			init();
 			List<HashMap<String, Object>> jArray = gson.fromJson(request.getReader(),
 					new TypeToken<List<HashMap<String, Object>>>() {
 					}.getType());
@@ -511,6 +523,7 @@ public class ConfigManagementActionController {
 		logger.info("getAuthorityTable : " + request.getLocalAddr());
 		System.out.println("getAuthorityTable Controller");
 		try {
+			init();
 			HttpSession session = request.getSession(true);
 			HashMap<String, Object> parameters = new HashMap<>();
 			parameters.put("site_id", Integer.parseInt(session.getAttribute("site_id").toString()));
@@ -628,6 +641,7 @@ public class ConfigManagementActionController {
 	public @ResponseBody Object changeGroupsAuthority(HttpServletRequest request) {
 		logger.info("changeGroupsAuthority : " + request.getLocalAddr());
 		try {
+			init();
 			List<HashMap<String, Object>> jArray = gson.fromJson(request.getReader(),
 					new TypeToken<List<HashMap<String, Object>>>() {
 					}.getType());
@@ -671,6 +685,7 @@ public class ConfigManagementActionController {
 	public @ResponseBody Object getSiteNames(HttpServletRequest request) {
 		logger.info("getSiteNames : " + request.getLocalAddr());
 		try {
+			init();
 			List<SITE_INFO_DTO> sitesInfoList = siteInfoService.select_SITE_INFO();
 			List<Map<String, Object>> mapList = new ArrayList<>();
 			for (SITE_INFO_DTO sid : sitesInfoList) {
@@ -690,4 +705,30 @@ public class ConfigManagementActionController {
 	}
 	// endregion
 
+	// region getCurrentSiteInfo
+	@RequestMapping(value = "getCurrentSiteInfo", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+	public @ResponseBody Object getCurrentSiteInfo(HttpServletRequest request, HttpSession session) {
+		logger.info("getCurrentSiteInfo : " + request.getLocalAddr());
+		try {
+			init();
+			SITE_INFO_DTO sid = siteInfoService
+					.select_SITE_INFO_ONE_SEARCH(Integer.parseInt(session.getAttribute("site_id").toString()));
+			HashMap<String, Object> map = new HashMap<>();
+			map.put("site_name", sid.getSite_name());
+			map.put("site_id", sid.getSite_id());
+			result.resultValue = map;
+			result.result = true;
+			return gson.toJson(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.result = false;
+			return gson.toJson(result);
+		}
+	}
+	// endregion
+	
+	private void init() {
+		result.data=null;
+		result.resultValue=null;
+	}
 }
