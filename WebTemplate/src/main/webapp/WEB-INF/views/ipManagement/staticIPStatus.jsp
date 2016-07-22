@@ -11,8 +11,8 @@
 <script src="resources/plugins/datatables/buttons.colVis.min.js"></script>
 <script src="resources/plugins/datatables/pdfmake.min.js"></script>
 <script src="resources/plugins/datatables/vfs_fonts.js"></script>
-<script src="resources/js/common/Datatable-Essential.js"></script>
 <script src="resources/plugins/datatables/jszip.min.js"></script>
+<script src="resources/js/common/Datatable-Essential.js"></script>
 <script src="resources/js/ipManagement/staticIPStatus.js"></script>
 
 <!-- Alert Start -->
@@ -35,10 +35,10 @@
 						<table id="datatable" class="essential-table" style="width: 98%">
 							<thead>
 								<tr>
-									<th width="25%"><%=LanguageHelper.GetLanguage("network")%></th>
-									<th width="25%"><%=LanguageHelper.GetLanguage("start")%></th>
-									<th width="25%"><%=LanguageHelper.GetLanguage("end")%></th>
-									<th width="25%"><%=LanguageHelper.GetLanguage("comment")%></th>
+									<th width="200px"><%=LanguageHelper.GetLanguage("network")%></th>
+									<th width="200px"><%=LanguageHelper.GetLanguage("start")%></th>
+									<th width="200px"><%=LanguageHelper.GetLanguage("end")%></th>
+									<th width="*"><%=LanguageHelper.GetLanguage("comment")%></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -80,26 +80,26 @@
 										style="width: 98%">
 										<thead>
 											<tr>
-												<th><%=LanguageHelper.GetLanguage("ipaddr")%></th>
-												<th><%=LanguageHelper.GetLanguage("ip_type")%></th>
-												<th><%=LanguageHelper.GetLanguage("macaddr")%></th>
-												<th><%=LanguageHelper.GetLanguage("duid")%></th>
-												<th><%=LanguageHelper.GetLanguage("is_conflict")%></th>
-												<th><%=LanguageHelper.GetLanguage("conflict_types")%></th>
-												<th><%=LanguageHelper.GetLanguage("status")%></th>
-												<th><%=LanguageHelper.GetLanguage("lease_state")%></th>
-												<th><%=LanguageHelper.GetLanguage("obj_types")%></th>
-												<th><%=LanguageHelper.GetLanguage("discover_status")%></th>
-												<th><%=LanguageHelper.GetLanguage("usage")%></th>
-												<th><%=LanguageHelper.GetLanguage("host_name")%></th>
-												<th><%=LanguageHelper.GetLanguage("host_os")%></th>
-												<th><%=LanguageHelper.GetLanguage("fingerprint")%></th>
-												<th><%=LanguageHelper.GetLanguage("is_never_ends")%></th>
-												<th><%=LanguageHelper.GetLanguage("is_never_start")%></th>
-												<th><%=LanguageHelper.GetLanguage("lease_start_time")%></th>
-												<th><%=LanguageHelper.GetLanguage("lease_end_time")%></th>
-												<th><%=LanguageHelper.GetLanguage("last_discovered")%></th>
-												<th><%=LanguageHelper.GetLanguage("user_description")%></th>
+<%-- 												<th><%=LanguageHelper.GetLanguage("ipaddr")%></th> --%>
+												<th>ipaddr</th>
+												<th>ip_type</th>
+												<th>macaddr</th>
+												<th>duid</th>
+												<th>is_conflict</th>
+												<th>status</th>
+												<th>lease_state</th>
+												<th>obj_types</th>
+												<th>discover_status</th>
+												<th>usage</th>
+												<th>host_name</th>
+												<th>host_os</th>
+												<th>fingerprint</th>
+												<th>is_never_ends</th>
+												<th>is_never_start</th>
+												<th>lease_start_time</th>
+												<th>lease_end_time</th>
+												<th>last_discovered</th>
+												<th>user_description</th>
 											</tr>
 										</thead>
 										<tbody>
