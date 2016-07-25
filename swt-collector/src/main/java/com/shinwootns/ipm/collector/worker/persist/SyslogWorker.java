@@ -3,7 +3,8 @@ package com.shinwootns.ipm.collector.worker.persist;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.json.simple.JSONObject;
+
+import com.google.gson.JsonObject;
 import com.shinwootns.common.network.SyslogEntity;
 import com.shinwootns.ipm.collector.service.handler.RabbitmqSender;
 import com.shinwootns.ipm.collector.worker.WorkerManager;
@@ -47,12 +48,12 @@ public class SyslogWorker implements Runnable {
 					// Trim
 					rawData = rawData.trim();
 					
-					JSONObject jobj = new JSONObject();
-					jobj.put("host", syslog.getHost());
-					jobj.put("facility", syslog.getFacility());
-					jobj.put("severity", syslog.getSeverity());
-					jobj.put("recv_time", syslog.getRecvTime());
-					jobj.put("message", rawData);
+					JsonObject jobj = new JsonObject();
+					jobj.addProperty("host", syslog.getHost());
+					jobj.addProperty("facility", syslog.getFacility());
+					jobj.addProperty("severity", syslog.getSeverity());
+					jobj.addProperty("recv_time", syslog.getRecvTime());
+					jobj.addProperty("message", rawData);
 					
 					RabbitmqSender.SendData(jobj, _logger);
 				}

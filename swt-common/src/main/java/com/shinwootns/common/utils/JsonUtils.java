@@ -1,102 +1,118 @@
 package com.shinwootns.common.utils;
 
+import java.io.ObjectOutputStream;
+import java.lang.reflect.Type;
 import java.sql.Timestamp;
 import java.util.Iterator;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import com.rabbitmq.tools.json.JSONSerializable;
 
 public class JsonUtils {
 	
-	public static JSONArray parseJSONArray(String data) throws ParseException {
+	//region Parse JSONArray
+	public static JsonArray parseJsonArray(String data) {
 		
-		Object obj = (new JSONParser()).parse(data);
+		JsonElement ele = (new JsonParser()).parse(data);
 		
-		if (obj != null && obj instanceof JSONArray)
-			return (JSONArray)obj;
-		
-		return null;
+		return ele.getAsJsonArray();
 	}
+	//endregion
 	
-	public static JSONObject parseJSONObject(String data) throws ParseException {
+	//region Parse JSONObject
+	public static JsonObject parseJsonObject(String data) {
 		
-		Object obj = (new JSONParser()).parse(data);
+		JsonElement ele = (new JsonParser()).parse(data);
 		
-		if (obj != null && obj instanceof JSONObject)
-			return (JSONObject)obj;
-		
-		return null;
+		return ele.getAsJsonObject();
 	}
+	//endregion
 	
-	public static String getValueToString(JSONObject jObj, String key, String defaultValue) {
+	//region getValueFromJson
+	public static String getValueToString(JsonObject jObj, String key, String defaultValue) {
 		
 		if (jObj == null)
 			return defaultValue;
 		
-		Object value = jObj.get(key);
+		JsonElement ele = jObj.get(key);
 		
-		if (value == null)
+		if (ele == null)
 			return defaultValue;
 		
 		
-		if (value instanceof JSONArray) {
+		if (ele instanceof JsonArray) {
 			
 			StringBuilder sb = new StringBuilder();
 			
-			Iterator iter = ((JSONArray)value).iterator();
+			JsonArray jArray = ele.getAsJsonArray();
+			
+			Iterator<JsonElement> iter = jArray.iterator();
 
 			while(iter != null && iter.hasNext()) {
 				
-				Object data = (String)iter.next();
+				JsonElement child = iter.next();
 				
 				if (sb.length() > 0)
  					sb.append(",");
 				
-				if (data instanceof JSONObject) {
-					sb.append( ((JSONObject)data).values().toString() );
+				sb.append( child.getAsString() );
+				
+				/*
+				if (child instanceof JsonObject) {
+					sb.append( child.getAsString() );
 				}
 				else {
-					sb.append(data.toString());
-				}
+					sb.append( child.getAsString() );
+				}*/
 			}
 			
 			return sb.toString();
 		}
 		else {
-			return (String)value;
+			return ele.getAsString();
 		}
 	}
 	
-	public static long getValueToNumber(JSONObject jObj, String key, long defaultValue) {
+	public static long getValueToNumber(JsonObject jObj, String key, long defaultValue) {
 		
 		if (jObj == null)
 			return defaultValue;
 		
-		Object value = jObj.get(key);
+		JsonElement ele = jObj.get(key);
 		
-		if (value == null)
+		if (ele == null)
 			return defaultValue;
 		
+		return ele.getAsNumber().longValue();
+		
+		/*
 		if (value instanceof Integer)
 			return (Long)value;
 		else if (value instanceof String)
 			return Long.parseLong((String)value);
-		
+
 		return (Long)value;
+		*/
 	}
 	
-	public static boolean getValueToBoolean(JSONObject jObj, String key, boolean defaultValue) {
+	public static boolean getValueToBoolean(JsonObject jObj, String key, boolean defaultValue) {
 		
 		if (jObj == null)
 			return defaultValue;
 		
-		Object value = jObj.get(key);
+		JsonElement ele = jObj.get(key);
 		
-		if (value == null)
+		if (ele == null)
 			return defaultValue;
 		
+		return ele.getAsBoolean();
+		
+		/*
 		if (value instanceof Boolean) {
 			return (Boolean)value;
 		}
@@ -113,17 +129,20 @@ public class JsonUtils {
 			else
 				return defaultValue;
 		}
-		
 		return defaultValue;
+		*/
 	}
 	
-	public static Timestamp getValueToTimestamp(JSONObject jObj, String key, long defaultValue) {
+	public static Timestamp getValueToTimestamp(JsonObject jObj, String key, long defaultValue) {
 		
 		if (jObj == null)
 			return new Timestamp(defaultValue);
 		
-		Object value = jObj.get(key);
+		JsonElement ele = jObj.get(key);
 
+		return new Timestamp(ele.getAsNumber().longValue());
+		
+		/*
 		if (value == null)
 			return new Timestamp(defaultValue);
 		
@@ -135,5 +154,19 @@ public class JsonUtils {
 			time = Long.parseLong((String)value);
 
 		return new Timestamp(time);
+		*/
 	}
+	//endregion
+	
+	public static String serializeFromObject(Object obj){
+		Gson gson = new Gson();
+		
+		return gson.toJson(obj);
+	}
+	
+	public Object deserializeToObject(String json, Type typeof){
+		Gson gson = new Gson();
+		return gson.fromJson(json, typeof);
+	}
+
 }

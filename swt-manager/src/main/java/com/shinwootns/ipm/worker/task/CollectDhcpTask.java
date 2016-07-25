@@ -5,9 +5,10 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.shinwootns.common.utils.CryptoUtils;
 import com.shinwootns.common.utils.IPv4Range;
 import com.shinwootns.common.utils.JsonUtils;
@@ -64,7 +65,7 @@ public class CollectDhcpTask extends BaseWorker{
 			
 			wapiHandler = new InfobloxWAPIHandler(host, userid, password);
 
-			JSONArray jArray;
+			JsonArray jArray;
 			
 			if (wapiHandler.Connect()) {
 				
@@ -94,11 +95,11 @@ public class CollectDhcpTask extends BaseWorker{
 		HashSet<String> setNetwork = new HashSet<String>(); 
 		
 		// Collect Network
-		JSONArray jArray = wapiHandler.getNetworkInfo();
+		JsonArray jArray = wapiHandler.getNetworkInfo();
 		
 		if (jArray != null)
 		for(Object obj : jArray) {
-			String network = JsonUtils.getValueToString((JSONObject)obj, "network", "");
+			String network = JsonUtils.getValueToString((JsonObject)obj, "network", "");
 			if (network != null && network.isEmpty() == false)
 				setNetwork.add(network);
 		}
@@ -113,7 +114,7 @@ public class CollectDhcpTask extends BaseWorker{
 	
 	private void collectDhcpRange(InfobloxWAPIHandler wapiHandler, DhcpMapper dhcpMapper) {
 		
-		JSONArray jArray = wapiHandler.getRangeInfo();
+		JsonArray jArray = wapiHandler.getRangeInfo();
 		
 		insertDhcpRange(dhcpMapper, jArray);
 		
@@ -123,7 +124,7 @@ public class CollectDhcpTask extends BaseWorker{
 	
 	private void collectFixedIp(InfobloxWAPIHandler wapiHandler, DhcpMapper dhcpMapper) {
 		
-		JSONArray jArray = wapiHandler.getFixedIPList();
+		JsonArray jArray = wapiHandler.getFixedIPList();
 		
 		insertDhcpFixedIP(dhcpMapper, jArray);
 		
@@ -132,7 +133,7 @@ public class CollectDhcpTask extends BaseWorker{
 	
 	private void collectMacFilter(InfobloxWAPIHandler wapiHandler, DhcpMapper dhcpMapper) {
 		
-		JSONArray jArray = wapiHandler.getFilterInfo();
+		JsonArray jArray = wapiHandler.getFilterInfo();
 		
 		insertDhcpFilter(dhcpMapper, jArray);
 		
@@ -215,9 +216,9 @@ public class CollectDhcpTask extends BaseWorker{
 		if (nextData == null || nextData.jArrayData == null)
 			return;
 		
-		for(Object obj : nextData.jArrayData) {
+		for(JsonElement ele : nextData.jArrayData) {
 			
-			JSONObject jObj = (JSONObject)obj; 
+			JsonObject jObj = ele.getAsJsonObject();
 			
 			try
 			{
@@ -238,7 +239,7 @@ public class CollectDhcpTask extends BaseWorker{
 				ip.setHostOs(JsonUtils.getValueToString(jObj, "discovered_data.os", ""));
 				ip.setFingerprint(JsonUtils.getValueToString(jObj, "fingerprint", ""));
 				
-				long lastDiscoverd = JsonUtils.getValueToNumber((JSONObject)obj, "discovered_data.last_discovered", 0);
+				long lastDiscoverd = JsonUtils.getValueToNumber(jObj, "discovered_data.last_discovered", 0);
 				if (lastDiscoverd > 0)
 					ip.setLastDiscovered(TimeUtils.convertLongToTimestamp(lastDiscoverd * 1000));
 
@@ -267,7 +268,7 @@ public class CollectDhcpTask extends BaseWorker{
 			
 			try
 			{
-				JSONObject jObj = (JSONObject)obj; 
+				JsonObject jObj = (JsonObject)obj; 
 				
 				String ipAddr = JsonUtils.getValueToString(jObj, "address", "");
 				if (ipAddr == null || ipAddr.isEmpty())
@@ -280,11 +281,11 @@ public class CollectDhcpTask extends BaseWorker{
 					ip.setIsNeverEnds(JsonUtils.getValueToBoolean(jObj, "never_ends", false));
 					ip.setIsNeverStart(JsonUtils.getValueToBoolean(jObj, "never_starts", false));
 					
-					long startTime = JsonUtils.getValueToNumber((JSONObject)obj, "starts", 0);
+					long startTime = JsonUtils.getValueToNumber((JsonObject)obj, "starts", 0);
 					if (startTime > 0)
 						ip.setLeaseStartTime(TimeUtils.convertLongToTimestamp(startTime * 1000));
 					
-					long endTime = JsonUtils.getValueToNumber((JSONObject)obj, "ends", 0);
+					long endTime = JsonUtils.getValueToNumber((JsonObject)obj, "ends", 0);
 					if (endTime > 0)
 						ip.setLeaseEndTime(TimeUtils.convertLongToTimestamp(endTime * 1000));
 				}
@@ -296,7 +297,7 @@ public class CollectDhcpTask extends BaseWorker{
 	}
 	
 	
-	private void insertDhcpNetwork(DhcpMapper dhcpMapper, JSONArray jArray) {
+	private void insertDhcpNetwork(DhcpMapper dhcpMapper, JsonArray jArray) {
 		
 		if (jArray == null) 
 			return;
@@ -307,8 +308,8 @@ public class CollectDhcpTask extends BaseWorker{
 			{
 				DhcpNetwork network = new DhcpNetwork();
 				network.setSiteId(this.device.getSiteId());
-				network.setNetwork(JsonUtils.getValueToString((JSONObject)obj, "network", ""));
-				network.setComment(JsonUtils.getValueToString((JSONObject)obj, "comment", ""));
+				network.setNetwork(JsonUtils.getValueToString((JsonObject)obj, "network", ""));
+				network.setComment(JsonUtils.getValueToString((JsonObject)obj, "comment", ""));
 				
 				IPv4Range ipRange = NetworkUtils.getIPV4Range(network.getNetwork());
 				
@@ -334,7 +335,7 @@ public class CollectDhcpTask extends BaseWorker{
 		}
 	}
 	
-	private void insertDhcpRange(DhcpMapper dhcpMapper, JSONArray jArray) {
+	private void insertDhcpRange(DhcpMapper dhcpMapper, JsonArray jArray) {
 		
 		if (jArray == null) 
 			return;
@@ -345,9 +346,9 @@ public class CollectDhcpTask extends BaseWorker{
 			{
 				DhcpRange range = new DhcpRange();
 				range.setSiteId(this.device.getSiteId());
-				range.setNetwork(JsonUtils.getValueToString((JSONObject)obj, "network", ""));
-				range.setStartIp(JsonUtils.getValueToString((JSONObject)obj, "start_addr", ""));
-				range.setEndIp(JsonUtils.getValueToString((JSONObject)obj, "end_addr", ""));
+				range.setNetwork(JsonUtils.getValueToString((JsonObject)obj, "network", ""));
+				range.setStartIp(JsonUtils.getValueToString((JsonObject)obj, "start_addr", ""));
+				range.setEndIp(JsonUtils.getValueToString((JsonObject)obj, "end_addr", ""));
 					
 				if (range.getNetwork().isEmpty() == false) {
 					int affected = dhcpMapper.updateDhcpRange(range);
@@ -362,7 +363,7 @@ public class CollectDhcpTask extends BaseWorker{
 		}
 	}
 	
-	private void insertDhcpFixedIP(DhcpMapper dhcpMapper, JSONArray jArray) {
+	private void insertDhcpFixedIP(DhcpMapper dhcpMapper, JsonArray jArray) {
 
 		if (jArray == null) 
 			return;
@@ -373,11 +374,11 @@ public class CollectDhcpTask extends BaseWorker{
 			{
 				DhcpFixedIp fixedIp = new DhcpFixedIp();
 				fixedIp.setSiteId(this.device.getSiteId());
-				fixedIp.setNetwork(JsonUtils.getValueToString((JSONObject)obj, "network", ""));
-				fixedIp.setIpaddr(JsonUtils.getValueToString((JSONObject)obj, "ipv4addr", ""));
-				fixedIp.setMacaddr(JsonUtils.getValueToString((JSONObject)obj, "mac", ""));
-				fixedIp.setComment(JsonUtils.getValueToString((JSONObject)obj, "comment", ""));
-				fixedIp.setDisable(JsonUtils.getValueToBoolean((JSONObject)obj, "disable", false));
+				fixedIp.setNetwork(JsonUtils.getValueToString((JsonObject)obj, "network", ""));
+				fixedIp.setIpaddr(JsonUtils.getValueToString((JsonObject)obj, "ipv4addr", ""));
+				fixedIp.setMacaddr(JsonUtils.getValueToString((JsonObject)obj, "mac", ""));
+				fixedIp.setComment(JsonUtils.getValueToString((JsonObject)obj, "comment", ""));
+				fixedIp.setDisable(JsonUtils.getValueToBoolean((JsonObject)obj, "disable", false));
 				
 				if (fixedIp.getIpaddr().isEmpty() == false) {
 					int affected = dhcpMapper.updateDhcpFixedIp(fixedIp);
@@ -392,7 +393,7 @@ public class CollectDhcpTask extends BaseWorker{
 		}
 	}
 
-	private void insertDhcpFilter(DhcpMapper dhcpMapper, JSONArray jArray) {
+	private void insertDhcpFilter(DhcpMapper dhcpMapper, JsonArray jArray) {
 		
 		if (jArray == null)
 			return;
@@ -403,7 +404,7 @@ public class CollectDhcpTask extends BaseWorker{
 			{
 				DhcpMacFilter filter = new DhcpMacFilter();
 				filter.setSiteId(this.device.getSiteId());
-				filter.setFilterName(JsonUtils.getValueToString((JSONObject)obj, "name", ""));
+				filter.setFilterName(JsonUtils.getValueToString((JsonObject)obj, "name", ""));
 				
 				if (filter.getFilterName().isEmpty() == false) {
 					int affected = dhcpMapper.updateDhcpFilter(filter);
@@ -441,7 +442,7 @@ public class CollectDhcpTask extends BaseWorker{
 					if ( (ip.getMacaddr() == null || ip.getMacaddr().isEmpty()) &&
 							(ip.getDuid() == null || ip.getDuid().isEmpty()) &&
 							(ip.getIsConflict() == null || ip.getIsConflict() == false) &&
-							//(ip.getStatus() == null || ip.getStatus().equals("UNUSED")) &&
+							(ip.getStatus() == null || ip.getStatus().equals("UNUSED")) &&
 							(ip.getLeaseState() == null || ip.getLeaseState().isEmpty() || ip.getLeaseState().equals("FREE")) &&
 							(ip.getDiscoverStatus() == null || ip.getDiscoverStatus().isEmpty() || ip.getDiscoverStatus().equals("NONE")) &&
 							(ip.getObjTypes() == null || ip.getObjTypes().isEmpty() 

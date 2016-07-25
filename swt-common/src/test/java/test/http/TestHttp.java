@@ -7,20 +7,22 @@ import java.util.Scanner;
 import org.apache.http.entity.ContentType;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.junit.Test;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.shinwootns.common.http.HttpClient;
+import com.shinwootns.common.utils.JsonUtils;
 import com.shinwootns.common.utils.StringUtils;
 
 public class TestHttp {
 
 	private final Logger _logger = Logger.getLogger(this.getClass());
 
-	public static void main() {
+	@Test
+	public void testHttp() {
 		
 		BasicConfigurator.configure();
 
@@ -37,7 +39,7 @@ public class TestHttp {
 			String pwd = "infoblox";
 
 			String sTestMac = "10:41:7f:54:39:8f";
-			String sFilterName = "ipt_test";
+			String sFilterName = "BlackList";
 			String sUserName = "전상수-테스트";
 
 			// Connect
@@ -128,7 +130,8 @@ public class TestHttp {
 						// Get MAC Filter URL
 						String ref = "";
 						if (value != null) {
-							ref = getValueFromJSONArray(value, "_ref");
+							ref = getValueFromJsonArray(value, "_ref");
+							//JsonUtils.getValueToString(value,  "_ref", "");
 						}
 
 						// Delete MAC Filter
@@ -164,28 +167,29 @@ public class TestHttp {
 
 	}
 
-	private static String getValueFromJSONArray(String jsonText, String key) {
+	private static String getValueFromJsonArray(String jsonText, String key) {
+		
 		String returnValue = "";
 
-		JSONParser parser = new JSONParser();
+		JsonParser parser = new JsonParser();
 
 		try {
 
-			Object obj = parser.parse(jsonText);
+			JsonElement ele = parser.parse(jsonText);
 
-			if (obj != null && obj instanceof JSONArray) {
-				JSONArray jsonArray = (JSONArray) obj;
+			if (ele != null && ele instanceof JsonArray) {
+				JsonArray jsonArray = ele.getAsJsonArray();
 
 				if (jsonArray.size() > 0) {
-					JSONObject jobj = (JSONObject) jsonArray.get(0);
+					JsonObject valueObj = jsonArray.get(0).getAsJsonObject();
 
-					if (jobj.containsKey(key)) {
-						returnValue = (String) jobj.get(key);
+					if (valueObj.has(key)) {
+						returnValue = valueObj.get(key).getAsString();
 					}
 				}
 			}
-
-		} catch (ParseException e) {
+			
+		} catch (Exception e) {
 			e.printStackTrace();
 			returnValue = "";
 		}
