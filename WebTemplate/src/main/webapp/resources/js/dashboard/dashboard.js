@@ -277,8 +277,7 @@ function systemStatusAjaxCall() {
 			}
 		}
 	} catch (e) {
-		console.log("dashboard.js systemStatusAjaxCall() Error Log c: "
-				+ e.message);
+		console.log("dashboard.js systemStatusAjaxCall() Error Log c: " + e.message);
 	}
 }
 
@@ -342,8 +341,7 @@ function guestIPAssignStatusAjaxCall() {
 			m_guestIPAssignStatusAjaxCall = setInterval(guestIPAssignStatusAjaxCall, guestIPAssignStatusCallTime);// 페이지 로딩 데이터 조회 후 polling 시간 변경
 		}
 	} catch (e) {
-		console.log("dashboard.js guestIPAssignStatusAjaxCall() Error Log : "
-				+ e.message);
+		console.log("dashboard.js guestIPAssignStatusAjaxCall() Error Log : " + e.message);
 	}
 }
 
@@ -481,8 +479,7 @@ function certifyProcessAjaxCall() {
 			// 5000);// 페이지 로딩 데이터 조회 후 polling 시간 변경
 		}
 	} catch (e) {
-		console.log("dashboard.js certifyProcessAjaxCall() Error Log : "
-				+ e.message);
+		console.log("dashboard.js certifyProcessAjaxCall() Error Log : " + e.message);
 	}
 }
 
@@ -609,8 +606,7 @@ function askIPStatusAjaxCall() {
 		    barChart.Bar(getData(), barChartOption());
 		}
 	} catch (e) {
-		console.log("dashboard.js askIPStatusAjaxCall() Error Log : "
-				+ e.message);
+		console.log("dashboard.js askIPStatusAjaxCall() Error Log : " + e.message);
 	}
 }
 
