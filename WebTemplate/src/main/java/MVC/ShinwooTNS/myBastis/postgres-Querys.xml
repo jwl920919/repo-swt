@@ -319,7 +319,7 @@
                FROM "dhcp_fixed_ip"
               WHERE "site_id" = #{siteid} AND "network" = #{network}) AS main,
             (SELECT COUNT("ipaddr") AS "allcount"
-		       FROM (SELECT "ipaddr" FROM "dhcp_lease_ip" WHERE "site_id" = #{siteid} AND "network" = #{network}
+		       FROM (SELECT "ipaddr" FROM "dhcp_ip_status" WHERE "site_id" = #{siteid} AND "network" = #{network}
 		      UNION
              SELECT "ipaddr" FROM "dhcp_fixed_ip" WHERE "site_id" = #{siteid} AND "network" = #{network}) as TCount) as countTable
 		 ORDER BY
