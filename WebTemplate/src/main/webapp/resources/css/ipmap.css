@@ -53,11 +53,8 @@
 #place .conflict {
 	background-image: url("../images/ipmap/conflict.png");
 }
-#place .exclusion {
-	background-image: url("../images/ipmap/dhcpexclusion.png");
-}
 #place .fixed {
-	background-image: url("../images/ipmap/Fixedaddress.png");
+	background-image: url("../images/ipmap/fixedaddress.png");
 }
 #place .hostnotindns {
 	background-image: url("../images/ipmap/hostnotindns.png");
@@ -67,9 +64,6 @@
 }
 #place .pending {
 	background-image: url("../images/ipmap/pending.png");
-}
-#place .reservedrange {
-	background-image: url("../images/ipmap/reservedrange.png");
 }
 #place .unmanaged {
 	background-image: url("../images/ipmap/unmanaged.png");
