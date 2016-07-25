@@ -11,13 +11,13 @@ ipm:
   redis:
     host: shinwootnskr.iptime.org
     port: 6379
-    password: shinwoo123!
+    password: 7+AzHIrmzGDARTT1VaQa3Q==
     timeout: 0
   rabbitmq:
     host: shinwootnskr.iptime.org
     port: 5672
     username: admin
-    password: shinwoo123!
+    password: 7+AzHIrmzGDARTT1VaQa3Q==
     virtual-host: /
     
   # debug mode
@@ -43,7 +43,7 @@ spring:
     driverClassName: org.postgresql.Driver
     url: jdbc:postgresql://shinwootnskr.iptime.org:5432/ipm_db
     username: postgres
-    password: shinwoo123!
+    password: SctL7q8ogUkfBwqqz3hP6A==
     max-idle: 10
     testOnBorrow: true
     validation-query: SELECT 1

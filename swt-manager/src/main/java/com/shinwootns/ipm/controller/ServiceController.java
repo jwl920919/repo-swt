@@ -30,7 +30,7 @@ public class ServiceController {
 	private ApplicationContext context;
 	
 	@PostConstruct
-	public void startService() {
+	public void startService() throws Exception {
 		
 		SecurityContextHolder
 			.getContext()

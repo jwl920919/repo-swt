@@ -114,7 +114,7 @@ public class TestUtils {
 	}*/
 	
 	@Test
-	public void testCollectionUtils() {
+	public void testCollectionUtils() throws Exception {
 		
 		HashMap<String, Integer> map = new HashMap<String, Integer>();
 		map.put("A", 93);

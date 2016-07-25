@@ -6,10 +6,13 @@ import org.apache.log4j.Logger;
 
 import com.google.gson.JsonObject;
 import com.shinwootns.common.network.SyslogEntity;
+import com.shinwootns.ipm.collector.SpringBeanProvider;
+import com.shinwootns.ipm.collector.config.ApplicationProperty;
 import com.shinwootns.ipm.collector.service.handler.RabbitmqSender;
+import com.shinwootns.ipm.collector.worker.BaseWorker;
 import com.shinwootns.ipm.collector.worker.WorkerManager;
 
-public class SyslogWorker implements Runnable {
+public class SyslogWorker extends BaseWorker {
 
 	private Logger _logger = null;
 	private int _index = 0;
@@ -18,16 +21,32 @@ public class SyslogWorker implements Runnable {
 		this._index = index;
 		this._logger = logger;
 	}
+	
+	private boolean isSkipInDebugMode() {
+		// get ApplicationProperty
+		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
+		if (appProperty == null)
+			return true;
+		
+		// debug_insert_event_enable
+		if (appProperty.enable_recv_syslog == false)
+			return true;
+		
+		return false;
+	}
 
 	@Override
 	public void run() {
+		
+		if (isSkipInDebugMode())
+			return;
 		
 		if ( _logger != null)
 			_logger.info(String.format("Syslog Producer#%d... start.", this._index));
 		
 		List<SyslogEntity> listSyslog = WorkerManager.getInstance().popSyslogList(1000, 500);
 
-		while(true)
+		while(isStopFlag())
 		{
 			listSyslog = WorkerManager.getInstance().popSyslogList(1000, 500);
 			

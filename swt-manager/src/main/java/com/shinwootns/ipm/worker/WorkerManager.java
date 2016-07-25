@@ -100,13 +100,19 @@ public class WorkerManager {
 	}
 	
 	// Pool Status
-	public synchronized PoolStatus GetPoolStatus() {
+	public synchronized PoolStatus GetWorkPoolStatus() {
 		return _workerPool.getPoolStatus();
+	}
+	
+	public synchronized PoolStatus GetTaskPoolStatus() {
+		return _taskPool.getPoolStatus();
 	}
 	
 	public synchronized void stop()
 	{
 		_workerPool.shutdownAndWait();
+		
+		_taskPool.shutdownAndWait();
 		
 		_logger.info("ServiceManager....... stop");
 	}

@@ -156,8 +156,8 @@ public class MQManager {
 			
 		return null;
 	}
-	//endregion 
-
+	//endregion
+	
 	//region Close
 	public void Close() {
 		

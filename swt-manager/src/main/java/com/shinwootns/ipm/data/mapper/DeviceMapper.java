@@ -14,6 +14,7 @@ public interface DeviceMapper {
 	// DHCP
 	List<DeviceDhcp> selectDhcp();
 	List<DeviceDhcp> selectDhcpBySiteId(@Param("site_id")int site_id);
+	DeviceDhcp selectDhcpByInsightHost(@Param("host")String host);
 
 	
 	// Insight

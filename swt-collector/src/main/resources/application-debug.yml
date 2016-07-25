@@ -5,23 +5,33 @@ ipm:
   name: IPM-Collector(Debug Mode)
   version: 0.1.1
   license: TEST000000
-  
-  # debug mode
-  debug_enable: true
-  debug:
-      insert_syslog_enable: false
-
-#====================================
-# spring
-#====================================
-spring:
-  # amqp
+  redis:
+    host: shinwootnskr.iptime.org
+    port: 6379
+    password: 7+AzHIrmzGDARTT1VaQa3Q==
+    timeout: 0
   rabbitmq:
     host: shinwootnskr.iptime.org
     port: 5672
     username: admin
-    password: shinwoo123!
+    password: 7+AzHIrmzGDARTT1VaQa3Q==
     virtual-host: /
+  
+  # debug mode
+  debug_enable: true
+  debug:
+    enable_recv_syslog: false
+
+#====================================
+# spring
+#====================================
+#spring:
+  #rabbitmq:
+    #host: shinwootnskr.iptime.org
+    #port: 5672
+    #username: admin
+    #password: shinwoo123!
+    #virtual-host: /
 
 #====================================
 # banner

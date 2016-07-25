@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.shinwootns.common.network.SyslogManager;
 import com.shinwootns.ipm.collector.SpringBeanProvider;
 import com.shinwootns.ipm.collector.config.ApplicationProperty;
+import com.shinwootns.ipm.collector.service.handler.RabbitmqHandler;
 import com.shinwootns.ipm.collector.service.handler.SyslogReceiveHandlerImpl;
 import com.shinwootns.ipm.collector.worker.WorkerManager;
 
@@ -27,7 +28,7 @@ public class ServiceController {
 	private ApplicationContext context;
 	
 	@PostConstruct
-	public void startService() {
+	public void startService() throws Exception {
 		
 		_logger.info("Start Service Controller.");
 		
@@ -37,11 +38,17 @@ public class ServiceController {
 		
 		_logger.info(appProperty.toString());
 		
-		// Start
-		WorkerManager.getInstance().start();
+		// Connect RabbitMQ
+		RabbitmqHandler.getInstance().connect();
 		
-		// Start receive handler
-		SyslogManager.getInstance().start(new SyslogReceiveHandlerImpl());
+		// Start Work Manager
+		WorkerManager.getInstance().start();
+
+		if (appProperty.debugEnable == false || appProperty.enable_recv_syslog == true )
+		{
+			// Start receive handler
+			SyslogManager.getInstance().start(new SyslogReceiveHandlerImpl());
+		}
 	}
 	
 	@PreDestroy
@@ -50,8 +57,11 @@ public class ServiceController {
 		// Stop receive handler
 		SyslogManager.getInstance().stop();
 				
-		// Stop
+		// Stop Work Manager
 		WorkerManager.getInstance().stop();
+		
+		// Close RabbitMQ
+		RabbitmqHandler.getInstance().close();
 		
 		_logger.info("Stop Service Controller.");
 	}

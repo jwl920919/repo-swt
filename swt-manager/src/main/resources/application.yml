@@ -11,13 +11,13 @@ ipm:
   redis:
     host: shinwootnskr.iptime.org
     port: 6379
-    password: shinwoo123!
+    password: 7+AzHIrmzGDARTT1VaQa3Q==
     timeout: 0
   rabbitmq:
     host: shinwootnskr.iptime.org
     port: 5672
     username: admin
-    password: shinwoo123!
+    password: 7+AzHIrmzGDARTT1VaQa3Q==
     virtual-host: /
 
 #====================================
