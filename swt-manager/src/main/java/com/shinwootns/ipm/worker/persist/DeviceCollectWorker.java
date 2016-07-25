@@ -75,7 +75,7 @@ public class DeviceCollectWorker extends BaseWorker {
 		if (deviceMapper == null)
 			return;
 		
-		List<DeviceDhcp> listDhcp = deviceMapper.selectDeviceDhcp();
+		List<DeviceDhcp> listDhcp = deviceMapper.selectDhcp();
 		
 		updateDeviceDhcp(listDhcp);
 		

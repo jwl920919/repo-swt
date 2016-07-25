@@ -4,8 +4,6 @@ import java.util.Hashtable;
 import java.util.Vector;
 
 import org.apache.log4j.BasicConfigurator;
-import org.junit.Test;
-
 import com.shinwootns.common.auth.LdapGroup;
 import com.shinwootns.common.auth.LdapUserGroupAttr;
 import com.shinwootns.common.auth.AuthCheckerLDAP;

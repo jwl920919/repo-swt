@@ -1,10 +1,10 @@
 package com.shinwootns.ipm.worker.persist;
 
 import java.util.List;
-import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gson.JsonObject;
 import com.shinwootns.common.utils.JsonUtils;
 import com.shinwootns.ipm.SpringBeanProvider;
 import com.shinwootns.ipm.config.ApplicationProperty;
@@ -42,7 +42,7 @@ public class SyslogWorker extends BaseWorker {
 
 		_logger.info(String.format("SyslogWorker#%d... start.", this._index));
 		
-		List<JSONObject> listSyslog = null;
+		List<JsonObject> listSyslog = null;
 		
 		while(true)
 		{
@@ -50,7 +50,7 @@ public class SyslogWorker extends BaseWorker {
 			if (listSyslog == null)
 				continue;
 			
-			for(JSONObject jObj : listSyslog)
+			for(JsonObject jObj : listSyslog)
 			{
 				if (jObj == null) 
 					continue;
@@ -90,7 +90,7 @@ public class SyslogWorker extends BaseWorker {
 			// Trim
 			rawData = rawData.trim();
 			
-			JSONObject jResult = SyslogParser.processSyslog(rawData);
+			JSonObject jResult = SyslogParser.processSyslog(rawData);
 			
 			// Check Result
 	        if (jResult != null && jResult.containsKey("result") && jResult.get("result") == Boolean.TRUE)
@@ -112,7 +112,7 @@ public class SyslogWorker extends BaseWorker {
 		*/
 	}
 	
-	private void parseSyslog(JSONObject jObj) {
+	private void parseSyslog(JsonObject jObj) {
 		/*
 		String rawData = jObj.getData();
 
@@ -132,7 +132,7 @@ public class SyslogWorker extends BaseWorker {
 
 	}
 	
-	private void insertEventQueue(JSONObject jObj) {
+	private void insertEventQueue(JsonObject jObj) {
 		
 		EventEntity eventLog = new EventEntity(); 
 

@@ -19,6 +19,7 @@ public class APIController {
 	@Autowired(required=true)
 	private DeviceMapper deviceMapper;
 	
+	/*
 	@RequestMapping(value="/api/device/dhcp", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
 	public List<DeviceDhcp> getDeviceDhcp(
 			@RequestParam(value="device_type", defaultValue="") String device_type ) 
@@ -26,17 +27,8 @@ public class APIController {
 		
 		List<DeviceDhcp> listDhcp = deviceMapper.selectDeviceDhcp();
 		
-		//for(DeviceDhcp dhcp : listDhcp) {
-		//	System.out.println(dhcp.getHost());
-		//}
-		
-		//if (device_type == null || device_type.isEmpty())
-		//	listDevice = deviceMapper.selectDevice();
-		//else
-		//	listDevice = deviceMapper.selectDeviceByType(device_type);
-		
 		return listDhcp;
-	}
+	}*/
 
 	/*
 	@RequestMapping(value="/api/device/{device_id}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)

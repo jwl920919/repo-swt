@@ -28,6 +28,14 @@ ipm:
     enable_device_collect: false
     
 #====================================
+# Security
+#====================================
+security:
+  user:
+    name: admin
+    password: shinwoo123!
+    
+#====================================
 # spring
 #====================================
 spring:

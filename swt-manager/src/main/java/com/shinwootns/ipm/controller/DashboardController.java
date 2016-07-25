@@ -2,10 +2,11 @@ package com.shinwootns.ipm.controller;
 
 import java.util.Random;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 @RestController
 public class DashboardController {
@@ -15,76 +16,76 @@ public class DashboardController {
 		
 		Random random = new Random();
 		
-		JSONObject jObj = new JSONObject();
+		JsonObject jObj = new JsonObject();
 		
 		// CPU
-		JSONArray cpuArray = new JSONArray(); 
+		JsonArray cpuArray = new JsonArray(); 
 		
 		for(int i=0; i < 4; i++) {
 			
-			JSONObject cpuObj = new JSONObject();
-			cpuObj.put("seq", String.format("cpu%d", i));
-			cpuObj.put("value", (30 + random.nextInt(20) % 50));
-			cpuObj.put("unit", "%");
+			JsonObject cpuObj = new JsonObject();
+			cpuObj.addProperty("seq", String.format("cpu%d", i));
+			cpuObj.addProperty("value", (30 + random.nextInt(20) % 50));
+			cpuObj.addProperty("unit", "%");
 			
 			cpuArray.add(cpuObj);
 		}
 		
-		jObj.put("CPU", cpuArray);
+		jObj.add("CPU", cpuArray);
 		
 		
 		// MEMORY
-		JSONObject memObject = new JSONObject();
-		memObject.put("value", 4);
-		memObject.put("total", 8);
-		memObject.put("unit", "G");
+		JsonObject memObject = new JsonObject();
+		memObject.addProperty("value", 4);
+		memObject.addProperty("total", 8);
+		memObject.addProperty("unit", "G");
 		
-		jObj.put("MEMORY", memObject);
+		jObj.add("MEMORY", memObject);
 		
 		
 		// DISK
-		JSONArray diskArray = new JSONArray(); 
+		JsonArray diskArray = new JsonArray(); 
 		
-		JSONObject disk1 = new JSONObject();
-		disk1.put("seq", "/");
-		disk1.put("usage", 5638);
-		disk1.put("total", 28111);
-		disk1.put("unit", "M");
+		JsonObject disk1 = new JsonObject();
+		disk1.addProperty("seq", "/");
+		disk1.addProperty("usage", 5638);
+		disk1.addProperty("total", 28111);
+		disk1.addProperty("unit", "M");
 		diskArray.add(disk1);
 		
-		JSONObject disk2 = new JSONObject();
-		disk2.put("seq", "/dev/boot");
-		disk2.put("usage", 165);
-		disk2.put("total", 497);
-		disk2.put("unit", "M");
+		JsonObject disk2 = new JsonObject();
+		disk2.addProperty("seq", "/dev/boot");
+		disk2.addProperty("usage", 165);
+		disk2.addProperty("total", 497);
+		disk2.addProperty("unit", "M");
 		diskArray.add(disk2);
 		
-		jObj.put("DISK", diskArray);
+		jObj.add("DISK", diskArray);
 		
 		// NETWORK
-		JSONArray networkArray = new JSONArray(); 
+		JsonArray networkArray = new JsonArray(); 
 		
-		JSONObject byte1 = new JSONObject();
-		byte1.put("seq", "IN");
-		byte1.put("usage", random.nextInt(10)+5);
-		byte1.put("total", 1000);
-		byte1.put("unit", "M");
+		JsonObject byte1 = new JsonObject();
+		byte1.addProperty("seq", "IN");
+		byte1.addProperty("usage", random.nextInt(10)+5);
+		byte1.addProperty("total", 1000);
+		byte1.addProperty("unit", "M");
 		networkArray.add(byte1);
 		
-		JSONObject bytes2 = new JSONObject();
-		bytes2.put("seq", "OUT");
-		bytes2.put("usage", random.nextInt(10)+5);
-		bytes2.put("total", 1000);
-		bytes2.put("unit", "M");
+		JsonObject bytes2 = new JsonObject();
+		bytes2.addProperty("seq", "OUT");
+		bytes2.addProperty("usage", random.nextInt(10)+5);
+		bytes2.addProperty("total", 1000);
+		bytes2.addProperty("unit", "M");
 		networkArray.add(bytes2);
 		
-		jObj.put("NETWORK", networkArray);
+		jObj.add("NETWORK", networkArray);
 		
 		// HA
-		JSONObject haObj = new JSONObject();
-		haObj.put("STATE", "FALSE");
+		JsonObject haObj = new JsonObject();
+		haObj.addProperty("STATE", "FALSE");
 		
-		jObj.put("HA", haObj);
+		jObj.add("HA", haObj);
 		
 		/*
 		{
@@ -139,6 +140,6 @@ public class DashboardController {
 			}
 		 */
 		
-		return jObj.toJSONString();
+		return jObj.toString();
 	}
 }
