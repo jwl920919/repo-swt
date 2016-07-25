@@ -222,7 +222,7 @@ function mapDataCall(network){
 	var BROADCAST_Arr = [], NETWORK_Arr = [];
 	var ABANDONED_Arr = [], ACTIVE_Arr = [], BACKUP_Arr = [], DECLINED_Arr = [], EXPIRED_Arr = [];
 	var FREE_Arr = [], OFFERED_Arr = [], RELEASED_Arr = [], RESET_Arr = [], STATIC_Arr = [], FIXED_Arr = [], ETC_Arr = [];
-	
+	var startipNumber, endipNumber;
 	var jObj = Object();
     jObj.network = network;
     jObj.timezone = getClientTimeZoneName();
@@ -243,8 +243,8 @@ function mapDataCall(network){
             	$.each(jsonObj.data, function (index, obj) {
             		if (obj.KEY == "DHCP_RANGE") {
             			//DHCP의 IP대역대 Stat, End영역과 Range 영역 설정을 위한 데이터
-						var startipNumber = ipToNumber(obj.Network_Start);
-						var endipNumber = ipToNumber(obj.Network_End);
+						startipNumber = ipToNumber(obj.Network_Start);
+						endipNumber = ipToNumber(obj.Network_End);
 						var row = Math.ceil((endipNumber - startipNumber + 1)/32); //0~255까지인데 255에서 0을 빼니까 항상 1을 더해줘야 256이 된다.
 						//console.log("startipNumber: " + obj.Network_Start + ", endipNumber: " + obj.Network_End + ", row: " + row);
 						ipMapSettings.rows = row; //ip영역에 따라 Row를 변경해준다.
@@ -328,7 +328,7 @@ function mapDataCall(network){
 					}
 	            });
             	
-            	fnIPMapDraw(DHCP_RangeArr, BROADCAST_Arr, NETWORK_Arr, ABANDONED_Arr, ACTIVE_Arr, BACKUP_Arr, DECLINED_Arr, EXPIRED_Arr,
+            	fnIPMapDraw(startipNumber, DHCP_RangeArr, BROADCAST_Arr, NETWORK_Arr, ABANDONED_Arr, ACTIVE_Arr, BACKUP_Arr, DECLINED_Arr, EXPIRED_Arr,
             			FREE_Arr, OFFERED_Arr, RELEASED_Arr, RESET_Arr, STATIC_Arr, FIXED_Arr, ETC_Arr);
             }
         },
@@ -380,95 +380,311 @@ function fnIPMapSetting(){
         rectangleWidth: 19,
         rectangleHeight: 19,
         rectangleCss: 'rectangle',
+        selectingCss: 'selecting',
+
         dhcpRangeCss: 'dhcpRange',
         activeLeaseCss: 'activeLease',
         conflictCss: 'conflict',
         exclusionCss: 'exclusion',
         fixedCss: 'fixed',
         hostnotindnsCss: 'hostnotindns',
-        objectCss: 'object',
+        dnsObjectCss: 'dnsObject',
         pendingCss: 'pending',
         reservedrangeCss: 'reservedrange',
         unmanagedCss: 'unmanaged',
         unusedCss: 'unused',
         usedCss: 'used',
-        selectingCss: 'selecting'
+        
+        dhcpRange_activeLeaseCss: 'dhcpRange_activeLease',
+        dhcpRange_conflictCss: 'dhcpRange_conflict',
+        dhcpRange_fixedCss: 'dhcpRange_fixed',
+        dhcpRange_hostnotindnsCss: 'dhcpRange_hostnotindns',
+        dhcpRange_dnsObjectCss: 'dhcpRange_dnsObject',
+        dhcpRange_pendingCss: 'dhcpRange_pending',
+        dhcpRange_unmanagedCss: 'dhcpRange_unmanaged',
+        dhcpRange_unusedCss: 'dhcpRange_unused',
+        dhcpRange_usedCss: 'dhcpRange_used',
+
+        selected_activeLeaseCss: 'selected_activeLease',
+        selected_conflictCss: 'selected_conflict',
+        selected_fixedaddressCss: 'selected_fixedaddress',
+        selected_hostnotindnsCss: 'selected_hostnotindns',
+        selected_dnsobjectCss: 'selected_dnsobject',
+        selected_pendingCss: 'selected_pending',
+        selected_unmanagedCss: 'selected_unmanaged',
+        selected_unusedCss: 'selected_unused',
+        selected_usedCss: 'selected_used',
     };
 }
 
 
-function fnIPMapDraw(DHCP_RangeArr, BROADCAST_Arr, NETWORK_Arr, ABANDONED_Arr, ACTIVE_Arr, BACKUP_Arr, DECLINED_Arr, EXPIRED_Arr,
+function fnIPMapDraw(startipNumber, DHCP_RangeArr, BROADCAST_Arr, NETWORK_Arr, ABANDONED_Arr, ACTIVE_Arr, BACKUP_Arr, DECLINED_Arr, EXPIRED_Arr,
 		FREE_Arr, OFFERED_Arr, RELEASED_Arr, RESET_Arr, STATIC_Arr, FIXED_Arr, ETC_Arr){
 	var str = [], ipNo = -1, className;
+	var ipNumber = parseInt(startipNumber,10);
 
-    for (i = 0; i < ipMapSettings.rows; i++) {
-        for (j = 0; j < ipMapSettings.cols; j++) {
-            ipNo += 1;
-            className = ipMapSettings.rectangleCss + ' ' + ipMapSettings.rowCssPrefix + i.toString() + ' ' + ipMapSettings.colCssPrefix + j.toString();
-
-            // IP대역 설정 및 DHCP Range설정 시작            
-            if ($.isArray(DHCP_RangeArr) && $.inArray(ipNo, DHCP_RangeArr) != -1) {
-                className += ' ' + ipMapSettings.dhcpRangeCss;
-//                address = String.format("{0}.{1}", ipaddress, ipNo); 
-//                status = "Range";
-            }
-            else {
-                className += ' ' + ipMapSettings.unusedCss;
-//	            address = String.format("{0}.{1}", ipaddress, ipNo); 
-//	            status = "Unused";
-            }
-            // IP대역 설정 및 DHCP Range설정 끝
-
-            
-            if (BROADCAST_Arr.length > 0) {
-            	for (var index = BROADCAST_Arr.length - 1; index >= 0; index--) {	
-                	var BROADCAST_dClassIP = dClassIPHelper(BROADCAST_Arr[index].ipaddr);
-                	console.log("BROADCAST_dClassIP : " + BROADCAST_dClassIP);
-                	if (ipNo == parseInt(BROADCAST_dClassIP,10)) {
-                		className = className.replace(' ' + ipMapSettings.dhcpRangeCss, '').replace(' ' + ipMapSettings.unusedCss, '');
-                		
-                		console.log("true : " + BROADCAST_Arr[index].is_conflict);
-//                		if (Boolean(BROADCAST_Arr[index].is_conflict)) {
-//	    	                className += ' ' + ipMapSettings.conflictCss;
-//						}
-//                		esle {
-//	    	                className += ' ' + ipMapSettings.conflictCss;
-//                		}
-                		BROADCAST_Arr.splice(index, 1);
-                		break;
-            		}
-				}
-            }
-            
-            if (NETWORK_Arr.length > 0) {
-            	for (var index = NETWORK_Arr.length - 1; index >= 0; index--) {					
-                	var NETWORK_dClassIP = dClassIPHelper(NETWORK_Arr[index].ipaddr);
-                	console.log("NETWORK_dClassIP : " + NETWORK_dClassIP);
-                	if (ipNo == parseInt(NETWORK_dClassIP,10)) {
-                		className = className.replace(' ' + ipMapSettings.dhcpRangeCss, '').replace(' ' + ipMapSettings.unusedCss, '');
-//                		if (Boolean(NETWORK_Arr[index].is_conflict)) {
-//	    	                className += ' ' + ipMapSettings.conflictCss;
-//						}
-//                		esle {
-//	    	                className += ' ' + ipMapSettings.usedCss;
-//                		}
-    	                NETWORK_Arr.splice(index, 1);
-    	                break;
-    	            }
-				}
-            }
-            
-
-            str.push('<li class="' + className + '" data-toggle=\"tooltip\" data-html=\"true\"' +
-            			  'data-title=\"<table><tr><td style=\'text-align:left;\'>IP Address: +address+</td></tr>' +
-            			  '<tr><td style=\'text-align:left;\'>Ststus: +status+</td></tr></table>\"' +
-                          'style="top:' + (i * ipMapSettings.rectangleHeight).toString() + 'px;left:' + (j * ipMapSettings.rectangleWidth).toString() + 'px"' + 
-                          'onclick=rectangleClick(this); align=center>' +
-//                          '<a title="' + ipNo + '" style=\"line-height:50px\">' + ipNo + '</a>' +
-                          '</li>');
-        }
-    }
-    $('#place').html(str.join(''));
+	if (!isNaN(ipNumber)) {
+	    console.log("org : " + ipNumber);
+	    
+	    for (i = 0; i < ipMapSettings.rows; i++) {
+	        for (j = 0; j < ipMapSettings.cols; j++) {
+	            ipNo += 1;
+	            var address, status, conflict, usage, lease_state, fingerprint;
+	            className = ipMapSettings.rectangleCss + ' ' + ipMapSettings.rowCssPrefix + i.toString() + ' ' + ipMapSettings.colCssPrefix + j.toString();
+	
+	            // IP대역 설정 및 DHCP Range설정 시작            
+	            if ($.isArray(DHCP_RangeArr) && $.inArray(ipNo, DHCP_RangeArr) != -1) {
+	                className += ' ' + ipMapSettings.dhcpRangeCss;
+	                console.log(address);
+	            }
+	            else {
+	                className += ' ' + ipMapSettings.unusedCss;
+	                address = numberToIp(ipNumber); 
+		            status = "Unused";
+		            usage = "None";
+	            }
+	            ipNumber += 1;
+	            // IP대역 설정 및 DHCP Range설정 끝
+	
+	            
+	            if (BROADCAST_Arr.length > 0) {
+	            	for (var index = BROADCAST_Arr.length - 1; index >= 0; index--) {	
+	                	var BROADCAST_dClassIP = dClassIPHelper(BROADCAST_Arr[index].ipaddr);
+	
+	                	if (ipNo == parseInt(BROADCAST_dClassIP,10)) {
+	                		if (className.includes(ipMapSettings.dhcpRangeCss)) {
+	                    		if (BROADCAST_Arr[index].is_conflict) {
+	                    			className += ' ' + ipMapSettings.dhcpRange_conflictCss;
+	    						}
+	                    		else {
+	                    			className += ' ' + ipMapSettings.dhcpRange_usedCss;
+	    						}
+							}
+	                		else {
+	                    		if (BROADCAST_Arr[index].is_conflict) {
+	                    			className += ' ' + ipMapSettings.conflictCss;
+	    						}
+	                    		else {
+	                    			className += ' ' + ipMapSettings.usedCss;
+	    						}
+							}
+	                		className = className.replace(' ' + ipMapSettings.dhcpRangeCss, '').replace(' ' + ipMapSettings.unusedCss, '');
+	                		address = BROADCAST_Arr[index].ipaddr; 
+	                		status = BROADCAST_Arr[index].status;
+	                		conflict = BROADCAST_Arr[index].is_conflict;
+	                		usage = BROADCAST_Arr[index].usage;
+	                		lease_state = BROADCAST_Arr[index].lease_state;
+	                		fingerprint = BROADCAST_Arr[index].fingerprint;
+	                		BROADCAST_Arr.splice(index, 1);
+	                		break;
+	            		}
+					}
+	            }
+	            
+	            if (NETWORK_Arr.length > 0) {
+	            	for (var index = NETWORK_Arr.length - 1; index >= 0; index--) {					
+	                	var NETWORK_dClassIP = dClassIPHelper(NETWORK_Arr[index].ipaddr);
+	
+	                	if (ipNo == parseInt(NETWORK_dClassIP,10)) {
+	                		if (className.includes(ipMapSettings.dhcpRangeCss)) {
+	                    		if (NETWORK_Arr[index].is_conflict) {
+	                    			className += ' ' + ipMapSettings.dhcpRange_conflictCss;
+	    						}
+	                    		else {
+	                    			className += ' ' + ipMapSettings.dhcpRange_usedCss;
+	    						}
+							}
+	                		else {
+	                    		if (NETWORK_Arr[index].is_conflict) {
+	                    			className += ' ' + ipMapSettings.conflictCss;
+	    						}
+	                    		else {
+	                    			className += ' ' + ipMapSettings.usedCss;
+	    						}
+							}
+	                		className = className.replace(' ' + ipMapSettings.dhcpRangeCss, '').replace(' ' + ipMapSettings.unusedCss, '');
+	                		address = NETWORK_Arr[index].ipaddr; 
+	                		status = NETWORK_Arr[index].status;
+	                		conflict = NETWORK_Arr[index].is_conflict;
+	                		usage = NETWORK_Arr[index].usage;
+	                		lease_state = NETWORK_Arr[index].lease_state;
+	                		fingerprint = NETWORK_Arr[index].fingerprint;
+	    	                NETWORK_Arr.splice(index, 1);
+	    	                break;
+	    	            }
+					}
+	            }
+	            
+	            if (ABANDONED_Arr.length > 0) {
+	            	for (var index = ABANDONED_Arr.length - 1; index >= 0; index--) {					
+	                	var ABANDONED_dClassIP = dClassIPHelper(ABANDONED_Arr[index].ipaddr);
+	
+	                	if (ipNo == parseInt(ABANDONED_dClassIP,10)) {
+	                		if (className.includes(ipMapSettings.dhcpRangeCss)) {
+	                    		if (ABANDONED_Arr[index].is_conflict) {
+	                    			className += ' ' + ipMapSettings.dhcpRange_conflictCss;
+	    						}
+	                    		else {
+	                    			className += ' ' + ipMapSettings.dhcpRange_unusedCss;
+	                    			console.log(className);
+	    						}
+							}
+	                		else {
+	                    		if (ABANDONED_Arr[index].is_conflict) {
+	                    			className += ' ' + ipMapSettings.conflictCss;
+	    						}
+	                    		else {
+	                    			className += ' ' + ipMapSettings.unused;
+	    						}
+							}
+	                		className = className.replace(' ' + ipMapSettings.dhcpRangeCss, '').replace(' ' + ipMapSettings.unusedCss, '');
+	                		address = ABANDONED_Arr[index].ipaddr; 
+	                		status = ABANDONED_Arr[index].status;
+	                		conflict = ABANDONED_Arr[index].is_conflict;
+	                		usage = ABANDONED_Arr[index].usage;
+	                		lease_state = ABANDONED_Arr[index].lease_state;
+	                		fingerprint = ABANDONED_Arr[index].fingerprint;
+	    	                ABANDONED_Arr.splice(index, 1);
+	    	                break;
+	    	            }
+					}
+	            }
+	            
+	            if (ACTIVE_Arr.length > 0) {
+	            	for (var index = ACTIVE_Arr.length - 1; index >= 0; index--) {					
+	                	var ACTIVE_dClassIP = dClassIPHelper(ACTIVE_Arr[index].ipaddr);
+	
+	                	if (ipNo == parseInt(ACTIVE_dClassIP,10)) {
+	                		if (className.includes(ipMapSettings.dhcpRangeCss)) {
+	                    		if (ACTIVE_Arr[index].is_conflict) {
+	                    			className += ' ' + ipMapSettings.dhcpRange_conflictCss;
+	    						}
+	                    		else {
+	                    			className += ' ' + ipMapSettings.dhcpRange_activeLeaseCss;
+	                    			console.log(className);
+	    						}
+							}
+	                		else {
+	                    		if (ACTIVE_Arr[index].is_conflict) {
+	                    			className += ' ' + ipMapSettings.conflictCss;
+	    						}
+	                    		else {
+	                    			className += ' ' + ipMapSettings.activeLeaseCss;
+	    						}
+							}
+	                		className = className.replace(' ' + ipMapSettings.dhcpRangeCss, '').replace(' ' + ipMapSettings.unusedCss, '');
+	                		address = ACTIVE_Arr[index].ipaddr; 
+	                		status = ACTIVE_Arr[index].status;
+	                		conflict = ACTIVE_Arr[index].is_conflict;
+	                		usage = ACTIVE_Arr[index].usage;
+	                		lease_state = ACTIVE_Arr[index].lease_state;
+	                		fingerprint = ACTIVE_Arr[index].fingerprint;
+	    	                ACTIVE_Arr.splice(index, 1);
+	    	                break;
+	    	            }
+					}
+	            }
+	            
+	            if (FREE_Arr.length > 0) {
+	            	for (var index = FREE_Arr.length - 1; index >= 0; index--) {					
+	                	var FREE_dClassIP = dClassIPHelper(FREE_Arr[index].ipaddr);
+	
+	                	if (ipNo == parseInt(FREE_dClassIP,10)) {
+	                		if (className.includes(ipMapSettings.dhcpRangeCss)) {
+	                    		if (FREE_Arr[index].is_conflict) {
+	                    			className += ' ' + ipMapSettings.dhcpRange_conflictCss;
+	    						}
+	                    		else {
+	                    			className += ' ' + ipMapSettings.dhcpRange_unusedCss;
+	                    			console.log(className);
+	    						}
+							}
+	                		else {
+	                    		if (FREE_Arr[index].is_conflict) {
+	                    			className += ' ' + ipMapSettings.conflictCss;
+	    						}
+	                    		else {
+	                    			className += ' ' + ipMapSettings.unusedCss;
+	    						}
+							}
+	                		className = className.replace(' ' + ipMapSettings.dhcpRangeCss, '').replace(' ' + ipMapSettings.unusedCss, '');
+	                		address = FREE_Arr[index].ipaddr; 
+	                		status = FREE_Arr[index].status;
+	                		conflict = FREE_Arr[index].is_conflict;
+	                		usage = FREE_Arr[index].usage;
+	                		lease_state = FREE_Arr[index].lease_state;
+	                		fingerprint = FREE_Arr[index].fingerprint;
+	    	                FREE_Arr.splice(index, 1);
+	    	                break;
+	    	            }
+					}
+	            }
+	            
+	            if (ETC_Arr.length > 0) {
+	            	for (var index = ETC_Arr.length - 1; index >= 0; index--) {					
+	                	var ETC_dClassIP = dClassIPHelper(ETC_Arr[index].ipaddr);
+	
+	                	if (ipNo == parseInt(ETC_dClassIP,10)) {
+	                		if (className.includes(ipMapSettings.dhcpRangeCss)) {
+	                    		if (ETC_Arr[index].is_conflict) {
+	                    			className += ' ' + ipMapSettings.dhcpRange_conflictCss;
+	    						}
+	                    		else if (ETC_Arr[index].status.toUpperCase() == "USED") {
+	                    			className += ' ' + ipMapSettings.dhcpRange_usedCss;
+	    						}
+							}
+	                		else {
+	                    		if (ETC_Arr[index].is_conflict) {
+	                    			className += ' ' + ipMapSettings.conflictCss;
+	    						}
+	                    		else if (ETC_Arr[index].status.toUpperCase() == "USED") {
+	                    			className += ' ' + ipMapSettings.usedCss;
+	    						}
+							}
+	                		className = className.replace(' ' + ipMapSettings.dhcpRangeCss, '').replace(' ' + ipMapSettings.unusedCss, '');
+	                		address = ETC_Arr[index].ipaddr; 
+	                		status = ETC_Arr[index].status;
+	                		conflict = ETC_Arr[index].is_conflict;
+	                		usage = ETC_Arr[index].usage;
+	                		lease_state = ETC_Arr[index].lease_state;
+	                		fingerprint = ETC_Arr[index].fingerprint;
+	    	                ETC_Arr.splice(index, 1);
+	    	                break;
+	    	            }
+					}
+	            }
+	            
+	            var html = '<li class="' + className + '" data-toggle=\"tooltip\" data-html=\"true\"' +
+	            			  'data-title=\"<table><tr><td style=\'text-align:left;\'>IP Address: ' + address + '</td></tr>';
+	            			  if (status != "") {
+	            				  html += '<tr><td style=\'text-align:left;\'>Ststus : ' + status + '</td></tr>';
+	            			  }
+	            			  if (conflict != "") {
+	            				  html += '<tr><td style=\'text-align:left;\'>Conflict : ' + conflict + '</td></tr>';
+	            			  }
+	            			  if (usage != "") {
+	            				  html += '<tr><td style=\'text-align:left;\'>Usage : ' + usage + '</td></tr>';
+	            			  }
+	            			  if (lease_state != "") {
+	            				  html += '<tr><td style=\'text-align:left;\'>Lease state : ' + lease_state + '</td></tr>';
+	            			  }
+	            			  if (fingerprint != "") {
+	            				  html += '<tr><td style=\'text-align:left;\'>Fingerprint : ' + fingerprint + '</td></tr>';
+	            			  }
+	            			  html += '</table>\"';
+	            			  html += 'style="top:' + (i * ipMapSettings.rectangleHeight).toString() + 'px;left:' + (j * ipMapSettings.rectangleWidth).toString() + 'px"';
+	            			  html += 'onclick=rectangleClick(this); align=center>';
+	            			  html += '</li>';
+	            
+	                          
+	            str.push(html);
+	        }
+	    }
+	    $('#place').html(str.join(''));
+	}
+	else {
+		console.log("Check the DHCP Range setting - DB query is null!");
+	}
 }
 
 /**
@@ -574,24 +790,136 @@ function fnIPMapInit (ipaddress, DHCP_RangeArr, ActiveLeaseArr, ConflictArr, Exc
  * IP Map Rectangel Click Event - Class 변경해주기
 **/
 rectangleClick = function (obj) {
-	//console.log($(obj).attr('class'));
-    if ($(obj).hasClass(ipMapSettings.usedCss)) {
-        alert('This ip is already reserved');
-    }
-    else if ($(obj).hasClass(ipMapSettings.activeLeaseCss)) {
-    	//console.log("hasClass : " + $(obj).hasClass(ipMapSettings.selectingCss));
+	console.log("map click : " + $(obj).attr('class'));
+//    if ($(obj).hasClass(ipMapSettings.usedCss)) {
+//        //alert('This ip is already reserved');
+//    	$(obj).removeClass(ipMapSettings.usedCss).addClass(ipMapSettings.usedCss+ "ORG").addClass(ipMapSettings.selectingCss);
+//    }
+
+    //activeLeaseCss
+    if ($(obj).hasClass(ipMapSettings.activeLeaseCss)) {
     	$(obj).removeClass(ipMapSettings.activeLeaseCss).addClass(ipMapSettings.activeLeaseCss+ "ORG").addClass(ipMapSettings.selectingCss);
     }
-    else if ($(obj).hasClass(ipMapSettings.activeLeaseCss+"ORG")) {
-    	//console.log("hasClass : " + $(obj).hasClass(ipMapSettings.selectingCss));
-    	$(obj).removeClass(ipMapSettings.activeLeaseCss+ "ORG").removeClass(ipMapSettings.selectingCss).addClass(ipMapSettings.activeLeaseCss);
+    else if ($(obj).hasClass(ipMapSettings.dhcpRange_activeLeaseCss)) {
+    	$(obj).removeClass(ipMapSettings.dhcpRange_activeLeaseCss).addClass(ipMapSettings.dhcpRange_activeLeaseCss+ "ORG").addClass(ipMapSettings.selected_activeLeaseCss);
     }
-    else if ($(obj).hasClass(ipMapSettings.selectingCss)) {
-    	//console.log("hasClass : " + $(obj).hasClass(ipMapSettings.selectingCss));
-    	$(obj).removeClass(ipMapSettings.selectingCss);//.addClass(ipMapSettings.unusedCss);
+    else if ($(obj).hasClass(ipMapSettings.activeLeaseCss+ "ORG")) {
+    	$(obj).removeClass(ipMapSettings.selectingCss).removeClass(ipMapSettings.activeLeaseCss+ "ORG").addClass(ipMapSettings.activeLeaseCss);
     }
+    else if ($(obj).hasClass(ipMapSettings.dhcpRange_activeLeaseCss+ "ORG")) {
+    	$(obj).removeClass(ipMapSettings.selected_activeLeaseCss).removeClass(ipMapSettings.dhcpRange_activeLeaseCss+ "ORG").addClass(ipMapSettings.dhcpRange_activeLeaseCss);
+    }
+    
+    //conflictCss
+    else if ($(obj).hasClass(ipMapSettings.conflictCss)) {
+    	$(obj).removeClass(ipMapSettings.conflictCss).addClass(ipMapSettings.conflictCss+ "ORG").addClass(ipMapSettings.selectingCss);
+    }
+    else if ($(obj).hasClass(ipMapSettings.dhcpRange_conflictCss)) {
+    	$(obj).removeClass(ipMapSettings.dhcpRange_conflictCss).addClass(ipMapSettings.dhcpRange_conflictCss+ "ORG").addClass(ipMapSettings.selected_conflictCss);
+    }
+    else if ($(obj).hasClass(ipMapSettings.conflictCss+ "ORG")) {
+    	$(obj).removeClass(ipMapSettings.selectingCss).removeClass(ipMapSettings.conflictCss+ "ORG").addClass(ipMapSettings.conflictCss);
+    }
+    else if ($(obj).hasClass(ipMapSettings.dhcpRange_conflictCss+ "ORG")) {
+    	$(obj).removeClass(ipMapSettings.selected_conflictCss).removeClass(ipMapSettings.dhcpRange_conflictCss+ "ORG").addClass(ipMapSettings.dhcpRange_conflictCss);
+    }
+    
+    //fixedCss
+    else if ($(obj).hasClass(ipMapSettings.fixedCss)) {
+    	$(obj).removeClass(ipMapSettings.fixedCss).addClass(ipMapSettings.fixedCss+ "ORG").addClass(ipMapSettings.selectingCss);
+    }
+    else if ($(obj).hasClass(ipMapSettings.dhcpRange_fixedCss)) {
+    	$(obj).removeClass(ipMapSettings.dhcpRange_fixedCss).addClass(ipMapSettings.dhcpRange_fixedCss+ "ORG").addClass(ipMapSettings.selected_fixedaddressCss);
+    }
+    else if ($(obj).hasClass(ipMapSettings.fixedCss+ "ORG")) {
+    	$(obj).removeClass(ipMapSettings.selectingCss).removeClass(ipMapSettings.conflictCss+ "ORG").addClass(ipMapSettings.conflictCss);
+    }
+    else if ($(obj).hasClass(ipMapSettings.dhcpRange_fixedCss+ "ORG")) {
+    	$(obj).removeClass(ipMapSettings.selected_fixedaddressCss).removeClass(ipMapSettings.dhcpRange_fixedCss+ "ORG").addClass(ipMapSettings.dhcpRange_fixedCss);
+    }
+    
+    //hostnotindnsCss
+    else if ($(obj).hasClass(ipMapSettings.hostnotindnsCss)) {
+    	$(obj).removeClass(ipMapSettings.hostnotindnsCss).addClass(ipMapSettings.hostnotindnsCss+ "ORG").addClass(ipMapSettings.selectingCss);
+    }
+    else if ($(obj).hasClass(ipMapSettings.dhcpRange_hostnotindnsCss)) {
+    	$(obj).removeClass(ipMapSettings.dhcpRange_hostnotindnsCss).addClass(ipMapSettings.dhcpRange_hostnotindnsCss+ "ORG").addClass(ipMapSettings.selected_hostnotindnsCss);
+    }
+    else if ($(obj).hasClass(ipMapSettings.hostnotindnsCss+ "ORG")) {
+    	$(obj).removeClass(ipMapSettings.selectingCss).removeClass(ipMapSettings.hostnotindnsCss+ "ORG").addClass(ipMapSettings.hostnotindnsCss);
+    }
+    else if ($(obj).hasClass(ipMapSettings.dhcpRange_hostnotindnsCss+ "ORG")) {
+    	$(obj).removeClass(ipMapSettings.selected_hostnotindnsCss).removeClass(ipMapSettings.dhcpRange_hostnotindnsCss+ "ORG").addClass(ipMapSettings.dhcpRange_hostnotindnsCss);
+    }
+    
+    //dnsObjectCss
+    else if ($(obj).hasClass(ipMapSettings.dnsObjectCss)) {
+    	$(obj).removeClass(ipMapSettings.dnsObjectCss).addClass(ipMapSettings.dnsObjectCss+ "ORG").addClass(ipMapSettings.selectingCss);
+    }
+    else if ($(obj).hasClass(ipMapSettings.dhcpRange_dnsObjectCss)) {
+    	$(obj).removeClass(ipMapSettings.dhcpRange_dnsObjectCss).addClass(ipMapSettings.dhcpRange_dnsObjectCss+ "ORG").addClass(ipMapSettings.selected_dnsobjectCss);
+    }
+    else if ($(obj).hasClass(ipMapSettings.dnsObjectCss+ "ORG")) {
+    	$(obj).removeClass(ipMapSettings.selectingCss).removeClass(ipMapSettings.dnsObjectCss+ "ORG").addClass(ipMapSettings.dnsObjectCss);
+    }
+    else if ($(obj).hasClass(ipMapSettings.dhcpRange_dnsObjectCss+ "ORG")) {
+    	$(obj).removeClass(ipMapSettings.selected_dnsobjectCss).removeClass(ipMapSettings.dhcpRange_dnsObjectCss+ "ORG").addClass(ipMapSettings.dhcpRange_dnsObjectCss);
+    }
+    
+    //pendingCss
+    else if ($(obj).hasClass(ipMapSettings.pendingCss)) {
+    	$(obj).removeClass(ipMapSettings.pendingCss).addClass(ipMapSettings.pendingCss+ "ORG").addClass(ipMapSettings.selectingCss);
+    }
+    else if ($(obj).hasClass(ipMapSettings.dhcpRange_pendingCss)) {
+    	$(obj).removeClass(ipMapSettings.dhcpRange_pendingCss).addClass(ipMapSettings.dhcpRange_pendingCss+ "ORG").addClass(ipMapSettings.selected_pendingCss);
+    }
+    else if ($(obj).hasClass(ipMapSettings.pendingCss+ "ORG")) {
+    	$(obj).removeClass(ipMapSettings.selectingCss).removeClass(ipMapSettings.pendingCss+ "ORG").addClass(ipMapSettings.pendingCss);
+    }
+    else if ($(obj).hasClass(ipMapSettings.dhcpRange_pendingCss+ "ORG")) {
+    	$(obj).removeClass(ipMapSettings.selected_pendingCss).removeClass(ipMapSettings.dhcpRange_pendingCss+ "ORG").addClass(ipMapSettings.dhcpRange_pendingCss);
+    }
+    
+    //unmanagedCss
+    else if ($(obj).hasClass(ipMapSettings.unmanagedCss)) {
+    	$(obj).removeClass(ipMapSettings.unmanagedCss).addClass(ipMapSettings.unmanagedCss+ "ORG").addClass(ipMapSettings.selectingCss);
+    }
+    else if ($(obj).hasClass(ipMapSettings.dhcpRange_unmanagedCss)) {
+    	$(obj).removeClass(ipMapSettings.dhcpRange_unmanagedCss).addClass(ipMapSettings.dhcpRange_unmanagedCss+ "ORG").addClass(ipMapSettings.selected_unmanagedCss);
+    }
+    else if ($(obj).hasClass(ipMapSettings.unmanagedCss+ "ORG")) {
+    	$(obj).removeClass(ipMapSettings.selectingCss).removeClass(ipMapSettings.unmanagedCss+ "ORG").addClass(ipMapSettings.unmanagedCss);
+    }
+    else if ($(obj).hasClass(ipMapSettings.dhcpRange_unmanagedCss+ "ORG")) {
+    	$(obj).removeClass(ipMapSettings.selected_unmanagedCss).removeClass(ipMapSettings.dhcpRange_unmanagedCss+ "ORG").addClass(ipMapSettings.dhcpRange_unmanagedCss);
+    }
+    
+    //unusedCss
     else if ($(obj).hasClass(ipMapSettings.unusedCss)) {
-        $(obj).removeClass(ipMapSettings.unusedCss).addClass(ipMapSettings.selectingCss);
+    	$(obj).removeClass(ipMapSettings.unusedCss).addClass(ipMapSettings.unusedCss+ "ORG").addClass(ipMapSettings.selectingCss);
+    }
+    else if ($(obj).hasClass(ipMapSettings.dhcpRange_unusedCss)) {
+    	$(obj).removeClass(ipMapSettings.dhcpRange_unusedCss).addClass(ipMapSettings.dhcpRange_unusedCss+ "ORG").addClass(ipMapSettings.selected_unusedCss);
+    }
+    else if ($(obj).hasClass(ipMapSettings.unusedCss+ "ORG")) {
+    	$(obj).removeClass(ipMapSettings.selectingCss).removeClass(ipMapSettings.unusedCss+ "ORG").addClass(ipMapSettings.unusedCss);
+    }
+    else if ($(obj).hasClass(ipMapSettings.dhcpRange_unusedCss+ "ORG")) {
+    	$(obj).removeClass(ipMapSettings.selected_unusedCss).removeClass(ipMapSettings.dhcpRange_unusedCss+ "ORG").addClass(ipMapSettings.dhcpRange_unusedCss);
+    }
+    
+    //usedCss
+    else if ($(obj).hasClass(ipMapSettings.usedCss)) {
+    	$(obj).removeClass(ipMapSettings.usedCss).addClass(ipMapSettings.usedCss+ "ORG").addClass(ipMapSettings.selected_usedCss);
+    }
+    else if ($(obj).hasClass(ipMapSettings.dhcpRange_usedCss)) {
+    	$(obj).removeClass(ipMapSettings.dhcpRange_usedCss).addClass(ipMapSettings.dhcpRange_usedCss+ "ORG").addClass(ipMapSettings.selected_usedCss);
+    }
+    else if ($(obj).hasClass(ipMapSettings.usedCss+ "ORG")) {
+    	$(obj).removeClass(ipMapSettings.selected_usedCss).removeClass(ipMapSettings.usedCss+ "ORG").addClass(ipMapSettings.usedCss);
+    }
+    else if ($(obj).hasClass(ipMapSettings.dhcpRange_usedCss+ "ORG")) {
+    	$(obj).removeClass(ipMapSettings.selected_usedCss).removeClass(ipMapSettings.dhcpRange_usedCss+ "ORG").addClass(ipMapSettings.dhcpRange_usedCss);
     }
 };
 

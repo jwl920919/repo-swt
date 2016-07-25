@@ -137,6 +137,17 @@ String.format = function() {
     return s;
 }
 
+/**
+ * stringToBoolean
+ */
+stringToBoolean = function(string){
+    switch(string.toLowerCase().trim()){
+        case "true": case "yes": case "1": return true;
+        case "false": case "no": case "0": case null: return false;
+        default: return Boolean(string);
+    }
+}
+
 // DateTime format function
 /**
  * http://stove99.tistory.com/46 
@@ -233,10 +244,10 @@ function ipToNumber(ip) {
  * number를 IPv4로 리턴
 **/
 function numberToIp(number) {		
-	var ip=num%256;
+	var ip=number%256;
 	for (var i=1;i<=3;i++)
 	{
-		number=Math.floor(num/256);
+		number=Math.floor(number/256);
 		ip=number%256+'.'+ip;
 	}
 	return ip; // As string
