@@ -221,7 +221,7 @@ function mapDataCall(network){
 	var DHCP_RangeArr = [];	
 	var BROADCAST_Arr = [], NETWORK_Arr = [];
 	var ABANDONED_Arr = [], ACTIVE_Arr = [], BACKUP_Arr = [], DECLINED_Arr = [], EXPIRED_Arr = [];
-	var FREE_Arr = [], OFFERED_Arr = [], RELEASED_Arr = [], RESET_Arr = [], STATIC_Arr = [], FIXED_Arr = [];
+	var FREE_Arr = [], OFFERED_Arr = [], RELEASED_Arr = [], RESET_Arr = [], STATIC_Arr = [], FIXED_Arr = [], ETC_Arr = [];
 	
 	var jObj = Object();
     jObj.network = network;
@@ -280,10 +280,10 @@ function mapDataCall(network){
             	    		obj.is_never_ends, obj.is_never_start, obj.lease_start_time, obj.lease_end_time);
 
             	    //console.log("classData.ipaddr.toUpperCase() : " + classData.ipaddr.toUpperCase());
-            		if (classData.obj_types.toUpperCase() ==  "NETWORK") {
+            		if (classData.obj_types.toUpperCase() == "BROADCAST") {
             			BROADCAST_Arr.push(classData); 
 					}
-            		else if (obj.obj_types.toUpperCase() ==  "BROADCAST") {
+            		else if (obj.obj_types.toUpperCase() == "NETWORK") {
             			NETWORK_Arr.push(classData); 
 					}
             		else {
@@ -329,7 +329,7 @@ function mapDataCall(network){
 	            });
             	
             	fnIPMapDraw(DHCP_RangeArr, BROADCAST_Arr, NETWORK_Arr, ABANDONED_Arr, ACTIVE_Arr, BACKUP_Arr, DECLINED_Arr, EXPIRED_Arr,
-            			FREE_Arr, OFFERED_Arr, RELEASED_Arr, RESET_Arr, STATIC_Arr, FIXED_Arr);
+            			FREE_Arr, OFFERED_Arr, RELEASED_Arr, RESET_Arr, STATIC_Arr, FIXED_Arr, ETC_Arr);
             }
         },
         complete: function(data) {
@@ -351,6 +351,19 @@ function mapDataHelper(stringIP, array){
 				array.push(parseInt(arrip[3], 10)); 
 			}
 		}
+	}
+}
+
+/**
+ * IP에서 D 클래스 정보 return function
+**/
+function dClassIPHelper(stringIP){
+	if (stringIP != undefined && stringIP.length > 0) {
+		if (checkIPv4(stringIP)) {
+			var arrip = stringIP.split( "." );
+			return arrip[3];
+		}
+		return null;
 	}
 }
 
@@ -384,12 +397,88 @@ function fnIPMapSetting(){
 }
 
 
+function fnIPMapDraw(DHCP_RangeArr, BROADCAST_Arr, NETWORK_Arr, ABANDONED_Arr, ACTIVE_Arr, BACKUP_Arr, DECLINED_Arr, EXPIRED_Arr,
+		FREE_Arr, OFFERED_Arr, RELEASED_Arr, RESET_Arr, STATIC_Arr, FIXED_Arr, ETC_Arr){
+	var str = [], ipNo = -1, className;
+
+    for (i = 0; i < ipMapSettings.rows; i++) {
+        for (j = 0; j < ipMapSettings.cols; j++) {
+            ipNo += 1;
+            className = ipMapSettings.rectangleCss + ' ' + ipMapSettings.rowCssPrefix + i.toString() + ' ' + ipMapSettings.colCssPrefix + j.toString();
+
+            // IP대역 설정 및 DHCP Range설정 시작            
+            if ($.isArray(DHCP_RangeArr) && $.inArray(ipNo, DHCP_RangeArr) != -1) {
+                className += ' ' + ipMapSettings.dhcpRangeCss;
+//                address = String.format("{0}.{1}", ipaddress, ipNo); 
+//                status = "Range";
+            }
+            else {
+                className += ' ' + ipMapSettings.unusedCss;
+//	            address = String.format("{0}.{1}", ipaddress, ipNo); 
+//	            status = "Unused";
+            }
+            // IP대역 설정 및 DHCP Range설정 끝
+
+            
+            if (BROADCAST_Arr.length > 0) {
+            	for (var index = BROADCAST_Arr.length - 1; index >= 0; index--) {	
+                	var BROADCAST_dClassIP = dClassIPHelper(BROADCAST_Arr[index].ipaddr);
+                	console.log("BROADCAST_dClassIP : " + BROADCAST_dClassIP);
+                	if (ipNo == parseInt(BROADCAST_dClassIP,10)) {
+                		className = className.replace(' ' + ipMapSettings.dhcpRangeCss, '').replace(' ' + ipMapSettings.unusedCss, '');
+                		
+                		console.log("true : " + BROADCAST_Arr[index].is_conflict);
+//                		if (Boolean(BROADCAST_Arr[index].is_conflict)) {
+//	    	                className += ' ' + ipMapSettings.conflictCss;
+//						}
+//                		esle {
+//	    	                className += ' ' + ipMapSettings.conflictCss;
+//                		}
+                		BROADCAST_Arr.splice(index, 1);
+                		break;
+            		}
+				}
+            }
+            
+            if (NETWORK_Arr.length > 0) {
+            	for (var index = NETWORK_Arr.length - 1; index >= 0; index--) {					
+                	var NETWORK_dClassIP = dClassIPHelper(NETWORK_Arr[index].ipaddr);
+                	console.log("NETWORK_dClassIP : " + NETWORK_dClassIP);
+                	if (ipNo == parseInt(NETWORK_dClassIP,10)) {
+                		className = className.replace(' ' + ipMapSettings.dhcpRangeCss, '').replace(' ' + ipMapSettings.unusedCss, '');
+//                		if (Boolean(NETWORK_Arr[index].is_conflict)) {
+//	    	                className += ' ' + ipMapSettings.conflictCss;
+//						}
+//                		esle {
+//	    	                className += ' ' + ipMapSettings.usedCss;
+//                		}
+    	                NETWORK_Arr.splice(index, 1);
+    	                break;
+    	            }
+				}
+            }
+            
+
+            str.push('<li class="' + className + '" data-toggle=\"tooltip\" data-html=\"true\"' +
+            			  'data-title=\"<table><tr><td style=\'text-align:left;\'>IP Address: +address+</td></tr>' +
+            			  '<tr><td style=\'text-align:left;\'>Ststus: +status+</td></tr></table>\"' +
+                          'style="top:' + (i * ipMapSettings.rectangleHeight).toString() + 'px;left:' + (j * ipMapSettings.rectangleWidth).toString() + 'px"' + 
+                          'onclick=rectangleClick(this); align=center>' +
+//                          '<a title="' + ipNo + '" style=\"line-height:50px\">' + ipNo + '</a>' +
+                          '</li>');
+        }
+    }
+    $('#place').html(str.join(''));
+}
+
 /**
  * IP Map Initialize
 **/
 var chargePerSheet;
 function fnIPMapInit (ipaddress, DHCP_RangeArr, ActiveLeaseArr, ConflictArr, ExclusionArr, FixedArr, HostnotindnsArr, ObjectArr, 
 		PendingArr,	ReservedrangeArr, UnmanagedArr, UnusedArr, UsedArr) {
+	return;
+	
     var str = [], ipNo = -1, className, address, status;
     console.log("fnIPMapInit");
     
