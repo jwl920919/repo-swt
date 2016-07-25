@@ -132,12 +132,9 @@
 	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
 	<select id="select_SYSTEM_USER_GROUP_INFO_CONDITIONAL_SEARCH"
 		parameterType="hashmap" resultType="java.util.HashMap">
-		SELECT
-		si.site_name, sg.group_name,
-		sg.group_desc,sg.group_id
+		SELECT si.site_name, sg.group_name, sg.group_desc,sg.group_id
 		FROM system_user_group as sg, site_info as si
-		WHERE
-		sg.site_id = si.site_id and (si.site_name like CONCAT('%',
+		WHERE sg.site_id = si.site_id and <if test='site_master == "f"'> sg.site_id=#{site_id} and </if> (si.site_name like CONCAT('%',
 		#{searchValue}, '%') OR sg.group_name like CONCAT('%', #{searchValue},
 		'%') OR sg.group_desc like CONCAT('%', #{searchValue}, '%'))
 		ORDER BY

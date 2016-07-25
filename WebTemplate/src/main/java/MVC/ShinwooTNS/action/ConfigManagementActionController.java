@@ -316,7 +316,7 @@ public class ConfigManagementActionController {
 	// region getUserGroupDatatableDatas
 	@RequestMapping(value = "getUserGroupDatatableDatas", method = RequestMethod.POST)
 	public void getUserGroupDatatableDatas(Locale locale, Model model, HttpServletRequest request,
-			HttpServletResponse response) {
+			HttpServletResponse response,HttpSession session) {
 		logger.info("getUserGroupDatatableDatas : " + request.getLocalAddr());
 		System.out.println("getUserGroupDatatableDatas Controller");
 		try {
@@ -324,6 +324,8 @@ public class ConfigManagementActionController {
 			String[] columns = { "site_name", "group_name", "group_desc", "group_id" };
 			HashMap<String, Object> parameters = Common.Helper.DatatableHelper.getDatatableParametas(request, columns,
 					1);
+			parameters.put("site_id", Integer.parseInt(session.getAttribute("site_id").toString()));
+			parameters.put("site_master", session.getAttribute("site_master"));
 			List<Map<String, Object>> siteDataList = groupInfoService
 					.select_SYSTEM_USER_GROUP_INFO_CONDITIONAL_SEARCH(parameters);
 			for (Map<String, Object> siteData : siteDataList) {
