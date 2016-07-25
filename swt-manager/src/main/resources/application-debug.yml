@@ -13,6 +13,12 @@ ipm:
     port: 6379
     password: shinwoo123!
     timeout: 0
+  rabbitmq:
+    host: shinwootnskr.iptime.org
+    port: 5672
+    username: admin
+    password: shinwoo123!
+    virtual-host: /
     
   # debug mode
   debug:
@@ -38,12 +44,12 @@ spring:
     hibernate:
       ddlAuto: none
       naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
-  rabbitmq:
-    host: shinwootnskr.iptime.org
-    port: 5672
-    username: admin
-    password: shinwoo123!
-    virtual-host: /
+  #rabbitmq:
+  #  host: shinwootnskr.iptime.org
+  #  port: 5672
+  #  username: admin
+  #  password: shinwoo123!
+  #  virtual-host: /
 
 #====================================
 # banner

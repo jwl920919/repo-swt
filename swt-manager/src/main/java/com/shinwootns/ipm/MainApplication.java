@@ -15,7 +15,7 @@ import com.shinwootns.ipm.data.mapper.DeviceMapper;
 
 //@ComponentScan(basePackages = "com.shinwootns.*")
 @SpringBootApplication
-@EnableScheduling
+//@EnableScheduling
 public class MainApplication implements CommandLineRunner {
 	
 	//@Autowired

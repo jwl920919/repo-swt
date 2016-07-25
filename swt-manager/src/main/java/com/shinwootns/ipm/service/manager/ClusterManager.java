@@ -1,13 +1,15 @@
 package com.shinwootns.ipm.service.manager;
 
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
-
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map.Entry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.shinwootns.common.cache.RedisClient;
+import com.shinwootns.common.utils.CollectionUtils;
 import com.shinwootns.common.utils.SystemUtils;
 import com.shinwootns.ipm.SpringBeanProvider;
 import com.shinwootns.ipm.config.ApplicationProperty;
@@ -19,7 +21,6 @@ public class ClusterManager {
 
 	private final static String KEY_CLUSTER_MEMBER = "cluster:ipm:member";
 	private final static String KEY_CLUSTER_MASTER = "cluster:ipm:master";
-
 	private final static String KEY_CLUSTER_JOB = "cluster:ipm:job";
 
 	private final static int EXPIRE_TIME_MEMBER = 10;
@@ -71,11 +72,11 @@ public class ClusterManager {
 
 			redis.expire(key, EXPIRE_TIME_MEMBER);
 			
-			redis.close();
-			
 		} catch (Exception ex) {
 			_logger.error(ex.getMessage(), ex);
 		}
+		
+		redis.close();
 	}
 
 	public void checkClusterMaster() {
@@ -87,85 +88,105 @@ public class ClusterManager {
 		RedisClient redis = RedisHandler.getInstance().getRedisClient();
 		if (redis == null)
 			return;
-		 
-		// Get Master Info Set<String> keys =
-		HashSet<String> keys = redis.keys(KEY_CLUSTER_MEMBER+":*");
-		 
-		for(String key : keys) {
+		
+		try
+		{
+		
+			// Get Keys
+			HashSet<String> keys = redis.keys(KEY_CLUSTER_MEMBER+":*");
 			
-			String value = redis.get(key);
+			// Get Values
+			HashMap<String, Integer> mapMember = new HashMap<String, Integer>();
+			for(String key : keys) {
+				mapMember.put(key, Integer.parseInt(redis.get(key)));
+			}
 			
-			System.out.println(key); 
+			// Sort by valuse
+			LinkedHashMap<String, Integer> sortMap = CollectionUtils.sortMapByValue(mapMember);
+			//System.out.println(sortMap);
+			
+			Iterator<Entry<String, Integer>> iter = sortMap.entrySet().iterator();
+			
+			if (iter != null && iter.hasNext()) {
+				
+				Entry<String, Integer> entry = iter.next();
+				
+				// Top 1
+				String masterKey = entry.getKey();
+				String hostName = SystemUtils.getHostName();
+	
+				// check Master
+				int index = masterKey.lastIndexOf(":");
+				
+				if (index > 0 && masterKey.length() > index+1 ) {
+					
+					String masterName = masterKey.substring(index+1);
+					
+					// is Master node
+					if (masterName.isEmpty() == false && masterName.equals(hostName)) {
+						
+						// Set Master
+						ClusterManager.getInstance().setMasterNode(true);
+						 
+						redis.set(KEY_CLUSTER_MASTER, hostName);
+						 
+					} else { 
+						// Set Slave
+						ClusterManager.getInstance().setMasterNode(false); 
+					}
+				}	
+			}
+		} catch(Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+		} finally {
+			redis.close();
 		}
-		 
 	}
+	
+	public String getMasterName() {
 
-	/*
-	 * public void updateClusterMember() {
-	 * 
-	 * ApplicationProperty appProperty =
-	 * SpringBeanProvider.getInstance().getApplicationProperty();
-	 * StringRedisTemplate redisTemplate =
-	 * SpringBeanProvider.getInstance().getRedisTemplate(); if ( appProperty ==
-	 * null || redisTemplate == null ) return;
-	 * 
-	 * try { // Update Member String hostName = SystemUtils.getHostName();
-	 * 
-	 * String key = String.format("%s:%s", KEY_CLUSTER_MEMBER, hostName);
-	 * 
-	 * redisTemplate.opsForValue().set(key, hostName);
-	 * 
-	 * redisTemplate.expire(key, EXPIRE_TIME_MEMBER, TimeUnit.SECONDS);
-	 * 
-	 * 
-	 * // Get Master Info String masterName =
-	 * (String)redisTemplate.opsForValue().get(KEY_CLUSTER_MASTER);
-	 * 
-	 * // Master is none if (masterName == null || masterName.isEmpty()) {
-	 * 
-	 * // Lookup master candidate Set<String> setMember =
-	 * redisTemplate.opsForZSet().range(KEY_CLUSTER_MEMBER, 0, 0); // Top 1 by
-	 * rank.
-	 * 
-	 * if (setMember.size() == 1) { masterName = setMember.iterator().next();
-	 * 
-	 * if (masterName != null && masterName.isEmpty() == false) { if
-	 * (masterName.equals(hostName)) {
-	 * 
-	 * // Set Master redisTemplate.opsForValue().set(KEY_CLUSTER_MASTER,
-	 * masterName); //redisTemplate.expire(KEY_CLUSTER_MASTER,
-	 * EXPIRE_TIME_MASTER, TimeUnit.SECONDS);
-	 * 
-	 * // Master node ClusterManager.getInstance().setMasterNode(true); } else {
-	 * // Slave node ClusterManager.getInstance().setMasterNode(false); } } } }
-	 * else if (masterName.equals(hostName)) { // Master node
-	 * ClusterManager.getInstance().setMasterNode(true); } else { // Slave node
-	 * ClusterManager.getInstance().setMasterNode(false); } } catch(Exception
-	 * ex) { _logger.error(ex.getMessage(), ex); } }
-	 */
+		RedisClient redis = RedisHandler.getInstance().getRedisClient();
+		if (redis == null)
+			return "";
+
+		try {
+
+			String masterName = redis.get(KEY_CLUSTER_MASTER);
+			
+			
+			
+			return (masterName != null) ? masterName : "";
+
+		} catch (Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+		}finally {
+			redis.close();
+		}
+
+		return "";
+	}
 
 	public boolean isClusterMaster() {
 
 		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
 		if (appProperty == null)
 			return false;
-
-		// RedisTemplate redisTemplate =
-		// SpringBeanProvider.getInstance().getRedisTemplate();
+		
+		RedisClient redis = RedisHandler.getInstance().getRedisClient();
+		if (redis == null)
+			return false;
 
 		try {
 
-			String hostName = SystemUtils.getHostName();
+			String masterName = redis.get(KEY_CLUSTER_MASTER);
+			
+			if(masterName != null && masterName.equals(SystemUtils.getHostName()))
+				return true;
 
-			/*
-			 * String masterName =
-			 * (String)redisTemplate.opsForValue().get(KEY_CLUSTER_MASTER);
-			 * 
-			 * if (masterName != null) { if (masterName.equals(hostName)) return
-			 * true; else return false; }
-			 */
 		} catch (Exception ex) {
 			_logger.error(ex.getMessage(), ex);
+		} finally {
+			redis.close();
 		}
 
 		return false;
@@ -176,7 +197,7 @@ public class ClusterManager {
 		// If changed cluster mode.
 		if (this.isMasterNode != isMasterNode) {
 
-			_logger.info(String.format("Changed Cluster Mode --- %s !!!", (isMasterNode) ? "MASTER" : "SLAVE"));
+			_logger.info(String.format("Cluster mode changed. MODE = %s", (isMasterNode) ? "MASTER" : "SLAVE"));
 
 			this.isMasterNode = isMasterNode;
 

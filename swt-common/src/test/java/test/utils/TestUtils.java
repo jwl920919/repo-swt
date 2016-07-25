@@ -124,11 +124,14 @@ public class TestUtils {
 		map.put("E", 100);
 		map.put("F", 88);
 		
-		LinkedHashMap<String, Integer> linkedMap = CollectionUtils.sortByValue(map);
+		// Sort Map Asc
+		LinkedHashMap<String, Integer> linkedMap = CollectionUtils.sortMapByValue(map);
 		
 		System.out.println(linkedMap.toString());
 		
-		LinkedHashMap<String, Integer> linkedMap2 = CollectionUtils.sortByValueDesc(map);
+		
+		// Sort Map Desc
+		LinkedHashMap<String, Integer> linkedMap2 = CollectionUtils.sortMapByValueDesc(map);
 		
 		System.out.println(linkedMap2.toString());
 		

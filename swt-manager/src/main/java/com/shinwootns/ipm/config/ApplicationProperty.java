@@ -38,7 +38,8 @@ public class ApplicationProperty {
 	public boolean enableDeviceCollect;
 	//}} Debug Mode
 	
-	@Value("${ipm.redis.host}")
+	// Redis
+	@Value("${ipm.redis.host:127.0.0.1}")
 	public String redisHost;
 	
 	@Value("${ipm.redis.port:6379}")
@@ -50,6 +51,22 @@ public class ApplicationProperty {
 	@Value("${ipm.redis.timeout:0}")
 	public int redisTimeout;
 	
+	// Rabbitmq
+	@Value("${ipm.rabbitmq.host:127.0.0.1}")
+	public String rabbitmqHost;
+	
+	@Value("${ipm.rabbitmq.port:5672}")
+    public int rabbitmqPort;
+    
+	@Value("${ipm.rabbitmq.username}")
+    public String rabbitmqUsername;
+	
+	@Value("${ipm.rabbitmq.password}")
+	public String rabbitmqPassword;
+	
+	@Value("${ipm.rabbitmq.virtual-host:/}")
+    public String virtualHost;
+	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -60,6 +77,15 @@ public class ApplicationProperty {
 		sb.append( String.format("%-30s = %s\n", "ipm.license", this.license ) );
 		sb.append( String.format("%-30s = %s\n", "ipm.cluster.mode", this.clusterMode ) );
 		sb.append( String.format("%-30s = %s\n", "ipm.cluster.slave-index", this.clusterSalveIndex ) );
+		
+		sb.append( String.format("%-30s = %s\n", "ipm.redis.host", this.redisHost ) );
+		sb.append( String.format("%-30s = %s\n", "ipm.redis.port", this.redisPort ) );
+		sb.append( String.format("%-30s = %s\n", "ipm.redis.timeout", this.redisTimeout ) );
+		
+		sb.append( String.format("%-30s = %s\n", "ipm.rabbitmq.host", this.rabbitmqHost ) );
+		sb.append( String.format("%-30s = %s\n", "ipm.rabbitmq.port", this.rabbitmqPort ) );
+		sb.append( String.format("%-30s = %s\n", "ipm.rabbitmq.virtual-host", this.virtualHost ) );
+		
 		
 		if (debugEnable) {
 			sb.append( String.format("%-30s = %s\n", "ipm.debug.enable", (this.debugEnable)? "true":"false" ) );

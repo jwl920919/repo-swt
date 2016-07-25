@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 
 public class CollectionUtils {
 	
-	public static <K, V> LinkedHashMap<K, V> sortByValue(Map<K, V> map) {
+	public static <K, V> LinkedHashMap<K, V> sortMapByValue(Map<K, V> map) {
 		
 	    List<Entry<K, V>> list = new LinkedList<Entry<K, V>>(map.entrySet());
 	    Collections.sort(list, new Comparator<Object>() {
@@ -31,7 +31,7 @@ public class CollectionUtils {
 	    return result;
 	}
 	
-	public static <K, V> LinkedHashMap<K, V> sortByValueDesc(Map<K, V> map) {
+	public static <K, V> LinkedHashMap<K, V> sortMapByValueDesc(Map<K, V> map) {
 		
 	    List<Entry<K, V>> list = new LinkedList<Entry<K, V>>(map.entrySet());
 	    Collections.sort(list, new Comparator<Object>() {
