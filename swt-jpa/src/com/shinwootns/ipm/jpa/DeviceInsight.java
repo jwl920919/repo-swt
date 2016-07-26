@@ -1,39 +1,59 @@
-package com.shinwootns.ipm.data.entity;
+package com.shinwootns.ipm.jpa;
 
 import java.io.Serializable;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 
+/**
+ * The persistent class for the device_insight database table.
+ * 
+ */
+@Entity
+@Table(name="device_insight")
+@NamedQuery(name="DeviceInsight.findAll", query="SELECT d FROM DeviceInsight d")
 public class DeviceInsight implements Serializable {
-	
 	private static final long serialVersionUID = 1L;
 
-	private Integer device_id;
-	private Boolean enable_collect;
+	@Id
+	@Column(name="device_id")
+	private Integer deviceId;
+
+	@Column(name="enable_collect")
+	private Boolean enableCollect;
+
 	private String host;
-	private Timestamp insert_time;
+
+	@Column(name="insert_time")
+	private Timestamp insertTime;
+
 	private Integer port;
-	private Integer site_id;
-	private Timestamp update_time;
+
+	@Column(name="site_id")
+	private Integer siteId;
+
+	@Column(name="update_time")
+	private Timestamp updateTime;
+
 	private String version;
 
 	public DeviceInsight() {
 	}
 
 	public Integer getDeviceId() {
-		return this.device_id;
+		return this.deviceId;
 	}
 
 	public void setDeviceId(Integer deviceId) {
-		this.device_id = deviceId;
+		this.deviceId = deviceId;
 	}
 
 	public Boolean getEnableCollect() {
-		return this.enable_collect;
+		return this.enableCollect;
 	}
 
 	public void setEnableCollect(Boolean enableCollect) {
-		this.enable_collect = enableCollect;
+		this.enableCollect = enableCollect;
 	}
 
 	public String getHost() {
@@ -45,11 +65,11 @@ public class DeviceInsight implements Serializable {
 	}
 
 	public Timestamp getInsertTime() {
-		return this.insert_time;
+		return this.insertTime;
 	}
 
 	public void setInsertTime(Timestamp insertTime) {
-		this.insert_time = insertTime;
+		this.insertTime = insertTime;
 	}
 
 	public Integer getPort() {
@@ -61,19 +81,19 @@ public class DeviceInsight implements Serializable {
 	}
 
 	public Integer getSiteId() {
-		return this.site_id;
+		return this.siteId;
 	}
 
 	public void setSiteId(Integer siteId) {
-		this.site_id = siteId;
+		this.siteId = siteId;
 	}
 
 	public Timestamp getUpdateTime() {
-		return this.update_time;
+		return this.updateTime;
 	}
 
 	public void setUpdateTime(Timestamp updateTime) {
-		this.update_time = updateTime;
+		this.updateTime = updateTime;
 	}
 
 	public String getVersion() {

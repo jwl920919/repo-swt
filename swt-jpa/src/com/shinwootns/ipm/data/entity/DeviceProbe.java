@@ -1,81 +1,56 @@
 package com.shinwootns.ipm.data.entity;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.sql.Timestamp;
 
-
-/**
- * The persistent class for the device_probe database table.
- * 
- */
-@Entity
-@Table(name="device_probe")
-@NamedQuery(name="DeviceProbe.findAll", query="SELECT d FROM DeviceProbe d")
 public class DeviceProbe implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@Column(name="device_id")
-	private Integer deviceId;
-
-	@Column(name="enable_collect_cam")
-	private Boolean enableCollectCam;
-
-	@Column(name="enable_control_ipv4")
-	private Boolean enableControlIpv4;
-
-	@Column(name="enable_control_ipv6")
-	private Boolean enableControlIpv6;
-
+	private Integer device_id;
+	private Boolean enable_collect_cam;
+	private Boolean enable_control_ipv4;
+	private Boolean enable_control_ipv6;
 	private String host;
-
-	@Column(name="insert_time")
-	private Timestamp insertTime;
-
+	private Timestamp insert_time;
 	private Integer port;
-
-	@Column(name="site_id")
-	private Integer siteId;
-
-	@Column(name="update_time")
-	private Timestamp updateTime;
-
+	private Integer site_id;
+	private Timestamp update_time;
 	private String version;
 
 	public DeviceProbe() {
 	}
 
 	public Integer getDeviceId() {
-		return this.deviceId;
+		return this.device_id;
 	}
 
-	public void setDeviceId(Integer deviceId) {
-		this.deviceId = deviceId;
+	public void setDeviceId(Integer device_id) {
+		this.device_id = device_id;
 	}
 
 	public Boolean getEnableCollectCam() {
-		return this.enableCollectCam;
+		return this.enable_collect_cam;
 	}
 
 	public void setEnableCollectCam(Boolean enableCollectCam) {
-		this.enableCollectCam = enableCollectCam;
+		this.enable_collect_cam = enableCollectCam;
 	}
 
 	public Boolean getEnableControlIpv4() {
-		return this.enableControlIpv4;
+		return this.enable_control_ipv4;
 	}
 
 	public void setEnableControlIpv4(Boolean enableControlIpv4) {
-		this.enableControlIpv4 = enableControlIpv4;
+		this.enable_control_ipv4 = enableControlIpv4;
 	}
 
 	public Boolean getEnableControlIpv6() {
-		return this.enableControlIpv6;
+		return this.enable_control_ipv6;
 	}
 
 	public void setEnableControlIpv6(Boolean enableControlIpv6) {
-		this.enableControlIpv6 = enableControlIpv6;
+		this.enable_control_ipv6 = enableControlIpv6;
 	}
 
 	public String getHost() {
@@ -87,11 +62,11 @@ public class DeviceProbe implements Serializable {
 	}
 
 	public Timestamp getInsertTime() {
-		return this.insertTime;
+		return this.insert_time;
 	}
 
 	public void setInsertTime(Timestamp insertTime) {
-		this.insertTime = insertTime;
+		this.insert_time = insertTime;
 	}
 
 	public Integer getPort() {
@@ -103,19 +78,19 @@ public class DeviceProbe implements Serializable {
 	}
 
 	public Integer getSiteId() {
-		return this.siteId;
+		return this.site_id;
 	}
 
 	public void setSiteId(Integer siteId) {
-		this.siteId = siteId;
+		this.site_id = siteId;
 	}
 
 	public Timestamp getUpdateTime() {
-		return this.updateTime;
+		return this.update_time;
 	}
 
 	public void setUpdateTime(Timestamp updateTime) {
-		this.updateTime = updateTime;
+		this.update_time = updateTime;
 	}
 
 	public String getVersion() {

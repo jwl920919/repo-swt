@@ -1,38 +1,87 @@
-package com.shinwootns.ipm.data.entity;
+package com.shinwootns.ipm.jpa;
 
 import java.io.Serializable;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 
+/**
+ * The persistent class for the dhcp_ip_status database table.
+ * 
+ */
+@Entity
+@Table(name="dhcp_ip_status")
+@NamedQuery(name="DhcpIpStatus.findAll", query="SELECT d FROM DhcpIpStatus d")
 public class DhcpIpStatus implements Serializable {
-
 	private static final long serialVersionUID = 1L;
 
-	private Integer site_id;
-	private String ipaddr;
-	private String discover_status;
+	@EmbeddedId
+	private DhcpIpStatusPK id;
+
+	@Column(name="discover_status")
+	private String discoverStatus;
+
 	private String duid;
+
 	private String fingerprint;
-	private String host_os;
-	private String host_name;
-	private String ip_type;
-	private Boolean is_conflict;
-	private Boolean is_never_ends;
-	private Boolean is_never_start;
-	private String conflict_types;
-	private Timestamp last_discovered;
-	private Timestamp lease_end_time;
-	private Timestamp lease_start_time;
-	private String lease_state;
+
+	@Column(name="host_os")
+	private String hostOs;
+
+	private String hostname;
+
+	@Column(name="ip_type")
+	private String ipType;
+
+	@Column(name="is_conflict")
+	private Boolean isConflict;
+
+	@Column(name="last_discovered")
+	private Timestamp lastDiscovered;
+
+	@Column(name="lease_end_time")
+	private Timestamp leaseEndTime;
+
+	@Column(name="lease_start_time")
+	private Timestamp leaseStartTime;
+
+	@Column(name="lease_state")
+	private String leaseState;
+
 	private String macaddr;
+
 	private String network;
-	private String obj_types;
+
+	@Column(name="obj_types")
+	private String objTypes;
+
 	private String status;
-	private Timestamp update_time;
+
+	@Column(name="update_time")
+	private Timestamp updateTime;
+
 	private String usage;
-	private String user_description;
+
+	@Column(name="user_description")
+	private String userDescription;
 
 	public DhcpIpStatus() {
+	}
+
+	public DhcpIpStatusPK getId() {
+		return this.id;
+	}
+
+	public void setId(DhcpIpStatusPK id) {
+		this.id = id;
+	}
+
+	public String getDiscoverStatus() {
+		return this.discoverStatus;
+	}
+
+	public void setDiscoverStatus(String discoverStatus) {
+		this.discoverStatus = discoverStatus;
 	}
 
 	public String getDuid() {
@@ -52,67 +101,67 @@ public class DhcpIpStatus implements Serializable {
 	}
 
 	public String getHostOs() {
-		return this.host_os;
+		return this.hostOs;
 	}
 
 	public void setHostOs(String hostOs) {
-		this.host_os = hostOs;
+		this.hostOs = hostOs;
 	}
 
 	public String getHostname() {
-		return this.host_name;
+		return this.hostname;
 	}
 
 	public void setHostname(String hostname) {
-		this.host_name = hostname;
+		this.hostname = hostname;
 	}
 
 	public String getIpType() {
-		return this.ip_type;
+		return this.ipType;
 	}
 
 	public void setIpType(String ipType) {
-		this.ip_type = ipType;
+		this.ipType = ipType;
 	}
 
 	public Boolean getIsConflict() {
-		return this.is_conflict;
+		return this.isConflict;
 	}
 
 	public void setIsConflict(Boolean isConflict) {
-		this.is_conflict = isConflict;
+		this.isConflict = isConflict;
 	}
 
 	public Timestamp getLastDiscovered() {
-		return this.last_discovered;
+		return this.lastDiscovered;
 	}
 
 	public void setLastDiscovered(Timestamp lastDiscovered) {
-		this.last_discovered = lastDiscovered;
+		this.lastDiscovered = lastDiscovered;
 	}
 
 	public Timestamp getLeaseEndTime() {
-		return this.lease_end_time;
+		return this.leaseEndTime;
 	}
 
 	public void setLeaseEndTime(Timestamp leaseEndTime) {
-		this.lease_end_time = leaseEndTime;
+		this.leaseEndTime = leaseEndTime;
 	}
 
 	public Timestamp getLeaseStartTime() {
-		return this.lease_start_time;
+		return this.leaseStartTime;
 	}
 
 	public void setLeaseStartTime(Timestamp leaseStartTime) {
-		this.lease_start_time = leaseStartTime;
+		this.leaseStartTime = leaseStartTime;
 	}
 
 	public String getLeaseState() {
-		return this.lease_state;
+		return this.leaseState;
 	}
 
 	public void setLeaseState(String leaseState) {
-		this.lease_state = leaseState;
+		this.leaseState = leaseState;
 	}
 
 	public String getMacaddr() {
@@ -132,11 +181,11 @@ public class DhcpIpStatus implements Serializable {
 	}
 
 	public String getObjTypes() {
-		return this.obj_types;
+		return this.objTypes;
 	}
 
 	public void setObjTypes(String objTypes) {
-		this.obj_types = objTypes;
+		this.objTypes = objTypes;
 	}
 
 	public String getStatus() {
@@ -148,11 +197,11 @@ public class DhcpIpStatus implements Serializable {
 	}
 
 	public Timestamp getUpdateTime() {
-		return this.update_time;
+		return this.updateTime;
 	}
 
 	public void setUpdateTime(Timestamp updateTime) {
-		this.update_time = updateTime;
+		this.updateTime = updateTime;
 	}
 
 	public String getUsage() {
@@ -164,59 +213,11 @@ public class DhcpIpStatus implements Serializable {
 	}
 
 	public String getUserDescription() {
-		return this.user_description;
+		return this.userDescription;
 	}
 
 	public void setUserDescription(String userDescription) {
-		this.user_description = userDescription;
-	}
-
-	public Integer getSiteId() {
-		return site_id;
-	}
-
-	public void setSiteId(Integer site_id) {
-		this.site_id = site_id;
-	}
-
-	public String getIpaddr() {
-		return ipaddr;
-	}
-
-	public void setIpaddr(String ipaddr) {
-		this.ipaddr = ipaddr;
-	}
-
-	public String getDiscoverStatus() {
-		return discover_status;
-	}
-
-	public void setDiscoverStatus(String discover_status) {
-		this.discover_status = discover_status;
-	}
-
-	public String getConflictTypes() {
-		return conflict_types;
-	}
-
-	public void setConflictTypes(String conflict_types) {
-		this.conflict_types = conflict_types;
-	}
-
-	public Boolean getIsNeverEnds() {
-		return is_never_ends;
-	}
-
-	public void setIsNeverEnds(Boolean is_never_ends) {
-		this.is_never_ends = is_never_ends;
-	}
-
-	public Boolean getIsNeverStart() {
-		return is_never_start;
-	}
-
-	public void setIsNeverStart(Boolean is_never_start) {
-		this.is_never_start = is_never_start;
+		this.userDescription = userDescription;
 	}
 
 }

@@ -1,65 +1,60 @@
 package com.shinwootns.ipm.data.entity;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.sql.Timestamp;
 
 
-/**
- * The persistent class for the dhcp_mac_filter database table.
- * 
- */
-@Entity
-@Table(name="dhcp_mac_filter")
-@NamedQuery(name="DhcpMacFilter.findAll", query="SELECT d FROM DhcpMacFilter d")
 public class DhcpMacFilter implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 
-	@EmbeddedId
-	private DhcpMacFilterPK id;
+	private Integer site_id;
+	private String filter_name;
+	private String filter_desc;
+	private Timestamp insert_time;
+	private Timestamp update_time;
 
-	@Column(name="filter_desc")
-	private String filterDesc;
+	public Integer getSiteId() {
+		return site_id;
+	}
 
-	@Column(name="insert_time")
-	private Timestamp insertTime;
+	public void setSiteId(Integer site_id) {
+		this.site_id = site_id;
+	}
 
-	@Column(name="update_time")
-	private Timestamp updateTime;
+	public String getFilterName() {
+		return filter_name;
+	}
+
+	public void setFilterName(String filter_name) {
+		this.filter_name = filter_name;
+	}
 
 	public DhcpMacFilter() {
 	}
 
-	public DhcpMacFilterPK getId() {
-		return this.id;
-	}
-
-	public void setId(DhcpMacFilterPK id) {
-		this.id = id;
-	}
-
 	public String getFilterDesc() {
-		return this.filterDesc;
+		return this.filter_desc;
 	}
 
 	public void setFilterDesc(String filterDesc) {
-		this.filterDesc = filterDesc;
+		this.filter_desc = filterDesc;
 	}
 
 	public Timestamp getInsertTime() {
-		return this.insertTime;
+		return this.insert_time;
 	}
 
 	public void setInsertTime(Timestamp insertTime) {
-		this.insertTime = insertTime;
+		this.insert_time = insertTime;
 	}
 
 	public Timestamp getUpdateTime() {
-		return this.updateTime;
+		return this.update_time;
 	}
 
 	public void setUpdateTime(Timestamp updateTime) {
-		this.updateTime = updateTime;
+		this.update_time = updateTime;
 	}
 
 }
