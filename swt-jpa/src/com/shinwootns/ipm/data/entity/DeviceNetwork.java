@@ -1,59 +1,27 @@
 package com.shinwootns.ipm.data.entity;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.sql.Timestamp;
 
 
-/**
- * The persistent class for the device_network database table.
- * 
- */
-@Entity
-@Table(name="device_network")
-@NamedQuery(name="DeviceNetwork.findAll", query="SELECT d FROM DeviceNetwork d")
 public class DeviceNetwork implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@Column(name="device_id")
-	private Integer deviceId;
-
+	private Integer device_id;
 	private String description;
-
-	@Column(name="device_type")
-	private String deviceType;
-
+	private String device_type;
 	private String host;
-
-	@Column(name="host_name")
-	private String hostName;
-
-	@Column(name="insert_time")
-	private Timestamp insertTime;
-
+	private String host_name;
+	private Timestamp insert_time;
 	private String model;
-
-	@Column(name="service_type")
-	private Integer serviceType;
-
-	@Column(name="site_id")
-	private Integer siteId;
-
-	@Column(name="snmp_community")
-	private String snmpCommunity;
-
-	@Column(name="snmp_version")
-	private Integer snmpVersion;
-
-	@Column(name="sys_location")
-	private String sysLocation;
-
-	@Column(name="sys_oid")
-	private String sysOid;
-
-	@Column(name="update_time")
-	private Timestamp updateTime;
+	private Integer service_type;
+	private Integer site_id;
+	private String snmp_community;
+	private Integer snmp_version;
+	private String sys_location;
+	private String sys_oid;
+	private Timestamp update_time;
 
 	private String vendor;
 
@@ -61,11 +29,11 @@ public class DeviceNetwork implements Serializable {
 	}
 
 	public Integer getDeviceId() {
-		return this.deviceId;
+		return this.device_id;
 	}
 
 	public void setDeviceId(Integer deviceId) {
-		this.deviceId = deviceId;
+		this.device_id = deviceId;
 	}
 
 	public String getDescription() {
@@ -77,11 +45,11 @@ public class DeviceNetwork implements Serializable {
 	}
 
 	public String getDeviceType() {
-		return this.deviceType;
+		return this.device_type;
 	}
 
 	public void setDeviceType(String deviceType) {
-		this.deviceType = deviceType;
+		this.device_type = deviceType;
 	}
 
 	public String getHost() {
@@ -93,19 +61,19 @@ public class DeviceNetwork implements Serializable {
 	}
 
 	public String getHostName() {
-		return this.hostName;
+		return this.host_name;
 	}
 
 	public void setHostName(String hostName) {
-		this.hostName = hostName;
+		this.host_name = hostName;
 	}
 
 	public Timestamp getInsertTime() {
-		return this.insertTime;
+		return this.insert_time;
 	}
 
 	public void setInsertTime(Timestamp insertTime) {
-		this.insertTime = insertTime;
+		this.insert_time = insertTime;
 	}
 
 	public String getModel() {
@@ -117,59 +85,59 @@ public class DeviceNetwork implements Serializable {
 	}
 
 	public Integer getServiceType() {
-		return this.serviceType;
+		return this.service_type;
 	}
 
 	public void setServiceType(Integer serviceType) {
-		this.serviceType = serviceType;
+		this.service_type = serviceType;
 	}
 
 	public Integer getSiteId() {
-		return this.siteId;
+		return this.site_id;
 	}
 
 	public void setSiteId(Integer siteId) {
-		this.siteId = siteId;
+		this.site_id = siteId;
 	}
 
 	public String getSnmpCommunity() {
-		return this.snmpCommunity;
+		return this.snmp_community;
 	}
 
 	public void setSnmpCommunity(String snmpCommunity) {
-		this.snmpCommunity = snmpCommunity;
+		this.snmp_community = snmpCommunity;
 	}
 
 	public Integer getSnmpVersion() {
-		return this.snmpVersion;
+		return this.snmp_version;
 	}
 
 	public void setSnmpVersion(Integer snmpVersion) {
-		this.snmpVersion = snmpVersion;
+		this.snmp_version = snmpVersion;
 	}
 
 	public String getSysLocation() {
-		return this.sysLocation;
+		return this.sys_location;
 	}
 
 	public void setSysLocation(String sysLocation) {
-		this.sysLocation = sysLocation;
+		this.sys_location = sysLocation;
 	}
 
 	public String getSysOid() {
-		return this.sysOid;
+		return this.sys_oid;
 	}
 
 	public void setSysOid(String sysOid) {
-		this.sysOid = sysOid;
+		this.sys_oid = sysOid;
 	}
 
 	public Timestamp getUpdateTime() {
-		return this.updateTime;
+		return this.update_time;
 	}
 
 	public void setUpdateTime(Timestamp updateTime) {
-		this.updateTime = updateTime;
+		this.update_time = updateTime;
 	}
 
 	public String getVendor() {

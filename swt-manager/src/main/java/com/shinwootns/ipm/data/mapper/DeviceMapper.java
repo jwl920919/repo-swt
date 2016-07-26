@@ -6,14 +6,24 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.shinwootns.ipm.data.entity.DeviceDhcp;
+import com.shinwootns.ipm.data.entity.DeviceInsight;
 
 @Mapper
 public interface DeviceMapper {
 	
 	// DHCP
-	List<DeviceDhcp> selectDeviceDhcp();
-	List<DeviceDhcp> selectDeviceDhcpBySiteId(@Param("site_id")int site_id);
+	List<DeviceDhcp> selectDhcp();
+	List<DeviceDhcp> selectDhcpBySiteId(@Param("site_id")int site_id);
+	DeviceDhcp selectDhcpByInsightHost(@Param("host")String host);
 
+	
+	// Insight
+	List<DeviceInsight> selectInsight();
+	DeviceInsight selectInsightByDeviceId(@Param("device_id")int device_id);
+	int insertInsight(DeviceInsight device);
+	int updateInsight(DeviceInsight device);
+	int deleteInsight(DeviceInsight device);
+	
 	/*
 	// SELECT device_nfo
 	List<DeviceEntity> selectDevice();

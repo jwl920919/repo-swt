@@ -33,26 +33,67 @@ public class ApplicationProperty {
 	
 	@Value("${ipm.debug.enable_insert_event:true}")
 	public boolean enableInsertEvent;
+	
+	@Value("${ipm.debug.enable_device_collect:true}")
+	public boolean enableDeviceCollect;
 	//}} Debug Mode
 	
+	// Redis
+	@Value("${ipm.redis.host:127.0.0.1}")
+	public String redisHost;
+	
+	@Value("${ipm.redis.port:6379}")
+	public int redisPort;
+	
+	@Value("${ipm.redis.password}")
+	public String redisPassword;
+
+	@Value("${ipm.redis.timeout:0}")
+	public int redisTimeout;
+	
+	// Rabbitmq
+	@Value("${ipm.rabbitmq.host:127.0.0.1}")
+	public String rabbitmqHost;
+	
+	@Value("${ipm.rabbitmq.port:5672}")
+    public int rabbitmqPort;
+    
+	@Value("${ipm.rabbitmq.username}")
+    public String rabbitmqUsername;
+	
+	@Value("${ipm.rabbitmq.password}")
+	public String rabbitmqPassword;
+	
+	@Value("${ipm.rabbitmq.virtual-host:/}")
+    public String virtualHost;
 	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		
-		sb.append( "\n====================================================\n" );
+		sb.append( "\n------------------------------------------------------------\n" );
 		sb.append( String.format("%-30s = %s\n", "ipm.name", this.name ) );
 		sb.append( String.format("%-30s = %s\n", "ipm.version", this.version ) );
 		sb.append( String.format("%-30s = %s\n", "ipm.license", this.license ) );
 		sb.append( String.format("%-30s = %s\n", "ipm.cluster.mode", this.clusterMode ) );
 		sb.append( String.format("%-30s = %s\n", "ipm.cluster.slave-index", this.clusterSalveIndex ) );
 		
+		sb.append( String.format("%-30s = %s\n", "ipm.redis.host", this.redisHost ) );
+		sb.append( String.format("%-30s = %s\n", "ipm.redis.port", this.redisPort ) );
+		sb.append( String.format("%-30s = %s\n", "ipm.redis.timeout", this.redisTimeout ) );
+		
+		sb.append( String.format("%-30s = %s\n", "ipm.rabbitmq.host", this.rabbitmqHost ) );
+		sb.append( String.format("%-30s = %s\n", "ipm.rabbitmq.port", this.rabbitmqPort ) );
+		sb.append( String.format("%-30s = %s\n", "ipm.rabbitmq.virtual-host", this.virtualHost ) );
+		
+		
 		if (debugEnable) {
 			sb.append( String.format("%-30s = %s\n", "ipm.debug.enable", (this.debugEnable)? "true":"false" ) );
 			sb.append( String.format("%-30s = %s\n", "ipm.debug.enable_recv_syslog", (this.enableRecvSyslog)? "true":"false" ) );
 			sb.append( String.format("%-30s = %s\n", "ipm.debug.enable_insert_event", (this.enableInsertEvent)? "true":"false" ) );
+			sb.append( String.format("%-30s = %s\n", "ipm.debug.enable_device_collect", (this.enableDeviceCollect)? "true":"false" ) );
 		}
-		sb.append( "====================================================\n" );
+		sb.append( "------------------------------------------------------------" );
 		
 		return sb.toString();
 	}

@@ -5,6 +5,30 @@
 	padding-left: 15px;
 	padding-top: 5px;
 	padding-right: 15px;
+	margin-top: 5px;
+}
+
+.pagebox-header {
+	color: #444;
+	display: block;
+	padding: 10px 10px 8px 10px;
+	position: relative
+}
+
+.pagebox-header.with-border {
+	border-bottom: 1px solid #f4f4f4
+}
+
+.pagebbox-header.with-border {
+}
+
+.pagebox-header>.fa, .pagebox-header>.glyphicon, .pagebox-header>.ion, .pagebox-header .pagebox-title-small
+{
+	vertical-align: middle;
+	display: inline-block;
+	font-size: 16px;
+	margin: 0;
+	line-height: 1
 }
 
 div.row {

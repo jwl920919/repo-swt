@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.shinwootns.ipm.SpringBeanProvider;
+import com.shinwootns.ipm.config.ApplicationProperty;
 import com.shinwootns.ipm.data.entity.DeviceDhcp;
 import com.shinwootns.ipm.data.mapper.DeviceMapper;
 import com.shinwootns.ipm.data.mapper.EventMapper;
@@ -30,8 +31,24 @@ public class DeviceCollectWorker extends BaseWorker {
 		this._index = _index;
 	}
 	
+	private boolean isSkipInDebugMode() {
+		// get ApplicationProperty
+		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
+		if (appProperty == null)
+			return true;
+		
+		// debug_insert_event_enable
+		if (appProperty.enableDeviceCollect == false)
+			return true;
+		
+		return false;
+	}
+	
 	@Override
 	public void run() {
+		
+		if (isSkipInDebugMode())
+			return;
 		
 		_logger.info(String.format("DeviceCollectWorker#%d... start.", this._index));
 		
@@ -58,7 +75,7 @@ public class DeviceCollectWorker extends BaseWorker {
 		if (deviceMapper == null)
 			return;
 		
-		List<DeviceDhcp> listDhcp = deviceMapper.selectDeviceDhcp();
+		List<DeviceDhcp> listDhcp = deviceMapper.selectDhcp();
 		
 		updateDeviceDhcp(listDhcp);
 		

@@ -3,8 +3,6 @@ package test.mq;
 import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
-import org.junit.Test;
-
 import com.shinwootns.common.mq.MQManager;
 import com.shinwootns.common.mq.client.*;
 import com.shinwootns.common.mq.MQManager.MQClientType;

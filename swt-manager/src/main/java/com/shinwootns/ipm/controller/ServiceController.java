@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.shinwootns.ipm.SpringBeanProvider;
 import com.shinwootns.ipm.config.ApplicationProperty;
 import com.shinwootns.ipm.service.handler.RedisHandler;
+import com.shinwootns.ipm.service.manager.ClusterManager;
 import com.shinwootns.ipm.worker.WorkerManager;
 
 @RestController
@@ -29,7 +30,7 @@ public class ServiceController {
 	private ApplicationContext context;
 	
 	@PostConstruct
-	public void startService() {
+	public void startService() throws Exception {
 		
 		SecurityContextHolder
 			.getContext()
@@ -50,9 +51,12 @@ public class ServiceController {
 		
 		_logger.info(appProperty.toString());
 		
+		
+		// Redis
+		RedisHandler.getInstance().Connect();
+		
 		// Cluster Info
-		RedisHandler.getInstance().registClusterRank();
-		RedisHandler.getInstance().updateClusterMember();
+		ClusterManager.getInstance().updateClusterMember();
 		
 		// Start
 		WorkerManager.getInstance().start();

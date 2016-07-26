@@ -11,13 +11,22 @@ import com.shinwootns.common.network.SyslogEntity;
 import com.shinwootns.common.stp.PoolStatus;
 import com.shinwootns.common.stp.SmartThreadPool;
 import com.shinwootns.common.utils.TimeUtils;
+import com.shinwootns.ipm.collector.data.SharedData;
 import com.shinwootns.ipm.collector.worker.persist.SyslogWorker;
 
 public class WorkerManager {
 	
 	private final Logger _logger = Logger.getLogger(this.getClass());
 	
+	private static final int SCHEDULER_WORKER_COUNT = 1;
 	private static final int SYSLOG_WORKER_COUNT = 3;
+	
+	// Task
+	private static final int TASK_MIN_COUNT = 32;
+	private static final int TASK_MAX_COUNT = 32;
+	private static final int TASK_LIMIT_COUNT = 32;
+	
+	private SmartThreadPool _taskPool = new SmartThreadPool();
 	
 	// Singleton
 	private static WorkerManager _instance = null;
@@ -34,16 +43,15 @@ public class WorkerManager {
 	private SmartThreadPool _workerPool = new SmartThreadPool();
 	
 	
-	// Syslog Queue
-	public java.util.Queue<SyslogEntity> syslogQueue = new ConcurrentLinkedQueue<SyslogEntity>();
-	
-	
 	// Start
 	public synchronized void start() {
 
 		_logger.info("ServiceManager... start");
-
-		if (_workerPool.createPool(SYSLOG_WORKER_COUNT, SYSLOG_WORKER_COUNT, SYSLOG_WORKER_COUNT)) {
+		
+		// Worker Pool
+		int totalCount = SCHEDULER_WORKER_COUNT + SYSLOG_WORKER_COUNT;
+				
+		if (_workerPool.createPool(totalCount, totalCount, totalCount)) {
 			
 			// Start Producer Worker
 			for(int i=1; i<=SYSLOG_WORKER_COUNT; i++)
@@ -55,6 +63,14 @@ public class WorkerManager {
 			_logger.fatal("[FATAL] Failed to create syslog-analyzer worker pool !!!");
 			return;
 		}
+		
+		// Task Pool
+		if (_taskPool.createPool(TASK_MIN_COUNT, TASK_MAX_COUNT, TASK_LIMIT_COUNT)) {
+			_logger.info("Create task pool... ok");
+		}
+		else {
+			_logger.fatal("[FATAL] Failed to create task-pool !!!");
+		}
 	}
 	
 	// Add Syslog Task
@@ -64,7 +80,7 @@ public class WorkerManager {
 		
 		while(bResult == false)
 		{
-			bResult = syslogQueue.add(syslog);
+			bResult = SharedData.getInstance().syslogQueue.add(syslog);
 			
 			if (bResult)
 				break;
@@ -91,7 +107,7 @@ public class WorkerManager {
 		
 		while(count < popCount )
 		{
-			SyslogEntity syslog = syslogQueue.poll();
+			SyslogEntity syslog = SharedData.getInstance().syslogQueue.poll();
 			
 			if (syslog != null)
 			{
@@ -114,14 +130,24 @@ public class WorkerManager {
 	}
 	
 	// Pool Status
-	public synchronized PoolStatus GetPoolStatus() {
+	public synchronized PoolStatus GetWorkPoolStatus() {
 		return _workerPool.getPoolStatus();
+	}
+	
+	public synchronized PoolStatus GetTaskPoolStatus() {
+		return _taskPool.getPoolStatus();
 	}
 	
 	public synchronized void stop()
 	{
 		_workerPool.shutdownAndWait();
 		
+		_taskPool.shutdownAndWait();
+		
 		_logger.info("ServiceManager....... stop");
+	}
+	
+	public void AddTask(BaseWorker task) {
+		_taskPool.addTask(task);
 	}
 }

@@ -1,5 +1,7 @@
 package com.shinwootns.ipm.config;
 
+/*
+
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -16,9 +18,6 @@ public class AmqpConfig {
 	
 	private final static String SYSLOG_QUEUE_NAME = "ipm.syslog";
 	private final static int AMQP_RECONNECT_TIME = 5000;
-	
-	@Autowired
-	private ApplicationProperty appProperty;
 	
 	@Autowired
 	private RabbitTemplate rabbitTemplate;
@@ -41,11 +40,6 @@ public class AmqpConfig {
 	@Bean
 	SimpleMessageListenerContainer container(ConnectionFactory connectionFactory, MessageListenerAdapter listenerAdapter) {
 		
-		// Debug - Skip recv syslog
-		if ( appProperty.debugEnable && appProperty.enableRecvSyslog == false ) {
-			return null;
-		}
-		
 		SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
 		container.setConnectionFactory(connectionFactory);
 		
@@ -61,3 +55,5 @@ public class AmqpConfig {
 		return container;
 	}
 }
+
+*/

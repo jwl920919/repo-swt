@@ -1,77 +1,44 @@
 package com.shinwootns.ipm.data.entity;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.sql.Timestamp;
 
-
-/**
- * The persistent class for the device_dhcp database table.
- * 
- */
-@Entity
-@Table(name="device_dhcp")
-@NamedQuery(name="DeviceDhcp.findAll", query="SELECT d FROM DeviceDhcp d")
 public class DeviceDhcp implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@Column(name="device_id")
-	private Integer deviceId;
-
-	@Column(name="device_name")
-	private String deviceName;
-
+	private Integer device_id;
+	private String device_name;
 	private String host;
-
-	@Column(name="insert_time")
-	private Timestamp insertTime;
-
+	private Timestamp insert_time;
 	private String model;
-
-	@Column(name="site_id")
-	private Integer siteId;
-
-	@Column(name="snmp_community")
-	private String snmpCommunity;
-
-	@Column(name="snmp_version")
-	private Integer snmpVersion;
-
-	@Column(name="sys_location")
-	private String sysLocation;
-
-	@Column(name="sys_oid")
-	private String sysOid;
-
-	@Column(name="update_time")
-	private Timestamp updateTime;
-
+	private Integer site_id;
+	private String snmp_community;
+	private Integer snmp_version;
+	private String sys_location;
+	private String sys_oid;
+	private Timestamp update_time;
 	private String vendor;
-
-	@Column(name="wapi_password")
-	private String wapiPassword;
-
-	@Column(name="wapi_userid")
-	private String wapiUserid;
+	private String wapi_password;
+	private String wapi_userid;
 
 	public DeviceDhcp() {
 	}
 
 	public Integer getDeviceId() {
-		return this.deviceId;
+		return this.device_id;
 	}
 
 	public void setDeviceId(Integer deviceId) {
-		this.deviceId = deviceId;
+		this.device_id = deviceId;
 	}
 
 	public String getDeviceName() {
-		return this.deviceName;
+		return this.device_name;
 	}
 
 	public void setDeviceName(String deviceName) {
-		this.deviceName = deviceName;
+		this.device_name = deviceName;
 	}
 
 	public String getHost() {
@@ -83,11 +50,11 @@ public class DeviceDhcp implements Serializable {
 	}
 
 	public Timestamp getInsertTime() {
-		return this.insertTime;
+		return this.insert_time;
 	}
 
 	public void setInsertTime(Timestamp insertTime) {
-		this.insertTime = insertTime;
+		this.insert_time = insertTime;
 	}
 
 	public String getModel() {
@@ -99,51 +66,51 @@ public class DeviceDhcp implements Serializable {
 	}
 
 	public Integer getSiteId() {
-		return this.siteId;
+		return this.site_id;
 	}
 
 	public void setSiteId(Integer siteId) {
-		this.siteId = siteId;
+		this.site_id = siteId;
 	}
 
 	public String getSnmpCommunity() {
-		return this.snmpCommunity;
+		return this.snmp_community;
 	}
 
 	public void setSnmpCommunity(String snmpCommunity) {
-		this.snmpCommunity = snmpCommunity;
+		this.snmp_community = snmpCommunity;
 	}
 
 	public Integer getSnmpVersion() {
-		return this.snmpVersion;
+		return this.snmp_version;
 	}
 
 	public void setSnmpVersion(Integer snmpVersion) {
-		this.snmpVersion = snmpVersion;
+		this.snmp_version = snmpVersion;
 	}
 
 	public String getSysLocation() {
-		return this.sysLocation;
+		return this.sys_location;
 	}
 
 	public void setSysLocation(String sysLocation) {
-		this.sysLocation = sysLocation;
+		this.sys_location = sysLocation;
 	}
 
 	public String getSysOid() {
-		return this.sysOid;
+		return this.sys_oid;
 	}
 
 	public void setSysOid(String sysOid) {
-		this.sysOid = sysOid;
+		this.sys_oid = sysOid;
 	}
 
 	public Timestamp getUpdateTime() {
-		return this.updateTime;
+		return this.update_time;
 	}
 
 	public void setUpdateTime(Timestamp updateTime) {
-		this.updateTime = updateTime;
+		this.update_time = updateTime;
 	}
 
 	public String getVendor() {
@@ -155,19 +122,19 @@ public class DeviceDhcp implements Serializable {
 	}
 
 	public String getWapiPassword() {
-		return this.wapiPassword;
+		return this.wapi_password;
 	}
 
 	public void setWapiPassword(String wapiPassword) {
-		this.wapiPassword = wapiPassword;
+		this.wapi_password = wapiPassword;
 	}
 
 	public String getWapiUserid() {
-		return this.wapiUserid;
+		return this.wapi_userid;
 	}
 
 	public void setWapiUserid(String wapiUserid) {
-		this.wapiUserid = wapiUserid;
+		this.wapi_userid = wapiUserid;
 	}
 
 }

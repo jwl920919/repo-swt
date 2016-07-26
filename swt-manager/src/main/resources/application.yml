@@ -2,13 +2,24 @@
 # ipm
 #====================================
 ipm:
-  name: IPM
+  name: Smart IPM
   version: 0.1.1
   license: TEST000000
   cluster:
     mode: master    # master, slave
     slave-index: 0  # 0 ~ 99
-    
+  redis:
+    host: shinwootnskr.iptime.org
+    port: 6379
+    password: 7+AzHIrmzGDARTT1VaQa3Q==
+    timeout: 0
+  rabbitmq:
+    host: shinwootnskr.iptime.org
+    port: 5672
+    username: admin
+    password: 7+AzHIrmzGDARTT1VaQa3Q==
+    virtual-host: /
+
 #====================================
 # Security
 #====================================
@@ -36,19 +47,12 @@ spring:
       ddlAuto: none
       naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
   # amqp
-  rabbitmq:
-    host: shinwootnskr.iptime.org
-    port: 5672
-    username: admin
-    password: shinwoo123!
-    virtual-host: /
-  # Redis
-  redis:
-    host: shinwootnskr.iptime.org
-    port: 6379
-    password: shinwoo123!
-    timeout: 0
-    
+  #rabbitmq:
+  #  host: shinwootnskr.iptime.org
+  #  port: 5672
+  #  username: admin
+  #  password: shinwoo123!
+  #  virtual-host: /
 
 #====================================
 # banner

@@ -22,19 +22,26 @@ public class EventWorker extends BaseWorker {
 		this._index = _index;
 	}
 	
-	@Override
-	public void run() {
-		
-		_logger.info(String.format("EventWorker#%d... start.", this._index));
-		
+	private boolean isSkipInDebugMode() {
 		// get ApplicationProperty
 		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
 		if (appProperty == null)
-			return;
+			return true;
 		
 		// debug_insert_event_enable
 		if (appProperty.enableInsertEvent == false)
+			return true;
+		
+		return false;
+	}
+	
+	@Override
+	public void run() {
+		
+		if (isSkipInDebugMode())
 			return;
+		
+		_logger.info(String.format("EventWorker#%d... start.", this._index));
 		
 		// get EventMapper
 		EventMapper eventMapper = SpringBeanProvider.getInstance().getEventMapper();

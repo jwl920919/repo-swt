@@ -1,5 +1,6 @@
 package com.shinwootns.ipm;
 
+/*
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -16,3 +17,4 @@ public class SwtCollectorApplicationTests {
 	}
 
 }
+*/

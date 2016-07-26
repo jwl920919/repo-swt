@@ -3,62 +3,51 @@
         
 <mapper namespace="com.shinwootns.ipm.data.mapper.DeviceMapper">
 
-	<select id="selectDeviceDhcp" resultType="com.shinwootns.ipm.data.entity.DeviceDhcp">
-		<![CDATA[
-			SELECT * FROM device_dhcp
-		]]>
+	<!-- ############################ DHCP ############################ -->
+	<select id="selectDhcp" resultType="com.shinwootns.ipm.data.entity.DeviceDhcp">
+		SELECT * FROM device_dhcp WHERE 1=1
+		<if test="device_id != null">
+			AND device_id = #{device_id}
+		</if>
 	</select>
 	
-	<select id="selectDeviceDhcpBySiteId" resultType="com.shinwootns.ipm.data.entity.DeviceDhcp">
-		<![CDATA[
-			SELECT dhcp.* 
-			FROM device_dhcp dhcp, site_info site
-			WHERE dhcp.site_id = site.site_id
-			AND site.site_id = #{site_id}
-		]]>
-	</select>
-
-	<!-- 
-	<select id="selectDevice" resultType="com.shinwootns.ipm.data.entity.DeviceEntity">
-		<![CDATA[
-			SELECT device_id, site_id, ipv4, ipv6, device_name, device_type, snmp_community, 
-				snmp_version, vendor, model, service_type, sys_oid, sys_location, 
-				api_type, api_version, api_userid, api_password, description, 
-				insert_time, update_time
-			FROM device_info dev, SITE_INFO site
-			WHERE dev.site_id = site.site_id
-		]]>
-	</select>
-
-
-	<select id="selectDeviceByType" resultType="com.shinwootns.ipm.data.entity.DeviceEntity">
-		<![CDATA[
-			SELECT dev.*
-			FROM device_info dev, SITE_INFO site
-			WHERE dev.site_id = site.site_id
-			AND dev.device_type = #{device_type}
-		]]>
+	<select id="selectDhcpByInsightHost" resultType="com.shinwootns.ipm.data.entity.DeviceDhcp">
+		SELECT dhcp.*
+		FROM site_info site, device_dhcp dhcp, device_insight ins
+		WHERE site.site_id = dhcp.site_id
+		AND dhcp.site_id = ins.site_id
+		AND ins.host = #{host}
 	</select>
 	
-	<select id="selectDeviceById" resultType="com.shinwootns.ipm.data.entity.DeviceEntity">
-		<![CDATA[
-			SELECT dev.*
-			FROM device_info dev, SITE_INFO site
-			WHERE dev.site_id = site.site_id
-			AND dev.device_id = #{device_id}
-		]]>
+	<!-- ############################ Insight ############################ -->
+	<select id="selectInsight" resultType="com.shinwootns.ipm.data.entity.DeviceInsight">
+		SELECT * FROM device_insight
 	</select>
+	
+	<select id="selectInsightByDeviceId" resultType="com.shinwootns.ipm.data.entity.DeviceInsight">
+		SELECT * FROM device_insight 
+		WHERE device_id = #{device_id}
+	</select>
+	
+	<insert id="insertInsight" parameterType="com.shinwootns.ipm.data.entity.DhcpNetwork">
+		<![CDATA[
+			INSERT INTO device_insight (site_id, host, version, insert_time, update_time)
+			VALUES ( #{site_id}, #{host}, #{version}, now(), now() ) 
+		]]>
+	</insert>
+	
+	<update id="updateInsight" parameterType="com.shinwootns.ipm.data.entity.DhcpNetwork">
+		<![CDATA[
+			UPDATE device_insight
+			SET site_id=#{site_id}, host=#{host}, port=#{port}, version=#{version}, enable_collect=#{enable_collect}, update_time=now()
+			WHERE device_id=#{device_id}
+		]]>
+	</update>
+	
+	<delete id="deleteInsight">
+		<![CDATA[
+			DELETE FROM device_insight WHERE device_id=#{device_id}
+		]]>
+	</delete>
 
-	<update id="updateDevice" parameterType="com.shinwootns.ipm.data.entity.DeviceEntity">
-        UPDATE device_info 
-        SET	device_name = #{device_name}
-        	<if test="vendor != null">, vendor = #{vendor}</if>
-        	<if test="model != null">, model = #{model}</if>
-        	, service_type = #{service_type}
-        	, sys_oid = #{sys_oid}
-        	, sys_location = #{sys_location}
-        	, update_time = now()
-        WHERE device_id = #{device_id}
-    </update>
-    -->
 </mapper>

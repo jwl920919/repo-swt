@@ -1,9 +1,9 @@
 package com.shinwootns.ipm.service.handler;
 
-import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gson.JsonObject;
 import com.shinwootns.common.utils.JsonUtils;
 import com.shinwootns.ipm.data.SharedData;
 
@@ -19,7 +19,7 @@ public class AmqpRecvHandler {
 				return;
 					
 			// Parse
-			JSONObject jObj = JsonUtils.parseJSONObject(message);
+			JsonObject jObj = JsonUtils.parseJsonObject(message);
 			
 			// Put Queue
 			if ( SharedData.getInstance().syslogQueue.put(jObj) )

@@ -96,7 +96,7 @@ public class IPManagementActionController {
 			
 			String siteID = session.getAttribute("site_id").toString();
 			if (!siteID.equals("")) {
-				parameters.put("siteid", Integer.parseInt(session.getAttribute("site_id").toString()));
+				parameters.put("siteid", Integer.parseInt(siteID));
 				parameters.put("network", m_network);
 				parameters.put("time_zone", m_timezone);
 				

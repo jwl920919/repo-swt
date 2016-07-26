@@ -231,9 +231,11 @@ public class HttpClient {
 			
 			if (contentType != null)
 				postRequest.setHeader("Context-Type", contentType.toString());
-
-			List<NameValuePair> paramList = convertParam(params);
-			postRequest.setEntity(new UrlEncodedFormEntity(paramList, _encoding));
+			
+			if (params != null) {
+				List<NameValuePair> paramList = convertParam(params);
+				postRequest.setEntity(new UrlEncodedFormEntity(paramList, _encoding));
+			}
 			
 			// String Entity
 			// StringEntity inputEntity = new StringEntity(inputValue);
@@ -366,7 +368,7 @@ public class HttpClient {
 		
 		List<NameValuePair> paramList = new ArrayList<NameValuePair>();
 
-		if (params.keySet() != null) {
+		if (params != null && params.keySet() != null) {
 			Iterator<String> keys = params.keySet().iterator();
 			while (keys.hasNext()) {
 

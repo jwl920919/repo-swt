@@ -1,5 +1,6 @@
 package com.shinwootns.common.cache;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -54,6 +55,24 @@ public class RedisClient {
 		}
 	}
 	//endregion
+	
+	public HashSet<String> keys(String pattern) {
+		
+		HashSet<String> keys = new HashSet<String>();
+		
+		try {
+			
+			if (this._redis != null)
+			{
+				keys.addAll( this._redis.keys(pattern) );
+			}
+		}
+		catch(Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+		}
+		
+		return keys;
+	}
 	
 	//region get / set / delete / isExist
 	public boolean set(String key, String value) {

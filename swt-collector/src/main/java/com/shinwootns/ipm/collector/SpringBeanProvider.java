@@ -1,7 +1,6 @@
 package com.shinwootns.ipm.collector;
 
 import org.apache.log4j.Logger;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -54,8 +53,9 @@ public class SpringBeanProvider {
     	return appProperty;
     }
     
+    /*
     // RabbitTemplate
     public RabbitTemplate getRabbitTemplate() {
     	return _context.getBean("rabbitTemplate", RabbitTemplate.class);
-    }
+    }*/
 }

@@ -1,139 +1,201 @@
 package com.shinwootns.common.utils;
 
+import java.io.ObjectOutputStream;
+import java.lang.reflect.Type;
 import java.sql.Timestamp;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import com.rabbitmq.tools.json.JSONSerializable;
 
 public class JsonUtils {
 	
-	public static JSONArray parseJSONArray(String data) throws ParseException {
+	//region Parse JSONArray
+	public static JsonArray parseJsonArray(String data) {
 		
-		Object obj = (new JSONParser()).parse(data);
+		JsonElement ele = (new JsonParser()).parse(data);
 		
-		if (obj != null && obj instanceof JSONArray)
-			return (JSONArray)obj;
-		
-		return null;
+		return ele.getAsJsonArray();
 	}
+	//endregion
 	
-	public static JSONObject parseJSONObject(String data) throws ParseException {
+	//region Parse JSONObject
+	public static JsonObject parseJsonObject(String data) {
 		
-		Object obj = (new JSONParser()).parse(data);
+		JsonElement ele = (new JsonParser()).parse(data);
 		
-		if (obj != null && obj instanceof JSONObject)
-			return (JSONObject)obj;
-		
-		return null;
+		return ele.getAsJsonObject();
 	}
+	//endregion
 	
-	public static String getValueToString(JSONObject jObj, String key, String defaultValue) {
+	//region getValueFromJson
+	public static String getValueToString(JsonElement jEle, String key, String defaultValue) {
 		
-		if (jObj == null)
+		if (jEle == null || jEle instanceof JsonObject == false)
 			return defaultValue;
 		
-		Object value = jObj.get(key);
+		JsonElement dataEle = jEle.getAsJsonObject().get(key);
 		
-		if (value == null)
+		if (dataEle == null)
+			return defaultValue;
+
+		return dataEle.getAsString();
+	}
+
+	public static String getMergeValueToString(JsonElement jEle, String key, String defaultValue) {
+		
+		if (jEle == null || jEle instanceof JsonObject == false)
 			return defaultValue;
 		
+		JsonElement dataEle = jEle.getAsJsonObject().get(key);
 		
-		if (value instanceof JSONArray) {
+		if (dataEle == null)
+			return defaultValue;
+		
+		if (dataEle instanceof JsonArray) {
 			
 			StringBuilder sb = new StringBuilder();
 			
-			Iterator iter = ((JSONArray)value).iterator();
+			JsonArray jArray = dataEle.getAsJsonArray();
+			
+			Iterator<JsonElement> iter = jArray.iterator();
 
 			while(iter != null && iter.hasNext()) {
 				
-				Object data = (String)iter.next();
+				JsonElement child = iter.next();
 				
 				if (sb.length() > 0)
  					sb.append(",");
 				
-				if (data instanceof JSONObject) {
-					sb.append( ((JSONObject)data).values().toString() );
-				}
-				else {
-					sb.append(data.toString());
-				}
+				sb.append( child.getAsString() );
 			}
 			
 			return sb.toString();
 		}
 		else {
-			return (String)value;
+			return dataEle.getAsString();
 		}
 	}
 	
-	public static long getValueToNumber(JSONObject jObj, String key, long defaultValue) {
+	public static long getValueToNumber(JsonObject jObj, String key, long defaultValue) {
 		
 		if (jObj == null)
 			return defaultValue;
 		
-		Object value = jObj.get(key);
+		JsonElement ele = jObj.get(key);
 		
-		if (value == null)
+		if (ele == null)
 			return defaultValue;
 		
-		if (value instanceof Integer)
-			return (Long)value;
-		else if (value instanceof String)
-			return Long.parseLong((String)value);
-		
-		return (Long)value;
+		return ele.getAsNumber().longValue();
 	}
 	
-	public static boolean getValueToBoolean(JSONObject jObj, String key, boolean defaultValue) {
+	public static boolean getValueToBoolean(JsonObject jObj, String key, boolean defaultValue) {
 		
 		if (jObj == null)
 			return defaultValue;
 		
-		Object value = jObj.get(key);
+		JsonElement ele = jObj.get(key);
 		
-		if (value == null)
+		if (ele == null)
 			return defaultValue;
 		
-		if (value instanceof Boolean) {
-			return (Boolean)value;
-		}
-		else if (value instanceof Integer) {
-			return ((Integer)value) == 0 ? false : true;
-		}
-		else if (value instanceof String) {
+		return ele.getAsBoolean();
+	}
+	
+	public static Timestamp getValueToTimestamp(JsonObject jObj, String key, long defaultValue) {
+		
+		if (jObj == null)
+			return new Timestamp(defaultValue);
+		
+		JsonElement ele = jObj.get(key);
+
+		return new Timestamp(ele.getAsNumber().longValue());
+	}
+	//endregion
+	
+	public static String serialize(Object obj){
+		return (new Gson()).toJson(obj);
+	}
+	
+	public Object deserialize(String json, Type typeof){
+		return (new Gson()).fromJson(json, typeof);
+	}
+
+	public static String toPrettyString(JsonElement ele) {
+		
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+		return gson.toJson(ele);
+	}
+	
+	/*
+	public static LinkedHashMap<Integer, String> getValueToString(JsonElement ele, String[] keys) {
+		
+		LinkedHashMap<Integer, String> mapResult = new LinkedHashMap<Integer, String>(); 
+		
+		LinkedList<JsonElement> listEle = new LinkedList<JsonElement>();
+		listEle.add(ele);
+		
+		for(String key : keys) {
 			
-			String tempValue = (String)value;
-			if ( tempValue.toUpperCase().equals("TRUE"))
-				return true;
-			else if ( ((String)value).toUpperCase().equals("FALSE") )
-				return false;
-			else
-				return defaultValue;
+			listEle = lookupChild(listEle, key);
 		}
 		
-		return defaultValue;
+		if (listEle != null) {
+			for(JsonElement result : listEle) {
+				System.out.println(result.toString());
+			}
+		}
+		
+		return mapResult;
 	}
 	
-	public static Timestamp getValueToTimestamp(JSONObject jObj, String key, long defaultValue) {
-		
-		if (jObj == null)
-			return new Timestamp(defaultValue);
-		
-		Object value = jObj.get(key);
+	private static LinkedList<JsonElement> lookupChild(LinkedList<JsonElement> listEle, String key) {
 
-		if (value == null)
-			return new Timestamp(defaultValue);
+		LinkedList<JsonElement> listResult = new LinkedList<JsonElement>();
 		
-		long time = defaultValue; 
+		for(JsonElement ele : listEle) {
 		
-		if (value instanceof Long)
-			time = (Long)value;
-		else if (value instanceof String)
-			time = Long.parseLong((String)value);
-
-		return new Timestamp(time);
-	}
+			if (ele instanceof JsonArray) {
+				JsonArray jArray = ele.getAsJsonArray();
+				
+				for(int i=0; i<jArray.size(); i++) {
+					JsonElement childEle = jArray.get(i);
+					
+					if (childEle instanceof JsonArray) {
+						//LinkedList<JsonElement> listEle = lookupChild(childEle, key);
+						//listResult.addAll(listEle);
+					}
+					else if (childEle instanceof JsonObject) {
+						JsonElement result = childEle.getAsJsonObject().get(key);
+						
+						if (result != null)
+							listResult.add(result);
+					}
+				}
+			}
+			else if (ele instanceof JsonObject) {
+				
+				JsonObject jObj = ele.getAsJsonObject();
+				
+				JsonElement result = jObj.get(key);
+				
+				if (result != null)
+					listResult.add(result);
+				
+				return listResult;
+			}
+		}
+		
+		return listResult;
+	}*/
 }
