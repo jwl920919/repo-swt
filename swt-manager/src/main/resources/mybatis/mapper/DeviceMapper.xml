@@ -11,6 +11,14 @@
 		</if>
 	</select>
 	
+	<select id="selectDhcpByInsightHost" resultType="com.shinwootns.ipm.data.entity.DeviceDhcp">
+		SELECT dhcp.*
+		FROM site_info site, device_dhcp dhcp, device_insight ins
+		WHERE site.site_id = dhcp.site_id
+		AND dhcp.site_id = ins.site_id
+		AND ins.host = #{host}
+	</select>
+	
 	<!-- ############################ Insight ############################ -->
 	<select id="selectInsight" resultType="com.shinwootns.ipm.data.entity.DeviceInsight">
 		SELECT * FROM device_insight

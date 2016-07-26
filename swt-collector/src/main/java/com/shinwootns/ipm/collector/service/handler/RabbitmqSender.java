@@ -1,7 +1,7 @@
 package com.shinwootns.ipm.collector.service.handler;
 
 import org.apache.log4j.Logger;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
+//import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
 import com.google.gson.JsonObject;
 import com.shinwootns.ipm.collector.SpringBeanProvider;
@@ -12,6 +12,8 @@ public class RabbitmqSender {
 	public static void SendData(JsonObject jobj, Logger _logger) {
 		
 		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
+		
+		/*
 		RabbitTemplate rabbitTemplate = SpringBeanProvider.getInstance().getRabbitTemplate();
 		
 		if (appProperty == null || rabbitTemplate == null)
@@ -34,6 +36,6 @@ public class RabbitmqSender {
 		}
 		catch(Exception ex) {
 			_logger.error(ex.getMessage(), ex);
-		}
+		}*/
 	}
 }

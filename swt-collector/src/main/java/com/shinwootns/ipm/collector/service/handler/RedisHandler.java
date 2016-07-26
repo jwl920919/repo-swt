@@ -1,17 +1,11 @@
-package com.shinwootns.ipm.service.handler;
-
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
+package com.shinwootns.ipm.collector.service.handler;
 
 import org.apache.log4j.Logger;
 
 import com.shinwootns.common.cache.RedisClient;
 import com.shinwootns.common.cache.RedisManager;
-import com.shinwootns.common.utils.CryptoUtils;
-import com.shinwootns.common.utils.SystemUtils;
-import com.shinwootns.ipm.SpringBeanProvider;
-import com.shinwootns.ipm.config.ApplicationProperty;
-import com.shinwootns.ipm.service.manager.ClusterManager;
+import com.shinwootns.ipm.collector.SpringBeanProvider;
+import com.shinwootns.ipm.collector.config.ApplicationProperty;
 
 public class RedisHandler {
 	
@@ -31,17 +25,13 @@ public class RedisHandler {
 	}
 
 	
-	public boolean Connect() throws Exception 
+	public boolean Connect() 
 	{
 		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
 		if (appProperty == null)
 			return false;
 		
-		if (rm.connect(
-				appProperty.redisHost, 
-				appProperty.redisPort, 
-				CryptoUtils.Decode_AES128(appProperty.redisPassword), 
-				0) == false)
+		if (rm.connect(appProperty.redisHost, appProperty.redisPort, appProperty.redisPassword, 0) == false)
 		{
 			System.out.println("Redis connection failed.");
 			return false;

@@ -17,7 +17,15 @@ public class WorkerManager {
 	
 	private final Logger _logger = Logger.getLogger(this.getClass());
 	
+	private static final int SCHEDULER_WORKER_COUNT = 1;
 	private static final int SYSLOG_WORKER_COUNT = 3;
+	
+	// Task
+	private static final int TASK_MIN_COUNT = 32;
+	private static final int TASK_MAX_COUNT = 32;
+	private static final int TASK_LIMIT_COUNT = 32;
+	
+	private SmartThreadPool _taskPool = new SmartThreadPool();
 	
 	// Singleton
 	private static WorkerManager _instance = null;
@@ -37,13 +45,15 @@ public class WorkerManager {
 	// Syslog Queue
 	public java.util.Queue<SyslogEntity> syslogQueue = new ConcurrentLinkedQueue<SyslogEntity>();
 	
-	
 	// Start
 	public synchronized void start() {
 
 		_logger.info("ServiceManager... start");
-
-		if (_workerPool.createPool(SYSLOG_WORKER_COUNT, SYSLOG_WORKER_COUNT, SYSLOG_WORKER_COUNT)) {
+		
+		// Worker Pool
+		int totalCount = SCHEDULER_WORKER_COUNT + SYSLOG_WORKER_COUNT;
+				
+		if (_workerPool.createPool(totalCount, totalCount, totalCount)) {
 			
 			// Start Producer Worker
 			for(int i=1; i<=SYSLOG_WORKER_COUNT; i++)
@@ -54,6 +64,14 @@ public class WorkerManager {
 		} else {
 			_logger.fatal("[FATAL] Failed to create syslog-analyzer worker pool !!!");
 			return;
+		}
+		
+		// Task Pool
+		if (_taskPool.createPool(TASK_MIN_COUNT, TASK_MAX_COUNT, TASK_LIMIT_COUNT)) {
+			_logger.info("Create task pool... ok");
+		}
+		else {
+			_logger.fatal("[FATAL] Failed to create task-pool !!!");
 		}
 	}
 	
@@ -114,14 +132,24 @@ public class WorkerManager {
 	}
 	
 	// Pool Status
-	public synchronized PoolStatus GetPoolStatus() {
+	public synchronized PoolStatus GetWorkPoolStatus() {
 		return _workerPool.getPoolStatus();
+	}
+	
+	public synchronized PoolStatus GetTaskPoolStatus() {
+		return _taskPool.getPoolStatus();
 	}
 	
 	public synchronized void stop()
 	{
 		_workerPool.shutdownAndWait();
 		
+		_taskPool.shutdownAndWait();
+		
 		_logger.info("ServiceManager....... stop");
+	}
+	
+	public void AddTask(BaseWorker task) {
+		_taskPool.addTask(task);
 	}
 }
