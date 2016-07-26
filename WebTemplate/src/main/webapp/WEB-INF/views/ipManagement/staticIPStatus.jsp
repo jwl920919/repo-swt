@@ -25,8 +25,8 @@
 	<div class="row" id="defaultDiv">
 		<div class="col-lg-12">
 			<div class="box box-primary">
-				<div class="box-header" style="margin-bottom: -10px">
-					<h2 class="box-title-small">
+				<div class="pagebox-header with-border">
+					<h2 class="pagebox-title-small">
 						<LABEL>default</LABEL>
 					</h2>
 				</div>
@@ -44,10 +44,10 @@
 							<tbody>
 							</tbody>
 						</table>
-												<div class="col-sm-1">
-													<input id='delete-button' class='btn btn-primary' type="button"
-														value="<%=LanguageHelper.GetLanguage("delete")%>"  onclick="excelExport();" />
-												</div>
+<!-- 												<div class="col-sm-1"> -->
+<!-- 													<input id='delete-button' class='btn btn-primary' type="button" -->
+<%-- 														value="<%=LanguageHelper.GetLanguage("delete")%>"  onclick="excelExport();" /> --%>
+<!-- 												</div> -->
 					</center>
 				</div>
 			</div>
