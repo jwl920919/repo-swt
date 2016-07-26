@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.shinwootns.ipm.collector.service.cluster.ClusterManager;
 import com.shinwootns.ipm.collector.worker.BaseWorker;
 
 public class SchedulerWorker extends BaseWorker {
@@ -27,7 +28,7 @@ public class SchedulerWorker extends BaseWorker {
 				new Runnable() {
 					@Override
 					public void run() {
-						//ClusterManager.getInstance().updateClusterMember();
+						run3SecCycle();
 					}
 				}
 				,0 ,3 ,TimeUnit.SECONDS
@@ -38,7 +39,7 @@ public class SchedulerWorker extends BaseWorker {
 				new Runnable() {
 					@Override
 					public void run() {
-						//ClusterManager.getInstance().checkClusterMaster();
+						run10SecCycle();
 					}
 				}
 				,0, 10 , TimeUnit.SECONDS
@@ -56,5 +57,17 @@ public class SchedulerWorker extends BaseWorker {
 		
 		// shutdown scheduler service
 		schedulerService.shutdown();
+	}
+	
+	// 3 Seconds
+	public void run3SecCycle() {
+		ClusterManager.getInstance().updateClusterMember();
+		
+		// ...
+	}
+	
+	// 10 Seconds
+	public void run10SecCycle() {
+		ClusterManager.getInstance().checkClusterMaster();
 	}
 }

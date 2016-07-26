@@ -1,4 +1,4 @@
-package com.shinwootns.ipm.collector.service.handler;
+package com.shinwootns.ipm.collector.service.amqp;
 
 import org.apache.log4j.Logger;
 

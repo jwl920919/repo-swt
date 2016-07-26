@@ -1,16 +1,27 @@
 package com.shinwootns.ipm;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.shinwootns.common.snmp.SnmpResult;
+import com.shinwootns.common.snmp.SnmpUtil;
+import com.shinwootns.common.utils.JsonUtils;
 import com.shinwootns.common.utils.TimeUtils;
-//import com.shinwootns.ipm.service.handler.InfobloxWAPIHandler;
+import com.shinwootns.ipm.collector.service.infoblox.DhcpHandler;
+import com.shinwootns.ipm.data.status.DhcpStatus;
 
 public class TestWAPI {
 
+	private final Logger _logger = Logger.getLogger(this.getClass());
+	
 	/*
 	@Test
 	public void testWAPI_Info() {
@@ -84,4 +95,23 @@ public class TestWAPI {
 	}
 	*/
 
+	@Test
+	public void testWAPI_DeviceStatus() {
+	
+		BasicConfigurator.configure();
+		
+		String host = "192.168.1.11";
+		String wapiUser = "admin";
+		String wapiPasswd = "infoblox";
+		String community = "public";
+
+		DhcpHandler handler = new DhcpHandler(host, wapiUser, wapiPasswd, community);
+
+		// Get H/W Status
+		DhcpStatus dhcpStatus = handler.getHWStatus();
+		
+		System.out.println( JsonUtils.serialize(dhcpStatus));
+		
+		return;
+	}
 }

@@ -1,13 +1,6 @@
-package com.shinwootns.ipm.service.handler;
-
-/*
-
-import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.Map;
+package com.shinwootns.common.infoblox;
 
 import org.apache.log4j.Logger;
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.entity.ContentType;
 
 import com.google.gson.JsonArray;
@@ -25,43 +18,33 @@ public class InfobloxWAPIHandler {
 	private HttpClient restClient = new HttpClient();
 
 	private String baseURL = "";
+	private String host = "";
 	private String id = "";
 	private String pwd = "";
 	
-	public class NextPageData {
+	//region Constructor
+	public InfobloxWAPIHandler(String host, String id, String pwd) {
 		
-		public JsonArray jArrayData = new JsonArray();
-		public String nextPageID = null;
-		
-		public NextPageData(JsonArray jArrayData, String nextPageID) {
-			if (jArrayData != null) {
-				this.jArrayData.addAll( jArrayData );
-				this.nextPageID = nextPageID;
-			}
-		}
-		
-		public boolean IsExistNextPage() {
-			if (this.nextPageID == null || this.nextPageID.isEmpty())
-				return false;
-			else
-				return true;
-		}
-	}
-	
-	public InfobloxWAPIHandler(String ipAddr, String id, String pwd) {
-		this.baseURL = String.format("https://%s", ipAddr);
+		this.host = host;
+		this.baseURL = ((new StringBuilder()).append("https://").append(host)).toString();
 		this.id = id;
 		this.pwd = pwd;
+		
+		Connect();
 	}
+	//endregion
 	
+	//region Connect WAPI
 	public boolean Connect() {
 		
 		try
 		{
-			// Connect
-			if (restClient.Connect_Https(baseURL, id, pwd)) {
-				return true;
+			// Connect WAPI
+			if (restClient.Connect_Https(baseURL, id, pwd) == false) {
+				return false;
 			}
+			
+			return true;
 		}
 		catch(Exception ex) {
 			_logger.fatal(ex.getMessage(), ex);
@@ -69,8 +52,9 @@ public class InfobloxWAPIHandler {
 		
 		return false;
 	}
+	//endregion
 	
-	//region Network Info 
+	//region [WAPI] Network Info 
 	public JsonArray getNetworkInfo() {
 		
 		try
@@ -99,7 +83,7 @@ public class InfobloxWAPIHandler {
 	}
 	//endregion
 
-	//region Filter Info
+	//region [WAPI] Filter Info
 	public JsonArray getFilterInfo() {
 		
 		try
@@ -128,7 +112,7 @@ public class InfobloxWAPIHandler {
 	}
 	//endregion
 
-	//region Range Info
+	//region [WAPI] Range Info
 	public JsonArray getRangeInfo() {
 		
 		try
@@ -157,7 +141,7 @@ public class InfobloxWAPIHandler {
 	}
 	//endregion
 
-	//region Grid Info
+	//region [WAPI] Grid Info
 	public JsonArray getGridInfo() {
 		
 		try
@@ -186,7 +170,7 @@ public class InfobloxWAPIHandler {
 	}
 	//endregion
 
-	//region Collect MacFilter
+	//region [WAPI] Collect MacFilter
 	public JsonArray getMacFilter(String macAddr) {
 
 		try
@@ -217,7 +201,7 @@ public class InfobloxWAPIHandler {
 	}
 	//endregion
 	
-	//region Insert MacFilter
+	//region [WAPI] Insert MacFilter
 	public boolean insertMacFilter(String macAddr, String filterName, String userName) {
 		
 		try
@@ -244,7 +228,7 @@ public class InfobloxWAPIHandler {
 	}
 	//endregion
 	
-	//region Delete MacFilter
+	//region [WAPI] Delete MacFilter
 	public boolean deleteMacFilter(String macAddr) {
 
 		try
@@ -281,7 +265,7 @@ public class InfobloxWAPIHandler {
 	}
 	//endregion
 	
-	//region Collect IPv4Address
+	//region [WAPI] Collect IPv4Address
 	public NextPageData getIPv4AddressFirst(int splitCount, String network) {
 		
 		try
@@ -375,62 +359,62 @@ public class InfobloxWAPIHandler {
 	}
 	//endregion
 	
-	//region Collect Ipv6address
+	//region [WAPI] Collect Ipv6address
 	public NextPageData getIPv6AddressFirst(int splitCount, String network) {
 		
+		/*
+		try
+		{
+			Map params = new HashMap<String, String>();
+			
+			// First Page
+			params.put("_paging", 1);
+			params.put("_max_results", splitCount);
+			params.put("_return_as_object", 1);
+			params.put("_return_type", "json");
+			params.put("network", network);							// '192.168.1.0/25'
+			params.put("_return_fields", 
+					((new StringBuilder())
+					.append("ip_address,network,duid,names")
+					.append(",is_conflict")
+					.append(",discover_now_status")
+					//.append(",conflict_types")
+					.append(",lease_state,status")
+					.append(",types,usage")
+					.append(",fingerprint")
+					.append(",discovered_data.os,discovered_data.last_discovered")
+					).toString()
+			);
+			
+			// type = LEASE, DHCP_RANGE
+			// usage = DHCP
 
-//		try
-//		{
-//			Map params = new HashMap<String, String>();
-//			
-//			// First Page
-//			params.put("_paging", 1);
-//			params.put("_max_results", splitCount);
-//			params.put("_return_as_object", 1);
-//			params.put("_return_type", "json");
-//			params.put("network", network);							// '192.168.1.0/25'
-//			params.put("_return_fields", 
-//					((new StringBuilder())
-//					.append("ip_address,network,duid,names")
-//					.append(",is_conflict")
-//					.append(",discover_now_status")
-//					//.append(",conflict_types")
-//					.append(",lease_state,status")
-//					.append(",types,usage")
-//					.append(",fingerprint")
-//					.append(",discovered_data.os,discovered_data.last_discovered")
-//					).toString()
-//			);
-//			
-//			// type = LEASE, DHCP_RANGE
-//			// usage = DHCP
-//
-//			String value = restClient.Get("/wapi/v2.3/ipv6address", params);
-//			
-//			if (value == null)
-//				return null;
-//			
-//			// Change unescape-unicode
-//			value = StringUtils.unescapeUnicodeString(value);
-//			
-//			// JsonObject Parser
-//			JsonObject jObj = JsonUtils.parseJsonObject(value);
-//			
-//			if (jObj == null)
-//				return null;
-//			
-//			// next_page_id
-//			String nextPageId = (String)jObj.get("next_page_id");
-//			
-//			// result
-//			JsonArray resultArray = (JsonArray)jObj.get("result");
-//			
-//			return new NextPageData(resultArray, nextPageId);
-//		}
-//		catch(Exception ex) {
-//			_logger.fatal(ex.getMessage(), ex);
-//		}
-		
+			String value = restClient.Get("/wapi/v2.3/ipv6address", params);
+			
+			if (value == null)
+				return null;
+			
+			// Change unescape-unicode
+			value = StringUtils.unescapeUnicodeString(value);
+			
+			// JsonObject Parser
+			JsonObject jObj = JsonUtils.parseJsonObject(value);
+			
+			if (jObj == null)
+				return null;
+			
+			// next_page_id
+			String nextPageId = (String)jObj.get("next_page_id");
+			
+			// result
+			JsonArray resultArray = (JsonArray)jObj.get("result");
+			
+			return new NextPageData(resultArray, nextPageId);
+		}
+		catch(Exception ex) {
+			_logger.fatal(ex.getMessage(), ex);
+		}
+		*/
 		return null;
 	}
 	
@@ -438,45 +422,45 @@ public class InfobloxWAPIHandler {
 		
 		if (nextPageId == null || nextPageId.isEmpty())
 			return null;
+		/*
+		try
+		{
+			Map params = new HashMap<String, String>();
+			params.put("_max_results", splitCount);
+			params.put("_page_id", nextPageId);
+			params.put("_return_type", "json");
 
-//		try
-//		{
-//			Map params = new HashMap<String, String>();
-//			params.put("_max_results", splitCount);
-//			params.put("_page_id", nextPageId);
-//			params.put("_return_type", "json");
-//
-//			String value = restClient.Get("/wapi/v2.3/ipv6address", params);
-//			
-//			if (value == null)
-//				return null;
-//			
-//			// Change unescape-unicode
-//			value = StringUtils.unescapeUnicodeString(value);
-//			
-//			// JsonObject Parser
-//			JsonObject jObj = JsonUtils.parseJsonObject(value);
-//			
-//			if (jObj == null)
-//				return null;
-//
-//			// next_page_id
-//			nextPageId = (String)jObj.get("next_page_id");
-//			
-//			// result
-//			JsonArray resultArray = (JsonArray)jObj.get("result");
-//			
-//			return new NextPageData(resultArray, nextPageId);
-//		}
-//		catch(Exception ex) {
-//			_logger.fatal(ex.getMessage(), ex);
-//		}
+			String value = restClient.Get("/wapi/v2.3/ipv6address", params);
+			
+			if (value == null)
+				return null;
+			
+			// Change unescape-unicode
+			value = StringUtils.unescapeUnicodeString(value);
+			
+			// JsonObject Parser
+			JsonObject jObj = JsonUtils.parseJsonObject(value);
+			
+			if (jObj == null)
+				return null;
 
+			// next_page_id
+			nextPageId = (String)jObj.get("next_page_id");
+			
+			// result
+			JsonArray resultArray = (JsonArray)jObj.get("result");
+			
+			return new NextPageData(resultArray, nextPageId);
+		}
+		catch(Exception ex) {
+			_logger.fatal(ex.getMessage(), ex);
+		}
+		*/
 		return null;
 	}
 	//endregion
 	
-	//region Collect Lease IP
+	//region [WAPI] Collect Lease IP
 	public NextPageData getLeaseIPFirst(int splitCount, String network) {
 		
 		JsonArray resultArray = new JsonArray(); 
@@ -587,7 +571,7 @@ public class InfobloxWAPIHandler {
 	}
 	//endregion
 
-	//region Collect Fixed IP
+	//region [WAPI] Collect Fixed IP
 	public JsonArray getFixedIPList() {
 
 		try
@@ -617,5 +601,33 @@ public class InfobloxWAPIHandler {
 	}
 	//endregion
 	
+	//region [WAPI] Get Device Status
+	public JsonArray getNodeInfo(String hostName) {
+		try
+		{
+			StringBuilder sb = new StringBuilder();
+			
+			sb.append("/wapi/v2.3/member");
+			sb.append("?_return_type=json");
+			sb.append("&_return_fields=node_info");
+			if (hostName.isEmpty() == false)
+				sb.append("&host_name=").append(hostName);
+			
+			String value = restClient.Get(sb.toString());
+			
+			if (value == null)
+				return null;
+			
+			// Change unescape-unicode
+			value = StringUtils.unescapeUnicodeString(value);
+			
+			// JsonArray Parser
+			return JsonUtils.parseJsonArray(value);
+		}
+		catch(Exception ex) {
+			_logger.fatal(ex.getMessage(), ex);
+		}
+		return null;
+	}
+	//endregion
 }
-*/

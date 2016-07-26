@@ -2,7 +2,7 @@
 # ipm
 #====================================
 ipm:
-  name: IPM-Manager(Debug Mode)
+  name: Smart IPM (Debug)
   version: 0.1.1
   license: TEST000000
   cluster:

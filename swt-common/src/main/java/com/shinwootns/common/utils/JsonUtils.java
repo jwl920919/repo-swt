@@ -4,8 +4,11 @@ import java.io.ObjectOutputStream;
 import java.lang.reflect.Type;
 import java.sql.Timestamp;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -34,22 +37,34 @@ public class JsonUtils {
 	//endregion
 	
 	//region getValueFromJson
-	public static String getValueToString(JsonObject jObj, String key, String defaultValue) {
+	public static String getValueToString(JsonElement jEle, String key, String defaultValue) {
 		
-		if (jObj == null)
+		if (jEle == null || jEle instanceof JsonObject == false)
 			return defaultValue;
 		
-		JsonElement ele = jObj.get(key);
+		JsonElement dataEle = jEle.getAsJsonObject().get(key);
 		
-		if (ele == null)
+		if (dataEle == null)
+			return defaultValue;
+
+		return dataEle.getAsString();
+	}
+
+	public static String getMergeValueToString(JsonElement jEle, String key, String defaultValue) {
+		
+		if (jEle == null || jEle instanceof JsonObject == false)
 			return defaultValue;
 		
+		JsonElement dataEle = jEle.getAsJsonObject().get(key);
 		
-		if (ele instanceof JsonArray) {
+		if (dataEle == null)
+			return defaultValue;
+		
+		if (dataEle instanceof JsonArray) {
 			
 			StringBuilder sb = new StringBuilder();
 			
-			JsonArray jArray = ele.getAsJsonArray();
+			JsonArray jArray = dataEle.getAsJsonArray();
 			
 			Iterator<JsonElement> iter = jArray.iterator();
 
@@ -61,20 +76,12 @@ public class JsonUtils {
  					sb.append(",");
 				
 				sb.append( child.getAsString() );
-				
-				/*
-				if (child instanceof JsonObject) {
-					sb.append( child.getAsString() );
-				}
-				else {
-					sb.append( child.getAsString() );
-				}*/
 			}
 			
 			return sb.toString();
 		}
 		else {
-			return ele.getAsString();
+			return dataEle.getAsString();
 		}
 	}
 	
@@ -89,15 +96,6 @@ public class JsonUtils {
 			return defaultValue;
 		
 		return ele.getAsNumber().longValue();
-		
-		/*
-		if (value instanceof Integer)
-			return (Long)value;
-		else if (value instanceof String)
-			return Long.parseLong((String)value);
-
-		return (Long)value;
-		*/
 	}
 	
 	public static boolean getValueToBoolean(JsonObject jObj, String key, boolean defaultValue) {
@@ -111,26 +109,6 @@ public class JsonUtils {
 			return defaultValue;
 		
 		return ele.getAsBoolean();
-		
-		/*
-		if (value instanceof Boolean) {
-			return (Boolean)value;
-		}
-		else if (value instanceof Integer) {
-			return ((Integer)value) == 0 ? false : true;
-		}
-		else if (value instanceof String) {
-			
-			String tempValue = (String)value;
-			if ( tempValue.toUpperCase().equals("TRUE"))
-				return true;
-			else if ( ((String)value).toUpperCase().equals("FALSE") )
-				return false;
-			else
-				return defaultValue;
-		}
-		return defaultValue;
-		*/
 	}
 	
 	public static Timestamp getValueToTimestamp(JsonObject jObj, String key, long defaultValue) {
@@ -141,32 +119,83 @@ public class JsonUtils {
 		JsonElement ele = jObj.get(key);
 
 		return new Timestamp(ele.getAsNumber().longValue());
-		
-		/*
-		if (value == null)
-			return new Timestamp(defaultValue);
-		
-		long time = defaultValue; 
-		
-		if (value instanceof Long)
-			time = (Long)value;
-		else if (value instanceof String)
-			time = Long.parseLong((String)value);
-
-		return new Timestamp(time);
-		*/
 	}
 	//endregion
 	
-	public static String serializeFromObject(Object obj){
-		Gson gson = new Gson();
-		
-		return gson.toJson(obj);
+	public static String serialize(Object obj){
+		return (new Gson()).toJson(obj);
 	}
 	
-	public Object deserializeToObject(String json, Type typeof){
-		Gson gson = new Gson();
-		return gson.fromJson(json, typeof);
+	public Object deserialize(String json, Type typeof){
+		return (new Gson()).fromJson(json, typeof);
 	}
 
+	public static String toPrettyString(JsonElement ele) {
+		
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+		return gson.toJson(ele);
+	}
+	
+	/*
+	public static LinkedHashMap<Integer, String> getValueToString(JsonElement ele, String[] keys) {
+		
+		LinkedHashMap<Integer, String> mapResult = new LinkedHashMap<Integer, String>(); 
+		
+		LinkedList<JsonElement> listEle = new LinkedList<JsonElement>();
+		listEle.add(ele);
+		
+		for(String key : keys) {
+			
+			listEle = lookupChild(listEle, key);
+		}
+		
+		if (listEle != null) {
+			for(JsonElement result : listEle) {
+				System.out.println(result.toString());
+			}
+		}
+		
+		return mapResult;
+	}
+	
+	private static LinkedList<JsonElement> lookupChild(LinkedList<JsonElement> listEle, String key) {
+
+		LinkedList<JsonElement> listResult = new LinkedList<JsonElement>();
+		
+		for(JsonElement ele : listEle) {
+		
+			if (ele instanceof JsonArray) {
+				JsonArray jArray = ele.getAsJsonArray();
+				
+				for(int i=0; i<jArray.size(); i++) {
+					JsonElement childEle = jArray.get(i);
+					
+					if (childEle instanceof JsonArray) {
+						//LinkedList<JsonElement> listEle = lookupChild(childEle, key);
+						//listResult.addAll(listEle);
+					}
+					else if (childEle instanceof JsonObject) {
+						JsonElement result = childEle.getAsJsonObject().get(key);
+						
+						if (result != null)
+							listResult.add(result);
+					}
+				}
+			}
+			else if (ele instanceof JsonObject) {
+				
+				JsonObject jObj = ele.getAsJsonObject();
+				
+				JsonElement result = jObj.get(key);
+				
+				if (result != null)
+					listResult.add(result);
+				
+				return listResult;
+			}
+		}
+		
+		return listResult;
+	}*/
 }

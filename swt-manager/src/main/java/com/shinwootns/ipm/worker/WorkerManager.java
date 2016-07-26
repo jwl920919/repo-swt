@@ -80,8 +80,8 @@ public class WorkerManager {
 				_workerPool.addTask(new EventWorker(i));
 			
 			// Device CollectWorker
-			for(int i=1; i<=DEVICE_COLLECT_WORKER_COUNT; i++)
-				_workerPool.addTask(new DeviceCollectWorker(i));
+			//for(int i=1; i<=DEVICE_COLLECT_WORKER_COUNT; i++)
+			//	_workerPool.addTask(new DeviceCollectWorker(i));
 			
 		} else {
 			_logger.fatal("[FATAL] Failed to create worker-pool !!!");

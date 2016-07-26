@@ -11,6 +11,7 @@ import com.shinwootns.common.network.SyslogEntity;
 import com.shinwootns.common.stp.PoolStatus;
 import com.shinwootns.common.stp.SmartThreadPool;
 import com.shinwootns.common.utils.TimeUtils;
+import com.shinwootns.ipm.collector.data.SharedData;
 import com.shinwootns.ipm.collector.worker.persist.SyslogWorker;
 
 public class WorkerManager {
@@ -41,9 +42,6 @@ public class WorkerManager {
 	// Worker Pool
 	private SmartThreadPool _workerPool = new SmartThreadPool();
 	
-	
-	// Syslog Queue
-	public java.util.Queue<SyslogEntity> syslogQueue = new ConcurrentLinkedQueue<SyslogEntity>();
 	
 	// Start
 	public synchronized void start() {
@@ -82,7 +80,7 @@ public class WorkerManager {
 		
 		while(bResult == false)
 		{
-			bResult = syslogQueue.add(syslog);
+			bResult = SharedData.getInstance().syslogQueue.add(syslog);
 			
 			if (bResult)
 				break;
@@ -109,7 +107,7 @@ public class WorkerManager {
 		
 		while(count < popCount )
 		{
-			SyslogEntity syslog = syslogQueue.poll();
+			SyslogEntity syslog = SharedData.getInstance().syslogQueue.poll();
 			
 			if (syslog != null)
 			{

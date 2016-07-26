@@ -18,6 +18,9 @@ public class DhcpIpStatus implements Serializable {
 	@EmbeddedId
 	private DhcpIpStatusPK id;
 
+	@Column(name="conflict_types")
+	private String conflictTypes;
+
 	@Column(name="discover_status")
 	private String discoverStatus;
 
@@ -25,16 +28,23 @@ public class DhcpIpStatus implements Serializable {
 
 	private String fingerprint;
 
+	@Column(name="host_name")
+	private String hostName;
+
 	@Column(name="host_os")
 	private String hostOs;
-
-	private String hostname;
 
 	@Column(name="ip_type")
 	private String ipType;
 
 	@Column(name="is_conflict")
 	private Boolean isConflict;
+
+	@Column(name="is_never_ends")
+	private Boolean isNeverEnds;
+
+	@Column(name="is_never_start")
+	private Boolean isNeverStart;
 
 	@Column(name="last_discovered")
 	private Timestamp lastDiscovered;
@@ -76,6 +86,14 @@ public class DhcpIpStatus implements Serializable {
 		this.id = id;
 	}
 
+	public String getConflictTypes() {
+		return this.conflictTypes;
+	}
+
+	public void setConflictTypes(String conflictTypes) {
+		this.conflictTypes = conflictTypes;
+	}
+
 	public String getDiscoverStatus() {
 		return this.discoverStatus;
 	}
@@ -100,20 +118,20 @@ public class DhcpIpStatus implements Serializable {
 		this.fingerprint = fingerprint;
 	}
 
+	public String getHostName() {
+		return this.hostName;
+	}
+
+	public void setHostName(String hostName) {
+		this.hostName = hostName;
+	}
+
 	public String getHostOs() {
 		return this.hostOs;
 	}
 
 	public void setHostOs(String hostOs) {
 		this.hostOs = hostOs;
-	}
-
-	public String getHostname() {
-		return this.hostname;
-	}
-
-	public void setHostname(String hostname) {
-		this.hostname = hostname;
 	}
 
 	public String getIpType() {
@@ -130,6 +148,22 @@ public class DhcpIpStatus implements Serializable {
 
 	public void setIsConflict(Boolean isConflict) {
 		this.isConflict = isConflict;
+	}
+
+	public Boolean getIsNeverEnds() {
+		return this.isNeverEnds;
+	}
+
+	public void setIsNeverEnds(Boolean isNeverEnds) {
+		this.isNeverEnds = isNeverEnds;
+	}
+
+	public Boolean getIsNeverStart() {
+		return this.isNeverStart;
+	}
+
+	public void setIsNeverStart(Boolean isNeverStart) {
+		this.isNeverStart = isNeverStart;
 	}
 
 	public Timestamp getLastDiscovered() {

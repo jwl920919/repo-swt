@@ -43,7 +43,6 @@
 		<class>com.shinwootns.ipm.jpa.DhcpFixedIpPK</class>
 		<class>com.shinwootns.ipm.jpa.DhcpIpStatus</class>
 		<class>com.shinwootns.ipm.jpa.DhcpIpStatusPK</class>
-		<class>com.shinwootns.ipm.jpa.DhcpLeaseIp</class>
 		<class>com.shinwootns.ipm.jpa.DhcpLeaseIpPK</class>
 	</persistence-unit>
 </persistence>

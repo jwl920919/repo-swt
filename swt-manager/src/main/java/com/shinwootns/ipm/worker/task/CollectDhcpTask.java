@@ -22,8 +22,8 @@ import com.shinwootns.ipm.data.entity.DhcpMacFilter;
 import com.shinwootns.ipm.data.entity.DhcpNetwork;
 import com.shinwootns.ipm.data.entity.DhcpRange;
 import com.shinwootns.ipm.data.mapper.DhcpMapper;
-import com.shinwootns.ipm.service.handler.InfobloxWAPIHandler;
-import com.shinwootns.ipm.service.handler.InfobloxWAPIHandler.NextPageData;
+//import com.shinwootns.ipm.service.handler.InfobloxWAPIHandler;
+//import com.shinwootns.ipm.service.handler.InfobloxWAPIHandler.NextPageData;
 import com.shinwootns.ipm.worker.BaseWorker;
 
 public class CollectDhcpTask extends BaseWorker{
@@ -43,16 +43,19 @@ public class CollectDhcpTask extends BaseWorker{
 		
 		try
 		{
+			/*
 			collectDhcpData(
 					this.device.getHost()
 					, this.device.getWapiUserid()
 					, CryptoUtils.Decode_AES128(this.device.getWapiPassword()));
+			*/
 		}
 		catch(Exception ex) {
 			_logger.error(ex.getMessage(), ex);
 		}
 	}
-	
+
+	/*
 	public void collectDhcpData(String host, String userid, String password)
 	{
 		DhcpMapper dhcpMapper = SpringBeanProvider.getInstance().getDhcpMapper();
@@ -159,16 +162,15 @@ public class CollectDhcpTask extends BaseWorker{
 				extractIpv4Data(nextData1, mapIp);
 			}
 			
-			/*
 			// Collect IPv6
-			NextPageData nextData2 = wapiHandler.getIPv6AddressFirst(splitCount, network);
-			extractIpv6Data(nextData2, mapIp);
-			
-			while(nextData2 != null && nextData2.IsExistNextPage()) {
-				
-				nextData2 = wapiHandler.getIPv6AddressNext(splitCount, nextData2.nextPageID);
-				extractIpv6Data(nextData2, mapIp);
-			}*/
+//			NextPageData nextData2 = wapiHandler.getIPv6AddressFirst(splitCount, network);
+//			extractIpv6Data(nextData2, mapIp);
+//			
+//			while(nextData2 != null && nextData2.IsExistNextPage()) {
+//				
+//				nextData2 = wapiHandler.getIPv6AddressNext(splitCount, nextData2.nextPageID);
+//				extractIpv6Data(nextData2, mapIp);
+//			}
 			
 			// Collect Lease IP
 			NextPageData nextData3 = wapiHandler.getLeaseIPFirst(splitCount, network);
@@ -186,30 +188,8 @@ public class CollectDhcpTask extends BaseWorker{
 			mapIp.clear();
 		}
 		
-		
-
-		/*
-		NextPageData nextData = wapiHandler.getLeaseIPFirst(splitCount);
-		
-		if (nextData != null && nextData.jArrayData != null) {
-			insertDhcpLeaseIP(dhcpMapper, nextData.jArrayData);
-			leaseCount += nextData.jArrayData.size();
-		}
-		
-		while(nextData != null && nextData.IsExistNextPage()) {
-			
-			nextData = wapiHandler.getLeaseIPNext(splitCount, nextData.nextPageID);
-			
-			if (nextData != null && nextData.jArrayData != null) {
-				insertDhcpLeaseIP(dhcpMapper, nextData.jArrayData);
-				leaseCount += nextData.jArrayData.size();
-			}
-		}
-		*/
-		
 		_logger.info(String.format("DHCP - Collect Lease IP: %s.... OK (count:%d)", this.device.getHost(), ipCount));
 	}
-	
 	
 	private void extractIpv4Data(NextPageData nextData, HashMap<String, DhcpIpStatus> mapIp) {
 		
@@ -229,15 +209,18 @@ public class CollectDhcpTask extends BaseWorker{
 				ip.setNetwork(JsonUtils.getValueToString(jObj, "network", ""));
 				ip.setMacaddr(JsonUtils.getValueToString(jObj, "mac_address", "").toUpperCase());
 				ip.setIsConflict(JsonUtils.getValueToBoolean(jObj, "is_conflict", false));
-				ip.setConflictTypes(JsonUtils.getValueToString(jObj, "conflict_types", ""));
 				ip.setStatus(JsonUtils.getValueToString(jObj, "status", ""));
 				ip.setLeaseState(JsonUtils.getValueToString(jObj, "lease_state", ""));
-				ip.setObjTypes(JsonUtils.getValueToString(jObj, "types", ""));
 				ip.setDiscoverStatus(JsonUtils.getValueToString(jObj, "discover_now_status", ""));
-				ip.setUsage(JsonUtils.getValueToString(jObj, "usage", ""));
-				ip.setHostname(JsonUtils.getValueToString(jObj, "names", ""));
-				ip.setHostOs(JsonUtils.getValueToString(jObj, "discovered_data.os", ""));
 				ip.setFingerprint(JsonUtils.getValueToString(jObj, "fingerprint", ""));
+				
+				// merge value
+				ip.setHostname(JsonUtils.getMergeValueToString(jObj, "names", ""));
+				ip.setConflictTypes(JsonUtils.getMergeValueToString(jObj, "conflict_types", ""));
+				ip.setObjTypes(JsonUtils.getMergeValueToString(jObj, "types", ""));
+				ip.setUsage(JsonUtils.getMergeValueToString(jObj, "usage", ""));
+				ip.setHostOs(JsonUtils.getMergeValueToString(jObj, "discovered_data.os", ""));
+				
 				
 				long lastDiscoverd = JsonUtils.getValueToNumber(jObj, "discovered_data.last_discovered", 0);
 				if (lastDiscoverd > 0)
@@ -469,4 +452,5 @@ public class CollectDhcpTask extends BaseWorker{
 			}
 		}
 	}
+	*/
 }

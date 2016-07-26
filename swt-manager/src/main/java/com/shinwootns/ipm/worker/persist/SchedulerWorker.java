@@ -29,7 +29,7 @@ public class SchedulerWorker extends BaseWorker {
 				new Runnable() {
 					@Override
 					public void run() {
-						ClusterManager.getInstance().updateClusterMember();
+						run3SecCycle();
 					}
 				}
 				,0 ,3 ,TimeUnit.SECONDS
@@ -40,7 +40,7 @@ public class SchedulerWorker extends BaseWorker {
 				new Runnable() {
 					@Override
 					public void run() {
-						ClusterManager.getInstance().checkClusterMaster();
+						run10SecCycle();
 					}
 				}
 				,0, 10 , TimeUnit.SECONDS
@@ -58,5 +58,15 @@ public class SchedulerWorker extends BaseWorker {
 		
 		// shutdown scheduler service
 		schedulerService.shutdown();
+	}
+	
+	// 3 Seconds
+	public void run3SecCycle() {
+		ClusterManager.getInstance().updateClusterMember();
+	}
+	
+	// 10 Seconds
+	public void run10SecCycle() {
+		ClusterManager.getInstance().checkClusterMaster();
 	}
 }
