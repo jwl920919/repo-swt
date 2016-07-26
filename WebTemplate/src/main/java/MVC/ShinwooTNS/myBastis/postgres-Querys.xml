@@ -435,6 +435,32 @@
 		(#{auth_state},#{master_cd},#{sub_cd},#{site_id},#{group_id});
 	</insert>
 
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-07-25 -->
+	<!-- Insert User : KCM -->
+	<!-- Description : Lease IP현황 > ip현황 데이터 -->
+	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
+	<select id="select_LEASEIP_STATUS_DATA" resultType="java.util.HashMap">
+		SET TIMEZONE TO '${time_zone}';
+		
+		SELECT (ROW_NUMBER() OVER()) AS "rownum", "ipaddr", "macaddr", "host_name", "host_os", "duid", "status",
+			   "lease_state", "obj_types", "discover_status", "usage", "fingerprint",
+               COALESCE("is_never_ends", FALSE) AS "is_never_ends", COALESCE("is_never_start", FALSE) AS "is_never_start",			   
+			   COALESCE(to_char("lease_start_time",'YYYY-MM-DD HH24:MI:SS'),'') AS "lease_start_time",
+			   COALESCE(to_char("lease_end_time",'YYYY-MM-DD HH24:MI:SS'),'') AS "lease_end_time",
+               COALESCE(to_char("last_discovered",'YYYY-MM-DD HH24:MI:SS'),'') AS "last_discovered",
+               COALESCE(to_char("update_time",'YYYY-MM-DD HH24:MI:SS'),'') AS "update_time",
+		       "user_description"
+		  FROM "dhcp_ip_status"
+		 WHERE "network" = #{network}
+		   AND "is_conflict" != true
+		   AND "usage" = 'DHCP'
+		   AND "obj_types" like CONCAT('%', 'LEASE', '%')
+		   AND ("ipaddr" like CONCAT('%', #{searchValue}, '%') OR "macaddr" like CONCAT('%', #{searchValue}, '%')
+		   	    OR "host_name" like CONCAT('%', #{searchValue}, '%'))
+		 ORDER BY inet("ipaddr")
+	</select>
+
 </mapper>
 
 
