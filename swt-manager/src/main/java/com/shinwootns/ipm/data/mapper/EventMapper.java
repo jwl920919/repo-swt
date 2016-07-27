@@ -4,7 +4,8 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
-import com.shinwootns.ipm.data.entity.EventEntity;
+
+import com.shinwootns.data.entity.EventData;
 
 @Mapper
 public interface EventMapper {
@@ -20,7 +21,7 @@ public interface EventMapper {
 			+ " , #{message}"
 			+ ");"
 	)
-	public void insert(EventEntity eventLog);
+	public void insert(EventData eventLog);
 
 }
 

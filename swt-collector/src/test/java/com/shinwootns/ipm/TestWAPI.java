@@ -11,12 +11,13 @@ import org.junit.Test;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.shinwootns.common.infoblox.InfobloxWAPIHandler;
 import com.shinwootns.common.snmp.SnmpResult;
 import com.shinwootns.common.snmp.SnmpUtil;
 import com.shinwootns.common.utils.JsonUtils;
 import com.shinwootns.common.utils.TimeUtils;
 import com.shinwootns.ipm.collector.service.infoblox.DhcpHandler;
-import com.shinwootns.ipm.data.status.DhcpStatus;
+import com.shinwootns.data.status.DhcpStatus;
 
 public class TestWAPI {
 
@@ -94,6 +95,27 @@ public class TestWAPI {
 		}
 	}
 	*/
+	
+	@Test
+	public void testWAPI() {
+	
+		BasicConfigurator.configure();
+		
+		InfobloxWAPIHandler wapiHandler = new InfobloxWAPIHandler("192.168.1.11", "admin", "infoblox");
+
+		JsonArray jArray;
+		
+		if (wapiHandler.Connect()) {
+
+			// LiceseInfo
+			String hwid = "1412201310100022";
+			jArray = wapiHandler.getLicenseInfo(hwid);
+			
+			System.out.println( JsonUtils.toPrettyString(jArray) );
+		}
+		
+		return;
+	}
 
 	@Test
 	public void testWAPI_DeviceStatus() {

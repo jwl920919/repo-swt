@@ -19,6 +19,21 @@ public class RedisManager {
 	
 	private String _host;
 	private int _port, _timeout;
+	
+	public class RedisPoolStatus {
+		public int activeCount=0;
+		public int idleCount=0;
+		public int waitCount=0;
+		
+		@Override
+		public String toString() {
+			return (new StringBuilder())
+					.append("ActiveCount=").append(activeCount)
+					.append(", IdleCount=").append(idleCount)
+					.append(", WaitCount=").append(waitCount)
+					.toString();
+		}
+	}
 
 	public RedisManager() {
 	}
@@ -84,6 +99,27 @@ public class RedisManager {
 				return null;
 			
 			return new RedisClient(redis); 
+		}
+		catch(JedisConnectionException ex) {
+			_logger.error(ex.getMessage(), ex);
+		}
+		catch(Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+		}
+		
+		return null;
+	}
+	
+	public RedisPoolStatus getPoolStatus() {
+		
+		try
+		{
+			RedisPoolStatus status = new RedisPoolStatus();
+			status.activeCount = _redisPool.getNumActive();
+			status.idleCount = _redisPool.getNumIdle();
+			status.waitCount = _redisPool.getNumWaiters();
+			
+			return status;
 		}
 		catch(JedisConnectionException ex) {
 			_logger.error(ex.getMessage(), ex);

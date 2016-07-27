@@ -5,11 +5,11 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.shinwootns.ipm.data.entity.DhcpFixedIp;
-import com.shinwootns.ipm.data.entity.DhcpIpStatus;
-import com.shinwootns.ipm.data.entity.DhcpMacFilter;
-import com.shinwootns.ipm.data.entity.DhcpNetwork;
-import com.shinwootns.ipm.data.entity.DhcpRange;
+import com.shinwootns.data.entity.DhcpFixedIp;
+import com.shinwootns.data.entity.DhcpIpStatus;
+import com.shinwootns.data.entity.DhcpMacFilter;
+import com.shinwootns.data.entity.DhcpNetwork;
+import com.shinwootns.data.entity.DhcpRange;
 
 @Mapper
 public interface DhcpMapper {

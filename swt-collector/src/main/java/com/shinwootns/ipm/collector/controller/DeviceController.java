@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.shinwootns.common.utils.JsonUtils;
+import com.shinwootns.data.entity.DeviceDhcp;
 import com.shinwootns.ipm.collector.config.ApplicationProperty;
 import com.shinwootns.ipm.collector.data.SharedData;
 import com.shinwootns.ipm.collector.service.infoblox.DhcpHandler;
-import com.shinwootns.ipm.data.entity.DeviceDhcp;
-import com.shinwootns.ipm.data.status.DhcpStatus;
+import com.shinwootns.data.status.DhcpStatus;
 
 @RestController
 public class DeviceController {

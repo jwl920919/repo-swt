@@ -21,8 +21,16 @@ public class RedisClient {
 		this._redis = redis;
 	}
 	
+	public Jedis getJedis() {
+		return this._redis;
+	}
+	
+	public void setJedis(Jedis redis) {
+		this._redis = redis;
+	}
+	
 	//region isConnection / Close
-	public boolean isConnection(Jedis redis)
+	public boolean isConnection()
 	{
 		try
 		{
@@ -30,7 +38,7 @@ public class RedisClient {
 				return false;
 			
 			// Ping
-			String value = redis.ping();
+			String value = this._redis.ping();
 			
 			if (value != null && value.toUpperCase().equals("PONG"))
 				return true;

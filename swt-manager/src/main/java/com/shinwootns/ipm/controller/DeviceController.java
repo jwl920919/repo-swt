@@ -1,19 +1,11 @@
 package com.shinwootns.ipm.controller;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import java.util.List;
 
-import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,9 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.shinwootns.common.utils.JsonUtils;
-import com.shinwootns.ipm.data.entity.DeviceDhcp;
-import com.shinwootns.ipm.data.entity.DeviceInsight;
+import com.shinwootns.data.entity.DeviceDhcp;
+import com.shinwootns.data.entity.DeviceInsight;
 import com.shinwootns.ipm.data.mapper.DeviceMapper;
 
 @RestController

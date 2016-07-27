@@ -88,6 +88,7 @@ public class ApplicationProperty {
 		
 		
 		if (debugEnable) {
+			sb.append( "------------------------------------------------------------\n" );
 			sb.append( String.format("%-30s = %s\n", "ipm.debug.enable", (this.debugEnable)? "true":"false" ) );
 			sb.append( String.format("%-30s = %s\n", "ipm.debug.enable_recv_syslog", (this.enableRecvSyslog)? "true":"false" ) );
 			sb.append( String.format("%-30s = %s\n", "ipm.debug.enable_insert_event", (this.enableInsertEvent)? "true":"false" ) );

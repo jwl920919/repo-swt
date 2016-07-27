@@ -5,8 +5,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.shinwootns.ipm.data.entity.DeviceDhcp;
-import com.shinwootns.ipm.data.entity.DeviceInsight;
+import com.shinwootns.data.entity.DeviceDhcp;
+import com.shinwootns.data.entity.DeviceInsight;
 
 @Mapper
 public interface DeviceMapper {

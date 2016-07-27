@@ -28,11 +28,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/swt-common"/>
-	<classpathentry kind="src" path=".apt_generated">
-		<attributes>
-			<attribute name="optional" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/swt-jpa"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/swt-data"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

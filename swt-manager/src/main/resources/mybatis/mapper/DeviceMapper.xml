@@ -4,14 +4,14 @@
 <mapper namespace="com.shinwootns.ipm.data.mapper.DeviceMapper">
 
 	<!-- ############################ DHCP ############################ -->
-	<select id="selectDhcp" resultType="com.shinwootns.ipm.data.entity.DeviceDhcp">
+	<select id="selectDhcp" resultType="com.shinwootns.data.entity.DeviceDhcp">
 		SELECT * FROM device_dhcp WHERE 1=1
 		<if test="device_id != null">
 			AND device_id = #{device_id}
 		</if>
 	</select>
 	
-	<select id="selectDhcpByInsightHost" resultType="com.shinwootns.ipm.data.entity.DeviceDhcp">
+	<select id="selectDhcpByInsightHost" resultType="com.shinwootns.data.entity.DeviceDhcp">
 		SELECT dhcp.*
 		FROM site_info site, device_dhcp dhcp, device_insight ins
 		WHERE site.site_id = dhcp.site_id
@@ -20,23 +20,23 @@
 	</select>
 	
 	<!-- ############################ Insight ############################ -->
-	<select id="selectInsight" resultType="com.shinwootns.ipm.data.entity.DeviceInsight">
+	<select id="selectInsight" resultType="com.shinwootns.data.entity.DeviceInsight">
 		SELECT * FROM device_insight
 	</select>
 	
-	<select id="selectInsightByDeviceId" resultType="com.shinwootns.ipm.data.entity.DeviceInsight">
+	<select id="selectInsightByDeviceId" resultType="com.shinwootns.data.entity.DeviceInsight">
 		SELECT * FROM device_insight 
 		WHERE device_id = #{device_id}
 	</select>
 	
-	<insert id="insertInsight" parameterType="com.shinwootns.ipm.data.entity.DhcpNetwork">
+	<insert id="insertInsight" parameterType="com.shinwootns.data.entity.DhcpNetwork">
 		<![CDATA[
 			INSERT INTO device_insight (site_id, host, version, insert_time, update_time)
 			VALUES ( #{site_id}, #{host}, #{version}, now(), now() ) 
 		]]>
 	</insert>
 	
-	<update id="updateInsight" parameterType="com.shinwootns.ipm.data.entity.DhcpNetwork">
+	<update id="updateInsight" parameterType="com.shinwootns.data.entity.DhcpNetwork">
 		<![CDATA[
 			UPDATE device_insight
 			SET site_id=#{site_id}, host=#{host}, port=#{port}, version=#{version}, enable_collect=#{enable_collect}, update_time=now()

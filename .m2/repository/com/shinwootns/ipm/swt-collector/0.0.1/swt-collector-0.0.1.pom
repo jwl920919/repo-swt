@@ -14,10 +14,10 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.3.5.RELEASE</version>
+		<version>1.3.6.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-
+	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
@@ -29,23 +29,39 @@
 			<groupId>com.shinwootns</groupId>
 			<artifactId>swt-common</artifactId>
 			<version>0.1.7</version>
+			<scope>compile</scope>
 		</dependency>
+		
+		<dependency>
+			<groupId>com.shinwootns.ipm</groupId>
+			<artifactId>swt-data</artifactId>
+			<version>0.1.1</version>
+			<scope>compile</scope>
+  		</dependency>
 
+		<!-- 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-amqp</artifactId>
 		</dependency>
-
+ 		-->
+ 		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 
-		<!-- http://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple -->
 		<dependency>
-			<groupId>com.googlecode.json-simple</groupId>
-			<artifactId>json-simple</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-ws</artifactId>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.7</version>
 		</dependency>
 
 		<!-- Exclude default spring logging service -->
@@ -65,6 +81,35 @@
 			<artifactId>spring-boot-starter-log4j</artifactId>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc -->
+		<dependency>
+			<groupId>org.xerial</groupId>
+			<artifactId>sqlite-jdbc</artifactId>
+			<version>3.8.11.2</version>
+		</dependency>
+
+		<!-- 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
+		 -->
+		
+		<!-- myBatis -->
+		<dependency>
+			<groupId>org.mybatis.spring.boot</groupId>
+			<artifactId>mybatis-spring-boot-starter</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>9.4.1208</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -72,6 +117,12 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+
+				<configuration>
+					<profiles>
+						<profile></profile>
+					</profiles>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

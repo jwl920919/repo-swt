@@ -8,6 +8,14 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(locations={"application.yml"}, prefix="insight")
 public class ApplicationProperty {
 	
+	@Value("${server.port}")
+	public int serverPort;
+	@Value("${server.session.timeout}")
+	public int sessionTimeout;
+	
+	@Value("${insight.site-code}")
+	public String siteCode;
+	
 	@Value("${insight.name}")
 	public String name;
 	
@@ -60,12 +68,16 @@ public class ApplicationProperty {
 	
 	@Value("${insight.rabbitmq.virtual-host:/}")
     public String rabbitmqVHost;
+	
 
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		
-		sb.append( "\n====================================================\n" );
+		sb.append( "\n------------------------------------------------------------\n" );
+		sb.append( String.format("%-30s = %s\n", "server.port", this.serverPort ) );
+		sb.append( String.format("%-30s = %s\n", "server.session.timeout", this.sessionTimeout ) );
+		
 		sb.append( String.format("%-30s = %s\n", "insight.name", this.name ) );
 		sb.append( String.format("%-30s = %s\n", "insight.version", this.version ) );
 		sb.append( String.format("%-30s = %s\n", "insight.license", this.license ) );
@@ -79,10 +91,11 @@ public class ApplicationProperty {
 		sb.append( String.format("%-30s = %s\n", "insight.rabbitmq.virtual-host", this.rabbitmqVHost ) );
 		
 		if (debugEnable) {
+			sb.append( "------------------------------------------------------------\n" );
 			sb.append( String.format("%-30s = %s\n", "insight.debug.enable", (this.debugEnable)? "true":"false" ) );
 			sb.append( String.format("%-30s = %s\n", "insight.debug.enable_recv_syslog", (this.enable_recv_syslog)? "true":"false" ) );
 		}
-		sb.append( "====================================================\n" );
+		sb.append( "------------------------------------------------------------" );
 		
 		return sb.toString();
 	}

@@ -5,7 +5,6 @@
 	<artifactId>swt-common</artifactId>
 	<version>0.1.7</version>
 	<name>swt-common</name>
-	<description>ShinwooTNS Common Library</description>
 
 	<distributionManagement>
 		<repository>
