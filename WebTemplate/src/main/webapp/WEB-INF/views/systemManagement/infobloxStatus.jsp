@@ -113,28 +113,96 @@
 				</div>
 				<div class="box-body" style="text-align: left">
 					<div>
-						<label class="info-label">Hardware ID</label><b class="info-label-b">:</b><span id='id-info'></span>
+						<label class="info-label">Hardware ID</label><b
+							class="info-label-b">:</b><span id='id-info'></span>
 					</div>
 					<div>
-						<label class="info-label">System up-time</label><b class="info-label-b">:</b><span id='uptime-info'></span>
+						<label class="info-label">Host</label><b class="info-label-b">:</b><span
+							id='host-info'></span>
 					</div>
 					<div>
-						<label class="info-label">Temperature</label><b class="info-label-b">:</b><span id='temp-info'></span>&#x2103
+						<label class="info-label">Host Name</label><b class="info-label-b">:</b><span
+							id='host-name-info'></span>
 					</div>
 					<div>
-						<label class="info-label">Power</label><b class="info-label-b">:</b><i id="power1-status" class="fa fa-circle"></i>&nbsp;&nbsp;POWER1&nbsp;&nbsp;<i id="power2-status" class="fa fa-circle"></i>&nbsp;&nbsp;POWER2
+						<label class="info-label">System up-time</label><b
+							class="info-label-b">:</b><span id='uptime-info'></span>
+					</div>
+					<div>
+						<label class="info-label">Temperature</label><b
+							class="info-label-b">:</b>System&nbsp;<span id='sys-temp-info'></span>&#x2103&nbsp;&nbsp;/&nbsp;&nbsp;CPU&nbsp;<span
+							id='cpu-temp-info'></span>&#x2103
+					</div>
+					<div>
+						<label class="info-label">Power</label><b class="info-label-b">:</b><i
+							id="power1-status" class="fa fa-circle"></i>&nbsp;&nbsp;POWER1&nbsp;&nbsp;<i
+							id="power2-status" class="fa fa-circle"></i>&nbsp;&nbsp;POWER2
 					</div>
 					<div style="min-height: 25px;">
-						<label class="info-label" style="float:left">Fan</label><b class="info-label-b" style="float:left">:</b><table id='fan-info' style="float:left"></table>
+						<label class="info-label" style="float: left">Fan</label><b
+							class="info-label-b" style="float: left">:</b>
+						<table id='fan-info' style="float: left"></table>
 					</div>
 					<div style="min-height: 25px;">
-						<label class="info-label" style="float:left">License</label><b class="info-label-b" style="float:left">:</b><table id='license-info' style="float:left"></table>
+						<label class="info-label" style="float: left">License</label><b
+							class="info-label-b" style="float: left">:</b>
+						<table id='license-info' style="float: left"></table>
 					</div>
 					<div>
-						<label class="info-label">OS</label><b class="info-label-b">:</b><span id='os-info'></span>
+						<label class="info-label">OS</label><b class="info-label-b">:</b><span
+							id='os-info'></span>
 					</div>
 					<div>
-						<label class="info-label">Service Status</label><b class="info-label-b">:</b><i id="dhcp-is-enable" class="fa fa-circle"></i>&nbsp;&nbsp;DHCP&nbsp;&nbsp;<i id="dns-is-enable" class="fa fa-circle"></i>&nbsp;&nbsp;DNS
+						<label class="info-label">Service Status</label><b
+							class="info-label-b">:</b><i id="dhcp-is-enable"
+							class="fa fa-circle"></i>&nbsp;&nbsp;DHCP&nbsp;&nbsp;<i
+							id="dns-is-enable" class="fa fa-circle"></i>&nbsp;&nbsp;DNS
+					</div>
+					<div style="text-align: right;">
+						<label>Current : </label><b id='hw-collect-time'></b>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-xs-6">
+			<div class="box box-primary">
+				<div class="box-header" style="text-align: left;">
+					<i class="fa fa-cog"></i>
+					<h3 class="box-title-small">이중화정보</h3>
+					<!-- tools box -->
+					<div class="pull-right box-tools">
+						<button type="button" class="btn bg-teal btn-sm"
+							data-widget="collapse">
+							<i class="fa fa-minus"></i>
+						</button>
+					</div>
+					<!-- ./ tools -->
+				</div>
+				<div class="box-body" style="text-align: left">
+					<div>
+						<label class="info-label">Port Redundancy</label>&nbsp;<i id="lan2-port-setting" class="fa fa-circle"></i>
+					</div>
+					<div>
+						<label class="info-label">Enabled HA</label>&nbsp;<i id="enable-ha" class="fa fa-circle"></i>
+					</div>
+					<div>
+						<label class="info-label">Vrrp IpAddress</label><b class="info-label-b">:</b><span id='vrrp-address'></span>
+					</div>
+					<div>
+						<label class="info-label">Vrrp SubnetMask</label><b class="info-label-b">:</b><span id='vrrp-subnet'></span>
+					</div>
+					<div>
+						<label class="info-label">Vrrp Gateway</label><b class="info-label-b">:</b><span id='vrrp-gateway'></span>
+					</div>
+					<div>
+						<label class="info-label">Enabled Grid</label>&nbsp;<i id="master-candidate" class="fa fa-circle"></i>
+					</div>
+					<div>
+						<label class="info-label">Grid Status</label><b class="info-label-b">:</b><span id='grid-status'></span>
+					</div>
+					<div style="text-align: right;">
+						<label>Current : </label><b id='reduncdancy-collect-time'></b>
 					</div>
 				</div>
 			</div>

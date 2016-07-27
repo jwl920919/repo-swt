@@ -44,39 +44,40 @@ public class SystemManagementActionController {
 
 	@Autowired StringRedisTemplate redisTemplate;
 	
-	@RequestMapping(value = "expiryCheck", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+	@RequestMapping(value = "getHwInfo", method = RequestMethod.GET, produces = "application/text; charset=utf8")
 	public @ResponseBody Object expiryCheck(HttpServletRequest request, HttpSession session) {
-		logger.info("expiryCheck : " + request.getLocalAddr());
+		logger.info("getHwInfo : " + request.getLocalAddr());
 		init();
 		try {
 			String json = redisTemplate.opsForValue().get("status:device:dhcp:1");
 			if(json!=null) {
-				HashMap<String, Object> hwInfo = gson.fromJson(json,
-						new TypeToken<HashMap<String, Object>>() {
-						}.getType());
-//				Calendar calendar = Calendar.getInstance();
-				List<HashMap<String, Object>> licensesInfo = gson.fromJson(hwInfo.get("licenses").toString(),
-						new TypeToken<List<HashMap<String, Object>>>() {
-						}.getType());
-				List<Map<String, Object>> resultArray = new ArrayList<>();
-				System.out.println(licensesInfo);
-//				while (iterator.hasNext()) {
-//					JSONObject jObj = (JSONObject) iterator.next();
-//					long expiryDate = CommonHelper.objectToLong(jObj.get("expiry_date"))*1000;
-//					long now = calendar.getTimeInMillis();
-//					long gap = expiryDate - now;
-//					HashMap<String, Object> data = new HashMap<>();
-//					data.put("type", jObj.get("type"));
-//					data.put("now", now);
-//					data.put("gap", gap);
-//					if (gap > 0) {
-//						data.put("result", true);
-//					} else {
-//						data.put("result", false);
-//					}
-//					resultArray.add(data);
-//				}
-				result.data = resultArray;
+				JSONParser jParser = new JSONParser();
+				JSONObject hwInfo = (JSONObject) jParser.parse(json);
+				Calendar calendar = Calendar.getInstance();
+				JSONArray licensesInfo = (JSONArray)hwInfo.get("licenses");
+				Iterator iterator = licensesInfo.iterator();
+				while(iterator.hasNext()) {
+					JSONObject jObj = (JSONObject) iterator.next();
+					long expiryDate = CommonHelper.objectToLong(jObj.get("expiry_date"))*1000;
+					long now = calendar.getTimeInMillis();
+					long gap = (expiryDate - now) / 1000 ;
+					long gap_day = gap/(24*60*60);
+					long gap_hour = (gap-gap_day*24*60*60)/(60*60);
+					long gap_minute = (gap-gap_day*24*60*60-gap_hour*60*60)/60;
+					long gap_second = (gap-gap_day*24*60*60-gap_hour*60*60-gap_minute*60);
+					HashMap<String, Object> data = new HashMap<>();
+					jObj.put("now", now);
+					jObj.put("gap_day", gap_day);
+					jObj.put("gap_hour", gap_hour);
+					jObj.put("gap_minute", gap_minute);
+					jObj.put("gap_second", gap_second);
+					if (gap > 0) {
+						jObj.put("result", true);
+					} else {
+						jObj.put("result", false);
+					}
+				}
+				result.resultValue = hwInfo;
 			}
 			
 			result.result = true;

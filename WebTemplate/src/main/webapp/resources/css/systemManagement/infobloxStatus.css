@@ -28,20 +28,20 @@ div.row {
 	color:#ff3131 !important;
 }
 /* Tooltip container */
-.tooltip {
+.custom-tooltip {
     position: relative;
     display: inline-block;
-    border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
 }
 
 /* Tooltip text */
-.tooltip .tooltiptext {
+.custom-tooltip .tooltiptext {
     visibility: hidden;
-    width: 120px;
-    background-color: black;
+    width: 220px;
+    background-color: rgba(53, 53, 53, 0.70);
     color: #fff;
-    text-align: center;
+    text-align: left;
     padding: 5px 0;
+    padding-left:5px;
     border-radius: 6px;
  
     /* Position the tooltip text - see examples below! */
@@ -50,6 +50,6 @@ div.row {
 }
 
 /* Show the tooltip text when you mouse over the tooltip container */
-.tooltip:hover .tooltiptext {
+.custom-tooltip:hover .tooltiptext {
     visibility: visible;
 }
