@@ -8,7 +8,7 @@ import com.google.gson.JsonObject;
 import com.shinwootns.common.network.SyslogEntity;
 import com.shinwootns.ipm.collector.SpringBeanProvider;
 import com.shinwootns.ipm.collector.config.ApplicationProperty;
-import com.shinwootns.ipm.collector.service.handler.RabbitmqSender;
+import com.shinwootns.ipm.collector.service.amqp.RabbitmqSender;
 import com.shinwootns.ipm.collector.worker.BaseWorker;
 import com.shinwootns.ipm.collector.worker.WorkerManager;
 

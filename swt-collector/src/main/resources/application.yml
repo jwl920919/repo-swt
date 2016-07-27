@@ -1,11 +1,13 @@
 #====================================
-# ipm
+# insight
 #====================================
-ipm:
-  name: IPM-Collector
+insight:
+  name: Smart Insight
   version: 0.1.1
   license: TEST000000
-  master_ip:
+  cluster:
+    mode: master    # master, slave
+    slave-index: 0  # 0 ~ 99
   redis:
     host: shinwootnskr.iptime.org
     port: 6379

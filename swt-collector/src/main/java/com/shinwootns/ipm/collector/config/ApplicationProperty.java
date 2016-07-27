@@ -5,53 +5,60 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 @Component
-@ConfigurationProperties(locations={"application.yml"}, prefix="ipm")
+@ConfigurationProperties(locations={"application.yml"}, prefix="insight")
 public class ApplicationProperty {
 	
-	@Value("${ipm.name}")
+	@Value("${insight.name}")
 	public String name;
 	
-	@Value("${ipm.version}")
+	@Value("${insight.version}")
 	public String version;
 	
-	@Value("${ipm.license}")
+	@Value("${insight.license}")
 	public String license;
 	
+	// Cluster info
+	@Value("${insight.cluster.mode}")
+	public String clusterMode;
+	
+	@Value("${insight.cluster.slave-index:99}")
+	public int clusterSalveIndex;
+	
 	//{{ Debug Mode
-	@Value("${ipm.debug_enable:false}")
+	@Value("${insight.debug_enable:false}")
 	public boolean debugEnable;
 	
-	@Value("${ipm.debug.enable_recv_syslog:true}")
+	@Value("${insight.debug.enable_recv_syslog:true}")
 	public boolean enable_recv_syslog;
 	//}} Debug Mode
 	
 	// Redis
-	@Value("${ipm.redis.host:127.0.0.1}")
+	@Value("${insight.redis.host:127.0.0.1}")
 	public String redisHost;
 	
-	@Value("${ipm.redis.port:6379}")
+	@Value("${insight.redis.port:6379}")
 	public int redisPort;
 	
-	@Value("${ipm.redis.password}")
+	@Value("${insight.redis.password}")
 	public String redisPassword;
 
-	@Value("${ipm.redis.timeout:0}")
+	@Value("${insight.redis.timeout:0}")
 	public int redisTimeout;
 	
 	// Rabbitmq
-	@Value("${ipm.rabbitmq.host:127.0.0.1}")
+	@Value("${insight.rabbitmq.host:127.0.0.1}")
 	public String rabbitmqHost;
 	
-	@Value("${ipm.rabbitmq.port:5672}")
+	@Value("${insight.rabbitmq.port:5672}")
     public int rabbitmqPort;
     
-	@Value("${ipm.rabbitmq.username}")
+	@Value("${insight.rabbitmq.username}")
     public String rabbitmqUsername;
 	
-	@Value("${ipm.rabbitmq.password}")
+	@Value("${insight.rabbitmq.password}")
 	public String rabbitmqPassword;
 	
-	@Value("${ipm.rabbitmq.virtual-host:/}")
+	@Value("${insight.rabbitmq.virtual-host:/}")
     public String rabbitmqVHost;
 
 	@Override
@@ -59,21 +66,21 @@ public class ApplicationProperty {
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append( "\n====================================================\n" );
-		sb.append( String.format("%-30s = %s\n", "ipm.name", this.name ) );
-		sb.append( String.format("%-30s = %s\n", "ipm.version", this.version ) );
-		sb.append( String.format("%-30s = %s\n", "ipm.license", this.license ) );
+		sb.append( String.format("%-30s = %s\n", "insight.name", this.name ) );
+		sb.append( String.format("%-30s = %s\n", "insight.version", this.version ) );
+		sb.append( String.format("%-30s = %s\n", "insight.license", this.license ) );
 		
-		sb.append( String.format("%-30s = %s\n", "ipm.redis.host", this.redisHost ) );
-		sb.append( String.format("%-30s = %s\n", "ipm.redis.port", this.redisPort ) );
-		sb.append( String.format("%-30s = %s\n", "ipm.redis.timeout", this.redisTimeout ) );
+		sb.append( String.format("%-30s = %s\n", "insight.redis.host", this.redisHost ) );
+		sb.append( String.format("%-30s = %s\n", "insight.redis.port", this.redisPort ) );
+		sb.append( String.format("%-30s = %s\n", "insight.redis.timeout", this.redisTimeout ) );
 		
-		sb.append( String.format("%-30s = %s\n", "ipm.rabbitmq.host", this.rabbitmqHost ) );
-		sb.append( String.format("%-30s = %s\n", "ipm.rabbitmq.port", this.rabbitmqPort ) );
-		sb.append( String.format("%-30s = %s\n", "ipm.rabbitmq.virtual-host", this.rabbitmqVHost ) );
+		sb.append( String.format("%-30s = %s\n", "insight.rabbitmq.host", this.rabbitmqHost ) );
+		sb.append( String.format("%-30s = %s\n", "insight.rabbitmq.port", this.rabbitmqPort ) );
+		sb.append( String.format("%-30s = %s\n", "insight.rabbitmq.virtual-host", this.rabbitmqVHost ) );
 		
 		if (debugEnable) {
-			sb.append( String.format("%-30s = %s\n", "ipm.debug.enable", (this.debugEnable)? "true":"false" ) );
-			sb.append( String.format("%-30s = %s\n", "ipm.debug.enable_recv_syslog", (this.enable_recv_syslog)? "true":"false" ) );
+			sb.append( String.format("%-30s = %s\n", "insight.debug.enable", (this.debugEnable)? "true":"false" ) );
+			sb.append( String.format("%-30s = %s\n", "insight.debug.enable_recv_syslog", (this.enable_recv_syslog)? "true":"false" ) );
 		}
 		sb.append( "====================================================\n" );
 		

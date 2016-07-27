@@ -10,11 +10,14 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.shinwootns.common.network.SyslogManager;
+import com.shinwootns.common.utils.CryptoUtils;
 import com.shinwootns.ipm.collector.SpringBeanProvider;
 import com.shinwootns.ipm.collector.config.ApplicationProperty;
-import com.shinwootns.ipm.collector.service.handler.RabbitmqHandler;
-import com.shinwootns.ipm.collector.service.handler.SyslogReceiveHandlerImpl;
+import com.shinwootns.ipm.collector.data.SharedData;
+import com.shinwootns.ipm.collector.service.amqp.RabbitmqHandler;
+import com.shinwootns.ipm.collector.service.syslog.SyslogReceiveHandlerImpl;
 import com.shinwootns.ipm.collector.worker.WorkerManager;
+import com.shinwootns.ipm.data.entity.DeviceDhcp;
 
 @RestController
 public class ServiceController {
@@ -64,5 +67,18 @@ public class ServiceController {
 		RabbitmqHandler.getInstance().close();
 		
 		_logger.info("Stop Service Controller.");
+	}
+	
+	public void testInitData() throws Exception {
+		
+		DeviceDhcp dhcp = new DeviceDhcp();
+		dhcp.setDeviceId(2);
+		dhcp.setSiteId(1);
+		dhcp.setHost("192.168.1.11");
+		dhcp.setSnmpCommunity("public");
+		dhcp.setWapiUserid("admin");
+		dhcp.setWapiUserid( CryptoUtils.Decode_AES128("SctL7q8ogUkfBwqqz3hP6A=="));
+		
+		SharedData.getInstance().dhcpDevice = dhcp;
 	}
 }

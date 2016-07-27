@@ -1,44 +1,24 @@
 package com.shinwootns.ipm.data.entity;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.sql.Timestamp;
 
 
-/**
- * The persistent class for the dhcp_fixed_ip database table.
- * 
- */
-@Entity
-@Table(name="dhcp_fixed_ip")
-@NamedQuery(name="DhcpFixedIp.findAll", query="SELECT d FROM DhcpFixedIp d")
 public class DhcpFixedIp implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
 
-	@EmbeddedId
-	private DhcpFixedIpPK id;
-
-	private String comment;
-
-	private Boolean disable;
-
-	private String macaddr;
-
+	private Integer site_id;
 	private String network;
-
-	@Column(name="update_time")
-	private Timestamp updateTime;
+	private String ipaddr;
+	private String comment;
+	private String macaddr;
+	private Boolean disable;
+	private Timestamp update_time;
 
 	public DhcpFixedIp() {
 	}
 
-	public DhcpFixedIpPK getId() {
-		return this.id;
-	}
-
-	public void setId(DhcpFixedIpPK id) {
-		this.id = id;
-	}
 
 	public String getComment() {
 		return this.comment;
@@ -46,14 +26,6 @@ public class DhcpFixedIp implements Serializable {
 
 	public void setComment(String comment) {
 		this.comment = comment;
-	}
-
-	public Boolean getDisable() {
-		return this.disable;
-	}
-
-	public void setDisable(Boolean disable) {
-		this.disable = disable;
 	}
 
 	public String getMacaddr() {
@@ -64,20 +36,52 @@ public class DhcpFixedIp implements Serializable {
 		this.macaddr = macaddr;
 	}
 
-	public String getNetwork() {
-		return this.network;
+	public Timestamp getUpdateTime() {
+		return this.update_time;
 	}
+
+	public void setUpdateTime(Timestamp updateTime) {
+		this.update_time = updateTime;
+	}
+
+
+	public Integer getSiteId() {
+		return site_id;
+	}
+
+
+	public void setSiteId(Integer site_id) {
+		this.site_id = site_id;
+	}
+
+
+	public String getNetwork() {
+		return network;
+	}
+
 
 	public void setNetwork(String network) {
 		this.network = network;
 	}
 
-	public Timestamp getUpdateTime() {
-		return this.updateTime;
+
+	public String getIpaddr() {
+		return ipaddr;
 	}
 
-	public void setUpdateTime(Timestamp updateTime) {
-		this.updateTime = updateTime;
+
+	public void setIpaddr(String ipaddr) {
+		this.ipaddr = ipaddr;
+	}
+
+
+	public Boolean getDisable() {
+		return disable;
+	}
+
+
+	public void setDisable(Boolean disable) {
+		this.disable = disable;
 	}
 
 }

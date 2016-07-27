@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import com.google.gson.JsonArray;
 import com.shinwootns.common.utils.TimeUtils;
-import com.shinwootns.ipm.service.handler.InfobloxWAPIHandler;
+//import com.shinwootns.ipm.service.handler.InfobloxWAPIHandler;
 
 public class TestWAPI {
 

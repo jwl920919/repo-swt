@@ -1,5 +1,7 @@
 package com.shinwootns.ipm.service.handler;
 
+/*
+
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +30,7 @@ public class InfobloxWAPIHandler {
 	
 	public class NextPageData {
 		
-		public JsonArray jArrayData = null;
+		public JsonArray jArrayData = new JsonArray();
 		public String nextPageID = null;
 		
 		public NextPageData(JsonArray jArrayData, String nextPageID) {
@@ -315,7 +317,7 @@ public class InfobloxWAPIHandler {
 				return null;
 			
 			// next_page_id
-			String nextPageId = jObj.get("next_page_id").getAsString();
+			String nextPageId = JsonUtils.getValueToString(jObj, "next_page_id", "");
 			
 			// result
 			JsonArray resultArray = (JsonArray)jObj.get("result");
@@ -358,7 +360,7 @@ public class InfobloxWAPIHandler {
 				return null;
 
 			// next_page_id
-			nextPageId = jObj.get("next_page_id").getAsString();
+			nextPageId = JsonUtils.getValueToString(jObj, "next_page_id", "");
 			
 			// result
 			JsonArray resultArray = (JsonArray)jObj.get("result");
@@ -376,59 +378,59 @@ public class InfobloxWAPIHandler {
 	//region Collect Ipv6address
 	public NextPageData getIPv6AddressFirst(int splitCount, String network) {
 		
-		/*
-		try
-		{
-			Map params = new HashMap<String, String>();
-			
-			// First Page
-			params.put("_paging", 1);
-			params.put("_max_results", splitCount);
-			params.put("_return_as_object", 1);
-			params.put("_return_type", "json");
-			params.put("network", network);							// '192.168.1.0/25'
-			params.put("_return_fields", 
-					((new StringBuilder())
-					.append("ip_address,network,duid,names")
-					.append(",is_conflict")
-					.append(",discover_now_status")
-					//.append(",conflict_types")
-					.append(",lease_state,status")
-					.append(",types,usage")
-					.append(",fingerprint")
-					.append(",discovered_data.os,discovered_data.last_discovered")
-					).toString()
-			);
-			
-			// type = LEASE, DHCP_RANGE
-			// usage = DHCP
 
-			String value = restClient.Get("/wapi/v2.3/ipv6address", params);
-			
-			if (value == null)
-				return null;
-			
-			// Change unescape-unicode
-			value = StringUtils.unescapeUnicodeString(value);
-			
-			// JsonObject Parser
-			JsonObject jObj = JsonUtils.parseJsonObject(value);
-			
-			if (jObj == null)
-				return null;
-			
-			// next_page_id
-			String nextPageId = (String)jObj.get("next_page_id");
-			
-			// result
-			JsonArray resultArray = (JsonArray)jObj.get("result");
-			
-			return new NextPageData(resultArray, nextPageId);
-		}
-		catch(Exception ex) {
-			_logger.fatal(ex.getMessage(), ex);
-		}
-		*/
+//		try
+//		{
+//			Map params = new HashMap<String, String>();
+//			
+//			// First Page
+//			params.put("_paging", 1);
+//			params.put("_max_results", splitCount);
+//			params.put("_return_as_object", 1);
+//			params.put("_return_type", "json");
+//			params.put("network", network);							// '192.168.1.0/25'
+//			params.put("_return_fields", 
+//					((new StringBuilder())
+//					.append("ip_address,network,duid,names")
+//					.append(",is_conflict")
+//					.append(",discover_now_status")
+//					//.append(",conflict_types")
+//					.append(",lease_state,status")
+//					.append(",types,usage")
+//					.append(",fingerprint")
+//					.append(",discovered_data.os,discovered_data.last_discovered")
+//					).toString()
+//			);
+//			
+//			// type = LEASE, DHCP_RANGE
+//			// usage = DHCP
+//
+//			String value = restClient.Get("/wapi/v2.3/ipv6address", params);
+//			
+//			if (value == null)
+//				return null;
+//			
+//			// Change unescape-unicode
+//			value = StringUtils.unescapeUnicodeString(value);
+//			
+//			// JsonObject Parser
+//			JsonObject jObj = JsonUtils.parseJsonObject(value);
+//			
+//			if (jObj == null)
+//				return null;
+//			
+//			// next_page_id
+//			String nextPageId = (String)jObj.get("next_page_id");
+//			
+//			// result
+//			JsonArray resultArray = (JsonArray)jObj.get("result");
+//			
+//			return new NextPageData(resultArray, nextPageId);
+//		}
+//		catch(Exception ex) {
+//			_logger.fatal(ex.getMessage(), ex);
+//		}
+		
 		return null;
 	}
 	
@@ -436,40 +438,40 @@ public class InfobloxWAPIHandler {
 		
 		if (nextPageId == null || nextPageId.isEmpty())
 			return null;
-		/*
-		try
-		{
-			Map params = new HashMap<String, String>();
-			params.put("_max_results", splitCount);
-			params.put("_page_id", nextPageId);
-			params.put("_return_type", "json");
 
-			String value = restClient.Get("/wapi/v2.3/ipv6address", params);
-			
-			if (value == null)
-				return null;
-			
-			// Change unescape-unicode
-			value = StringUtils.unescapeUnicodeString(value);
-			
-			// JsonObject Parser
-			JsonObject jObj = JsonUtils.parseJsonObject(value);
-			
-			if (jObj == null)
-				return null;
+//		try
+//		{
+//			Map params = new HashMap<String, String>();
+//			params.put("_max_results", splitCount);
+//			params.put("_page_id", nextPageId);
+//			params.put("_return_type", "json");
+//
+//			String value = restClient.Get("/wapi/v2.3/ipv6address", params);
+//			
+//			if (value == null)
+//				return null;
+//			
+//			// Change unescape-unicode
+//			value = StringUtils.unescapeUnicodeString(value);
+//			
+//			// JsonObject Parser
+//			JsonObject jObj = JsonUtils.parseJsonObject(value);
+//			
+//			if (jObj == null)
+//				return null;
+//
+//			// next_page_id
+//			nextPageId = (String)jObj.get("next_page_id");
+//			
+//			// result
+//			JsonArray resultArray = (JsonArray)jObj.get("result");
+//			
+//			return new NextPageData(resultArray, nextPageId);
+//		}
+//		catch(Exception ex) {
+//			_logger.fatal(ex.getMessage(), ex);
+//		}
 
-			// next_page_id
-			nextPageId = (String)jObj.get("next_page_id");
-			
-			// result
-			JsonArray resultArray = (JsonArray)jObj.get("result");
-			
-			return new NextPageData(resultArray, nextPageId);
-		}
-		catch(Exception ex) {
-			_logger.fatal(ex.getMessage(), ex);
-		}
-		*/
 		return null;
 	}
 	//endregion
@@ -517,12 +519,13 @@ public class InfobloxWAPIHandler {
 				return null;
 			
 			// next_page_id
-			String nextPageId = jObj.get("next_page_id").getAsString();
+			String nextPageId = JsonUtils.getValueToString(jObj, "next_page_id", "");
 			
 			// result
 			JsonArray jIPAddr = (JsonArray)jObj.get("result");
 			
-			resultArray.addAll(jIPAddr);
+			if (jIPAddr.size() > 0)
+				resultArray.addAll(jIPAddr);
 
 			return new NextPageData(resultArray, nextPageId);
 		}
@@ -566,7 +569,7 @@ public class InfobloxWAPIHandler {
 				return null;
 
 			// next_page_id
-			nextPageId = jObj.get("next_page_id").getAsString();
+			nextPageId = JsonUtils.getValueToString(jObj, "next_page_id", "");
 			
 			// result
 			JsonArray jIPAddr = (JsonArray)jObj.get("result");
@@ -613,4 +616,6 @@ public class InfobloxWAPIHandler {
 		return null;
 	}
 	//endregion
+	
 }
+*/
