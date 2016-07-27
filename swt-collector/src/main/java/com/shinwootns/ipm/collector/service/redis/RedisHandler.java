@@ -4,6 +4,8 @@ import org.apache.log4j.Logger;
 
 import com.shinwootns.common.cache.RedisClient;
 import com.shinwootns.common.cache.RedisManager;
+import com.shinwootns.common.cache.RedisManager.RedisPoolStatus;
+import com.shinwootns.common.utils.CryptoUtils;
 import com.shinwootns.ipm.collector.SpringBeanProvider;
 import com.shinwootns.ipm.collector.config.ApplicationProperty;
 
@@ -25,13 +27,26 @@ public class RedisHandler {
 	}
 
 	
-	public boolean Connect() 
+	public boolean connect() 
 	{
 		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
 		if (appProperty == null)
 			return false;
 		
-		if (rm.connect(appProperty.redisHost, appProperty.redisPort, appProperty.redisPassword, 0) == false)
+		boolean result = false;
+		try
+		{
+			result = rm.connect(
+					appProperty.redisHost, 
+					appProperty.redisPort, 
+					CryptoUtils.Decode_AES128(appProperty.redisPassword), 0);
+		}
+		catch(Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+			result = false;
+		}
+		
+		if ( result == false)
 		{
 			System.out.println("Redis connection failed.");
 			return false;
@@ -44,6 +59,18 @@ public class RedisHandler {
 		
 		RedisClient redis = rm.createRedisClient();
 		
+		if (redis == null) {
+			return null;
+		}
+		else if (redis.isConnection() == false) {
+			redis.close();
+			return null;
+		}
+		
 		return redis;
+	}
+	
+	public RedisPoolStatus getPoolStatus() {
+		return rm.getPoolStatus();
 	}
 }

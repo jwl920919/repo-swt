@@ -54,7 +54,7 @@ public class InfobloxWAPIHandler {
 	}
 	//endregion
 	
-	//region [WAPI] Network Info 
+	//region [WAPI] Get Network Info 
 	public JsonArray getNetworkInfo() {
 		
 		try
@@ -83,7 +83,7 @@ public class InfobloxWAPIHandler {
 	}
 	//endregion
 
-	//region [WAPI] Filter Info
+	//region [WAPI] Get Filter Info
 	public JsonArray getFilterInfo() {
 		
 		try
@@ -112,7 +112,7 @@ public class InfobloxWAPIHandler {
 	}
 	//endregion
 
-	//region [WAPI] Range Info
+	//region [WAPI] Get Range Info
 	public JsonArray getRangeInfo() {
 		
 		try
@@ -141,7 +141,7 @@ public class InfobloxWAPIHandler {
 	}
 	//endregion
 
-	//region [WAPI] Grid Info
+	//region [WAPI] Get Grid Info
 	public JsonArray getGridInfo() {
 		
 		try
@@ -170,7 +170,7 @@ public class InfobloxWAPIHandler {
 	}
 	//endregion
 
-	//region [WAPI] Collect MacFilter
+	//region [WAPI] Get MacFilter
 	public JsonArray getMacFilter(String macAddr) {
 
 		try
@@ -265,7 +265,7 @@ public class InfobloxWAPIHandler {
 	}
 	//endregion
 	
-	//region [WAPI] Collect IPv4Address
+	//region [WAPI] Get IPv4Address
 	public NextPageData getIPv4AddressFirst(int splitCount, String network) {
 		
 		try
@@ -359,7 +359,7 @@ public class InfobloxWAPIHandler {
 	}
 	//endregion
 	
-	//region [WAPI] Collect Ipv6address
+	//region [WAPI] Get Ipv6address
 	public NextPageData getIPv6AddressFirst(int splitCount, String network) {
 		
 		/*
@@ -460,7 +460,7 @@ public class InfobloxWAPIHandler {
 	}
 	//endregion
 	
-	//region [WAPI] Collect Lease IP
+	//region [WAPI] Get Lease IP
 	public NextPageData getLeaseIPFirst(int splitCount, String network) {
 		
 		JsonArray resultArray = new JsonArray(); 
@@ -571,7 +571,7 @@ public class InfobloxWAPIHandler {
 	}
 	//endregion
 
-	//region [WAPI] Collect Fixed IP
+	//region [WAPI] Get Fixed IP
 	public JsonArray getFixedIPList() {
 
 		try
@@ -610,8 +610,7 @@ public class InfobloxWAPIHandler {
 			sb.append("/wapi/v2.3/member");
 			sb.append("?_return_type=json");
 			sb.append("&_return_fields=node_info");
-			if (hostName.isEmpty() == false)
-				sb.append("&host_name=").append(hostName);
+			sb.append("&host_name=").append(hostName);
 			
 			String value = restClient.Get(sb.toString());
 			
@@ -630,4 +629,63 @@ public class InfobloxWAPIHandler {
 		return null;
 	}
 	//endregion
+	
+	//region [WAPI] Get License info
+	public JsonArray getLicenseInfo(String hwid) {
+		try
+		{
+			StringBuilder sb = new StringBuilder();
+			
+			sb.append("/wapi/v2.3/member:license");
+			sb.append("?_return_type=json");
+			sb.append("&_return_fields=expiry_date,hwid,kind,type");
+			sb.append("&hwid=").append(hwid);
+			
+			String value = restClient.Get(sb.toString());
+			
+			if (value == null)
+				return null;
+			
+			// Change unescape-unicode
+			value = StringUtils.unescapeUnicodeString(value);
+			
+			// JsonArray Parser
+			return JsonUtils.parseJsonArray(value);
+		}
+		catch(Exception ex) {
+			_logger.fatal(ex.getMessage(), ex);
+		}
+		return null;
+	}
+	//endregion
+
+	//region [WAPI] Get Service enable
+	public JsonArray getServiceEnableInfo(String hostname) {
+		try
+		{
+			StringBuilder sb = new StringBuilder();
+			
+			sb.append("/wapi/v2.3/member:dhcpproperties");
+			sb.append("?_return_type=json");
+			sb.append("&_return_fields=enable_ddns,enable_dhcp,enable_fingerprint,enable_dhcpv6_service,enable_dhcp_on_lan2,enable_dhcp_on_ipv6_lan2");
+			sb.append("&host_name=").append(hostname);
+			
+			String value = restClient.Get(sb.toString());
+			
+			if (value == null)
+				return null;
+			
+			// Change unescape-unicode
+			value = StringUtils.unescapeUnicodeString(value);
+			
+			// JsonArray Parser
+			return JsonUtils.parseJsonArray(value);
+		}
+		catch(Exception ex) {
+			_logger.fatal(ex.getMessage(), ex);
+		}
+		return null;
+	}
+	//endregion
+	
 }

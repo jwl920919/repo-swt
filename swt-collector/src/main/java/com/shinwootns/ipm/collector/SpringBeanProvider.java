@@ -5,6 +5,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import com.shinwootns.ipm.collector.config.ApplicationProperty;
+import com.shinwootns.ipm.collector.data.mapper.DataMapper;
 
 @Component
 public class SpringBeanProvider {
@@ -51,6 +52,26 @@ public class SpringBeanProvider {
     public ApplicationProperty getApplicationProperty() {
     
     	return appProperty;
+    }
+    
+    // Data Mapper
+    public DataMapper getDataMapper() {
+    	
+    	if (_context == null)
+    		return null;
+    	
+    	DataMapper dataMapper = null;
+    	
+    	try
+    	{
+    		dataMapper = _context.getBean("dataMapper", DataMapper.class);
+    	}
+    	catch(Exception ex) {
+    		_logger.error("SpringBeanProvider.getDhcpMapper().... failed");
+    		_logger.error(ex.getMessage(), ex);
+    	}
+    	
+    	return dataMapper;
     }
     
     /*

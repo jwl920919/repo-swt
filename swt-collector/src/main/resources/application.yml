@@ -2,6 +2,8 @@
 # insight
 #====================================
 insight:
+  site-code: SWT
+  
   name: Smart Insight
   version: 0.1.1
   license: TEST000000
@@ -19,17 +21,40 @@ insight:
     username: admin
     password: 7+AzHIrmzGDARTT1VaQa3Q==
     virtual-host: / 
-
+    
+#====================================
+# server
+#====================================
+server:
+  port: 8081
+  session:
+    timeout: 3000
+    
+#====================================
+# Security
+#====================================
+security:
+  user:
+    name: admin
+    password: shinwoo123!
+    
 #====================================
 # spring
 #====================================
-#spring:
-  #rabbitmq:
-    #host: shinwootnskr.iptime.org
-    #port: 5672
-    #username: admin
-    #password: shinwoo123!
-    #virtual-host: /
+spring:
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://shinwootnskr.iptime.org:5432/ipm_db
+    username: postgres
+    password: SctL7q8ogUkfBwqqz3hP6A==
+    max-idle: 10
+    testOnBorrow: true
+    validation-query: SELECT 1
+  jpa:
+    show-sql: false
+    hibernate:
+      ddlAuto: none
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
 
 #====================================
 # banner
@@ -42,8 +67,14 @@ banner:
 # logging
 #====================================
 logging:
-  file: /logs/ipm-collector.log
+  file: /logs/ipm-insight.log
   level:
     org.springframework: INFO
     level.com.shinwootns: DEBUG
     root: INFO
+    
+#====================================
+# mybatis
+#====================================
+mybatis:
+  config-location: classpath:/mybatis/mybatis-config.xml

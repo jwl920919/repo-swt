@@ -9,9 +9,32 @@ import com.shinwootns.common.infoblox.InfobloxWAPIHandler;
 import com.shinwootns.common.snmp.SnmpResult;
 import com.shinwootns.common.snmp.SnmpUtil;
 import com.shinwootns.common.utils.JsonUtils;
+import com.shinwootns.common.utils.TimeUtils;
 import com.shinwootns.ipm.data.status.DhcpStatus;
+import com.shinwootns.ipm.data.status.DhcpStatus.License;
 
 public class DhcpHandler {
+	
+	private final static String OID_sysObjectID = "1.3.6.1.2.1.1.2.0";
+	private final static String OID_sysName = "1.3.6.1.2.1.1.5.0";
+	
+	private final static String OID_ibHardwareType = "1.3.6.1.4.1.7779.3.1.1.2.1.4.0";
+	private final static String OID_ibSerialNumber = "1.3.6.1.4.1.7779.3.1.1.2.1.6.0";
+	private final static String OID_ibNiosVersion = "1.3.6.1.4.1.7779.3.1.1.2.1.7.0";
+	private final static String OID_ibSystemMonitorCpuUsage = "1.3.6.1.4.1.7779.3.1.1.2.1.8.1.1.0";
+	private final static String OID_ibSystemMonitorMemUsage = "1.3.6.1.4.1.7779.3.1.1.2.1.8.2.1.0";
+	private final static String OID_ibMemberServiceStatusEntry = "1.3.6.1.4.1.7779.3.1.1.2.1.9.1";
+	//ibServiceName		1.3.6.1.4.1.7779.3.1.1.2.1.9.1.1
+	//ibServiceStatus	1.3.6.1.4.1.7779.3.1.1.2.1.9.1.2
+	//ibServiceDesc		s1.3.6.1.4.1.7779.3.1.1.2.1.9.1.3
+	private final static String OID_ibMemberNode1ServiceStatusEntry = "1.3.6.1.4.1.7779.3.1.1.2.1.10.1";
+	//ibNode1ServiceName	1.3.6.1.4.1.7779.3.1.1.2.1.10.1.1
+	//ibNode1ServiceStatus	1.3.6.1.4.1.7779.3.1.1.2.1.10.1.2
+	//ibNode1ServiceDesc	1.3.6.1.4.1.7779.3.1.1.2.1.10.1.3
+	private final static String OID_ibMemberNode2ServiceStatusEntry = "1.3.6.1.4.1.7779.3.1.1.2.1.11.1";
+	//ibNode2ServiceName	1.3.6.1.4.1.7779.3.1.1.2.1.11.1.1
+	//ibNode2ServiceStatus	1.3.6.1.4.1.7779.3.1.1.2.1.11.1.2
+	//ibNode2ServiceDesc	1.3.6.1.4.1.7779.3.1.1.2.1.11.1.3
 	
 	private final Logger _logger = Logger.getLogger(this.getClass());
 	
@@ -20,7 +43,6 @@ public class DhcpHandler {
 	private String wapiPasswd = "";
 	private String snmpCommunity = "";
 	
-	private SnmpUtil snmpUtil;
 	private InfobloxWAPIHandler wapiHandler; 
 	
 	public DhcpHandler(String host, String wapiId, String wapiPwd, String snmpCommunity) {
@@ -30,8 +52,8 @@ public class DhcpHandler {
 		this.wapiPasswd = wapiPwd;
 		this.snmpCommunity = snmpCommunity;
 		
+		//WAPI Handler
 		wapiHandler = new InfobloxWAPIHandler(this.host, this.wapiUser, this.wapiPasswd);
-		snmpUtil = new SnmpUtil(this.host, this.snmpCommunity);
 	}
 	
 	//region Connect WAPI & SNMP
@@ -66,9 +88,12 @@ public class DhcpHandler {
 	//region [SNMP] Check snmp
 	public boolean checkSnmp() {
 		
-		SnmpResult sysOid = this.snmpUtil.snmpGet(1, ".1.3.6.1.2.1.1.2.0", 1000, 3);
+		//SNMP Handler
+		SnmpUtil snmpUtil = new SnmpUtil(this.host, this.snmpCommunity);
+		
+		SnmpResult result = snmpUtil.snmpGet(1, OID_sysObjectID, 1000, 3);
 
-		if (sysOid != null) {
+		if (result != null) {
 			return true;
 		}
 		
@@ -79,10 +104,11 @@ public class DhcpHandler {
 	//region [SNMP] Get sysName
 	public String getSysName() {
 		
-		SnmpResult sysName = this.snmpUtil.snmpGet(1, ".1.3.6.1.2.1.1.5.0", 1000, 3);
+		SnmpUtil snmpUtil = new SnmpUtil(this.host, this.snmpCommunity);
+		SnmpResult result = snmpUtil.snmpGet(1, OID_sysName, 1000, 3);
 
-		if (sysName != null)
-			return sysName.getValueString();
+		if (result != null)
+			return result.getValueString();
 		
 		return null;
 	}
@@ -91,38 +117,71 @@ public class DhcpHandler {
 	//region [SNMP] Get SysUptime
 	public Long getSysUptime() {
 
-		SnmpResult sysUptime = this.snmpUtil.snmpGet(2, ".1.3.6.1.2.1.1.3.0", 1000, 3);
+		SnmpUtil snmpUtil = new SnmpUtil(this.host, this.snmpCommunity);
+		SnmpResult sysUptime = snmpUtil.snmpGet(2, ".1.3.6.1.2.1.1.3.0", 1000, 3);
 		
 		if (sysUptime != null)
-			return (long)(sysUptime.getValueNumber()/1000);
+			return (long)(sysUptime.getValueNumber()/100);
 		
 		return null;
 	}
 	//endregion
 	
-	//region Get Device Status
+	//region [SNMP] Get Infoblox NioVersion
+	public String getNiosVersion() {
+		
+		SnmpUtil snmpUtil = new SnmpUtil(this.host, this.snmpCommunity);
+		SnmpResult result = snmpUtil.snmpGet(1, OID_ibNiosVersion, 1000, 3);
+
+		if (result != null)
+			return result.getValueString();
+		
+		return null;
+	}
+	//endregion
+	
+	//region Get HW Status
 	public DhcpStatus getHWStatus() {
 		
 		DhcpStatus dhcpStatus = new DhcpStatus();
 		dhcpStatus.host = this.host;
 		dhcpStatus.host_name = getSysName();
 		dhcpStatus.sys_uptime = getSysUptime();
+		dhcpStatus.os = this.getNiosVersion();
+		dhcpStatus.collect_time = TimeUtils.currentTimeMilis() / 1000;
 		
-		// Get Node Info
-		JsonArray jArray = wapiHandler.getNodeInfo(dhcpStatus.host_name);
-			
-		if (jArray == null || jArray.size() == 0)
+		if (dhcpStatus.host_name == null || dhcpStatus.host_name.isEmpty()) {
+			_logger.error("hostname is null");
 			return null;
+		}
 		
-		JsonElement rootEle = jArray.get(0);
-
 		try {
+
+			// Get Node Info
+			JsonArray jArray = wapiHandler.getNodeInfo(dhcpStatus.host_name);
+
+			if (jArray == null || jArray.size() == 0)
+				return null;
 			
-			// get node info
-			JsonArray jNodeArray = rootEle.getAsJsonObject().get("node_info").getAsJsonArray();
-			
+			JsonArray jNodeArray = jArray.get(0).getAsJsonObject().get("node_info").getAsJsonArray();
 			if (jNodeArray != null)
-				getHWNodeInfo(dhcpStatus, jNodeArray);
+				extractNodeInfo(dhcpStatus, jNodeArray);
+			
+			// Get Service enable info
+			if (dhcpStatus.hwid != null && dhcpStatus.hwid.isEmpty() == false) {
+				JsonArray jServiceArray = wapiHandler.getServiceEnableInfo(dhcpStatus.host_name);
+				
+				if (jServiceArray != null)
+					extractServiceEnableInfo(dhcpStatus, jServiceArray);
+			}
+			
+			// Get License Info
+			if (dhcpStatus.hwid != null && dhcpStatus.hwid.isEmpty() == false) {
+				JsonArray jLicenseArray = wapiHandler.getLicenseInfo(dhcpStatus.hwid);
+
+				if (jLicenseArray != null)
+					extractLicenseInfo(dhcpStatus, jLicenseArray);
+			}
 		}
 		catch(Exception ex) {
 			ex.printStackTrace();
@@ -130,8 +189,10 @@ public class DhcpHandler {
 		
 		return dhcpStatus;
 	}
+	//endregion
 	
-	private void getHWNodeInfo(DhcpStatus dhcpStatus, JsonArray jNodeArray) {
+	//region Extract Node Info
+	private void extractNodeInfo(DhcpStatus dhcpStatus, JsonArray jNodeArray) {
 		
 		if (dhcpStatus == null || jNodeArray == null)
 			return;
@@ -147,12 +208,12 @@ public class DhcpHandler {
 			JsonArray jServiceArray = nodeObj.get("service_status").getAsJsonArray();
 			for(JsonElement serviceEle : jServiceArray) {
 				
-				String service = JsonUtils.getValueToString(serviceEle, "service", "");
-				String desc = JsonUtils.getValueToString(serviceEle, "description", "");
-				String status = JsonUtils.getValueToString(serviceEle, "status", "");
+				String service = JsonUtils.getValueToString(serviceEle, "service", "").toUpperCase();
+				String desc = JsonUtils.getValueToString(serviceEle, "description", "").toUpperCase();
+				String status = JsonUtils.getValueToString(serviceEle, "status", "").toUpperCase();
 				
 				// CPU Usage
-				if (service.toUpperCase().equals("CPU_USAGE") && status.toUpperCase().equals("WORKING")) {
+				if (service.equals("CPU_USAGE") && status.equals("WORKING")) {
 
 					// CPU Usage: 5%
 					int index1 = desc.indexOf(":");
@@ -162,7 +223,7 @@ public class DhcpHandler {
 						dhcpStatus.cpu_usage = Integer.parseInt(desc.substring(index1+1, index2).trim());
 				}
 				// Memory Usage
-				else if (service.toUpperCase().equals("MEMORY") && status.toUpperCase().equals("WORKING")) {
+				else if (service.equals("MEMORY") && status.equals("WORKING")) {
 					
 					// 28% - System memory usage is OK.
 					int index = desc.indexOf("%");
@@ -171,7 +232,7 @@ public class DhcpHandler {
 					}
 				}
 				// Swap Usage
-				else if (service.toUpperCase().equals("SWAP_USAGE") && status.toUpperCase().equals("WORKING")) {
+				else if (service.equals("SWAP_USAGE") && status.equals("WORKING")) {
 					
 					// 0% - System swap space usage is OK.
 					int index = desc.indexOf("%");
@@ -180,7 +241,7 @@ public class DhcpHandler {
 					}
 				}
 				// DB capacity used
-				else if (service.toUpperCase().equals("DB_OBJECT") && status.toUpperCase().equals("WORKING")) {
+				else if (service.equals("DB_OBJECT") && status.equals("WORKING")) {
 					
 					// 0% - Database capacity usage is OK.
 					int index = desc.indexOf("%");
@@ -189,7 +250,7 @@ public class DhcpHandler {
 					}
 				}
 				// Disk usage
-				else if (service.toUpperCase().equals("DISK_USAGE") && status.toUpperCase().equals("WORKING")) {
+				else if (service.equals("DISK_USAGE") && status.equals("WORKING")) {
 					
 					// 9% - Primary drive usage is OK.
 					int index = desc.indexOf("%");
@@ -198,7 +259,7 @@ public class DhcpHandler {
 					}
 				}
 				// Capacity usage
-				else if (service.toUpperCase().equals("DISCOVERY_CAPACITY") && status.toUpperCase().equals("WORKING")) {
+				else if (service.equals("DISCOVERY_CAPACITY") && status.equals("WORKING")) {
 					
 					// 0% - Discovery capacity usage is OK.
 					int index = desc.indexOf("%");
@@ -207,7 +268,7 @@ public class DhcpHandler {
 					}
 				}
 				// CPU Temp.
-				else if (service.toUpperCase().equals("CPU1_TEMP") && status.toUpperCase().equals("WORKING")) {
+				else if (service.equals("CPU1_TEMP") && status.equals("WORKING")) {
 					
 					// CPU_TEMP: +34.00 C
 					int index1 = desc.indexOf("+");
@@ -217,7 +278,7 @@ public class DhcpHandler {
 						dhcpStatus.cpu_temp = Integer.parseInt(desc.substring(index1+1, index2).trim());
 				}
 				// Sys Temp.
-				else if (service.toUpperCase().equals("SYS_TEMP") && status.toUpperCase().equals("WORKING")) {
+				else if (service.equals("SYS_TEMP") && status.equals("WORKING")) {
 					
 					// SYS_TEMP: +37.00 C
 					int index1 = desc.indexOf("+");
@@ -227,35 +288,109 @@ public class DhcpHandler {
 						dhcpStatus.sys_temp = Integer.parseInt(desc.substring(index1+1, index2).trim());
 				}
 				// Power1
-				else if (service.toUpperCase().equals("POWER1")) {
+				else if (service.equals("POWER1")) {
 					
 					// Power1 (AC) OK
-					if (status.toUpperCase().equals("INACTIVE"))
-						dhcpStatus.power1_status = "empty";
+					if (desc.indexOf("EMPTY") > 0 )
+						dhcpStatus.power1_status = "EMPTY";
+					else if (status.equals("INACTIVE"))
+						dhcpStatus.power1_status = "INACTIVE";
 					else if (desc.indexOf("OK") > 0)
 						dhcpStatus.power1_status = "OK";
+					else if (desc.indexOf("FAILED") > 0)
+						dhcpStatus.power1_status = "FAILED";
 				}
 				// Power2
-				else if (service.toUpperCase().equals("POWER2")) {
+				else if (service.equals("POWER2")) {
 					
 					// Power2 [empty]
-					if (status.toUpperCase().equals("INACTIVE") || desc.indexOf("empty") > 0 )
-						dhcpStatus.power2_status = "empty";
+					if (desc.indexOf("EMPTY") > 0 )
+						dhcpStatus.power2_status = "EMPTY";
+					else if (status.equals("INACTIVE"))
+						dhcpStatus.power2_status = "INACTIVE";
 					else if (desc.indexOf("OK") > 0)
 						dhcpStatus.power2_status = "OK";
+					else if (desc.indexOf("FAILED") > 0)
+						dhcpStatus.power2_status = "FAILED";
 				}
 				// NTP
-				else if (service.toUpperCase().equals("NTP_SYNC")) {
+				else if (service.equals("NTP_SYNC")) {
 					
 					// Power2 [empty]
 					if (status.toUpperCase().equals("INACTIVE") )
-						dhcpStatus.ntp_status = "Inactive";
+						dhcpStatus.ntp_status = "INACTIVE";
 					else if (desc.indexOf("OK") > 0)
 						dhcpStatus.ntp_status = "OK";
+					else if (desc.indexOf("FAILED") > 0)
+						dhcpStatus.ntp_status = "FAILED";
+				}
+				// FAN
+				else if (service.indexOf("FAN") == 0 && service.length() > 3) {
+					try {
+						int fanIndex = Integer.parseInt(service.substring(3));
+						
+						int index1 = desc.indexOf(":");
+						int index2 = desc.indexOf("RPM");
+						
+						int rpm = 0;
+						if (index1 > 0 && index2 > 0) {
+							String temp = desc.substring(index1+1, index2).trim();
+							rpm = Integer.parseInt(temp);
+						}
+						
+						dhcpStatus.addFan(fanIndex, status, rpm);
+					}
+					catch(Exception ex) {
+						//ex.printStackTrace();
+					}
 				}
 			}
 		}
 	}
+	//endregion
+
+	//region Extract License Info
+	private void extractLicenseInfo(DhcpStatus dhcpStatus, JsonArray jLicenseArray) {
+		
+		if (dhcpStatus == null || jLicenseArray == null)
+			return;
+		
+		for(JsonElement ele : jLicenseArray) {
+			JsonObject jLicense = ele.getAsJsonObject();
+			
+			String type = JsonUtils.getValueToString(jLicense, "type", ""); 
+			long expireDate = JsonUtils.getValueToNumber(jLicense, "expiry_date", 0);
+			
+			if (type != null && type.isEmpty() == false)
+				dhcpStatus.addLicense(type, expireDate);
+		}
+	}
+	//endregion
 	
+	//region Extract Service Enabled
+	private void extractServiceEnableInfo(DhcpStatus dhcpStatus, JsonArray jServiceArray) {
+		
+		if (dhcpStatus == null || jServiceArray == null)
+			return;
+		
+		for(JsonElement ele : jServiceArray) {
+			
+			JsonObject jService = ele.getAsJsonObject();
+			
+			boolean enable_ddns = JsonUtils.getValueToBoolean(jService, "enable_ddns", false); 
+			boolean enable_dhcp = JsonUtils.getValueToBoolean(jService, "enable_dhcp", false);
+			boolean enable_fingerprint = JsonUtils.getValueToBoolean(jService, "enable_fingerprint", false);
+			boolean enable_dhcpv6_service = JsonUtils.getValueToBoolean(jService, "enable_dhcpv6_service", false);
+			boolean enable_dhcp_on_lan2 = JsonUtils.getValueToBoolean(jService, "enable_dhcp_on_lan2", false);
+			boolean enable_dhcp_on_ipv6_lan2 = JsonUtils.getValueToBoolean(jService, "enable_dhcp_on_ipv6_lan2", false);
+			
+			dhcpStatus.service_status.enable_dns = enable_ddns;
+			dhcpStatus.service_status.enable_dhcp = enable_dhcp;
+			dhcpStatus.service_status.enable_fingerprint = enable_fingerprint;
+			dhcpStatus.service_status.enable_dhcpv6_service = enable_dhcpv6_service;
+			dhcpStatus.service_status.enable_dhcp_on_lan2 = enable_dhcp_on_lan2;
+			dhcpStatus.service_status.enable_dhcp_on_ipv6_lan2 = enable_dhcp_on_ipv6_lan2;
+		}
+	}
 	//endregion
 }

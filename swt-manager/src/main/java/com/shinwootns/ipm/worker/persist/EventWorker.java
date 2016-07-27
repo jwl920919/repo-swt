@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import com.shinwootns.ipm.SpringBeanProvider;
 import com.shinwootns.ipm.config.ApplicationProperty;
 import com.shinwootns.ipm.data.SharedData;
-import com.shinwootns.ipm.data.entity.EventEntity;
+import com.shinwootns.ipm.data.entity.EventData;
 import com.shinwootns.ipm.data.mapper.EventMapper;
 import com.shinwootns.ipm.worker.BaseWorker;
 
@@ -48,7 +48,7 @@ public class EventWorker extends BaseWorker {
 		if (eventMapper == null)
 			return;
 		
-		List<EventEntity> listEvent = null;
+		List<EventData> listEvent = null;
 		
 		while(true)
 		{
@@ -56,7 +56,7 @@ public class EventWorker extends BaseWorker {
 			if (listEvent == null)
 				continue;
 			
-			for(EventEntity event : listEvent)
+			for(EventData event : listEvent)
 			{
 				if (event == null) 
 					continue;

@@ -8,9 +8,9 @@ import com.google.gson.JsonObject;
 import com.shinwootns.common.network.SyslogEntity;
 import com.shinwootns.ipm.collector.SpringBeanProvider;
 import com.shinwootns.ipm.collector.config.ApplicationProperty;
+import com.shinwootns.ipm.collector.data.SharedData;
 import com.shinwootns.ipm.collector.service.amqp.RabbitmqSender;
 import com.shinwootns.ipm.collector.worker.BaseWorker;
-import com.shinwootns.ipm.collector.worker.WorkerManager;
 
 public class SyslogWorker extends BaseWorker {
 
@@ -44,11 +44,11 @@ public class SyslogWorker extends BaseWorker {
 		if ( _logger != null)
 			_logger.info(String.format("Syslog Producer#%d... start.", this._index));
 		
-		List<SyslogEntity> listSyslog = WorkerManager.getInstance().popSyslogList(1000, 500);
+		List<SyslogEntity> listSyslog = SharedData.getInstance().popSyslogList(1000, 500);
 
 		while(isStopFlag())
 		{
-			listSyslog = WorkerManager.getInstance().popSyslogList(1000, 500);
+			listSyslog = SharedData.getInstance().popSyslogList(1000, 500);
 			
 			if (listSyslog != null && listSyslog.size() > 0)
 			{

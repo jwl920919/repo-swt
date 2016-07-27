@@ -12,10 +12,12 @@
 
 	<repositories>
 
+		<!-- 
 		<repository>
 			<id>WSO2</id>
 			<url>http://maven.wso2.org/nexus/content/repositories/releases/</url>
 		</repository>
+		-->
 
 		<!-- <repository> <id>songagi-mvn-repo</id> <url>https://github.com/songagi/mvn-repo/</url> 
 			<snapshots> <enabled>true</enabled> <updatePolicy>always</updatePolicy> </snapshots> 
@@ -42,6 +44,12 @@
 			<artifactId>swt-common</artifactId>
 			<version>0.1.7</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>com.shinwootns.ipm.data</groupId>
+			<artifactId>swt-data</artifactId>
+			<version>0.1.1</version>
+  		</dependency>
 
 		<dependency>
 			<groupId>javax.persistence</groupId>
@@ -105,11 +113,13 @@
 		</dependency>
 		-->
 
+		<!-- 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
 		</dependency>
+		 -->
 
 		<!-- Exclude default spring logging service -->
 		<dependency>

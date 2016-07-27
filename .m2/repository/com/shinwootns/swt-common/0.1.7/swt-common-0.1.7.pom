@@ -42,12 +42,20 @@
 			<version>4.5.2</version>
 		</dependency>
 
-		<!-- http://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple -->
+		<!-- https://mvnrepository.com/artifact/junit/junit -->
 		<dependency>
-			<groupId>com.googlecode.json-simple</groupId>
-			<artifactId>json-simple</artifactId>
-			<version>1.1.1</version>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.7</version>
+		</dependency>
+
 
 		<!-- http://mvnrepository.com/artifact/commons-lang/commons-lang -->
 		<dependency>
@@ -122,12 +130,12 @@
 					<includes>
 						<include>**/*</include>
 					</includes>
-					
+
 					<!-- <merge>true</merge> -->								<!-- don't delete old artifacts -->
-					
+
 					<repositoryName>mvn-repo</repositoryName>		<!-- github repo name -->
 					<repositoryOwner>songagi</repositoryOwner>		<!-- github username -->
-					
+
 				</configuration>
 				<executions>
 					<execution>

@@ -4,7 +4,6 @@
 	<comment></comment>
 	<projects>
 		<project>swt-common</project>
-		<project>swt-jpa</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

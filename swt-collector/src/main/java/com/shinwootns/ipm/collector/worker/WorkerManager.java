@@ -12,6 +12,7 @@ import com.shinwootns.common.stp.PoolStatus;
 import com.shinwootns.common.stp.SmartThreadPool;
 import com.shinwootns.common.utils.TimeUtils;
 import com.shinwootns.ipm.collector.data.SharedData;
+import com.shinwootns.ipm.collector.worker.persist.SchedulerWorker;
 import com.shinwootns.ipm.collector.worker.persist.SyslogWorker;
 
 public class WorkerManager {
@@ -53,11 +54,16 @@ public class WorkerManager {
 				
 		if (_workerPool.createPool(totalCount, totalCount, totalCount)) {
 			
+			// Scheduler Worker
+			_workerPool.addTask(new SchedulerWorker());
+			
+			/*
 			// Start Producer Worker
 			for(int i=1; i<=SYSLOG_WORKER_COUNT; i++)
 			{
 				_workerPool.addTask(new SyslogWorker(i, _logger));
 			}
+			*/
 			
 		} else {
 			_logger.fatal("[FATAL] Failed to create syslog-analyzer worker pool !!!");
@@ -71,62 +77,6 @@ public class WorkerManager {
 		else {
 			_logger.fatal("[FATAL] Failed to create task-pool !!!");
 		}
-	}
-	
-	// Add Syslog Task
-	public boolean addSyslogData(SyslogEntity syslog) {
-		
-		boolean bResult = false;
-		
-		while(bResult == false)
-		{
-			bResult = SharedData.getInstance().syslogQueue.add(syslog);
-			
-			if (bResult)
-				break;
-			
-			try {
-				Thread.sleep(1);
-			} catch (InterruptedException e) {
-			}
-		}
-		
-		return bResult;
-	}
-	
-	public List<SyslogEntity> popSyslogList(int popCount, int timeout) {
-		
-		List<SyslogEntity> resultList = new ArrayList<SyslogEntity>();
-		
-		if (popCount < 1)
-			popCount = 1000;
-		
-		int count=0;
-		
-		long startTime = TimeUtils.currentTimeMilis();
-		
-		while(count < popCount )
-		{
-			SyslogEntity syslog = SharedData.getInstance().syslogQueue.poll();
-			
-			if (syslog != null)
-			{
-				count++;
-				resultList.add(syslog);
-			}
-			else {
-				
-				if ( TimeUtils.currentTimeMilis() - startTime > timeout )
-					break;
-				
-				try {
-					Thread.sleep(100);
-				} catch (InterruptedException e) {
-				}
-			}
-		}
-		
-		return resultList;
 	}
 	
 	// Pool Status

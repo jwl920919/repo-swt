@@ -33,18 +33,27 @@ public class RabbitmqHandler {
 	}
 	
 	// Connect
-	public boolean connect() throws Exception
+	public boolean connect()
 	{
 		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
 		if (appProperty == null)
 			return false;
 		
-		boolean result =  manager.Connect(
-				appProperty.rabbitmqHost, 
-				appProperty.rabbitmqPort, 
-				appProperty.rabbitmqUsername, 
-				CryptoUtils.Decode_AES128(appProperty.rabbitmqPassword), 
-				appProperty.rabbitmqVHost);
+		boolean result = false;
+		try
+		{
+		
+			result =  manager.Connect(
+					appProperty.rabbitmqHost, 
+					appProperty.rabbitmqPort, 
+					appProperty.rabbitmqUsername, 
+					CryptoUtils.Decode_AES128(appProperty.rabbitmqPassword), 
+					appProperty.rabbitmqVHost);
+		}
+		catch(Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+			result = false;
+		}
 		
 		if (result)
 			_logger.info((new StringBuilder()).append("Succeed connect rabbitmq... amqp:\\").append(appProperty.rabbitmqHost).append(":").append(appProperty.rabbitmqPort));

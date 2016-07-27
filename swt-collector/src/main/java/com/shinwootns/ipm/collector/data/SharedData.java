@@ -13,6 +13,7 @@ import com.shinwootns.common.network.SyslogEntity;
 import com.shinwootns.common.utils.CryptoUtils;
 import com.shinwootns.common.utils.TimeUtils;
 import com.shinwootns.ipm.data.entity.DeviceDhcp;
+import com.shinwootns.ipm.data.entity.SiteInfo;
 
 public class SharedData {
 	
@@ -34,7 +35,66 @@ public class SharedData {
 	// Syslog Queue
 	public java.util.Queue<SyslogEntity> syslogQueue = new ConcurrentLinkedQueue<SyslogEntity>();
 	
-	
-	// Data
+	// Dhcp Info
 	public DeviceDhcp dhcpDevice = null;
+
+	// SiteInfo
+	public SiteInfo site_info = null;
+	
+	
+	// Add Syslog Task
+		public boolean addSyslogData(SyslogEntity syslog) {
+			
+			boolean bResult = false;
+			
+			while(bResult == false)
+			{
+				bResult = SharedData.getInstance().syslogQueue.add(syslog);
+				
+				if (bResult)
+					break;
+				
+				try {
+					Thread.sleep(1);
+				} catch (InterruptedException e) {
+				}
+			}
+			
+			return bResult;
+		}
+		
+		public List<SyslogEntity> popSyslogList(int popCount, int timeout) {
+			
+			List<SyslogEntity> resultList = new ArrayList<SyslogEntity>();
+			
+			if (popCount < 1)
+				popCount = 1000;
+			
+			int count=0;
+			
+			long startTime = TimeUtils.currentTimeMilis();
+			
+			while(count < popCount )
+			{
+				SyslogEntity syslog = SharedData.getInstance().syslogQueue.poll();
+				
+				if (syslog != null)
+				{
+					count++;
+					resultList.add(syslog);
+				}
+				else {
+					
+					if ( TimeUtils.currentTimeMilis() - startTime > timeout )
+						break;
+					
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+					}
+				}
+			}
+			
+			return resultList;
+		}
 }
