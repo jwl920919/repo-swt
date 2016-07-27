@@ -113,28 +113,28 @@
 				</div>
 				<div class="box-body" style="text-align: left">
 					<div>
-						<label class="info-label">Hardware ID</label><b>:</b>
+						<label class="info-label">Hardware ID</label><b class="info-label-b">:</b><span id='id-info'></span>
 					</div>
 					<div>
-						<label class="info-label">System up-time</label><b>:</b>
+						<label class="info-label">System up-time</label><b class="info-label-b">:</b><span id='uptime-info'></span>
 					</div>
 					<div>
-						<label class="info-label">Temperature</label><b>:</b>
+						<label class="info-label">Temperature</label><b class="info-label-b">:</b><span id='temp-info'></span>&#x2103
 					</div>
 					<div>
-						<label class="info-label">Power</label><b>:</b>
+						<label class="info-label">Power</label><b class="info-label-b">:</b><i id="power1-status" class="fa fa-circle"></i>&nbsp;&nbsp;POWER1&nbsp;&nbsp;<i id="power2-status" class="fa fa-circle"></i>&nbsp;&nbsp;POWER2
+					</div>
+					<div style="height:25px">
+						<label class="info-label" style="float:left">Fan</label><b class="info-label-b" style="float:left">:</b><table id='fan-info' style="float:left"></table>
+					</div>
+					<div style="height:25px">
+						<label class="info-label" style="float:left">License</label><b class="info-label-b" style="float:left">:</b><table id='license-info' style="float:left"></table>
 					</div>
 					<div>
-						<label class="info-label">Fan</label><b>:</b>
+						<label class="info-label">OS</label><b class="info-label-b">:</b><span id='os-info'></span>
 					</div>
 					<div>
-						<label class="info-label">License</label><b>:</b>
-					</div>
-					<div>
-						<label class="info-label">OS</label><b>:</b>
-					</div>
-					<div>
-						<label class="info-label">Service Status</label><b>:</b>
+						<label class="info-label">Service Status</label><b class="info-label-b">:</b><i id="dhcp-is-enable" class="fa fa-circle"></i>&nbsp;&nbsp;DHCP&nbsp;&nbsp;<i id="dns-is-enable" class="fa fa-circle"></i>&nbsp;&nbsp;DNS
 					</div>
 				</div>
 			</div>

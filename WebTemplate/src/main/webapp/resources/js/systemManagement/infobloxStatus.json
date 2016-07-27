@@ -1,11 +1,11 @@
 {
     "hwid" : 1412201310100022
-    , "cpu_usage" : 10
-    , "memory_usage" : 10
-    , "swap_usage" : 10
-    , "db_usage" : 10
-    , "disk_usage" : 10
-    , "capacity_usage" : 10
+    , "cpu_usage" : 70
+    , "memory_usage" : 62
+    , "swap_usage" : 37
+    , "db_usage" : 84
+    , "disk_usage" : 100
+    , "capacity_usage" : 12
     , "sys_uptime" : 7256090
     , "cpu_temp": 34
     , "sys_temp": 37
@@ -44,7 +44,7 @@
         "type":"GRID",
         "expiry_date":1472255999
       }
-    ], "os" : "7.3.5-333643"
+    ], "os" : "7.3.5"
     , "service_status" : {
       "enable_dhcp":true,
       "enable_dns":true

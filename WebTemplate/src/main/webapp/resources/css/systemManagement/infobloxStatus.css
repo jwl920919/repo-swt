@@ -12,3 +12,18 @@ div.row {
 .info-label {
 	width: 120px;
 }
+.info-label-b{
+	margin-right:10px;
+}
+.normal {
+	color:#02fd3a !important;
+}
+.empty {
+	color:#444444 !important;
+}
+.warning {
+	color:#ff962d !important;
+}
+.error {
+	color:#ff3131 !important;
+}
