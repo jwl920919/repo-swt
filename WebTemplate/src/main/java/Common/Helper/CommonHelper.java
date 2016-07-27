@@ -122,6 +122,24 @@ public class CommonHelper {
 		
 		return Long.parseLong(value.toString());
 	}
+	/**
+	 * <p>
+	 * object 값을 int로 반환한다.
+	 * 처리할 수 없는 에러 발생시 Exception을 발생한다.
+	 * </p>
+	 * 
+	 * @param Object
+	 * @return int
+	 * @throws Exception
+	 **/
+	public static int objectToInteger(Object value) throws Exception {
+		
+		if (value instanceof Double || value instanceof Float) {
+			return Integer.parseInt(String.format("%.0f", value));
+		}
+		
+		return Integer.parseInt(value.toString());
+	}
 }
 
 

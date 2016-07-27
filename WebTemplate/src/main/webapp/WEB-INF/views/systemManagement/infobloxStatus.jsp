@@ -124,10 +124,10 @@
 					<div>
 						<label class="info-label">Power</label><b class="info-label-b">:</b><i id="power1-status" class="fa fa-circle"></i>&nbsp;&nbsp;POWER1&nbsp;&nbsp;<i id="power2-status" class="fa fa-circle"></i>&nbsp;&nbsp;POWER2
 					</div>
-					<div style="height:25px">
+					<div style="min-height: 25px;">
 						<label class="info-label" style="float:left">Fan</label><b class="info-label-b" style="float:left">:</b><table id='fan-info' style="float:left"></table>
 					</div>
-					<div style="height:25px">
+					<div style="min-height: 25px;">
 						<label class="info-label" style="float:left">License</label><b class="info-label-b" style="float:left">:</b><table id='license-info' style="float:left"></table>
 					</div>
 					<div>

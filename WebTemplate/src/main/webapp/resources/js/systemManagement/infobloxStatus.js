@@ -334,9 +334,9 @@ function setInfobloxFanStatus() {
 
                 tag += '<td>';
                 if(hwData.fans[idx].status=='WORKING'){
-                    tag += ('<i class="fa fa-circle normal"></i>');
+                    tag += '<i class="fa fa-circle normal"></i>';
                 } else {
-                    tag += ('<i class="fa fa-circle error"></i>');
+                    tag += '<i class="fa fa-circle error"></i>';
                 }
                 tag += ('&nbsp;&nbsp;</td><td>FAN');
                 tag += (hwData.fans[idx].index);
@@ -372,46 +372,42 @@ function setInfobloxLicenseStatus() {
                 dataType : "text",
                 type : "POST",
                 success : function(data) {
-                    var jsonObj = eval("(" + data + ')');
-                    if (jsonObj.result == true) {
-                        console.log(jsonObj.resultValue);
-                    }
+//                    var jsonObj = eval("(" + data + ')');
+//                    if (jsonObj.result == true) {
+//                        var tag = '';
+//                        var isStart = true, isEnd = false;
+//                        for (idx = 0; idx < jsonObj.data.length; idx++) {
+//                            if (isStart) {
+//                                tag += '<tr>';
+//                                isStart = false;
+//                            }
+//                            var type = jsonObj.data[idx].type;
+//                            tag += '<td>';
+//                            if(jsonObj.data[idx].result){
+//                                tag += '<i class="fa fa-circle normal" ></i>';
+//                            } else {
+//                                tag += '<i class="fa fa-circle error" </i>';
+//                            }
+//                            tag += '&nbsp;&nbsp;</td><td>';
+//                            tag += (jsonObj.data[idx].type);
+//                            tag += '&nbsp;&nbsp;</td>';
+//                            if (idx >= 4 && (idx + 1) % 5 == 0 && !isEnd) {
+//                                isEnd = true;
+//                            }
+//                            if (isEnd) {
+//                                tag += '</tr>';
+//                                isEnd = false;
+//                                isStart = true;
+//                            }
+//                            
+//                        }
+//                        $('#license-info').html(tag);
+//                        $('#license-info').parent().attr('style',
+//                                'height:' + $('#license-info').css('height'));
+//                    }
                 }
             });
-//            var tag = '';
-//            var isStart = true, isEnd = false;
-//            console.log(Date.now());
-//            for (idx = 0; idx < hwData.licenses.length; idx++) {
-//                if (isStart) {
-//                    tag += '<tr>';
-//                    isStart = false;
-//                }
-//                var type = hwData.licenses[idx].type;
-//                console.log(type);
-//                tag += '<td>';
-//                if(hwData.licenses[idx].status=='WORKING'){
-//                    tag += ('<i class="fa fa-circle normal"></i>');
-//                } else {
-//                    tag += ('<i class="fa fa-circle error"></i>');
-//                }
-//                tag += ('&nbsp;&nbsp;</td><td>FAN');
-//                tag += (hwData.licenses[idx].index);
-//                tag += (':&nbsp;</td><td>');
-//                tag += (hwData.licenses[idx].rpm);
-//                tag += ('RPM&nbsp;&nbsp;</td>');
-//                if (idx >= 1 && (idx + 1) % 2 == 0 && !isEnd) {
-//                    isEnd = true;
-//                }
-//                if (isEnd) {
-//                    tag += '</tr>';
-//                    isEnd = false;
-//                    isStart = true;
-//                }
-//                
-//            }
-//            $('#license-info').html(tag);
-//            $('#license-info').parent().attr('style',
-//                    'height:' + $('#license-info').css('height'));
+            
         }
     } catch (e) {
         console.log("infobloxStatus.js setInfobloxFanStatus() Error Log : "
