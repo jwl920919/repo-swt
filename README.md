@@ -82,13 +82,14 @@ docker run \
  /bin/bash
 ```
 
-* ipm-collector
+* ipm-insight
 ```
 docker run \
- --name=ipm-collector \
+ --name=ipm-insight \
  -itd \
  -p 514:514/udp \
- -v /logs/ipm-collector:/logs \
+ -p 8081:8081 \
+ -v /logs/ipm-insight:/logs \
  --restart always \
  ipm-base:0.1 \
  /bin/bash
