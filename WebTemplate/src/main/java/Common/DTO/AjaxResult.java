@@ -48,7 +48,7 @@ public class AjaxResult {
 	 * Ajax 결과 값
 	 * </p>
 	 * 
-	 * @return List Array
+	 * @return List Array List<Map<String, Object>>
 	 **/
 	@JsonProperty("data")
 	public List<Map<String, Object>> data = null;
