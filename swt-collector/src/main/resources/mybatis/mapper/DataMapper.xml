@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        
+<mapper namespace="com.shinwootns.ipm.collector.data.mapper.DataMapper">
+
+	<!-- ############################ Site ############################ -->
+    <select id="selectSiteInfoByCode" resultType="com.shinwootns.ipm.data.entity.SiteInfo">
+        SELECT * FROM site_info WHERE site_code=#{site_code}
+    </select>
+    
+    
+    <!-- ############################ DHCP ############################ -->
+    <select id="selectDeviceDhcp" resultType="com.shinwootns.ipm.data.entity.DeviceDhcp">
+        SELECT * FROM device_dhcp WHERE site_id=#{site_id} ORDER BY device_id LIMIT 1
+    </select>
+    
+    
+    <!-- ############################ DHCP ############################ -->
+    
+    <select id="selectInsightByHost" resultType="com.shinwootns.ipm.data.entity.DeviceInsight">
+		SELECT * FROM device_insight WHERE host = #{host}
+	</select>
+    
+    <insert id="insertInsight" parameterType="com.shinwootns.ipm.data.entity.DhcpNetwork">
+		<![CDATA[
+			INSERT INTO device_insight (site_id, host, version, insert_time, update_time)
+			VALUES ( #{site_id}, #{host}, #{version}, now(), now() ) 
+		]]>
+	</insert>
+	
+	<update id="updateInsight" parameterType="com.shinwootns.ipm.data.entity.DhcpNetwork">
+		<![CDATA[
+			UPDATE device_insight
+			SET site_id=#{site_id}, host=#{host}, port=#{port}, version=#{version}, enable_collect=#{enable_collect}, update_time=now()
+			WHERE host=#{host}
+		]]>
+	</update>
+    
+</mapper>

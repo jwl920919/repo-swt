@@ -1,26 +1,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	
 	<modelVersion>4.0.0</modelVersion>
-
-	<groupId>com.shinwootns.ipm.data</groupId>
+	<groupId>com.shinwootns.ipm</groupId>
 	<artifactId>swt-data</artifactId>
 	<version>0.1.1</version>
 	<packaging>jar</packaging>
-
 	<name>swt-data</name>
-	<url>http://maven.apache.org</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-
-	<distributionManagement>
-		<repository>
-			<id>internal.repo</id>
-			<name>Temporary Staging Repository</name>
-			<url>file://${project.build.directory}/mvn-repo</url>
-		</repository>
-	</distributionManagement>
 
 	<dependencies>
 		<dependency>
@@ -38,9 +28,6 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 
 				<configuration>
-					<profiles>
-						<profile></profile>
-					</profiles>
 				</configuration>
 			</plugin>
 		</plugins>

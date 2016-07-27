@@ -3,6 +3,7 @@
 	<name>swt-collector</name>
 	<comment></comment>
 	<projects>
+		<project>swt-common</project>
 		<project>swt-data</project>
 	</projects>
 	<buildSpec>

@@ -46,7 +46,7 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>com.shinwootns.ipm.data</groupId>
+			<groupId>com.shinwootns.ipm</groupId>
 			<artifactId>swt-data</artifactId>
 			<version>0.1.1</version>
   		</dependency>
@@ -152,6 +152,7 @@
 
 	<build>
 		<plugins>
+		
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
