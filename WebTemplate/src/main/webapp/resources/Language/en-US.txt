@@ -120,6 +120,7 @@
 	"processing":									"Processing.",
 	"searching":									"Searching.",
 	"search":										"Search",
+	"inquiry":										"Inquiry",
 	"desctription":									"Desctription",
 	"comment":										"Comment",
 	"site":											"Site",

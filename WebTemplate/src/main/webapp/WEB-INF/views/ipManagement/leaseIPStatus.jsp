@@ -1,9 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"%>
 <%@ page import="Common.Helper.LanguageHelper"%>
 <!-- IP Map style -->
-<link rel="stylesheet" href="resources/css/ipmap.css">
-<link rel="stylesheet"
-	href="resources/plugins/datatables/buttons.dataTables.min.css">
+<link rel="stylesheet" href="resources/css/default.css">
+<link rel="stylesheet" href="resources/plugins/datatables/buttons.dataTables.min.css">
 
 <script src="resources/js/main/main.js"></script>
 <script src="resources/plugins/datatables/dataTables.buttons.min.js"></script>
@@ -30,15 +29,23 @@
 <!-- 				<div class="box-header"> -->
 					<div>						
 		                <!-- select -->
-		                <div>
-		                  <select class="form-control">
-		                    <option>option 1</option>
-		                    <option>option 2</option>
-		                    <option>option 3</option>
-		                    <option>option 4</option>
-		                    <option>option 5</option>
-		                  </select>
-		                </div>
+		                <table>
+		                	<tr>
+		                		<td>
+		                			<label style="width:90px; padding-left:10px;">세그먼트 : </label>
+		                		</td>
+		                		<td>
+			                		<select id="sbSegment" class="form-control selectoption_grey_color" style="width:210px">
+									</select>
+		                		</td>
+		                		<td>
+		                			<input type="text" style="width:250px; margin-left:15px;" class="form-control" id="txtSearch" placeholder="검색어를 입력해주세요">
+		                		</td>
+		                		<td style="width:100%; text-align:right; padding-right:10px">
+		                			<button type="button" class="btn btn-primary" id="btnSearch"><%=LanguageHelper.GetLanguage("save")%></button>
+		                		</td>
+		                	</tr>
+		                </table>
 					</div>
 				</div>
 				<div class="box-header">

@@ -257,6 +257,188 @@ public class IPManagementActionController {
 		return gson.toJson(result);
 	}
 
+
+	//Lease IP 현황 -> 데이터 조회
+	@RequestMapping(value = "dhcp_Network_Select", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+	public @ResponseBody Object dhcp_Network_Select(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		System.out.println("dhcp_Network_Select");
+		logger.info("dhcp_Network_Select : " + request.getLocalAddr());
+		HttpSession session = request.getSession(true);
+		List<Map<String, Object>> dataList = new ArrayList<Map<String, Object>>();
+		result = new AjaxResult();
+		
+		try {
+			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),new TypeToken<HashMap<String, Object>>() {}.getType());
+			String siteID = session.getAttribute("site_id").toString();
+			if (!siteID.equals("")) {
+				parameters.put("siteid", Integer.parseInt(siteID));
+				parameters.put("searchValue", "");
+				parameters.put("orderColumn", "network");
+				parameters.put("orderType", "ASC");
+				parameters.put("startIndex", 0);
+				parameters.put("length", Integer.MAX_VALUE);
+								
+				List<String> rangelist = new ArrayList<String>();
+				//region DHCP Network 데이터 조회
+				List<Map<String, Object>> dhcpRange = ipManagementService.select_IP_MANAGEMENT_SEGMENT(parameters);
+				if (dhcpRange.size() > 0) {
+					
+					for (Map<String, Object> dhcpRangeMap : dhcpRange) {
+						rangelist.add(dhcpRangeMap.get("network").toString());
+					}
+				}
+				//endregion
+							
+				result.result = true;
+				result.data = dhcpRange;
+			}
+			else {
+				result.result = false;
+				result.errorMessage = "Site id is Null in Session!";
+			}
+		}  catch (Exception e) {
+			result.result = false;
+			result.errorMessage = e.getMessage();
+			e.printStackTrace();
+			logger.error(e.getMessage());
+		}
+		return gson.toJson(result);
+	}
+
+	
+
+	//Lease IP 현황 -> 데이터 조회
+	@RequestMapping(value = "leaseIPStatus_Data_Select", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+	public @ResponseBody Object leaseIPStatus_Data_Select(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		System.out.println("leaseIPStatus_Data_Select");
+		logger.info("leaseIPStatus_Data_Select : " + request.getLocalAddr());
+		HttpSession session = request.getSession(true);
+		List<Map<String, Object>> dataList = new ArrayList<Map<String, Object>>();
+		result = new AjaxResult();
+		
+		try {
+			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),new TypeToken<HashMap<String, Object>>() {}.getType());
+			String network = parameters.get("network").toString();
+			String m_timezone = parameters.get("timezone").toString();
+			
+			String siteID = session.getAttribute("site_id").toString();
+			if (!siteID.equals("")) {
+				parameters.put("siteid", Integer.parseInt(siteID));
+				
+				//region 맵에서 사용할 데이터 쿼리
+				String networkStartip = "";
+				String networkEndip = "";
+				StringBuilder m_DHCP_Range = new StringBuilder();
+				
+				StringBuilder m_activeLease = new StringBuilder();
+				StringBuilder m_conflict = new StringBuilder();
+				StringBuilder m_exclusion = new StringBuilder();
+				StringBuilder m_fixed = new StringBuilder();
+				StringBuilder m_hostnotindns = new StringBuilder();
+				StringBuilder m_object = new StringBuilder();
+				StringBuilder m_pending = new StringBuilder();
+				StringBuilder m_reservedrange = new StringBuilder();
+				StringBuilder m_unmanaged = new StringBuilder();
+				StringBuilder m_unused = new StringBuilder();
+				StringBuilder m_used = new StringBuilder();
+				
+				//region DHCP Range 데이터 조회
+				List<Map<String, Object>> dhcpRange = ipManagementService.select_IP_MANAGEMENT_SEGMENT_DETAIL_MAP_DHCPRANGE(parameters);
+				if (dhcpRange.size() > 0) {					 
+					for (Map<String, Object> dhcpRangeMap : dhcpRange) {
+						networkStartip = dhcpRangeMap.get("start_ip").toString();
+						networkEndip = dhcpRangeMap.get("end_ip").toString();
+						
+						long startip = CommonHelper.IPv4ToLong(dhcpRangeMap.get("dhcp_start_ip").toString());
+						long endip = CommonHelper.IPv4ToLong(dhcpRangeMap.get("dhcp_end_ip").toString());
+						 
+						for (long i = startip; i <= endip; i++) {
+							String rangeIP = CommonHelper.longToIPv4(i);
+							m_DHCP_Range.append((m_DHCP_Range.toString().length() > 0) ? "," + rangeIP : rangeIP);
+						}
+					}
+				}
+				//endregion
+				
+				//region DHCP의 IP대역대 Stat, End영역과 Range 영역 설정을 위한 데이터를 담음
+				HashMap<String, Object> ipMap  = new HashMap<>();
+				ipMap.put("KEY", "DHCP_RANGE");
+				ipMap.put("Network_Start", networkStartip);
+				ipMap.put("Network_End", networkEndip);
+				ipMap.put("KEY", "DHCP_RANGE");
+				ipMap.put("DHCP_Range", m_DHCP_Range);
+				dataList.add(ipMap);
+				//endregion
+				
+				
+				System.out.println("time_zone : " + m_timezone);
+				parameters.put("time_zone", m_timezone);
+				List<Map<String, Object>> allDataList = ipManagementService.select_IP_MANAGEMENT_SEGMENT_DETAIL_MAPDATA(parameters);
+				
+				for (Map<String, Object> ipListMap : allDataList) {
+					
+				}
+				/**
+				String ip = "";
+				for (Map<String, Object> ipListMap : allDataList) {
+					ip = ipListMap.get("ip").toString();
+					if (cClassIPAddress.equals("")) {
+						String[] ipArr = ip.split("[.]");
+						if (ipArr.length >= 3) {
+							cClassIPAddress = ipArr[0] + "." + ipArr[1] + "." + ipArr[2];
+						}
+					}
+					StringCompare(ipListMap.get("status").toString().toLowerCase(), "DHCP_Range", ip, m_DHCP_Range); //DHCP Range
+					StringCompare(ipListMap.get("status").toString().toLowerCase(), "activelease", ip, m_activeLease);
+					StringCompare(ipListMap.get("status").toString().toLowerCase(), "conflict", ip, m_conflict);
+					StringCompare(ipListMap.get("status").toString().toLowerCase(), "exclusion", ip, m_exclusion);
+					StringCompare(ipListMap.get("status").toString().toLowerCase(), "fixed", ip, m_fixed);
+					StringCompare(ipListMap.get("status").toString().toLowerCase(), "hostnotindns", ip, m_hostnotindns);
+					StringCompare(ipListMap.get("status").toString().toLowerCase(), "object", ip, m_object);
+					StringCompare(ipListMap.get("status").toString().toLowerCase(), "pending", ip, m_pending);
+					StringCompare(ipListMap.get("status").toString().toLowerCase(), "reservedrange", ip, m_reservedrange);
+					StringCompare(ipListMap.get("status").toString().toLowerCase(), "unmanaged", ip, m_unmanaged);
+					StringCompare(ipListMap.get("status").toString().toLowerCase(), "unused", ip, m_unused);
+					StringCompare(ipListMap.get("status").toString().toLowerCase(), "used", ip, m_used);				
+				}
+				**/
+				
+				/**
+				ipMap.put("cClassIPAddress", cClassIPAddress);
+				ipMap.put("activeLease", m_activeLease);
+				ipMap.put("conflict", m_conflict);
+				ipMap.put("exclusion", m_exclusion);
+				ipMap.put("fixed", m_fixed);
+				ipMap.put("hostnotindns", m_hostnotindns);
+				ipMap.put("object", m_object);
+				ipMap.put("pending", m_pending);
+				ipMap.put("reservedrange", m_reservedrange);
+				ipMap.put("unmanaged", m_unmanaged);
+				ipMap.put("unused", m_unused);
+				ipMap.put("used", m_used);
+				dataList.add(ipMap);
+				**/
+				//endregion			
+				
+				//Thread.sleep(1000);
+				result.result = true;
+				result.data = dataList;
+				result.resultValue = allDataList;
+			}
+			else {
+				result.result = false;
+				result.errorMessage = "Site id is Null in Session!";
+			}
+		}  catch (Exception e) {
+			result.result = false;
+			result.errorMessage = e.getMessage();
+			e.printStackTrace();
+			logger.error(e.getMessage());
+		}
+		return gson.toJson(result);
+	}
+
+	
 	//문자열 추가 Help 메서드
 	private void StringCompare(String lowerCase, String key, String value, StringBuilder m_string) {
 		if (lowerCase.equals(key)) {
