@@ -12,8 +12,8 @@ import com.shinwootns.common.datatype.ExtendedQueue;
 import com.shinwootns.common.network.SyslogEntity;
 import com.shinwootns.common.utils.CryptoUtils;
 import com.shinwootns.common.utils.TimeUtils;
-import com.shinwootns.ipm.data.entity.DeviceDhcp;
-import com.shinwootns.ipm.data.entity.SiteInfo;
+import com.shinwootns.data.entity.DeviceDhcp;
+import com.shinwootns.data.entity.SiteInfo;
 
 public class SharedData {
 	

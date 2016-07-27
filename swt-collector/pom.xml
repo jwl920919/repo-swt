@@ -33,7 +33,7 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>com.shinwootns.ipm</groupId>
+			<groupId>com.shinwootns.data</groupId>
 			<artifactId>swt-data</artifactId>
 			<version>0.1.1</version>
 			<scope>compile</scope>

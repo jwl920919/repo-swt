@@ -10,8 +10,8 @@ import com.shinwootns.common.snmp.SnmpResult;
 import com.shinwootns.common.snmp.SnmpUtil;
 import com.shinwootns.common.utils.JsonUtils;
 import com.shinwootns.common.utils.TimeUtils;
-import com.shinwootns.ipm.data.status.DhcpStatus;
-import com.shinwootns.ipm.data.status.DhcpStatus.License;
+import com.shinwootns.data.status.DhcpStatus;
+import com.shinwootns.data.status.DhcpStatus.License;
 
 public class DhcpHandler {
 	

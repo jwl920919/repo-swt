@@ -17,7 +17,7 @@ import com.shinwootns.common.snmp.SnmpUtil;
 import com.shinwootns.common.utils.JsonUtils;
 import com.shinwootns.common.utils.TimeUtils;
 import com.shinwootns.ipm.collector.service.infoblox.DhcpHandler;
-import com.shinwootns.ipm.data.status.DhcpStatus;
+import com.shinwootns.data.status.DhcpStatus;
 
 public class TestWAPI {
 

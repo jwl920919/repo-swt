@@ -7,7 +7,7 @@
 <configuration>
 
     <typeAliases>
-        <package name="com.shinwootns.ipm.data.entiy"/>
+        <package name="com.shinwootns.data.entiy"/>
     </typeAliases>
     
     <mappers>

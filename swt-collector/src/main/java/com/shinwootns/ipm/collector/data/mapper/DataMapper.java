@@ -3,9 +3,9 @@ package com.shinwootns.ipm.collector.data.mapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.shinwootns.ipm.data.entity.DeviceDhcp;
-import com.shinwootns.ipm.data.entity.DeviceInsight;
-import com.shinwootns.ipm.data.entity.SiteInfo;
+import com.shinwootns.data.entity.DeviceDhcp;
+import com.shinwootns.data.entity.DeviceInsight;
+import com.shinwootns.data.entity.SiteInfo;
 
 @Mapper
 public interface DataMapper {

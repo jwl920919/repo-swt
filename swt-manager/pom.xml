@@ -10,21 +10,6 @@
 	<name>swt-manager</name>
 	<description>swt-manager</description>
 
-	<repositories>
-
-		<!-- 
-		<repository>
-			<id>WSO2</id>
-			<url>http://maven.wso2.org/nexus/content/repositories/releases/</url>
-		</repository>
-		-->
-
-		<!-- <repository> <id>songagi-mvn-repo</id> <url>https://github.com/songagi/mvn-repo/</url> 
-			<snapshots> <enabled>true</enabled> <updatePolicy>always</updatePolicy> </snapshots> 
-			</repository> -->
-
-	</repositories>
-
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -46,7 +31,7 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>com.shinwootns.ipm</groupId>
+			<groupId>com.shinwootns.data</groupId>
 			<artifactId>swt-data</artifactId>
 			<version>0.1.1</version>
   		</dependency>
@@ -56,13 +41,6 @@
 			<artifactId>persistence-api</artifactId>
 			<version>LATEST</version>
 		</dependency>
-
-		<!-- 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		-->
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -152,24 +130,18 @@
 
 	<build>
 		<plugins>
-		
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-			
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<executable>true</executable>
-					<jvmArguments>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005</jvmArguments>
-					<arguments>
-						<argument>--spring.profiles.active=dev</argument>
-					</arguments>
-					<fork>false</fork>
-				</configuration>
-			</plugin>
-		</plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>1.3.6.RELEASE</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
 	</build>
 </project>

@@ -4,7 +4,7 @@
         
 <mapper namespace="com.shinwootns.ipm.data.mapper.EventMapper">
 
-    <insert id="insert" parameterType="com.shinwootns.ipm.data.entity.EventLogEntity">
+    <insert id="insert" parameterType="com.shinwootns.data.entity.EventLogEntity">
         INSERT INTO event_log (device_id, host_ip, event_type, severity, collect_time, message)
 		VALUES (
 			#{device_id}, 

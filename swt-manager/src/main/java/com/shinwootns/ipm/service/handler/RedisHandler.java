@@ -1,17 +1,12 @@
 package com.shinwootns.ipm.service.handler;
 
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
-
 import org.apache.log4j.Logger;
 
 import com.shinwootns.common.cache.RedisClient;
 import com.shinwootns.common.cache.RedisManager;
 import com.shinwootns.common.utils.CryptoUtils;
-import com.shinwootns.common.utils.SystemUtils;
 import com.shinwootns.ipm.SpringBeanProvider;
 import com.shinwootns.ipm.config.ApplicationProperty;
-import com.shinwootns.ipm.service.manager.ClusterManager;
 
 public class RedisHandler {
 	

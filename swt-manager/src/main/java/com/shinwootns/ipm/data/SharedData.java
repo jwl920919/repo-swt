@@ -11,7 +11,7 @@ import com.google.gson.JsonObject;
 import com.shinwootns.common.datatype.ExtendedQueue;
 import com.shinwootns.common.network.SyslogEntity;
 import com.shinwootns.common.utils.TimeUtils;
-import com.shinwootns.ipm.data.entity.EventData;
+import com.shinwootns.data.entity.EventData;
 
 public class SharedData {
 	

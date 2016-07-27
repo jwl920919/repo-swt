@@ -6,10 +6,10 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gson.JsonObject;
 import com.shinwootns.common.utils.JsonUtils;
+import com.shinwootns.data.entity.EventData;
 import com.shinwootns.ipm.SpringBeanProvider;
 import com.shinwootns.ipm.config.ApplicationProperty;
 import com.shinwootns.ipm.data.SharedData;
-import com.shinwootns.ipm.data.entity.EventData;
 import com.shinwootns.ipm.worker.BaseWorker;
 
 public class SyslogWorker extends BaseWorker {

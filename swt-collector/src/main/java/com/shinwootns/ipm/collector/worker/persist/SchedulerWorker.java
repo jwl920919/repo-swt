@@ -10,13 +10,13 @@ import org.slf4j.LoggerFactory;
 import com.shinwootns.common.cache.RedisClient;
 import com.shinwootns.common.cache.RedisManager.RedisPoolStatus;
 import com.shinwootns.common.utils.JsonUtils;
+import com.shinwootns.data.entity.DeviceDhcp;
 import com.shinwootns.ipm.collector.data.SharedData;
 import com.shinwootns.ipm.collector.service.cluster.ClusterManager;
 import com.shinwootns.ipm.collector.service.infoblox.DhcpHandler;
 import com.shinwootns.ipm.collector.service.redis.RedisHandler;
 import com.shinwootns.ipm.collector.worker.BaseWorker;
-import com.shinwootns.ipm.data.entity.DeviceDhcp;
-import com.shinwootns.ipm.data.status.DhcpStatus;
+import com.shinwootns.data.status.DhcpStatus;
 
 public class SchedulerWorker extends BaseWorker {
 	

@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
-import com.shinwootns.ipm.data.entity.AuthTypeEntity;
+import com.shinwootns.data.entity.AuthTypeEntity;
 
 
 @Mapper

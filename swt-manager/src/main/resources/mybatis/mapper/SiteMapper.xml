@@ -4,11 +4,11 @@
         
 <mapper namespace="com.shinwootns.ipm.data.mapper.SiteMapper">
 
-    <select id="findAll" resultType="com.shinwootns.ipm.data.entity.SiteInfoEntity">
+    <select id="findAll" resultType="com.shinwootns.data.entity.SiteInfoEntity">
         SELECT * FROM public.site_info
     </select>
     
-    <select id="findById" resultType="com.shinwootns.ipm.data.entity.SiteInfoEntity">
+    <select id="findById" resultType="com.shinwootns.data.entity.SiteInfoEntity">
         SELECT * FROM public.site_info WHERE site_id=#{site_id}
     </select>
 </mapper>
