@@ -80,26 +80,25 @@
 										style="width: 98%">
 										<thead>
 											<tr>
-<%-- 												<th><%=LanguageHelper.GetLanguage("ipaddr")%></th> --%>
-												<th width="4%">ipaddr</th>
-												<th width="4%">ip_type</th>
-												<th width="4%">macaddr</th>
-												<th width="4%">duid</th>
-												<th width="4%">is_conflict</th>
-												<th width="4%">status</th>
-												<th width="4%">lease_state</th>
-												<th width="7%">obj_types</th>
-												<th width="4%">discover_status</th>
-												<th width="4%">usage</th>
-												<th width="6%">host_name</th>
-												<th width="4%">host_os</th>
-												<th width="7%">fingerprint</th>
-												<th width="4%">is_never_ends</th>
-												<th width="4%">is_never_start</th>
-												<th width="5%">lease_start_time</th>
-												<th width="5%">lease_end_time</th>
-												<th width="4%">last_discovered</th>
-												<th width="6%">user_description</th>
+												<th width="4%"><%=LanguageHelper.GetLanguage("ip")%></th>
+												<th width="4%">IP type</th>
+												<th width="4%"><%=LanguageHelper.GetLanguage("mac")%></th>
+												<th width="4%">Duid</th>
+												<th width="4%">Conflict</th>
+												<th width="4%"><%=LanguageHelper.GetLanguage("status")%></th>
+												<th width="4%"><%=LanguageHelper.GetLanguage("leasestatus")%></th>
+												<th width="7%">Obj types</th>
+												<th width="4%">Discover status</th>
+												<th width="4%">Usage</th>
+												<th width="6%"><%=LanguageHelper.GetLanguage("hostname")%></th>
+												<th width="4%"><%=LanguageHelper.GetLanguage("hostos")%></th>
+												<th width="7%">Fingerprint</th>
+												<th width="4%">Never ends</th>
+												<th width="4%">Never start</th>
+												<th width="5%"><%=LanguageHelper.GetLanguage("lease")%> <%=LanguageHelper.GetLanguage("starttime")%></th>
+												<th width="5%"><%=LanguageHelper.GetLanguage("lease")%> <%=LanguageHelper.GetLanguage("endtime")%></th>
+												<th width="4%">Last discovered</th>
+												<th width="6%">user description</th>
 											</tr>
 										</thead>
 										<tbody>

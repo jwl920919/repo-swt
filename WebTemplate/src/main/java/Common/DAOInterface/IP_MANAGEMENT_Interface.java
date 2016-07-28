@@ -17,4 +17,6 @@ public interface IP_MANAGEMENT_Interface {
 	public List<Map<String, Object>> select_IP_MANAGEMENT_SEGMENT_DETAIL_MAP_DHCPRANGE(HashMap<String, Object> parameters);
 	
 	public List<Map<String, Object>> select_IP_MANAGEMENT_SEGMENT_DETAIL_MAPDATA(HashMap<String, Object> parameters);
+	
+	public List<Map<String, Object>> select_LEASEIP_STATUS_DATA(HashMap<String, Object> parameters);
 }
