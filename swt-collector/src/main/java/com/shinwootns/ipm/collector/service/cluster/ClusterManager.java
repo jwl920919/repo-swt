@@ -1,5 +1,6 @@
 package com.shinwootns.ipm.collector.service.cluster;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -8,9 +9,11 @@ import java.util.Map.Entry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gson.JsonObject;
 import com.shinwootns.common.cache.RedisClient;
 import com.shinwootns.common.utils.CollectionUtils;
 import com.shinwootns.common.utils.SystemUtils;
+import com.shinwootns.common.utils.TimeUtils;
 import com.shinwootns.ipm.collector.SpringBeanProvider;
 import com.shinwootns.ipm.collector.config.ApplicationProperty;
 import com.shinwootns.ipm.collector.service.redis.RedisHandler;
@@ -19,9 +22,9 @@ public class ClusterManager {
 
 	private final Logger _logger = LoggerFactory.getLogger(getClass());
 
-	private final static String KEY_CLUSTER_MEMBER = "cluster:insight:member";
+	private final static String KEY_CLUSTER_MEMBER = "cluster:insight:member";		// cluster:insight:member:{HostName}
 	private final static String KEY_CLUSTER_MASTER = "cluster:insight:master";
-	private final static String KEY_CLUSTER_JOB = "cluster:insight:job";
+	private final static String KEY_CLUSTER_JOB = "cluster:insight:job";			// cluster:insight:job:{HostName}
 
 	private final static int EXPIRE_TIME_MEMBER = 10;
 	// private final static int EXPIRE_TIME_MASTER = 10;
@@ -44,6 +47,7 @@ public class ClusterManager {
 
 	//region [FUNC] Update Member
 	public void updateMember() {
+		
 		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
 		if (appProperty == null)
 			return;
@@ -66,18 +70,19 @@ public class ClusterManager {
 			rank += appProperty.clusterSalveIndex;
 
 			// update member
-			String key = (new StringBuilder()).append(KEY_CLUSTER_MEMBER).append(":").append(SystemUtils.getHostName())
+			String key = (new StringBuilder())
+					.append(KEY_CLUSTER_MEMBER).append(":").append(SystemUtils.getHostName())
 					.toString();
 
 			redis.set(key, String.format("%d", rank));
 
-			redis.expire(key, EXPIRE_TIME_MEMBER);
+			redis.expireTime(key, EXPIRE_TIME_MEMBER);
 			
 		} catch (Exception ex) {
 			_logger.error(ex.getMessage(), ex);
+		}finally {
+			redis.close();
 		}
-		
-		redis.close();
 	}
 	//endregion
 
@@ -96,7 +101,7 @@ public class ClusterManager {
 		{
 		
 			// Get Keys
-			HashSet<String> keys = redis.keys(KEY_CLUSTER_MEMBER+":*");
+			HashSet<String> keys = redis.getKeys(KEY_CLUSTER_MEMBER+":*");
 			
 			// Get Values
 			HashMap<String, Integer> mapMember = new HashMap<String, Integer>();
@@ -225,4 +230,39 @@ public class ClusterManager {
 		}
 	}
 	//endregion
+
+	//region [FUNC] UpdateMasterJob
+	public void updateMasterJob(String status, String jobName, int currentStep, int totalStep, long startTime) {
+		
+		String key = (new StringBuilder())
+				.append(KEY_CLUSTER_JOB).append(":").append(SystemUtils.getHostName())
+				.toString();
+		
+		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
+		if (appProperty == null)
+			return;
+
+		RedisClient redis = RedisHandler.getInstance().getRedisClient();
+		if (redis == null)
+			return;
+		
+		try {
+			
+			JsonObject jObj = new JsonObject();
+			
+			jObj.addProperty("host", SystemUtils.getHostName());
+			jObj.addProperty("jon", jobName);
+			jObj.addProperty("current_step", currentStep);
+			jObj.addProperty("total_count", totalStep);
+			jObj.addProperty("startTime", startTime);
+			jObj.addProperty("updateTime", (TimeUtils.currentTimeMilis()/1000));
+			
+			redis.set(key, jObj.toString());
+			
+		}catch(Exception ex) {
+			
+		}finally {
+			redis.close();
+		}
+	}
 }

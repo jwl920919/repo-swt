@@ -112,27 +112,35 @@ public class SchedulerWorker extends BaseWorker {
 		DeviceDhcp dhcp = SharedData.getInstance().dhcpDevice;
 		if (dhcp == null)
 			return;
-
-		// DHCP Handler
-		DhcpHandler handler = new DhcpHandler(dhcp.getHost(), dhcp.getWapiUserid(), dhcp.getWapiPassword(), dhcp.getSnmpCommunity()); 
-		DhcpStatus dhcpStatus = handler.getHWStatus();
 		
-		if (dhcpStatus != null) {
+		RedisClient client = RedisHandler.getInstance().getRedisClient();
+		if(client != null)
+			return;
+
+		try {
 			
-			// Serialize to Json
-			String json = JsonUtils.serialize(dhcpStatus);
+			// DHCP Handler
+			DhcpHandler handler = new DhcpHandler(dhcp.getHost(), dhcp.getWapiUserid(), dhcp.getWapiPassword(), dhcp.getSnmpCommunity());
 			
-			// Update to redis
-			RedisClient client = RedisHandler.getInstance().getRedisClient();
-			if(client != null) {
+			DhcpStatus dhcpStatus = handler.getHWStatus();
+			
+			if (dhcpStatus != null) {
+				
+				// Serialize to Json
+				String json = JsonUtils.serialize(dhcpStatus);
 				
 				// Set value
-				client.set(
-						(new StringBuilder()).append(KEY_DEIVCE_DHCP_STATUS).append(":").append(SharedData.getInstance().site_info.getSiteId()).toString()
-						, json);
-				
-				client.close();
+				client.set((new StringBuilder())
+						.append(KEY_DEIVCE_DHCP_STATUS).append(":")
+						.append(SharedData.getInstance().site_info.getSiteId()).toString()
+						, json
+				);
 			}
+			
+		} catch(Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+		}finally {
+			client.close();
 		}
 	}
 	//endregion

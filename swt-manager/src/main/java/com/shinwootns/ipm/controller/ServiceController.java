@@ -56,7 +56,7 @@ public class ServiceController {
 		RedisHandler.getInstance().Connect();
 		
 		// Cluster Info
-		ClusterManager.getInstance().updateClusterMember();
+		ClusterManager.getInstance().updateMember();
 		
 		// Start
 		WorkerManager.getInstance().start();

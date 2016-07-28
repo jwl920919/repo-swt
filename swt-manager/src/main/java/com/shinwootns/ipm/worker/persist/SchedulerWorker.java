@@ -62,11 +62,11 @@ public class SchedulerWorker extends BaseWorker {
 	
 	// 3 Seconds
 	public void run3SecCycle() {
-		ClusterManager.getInstance().updateClusterMember();
+		ClusterManager.getInstance().updateMember();
 	}
 	
 	// 10 Seconds
 	public void run10SecCycle() {
-		ClusterManager.getInstance().checkClusterMaster();
+		ClusterManager.getInstance().checkMaster();
 	}
 }

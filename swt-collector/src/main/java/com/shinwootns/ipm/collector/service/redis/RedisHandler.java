@@ -62,7 +62,7 @@ public class RedisHandler {
 		if (redis == null) {
 			return null;
 		}
-		else if (redis.isConnection() == false) {
+		else if (redis.isConnect() == false) {
 			redis.close();
 			return null;
 		}
