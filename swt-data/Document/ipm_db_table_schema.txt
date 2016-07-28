@@ -8,11 +8,13 @@ CREATE SEQUENCE device_id_seq;
 CREATE TABLE device_insight
 (
   device_id integer NOT NULL DEFAULT nextval('device_id_seq'::regclass),
-  site_id integer NOT NULL,
+  site_id integer,
   host character varying(128) NOT NULL,
   port integer NOT NULL DEFAULT 0,
   version character varying(32),
-  enable_collect boolean DEFAULT true,
+  is_master boolean DEFAULT false,
+  cluster_mode character varying(32),
+  cluster_index integer,
   insert_time timestamp with time zone DEFAULT current_timestamp,
   update_time timestamp with time zone DEFAULT current_timestamp,
   CONSTRAINT device_insight_pkey PRIMARY KEY (device_id),

@@ -114,6 +114,7 @@ public class TestUtils {
 		}
 	}*/
 	
+	/*
 	@Test
 	public void testCollectionUtils() throws Exception {
 		
@@ -137,5 +138,5 @@ public class TestUtils {
 		System.out.println(linkedMap2.toString());
 		
 	}
-
+	 */
 }

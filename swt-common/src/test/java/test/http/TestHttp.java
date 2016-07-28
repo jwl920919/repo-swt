@@ -21,6 +21,7 @@ public class TestHttp {
 
 	private final Logger _logger = LoggerFactory.getLogger(getClass());
 
+	/*
 	@Test
 	public void testHttp() {
 		
@@ -194,4 +195,5 @@ public class TestHttp {
 
 		return returnValue;
 	}
+	 */
 }

@@ -20,6 +20,7 @@ import com.shinwootns.ipm.collector.SpringBeanProvider;
 import com.shinwootns.ipm.collector.WorkerManager;
 import com.shinwootns.ipm.collector.config.ApplicationProperty;
 import com.shinwootns.ipm.collector.data.SharedData;
+import com.shinwootns.ipm.collector.data.mapper.DataMapper;
 import com.shinwootns.ipm.collector.service.redis.RedisHandler;
 
 public class ClusterManager {
@@ -71,7 +72,7 @@ public class ClusterManager {
 				else
 					rank = 20000;
 	
-				rank += appProperty.clusterSalveIndex;
+				rank += appProperty.clusterIndex;
 	
 				// Key
 				StringBuilder key = new StringBuilder();
@@ -301,6 +302,14 @@ public class ClusterManager {
 			this.isMasterNode = isMasterNode;
 
 			if (this.isMasterNode) {
+				
+				DataMapper dataMapper = SpringBeanProvider.getInstance().getDataMapper();
+				
+				// Update To DB
+				if (dataMapper != null && SharedData.getInstance().getSiteID() >= 0) {
+					dataMapper.updateInsightMaster(SharedData.getInstance().getSiteID(), SystemUtils.getHostName());
+				}
+				
 				// Start MasterJobWorker
 				WorkerManager.getInstance().startMasterJobWorker();
 			} else {

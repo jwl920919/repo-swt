@@ -139,7 +139,8 @@ public class ServiceController {
 				insight.setSiteId(siteInfo.getSiteId());
 				insight.setPort(appProperty.serverPort);
 				insight.setVersion(appProperty.version);
-				insight.setEnableCollect(true);
+				insight.setClusterMode(appProperty.clusterMode);
+				insight.setClusterIndex(appProperty.clusterIndex);
 				
 				// Update
 				int affected = dataMapper.updateInsight(insight);

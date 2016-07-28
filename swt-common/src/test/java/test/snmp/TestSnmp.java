@@ -13,6 +13,7 @@ public class TestSnmp {
 
 	private final Logger _logger = LoggerFactory.getLogger(getClass());
 
+	/*
 	@Test
 	public void testSnmp() {
 		
@@ -79,5 +80,5 @@ public class TestSnmp {
 
 		_logger.info("Test End.");
 	}
-
+	 */
 }

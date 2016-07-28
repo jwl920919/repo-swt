@@ -9,13 +9,16 @@ public class DeviceInsight implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Integer device_id;
-	private Boolean enable_collect;
-	private String host;
-	private Timestamp insert_time;
-	private Integer port;
 	private Integer site_id;
-	private Timestamp update_time;
+	private String host;
+	private Integer port;
 	private String version;
+	private Boolean is_master;
+	private String cluster_mode;
+	private Integer cluster_index;
+	private Timestamp insert_time;
+	private Timestamp update_time;
+	
 
 	public DeviceInsight() {
 	}
@@ -28,12 +31,12 @@ public class DeviceInsight implements Serializable {
 		this.device_id = deviceId;
 	}
 
-	public Boolean getEnableCollect() {
-		return this.enable_collect;
+	public Boolean getIsmaster() {
+		return this.is_master;
 	}
 
-	public void setEnableCollect(Boolean enableCollect) {
-		this.enable_collect = enableCollect;
+	public void setIsMaster(Boolean isMaster) {
+		this.is_master = isMaster;
 	}
 
 	public String getHost() {
@@ -82,6 +85,22 @@ public class DeviceInsight implements Serializable {
 
 	public void setVersion(String version) {
 		this.version = version;
+	}
+
+	public String getClusterMode() {
+		return cluster_mode;
+	}
+
+	public void setClusterMode(String cluster_mode) {
+		this.cluster_mode = cluster_mode;
+	}
+
+	public Integer getClusterIndex() {
+		return cluster_index;
+	}
+
+	public void setClusterIndex(Integer cluster_index) {
+		this.cluster_index = cluster_index;
 	}
 
 }

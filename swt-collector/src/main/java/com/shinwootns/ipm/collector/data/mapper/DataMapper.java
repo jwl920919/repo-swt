@@ -20,4 +20,5 @@ public interface DataMapper {
 	DeviceInsight selectInsightByHost(@Param("host")String host);
 	int insertInsight(DeviceInsight insight);
 	int updateInsight(DeviceInsight insight);
+	void updateInsightMaster(@Param("site_id")int site_id, @Param("host")String host);
 }
