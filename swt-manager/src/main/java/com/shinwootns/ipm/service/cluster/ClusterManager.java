@@ -1,6 +1,5 @@
-package com.shinwootns.ipm.collector.service.cluster;
+package com.shinwootns.ipm.service.cluster;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -14,13 +13,11 @@ import com.shinwootns.common.cache.RedisClient;
 import com.shinwootns.common.utils.CollectionUtils;
 import com.shinwootns.common.utils.SystemUtils;
 import com.shinwootns.common.utils.TimeUtils;
-import com.shinwootns.data.entity.SiteInfo;
 import com.shinwootns.data.key.RedisKeys;
-import com.shinwootns.ipm.collector.SpringBeanProvider;
-import com.shinwootns.ipm.collector.WorkerManager;
-import com.shinwootns.ipm.collector.config.ApplicationProperty;
-import com.shinwootns.ipm.collector.data.SharedData;
-import com.shinwootns.ipm.collector.service.redis.RedisHandler;
+import com.shinwootns.ipm.SpringBeanProvider;
+import com.shinwootns.ipm.WorkerManager;
+import com.shinwootns.ipm.config.ApplicationProperty;
+import com.shinwootns.ipm.service.redis.RedisHandler;
 
 public class ClusterManager {
 
@@ -30,7 +27,7 @@ public class ClusterManager {
 	private final static int EXPIRE_TIME_MEMBER = 10;
 	
 	// is Master
-	private Boolean isMasterNode = null;
+	private boolean isMasterNode = false;
 
 	//region Singleton
 	private static ClusterManager _instance = null;
@@ -52,9 +49,6 @@ public class ClusterManager {
 			ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
 			if (appProperty == null)
 				return;
-			
-			if (SharedData.getInstance().getSiteID() <= 0)
-				return;
 	
 			RedisClient redis = RedisHandler.getInstance().getRedisClient();
 			if (redis == null)
@@ -75,14 +69,13 @@ public class ClusterManager {
 	
 				// Key
 				StringBuilder key = new StringBuilder();
-				key.append(RedisKeys.KEY_INSIGHT_CLUSTER_MEMBER)
-					.append(":").append(SharedData.getInstance().getSiteID())
+				key.append(RedisKeys.KEY_IPM_CLUSTER_MEMBER)
 					.append(":").append(SystemUtils.getHostName());
 	
-				// Set Value
+				// Set value
 				redis.set(key.toString(), String.format("%d", rank));
 	
-				// Expire Time
+				// Set expire time
 				redis.expireTime(key.toString(), EXPIRE_TIME_MEMBER);
 				
 			} catch (Exception ex) {
@@ -102,24 +95,19 @@ public class ClusterManager {
 			ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
 			if ( appProperty == null ) 
 				return;
-			
-			if (SharedData.getInstance().getSiteID() <= 0)
-				return;
-			
+			 
 			RedisClient redis = RedisHandler.getInstance().getRedisClient();
 			if (redis == null)
 				return;
 			
 			try
 			{
-				// Key
-				StringBuilder keyPattern = new StringBuilder();
-				keyPattern.append(RedisKeys.KEY_INSIGHT_CLUSTER_MEMBER)
-					.append(":").append(SharedData.getInstance().getSiteID())
-					.append(":*");
-				
 				// Get Keys
-				HashSet<String> keys = redis.getKeys(keyPattern.toString());
+				HashSet<String> keys = redis.getKeys( (new StringBuilder())
+						.append(RedisKeys.KEY_IPM_CLUSTER_MEMBER)
+						.append(":*")
+						.toString()
+						);
 				
 				// Get Values
 				HashMap<String, Integer> mapMember = new HashMap<String, Integer>();
@@ -153,14 +141,8 @@ public class ClusterManager {
 							
 							// Set Master
 							ClusterManager.getInstance().setMasterNode(true);
-							
-							// Key
-							StringBuilder key = new StringBuilder();
-							key.append(RedisKeys.KEY_INSIGHT_CLUSTER_MASTER)
-								.append(":").append(SharedData.getInstance().getSiteID());
-							
-							// Set value
-							redis.set(key.toString(), hostName);
+							 
+							redis.set(RedisKeys.KEY_IPM_CLUSTER_MASTER, hostName);
 							 
 						} else { 
 							// Set Slave
@@ -183,19 +165,10 @@ public class ClusterManager {
 		RedisClient redis = RedisHandler.getInstance().getRedisClient();
 		if (redis == null)
 			return "";
-		
-		if (SharedData.getInstance().getSiteID() <= 0)
-			return "";
 
 		try {
 
-			// Key
-			StringBuilder key = new StringBuilder();
-			key.append(RedisKeys.KEY_INSIGHT_CLUSTER_MASTER)
-				.append(":").append(SharedData.getInstance().getSiteID());
-			
-			// Get value
-			String masterName = redis.get(key.toString());
+			String masterName = redis.get(RedisKeys.KEY_IPM_CLUSTER_MASTER);
 			
 			return (masterName != null) ? masterName : "";
 
@@ -219,19 +192,10 @@ public class ClusterManager {
 		RedisClient redis = RedisHandler.getInstance().getRedisClient();
 		if (redis == null)
 			return false;
-		
-		if (SharedData.getInstance().getSiteID() <= 0)
-			return false;
 
 		try {
-			
-			// Key
-			StringBuilder key = new StringBuilder();
-			key.append(RedisKeys.KEY_INSIGHT_CLUSTER_MASTER)
-				.append(":").append(SharedData.getInstance().getSiteID());
 
-			// Get value
-			String masterName = redis.get(key.toString());
+			String masterName = redis.get(RedisKeys.KEY_IPM_CLUSTER_MASTER);
 			
 			if(masterName != null && masterName.equals(SystemUtils.getHostName()))
 				return true;
@@ -246,49 +210,11 @@ public class ClusterManager {
 	}
 	//endregion
 
-	//region [FUNC] UpdateMasterJob
-	public void updateMasterJob(String status, String jobName, int currentStep, int totalStep, long startTime) {
-		
-		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
-		if (appProperty == null)
-			return;
-
-		RedisClient redis = RedisHandler.getInstance().getRedisClient();
-		if (redis == null)
-			return;
-		
-		try {
-			
-			JsonObject jObj = new JsonObject();
-			jObj.addProperty("host", SystemUtils.getHostName());
-			jObj.addProperty("jon", jobName);
-			jObj.addProperty("current_step", currentStep);
-			jObj.addProperty("total_count", totalStep);
-			jObj.addProperty("startTime", startTime);
-			jObj.addProperty("updateTime", (TimeUtils.currentTimeMilis()/1000));
-
-			// Key
-			StringBuilder key = new StringBuilder();
-			key.append(RedisKeys.KEY_INSIGHT_CLUSTER_JOB)
-				.append(":").append(SharedData.getInstance().getSiteID())
-				.append(":").append(SystemUtils.getHostName());
-			
-			// Set value
-			redis.set(key.toString(), jObj.toString());
-			
-		}catch(Exception ex) {
-			_logger.error(ex.getMessage(), ex);
-		}finally {
-			redis.close();
-		}
-	}
-	//endregion
-	
 	//region [FUNC] set Master Node
 	private void setMasterNode(boolean isMasterNode) {
 
 		// If changed cluster mode.
-		if (this.isMasterNode == null || this.isMasterNode != isMasterNode) {
+		if (this.isMasterNode != isMasterNode) {
 
 			_logger.info( (new StringBuilder())
 					.append("************************************")
@@ -307,8 +233,43 @@ public class ClusterManager {
 				// Stop MasterJobWorker
 				WorkerManager.getInstance().stopMasterJobWorker();
 			}
-
 		}
 	}
 	//endregion
+
+	//region [FUNC] UpdateMasterJob
+	public void updateMasterJob(String status, String jobName, int currentStep, int totalStep, long startTime) {
+		
+		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
+		if (appProperty == null)
+			return;
+
+		RedisClient redis = RedisHandler.getInstance().getRedisClient();
+		if (redis == null)
+			return;
+		
+		try {
+			JsonObject jObj = new JsonObject();
+			jObj.addProperty("host", SystemUtils.getHostName());
+			jObj.addProperty("jon", jobName);
+			jObj.addProperty("current_step", currentStep);
+			jObj.addProperty("total_count", totalStep);
+			jObj.addProperty("startTime", startTime);
+			jObj.addProperty("updateTime", (TimeUtils.currentTimeMilis()/1000));
+
+			
+			StringBuilder key = new StringBuilder();
+			key.append(RedisKeys.KEY_IPM_CLUSTER_JOB)
+				.append(":").append(SystemUtils.getHostName());
+			
+			redis.set(key.toString(), jObj.toString());
+			
+		}catch(Exception ex) {
+			
+		}finally {
+			redis.close();
+		}
+	}
+	//endregion
+	
 }

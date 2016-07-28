@@ -1,5 +1,6 @@
 package com.shinwootns.ipm.collector.worker;
 
+/*
 public abstract class BaseWorker implements Runnable {
 
 	private boolean stopFlag = false;
@@ -14,3 +15,4 @@ public abstract class BaseWorker implements Runnable {
 		this.stopFlag = stopFlag;
 	}
 }
+*/

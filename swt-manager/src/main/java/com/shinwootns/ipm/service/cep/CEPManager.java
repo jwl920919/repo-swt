@@ -1,4 +1,4 @@
-package com.shinwootns.ipm.service.manager;
+package com.shinwootns.ipm.service.cep;
 
 /*
 import org.slf4j.Logger;

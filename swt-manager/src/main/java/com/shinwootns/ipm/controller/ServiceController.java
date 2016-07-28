@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.shinwootns.ipm.SpringBeanProvider;
 import com.shinwootns.ipm.WorkerManager;
 import com.shinwootns.ipm.config.ApplicationProperty;
-import com.shinwootns.ipm.service.handler.RedisHandler;
-import com.shinwootns.ipm.service.manager.ClusterManager;
+import com.shinwootns.ipm.service.cluster.ClusterManager;
+import com.shinwootns.ipm.service.redis.RedisHandler;
 
 @RestController
 public class ServiceController {

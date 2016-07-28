@@ -28,7 +28,7 @@ public class SharedData {
 	public DeviceDhcp dhcpDevice = null;
 
 	// SiteInfo
-	public SiteInfo site_info = null;
+	private SiteInfo site_info = null;
 	
 	//region Singleton
 	private static SharedData _instance = null;
@@ -39,6 +39,24 @@ public class SharedData {
 			_instance = new SharedData();
 		}
 		return _instance;
+	}
+	//endregion
+	
+	//region [FUNC] SiteInfo
+	public void setsiteInfo(SiteInfo site_info) {
+		synchronized(this) 
+		{
+			this.site_info = site_info;
+		}
+	}
+	
+	public int getSiteID() {
+		synchronized(this) 
+		{
+			if (this.site_info != null)
+				return this.site_info.getSiteId();
+		}
+		return 0;
 	}
 	//endregion
 	

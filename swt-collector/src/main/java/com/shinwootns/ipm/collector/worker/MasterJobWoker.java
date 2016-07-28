@@ -66,7 +66,7 @@ public class MasterJobWoker implements Runnable {
 		if ( ClusterManager.getInstance().isMaster() == false)
 			return;
 		
-		if (SharedData.getInstance().site_info == null)
+		if (SharedData.getInstance().getSiteID() <= 0)
 			return;
 		
 		DeviceDhcp dhcp = SharedData.getInstance().dhcpDevice;
@@ -95,6 +95,9 @@ public class MasterJobWoker implements Runnable {
 		if (handler == null || client == null)
 			return;
 		
+		if (SharedData.getInstance().getSiteID() <= 0)
+			return;
+		
 		try {
 
 			DhcpDeviceStatus dhcpStatus = handler.getDeviceStatus();
@@ -106,7 +109,8 @@ public class MasterJobWoker implements Runnable {
 				
 				// Set value
 				client.set((new StringBuilder())
-						.append(RedisKeys.KEY_STATUS_DEVICE).append(SharedData.getInstance().site_info.getSiteId()).toString()
+						.append(RedisKeys.KEY_STATUS_DEVICE)
+						.append(":").append(SharedData.getInstance().getSiteID()).toString()
 						, json
 				);
 				
@@ -125,6 +129,9 @@ public class MasterJobWoker implements Runnable {
 		if (handler == null || client == null)
 			return;
 		
+		if (SharedData.getInstance().getSiteID() <= 0)
+			return;
+		
 		try {
 			
 			DhcpVrrpStatus vrrpStatus = handler.getVRRPStatus();
@@ -137,7 +144,7 @@ public class MasterJobWoker implements Runnable {
 				// Set value
 				client.set((new StringBuilder())
 						.append(RedisKeys.KEY_STATUS_VRRP)
-						.append(SharedData.getInstance().site_info.getSiteId()).toString()
+						.append(":").append(SharedData.getInstance().getSiteID()).toString()
 						, json
 				);
 
@@ -156,6 +163,9 @@ public class MasterJobWoker implements Runnable {
 		if (handler == null || client == null)
 			return;
 		
+		if (SharedData.getInstance().getSiteID() <= 0)
+			return;
+		
 		try {
 
 			DhcpCounter dhcpCounter = handler.getDhcpCounter();
@@ -168,7 +178,7 @@ public class MasterJobWoker implements Runnable {
 				// Set value
 				client.set((new StringBuilder())
 						.append(RedisKeys.KEY_STATUS_DHCP_COUNTER)
-						.append(SharedData.getInstance().site_info.getSiteId()).toString()
+						.append(":").append(SharedData.getInstance().getSiteID()).toString()
 						, json
 				);
 
@@ -187,6 +197,9 @@ public class MasterJobWoker implements Runnable {
 		if (handler == null || client == null)
 			return;
 		
+		if (SharedData.getInstance().getSiteID() <= 0)
+			return;
+		
 		try {
 
 			DnsCounter dnsCounter = handler.getDnsCounter();
@@ -199,7 +212,7 @@ public class MasterJobWoker implements Runnable {
 				// Set value
 				client.set((new StringBuilder())
 						.append(RedisKeys.KEY_STATUS_DNS_COUNTER)
-						.append(SharedData.getInstance().site_info.getSiteId()).toString()
+						.append(":").append(SharedData.getInstance().getSiteID()).toString()
 						, json
 				);
 

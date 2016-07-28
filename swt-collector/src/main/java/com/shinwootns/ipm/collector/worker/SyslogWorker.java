@@ -11,7 +11,7 @@ import com.shinwootns.ipm.collector.config.ApplicationProperty;
 import com.shinwootns.ipm.collector.data.SharedData;
 import com.shinwootns.ipm.collector.service.amqp.RabbitmqSender;
 
-public class SyslogWorker extends BaseWorker {
+public class SyslogWorker implements Runnable {
 
 	private Logger _logger = null;
 	private int _index = 0;
@@ -45,7 +45,7 @@ public class SyslogWorker extends BaseWorker {
 		
 		List<SyslogEntity> listSyslog = SharedData.getInstance().popSyslogList(1000, 500);
 
-		while(isStopFlag())
+		while(true)
 		{
 			listSyslog = SharedData.getInstance().popSyslogList(1000, 500);
 			

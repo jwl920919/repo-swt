@@ -109,7 +109,7 @@ public class ServiceController {
 					.append(", SiteName=").append(siteInfo.getSiteName())
 					.toString()
 			);
-			SharedData.getInstance().site_info = siteInfo;
+			SharedData.getInstance().setsiteInfo( siteInfo );
 			
 			// Load DHCP
 			DeviceDhcp dhcpInfo = dataMapper.selectDeviceDhcp(siteInfo.getSiteId());

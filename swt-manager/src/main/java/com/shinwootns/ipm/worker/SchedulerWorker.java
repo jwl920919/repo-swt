@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.shinwootns.common.stp.SmartThreadPool;
-import com.shinwootns.ipm.service.manager.ClusterManager;
+import com.shinwootns.ipm.service.cluster.ClusterManager;
 
 public class SchedulerWorker extends BaseWorker {
 	
@@ -20,6 +20,9 @@ public class SchedulerWorker extends BaseWorker {
 	
 	@Override
 	public void run() {
+		
+		ClusterManager.getInstance().updateMember();
+		ClusterManager.getInstance().checkMaster();
 		
 		_logger.info(String.format("SchedulerWorker... start."));
 		

@@ -29,17 +29,21 @@ public class SchedulerWorker implements Runnable {
 	@Override
 	public void run() {
 		
+		ClusterManager.getInstance().updateMember();
+		ClusterManager.getInstance().checkMaster();
+		
 		_logger.info("SchedulerWorker... start.");
 		
-		// 3 Seconds
+		// Update ClusterMember
 		schedulerService.scheduleWithFixedDelay(
 				new Runnable() {
 					@Override
 					public void run() {
-						run3SecCycle();
+						ClusterManager.getInstance().updateMember();
+						ClusterManager.getInstance().checkMaster();
 					}
 				}
-				,0 ,3 ,TimeUnit.SECONDS
+				,0 ,5 ,TimeUnit.SECONDS
 		);
 		
 		// 10 Seconds
@@ -79,16 +83,9 @@ public class SchedulerWorker implements Runnable {
 		_logger.info("SchedulerWorker... end.");
 	}
 	
-	// 3 Seconds
-	private void run3SecCycle() {
-		
-		ClusterManager.getInstance().updateMember();
-	}
-	
 	// 10 Seconds
 	private void run10SecCycle() {
-
-		ClusterManager.getInstance().checkMaster();
+		// ...
 	}
 	
 	// 30 Seconds

@@ -13,7 +13,6 @@ import com.shinwootns.common.stp.PoolStatus;
 import com.shinwootns.common.stp.SmartThreadPool;
 import com.shinwootns.common.utils.TimeUtils;
 import com.shinwootns.ipm.collector.data.SharedData;
-import com.shinwootns.ipm.collector.worker.BaseWorker;
 import com.shinwootns.ipm.collector.worker.MasterJobWoker;
 import com.shinwootns.ipm.collector.worker.SchedulerWorker;
 import com.shinwootns.ipm.collector.worker.SyslogWorker;
@@ -117,7 +116,7 @@ public class WorkerManager {
 	//endregion
 	
 	//region [FUNC] AddTask
-	public void AddTask(BaseWorker task) {
+	public void AddTask(Runnable task) {
 		_taskPool.addTask(task);
 	}
 	//endregion
