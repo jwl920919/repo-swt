@@ -1066,8 +1066,8 @@ function eventLogAjaxCall() {
 		if (jsonObj != '') {
 			if (jsonObj.EVENTLOG != '') {
 
-				$('#datatable').dataTable().fnClearTable();
-				$('#datatable').dataTable().fnDestroy();				
+//				$('#datatable').dataTable().fnClearTable();
+//				$('#datatable').dataTable().fnDestroy();				
 				$('#datatable').dataTable( {
 				    data: jsonObj.EVENTLOG,
 				    columnDefs: [{ className: "essential-td-left", "targets": [ 4 ] }],
@@ -1078,21 +1078,34 @@ function eventLogAjaxCall() {
 	                   { data: "server"},
 	                   { data: "message"}
 	               ],
+	            "bJQueryUI": true,
                 "destroy" : false,
-                "paging" : true,
+                "paging" : false,
                 "searching" : false,
                 "lengthChange" : false,
                 "pageLength": 5,
                 "ordering" : true,
                 "info" : false,
-                "autoWidth" : false,
+                "bAutoWidth": false,
                 "processing" : true,
                 "serverSide" : false,
+                "sScrollY": "150",
+                "sScrollX": "100%",
+                "sScrollXInner": "1633",
+                "bScrollCollapse": true,
                 "order" : [ [ 1, 'desc' ] ]
 				} );
 			};
 		};
-
+		//검색, 엔트리 위치 정렬
+		$(function() {
+		    var d_wrap = $('#datatable_wrapper .row:first');
+		    var d_length = $('#datatable_wrapper .row:first .col-sm-6:eq(0)');
+		    var d_filter = $('#datatable_wrapper .row:first .col-sm-6:eq(1)');
+		    d_length.append(d_filter);
+		    d_wrap.prepend(d_filter);
+		});
+		
 		clearEventLogAjaxCall();
 		//m_eventLogAjaxCall = setInterval(eventLogAjaxCall, eventLogCallTime);// 페이지 로딩 데이터 조회 후 polling 시간 변경
 	} catch (e) {

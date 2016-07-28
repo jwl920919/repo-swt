@@ -267,38 +267,36 @@ $(document).ready(function() {
 							alt="User Image">
 
 							<p>
-								Alexander Pierce - Web Developer <small>Member since
-									Nov. 2012</small>
+								신우TNS Test
+								<small>Member since. 2016</small>
 							</p></li>
 						<!-- Menu Body -->
 						<li class="user-body">
 							<div class="row">
 								<div class="col-xs-4 text-center">
-									<a href="#">Followers</a>
+									<a href="#">Button1</a>
 								</div>
 								<div class="col-xs-4 text-center">
-									<a href="#">Sales</a>
+									<a href="#">Button1</a>
 								</div>
 								<div class="col-xs-4 text-center">
-									<a href="#">Friends</a>
+									<a href="#">Button1</a>
 								</div>
 							</div> <!-- /.row -->
 						</li>
 						<!-- Menu Footer-->
 						<li class="user-footer">
 							<div class="pull-left">
-								<a href="#" class="btn btn-default btn-flat">Profile</a>
+								<a href="#" class="btn btn-default btn-flat">Sample</a>
 							</div>
 							<div class="pull-right">
 								<!-- <a href="#" class="btn btn-default btn-flat" onclick="fnSignOut();return false;" >Sign out</a> -->
-								<a href="/signOut" class="btn btn-default btn-flat">Sign
-									out</a>
+								<a href="/signOut" class="btn btn-default btn-flat">Sign out</a>
 							</div>
 						</li>
 					</ul></li>
 				<!-- Control Sidebar Toggle Button -->
-				<li><a href="#" data-toggle="control-sidebar"><i
-						class="fa fa-gears"></i></a></li>
+<!-- 				<li><a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a></li> -->
 			</ul>
 		</div>
 		<!-- 상단 좌측 메일, 공지, 작업 , 프로필 관련 영역 끝 --> </nav> </header>

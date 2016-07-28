@@ -1,6 +1,7 @@
 ﻿{	
 	"Title":										"Smart IPM",
 	"Login":										"LOGIN",
+	"Signout":										"Sign out",
 	"ID":											"ID",
 	"Name":											"Name",
 	"Password":										"Password",
@@ -46,7 +47,7 @@
 	"staticIPStatus":								"고정 IP 현황",
 	"staticIPSetting":								"고정 IP 설정 및 예약",
 	"leaseIPStatus":								"Lease IP 현황",
-	"ipCertifyStatus":								"IP 승인 현황",
+	"certifyIPStatus":								"IP 승인 현황",
 	"unusedIPStatus":								"미승인 IP 현황",
 	"ipFilterStatus":								"DHCP IP 필터 현황",
 	"blackListStatus":								"Black List 현황",
@@ -132,6 +133,15 @@
     "ip":		 									"IP",
     "mac":		 									"MAC",
     "user":		 									"user",
+    "all":		 									"ALL",
     "start":		 								"start",
-    "end":		 									"end"
+    "end":		 									"end",    
+    "starttime":		 							"Start time",
+    "endtime":		 								"End time",
+    "hostname":		 								"Host name",
+    "hostos":		 								"Host OS",
+    "leasestatus":		 							"Lease status",
+    "lease":		 								"Lease",
+    "Chooseasegment":		 						"Choose a segment"
+    "IPMAChostnameinput":		 					"ip, mac, hostname input"
 }

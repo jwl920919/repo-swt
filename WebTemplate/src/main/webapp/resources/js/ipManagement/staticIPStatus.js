@@ -115,8 +115,7 @@ function tdClickEvent(obj){
 			
 			var table = $('#datatable_detail').DataTable(
 		            {
-		            	"bJQueryUI": true,
-	
+		            	"bJQueryUI": true,	
 		                "destroy" : true,
 		                "paging" : true,
 		                "searching" : true,

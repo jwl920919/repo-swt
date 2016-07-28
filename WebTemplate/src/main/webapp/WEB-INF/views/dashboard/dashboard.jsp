@@ -562,20 +562,27 @@
 					</div>
 					<!-- ./ tools -->
 				</div>
-				<div class="box-body">				
-					<table id="datatable" name="eventLog" class="essential-table" style="width: 98%">
-						<thead>
-							<tr>
-								<th width="160px"><%=LanguageHelper.GetLanguage("datetime")%></th>
-								<th width="150px">Facility</th>
-								<th width="150px"><%=LanguageHelper.GetLanguage("type")%></th>
-								<th width="200px"><%=LanguageHelper.GetLanguage("server")%></th>
-								<th width="*"><%=LanguageHelper.GetLanguage("message")%></th>
-							</tr>
-						</thead>
-						<tbody>
-						</tbody>
-					</table>
+				<div class="box-body" style="margin-bottom: 5px">
+					<center>
+						<table id="datatable" name="eventLog" class="essential-table" style="width: 98% !important">
+							<thead>
+								<tr>
+<%-- 									<th width="10%"><%=LanguageHelper.GetLanguage("datetime")%></th> --%>
+<!-- 									<th width="7%">Facility</th> -->
+<%-- 									<th width="7%"><%=LanguageHelper.GetLanguage("type")%></th> --%>
+<%-- 									<th width="10%"><%=LanguageHelper.GetLanguage("server")%></th> --%>
+<%-- 									<th width="*"><%=LanguageHelper.GetLanguage("message")%></th> --%>
+									<th width="160px"><%=LanguageHelper.GetLanguage("datetime")%></th>
+									<th width="100px">Facility</th>
+									<th width="100px"><%=LanguageHelper.GetLanguage("type")%></th>
+									<th width="180px"><%=LanguageHelper.GetLanguage("server")%></th>
+									<th width="AUTO"><%=LanguageHelper.GetLanguage("message")%></th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</center>
 				</div>
 			</div>
 		</div>
