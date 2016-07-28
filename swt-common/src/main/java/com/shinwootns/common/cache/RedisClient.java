@@ -21,8 +21,16 @@ public class RedisClient {
 		this._redis = redis;
 	}
 	
-	//region isConnection / Close
-	public boolean isConnection(Jedis redis)
+	public Jedis getJedis() {
+		return this._redis;
+	}
+	
+	public void setJedis(Jedis redis) {
+		this._redis = redis;
+	}
+	
+	//region [FUNC] is Connect
+	public boolean isConnect()
 	{
 		try
 		{
@@ -30,7 +38,7 @@ public class RedisClient {
 				return false;
 			
 			// Ping
-			String value = redis.ping();
+			String value = this._redis.ping();
 			
 			if (value != null && value.toUpperCase().equals("PONG"))
 				return true;
@@ -41,7 +49,9 @@ public class RedisClient {
 		
 		return false;
 	}
+	//endregion
 	
+	//region [FUNC] close
 	public void close() {
 		try
 		{
@@ -56,7 +66,8 @@ public class RedisClient {
 	}
 	//endregion
 	
-	public HashSet<String> keys(String pattern) {
+	//region [FUNC] get Keys
+	public HashSet<String> getKeys(String pattern) {
 		
 		HashSet<String> keys = new HashSet<String>();
 		
@@ -73,8 +84,9 @@ public class RedisClient {
 		
 		return keys;
 	}
+	//endregion
 	
-	//region get / set / delete / isExist
+	//region [FUNC] get / set / delete / isExist
 	public boolean set(String key, String value) {
 		try {
 			
@@ -130,8 +142,8 @@ public class RedisClient {
 	}
 	//endregion
 	
-	//region expire
-	public Long expire(String key, int seconds) {
+	//region [FUNC] expireTime / expireAt
+	public Long expireTime(String key, int seconds) {
 		try {
 			
 			if (this._redis != null)
@@ -156,7 +168,7 @@ public class RedisClient {
 	}
 	//endregion
 	
-	//region increase / decrease
+	//region [FUNC] increase / decrease
 	
 	public Long increase(String key) {
 		try {
@@ -183,7 +195,7 @@ public class RedisClient {
 	}
 	//endregion
 	
-	//region append / pop
+	//region [FUNC] append / pop
 	
 	public Long append(String key, String value) {
 		try {
@@ -222,7 +234,7 @@ public class RedisClient {
 	}
 	//endregion
 	
-	//region zorder
+	//region [FUNC] zadd / zcount / zrank
 	public Long zadd(String key, Map<String, Double> scoreMembers) {
 		try {
 			
@@ -258,7 +270,9 @@ public class RedisClient {
 		}
 		return null;
 	}
+	//endregion
 	
+	//region [FUNC] zrangeByRank / zrevrangeByRank
 	public Set<String> zrangeByRank(String key, long start, long end) {
 		try {
 			
@@ -282,7 +296,9 @@ public class RedisClient {
 		}
 		return null;
 	}
+	//endregion
 	
+	//region [FUNC] zrangeByScore / zrevrangeByScore
 	public Set<String> zrangeByScore(String key, double min, double max, int offset, int count) {
 		try {
 			
@@ -306,7 +322,9 @@ public class RedisClient {
 		}
 		return null;
 	}
+	//endregion
 	
+	//region [FUNC] zrangeByLex / zrevrangeByLex
 	public Set<String> zrangeByLex(String key, String min, String max) {
 		try {
 			

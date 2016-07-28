@@ -14,11 +14,9 @@ public class PropertyUtils {
 	
 	private Properties _properties = new Properties();
 	
-	// Singleton
+	//region Singleton
 	private static PropertyUtils _instance = null;
-
 	private PropertyUtils() {}
-
 	public static synchronized PropertyUtils getInstance() {
 
 		if (_instance == null) {
@@ -26,8 +24,9 @@ public class PropertyUtils {
 		}
 		return _instance;
 	}
+	//endregion
 	
-	//region Load Properties
+	//region [FUNC] load / save Properties
 	public boolean loadProperties(String filepath) {
 
 		FileInputStream fis = null;
@@ -65,7 +64,6 @@ public class PropertyUtils {
 		
 		return false;
 	}
-	//endregion
 	
 	public boolean saveProperties(String filePath) {
 		
@@ -94,7 +92,9 @@ public class PropertyUtils {
 		
 		return false;
 	}
+	//endregion
 	
+	//region [FUNC] getProperty Value
 	public String getPropertyString(String key, String defaultValue) {
 		
 		if ( _properties.containsKey(key) == false )
@@ -128,4 +128,5 @@ public class PropertyUtils {
 		
 		return defaultValue;
 	}
+	//endregion
 }

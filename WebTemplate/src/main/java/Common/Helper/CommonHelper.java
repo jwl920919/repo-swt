@@ -100,6 +100,46 @@ public class CommonHelper {
 		sb.append((ipNumber & 0xFF)); 
 		return sb.toString(); 
 	} 
+	
+	/**
+	 * <p>
+	 * object 값을 long으로 반환한다.
+	 * 처리할 수 없는 에러 발생시 Exception을 발생한다.
+	 * </p>
+	 * 
+	 * @param Object
+	 * @return long
+	 * @throws Exception
+	 **/
+	public static long objectToLong(Object value) throws Exception {
+		
+		if (value instanceof Double || value instanceof Float) {
+			return Long.parseLong(String.format("%.0f", value));
+		}
+		else if (value instanceof Integer) {
+			return (long)value;
+		}
+		
+		return Long.parseLong(value.toString());
+	}
+	/**
+	 * <p>
+	 * object 값을 int로 반환한다.
+	 * 처리할 수 없는 에러 발생시 Exception을 발생한다.
+	 * </p>
+	 * 
+	 * @param Object
+	 * @return int
+	 * @throws Exception
+	 **/
+	public static int objectToInteger(Object value) throws Exception {
+		
+		if (value instanceof Double || value instanceof Float) {
+			return Integer.parseInt(String.format("%.0f", value));
+		}
+		
+		return Integer.parseInt(value.toString());
+	}
 }
 
 

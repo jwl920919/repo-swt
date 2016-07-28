@@ -21,7 +21,7 @@ public class RabbitmqHandler {
 	
 	private MQManager manager = new MQManager();
 	
-	// Singleton
+	//retion Singleton
 	private static RabbitmqHandler _instance = null;
 	private RabbitmqHandler() {}
 	public static synchronized RabbitmqHandler getInstance() {
@@ -31,20 +31,30 @@ public class RabbitmqHandler {
 		}
 		return _instance;
 	}
+	//endregion
 	
-	// Connect
-	public boolean connect() throws Exception
+	//region [FUNC] connect / close
+	public boolean connect()
 	{
 		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
 		if (appProperty == null)
 			return false;
 		
-		boolean result =  manager.Connect(
-				appProperty.rabbitmqHost, 
-				appProperty.rabbitmqPort, 
-				appProperty.rabbitmqUsername, 
-				CryptoUtils.Decode_AES128(appProperty.rabbitmqPassword), 
-				appProperty.rabbitmqVHost);
+		boolean result = false;
+		try
+		{
+		
+			result =  manager.Connect(
+					appProperty.rabbitmqHost, 
+					appProperty.rabbitmqPort, 
+					appProperty.rabbitmqUsername, 
+					CryptoUtils.Decode_AES128(appProperty.rabbitmqPassword), 
+					appProperty.rabbitmqVHost);
+		}
+		catch(Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+			result = false;
+		}
 		
 		if (result)
 			_logger.info((new StringBuilder()).append("Succeed connect rabbitmq... amqp:\\").append(appProperty.rabbitmqHost).append(":").append(appProperty.rabbitmqPort));
@@ -54,14 +64,13 @@ public class RabbitmqHandler {
 		return result;
 	}
 	
-	// Close
 	public void close()
 	{
 		manager.Close();
 	}
+	//endregion
 	
-	
-	// Get Client
+	//region [FUNC] Get Clients
 	public SingleClient createSingleClient()
 	{
 		return (SingleClient)manager.createMQClient(MQClientType.Single);
@@ -91,4 +100,6 @@ public class RabbitmqHandler {
 	{
 		return (CustomClient)manager.createMQClient(MQClientType.Custom);
 	}
+	//endregion
+
 }

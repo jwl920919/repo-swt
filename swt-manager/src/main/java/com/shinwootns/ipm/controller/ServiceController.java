@@ -53,10 +53,10 @@ public class ServiceController {
 		
 		
 		// Redis
-		RedisHandler.getInstance().Connect();
+		RedisHandler.getInstance().connect();
 		
 		// Cluster Info
-		ClusterManager.getInstance().updateClusterMember();
+		ClusterManager.getInstance().updateMember();
 		
 		// Start
 		WorkerManager.getInstance().start();

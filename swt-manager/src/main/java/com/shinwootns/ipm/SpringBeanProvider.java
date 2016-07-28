@@ -17,7 +17,7 @@ public class SpringBeanProvider {
 	private ApplicationContext _context = null;
 	private ApplicationProperty appProperty = null;
 
-	// Singleton
+	//region Singleton
 	private static SpringBeanProvider _instance;
 	private SpringBeanProvider() {}
 	public static synchronized SpringBeanProvider getInstance() {
@@ -27,8 +27,9 @@ public class SpringBeanProvider {
 		}
 		return _instance;
 	}
+	//endregion
 
-	// get ApplicationContext
+	//region [FUNC] get / set ApplicationContext
     public ApplicationContext getApplicationContext() {
     	
     	if (_context != null)
@@ -37,7 +38,6 @@ public class SpringBeanProvider {
         return _context;
     }
  
-    // set ApplicationContext
     public void setApplicationContext(ApplicationContext context) {
     	
         this._context = context;
@@ -45,8 +45,9 @@ public class SpringBeanProvider {
         if (this._context != null)
         	_logger.info( String.format("AppContextProvider - setApplicationContext : %s", this._context.toString()));
     }
+    //endregion
     
-    // ApplicationProperties
+    //region [FUNC] get / set ApplicationProperties
     public void setApplicationProperty(ApplicationProperty appProperty) {
     	this.appProperty = appProperty;
     }
@@ -54,7 +55,9 @@ public class SpringBeanProvider {
     public ApplicationProperty getApplicationProperty() {
     	return appProperty;
     }
+    //endregion
     
+    //region [FUNC] Get Mapper (Event, Device, Dhcp, ...)
     public EventMapper getEventMapper() {
     	
     	if (_context == null)
@@ -73,7 +76,7 @@ public class SpringBeanProvider {
     	
     	return eventMapper;
     }
-    
+
     public DeviceMapper getDeviceMapper() {
     	
     	if (_context == null)
@@ -92,7 +95,7 @@ public class SpringBeanProvider {
     	
     	return deviceMapper;
     }
-    
+
     public DhcpMapper getDhcpMapper() {
     	
     	if (_context == null)
@@ -111,4 +114,5 @@ public class SpringBeanProvider {
     	
     	return dhcpMapper;
     }
+    //endregion
 }

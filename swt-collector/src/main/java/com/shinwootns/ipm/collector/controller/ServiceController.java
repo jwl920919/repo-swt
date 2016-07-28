@@ -11,13 +11,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.shinwootns.common.network.SyslogManager;
 import com.shinwootns.common.utils.CryptoUtils;
+import com.shinwootns.common.utils.SystemUtils;
+import com.shinwootns.data.entity.DeviceDhcp;
+import com.shinwootns.data.entity.DeviceInsight;
+import com.shinwootns.data.entity.SiteInfo;
 import com.shinwootns.ipm.collector.SpringBeanProvider;
+import com.shinwootns.ipm.collector.WorkerManager;
 import com.shinwootns.ipm.collector.config.ApplicationProperty;
 import com.shinwootns.ipm.collector.data.SharedData;
+import com.shinwootns.ipm.collector.data.mapper.DataMapper;
 import com.shinwootns.ipm.collector.service.amqp.RabbitmqHandler;
+import com.shinwootns.ipm.collector.service.redis.RedisHandler;
 import com.shinwootns.ipm.collector.service.syslog.SyslogReceiveHandlerImpl;
-import com.shinwootns.ipm.collector.worker.WorkerManager;
-import com.shinwootns.ipm.data.entity.DeviceDhcp;
 
 @RestController
 public class ServiceController {
@@ -30,8 +35,11 @@ public class ServiceController {
 	@Autowired
 	private ApplicationContext context;
 	
+	@Autowired
+	private DataMapper dataMapper;
+	
 	@PostConstruct
-	public void startService() throws Exception {
+	public void startService() {
 		
 		_logger.info("Start Service Controller.");
 		
@@ -41,8 +49,14 @@ public class ServiceController {
 		
 		_logger.info(appProperty.toString());
 		
+		// Load Config
+		if ( LoadConfig() == false )
+			return;
+		
 		// Connect RabbitMQ
 		RabbitmqHandler.getInstance().connect();
+		
+		RedisHandler.getInstance().connect();
 		
 		// Start Work Manager
 		WorkerManager.getInstance().start();
@@ -69,16 +83,100 @@ public class ServiceController {
 		_logger.info("Stop Service Controller.");
 	}
 	
-	public void testInitData() throws Exception {
+	public boolean LoadConfig() {
 		
-		DeviceDhcp dhcp = new DeviceDhcp();
-		dhcp.setDeviceId(2);
-		dhcp.setSiteId(1);
-		dhcp.setHost("192.168.1.11");
-		dhcp.setSnmpCommunity("public");
-		dhcp.setWapiUserid("admin");
-		dhcp.setWapiUserid( CryptoUtils.Decode_AES128("SctL7q8ogUkfBwqqz3hP6A=="));
+		DataMapper dataMapper = SpringBeanProvider.getInstance().getDataMapper();
+		if (dataMapper == null) {
+			_logger.error("LoadConfig.. failed (dataMapper is null");
+			return false;
+		}
 		
-		SharedData.getInstance().dhcpDevice = dhcp;
+		try
+		{
+			// Load Site Info
+			SiteInfo siteInfo = dataMapper.selectSiteInfoByCode(appProperty.siteCode);
+			if (siteInfo == null) {
+				_logger.error( (new StringBuilder())
+						.append("Failed get site info, SiteCode=").append(appProperty.siteCode)
+						.toString()
+				);
+				return false;
+			}
+			
+			_logger.info( (new StringBuilder())
+					.append("[Site Info] SiteID=").append(siteInfo.getSiteId())
+					.append(", SiteCode=").append(siteInfo.getSiteCode()) 
+					.append(", SiteName=").append(siteInfo.getSiteName())
+					.toString()
+			);
+			SharedData.getInstance().site_info = siteInfo;
+			
+			// Load DHCP
+			DeviceDhcp dhcpInfo = dataMapper.selectDeviceDhcp(siteInfo.getSiteId());
+			if (dhcpInfo != null ) {
+				
+				_logger.info( (new StringBuilder())
+						.append("[DHCP Info] host=").append(dhcpInfo.getHost())
+						.append(", WAPI user=").append(dhcpInfo.getWapiUserid()) 
+						.toString()
+				);
+				
+				// Decrypt password
+				if ( dhcpInfo.getWapiPassword().isEmpty() == false ) {
+					dhcpInfo.setWapiPassword( CryptoUtils.Decode_AES128(dhcpInfo.getWapiPassword()));
+				}
+				
+				SharedData.getInstance().dhcpDevice = dhcpInfo;
+			}
+			
+			String hostName = SystemUtils.getHostName();
+			
+			if (hostName.isEmpty() == false && siteInfo.getSiteId() > 0) {
+			
+				// Device Insight
+				DeviceInsight insight = new DeviceInsight();
+				insight.setHost(hostName);
+				insight.setSiteId(siteInfo.getSiteId());
+				insight.setPort(appProperty.serverPort);
+				insight.setVersion(appProperty.version);
+				insight.setEnableCollect(true);
+				
+				// Update
+				int affected = dataMapper.updateInsight(insight);
+				if ( affected > 0) {
+
+					// Update OK
+					_logger.info((new StringBuilder())
+							.append("[DB] Update device insight... ")
+							.append(", siteId=").append(insight.getSiteId())
+							.append(", host=").append(insight.getHost())
+							.append(", port=").append(insight.getPort())
+							.append(", version=").append(insight.getVersion())
+							.toString()
+							);
+				}
+				else {
+					// Insert New
+					affected = dataMapper.insertInsight(insight);
+					
+					if ( affected > 0) {
+						// Insert OK
+						_logger.info((new StringBuilder())
+								.append("[DB] Insert device insight... ")
+								.append(", siteId=").append(insight.getSiteId())
+								.append(", host=").append(insight.getHost())
+								.append(", port=").append(insight.getPort())
+								.append(", version=").append(insight.getVersion())
+								.toString()
+								);
+					}
+				}
+			}
+		}
+		catch(Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+		}
+		
+		return true;
 	}
 }

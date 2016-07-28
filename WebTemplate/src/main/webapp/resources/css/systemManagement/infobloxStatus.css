@@ -12,3 +12,44 @@ div.row {
 .info-label {
 	width: 120px;
 }
+.info-label-b{
+	margin-right:10px;
+}
+.normal {
+	color:#02fd3a !important;
+}
+.empty {
+	color:#444444 !important;
+}
+.warning {
+	color:#ff962d !important;
+}
+.error {
+	color:#ff3131 !important;
+}
+/* Tooltip container */
+.custom-tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+/* Tooltip text */
+.custom-tooltip .tooltiptext {
+    visibility: hidden;
+    width: 220px;
+    background-color: rgba(53, 53, 53, 0.70);
+    color: #fff;
+    text-align: left;
+    padding: 5px 0;
+    padding-left:5px;
+    border-radius: 6px;
+ 
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+     z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.custom-tooltip:hover .tooltiptext {
+    visibility: visible;
+}

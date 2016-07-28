@@ -4,20 +4,20 @@
 <mapper namespace="com.shinwootns.ipm.data.mapper.DhcpMapper">
 
 	<!-- ############################ DHCP NETWORK ############################ -->
-	<select id="selectDhcpNetworkBySiteId" resultType="com.shinwootns.ipm.data.entity.DhcpNetwork">
+	<select id="selectDhcpNetworkBySiteId" resultType="com.shinwootns.data.entity.DhcpNetwork">
 		<![CDATA[
 			SELECT * FROM dhcp_network WHERE site_id=#{site_id}
 		]]>
 	</select>
 	
-	<insert id="insertDhcpNetwork" parameterType="com.shinwootns.ipm.data.entity.DhcpNetwork">
+	<insert id="insertDhcpNetwork" parameterType="com.shinwootns.data.entity.DhcpNetwork">
 		<![CDATA[
 			INSERT INTO dhcp_network (site_id, network, start_ip, end_ip, comment)
 			VALUES ( #{site_id}, #{network}, #{start_ip}, #{end_ip}, #{comment} ) 
 		]]>
 	</insert>
 	
-	<update id="updateDhcpNetwork" parameterType="com.shinwootns.ipm.data.entity.DhcpNetwork">
+	<update id="updateDhcpNetwork" parameterType="com.shinwootns.data.entity.DhcpNetwork">
 		<![CDATA[
 			UPDATE dhcp_network
 			SET start_ip=#{start_ip}, end_ip=#{end_ip}, comment=#{comment}, update_time=now()
@@ -33,20 +33,20 @@
 	</delete>
 	
 	<!-- ############################ DHCP RANGE ############################ -->
-	<select id="selectDhcpRangeBySiteId" resultType="com.shinwootns.ipm.data.entity.DhcpRange">
+	<select id="selectDhcpRangeBySiteId" resultType="com.shinwootns.data.entity.DhcpRange">
 		<![CDATA[
 			SELECT * FROM dhcp_range WHERE site_id=#{site_id}
 		]]>
 	</select>
 	
-	<insert id="insertDhcpRange" parameterType="com.shinwootns.ipm.data.entity.DhcpRange">
+	<insert id="insertDhcpRange" parameterType="com.shinwootns.data.entity.DhcpRange">
 		<![CDATA[
 			INSERT INTO dhcp_range (site_id, network, start_ip, end_ip)
 			VALUES ( #{site_id}, #{network}, #{start_ip}, #{end_ip} ) 
 		]]>
 	</insert>
 	
-	<update id="updateDhcpRange" parameterType="com.shinwootns.ipm.data.entity.DhcpRange">
+	<update id="updateDhcpRange" parameterType="com.shinwootns.data.entity.DhcpRange">
 		<![CDATA[
 			UPDATE dhcp_range
 			SET end_ip=#{end_ip}, update_time=now()
@@ -62,20 +62,20 @@
 	</delete>
 	
 	<!-- ############################ DHCP Fixed IP ############################ -->
-	<select id="selectDhcpFixedIpBySiteId" resultType="com.shinwootns.ipm.data.entity.DhcpFixedIp">
+	<select id="selectDhcpFixedIpBySiteId" resultType="com.shinwootns.data.entity.DhcpFixedIp">
 		<![CDATA[
 			SELECT * FROM dhcp_fixed_ip WHERE site_id=#{site_id}
 		]]>
 	</select>
 	
-	<insert id="insertDhcpFixedIp" parameterType="com.shinwootns.ipm.data.entity.DhcpFixedIp">
+	<insert id="insertDhcpFixedIp" parameterType="com.shinwootns.data.entity.DhcpFixedIp">
 		<![CDATA[
 			INSERT INTO dhcp_fixed_ip (site_id, network, ipaddr, macaddr, comment, disable, update_time)
 			VALUES ( #{site_id}, #{network}, #{ipaddr}, #{macaddr}, #{comment}, #{disable}, now() ) 
 		]]>
 	</insert>
 	
-	<update id="updateDhcpFixedIp" parameterType="com.shinwootns.ipm.data.entity.DhcpFixedIp">
+	<update id="updateDhcpFixedIp" parameterType="com.shinwootns.data.entity.DhcpFixedIp">
 		<![CDATA[
 			UPDATE dhcp_fixed_ip
 			SET network=#{network}, macaddr=#{macaddr}, comment=#{comment}, disable=#{disable}, update_time=now()
@@ -91,20 +91,20 @@
 	</delete>
 	
 	<!-- ############################ DHCP Filter ############################ -->
-	<select id="selectDhcpFilterBySiteId" resultType="com.shinwootns.ipm.data.entity.DhcpMacFilter">
+	<select id="selectDhcpFilterBySiteId" resultType="com.shinwootns.data.entity.DhcpMacFilter">
 		<![CDATA[
 			SELECT * FROM dhcp_mac_filter WHERE site_id=#{site_id}
 		]]>
 	</select>
 	
-	<insert id="insertDhcpFilter" parameterType="com.shinwootns.ipm.data.entity.DhcpMacFilter">
+	<insert id="insertDhcpFilter" parameterType="com.shinwootns.data.entity.DhcpMacFilter">
 		<![CDATA[
 			INSERT INTO dhcp_mac_filter (site_id, filter_name, insert_time, update_time)
 			VALUES ( #{site_id}, #{filter_name}, now(), now() ) 
 		]]>
 	</insert>
 	
-	<update id="updateDhcpFilter" parameterType="com.shinwootns.ipm.data.entity.DhcpMacFilter">
+	<update id="updateDhcpFilter" parameterType="com.shinwootns.data.entity.DhcpMacFilter">
 		<![CDATA[
 			UPDATE dhcp_mac_filter
 			SET update_time=now()
@@ -120,13 +120,13 @@
 	</delete>
 	
 	<!-- ############################ DHCP IP STATUS ############################ -->
-	<select id="selectDhcpIpStatusByNetwork" resultType="com.shinwootns.ipm.data.entity.DhcpIpStatus">
+	<select id="selectDhcpIpStatusByNetwork" resultType="com.shinwootns.data.entity.DhcpIpStatus">
 		<![CDATA[
 			SELECT * FROM dhcp_ip_status WHERE site_id=#{site_id} AND network=#{network}
 		]]>
 	</select>
 	
-	<insert id="insertDhcpIpStatus" parameterType="com.shinwootns.ipm.data.entity.DhcpIpStatus">
+	<insert id="insertDhcpIpStatus" parameterType="com.shinwootns.data.entity.DhcpIpStatus">
 		<![CDATA[
 			INSERT INTO dhcp_ip_status (
 				site_id, network, ipaddr, ip_type, macaddr, duid, is_conflict
@@ -141,7 +141,7 @@
 		]]>
 	</insert>
 	
-	<update id="updateDhcpIpStatus" parameterType="com.shinwootns.ipm.data.entity.DhcpIpStatus">
+	<update id="updateDhcpIpStatus" parameterType="com.shinwootns.data.entity.DhcpIpStatus">
 		<![CDATA[
 			UPDATE dhcp_ip_status
 			SET network=#{network}, ip_type=#{ip_type}, macaddr=#{macaddr}, duid=#{duid}, is_conflict=#{is_conflict}, conflict_types=#{conflict_types}

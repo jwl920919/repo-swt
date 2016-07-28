@@ -13,24 +13,21 @@ public class WorkerManager {
 	
 	private final Logger _logger = Logger.getLogger(this.getClass());
 	
-	// Worker
+	// Worker Count
 	private static final int SCHEDULER_WORKER_COUNT = 1;
 	private static final int SYSLOG_WORKER_COUNT = 3;
 	private static final int EVENT_WORKER_COUNT = 2;
 	private static final int DEVICE_COLLECT_WORKER_COUNT = 1;
 	
-	private SmartThreadPool _workerPool = new SmartThreadPool();
-	
-	
-	// Task
+	// Task Count
 	private static final int TASK_MIN_COUNT = 32;
 	private static final int TASK_MAX_COUNT = 32;
 	private static final int TASK_LIMIT_COUNT = 32;
-	
+
+	private SmartThreadPool _workerPool = new SmartThreadPool();
 	private SmartThreadPool _taskPool = new SmartThreadPool();
 	
-	
-	// Singleton
+	//region Singleton
 	private static WorkerManager _instance = null;
 	private WorkerManager() {}
 	public static synchronized WorkerManager getInstance() {
@@ -40,9 +37,9 @@ public class WorkerManager {
 		}
 		return _instance;
 	}
-
+	//endregion
 	
-	// Start
+	//region [FUNC] start / stop
 	public synchronized void start() {
 
 		_logger.info("ThreadManager... start");
@@ -99,15 +96,6 @@ public class WorkerManager {
 
 	}
 	
-	// Pool Status
-	public synchronized PoolStatus GetWorkPoolStatus() {
-		return _workerPool.getPoolStatus();
-	}
-	
-	public synchronized PoolStatus GetTaskPoolStatus() {
-		return _taskPool.getPoolStatus();
-	}
-	
 	public synchronized void stop()
 	{
 		_workerPool.shutdownAndWait();
@@ -116,8 +104,21 @@ public class WorkerManager {
 		
 		_logger.info("ServiceManager....... stop");
 	}
+	//endregion
 	
+	//region [FUNC] Pool Status
+	public synchronized PoolStatus GetWorkPoolStatus() {
+		return _workerPool.getPoolStatus();
+	}
+	
+	public synchronized PoolStatus GetTaskPoolStatus() {
+		return _taskPool.getPoolStatus();
+	}
+	//endregion
+	
+	//region [FUNC] Add Task
 	public void AddTask(BaseWorker task) {
 		_taskPool.addTask(task);
 	}
+	//endregion
 }
