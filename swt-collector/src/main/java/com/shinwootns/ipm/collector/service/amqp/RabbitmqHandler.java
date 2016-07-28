@@ -21,7 +21,7 @@ public class RabbitmqHandler {
 	
 	private MQManager manager = new MQManager();
 	
-	// Singleton
+	//retion Singleton
 	private static RabbitmqHandler _instance = null;
 	private RabbitmqHandler() {}
 	public static synchronized RabbitmqHandler getInstance() {
@@ -31,8 +31,9 @@ public class RabbitmqHandler {
 		}
 		return _instance;
 	}
+	//endregion
 	
-	// Connect
+	//region [FUNC] connect / close
 	public boolean connect()
 	{
 		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
@@ -63,14 +64,13 @@ public class RabbitmqHandler {
 		return result;
 	}
 	
-	// Close
 	public void close()
 	{
 		manager.Close();
 	}
+	//endregion
 	
-	
-	// Get Client
+	//region [FUNC] Get Clients
 	public SingleClient createSingleClient()
 	{
 		return (SingleClient)manager.createMQClient(MQClientType.Single);
@@ -100,4 +100,6 @@ public class RabbitmqHandler {
 	{
 		return (CustomClient)manager.createMQClient(MQClientType.Custom);
 	}
+	//endregion
+
 }

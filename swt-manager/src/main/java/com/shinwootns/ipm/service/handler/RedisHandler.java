@@ -14,7 +14,7 @@ public class RedisHandler {
 	
 	RedisManager rm = new RedisManager();
 	
-	// Singleton
+	//region Singleton
 	private static RedisHandler _instance = null;
 	private RedisHandler() {}
 	public static synchronized RedisHandler getInstance() {
@@ -24,9 +24,10 @@ public class RedisHandler {
 		}
 		return _instance;
 	}
-
+	//endregion
 	
-	public boolean Connect() throws Exception 
+	//region [FUNC] connect
+	public boolean connect() throws Exception 
 	{
 		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
 		if (appProperty == null)
@@ -44,11 +45,14 @@ public class RedisHandler {
 
 		return true;
 	}
+	//endregion
 	
+	//region [FUNC] Get RedisClient
 	public RedisClient getRedisClient() {
 		
 		RedisClient redis = rm.createRedisClient();
 		
 		return redis;
 	}
+	//endregion
 }

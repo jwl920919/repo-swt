@@ -1,4 +1,4 @@
-package com.shinwootns.ipm.collector.worker;
+package com.shinwootns.ipm.collector;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,24 +12,29 @@ import com.shinwootns.common.stp.PoolStatus;
 import com.shinwootns.common.stp.SmartThreadPool;
 import com.shinwootns.common.utils.TimeUtils;
 import com.shinwootns.ipm.collector.data.SharedData;
-import com.shinwootns.ipm.collector.worker.persist.SchedulerWorker;
-import com.shinwootns.ipm.collector.worker.persist.SyslogWorker;
+import com.shinwootns.ipm.collector.worker.BaseWorker;
+import com.shinwootns.ipm.collector.worker.SchedulerWorker;
 
 public class WorkerManager {
 	
 	private final Logger _logger = Logger.getLogger(this.getClass());
 	
+	// Worker Count
 	private static final int SCHEDULER_WORKER_COUNT = 1;
 	private static final int SYSLOG_WORKER_COUNT = 3;
 	
-	// Task
+	// Task Count
 	private static final int TASK_MIN_COUNT = 32;
 	private static final int TASK_MAX_COUNT = 32;
 	private static final int TASK_LIMIT_COUNT = 32;
 	
+	// Worker Pool
+	private SmartThreadPool _workerPool = new SmartThreadPool();
+	
+	// Task Pool
 	private SmartThreadPool _taskPool = new SmartThreadPool();
 	
-	// Singleton
+	//region Singleton
 	private static WorkerManager _instance = null;
 	private WorkerManager() {}
 	public static synchronized WorkerManager getInstance() {
@@ -39,15 +44,12 @@ public class WorkerManager {
 		}
 		return _instance;
 	}
+	//endregion
 
-	// Worker Pool
-	private SmartThreadPool _workerPool = new SmartThreadPool();
-	
-	
-	// Start
+	//region [FUNC] start
 	public synchronized void start() {
 
-		_logger.info("ServiceManager... start");
+		_logger.info("WorkerManager... start");
 		
 		// Worker Pool
 		int totalCount = SCHEDULER_WORKER_COUNT + SYSLOG_WORKER_COUNT;
@@ -78,16 +80,9 @@ public class WorkerManager {
 			_logger.fatal("[FATAL] Failed to create task-pool !!!");
 		}
 	}
+	//endregion
 	
-	// Pool Status
-	public synchronized PoolStatus GetWorkPoolStatus() {
-		return _workerPool.getPoolStatus();
-	}
-	
-	public synchronized PoolStatus GetTaskPoolStatus() {
-		return _taskPool.getPoolStatus();
-	}
-	
+	//region [FUNC] stop
 	public synchronized void stop()
 	{
 		_workerPool.shutdownAndWait();
@@ -96,8 +91,22 @@ public class WorkerManager {
 		
 		_logger.info("ServiceManager....... stop");
 	}
+	//endregion
 	
+	//region [FUNC] Add Task
 	public void AddTask(BaseWorker task) {
 		_taskPool.addTask(task);
 	}
+	//endregion
+	
+	//region [FUNC] GetWorkPoolStatus / GetTaskPoolStatus
+	public synchronized PoolStatus GetWorkPoolStatus() {
+		return _workerPool.getPoolStatus();
+	}
+	
+	public synchronized PoolStatus GetTaskPoolStatus() {
+		return _taskPool.getPoolStatus();
+	}
+	//endregion
+
 }

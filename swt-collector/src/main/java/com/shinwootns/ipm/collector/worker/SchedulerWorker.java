@@ -1,4 +1,4 @@
-package com.shinwootns.ipm.collector.worker.persist;
+package com.shinwootns.ipm.collector.worker;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -15,7 +15,6 @@ import com.shinwootns.ipm.collector.data.SharedData;
 import com.shinwootns.ipm.collector.service.cluster.ClusterManager;
 import com.shinwootns.ipm.collector.service.infoblox.DhcpHandler;
 import com.shinwootns.ipm.collector.service.redis.RedisHandler;
-import com.shinwootns.ipm.collector.worker.BaseWorker;
 import com.shinwootns.data.status.DhcpStatus;
 
 public class SchedulerWorker extends BaseWorker {
@@ -31,7 +30,7 @@ public class SchedulerWorker extends BaseWorker {
 	@Override
 	public void run() {
 		
-		_logger.info(String.format("SchedulerWorker... start."));
+		_logger.info("SchedulerWorker... start.");
 		
 		// 3 Seconds
 		schedulerService.scheduleWithFixedDelay(
@@ -78,6 +77,8 @@ public class SchedulerWorker extends BaseWorker {
 		
 		// shutdown scheduler service
 		schedulerService.shutdown();
+		
+		_logger.info("SchedulerWorker... end.");
 	}
 	
 	// 3 Seconds

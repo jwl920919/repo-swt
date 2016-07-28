@@ -16,13 +16,13 @@ import com.shinwootns.data.entity.DeviceDhcp;
 import com.shinwootns.data.entity.DeviceInsight;
 import com.shinwootns.data.entity.SiteInfo;
 import com.shinwootns.ipm.collector.SpringBeanProvider;
+import com.shinwootns.ipm.collector.WorkerManager;
 import com.shinwootns.ipm.collector.config.ApplicationProperty;
 import com.shinwootns.ipm.collector.data.SharedData;
 import com.shinwootns.ipm.collector.data.mapper.DataMapper;
 import com.shinwootns.ipm.collector.service.amqp.RabbitmqHandler;
 import com.shinwootns.ipm.collector.service.redis.RedisHandler;
 import com.shinwootns.ipm.collector.service.syslog.SyslogReceiveHandlerImpl;
-import com.shinwootns.ipm.collector.worker.WorkerManager;
 
 @RestController
 public class ServiceController {

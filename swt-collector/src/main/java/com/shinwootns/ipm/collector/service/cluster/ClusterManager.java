@@ -22,19 +22,20 @@ public class ClusterManager {
 
 	private final Logger _logger = LoggerFactory.getLogger(getClass());
 
+	// Redis Key
 	private final static String KEY_CLUSTER_MEMBER = "cluster:insight:member";		// cluster:insight:member:{HostName}
 	private final static String KEY_CLUSTER_MASTER = "cluster:insight:master";
 	private final static String KEY_CLUSTER_JOB = "cluster:insight:job";			// cluster:insight:job:{HostName}
 
+	// Expire Time
 	private final static int EXPIRE_TIME_MEMBER = 10;
-	// private final static int EXPIRE_TIME_MASTER = 10;
+	
+	// is Master
+	private boolean isMasterNode = false;
 
-	// Singleton
+	//region Singleton
 	private static ClusterManager _instance = null;
-
-	private ClusterManager() {
-	}
-
+	private ClusterManager() {}
 	public static synchronized ClusterManager getInstance() {
 
 		if (_instance == null) {
@@ -42,8 +43,7 @@ public class ClusterManager {
 		}
 		return _instance;
 	}
-
-	private boolean isMasterNode = false;
+	//endregion
 
 	//region [FUNC] Update Member
 	public void updateMember() {
@@ -260,9 +260,10 @@ public class ClusterManager {
 			redis.set(key, jObj.toString());
 			
 		}catch(Exception ex) {
-			
+			_logger.error(ex.getMessage(), ex);
 		}finally {
 			redis.close();
 		}
 	}
+	//endregion
 }

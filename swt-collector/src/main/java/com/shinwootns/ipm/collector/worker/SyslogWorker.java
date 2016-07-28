@@ -1,4 +1,4 @@
-package com.shinwootns.ipm.collector.worker.persist;
+package com.shinwootns.ipm.collector.worker;
 
 import java.util.List;
 
@@ -10,7 +10,6 @@ import com.shinwootns.ipm.collector.SpringBeanProvider;
 import com.shinwootns.ipm.collector.config.ApplicationProperty;
 import com.shinwootns.ipm.collector.data.SharedData;
 import com.shinwootns.ipm.collector.service.amqp.RabbitmqSender;
-import com.shinwootns.ipm.collector.worker.BaseWorker;
 
 public class SyslogWorker extends BaseWorker {
 
