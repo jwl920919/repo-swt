@@ -42,7 +42,8 @@ public class ClusterManager {
 
 	private boolean isMasterNode = false;
 
-	public void updateClusterMember() {
+	//region [FUNC] Update Member
+	public void updateMember() {
 		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
 		if (appProperty == null)
 			return;
@@ -78,8 +79,10 @@ public class ClusterManager {
 		
 		redis.close();
 	}
+	//endregion
 
-	public void checkClusterMaster() {
+	//region [FUNC] Check Cluster Master
+	public void checkMaster() {
 		
 		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
 		if ( appProperty == null ) 
@@ -142,7 +145,9 @@ public class ClusterManager {
 			redis.close();
 		}
 	}
+	//endregion
 	
+	//region [FUNC] Get MasterName
 	public String getMasterName() {
 
 		RedisClient redis = RedisHandler.getInstance().getRedisClient();
@@ -165,8 +170,10 @@ public class ClusterManager {
 
 		return "";
 	}
+	//endregion
 
-	public boolean isClusterMaster() {
+	//region [FUNC] is Master
+	public boolean isMaster() {
 
 		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
 		if (appProperty == null)
@@ -191,13 +198,19 @@ public class ClusterManager {
 
 		return false;
 	}
+	//endregion
 
-	public void setMasterNode(boolean isMasterNode) {
+	//region [FUNC] set Master Node
+	public synchronized void setMasterNode(boolean isMasterNode) {
 
 		// If changed cluster mode.
 		if (this.isMasterNode != isMasterNode) {
 
-			_logger.info(String.format("Cluster mode changed. MODE = %s", (isMasterNode) ? "MASTER" : "SLAVE"));
+			_logger.info( (new StringBuilder())
+					.append("Changed cluster mode = ")
+					.append((isMasterNode) ? "MASTER" : "SLAVE")
+					.toString()
+			);
 
 			this.isMasterNode = isMasterNode;
 
@@ -211,4 +224,5 @@ public class ClusterManager {
 
 		}
 	}
+	//endregion
 }

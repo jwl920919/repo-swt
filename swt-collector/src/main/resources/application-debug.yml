@@ -75,7 +75,7 @@ banner:
 # logging
 #====================================
 logging:
-  file: /logs/ipm-collector.log
+  file: /logs/ipm-insight.log
   level:
     org.springframework: INFO
     level.com.shinwootns: DEBUG

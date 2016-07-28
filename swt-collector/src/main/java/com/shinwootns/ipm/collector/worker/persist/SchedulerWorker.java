@@ -28,8 +28,6 @@ public class SchedulerWorker extends BaseWorker {
 	
 	private ScheduledExecutorService schedulerService = Executors.newScheduledThreadPool(SCHEDULER_THREAD_COUNT);
 	
-	
-	
 	@Override
 	public void run() {
 		
@@ -57,11 +55,22 @@ public class SchedulerWorker extends BaseWorker {
 				,0, 10 , TimeUnit.SECONDS
 		);
 		
+		// 30 Seconds
+		schedulerService.scheduleWithFixedDelay(
+				new Runnable() {
+					@Override
+					public void run() {
+						run30SecCycle();
+					}
+				}
+				,0, 30 , TimeUnit.SECONDS
+		);
+		
 		// wait termination
 		while(this.isStopFlag() == false) {
 			
 			try {
-				Thread.sleep(100);
+				Thread.sleep(500);
 			} catch (InterruptedException e) {
 				break;
 			}
@@ -73,22 +82,29 @@ public class SchedulerWorker extends BaseWorker {
 	
 	// 3 Seconds
 	private void run3SecCycle() {
-		ClusterManager.getInstance().updateClusterMember();
 		
-		// ...
+		ClusterManager.getInstance().updateMember();
 	}
 	
 	// 10 Seconds
 	private void run10SecCycle() {
-		ClusterManager.getInstance().checkClusterMaster();
+
+		ClusterManager.getInstance().checkMaster();
 		
 		updateRedisDhcpStatus();
+	}
+	
+	// 30 Seconds
+	private void run30SecCycle() {
 		
 		displayStatus();
 	}
 	
-	
+	//region [FUNC] Update Dhcp Status
 	private void updateRedisDhcpStatus() {
+		
+		if ( ClusterManager.getInstance().isMaster() == false)
+			return;
 		
 		if (SharedData.getInstance().site_info == null)
 			return;
@@ -97,15 +113,20 @@ public class SchedulerWorker extends BaseWorker {
 		if (dhcp == null)
 			return;
 
+		// DHCP Handler
 		DhcpHandler handler = new DhcpHandler(dhcp.getHost(), dhcp.getWapiUserid(), dhcp.getWapiPassword(), dhcp.getSnmpCommunity()); 
 		DhcpStatus dhcpStatus = handler.getHWStatus();
 		
 		if (dhcpStatus != null) {
+			
+			// Serialize to Json
 			String json = JsonUtils.serialize(dhcpStatus);
 			
+			// Update to redis
 			RedisClient client = RedisHandler.getInstance().getRedisClient();
 			if(client != null) {
 				
+				// Set value
 				client.set(
 						(new StringBuilder()).append(KEY_DEIVCE_DHCP_STATUS).append(":").append(SharedData.getInstance().site_info.getSiteId()).toString()
 						, json);
@@ -114,7 +135,9 @@ public class SchedulerWorker extends BaseWorker {
 			}
 		}
 	}
+	//endregion
 	
+	//region [FUNC] Display Status
 	private void displayStatus() {
 		
 		// Redis
@@ -127,4 +150,5 @@ public class SchedulerWorker extends BaseWorker {
 			);
 		}
 	}
+	//endregion
 }

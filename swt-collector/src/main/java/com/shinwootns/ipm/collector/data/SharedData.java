@@ -42,59 +42,62 @@ public class SharedData {
 	public SiteInfo site_info = null;
 	
 	
-	// Add Syslog Task
-		public boolean addSyslogData(SyslogEntity syslog) {
+	//region Add Syslog Data
+	public boolean addSyslogData(SyslogEntity syslog) {
+		
+		boolean bResult = false;
+		
+		while(bResult == false)
+		{
+			bResult = SharedData.getInstance().syslogQueue.add(syslog);
 			
-			boolean bResult = false;
+			if (bResult)
+				break;
 			
-			while(bResult == false)
+			try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {
+			}
+		}
+		
+		return bResult;
+	}
+	//endregion
+
+	//region Pop Syslog Data
+	public List<SyslogEntity> popSyslogList(int popCount, int timeout) {
+		
+		List<SyslogEntity> resultList = new ArrayList<SyslogEntity>();
+		
+		if (popCount < 1)
+			popCount = 1000;
+		
+		int count=0;
+		
+		long startTime = TimeUtils.currentTimeMilis();
+		
+		while(count < popCount )
+		{
+			SyslogEntity syslog = SharedData.getInstance().syslogQueue.poll();
+			
+			if (syslog != null)
 			{
-				bResult = SharedData.getInstance().syslogQueue.add(syslog);
+				count++;
+				resultList.add(syslog);
+			}
+			else {
 				
-				if (bResult)
+				if ( TimeUtils.currentTimeMilis() - startTime > timeout )
 					break;
 				
 				try {
-					Thread.sleep(1);
+					Thread.sleep(100);
 				} catch (InterruptedException e) {
 				}
 			}
-			
-			return bResult;
 		}
 		
-		public List<SyslogEntity> popSyslogList(int popCount, int timeout) {
-			
-			List<SyslogEntity> resultList = new ArrayList<SyslogEntity>();
-			
-			if (popCount < 1)
-				popCount = 1000;
-			
-			int count=0;
-			
-			long startTime = TimeUtils.currentTimeMilis();
-			
-			while(count < popCount )
-			{
-				SyslogEntity syslog = SharedData.getInstance().syslogQueue.poll();
-				
-				if (syslog != null)
-				{
-					count++;
-					resultList.add(syslog);
-				}
-				else {
-					
-					if ( TimeUtils.currentTimeMilis() - startTime > timeout )
-						break;
-					
-					try {
-						Thread.sleep(100);
-					} catch (InterruptedException e) {
-					}
-				}
-			}
-			
-			return resultList;
-		}
+		return resultList;
+	}
+	//endregion
 }
