@@ -1,9 +1,6 @@
 package com.shinwootns.common.http;
 
 import java.io.IOException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.nio.charset.Charset;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
@@ -36,15 +33,13 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-
-import com.shinwootns.common.utils.LogUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HttpClient {
 
 	//region Variables
-	private final Logger _logger = Logger.getLogger(this.getClass());
+	private final Logger _logger = LoggerFactory.getLogger(getClass());
 
 	private String _baseURL;
 	private String _id;

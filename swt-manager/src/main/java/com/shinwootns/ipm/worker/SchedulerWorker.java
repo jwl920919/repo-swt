@@ -1,4 +1,4 @@
-package com.shinwootns.ipm.worker.persist;
+package com.shinwootns.ipm.worker;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import com.shinwootns.common.stp.SmartThreadPool;
 import com.shinwootns.ipm.service.manager.ClusterManager;
-import com.shinwootns.ipm.worker.BaseWorker;
 
 public class SchedulerWorker extends BaseWorker {
 	

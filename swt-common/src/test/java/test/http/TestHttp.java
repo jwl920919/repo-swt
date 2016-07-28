@@ -5,9 +5,9 @@ import java.util.Map;
 import java.util.Scanner;
 
 import org.apache.http.entity.ContentType;
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -19,13 +19,11 @@ import com.shinwootns.common.utils.StringUtils;
 
 public class TestHttp {
 
-	private final Logger _logger = Logger.getLogger(this.getClass());
+	private final Logger _logger = LoggerFactory.getLogger(getClass());
 
 	@Test
 	public void testHttp() {
 		
-		BasicConfigurator.configure();
-
 		Scanner sc = new Scanner(System.in);
 
 		HttpClient restClient = new HttpClient();

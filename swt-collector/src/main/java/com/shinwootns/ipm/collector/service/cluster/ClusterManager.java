@@ -14,6 +14,7 @@ import com.shinwootns.common.cache.RedisClient;
 import com.shinwootns.common.utils.CollectionUtils;
 import com.shinwootns.common.utils.SystemUtils;
 import com.shinwootns.common.utils.TimeUtils;
+import com.shinwootns.data.key.RedisKeys;
 import com.shinwootns.ipm.collector.SpringBeanProvider;
 import com.shinwootns.ipm.collector.WorkerManager;
 import com.shinwootns.ipm.collector.config.ApplicationProperty;
@@ -22,11 +23,6 @@ import com.shinwootns.ipm.collector.service.redis.RedisHandler;
 public class ClusterManager {
 
 	private final Logger _logger = LoggerFactory.getLogger(getClass());
-
-	// Redis Key
-	private final static String KEY_CLUSTER_MEMBER = "cluster:insight:member";		// cluster:insight:member:{HostName}
-	private final static String KEY_CLUSTER_MASTER = "cluster:insight:master";
-	private final static String KEY_CLUSTER_JOB = "cluster:insight:job";			// cluster:insight:job:{HostName}
 
 	// Expire Time
 	private final static int EXPIRE_TIME_MEMBER = 10;
@@ -72,7 +68,7 @@ public class ClusterManager {
 
 			// update member
 			String key = (new StringBuilder())
-					.append(KEY_CLUSTER_MEMBER).append(":").append(SystemUtils.getHostName())
+					.append(RedisKeys.KEY_INSIGHT_CLUSTER_MEMBER).append(SystemUtils.getHostName())
 					.toString();
 
 			redis.set(key, String.format("%d", rank));
@@ -102,7 +98,7 @@ public class ClusterManager {
 		{
 		
 			// Get Keys
-			HashSet<String> keys = redis.getKeys(KEY_CLUSTER_MEMBER+":*");
+			HashSet<String> keys = redis.getKeys(RedisKeys.KEY_INSIGHT_CLUSTER_MEMBER+"*");
 			
 			// Get Values
 			HashMap<String, Integer> mapMember = new HashMap<String, Integer>();
@@ -137,7 +133,7 @@ public class ClusterManager {
 						// Set Master
 						ClusterManager.getInstance().setMasterNode(true);
 						 
-						redis.set(KEY_CLUSTER_MASTER, hostName);
+						redis.set(RedisKeys.KEY_INSIGHT_CLUSTER_MASTER, hostName);
 						 
 					} else { 
 						// Set Slave
@@ -162,9 +158,7 @@ public class ClusterManager {
 
 		try {
 
-			String masterName = redis.get(KEY_CLUSTER_MASTER);
-			
-			
+			String masterName = redis.get(RedisKeys.KEY_INSIGHT_CLUSTER_MASTER);
 			
 			return (masterName != null) ? masterName : "";
 
@@ -191,7 +185,7 @@ public class ClusterManager {
 
 		try {
 
-			String masterName = redis.get(KEY_CLUSTER_MASTER);
+			String masterName = redis.get(RedisKeys.KEY_INSIGHT_CLUSTER_MASTER);
 			
 			if(masterName != null && masterName.equals(SystemUtils.getHostName()))
 				return true;
@@ -210,7 +204,7 @@ public class ClusterManager {
 	public void updateMasterJob(String status, String jobName, int currentStep, int totalStep, long startTime) {
 		
 		String key = (new StringBuilder())
-				.append(KEY_CLUSTER_JOB).append(":").append(SystemUtils.getHostName())
+				.append(RedisKeys.KEY_INSIGHT_CLUSTER_JOB).append(SystemUtils.getHostName())
 				.toString();
 		
 		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();

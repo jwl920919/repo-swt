@@ -16,7 +16,7 @@ import com.shinwootns.ipm.collector.data.SharedData;
 import com.shinwootns.ipm.collector.service.cluster.ClusterManager;
 import com.shinwootns.ipm.collector.service.infoblox.DhcpHandler;
 import com.shinwootns.ipm.collector.service.redis.RedisHandler;
-import com.shinwootns.data.status.DhcpStatus;
+import com.shinwootns.data.status.DhcpDeviceStatus;
 
 public class SchedulerWorker implements Runnable {
 	

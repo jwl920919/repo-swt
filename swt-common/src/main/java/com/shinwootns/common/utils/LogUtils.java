@@ -1,11 +1,8 @@
 package com.shinwootns.common.utils;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-
+/*
 public class LogUtils {
 	
-	/*
 	public static void WriteLog(Logger logger, Level level, Exception ex) {
 		
 		if (logger != null)
@@ -69,5 +66,5 @@ public class LogUtils {
 			System.out.println(message);
 		}
 	}
-	*/
 }
+*/

@@ -10,7 +10,11 @@ import org.slf4j.LoggerFactory;
 import com.shinwootns.common.cache.RedisClient;
 import com.shinwootns.common.utils.JsonUtils;
 import com.shinwootns.data.entity.DeviceDhcp;
-import com.shinwootns.data.status.DhcpStatus;
+import com.shinwootns.data.key.RedisKeys;
+import com.shinwootns.data.status.DhcpCounter;
+import com.shinwootns.data.status.DhcpDeviceStatus;
+import com.shinwootns.data.status.DhcpVrrpStatus;
+import com.shinwootns.data.status.DnsCounter;
 import com.shinwootns.ipm.collector.data.SharedData;
 import com.shinwootns.ipm.collector.service.cluster.ClusterManager;
 import com.shinwootns.ipm.collector.service.infoblox.DhcpHandler;
@@ -20,23 +24,22 @@ public class MasterJobWoker implements Runnable {
 
 	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
-	public final static String KEY_DEIVCE_DHCP_STATUS = "status:device:dhcp";
-	
 	private final static int SCHEDULER_THREAD_COUNT = 2;
 	
 	private ScheduledExecutorService schedulerService = Executors.newScheduledThreadPool(SCHEDULER_THREAD_COUNT);
 
+	//region [FUNC] run
 	@Override
 	public void run() {
 		
 		_logger.info("MasterJobWoker... start.");
 		
-		// UpdateDhcpStatus
+		// FixedDelay 10 seconds
 		schedulerService.scheduleWithFixedDelay(
 				new Runnable() {
 					@Override
 					public void run() {
-						updateDhcpStatusInfo();
+						updateDhcpStatus();
 					}
 				}
 				,0 ,10 ,TimeUnit.SECONDS
@@ -55,9 +58,10 @@ public class MasterJobWoker implements Runnable {
 		
 		_logger.info("MasterJobWoker... end.");
 	}
-
-	//region [FUNC] Update Dhcp Status
-	private void updateDhcpStatusInfo() {
+	//endregion
+	
+	//region [FUNC] Update Dhcp Device
+	public void updateDhcpStatus() {
 		
 		if ( ClusterManager.getInstance().isMaster() == false)
 			return;
@@ -73,12 +77,27 @@ public class MasterJobWoker implements Runnable {
 		if(client == null)
 			return;
 
+		// DHCP Handler
+		DhcpHandler handler = new DhcpHandler(dhcp.getHost(), dhcp.getWapiUserid(), dhcp.getWapiPassword(), dhcp.getSnmpCommunity());
+		
+		updateDhcpDeviceStatus(handler, client);
+		updateDhcpVrrpStatus(handler, client);
+		updateDhcpCount(handler, client);
+		updateDnsCount(handler, client);
+		
+		client.close();
+	}
+	//endregion
+
+	//region [FUNC] Update Dhcp Device Status
+	private void updateDhcpDeviceStatus(DhcpHandler handler, RedisClient client) {
+
+		if (handler == null || client == null)
+			return;
+		
 		try {
-			
-			// DHCP Handler
-			DhcpHandler handler = new DhcpHandler(dhcp.getHost(), dhcp.getWapiUserid(), dhcp.getWapiPassword(), dhcp.getSnmpCommunity());
-			
-			DhcpStatus dhcpStatus = handler.getHWStatus();
+
+			DhcpDeviceStatus dhcpStatus = handler.getDeviceStatus();
 			
 			if (dhcpStatus != null) {
 				
@@ -87,18 +106,108 @@ public class MasterJobWoker implements Runnable {
 				
 				// Set value
 				client.set((new StringBuilder())
-						.append(KEY_DEIVCE_DHCP_STATUS).append(":")
-						.append(SharedData.getInstance().site_info.getSiteId()).toString()
+						.append(RedisKeys.KEY_STATUS_DEVICE).append(SharedData.getInstance().site_info.getSiteId()).toString()
 						, json
 				);
 				
-				_logger.info("updateDhcpStatusInfo()... OK");
+				_logger.info("updateDhcpDeviceStatus()... OK");
 			}
 			
 		} catch(Exception ex) {
 			_logger.error(ex.getMessage(), ex);
-		}finally {
-			client.close();
+		}
+	}
+	//endregion
+
+	//region [FUNC] Update DHCP VRRP Status
+	private void updateDhcpVrrpStatus(DhcpHandler handler, RedisClient client) {
+
+		if (handler == null || client == null)
+			return;
+		
+		try {
+			
+			DhcpVrrpStatus vrrpStatus = handler.getVRRPStatus();
+
+			if (vrrpStatus != null) {
+				
+				// Serialize to Json
+				String json = JsonUtils.serialize(vrrpStatus);
+				
+				// Set value
+				client.set((new StringBuilder())
+						.append(RedisKeys.KEY_STATUS_VRRP)
+						.append(SharedData.getInstance().site_info.getSiteId()).toString()
+						, json
+				);
+
+				_logger.info("updateDhcpVrrpStatus()... OK");
+			}
+
+		} catch(Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+		}
+	}
+	//endregion
+	
+	//region [FUNC] Update DHCP Count
+	private void updateDhcpCount(DhcpHandler handler, RedisClient client) {
+
+		if (handler == null || client == null)
+			return;
+		
+		try {
+
+			DhcpCounter dhcpCounter = handler.getDhcpCounter();
+			
+			if (dhcpCounter != null) {
+				
+				// Serialize to Json
+				String json = JsonUtils.serialize(dhcpCounter);
+				
+				// Set value
+				client.set((new StringBuilder())
+						.append(RedisKeys.KEY_STATUS_DHCP_COUNTER)
+						.append(SharedData.getInstance().site_info.getSiteId()).toString()
+						, json
+				);
+
+				_logger.info("updateDhcpCount()... OK");
+			}
+
+		} catch(Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+		}
+	}
+	//endregion
+	
+	//region [FUNC] Update DNS Count
+	private void updateDnsCount(DhcpHandler handler, RedisClient client) {
+
+		if (handler == null || client == null)
+			return;
+		
+		try {
+
+			DnsCounter dnsCounter = handler.getDnsCounter();
+			
+			if (dnsCounter != null) {
+				
+				// Serialize to Json
+				String json = JsonUtils.serialize(dnsCounter);
+				
+				// Set value
+				client.set((new StringBuilder())
+						.append(RedisKeys.KEY_STATUS_DNS_COUNTER)
+						.append(SharedData.getInstance().site_info.getSiteId()).toString()
+						, json
+				);
+
+				_logger.info("updateDnsCount()... OK");
+			}
+
+		} catch(Exception ex) {
+			_logger.error(ex.getMessage(), ex);
 		}
 	}
 	//endregion

@@ -2,8 +2,8 @@ package test.mq;
 
 import java.util.ArrayList;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.shinwootns.common.mq.MQManager;
 import com.shinwootns.common.mq.client.*;
@@ -12,7 +12,7 @@ import com.shinwootns.common.utils.TimeUtils;
 
 public class TopicsTask extends testBaseTask {
 	
-	private final Logger _logger = Logger.getLogger(this.getClass());
+	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
 	private String type = "";
 	private int index = 0;
@@ -155,15 +155,15 @@ public class TopicsTask extends testBaseTask {
 		String sKey = "";
 		
 		if (level == 0)
-			sKey += Level.FATAL.toString();
+			sKey += "FATAL";
 		else if (level == 2)
-			sKey +=Level.ERROR.toString();
+			sKey +="ERROR";
 		else if (level == 4)
-			sKey +=Level.WARN.toString();
+			sKey +="WARN";
 		else if (level == 3)
-			sKey +=Level.INFO.toString();
+			sKey +="INFO";
 		else
-			sKey +=Level.DEBUG.toString();
+			sKey +="DEBUG";
 		
 		sKey += ".";
 		

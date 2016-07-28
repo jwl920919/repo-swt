@@ -1,6 +1,7 @@
 package com.shinwootns.common.infoblox;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.http.entity.ContentType;
 
 import com.google.gson.JsonArray;
@@ -13,7 +14,7 @@ import com.shinwootns.common.utils.StringUtils;
 
 public class InfobloxWAPIHandler {
 	
-	private final Logger _logger = Logger.getLogger(this.getClass());
+	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
 	private HttpClient restClient = new HttpClient();
 
@@ -47,7 +48,7 @@ public class InfobloxWAPIHandler {
 			return true;
 		}
 		catch(Exception ex) {
-			_logger.fatal(ex.getMessage(), ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		
 		return false;
@@ -76,7 +77,7 @@ public class InfobloxWAPIHandler {
 			return JsonUtils.parseJsonArray(value);
 		}
 		catch(Exception ex) {
-			_logger.fatal(ex.getMessage(), ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		
 		return null;
@@ -105,7 +106,7 @@ public class InfobloxWAPIHandler {
 			return JsonUtils.parseJsonArray(value);
 		}
 		catch(Exception ex) {
-			_logger.fatal(ex.getMessage(), ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		
 		return null;
@@ -134,7 +135,7 @@ public class InfobloxWAPIHandler {
 			return JsonUtils.parseJsonArray(value);
 		}
 		catch(Exception ex) {
-			_logger.fatal(ex.getMessage(), ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		
 		return null;
@@ -163,7 +164,7 @@ public class InfobloxWAPIHandler {
 			return JsonUtils.parseJsonArray(value);
 		}
 		catch(Exception ex) {
-			_logger.fatal(ex.getMessage(), ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		
 		return null;
@@ -194,7 +195,7 @@ public class InfobloxWAPIHandler {
 			return JsonUtils.parseJsonArray(value);
 		}
 		catch(Exception ex) {
-			_logger.fatal(ex.getMessage(), ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		
 		return null;
@@ -221,7 +222,7 @@ public class InfobloxWAPIHandler {
 			
 		}
 		catch(Exception ex) {
-			_logger.fatal(ex.getMessage(), ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		
 		return false;
@@ -258,7 +259,7 @@ public class InfobloxWAPIHandler {
 				return true;
 		}
 		catch(Exception ex) {
-			_logger.fatal(ex.getMessage(), ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		
 		return false;
@@ -309,7 +310,7 @@ public class InfobloxWAPIHandler {
 			return new NextPageData(resultArray, nextPageId);
 		}
 		catch(Exception ex) {
-			_logger.fatal(ex.getMessage(), ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		
 		return null;
@@ -352,7 +353,7 @@ public class InfobloxWAPIHandler {
 			return new NextPageData(resultArray, nextPageId);
 		}
 		catch(Exception ex) {
-			_logger.fatal(ex.getMessage(), ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		
 		return null;
@@ -514,7 +515,7 @@ public class InfobloxWAPIHandler {
 			return new NextPageData(resultArray, nextPageId);
 		}
 		catch(Exception ex) {
-			_logger.fatal(ex.getMessage(), ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		
 		return null;
@@ -564,7 +565,7 @@ public class InfobloxWAPIHandler {
 			
 		}
 		catch(Exception ex) {
-			_logger.fatal(ex.getMessage(), ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		
 		return null;
@@ -594,7 +595,7 @@ public class InfobloxWAPIHandler {
 			return JsonUtils.parseJsonArray(value);
 		}
 		catch(Exception ex) {
-			_logger.fatal(ex.getMessage(), ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		
 		return null;
@@ -624,7 +625,7 @@ public class InfobloxWAPIHandler {
 			return JsonUtils.parseJsonArray(value);
 		}
 		catch(Exception ex) {
-			_logger.fatal(ex.getMessage(), ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		return null;
 	}
@@ -653,7 +654,7 @@ public class InfobloxWAPIHandler {
 			return JsonUtils.parseJsonArray(value);
 		}
 		catch(Exception ex) {
-			_logger.fatal(ex.getMessage(), ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		return null;
 	}
@@ -682,10 +683,39 @@ public class InfobloxWAPIHandler {
 			return JsonUtils.parseJsonArray(value);
 		}
 		catch(Exception ex) {
-			_logger.fatal(ex.getMessage(), ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		return null;
 	}
 	//endregion
 	
+	//region [WAPI] Get HA Info
+	public JsonArray getHAInfo(String hostname) {
+		try
+		{
+			StringBuilder sb = new StringBuilder();
+			
+			sb.append("/wapi/v2.3/member");
+			sb.append("?_return_type=json");
+			sb.append("&_return_fields=lan2_port_setting,enable_ha,vip_setting,master_candidate,upgrade_group,");
+			sb.append("&host_name=").append(hostname);
+			
+			String value = restClient.Get(sb.toString());
+			
+			if (value == null)
+				return null;
+			
+			// Change unescape-unicode
+			value = StringUtils.unescapeUnicodeString(value);
+			
+			// JsonArray Parser
+			return JsonUtils.parseJsonArray(value);
+		}
+		catch(Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+		}
+		return null;
+	}
+	//endregion
+
 }

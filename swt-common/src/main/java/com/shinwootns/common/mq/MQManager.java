@@ -1,17 +1,16 @@
 package com.shinwootns.common.mq;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.shinwootns.common.mq.client.*;
-import com.shinwootns.common.utils.LogUtils;
 
 public class MQManager {
 
-	private final Logger _logger = Logger.getLogger(this.getClass());
+	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
 	private String _host = "127.0.0.1";
 	private int _port = 5672; // default : 5672

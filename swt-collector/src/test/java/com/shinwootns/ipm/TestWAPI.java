@@ -1,27 +1,11 @@
 package com.shinwootns.ipm;
 
-import java.sql.Timestamp;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
-import org.junit.Test;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.shinwootns.common.infoblox.InfobloxWAPIHandler;
-import com.shinwootns.common.snmp.SnmpResult;
-import com.shinwootns.common.snmp.SnmpUtil;
-import com.shinwootns.common.utils.JsonUtils;
-import com.shinwootns.common.utils.TimeUtils;
-import com.shinwootns.ipm.collector.service.infoblox.DhcpHandler;
-import com.shinwootns.data.status.DhcpStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TestWAPI {
 
-	private final Logger _logger = Logger.getLogger(this.getClass());
+	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
 	/*
 	@Test
@@ -96,6 +80,7 @@ public class TestWAPI {
 	}
 	*/
 	
+	/*
 	@Test
 	public void testWAPI() {
 	
@@ -116,7 +101,9 @@ public class TestWAPI {
 		
 		return;
 	}
-
+	*/
+	
+	/*
 	@Test
 	public void testWAPI_DeviceStatus() {
 	
@@ -130,10 +117,11 @@ public class TestWAPI {
 		DhcpHandler handler = new DhcpHandler(host, wapiUser, wapiPasswd, community);
 
 		// Get H/W Status
-		DhcpStatus dhcpStatus = handler.getHWStatus();
+		DhcpDeviceStatus dhcpStatus = handler.getDeviceStatus();
 		
 		System.out.println( JsonUtils.serialize(dhcpStatus));
 		
 		return;
 	}
+	*/
 }

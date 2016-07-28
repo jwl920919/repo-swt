@@ -1,11 +1,11 @@
 package test.cache;
 
-/*
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+/*
 import java.util.Scanner;
 
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import com.shinwootns.common.cache.RedisClient;
@@ -16,14 +16,11 @@ import test.utils.TestUtils;
 
 public class TestRedis {
 
-	private final Logger _logger = Logger.getLogger(this.getClass());
+	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
 	public static void main() {
-
 		
 		// Basic Configurator
-		BasicConfigurator.configure();
-		
 		RedisManager rm = new RedisManager();
 		
 		if (rm.connect("192.168.1.81", 6379, "shinwoo123!", 0) == false)
@@ -69,5 +66,4 @@ public class TestRedis {
 		
 	}
 }
-
 */

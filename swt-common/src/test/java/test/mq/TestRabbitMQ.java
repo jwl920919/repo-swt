@@ -3,13 +3,14 @@ package test.mq;
 import java.util.Scanner;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.shinwootns.common.stp.SmartThreadPool;
 
 public class TestRabbitMQ {
 	
-	private final Logger _logger = Logger.getLogger(this.getClass());
+	private final Logger _logger = LoggerFactory.getLogger(getClass());
 
 	private static ConcurrentLinkedQueue<testBaseTask> listTask = new ConcurrentLinkedQueue<testBaseTask>();
 	
@@ -19,8 +20,6 @@ public class TestRabbitMQ {
 		
 		try
 		{
-			BasicConfigurator.configure();
-			
 			Scanner sc = new Scanner(System.in);
 			
 			while(true)

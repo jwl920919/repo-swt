@@ -2,16 +2,15 @@ package com.shinwootns.common.mq.client;
 
 import java.io.IOException;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.QueueingConsumer;
-import com.shinwootns.common.utils.LogUtils;
 
 public abstract class BaseClient {
 	
-	private final Logger _logger = Logger.getLogger(this.getClass());
+	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
 	protected Channel _channel = null;
 	QueueingConsumer _consumer = null;

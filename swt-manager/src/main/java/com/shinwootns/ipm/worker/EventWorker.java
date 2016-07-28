@@ -1,4 +1,4 @@
-package com.shinwootns.ipm.worker.persist;
+package com.shinwootns.ipm.worker;
 
 import java.util.List;
 
@@ -10,16 +10,16 @@ import com.shinwootns.ipm.SpringBeanProvider;
 import com.shinwootns.ipm.config.ApplicationProperty;
 import com.shinwootns.ipm.data.SharedData;
 import com.shinwootns.ipm.data.mapper.EventMapper;
-import com.shinwootns.ipm.worker.BaseWorker;
 
 public class EventWorker extends BaseWorker {
 
-	private final Logger _logger = LoggerFactory.getLogger(getClass());
+	private Logger _logger = null;
 	
 	private int _index = 0;
 	
-	public EventWorker(int index) {
-		this._index = _index;
+	public EventWorker(int index, Logger logger) {
+		this._index = index;
+		this._logger = logger;
 	}
 	
 	private boolean isSkipInDebugMode() {

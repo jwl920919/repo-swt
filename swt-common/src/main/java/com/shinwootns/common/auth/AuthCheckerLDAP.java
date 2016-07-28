@@ -19,11 +19,12 @@ import javax.naming.directory.*;
 import javax.naming.ldap.*;
 import javax.net.ssl.*;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AuthCheckerLDAP extends AuthChecker {
 
-	private final static Logger _logger = Logger.getLogger(AuthCheckerLDAP.class);
+	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
 	// Binding Info
 	private String _host = "";

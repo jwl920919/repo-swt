@@ -1,10 +1,11 @@
 package com.shinwootns.common.network;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SyslogManager {
 	
-	private final Logger _logger = Logger.getLogger(this.getClass());
+	private final Logger _logger = LoggerFactory.getLogger(getClass());
 
 	// Syslog Server
 	private SyslogServer syslogServer = null;

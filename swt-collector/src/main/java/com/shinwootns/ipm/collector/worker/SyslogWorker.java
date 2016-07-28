@@ -2,7 +2,7 @@ package com.shinwootns.ipm.collector.worker;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 
 import com.google.gson.JsonObject;
 import com.shinwootns.common.network.SyslogEntity;

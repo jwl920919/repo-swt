@@ -1,41 +1,34 @@
-package com.shinwootns.ipm.collector;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.ConcurrentLinkedQueue;
+package com.shinwootns.ipm;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.shinwootns.common.network.SyslogEntity;
 import com.shinwootns.common.stp.PoolStatus;
 import com.shinwootns.common.stp.SmartThreadPool;
-import com.shinwootns.common.utils.TimeUtils;
-import com.shinwootns.ipm.collector.data.SharedData;
-import com.shinwootns.ipm.collector.worker.BaseWorker;
-import com.shinwootns.ipm.collector.worker.MasterJobWoker;
-import com.shinwootns.ipm.collector.worker.SchedulerWorker;
-import com.shinwootns.ipm.collector.worker.SyslogWorker;
+import com.shinwootns.ipm.worker.BaseWorker;
+import com.shinwootns.ipm.worker.EventWorker;
+import com.shinwootns.ipm.worker.MasterJobWoker;
+import com.shinwootns.ipm.worker.SchedulerWorker;
+import com.shinwootns.ipm.worker.SyslogWorker;
 
 public class WorkerManager {
 	
 	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
 	// Worker Count
-	private static final int SYSLOG_WORKER_COUNT = 3;
+	private static final int EVENT_WORKER_COUNT = 2;
 	
 	// Task Count
 	private static final int TASK_MIN_COUNT = 32;
 	private static final int TASK_MAX_COUNT = 32;
 	private static final int TASK_LIMIT_COUNT = 32;
 	
-	// Task Pool
-	private SmartThreadPool _taskPool = new SmartThreadPool();
-
 	Thread _scheduler = null;									// Scheduler Thread
 	Thread _masterJobThread = null;								// Master Job Thread
-	Thread[] _syslogWorker = new Thread[SYSLOG_WORKER_COUNT];	// Syslog Thread
+	Thread[] _eventWorker = new Thread[EVENT_WORKER_COUNT];		// Event Thread
+
+	//private SmartThreadPool _workerPool = new SmartThreadPool();
+	private SmartThreadPool _taskPool = new SmartThreadPool();
 	
 	//region Singleton
 	private static WorkerManager _instance = null;
@@ -48,11 +41,11 @@ public class WorkerManager {
 		return _instance;
 	}
 	//endregion
-
-	//region [FUNC] start
+	
+	//region [FUNC] start / stop
 	public void start() {
 
-		synchronized(this) 
+		synchronized(this)
 		{
 			_logger.info("WorkerManager... start");
 			
@@ -62,11 +55,11 @@ public class WorkerManager {
 				_scheduler.start();
 			}
 			
-			// Start Syslog Worker
-			for(int i=0; i<SYSLOG_WORKER_COUNT; i++) {
-				if (_syslogWorker[i] == null) {
-					_syslogWorker[i] = new Thread(new SyslogWorker(i, _logger));
-					_syslogWorker[i].start();
+			// Start EventWorker
+			for(int i=0; i<EVENT_WORKER_COUNT; i++) {
+				if (_eventWorker[i] == null) {
+					_eventWorker[i] = new Thread(new EventWorker(i, _logger));
+					_eventWorker[i].start();
 				}
 			}
 			
@@ -79,16 +72,11 @@ public class WorkerManager {
 			}
 		}
 	}
-	//endregion
 	
-	//region [FUNC] stop
 	public void stop()
 	{
-		stopMasterJobWorker();
-		
 		synchronized(this) 
 		{
-			// Stop Scheduller
 			try {
 				if (_scheduler != null)
 					_scheduler.join();
@@ -97,37 +85,37 @@ public class WorkerManager {
 				_scheduler = null;
 			}
 			
-			// Stop Syslog Worker
-			for(int i=1; i<=SYSLOG_WORKER_COUNT; i++) {
+			// Stop EventWorker
+			for(int i=1; i<=EVENT_WORKER_COUNT; i++) {
 				try {
-					if (_syslogWorker[i] != null)
-						_syslogWorker[i].join();
+					if (_eventWorker[i] != null)
+						_eventWorker[i].join();
 					
 				} catch (InterruptedException e) {
 				} finally {
-					_syslogWorker[i] = null;
+					_eventWorker[i] = null;
 				}
 			}
 			
 			_taskPool.shutdownAndWait();
 			
-			_logger.info("ServiceManager....... stop");
+			_logger.info("WorkerManager....... stop");
 		}
 	}
 	//endregion
 	
-	//region [FUNC] AddTask
+	//region [FUNC] Pool Status
+	public PoolStatus GetTaskPoolStatus() {
+		return _taskPool.getPoolStatus();
+	}
+	//endregion
+	
+	//region [FUNC] Add Task
 	public void AddTask(BaseWorker task) {
 		_taskPool.addTask(task);
 	}
 	//endregion
 	
-	//region [FUNC] GetTaskPoolStatus
-	public PoolStatus GetTaskPoolStatus() {
-		return _taskPool.getPoolStatus();
-	}
-	//endregion
-
 	//region [FUNC] start / stop MasterJobWorker
 	public void startMasterJobWorker() {
 		
