@@ -47,7 +47,7 @@
 	"staticIPStatus":								"IP 현황",
 	"staticIPSetting":								"IP 설정 및 예약",
 	"leaseIPStatus":								"리스 IP 현황",
-	"certifyIPStatus":								"승인 IP 현황",
+	"ipCertifyStatus":								"IP 요청/승인 현황",
 	"unusedIPStatus":								"미사용 IP 현황",
 	"ipFilterStatus":								"DHCP IP 필터 현황",
 	"blackListStatus":								"Black List 현황",

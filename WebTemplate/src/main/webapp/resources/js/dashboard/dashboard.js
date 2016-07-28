@@ -1091,7 +1091,7 @@ function eventLogAjaxCall() {
                 "serverSide" : false,
                 "sScrollY": "150",
                 "sScrollX": "100%",
-                "sScrollXInner": "1633",
+                "sScrollXInner": "1613",
                 "bScrollCollapse": true,
                 "order" : [ [ 1, 'desc' ] ]
 				} );

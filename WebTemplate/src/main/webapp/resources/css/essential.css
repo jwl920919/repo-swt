@@ -708,3 +708,7 @@ table td[class*="col-"], table th[class*="col-"] {
 		border-bottom: 0;
 	}
 }
+
+.dataTables_scroll{
+	padding:0px 10px;
+}
