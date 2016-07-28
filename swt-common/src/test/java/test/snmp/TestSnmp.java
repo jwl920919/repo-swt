@@ -2,22 +2,21 @@ package test.snmp;
 
 import java.util.LinkedList;
 
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.shinwootns.common.snmp.SnmpResult;
 import com.shinwootns.common.snmp.SnmpUtil;
 
 public class TestSnmp {
 
-	private final Logger _logger = Logger.getLogger(this.getClass());
+	private final Logger _logger = LoggerFactory.getLogger(getClass());
 
+	/*
 	@Test
 	public void testSnmp() {
 		
-		BasicConfigurator.configure();
-
 		_logger.info("Test Start...");
 
 		try {
@@ -81,5 +80,5 @@ public class TestSnmp {
 
 		_logger.info("Test End.");
 	}
-
+	 */
 }

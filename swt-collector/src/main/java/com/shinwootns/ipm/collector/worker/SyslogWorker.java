@@ -1,8 +1,8 @@
-package com.shinwootns.ipm.collector.worker.persist;
+package com.shinwootns.ipm.collector.worker;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 
 import com.google.gson.JsonObject;
 import com.shinwootns.common.network.SyslogEntity;
@@ -10,9 +10,8 @@ import com.shinwootns.ipm.collector.SpringBeanProvider;
 import com.shinwootns.ipm.collector.config.ApplicationProperty;
 import com.shinwootns.ipm.collector.data.SharedData;
 import com.shinwootns.ipm.collector.service.amqp.RabbitmqSender;
-import com.shinwootns.ipm.collector.worker.BaseWorker;
 
-public class SyslogWorker extends BaseWorker {
+public class SyslogWorker implements Runnable {
 
 	private Logger _logger = null;
 	private int _index = 0;
@@ -46,7 +45,7 @@ public class SyslogWorker extends BaseWorker {
 		
 		List<SyslogEntity> listSyslog = SharedData.getInstance().popSyslogList(1000, 500);
 
-		while(isStopFlag())
+		while(true)
 		{
 			listSyslog = SharedData.getInstance().popSyslogList(1000, 500);
 			
@@ -81,14 +80,11 @@ public class SyslogWorker extends BaseWorker {
 				
 				//_logger.debug( String.format("Syslog Producer#%d... process end:%d", this._index, count));
 			}
-			else
-			{
-				try {
-					Thread.sleep(10);
-				} catch (InterruptedException e) {
-					//e.printStackTrace();
-					break;
-				}
+
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				break;
 			}
 		}
 		

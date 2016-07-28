@@ -1,6 +1,7 @@
 package com.shinwootns.ipm.collector.service.redis;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.shinwootns.common.cache.RedisClient;
 import com.shinwootns.common.cache.RedisManager;
@@ -11,11 +12,11 @@ import com.shinwootns.ipm.collector.config.ApplicationProperty;
 
 public class RedisHandler {
 	
-	private final Logger _logger = Logger.getLogger(this.getClass());
+	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
 	RedisManager rm = new RedisManager();
 	
-	// Singleton
+	//region Singleton
 	private static RedisHandler _instance = null;
 	private RedisHandler() {}
 	public static synchronized RedisHandler getInstance() {
@@ -25,8 +26,9 @@ public class RedisHandler {
 		}
 		return _instance;
 	}
-
+	//endregion
 	
+	//region [FUNC] connect
 	public boolean connect() 
 	{
 		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
@@ -54,7 +56,9 @@ public class RedisHandler {
 
 		return true;
 	}
+	//endregion
 	
+	//region [FUNC] get RedisClient
 	public RedisClient getRedisClient() {
 		
 		RedisClient redis = rm.createRedisClient();
@@ -62,15 +66,18 @@ public class RedisHandler {
 		if (redis == null) {
 			return null;
 		}
-		else if (redis.isConnection() == false) {
+		else if (redis.isConnect() == false) {
 			redis.close();
 			return null;
 		}
 		
 		return redis;
 	}
+	//endregion
 	
+	//region [FUNC] get PoolStatus
 	public RedisPoolStatus getPoolStatus() {
 		return rm.getPoolStatus();
 	}
+	//endregion
 }

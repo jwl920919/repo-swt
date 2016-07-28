@@ -9,6 +9,10 @@ public class TimeUtils {
 	public static long currentTimeMilis() {
 		return System.currentTimeMillis();
 	}
+	
+	public static long currentTimeSecs() {
+		return System.currentTimeMillis() / 1000;
+	}
 
 	public static String currentTimeString() {
 		long time = System.currentTimeMillis();

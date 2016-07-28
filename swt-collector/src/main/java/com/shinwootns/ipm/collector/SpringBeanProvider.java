@@ -1,6 +1,7 @@
 package com.shinwootns.ipm.collector;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -10,12 +11,12 @@ import com.shinwootns.ipm.collector.data.mapper.DataMapper;
 @Component
 public class SpringBeanProvider {
 	
-	private final Logger _logger = Logger.getLogger(this.getClass());
+	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
 	private ApplicationContext _context = null;
 	private ApplicationProperty appProperty = null;
 
-	// Singleton
+	//region Singleton
 	private static SpringBeanProvider _instance;
 	private SpringBeanProvider() {}
 	public static synchronized SpringBeanProvider getInstance() {
@@ -25,8 +26,9 @@ public class SpringBeanProvider {
 		}
 		return _instance;
 	}
+	//endregion
 
-	// get ApplicationContext
+	//region [FUNC] get / set ApplicationContext
     public ApplicationContext getApplicationContext() {
     	
     	if (_context != null)
@@ -34,8 +36,6 @@ public class SpringBeanProvider {
     	
         return _context;
     }
- 
-    // set ApplicationContext
     public void setApplicationContext(ApplicationContext context) {
     	
         this._context = context;
@@ -43,8 +43,9 @@ public class SpringBeanProvider {
         if (this._context != null)
         	_logger.info( String.format("AppContextProvider - setApplicationContext : %s", this._context.toString()));
     }
+    //endregion
     
-    // ApplicationProperties
+    //region [FUNC] get / set ApplicationProperties
     public void setApplicationProperty(ApplicationProperty appProperty) {
     	this.appProperty = appProperty;
     }
@@ -53,8 +54,9 @@ public class SpringBeanProvider {
     
     	return appProperty;
     }
+    //endregion
     
-    // Data Mapper
+    //region [FUNC] getDataMapper
     public DataMapper getDataMapper() {
     	
     	if (_context == null)
@@ -73,10 +75,5 @@ public class SpringBeanProvider {
     	
     	return dataMapper;
     }
-    
-    /*
-    // RabbitTemplate
-    public RabbitTemplate getRabbitTemplate() {
-    	return _context.getBean("rabbitTemplate", RabbitTemplate.class);
-    }*/
+    //endregion
 }

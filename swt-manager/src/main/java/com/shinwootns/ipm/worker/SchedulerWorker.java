@@ -1,4 +1,4 @@
-package com.shinwootns.ipm.worker.persist;
+package com.shinwootns.ipm.worker;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -8,8 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.shinwootns.common.stp.SmartThreadPool;
-import com.shinwootns.ipm.service.manager.ClusterManager;
-import com.shinwootns.ipm.worker.BaseWorker;
+import com.shinwootns.ipm.service.cluster.ClusterManager;
 
 public class SchedulerWorker extends BaseWorker {
 	
@@ -21,6 +20,9 @@ public class SchedulerWorker extends BaseWorker {
 	
 	@Override
 	public void run() {
+		
+		ClusterManager.getInstance().updateMember();
+		ClusterManager.getInstance().checkMaster();
 		
 		_logger.info(String.format("SchedulerWorker... start."));
 		
@@ -62,11 +64,11 @@ public class SchedulerWorker extends BaseWorker {
 	
 	// 3 Seconds
 	public void run3SecCycle() {
-		ClusterManager.getInstance().updateClusterMember();
+		ClusterManager.getInstance().updateMember();
 	}
 	
 	// 10 Seconds
 	public void run10SecCycle() {
-		ClusterManager.getInstance().checkClusterMaster();
+		ClusterManager.getInstance().checkMaster();
 	}
 }

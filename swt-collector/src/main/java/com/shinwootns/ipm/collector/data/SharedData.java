@@ -20,8 +20,17 @@ public class SharedData {
 	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
 	private final static int MAX_SYSLOG_RECV_QUEUE_SIZE = 10000;
+
+	// Syslog Queue
+	public java.util.Queue<SyslogEntity> syslogQueue = new ConcurrentLinkedQueue<SyslogEntity>();
 	
-	// Singleton
+	// Dhcp Info
+	public DeviceDhcp dhcpDevice = null;
+
+	// SiteInfo
+	private SiteInfo site_info = null;
+	
+	//region Singleton
 	private static SharedData _instance = null;
 	private SharedData() {}
 	public static synchronized SharedData getInstance() {
@@ -31,70 +40,82 @@ public class SharedData {
 		}
 		return _instance;
 	}
+	//endregion
 	
-	// Syslog Queue
-	public java.util.Queue<SyslogEntity> syslogQueue = new ConcurrentLinkedQueue<SyslogEntity>();
+	//region [FUNC] SiteInfo
+	public void setsiteInfo(SiteInfo site_info) {
+		synchronized(this) 
+		{
+			this.site_info = site_info;
+		}
+	}
 	
-	// Dhcp Info
-	public DeviceDhcp dhcpDevice = null;
+	public int getSiteID() {
+		synchronized(this) 
+		{
+			if (this.site_info != null)
+				return this.site_info.getSiteId();
+		}
+		return 0;
+	}
+	//endregion
+	
+	//region Add Syslog Data
+	public boolean addSyslogData(SyslogEntity syslog) {
+		
+		boolean bResult = false;
+		
+		while(bResult == false)
+		{
+			bResult = SharedData.getInstance().syslogQueue.add(syslog);
+			
+			if (bResult)
+				break;
+			
+			try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {
+			}
+		}
+		
+		return bResult;
+	}
+	//endregion
 
-	// SiteInfo
-	public SiteInfo site_info = null;
-	
-	
-	// Add Syslog Task
-		public boolean addSyslogData(SyslogEntity syslog) {
+	//region Pop Syslog Data
+	public List<SyslogEntity> popSyslogList(int popCount, int timeout) {
+		
+		List<SyslogEntity> resultList = new ArrayList<SyslogEntity>();
+		
+		if (popCount < 1)
+			popCount = 1000;
+		
+		int count=0;
+		
+		long startTime = TimeUtils.currentTimeMilis();
+		
+		while(count < popCount )
+		{
+			SyslogEntity syslog = SharedData.getInstance().syslogQueue.poll();
 			
-			boolean bResult = false;
-			
-			while(bResult == false)
+			if (syslog != null)
 			{
-				bResult = SharedData.getInstance().syslogQueue.add(syslog);
+				count++;
+				resultList.add(syslog);
+			}
+			else {
 				
-				if (bResult)
+				if ( TimeUtils.currentTimeMilis() - startTime > timeout )
 					break;
 				
 				try {
-					Thread.sleep(1);
+					Thread.sleep(100);
 				} catch (InterruptedException e) {
 				}
 			}
-			
-			return bResult;
 		}
 		
-		public List<SyslogEntity> popSyslogList(int popCount, int timeout) {
-			
-			List<SyslogEntity> resultList = new ArrayList<SyslogEntity>();
-			
-			if (popCount < 1)
-				popCount = 1000;
-			
-			int count=0;
-			
-			long startTime = TimeUtils.currentTimeMilis();
-			
-			while(count < popCount )
-			{
-				SyslogEntity syslog = SharedData.getInstance().syslogQueue.poll();
-				
-				if (syslog != null)
-				{
-					count++;
-					resultList.add(syslog);
-				}
-				else {
-					
-					if ( TimeUtils.currentTimeMilis() - startTime > timeout )
-						break;
-					
-					try {
-						Thread.sleep(100);
-					} catch (InterruptedException e) {
-					}
-				}
-			}
-			
-			return resultList;
-		}
+		return resultList;
+	}
+	//endregion
 }

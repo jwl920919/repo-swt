@@ -9,7 +9,7 @@ insight:
   license: TEST000000
   cluster:
     mode: master    # master, slave
-    slave-index: 0  # 0 ~ 99
+    index: 0        # 0 ~ 99
   redis:
     host: shinwootnskr.iptime.org
     port: 6379
@@ -33,10 +33,10 @@ server:
 #====================================
 # Security
 #====================================
-security:
-  user:
-    name: admin
-    password: shinwoo123!
+#security:
+#  user:
+#    name: admin
+#    password: shinwoo123!
     
 #====================================
 # spring

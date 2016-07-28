@@ -19,7 +19,13 @@ public class SharedData {
 	
 	private final static int MAX_SYSLOG_RECV_QUEUE_SIZE = 10000;
 	
-	// Singleton
+	// Syslog Queue
+	public ExtendedQueue<JsonObject> syslogQueue = new ExtendedQueue<JsonObject>(MAX_SYSLOG_RECV_QUEUE_SIZE);
+	
+	// Event Queue
+	public ExtendedQueue<EventData> eventQueue = new ExtendedQueue<EventData>(MAX_SYSLOG_RECV_QUEUE_SIZE);
+	
+	//region Singleton
 	private static SharedData _instance = null;
 	private SharedData() {}
 	public static synchronized SharedData getInstance() {
@@ -29,10 +35,5 @@ public class SharedData {
 		}
 		return _instance;
 	}
-	
-	// Syslog Queue
-	public ExtendedQueue<JsonObject> syslogQueue = new ExtendedQueue<JsonObject>(MAX_SYSLOG_RECV_QUEUE_SIZE);
-	
-	// Event Queue
-	public ExtendedQueue<EventData> eventQueue = new ExtendedQueue<EventData>(MAX_SYSLOG_RECV_QUEUE_SIZE);
+	//endregion
 }

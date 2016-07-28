@@ -1,12 +1,16 @@
 package com.shinwootns.common.network;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SyslogManager {
 	
-	private final Logger _logger = Logger.getLogger(this.getClass());
+	private final Logger _logger = LoggerFactory.getLogger(getClass());
+
+	// Syslog Server
+	private SyslogServer syslogServer = null;
 	
-	// Singleton
+	//region Singleton
 	private static SyslogManager _instance;
 	private SyslogManager() {}
 	public static synchronized SyslogManager getInstance() {
@@ -16,10 +20,9 @@ public class SyslogManager {
 		}
 		return _instance;
 	}
+	//endregion
 	
-	// Syslog Server
-	private SyslogServer syslogServer = null;
-
+	//region [FUNC] start
 	public boolean start(SyslogReceiveHandler handler) {
 		
 		if (syslogServer == null) {
@@ -38,7 +41,9 @@ public class SyslogManager {
 		
 		return false;
 	}
+	//endregion
 	
+	//region [FUNC] stop
 	public void stop() {
 		
 		if (syslogServer != null) {
@@ -49,4 +54,5 @@ public class SyslogManager {
 			syslogServer.closeSocket();
 		}
 	}
+	//endregion
 }

@@ -7,12 +7,9 @@ insight:
   name: Smart Insight (Debug)
   version: 0.1.1
   license: TEST000000
-  ipm-cluster:
-    host1:
-    host2:
   cluster:
     mode: master    # master, slave
-    slave-index: 0  # 0 ~ 99
+    index: 0        # 0 ~ 99
   redis:
     host: shinwootnskr.iptime.org
     port: 6379
@@ -75,7 +72,7 @@ banner:
 # logging
 #====================================
 logging:
-  file: /logs/ipm-collector.log
+  file: /logs/ipm-insight.log
   level:
     org.springframework: INFO
     level.com.shinwootns: DEBUG

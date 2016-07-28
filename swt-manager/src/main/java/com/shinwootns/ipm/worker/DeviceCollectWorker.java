@@ -1,4 +1,4 @@
-package com.shinwootns.ipm.worker.persist;
+package com.shinwootns.ipm.worker;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,11 +12,10 @@ import org.slf4j.LoggerFactory;
 
 import com.shinwootns.data.entity.DeviceDhcp;
 import com.shinwootns.ipm.SpringBeanProvider;
+import com.shinwootns.ipm.WorkerManager;
 import com.shinwootns.ipm.config.ApplicationProperty;
 import com.shinwootns.ipm.data.mapper.DeviceMapper;
 import com.shinwootns.ipm.data.mapper.EventMapper;
-import com.shinwootns.ipm.worker.BaseWorker;
-import com.shinwootns.ipm.worker.WorkerManager;
 import com.shinwootns.ipm.worker.task.CollectDhcpTask;
 
 public class DeviceCollectWorker extends BaseWorker {

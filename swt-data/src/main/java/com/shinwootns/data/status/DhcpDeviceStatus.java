@@ -2,7 +2,7 @@ package com.shinwootns.data.status;
 
 import java.util.LinkedList;
 
-public class DhcpStatus {
+public class DhcpDeviceStatus {
 	
 	public String host = "";
 	public String host_name;
@@ -23,6 +23,7 @@ public class DhcpStatus {
 	public LinkedList<Fan> fans = new LinkedList<Fan>();
 	public LinkedList<License> licenses = new LinkedList<License>();
 	public ServiceStatus service_status = new ServiceStatus();
+	
 	public Long collect_time;
 	
 	// Classes

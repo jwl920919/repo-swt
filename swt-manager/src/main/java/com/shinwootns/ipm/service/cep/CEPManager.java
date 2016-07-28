@@ -1,11 +1,12 @@
-package com.shinwootns.ipm.service.manager;
+package com.shinwootns.ipm.service.cep;
 
 /*
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 
-import org.apache.log4j.Logger;
 import org.wso2.siddhi.core.ExecutionPlanRuntime;
 import org.wso2.siddhi.core.SiddhiManager;
 import org.wso2.siddhi.core.event.Event;
@@ -21,7 +22,7 @@ import org.wso2.siddhi.query.api.definition.StreamDefinition;
 
 public class CEPManager {
 	
-	private final Logger _logger = Logger.getLogger(this.getClass());
+	private final Logger _logger = LoggerFactory.getLogger(getClass());s
 
 	// Singleton
 	private static CEPManager _instance = null;

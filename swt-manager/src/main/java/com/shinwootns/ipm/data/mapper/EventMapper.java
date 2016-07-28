@@ -9,18 +9,8 @@ import com.shinwootns.data.entity.EventData;
 
 @Mapper
 public interface EventMapper {
-	
-	@Insert(""
-			+ " INSERT INTO event_log (device_id, host_ip, event_type, severity, collect_time, message)"
-			+ " VALUES ("
-			+ " #{device_id}" 
-			+ " , #{host_ip}"
-			+ " , #{event_type}" 
-			+ " , #{severity}"
-			+ " , #{collect_time}" 
-			+ " , #{message}"
-			+ ");"
-	)
+
+	// Event
 	public void insert(EventData eventLog);
 
 }

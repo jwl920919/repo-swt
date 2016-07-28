@@ -1,6 +1,7 @@
 package com.shinwootns.ipm.collector.service.amqp;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.shinwootns.common.mq.MQManager;
 import com.shinwootns.common.mq.MQManager.MQClientType;
@@ -17,11 +18,11 @@ import com.shinwootns.ipm.collector.config.ApplicationProperty;
 
 public class RabbitmqHandler {
 	
-	private final Logger _logger = Logger.getLogger(this.getClass());
+	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
 	private MQManager manager = new MQManager();
 	
-	// Singleton
+	//retion Singleton
 	private static RabbitmqHandler _instance = null;
 	private RabbitmqHandler() {}
 	public static synchronized RabbitmqHandler getInstance() {
@@ -31,8 +32,9 @@ public class RabbitmqHandler {
 		}
 		return _instance;
 	}
+	//endregion
 	
-	// Connect
+	//region [FUNC] connect / close
 	public boolean connect()
 	{
 		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
@@ -56,21 +58,25 @@ public class RabbitmqHandler {
 		}
 		
 		if (result)
-			_logger.info((new StringBuilder()).append("Succeed connect rabbitmq... amqp:\\").append(appProperty.rabbitmqHost).append(":").append(appProperty.rabbitmqPort));
+			_logger.info((new StringBuilder())
+					.append("Succeed connect rabbitmq... amqp:\\").append(appProperty.rabbitmqHost).append(":").append(appProperty.rabbitmqPort)
+					.toString());
 		else
-			_logger.info((new StringBuilder()).append("Failed connect rabbitmq... amqp:\\").append(appProperty.rabbitmqHost).append(":").append(appProperty.rabbitmqPort));
+			_logger.info((new StringBuilder())
+					.append("Failed connect rabbitmq... amqp:\\").append(appProperty.rabbitmqHost).append(":").append(appProperty.rabbitmqPort)
+					.toString()
+					);
 		
 		return result;
 	}
 	
-	// Close
 	public void close()
 	{
 		manager.Close();
 	}
+	//endregion
 	
-	
-	// Get Client
+	//region [FUNC] Get Clients
 	public SingleClient createSingleClient()
 	{
 		return (SingleClient)manager.createMQClient(MQClientType.Single);
@@ -100,4 +106,6 @@ public class RabbitmqHandler {
 	{
 		return (CustomClient)manager.createMQClient(MQClientType.Custom);
 	}
+	//endregion
+
 }

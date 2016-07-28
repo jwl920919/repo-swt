@@ -5,15 +5,12 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-
-import com.shinwootns.common.utils.LogUtils;
-import com.shinwootns.common.utils.TimeUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SyslogServer extends Thread {
 	
-	private final Logger _logger = Logger.getLogger(this.getClass());
+	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
 	private final static int PACKET_SIZE = 1024;
 	private final static int SYSLOG_PORT = 514;

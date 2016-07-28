@@ -29,8 +29,8 @@ public class ApplicationProperty {
 	@Value("${insight.cluster.mode}")
 	public String clusterMode;
 	
-	@Value("${insight.cluster.slave-index:99}")
-	public int clusterSalveIndex;
+	@Value("${insight.cluster.index:99}")
+	public int clusterIndex;
 	
 	//{{ Debug Mode
 	@Value("${insight.debug_enable:false}")

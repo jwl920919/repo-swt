@@ -2,7 +2,8 @@ package test.mq;
 
 import java.util.ArrayList;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.shinwootns.common.mq.MQManager;
 import com.shinwootns.common.mq.MQManager.MQClientType;
@@ -11,7 +12,7 @@ import com.shinwootns.common.utils.TimeUtils;
 
 public class SingleTask extends testBaseTask {
 
-	private final Logger _logger = Logger.getLogger(this.getClass());
+	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
 	private String type = "";
 	private int index = 0;

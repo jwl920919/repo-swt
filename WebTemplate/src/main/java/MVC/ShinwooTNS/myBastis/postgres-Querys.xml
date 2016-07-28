@@ -443,22 +443,57 @@
 	<select id="select_LEASEIP_STATUS_DATA" resultType="java.util.HashMap">
 		SET TIMEZONE TO '${time_zone}';
 		
-		SELECT (ROW_NUMBER() OVER()) AS "rownum", "ipaddr", "macaddr", "host_name", "host_os", "duid", "status",
+		CREATE OR REPLACE FUNCTION fnRowCount(int,text,text,text,text) RETURNS int LANGUAGE plpgsql AS $$
+		DECLARE
+		    V1 ALIAS FOR $1;
+		    V2 ALIAS FOR $2;
+		    V3 ALIAS FOR $3; 
+		    V4 ALIAS FOR $4;
+		    V5 ALIAS FOR $5;
+		    rowCnt int;
+		BEGIN
+		    rowCnt := Count(*)
+		      FROM "dhcp_ip_status"
+		     WHERE "site_id" = V1		   
+		<choose>
+			<when test="network != 'ALL'"> AND "network" = V2 </when>
+		</choose>		
+		       AND "is_conflict" != true
+		       AND "usage" = V3
+		       AND "obj_types" like CONCAT('%'||V4||'%')
+		       AND ("ipaddr" like CONCAT('%'||V5||'%') OR "macaddr" like CONCAT('%'||V5||'%')
+		   	    OR "host_name" like CONCAT('%'||V5||'%'));
+		    RETURN rowCnt;
+		END
+		$$;
+		--SELECT fnRowCount('192.168.1.0/24', 'DHCP', 'LEASE');
+
+		SELECT (ROW_NUMBER() OVER()) AS "rownum", "ipaddr", "macaddr", "host_name", "host_os", 
+			   COALESCE("duid", '') AS "duid", "status",
 			   "lease_state", "obj_types", "discover_status", "usage", "fingerprint",
                COALESCE("is_never_ends", FALSE) AS "is_never_ends", COALESCE("is_never_start", FALSE) AS "is_never_start",			   
 			   COALESCE(to_char("lease_start_time",'YYYY-MM-DD HH24:MI:SS'),'') AS "lease_start_time",
 			   COALESCE(to_char("lease_end_time",'YYYY-MM-DD HH24:MI:SS'),'') AS "lease_end_time",
                COALESCE(to_char("last_discovered",'YYYY-MM-DD HH24:MI:SS'),'') AS "last_discovered",
                COALESCE(to_char("update_time",'YYYY-MM-DD HH24:MI:SS'),'') AS "update_time",
-		       "user_description"
+		       COALESCE("user_description", '') AS "user_description", fnRowCount(#{siteid}, #{network}, 'DHCP', 'LEASE', #{searchValue}) AS "count"
 		  FROM "dhcp_ip_status"
-		 WHERE "network" = #{network}
+		 WHERE "site_id" = #{siteid}
+		<choose>
+			<when test="network != 'ALL'"> AND "network" = #{network} </when>
+		</choose>
 		   AND "is_conflict" != true
 		   AND "usage" = 'DHCP'
 		   AND "obj_types" like CONCAT('%', 'LEASE', '%')
 		   AND ("ipaddr" like CONCAT('%', #{searchValue}, '%') OR "macaddr" like CONCAT('%', #{searchValue}, '%')
 		   	    OR "host_name" like CONCAT('%', #{searchValue}, '%'))
-		 ORDER BY inet("ipaddr")
+		 ORDER BY
+		<choose>
+			<when test="orderColumn == 'network' or orderColumn == 'ipaddr'"> inet(${orderColumn}) ${orderType} </when>
+			<when test="orderColumn != 'network' and orderColumn != 'ipaddr'"> ${orderColumn} ${orderType} </when>
+		</choose>
+		OFFSET #{startIndex} LIMIT #{length};
+		DROP function fnRowCount(int,text,text,text,text);
 	</select>
 
 </mapper>

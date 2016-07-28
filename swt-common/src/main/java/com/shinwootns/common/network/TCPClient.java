@@ -4,13 +4,15 @@ import java.io.ObjectInputStream;
 import java.nio.channels.SocketChannel;
 import java.util.concurrent.ThreadPoolExecutor;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 //작업 중......
 
 public class TCPClient extends Thread {
 	
-	private final Logger _logger = Logger.getLogger(this.getClass());
+	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
 	private SocketChannel _socketChannel;
 	private ThreadPoolExecutor _executor;
