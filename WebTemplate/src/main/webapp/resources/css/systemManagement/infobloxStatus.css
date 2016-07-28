@@ -1,3 +1,7 @@
+#dhcp-info-table tr.dhcp-table-top-column td {
+    width:25%;
+}
+
 div.row {
 	margin-right: 0px;
 	margin-left: 0px;
@@ -52,4 +56,35 @@ div.row {
 /* Show the tooltip text when you mouse over the tooltip container */
 .custom-tooltip:hover .tooltiptext {
     visibility: visible;
+}
+
+.custom-btn-app {
+    border-radius: 3px;
+    position: relative;
+    padding: 15px 5px;
+    margin: 0 0 10px 10px;
+    min-width: 80px;
+    height: 60px;
+    text-align: center;
+    color: #666;
+    border: 1px solid #ddd;
+    background-color: #f4f4f4;
+    font-size: 12px;
+}
+
+.custom-btn {
+    display: inline-block;
+    font-weight: 400;
+    line-height: 1.4285;
+    white-space: nowrap;
+    vertical-align: middle;
+/*     -ms-touch-action: manipulation; */
+/*     touch-action: manipulation; */
+/*     cursor: pointer; */
+/*     -moz-user-select: none; */
+/*     -ms-user-select: none; */
+    user-select: none;
+    background-image: none;
+    border-radius: 4px;
+    box-shadow: none;
 }
