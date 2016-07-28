@@ -15,6 +15,7 @@ import com.shinwootns.common.utils.CollectionUtils;
 import com.shinwootns.common.utils.SystemUtils;
 import com.shinwootns.common.utils.TimeUtils;
 import com.shinwootns.ipm.collector.SpringBeanProvider;
+import com.shinwootns.ipm.collector.WorkerManager;
 import com.shinwootns.ipm.collector.config.ApplicationProperty;
 import com.shinwootns.ipm.collector.service.redis.RedisHandler;
 
@@ -205,32 +206,6 @@ public class ClusterManager {
 	}
 	//endregion
 
-	//region [FUNC] set Master Node
-	public synchronized void setMasterNode(boolean isMasterNode) {
-
-		// If changed cluster mode.
-		if (this.isMasterNode != isMasterNode) {
-
-			_logger.info( (new StringBuilder())
-					.append("Changed cluster mode = ")
-					.append((isMasterNode) ? "MASTER" : "SLAVE")
-					.toString()
-			);
-
-			this.isMasterNode = isMasterNode;
-
-			if (this.isMasterNode) {
-				// master
-				// TO-DO
-			} else {
-				// slave
-				// TO-DO
-			}
-
-		}
-	}
-	//endregion
-
 	//region [FUNC] UpdateMasterJob
 	public void updateMasterJob(String status, String jobName, int currentStep, int totalStep, long startTime) {
 		
@@ -263,6 +238,32 @@ public class ClusterManager {
 			_logger.error(ex.getMessage(), ex);
 		}finally {
 			redis.close();
+		}
+	}
+	//endregion
+	
+	//region [FUNC] set Master Node
+	public synchronized void setMasterNode(boolean isMasterNode) {
+
+		// If changed cluster mode.
+		if (this.isMasterNode != isMasterNode) {
+
+			_logger.info( (new StringBuilder())
+					.append("Changed cluster mode = ")
+					.append((isMasterNode) ? "MASTER" : "SLAVE")
+					.toString()
+			);
+
+			this.isMasterNode = isMasterNode;
+
+			if (this.isMasterNode) {
+				// Start MasterJobWorker
+				WorkerManager.getInstance().startMasterJobWorker();
+			} else {
+				// Stop MasterJobWorker
+				WorkerManager.getInstance().stopMasterJobWorker();
+			}
+
 		}
 	}
 	//endregion

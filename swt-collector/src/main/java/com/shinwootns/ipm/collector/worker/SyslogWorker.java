@@ -80,14 +80,11 @@ public class SyslogWorker extends BaseWorker {
 				
 				//_logger.debug( String.format("Syslog Producer#%d... process end:%d", this._index, count));
 			}
-			else
-			{
-				try {
-					Thread.sleep(10);
-				} catch (InterruptedException e) {
-					//e.printStackTrace();
-					break;
-				}
+
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				break;
 			}
 		}
 		
