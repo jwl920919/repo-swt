@@ -303,9 +303,8 @@ public class ClusterManager {
 
 			if (this.isMasterNode) {
 				
-				DataMapper dataMapper = SpringBeanProvider.getInstance().getDataMapper();
-				
 				// Update To DB
+				DataMapper dataMapper = SpringBeanProvider.getInstance().getDataMapper();
 				if (dataMapper != null && SharedData.getInstance().getSiteID() >= 0) {
 					dataMapper.updateInsightMaster(SharedData.getInstance().getSiteID(), SystemUtils.getHostName());
 				}
