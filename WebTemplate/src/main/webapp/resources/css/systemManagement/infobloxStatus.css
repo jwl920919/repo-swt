@@ -1,5 +1,9 @@
 #dhcp-info-table tr.dhcp-table-top-column td {
-    width:25%;
+	width: 25%;
+}
+
+#dns-info-table tr.dns-table-top-column td {
+	width: 33.3%;
 }
 
 div.row {
@@ -14,77 +18,172 @@ div.row {
 }
 
 .info-label {
+	margin-left: 10px;
 	width: 120px;
 }
-.info-label-b{
-	margin-right:10px;
+
+.info-label-b {
+	margin-right: 10px;
 }
+
 .normal {
-	color:#02fd3a !important;
+	color: #00a65a !important;
 }
+
 .empty {
-	color:#444444 !important;
+	color: #444444 !important;
 }
+
 .warning {
-	color:#ff962d !important;
+	color: #ff962d !important;
 }
+
 .error {
-	color:#ff3131 !important;
+	color: #ff3131 !important;
 }
 /* Tooltip container */
 .custom-tooltip {
-    position: relative;
-    display: inline-block;
+	position: relative;
+	display: inline-block;
 }
 
 /* Tooltip text */
 .custom-tooltip .tooltiptext {
-    visibility: hidden;
-    width: 220px;
-    background-color: rgba(53, 53, 53, 0.70);
-    color: #fff;
-    text-align: left;
-    padding: 5px 0;
-    padding-left:5px;
-    border-radius: 6px;
- 
-    /* Position the tooltip text - see examples below! */
-    position: absolute;
-     z-index: 1;
+	visibility: hidden;
+	width: 220px;
+	background-color: rgba(53, 53, 53, 0.70);
+	color: #fff;
+	text-align: left;
+	padding: 5px 0;
+	padding-left: 5px;
+	border-radius: 6px;
+	/* Position the tooltip text - see examples below! */
+	position: absolute;
+	z-index: 1;
 }
 
 /* Show the tooltip text when you mouse over the tooltip container */
 .custom-tooltip:hover .tooltiptext {
-    visibility: visible;
+	visibility: visible;
 }
 
 .custom-btn-app {
-    border-radius: 3px;
-    position: relative;
-    padding: 15px 5px;
-    margin: 0 0 10px 10px;
-    min-width: 80px;
-    height: 60px;
-    text-align: center;
-    color: #666;
-    border: 1px solid #ddd;
-    background-color: #f4f4f4;
-    font-size: 12px;
+	border-radius: 3px;
+	position: relative;
+	padding: 21px 0px 0px 0px;
+	/*     margin: 0 0 10px 10px; */
+	width: 85%;
+	height: 100%;
+	/*     min-width: 80px; */
+	/*     min-height: 60px; */
+	text-align: center;
+	color: #666;
+	border: 1px solid #ddd;
+	background-color: #f4f4f4;
+	font-size: 10px;
+	height: 100%;
 }
 
 .custom-btn {
-    display: inline-block;
-    font-weight: 400;
-    line-height: 1.4285;
-    white-space: nowrap;
-    vertical-align: middle;
-/*     -ms-touch-action: manipulation; */
-/*     touch-action: manipulation; */
-/*     cursor: pointer; */
-/*     -moz-user-select: none; */
-/*     -ms-user-select: none; */
-    user-select: none;
-    background-image: none;
-    border-radius: 4px;
-    box-shadow: none;
+	display: inline-block;
+	font-weight: 400;
+	line-height: 1.4285;
+	white-space: nowrap;
+	vertical-align: middle;
+	/*     -ms-touch-action: manipulation; */
+	/*     touch-action: manipulation; */
+	/*     cursor: pointer; */
+	/*     -moz-user-select: none; */
+	/*     -ms-user-select: none; */
+	user-select: none;
+	background-image: none;
+	border-radius: 4px;
+	box-shadow: none;
+	font-size: 12px;
+	min-width: 85px;
+}
+
+.custom-btn-app>.badge {
+	position: absolute;
+	top: -8px;
+	right: -10px;
+	font-size: 12px;
+	height: 20px;
+	padding-top: 4px;
+	font-weight: 400;
+}
+
+.custom-btn-app>.fa, .custom-btn-app>.glyphicon, .custom-btn-app>.ion {
+	font-size: 20px;
+	display: block;
+}
+
+.collect-time {
+	position: absolute;
+	right: 80px;
+	top: 11px;
+}
+
+#reflesh-bottom {
+	position: absolute;
+	right: 17px;
+	top: 1px;
+}
+
+.custom-line {
+	width: 100%;
+	border-bottom: rgba(208, 202, 202, 0.51);
+	border-bottom-width: thin;
+	border-bottom-style: double;
+	height: 1px;
+}
+
+.custom-box {
+	margin-top: 9px;
+}
+
+.p10 {
+	width: 10%;
+}
+
+.p20 {
+	width: 20%;
+}
+
+.p30 {
+	width: 30%;
+}
+
+.p40 {
+	width: 40%;
+}
+
+.p50 {
+	width: 50%;
+}
+
+.p60 {
+	width: 60%;
+}
+
+.p70 {
+	width: 70%;
+}
+
+.p80 {
+	width: 80%;
+}
+
+.p90 {
+	width: 90%;
+}
+
+.p100 {
+	width: 100%;
+}
+
+.custom-border {
+	position: inherit;
+	background: #cec8c8;
+	height: 1px;
 }
