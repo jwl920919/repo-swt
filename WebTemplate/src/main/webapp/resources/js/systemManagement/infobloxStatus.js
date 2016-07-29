@@ -1,26 +1,64 @@
 $("#layDiv").css("visibility", "hidden");
-// iMemoryUsg iSwapUsg iDbUsg iDiskUsg iCapacityUsg
 var m_hardwareStateAjaxCall;
 var m_redundancyStateAjaxCall;
 var m_DchpMessageAjaxCall;
-var hardwareStateAjaxCallTime = 5000;
-var redundancyStateAjaxCallTime = 5000;
-var DchpMessageAjaxCallTime = 5000;
+var m_DnsMessageAjaxCall;
+// var hardwareStateAjaxCallTime = 5000;
+// var redundancyStateAjaxCallTime = 5000;
+// var DchpMessageAjaxCallTime = 5000;
+// var DnsMessageAjaxCallTime = 5000;
 var hwData;
 var rData;
 var dhcpData;
+var dnsData;
 
 $(document).ready(function() {
     AllClearAjaxCall();
-    m_hardwareStateAjaxCall = setInterval(HardwareStateAjaxCall, 0);
-    m_redundancyStateAjaxCall = setInterval(redundancyStateAjaxCall, 0);
-    m_DchpMessageAjaxCall = setInterval(DchpMessageAjaxCall, 0);
+    // m_hardwareStateAjaxCall = setInterval(HardwareStateAjaxCall, 0);
+    // m_redundancyStateAjaxCall = setInterval(redundancyStateAjaxCall, 0);
+    // m_DchpMessageAjaxCall = setInterval(DchpMessageAjaxCall, 0);
+    // m_DnsMessageAjaxCall = setInterval(DnsMessageAjaxCall, 0);
+    refleshDatas();
+    tableResizing();
     jQueryKnob(); // jQueryKnob 차트관련 스크립트
     fnPieChartTooltipBind($("#dhcpPieChart"));
+    fnPieChartTooltipBind($("#dnsPieChart"));
 });
-$(window).resize(function() {
-    $('#dhcp-table').css('width', $('#dhcp-body').width() - 150);
-}).resize();
+
+var wheight, wWidth;
+
+window.onresize = function(event) {
+    tableResizing();
+};
+
+
+
+function refleshDatas() {
+    $.getJSON("/systemManagement/getInfobloxdatas", function(json) {
+        try {
+            hwData = json.data[0];
+            rData = json.data[1];
+            dhcpData = json.data[2];
+            dnsData = json.data[3];
+            HardwareStateAjaxCall();
+            redundancyStateAjaxCall();
+            DchpMessageAjaxCall();
+            DnsMessageAjaxCall();
+        } catch (e) {
+            console.log("infobloxStatus.js DchpMessageAjaxCall() Error Log : "
+                    + e.message);
+        }
+    });
+    // m_hardwareStateAjaxCall = setInterval(HardwareStateAjaxCall, 100);
+    // m_redundancyStateAjaxCall = setInterval(redundancyStateAjaxCall, 100);
+    // m_DchpMessageAjaxCall = setInterval(DchpMessageAjaxCall, 100);
+    // m_DnsMessageAjaxCall = setInterval(DnsMessageAjaxCall, 100);
+}
+//메세지 테이블 사이즈 조절
+function tableResizing() {
+    $('#dhcp-table').css('width', $('#dhcp-body').width() - 190);
+    $('#dns-table').css('width', $('#dns-body').width() - 190);
+}
 // jQueryKnob 차트관련 스크립트
 function jQueryKnob() {
     /* jQueryKnob 차트관련 스크립트 */
@@ -76,60 +114,178 @@ function jQueryKnob() {
                         }
                     });
 }
+// DNS 메세지 정보를 불러오기 위한 AjaxCall
+function DnsMessageAjaxCall() {
+    try {
+        // $.getJSON("/systemManagement/getDnsMessagesInfo", function(json) {
+//        dnsData = json.resultValue;
+        if (dnsData != "") {
+            if (dnsData.dns_msg_info != "") {
+                $.plot("#dnsPieChart", dnsData.dns_msg_info, {
+                    series : {
+                        pie : {
+                            show : true,
+                            radius : 1,
+                            // innerRadius: 0.5,
+                            label : {
+                                show : true,
+                                radius : 2 / 3,
+                                formatter : labelFormatter,
+                                threshold : 0.1
+                            }
+                        },
+                        trendline : {
+                            show : true
+                        }
+                    },
+                    legend : {
+                        show : false
+                    },
+                    grid : {
+                        hoverable : true,
+                        clickable : true
+                    }
+                });
+
+                // dns-td
+                $('#dns-td-1')
+                        .html(
+                                '<div class="custom-btn custom-btn-app"><span class="badge bg-green">'
+                                        + dnsData.dns_msg_info[0].data
+                                        + '</span><i class="fa fa-inbox"></i>SUCCESS</div>');
+                $('#dns-td-2')
+                        .html(
+                                '<div class="custom-btn custom-btn-app"><span class="badge bg-yellow">'
+                                        + dnsData.dns_msg_info[1].data
+                                        + '</span><i class="fa fa-inbox"></i>REFERRAL</div>');
+                $('#dns-td-3')
+                        .html(
+                                '<div class="custom-btn custom-btn-app"><span class="badge bg-teal">'
+                                        + dnsData.dns_msg_info[2].data
+                                        + '</span><i class="fa fa-inbox"></i>NXRRSET</div>');
+                $('#dns-td-4')
+                        .html(
+                                '<div class="custom-btn custom-btn-app"><span class="badge bg-red">'
+                                        + dnsData.dns_msg_info[3].data
+                                        + '</span><i class="fa fa-inbox"></i>NXDOMAIN</div>');
+                $('#dns-td-5')
+                        .html(
+                                '<div class="custom-btn custom-btn-app"><span class="badge bg-aqua">'
+                                        + dnsData.dns_msg_info[4].data
+                                        + '</span><i class="fa fa-inbox"></i>RECURSION</div>');
+                $('#dns-td-6')
+                        .html(
+                                '<div class="custom-btn custom-btn-app"><span class="badge bg-purple">'
+                                        + dnsData.dns_msg_info[5].data
+                                        + '</span><i class="fa fa-inbox"></i>FAILURE</div>');
+                if (dnsData.collect_time != '')
+                    $('#dns-collect-time').html(
+                            new Date(dnsData.collect_time * 1000)
+                                    .format('yyyy/MM/dd HH:mm:ss'));
+
+                // clearDnsMessageAjaxCall();
+                // m_DnsMessageAjaxCall = setInterval(DnsMessageAjaxCall,
+                // DnsMessageAjaxCallTime);// 페이지 로딩 데이터 조회 후 polling
+                // 시간 변경
+            }
+        }
+        // });
+
+    } catch (e) {
+        console.log("infobloxStatus.js DnsMessageAjaxCall() Error Log : "
+                + e.message);
+    }
+}
+function clearDnsMessageAjaxCall() {
+    clearInterval(m_DnsMessageAjaxCall);
+}
 // DHCP 메세지 정보를 불러오기 위한 AjaxCall
 function DchpMessageAjaxCall() {
     try {
-        $.getJSON("/systemManagement/getDhcpMessagesInfo", function(json) {
-            dhcpData = json.resultValue;
-            if (dhcpData != "") {
-                if (dhcpData.dhcp_msg_info != "") {
-                    $.plot("#dhcpPieChart", dhcpData.dhcp_msg_info, {
-                        series : {
-                            pie : {
+        // $.getJSON("/systemManagement/getDhcpMessagesInfo", function(json) {
+//        dhcpData = json.resultValue;
+        if (dhcpData != "") {
+            if (dhcpData.dhcp_msg_info != "") {
+                $.plot("#dhcpPieChart", dhcpData.dhcp_msg_info, {
+                    series : {
+                        pie : {
+                            show : true,
+                            radius : 1,
+                            // innerRadius: 0.5,
+                            label : {
                                 show : true,
-                                radius : 1,
-                                // innerRadius: 0.5,
-                                label : {
-                                    show : true,
-                                    radius : 2 / 3,
-                                    formatter : labelFormatter,
-                                    threshold : 0.1
-                                }
-                            },
-                            trendline : {
-                                show : true
+                                radius : 2 / 3,
+                                formatter : labelFormatter,
+                                threshold : 0.1
                             }
                         },
-                        legend : {
-                            show : false
-                        },
-                        grid : {
-                            hoverable : true,
-                            clickable : true
+                        trendline : {
+                            show : true
                         }
-                    });
-                    
-                    //dhcp-td-1
-                    $('#dhcp-td-1').html(dhcpData.dhcp_msg_info[0].data);
-                    $('#dhcp-td-2').html(dhcpData.dhcp_msg_info[1].data);
-                    $('#dhcp-td-3').html(dhcpData.dhcp_msg_info[2].data);
-                    $('#dhcp-td-4').html(dhcpData.dhcp_msg_info[3].data);
-                    $('#dhcp-td-5').html(dhcpData.dhcp_msg_info[4].data);
-                    $('#dhcp-td-6').html(dhcpData.dhcp_msg_info[5].data);
-                    $('#dhcp-td-7').html(dhcpData.dhcp_msg_info[6].data);
-                    $('#dhcp-td-8').html(dhcpData.dhcp_msg_info[7].data);
-                    
-                    
+                    },
+                    legend : {
+                        show : false
+                    },
+                    grid : {
+                        hoverable : true,
+                        clickable : true
+                    }
+                });
 
-                    clearDchpMessageAjaxCall();
-                    m_DchpMessageAjaxCall = setInterval(DchpMessageAjaxCall,
-                            DchpMessageAjaxCallTime);// 페이지 로딩 데이터 조회 후 polling
-                    // 시간 변경
-                }
+                // dhcp-td
+                $('#dhcp-td-1')
+                        .html(
+                                '<div class="custom-btn custom-btn-app"><span class="badge bg-green">'
+                                        + dhcpData.dhcp_msg_info[0].data
+                                        + '</span><i class="fa fa-inbox"></i>DISCOVERS</div>');
+                $('#dhcp-td-2')
+                        .html(
+                                '<div class="custom-btn custom-btn-app"><span class="badge bg-yellow">'
+                                        + dhcpData.dhcp_msg_info[1].data
+                                        + '</span><i class="fa fa-inbox"></i>OFFERS</div>');
+                $('#dhcp-td-3')
+                        .html(
+                                '<div class="custom-btn custom-btn-app"><span class="badge bg-teal">'
+                                        + dhcpData.dhcp_msg_info[2].data
+                                        + '</span><i class="fa fa-inbox"></i>REQUESTS</div>');
+                $('#dhcp-td-4')
+                        .html(
+                                '<div class="custom-btn custom-btn-app"><span class="badge bg-red">'
+                                        + dhcpData.dhcp_msg_info[3].data
+                                        + '</span><i class="fa fa-inbox"></i>ACKS</div>');
+                $('#dhcp-td-5')
+                        .html(
+                                '<div class="custom-btn custom-btn-app"><span class="badge bg-aqua">'
+                                        + dhcpData.dhcp_msg_info[4].data
+                                        + '</span><i class="fa fa-inbox"></i>NACKS</div>');
+                $('#dhcp-td-6')
+                        .html(
+                                '<div class="custom-btn custom-btn-app"><span class="badge bg-purple">'
+                                        + dhcpData.dhcp_msg_info[5].data
+                                        + '</span><i class="fa fa-inbox"></i>DECLINES</div>');
+                $('#dhcp-td-7')
+                        .html(
+                                '<div class="custom-btn custom-btn-app"><span class="badge bg-maroon">'
+                                        + dhcpData.dhcp_msg_info[6].data
+                                        + '</span><i class="fa fa-inbox"></i>INFORMS</div>');
+                $('#dhcp-td-8')
+                        .html(
+                                '<div class="custom-btn custom-btn-app"><span class="badge bg-navy">'
+                                        + dhcpData.dhcp_msg_info[7].data
+                                        + '</span><i class="fa fa-inbox"></i>RELEASES</div>');
+                if (dhcpData.collect_time != '')
+                    $('#dhcp-collect-time').html(
+                            new Date(dhcpData.collect_time * 1000)
+                                    .format('yyyy/MM/dd HH:mm:ss'));
+
+                // clearDchpMessageAjaxCall();
+                // m_DchpMessageAjaxCall = setInterval(DchpMessageAjaxCall,
+                // DchpMessageAjaxCallTime);// 페이지 로딩 데이터 조회 후 polling
+                // 시간 변경
             }
-        });
+        }
+        // });
 
-        
     } catch (e) {
         console.log("infobloxStatus.js DchpMessageAjaxCall() Error Log : "
                 + e.message);
@@ -143,32 +299,32 @@ function clearDchpMessageAjaxCall() {
 function HardwareStateAjaxCall() {
     try {
 
-        $.getJSON("/systemManagement/getHwInfo", function(json) {
-            hwData = json.resultValue;
-            if (hwData != "") {
-                setInfobloxCpuUsgStatus();
-                setInfobloxMemoryUsgStatus();
-                setInfobloxSwapUsgStatus();
-                setInfobloxDbUsgStatus();
-                setInfobloxDiskUsgStatus();
-                setInfobloxCapacityUsgStatus();
-                setInfobloxHost();
-                setInfobloxHostName();
-                setInfobloxHardwareID();
-                setInfobloxSysUptime();
-                setInfobloxSysTmep();
-                setInfobloxPowerStatus();
-                setInfobloxFanStatus();
-                setInfobloxLicenseStatus();
-                setInfobloxServiceStatus();
-                setInfobloxOS();
-                setInfobloxCollectTime();
-                clearHardwareStateAjaxCall();
-                m_hardwareStateAjaxCall = setInterval(HardwareStateAjaxCall,
-                        hardwareStateAjaxCallTime);// 페이지 로딩 데이터 조회 후 polling
-                                                    // 시간 변경
-            }
-        });
+        // $.getJSON("/systemManagement/getHwInfo", function(json) {
+//        hwData = json.resultValue;
+        if (hwData != "") {
+            setInfobloxCpuUsgStatus();
+            setInfobloxMemoryUsgStatus();
+            setInfobloxSwapUsgStatus();
+            setInfobloxDbUsgStatus();
+            setInfobloxDiskUsgStatus();
+            setInfobloxCapacityUsgStatus();
+            setInfobloxHost();
+            setInfobloxHostName();
+            setInfobloxHardwareID();
+            setInfobloxSysUptime();
+            setInfobloxSysTmep();
+            setInfobloxPowerStatus();
+            setInfobloxFanStatus();
+            setInfobloxLicenseStatus();
+            setInfobloxServiceStatus();
+            setInfobloxOS();
+            setInfobloxCollectTime();
+            // clearHardwareStateAjaxCall();
+            // m_hardwareStateAjaxCall = setInterval(HardwareStateAjaxCall,
+            // hardwareStateAjaxCallTime);// 페이지 로딩 데이터 조회 후 polling
+            // 시간 변경
+        }
+        // });
 
     } catch (e) {
         console.log("infobloxStatus.js HardwareStateAjaxCall() Error Log : "
@@ -182,24 +338,24 @@ function clearHardwareStateAjaxCall() {
 
 function redundancyStateAjaxCall() {
     try {
-        $.getJSON("/systemManagement/getRedundancyStatus", function(json) {
-            rData = json.resultValue;
-            if (rData != "") {
-                setPortRedundancyEnabled();
-                setHaEnabled();
-                setVrrpAddrsetting();
-                setVrrpSubnetsetting();
-                setVrrpGatewaysetting();
-                setGridEnabled();
-                setGridStatus();
-                setInfobloxRedundancyCollectTime();
-                clearRedundancyStateAjaxCall();
-                m_redundancyStateAjaxCall = setInterval(redundancyStateAjaxCall,
-                        redundancyStateAjaxCallTime);// 페이지 로딩 데이터 조회 후 polling
-                // 시간 변경
-            }
-        });
-       
+        // $.getJSON("/systemManagement/getRedundancyStatus", function(json) {
+//        rData = json.resultValue;
+        if (rData != "") {
+            setPortRedundancyEnabled();
+            setHaEnabled();
+            setVrrpAddrsetting();
+            setVrrpSubnetsetting();
+            setVrrpGatewaysetting();
+            setGridEnabled();
+            setGridStatus();
+            setInfobloxRedundancyCollectTime();
+            // clearRedundancyStateAjaxCall();
+            // m_redundancyStateAjaxCall = setInterval(redundancyStateAjaxCall,
+            // redundancyStateAjaxCallTime);// 페이지 로딩 데이터 조회 후 polling
+            // 시간 변경
+        }
+        // });
+
     } catch (e) {
         console.log("infobloxStatus.js redundancyStateAjaxCall() Error Log : "
                 + e.message);
@@ -450,9 +606,10 @@ function setInfobloxFanStatus() {
         if (hwData.fans != "") {
             var tag = '';
             var isStart = true, isEnd = false;
+            var endCnt = 0;
             for (idx = 0; idx < hwData.fans.length; idx++) {
                 if (isStart) {
-                    tag += '<tr>';
+                    tag += '<tr height=27>';
                     isStart = false;
                 }
 
@@ -474,12 +631,16 @@ function setInfobloxFanStatus() {
                     tag += '</tr>';
                     isEnd = false;
                     isStart = true;
+                    endCnt++;
                 }
 
             }
-            $('#fan-info').html(tag);
-            $('#fan-info').parent().attr('style',
-                    'height:' + $('#fan-info').css('height'));
+            var pre = '<tr><td rowspan='
+                    + (endCnt + 2)
+                    + '><label class="info-label">Fan</label><b class="info-label-b">:</b></td></tr>';
+            $('#fan-info').html(pre + tag);
+            // $('#fan-info').parent().attr('style',
+            // 'height:' + $('#fan-info').css('height'));
         }
     } catch (e) {
         console.log("infobloxStatus.js setInfobloxFanStatus() Error Log : "
@@ -492,6 +653,7 @@ function setInfobloxLicenseStatus() {
         if (hwData.licenses != "") {
             var tag = '';
             var isStart = true, isEnd = false;
+            var endCnt = 0;
             for (idx = 0; idx < hwData.licenses.length; idx++) {
                 if (isStart) {
                     tag += '<tr>';
@@ -523,12 +685,16 @@ function setInfobloxLicenseStatus() {
                     tag += '</tr>';
                     isEnd = false;
                     isStart = true;
+                    endCnt++;
                 }
 
             }
-            $('#license-info').html(tag);
-            $('#license-info').parent().attr('style',
-                    'height:' + $('#license-info').css('height'));
+            var pre = '<tr><td rowspan='
+                    + (endCnt + 2)
+                    + '><label class="info-label">License</label><b class="info-label-b">:</b></td></tr>';
+            $('#license-info').html(pre + tag);
+            // $('#license-info').parent().attr('style',
+            // 'height:' + $('#license-info').css('height'));
         }
 
     } catch (e) {
@@ -552,7 +718,7 @@ function setInfobloxOS() {
 function setInfobloxCollectTime() {
     try {
         if (hwData.collect_time != "") {
-            $('#hw-collect-time').html(
+            $('.hw-collect-time').html(
                     new Date(hwData.collect_time * 1000)
                             .format('yyyy/MM/dd HH:mm:ss'));
         }
@@ -598,7 +764,6 @@ function setPortRedundancyEnabled() {
 }
 function setHaEnabled() {
     try {
-        console.log(rData);
         $('#enable-ha').attr("class", "fa fa-circle normal");
         if (rData.enable_ha) {
             $('#enable-ha').addClass('normal');
@@ -767,4 +932,5 @@ function AllClearAjaxCall() {
     clearInterval(m_hardwareStateAjaxCall);
     clearInterval(m_redundancyStateAjaxCall);
     clearInterval(m_DchpMessageAjaxCall);
+    clearInterval(m_DnsMessageAjaxCall);
 }
