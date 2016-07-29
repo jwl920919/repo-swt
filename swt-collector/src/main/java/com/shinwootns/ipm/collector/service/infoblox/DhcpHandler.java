@@ -51,26 +51,24 @@ public class DhcpHandler {
 	private String wapiPasswd = "";
 	private String snmpCommunity = "";
 	
-	private InfobloxWAPIHandler wapiHandler; 
+	private InfobloxWAPIHandler wapiHandler = null;
 	
-	public DhcpHandler(String host, String wapiId, String wapiPwd, String snmpCommunity) {
+	//region Connect WAPI & SNMP
+	public boolean Connect(String host, String wapiId, String wapiPwd, String snmpCommunity) {
 		
 		this.host = host;
 		this.wapiUser = wapiId;
 		this.wapiPasswd = wapiPwd;
 		this.snmpCommunity = snmpCommunity;
 		
-		//WAPI Handler
-		wapiHandler = new InfobloxWAPIHandler(this.host, this.wapiUser, this.wapiPasswd);
-	}
-	
-	//region Connect WAPI & SNMP
-	public boolean Connect() {
-		
 		try
 		{
+			//WAPI Handler
+			if (wapiHandler == null)
+				wapiHandler = new InfobloxWAPIHandler();
+			
 			// Connect WAPI
-			if (wapiHandler.Connect()) {
+			if (wapiHandler.connect(this.host, this.wapiUser, this.wapiPasswd) == false) {
 				_logger.error( (new StringBuilder().append(host).append(", Connect WAPI... failed")).toString() );
 				return false;
 			}
@@ -90,6 +88,16 @@ public class DhcpHandler {
 		}
 		
 		return false;
+	}
+	
+	public void close() {
+		try {
+			wapiHandler.close();
+		}
+		catch(Exception ex) {}
+		finally {
+			wapiHandler = null;
+		}
 	}
 	//endregion
 	

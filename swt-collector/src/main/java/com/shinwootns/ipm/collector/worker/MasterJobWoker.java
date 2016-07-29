@@ -27,12 +27,18 @@ public class MasterJobWoker implements Runnable {
 	private final static int SCHEDULER_THREAD_COUNT = 2;
 	
 	private ScheduledExecutorService schedulerService = Executors.newScheduledThreadPool(SCHEDULER_THREAD_COUNT);
+	
+	// DHCP Handler
+	DhcpHandler handler = null;
 
-	//region [FUNC] run
 	@Override
 	public void run() {
 		
 		_logger.info("MasterJobWoker... start.");
+		
+		// DHCP Handler
+		if (handler == null)
+			handler = new DhcpHandler();
 		
 		// FixedDelay 10 seconds
 		schedulerService.scheduleWithFixedDelay(
@@ -58,7 +64,6 @@ public class MasterJobWoker implements Runnable {
 		
 		_logger.info("MasterJobWoker... end.");
 	}
-	//endregion
 	
 	//region [FUNC] Update Dhcp Device
 	public void updateDhcpStatus() {
@@ -77,13 +82,14 @@ public class MasterJobWoker implements Runnable {
 		if(client == null)
 			return;
 
-		// DHCP Handler
-		DhcpHandler handler = new DhcpHandler(dhcp.getHost(), dhcp.getWapiUserid(), dhcp.getWapiPassword(), dhcp.getSnmpCommunity());
-		
-		updateDhcpDeviceStatus(handler, client);
-		updateDhcpVrrpStatus(handler, client);
-		updateDhcpCount(handler, client);
-		updateDnsCount(handler, client);
+		if ( handler.Connect(dhcp.getHost(), dhcp.getWapiUserid(), dhcp.getWapiPassword(), dhcp.getSnmpCommunity()) ) {
+
+			updateDhcpDeviceStatus(handler, client);
+			updateDhcpVrrpStatus(handler, client);
+			updateDhcpCount(handler, client);
+			updateDnsCount(handler, client);
+		}
+		handler.close();
 		
 		client.close();
 	}

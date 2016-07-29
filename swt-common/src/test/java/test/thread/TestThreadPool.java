@@ -7,6 +7,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/*
+
 import com.shinwootns.common.stp.SmartThreadPool;
 
 public class TestThreadPool {
@@ -50,3 +52,5 @@ public class TestThreadPool {
 		System.out.println("Terminated.");
 	}
 }
+
+*/

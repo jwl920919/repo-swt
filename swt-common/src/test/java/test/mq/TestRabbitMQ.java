@@ -1,5 +1,7 @@
 package test.mq;
 
+/*
+
 import java.util.Scanner;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -173,3 +175,4 @@ public class TestRabbitMQ {
 		}
 	}
 }
+*/
