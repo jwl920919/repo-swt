@@ -13,8 +13,8 @@ var m_eventLogAjaxCall
 
 var systemStatusCallTime = 1000;
 var guestIPAssignStatusCallTime = 5000;
-var certifyProcessCallTime = 1000;
-var askIPStatusCallTime = 1000;
+var certifyProcessCallTime = 5000;
+var askIPStatusCallTime = 5000;
 var dnsStatusCallTime = 5000;
 var segmentLeasingIPAssignedCallTime = 5000;
 var assignmentIPStatusCallTime = 5000;
@@ -41,11 +41,11 @@ $(document).ready(
 //			$("#contentHeaderDepth1li").attr('style', 'display: none;');
 //			$("#contentHeaderDepth2li").attr('style', 'display: none;');
 
-			ivalue = 0;
+			jQueryKnob(); // jQueryKnob 차트관련 스크립트
+
 			AllClearAjaxCall();
 			m_systemStatusAjaxCall = setInterval(systemStatusAjaxCall, 0);// 페이지 로딩 후 바로 데이터 조회
-			m_guestIPAssignStatusAjaxCall = setInterval(
-					guestIPAssignStatusAjaxCall, 0);
+			m_guestIPAssignStatusAjaxCall = setInterval(guestIPAssignStatusAjaxCall, 0);
 			certifyProcessAjaxCall();
 			m_dnsStatusAjaxCall = setInterval(dnsStatusAjaxCall, 0);
 			m_segmentLeasingIPAssignedAjaxCall = setInterval(segmentLeasingIPAssignedAjaxCall, 0);
@@ -57,8 +57,7 @@ $(document).ready(
 			m_serviceUsedStatusAjaxCall = setInterval(serviceUsedStatusAjaxCall, 0);
 			m_vendorUsedStatusAjaxCall = setInterval(vendorUsedStatusAjaxCall, 0);
 			eventLogAjaxCall();
-			
-			jQueryKnob(); // jQueryKnob 차트관련 스크립트
+//			
 
 			//Pie Chart Tooltip Bind
 			fnPieChartTooltipBind($("#osPieChart"));
@@ -130,12 +129,10 @@ function jQueryKnob() {
 	/* END JQUERY KNOB */
 }
 
-var ivalue = 0;
 // 시스템 현황 Ajax Call 메서드
 function systemStatusAjaxCall() {
 
 	try {
-		ivalue = ivalue + 1;
 		// console.log("ajaxCall count : " + ivalue);
 
 		clearSystemStatusAjaxCall();
@@ -180,7 +177,9 @@ function systemStatusAjaxCall() {
 							+ obj.unit + "</LABEL></td></tr>"
 				});
 				vCpu = vCpu + "</table>";
+				$('#lCPUValue').html("");
 				$('#lCPUValue').html(vCpu);
+				vCpu = null;
 			}
 			// Memory (4G / 8G )
 			if (jsonObj.MEMORY != '') {
@@ -202,7 +201,9 @@ function systemStatusAjaxCall() {
 						+ "<LABEL style=\"font-size: 20px\">"
 						+ jsonObj.MEMORY.unit + "</LABEL>"
 						+ "</td></tr></table>";
+				$('#lMemoryValue').html("");
 				$('#lMemoryValue').html(vMEMORY);
+				vMEMORY = null;
 			}
 			// DISK (C:16G/100G)
 			if (jsonObj.DISK != '') {
@@ -234,7 +235,9 @@ function systemStatusAjaxCall() {
 									+ "</td></tr>";
 						});
 				vDisk = vDisk + "</table>";
+				$('#lDiskValue').html("");
 				$('#lDiskValue').html(vDisk);
+				vDisk = null;
 			}
 			// Network (IN:16G/100G)
 			if (jsonObj.NETWORK != '') {
@@ -272,7 +275,9 @@ function systemStatusAjaxCall() {
 									+ "</td></tr>";
 						});
 				vNetwork = vNetwork + "</table>";
+				$('#lNetworkValue').html("");
 				$('#lNetworkValue').html(vNetwork);
+				vNetwork = null;
 			}
 			// HA (정상)
 			if (jsonObj.HA != '') {
@@ -285,6 +290,7 @@ function systemStatusAjaxCall() {
 				}
 			}
 		}
+		jsonObj = null;
 	} catch (e) {
 		console.log("dashboard.js systemStatusAjaxCall() Error Log c: " + e.message);
 	}
@@ -327,28 +333,32 @@ function guestIPAssignStatusAjaxCall() {
 
 				// console.log("$('#iGuestIPAssing').val : " +
 				// jsonObj.GUEST_IP.used);
-				var percent = (parseInt(jsonObj.GUEST_IP.used) / parseInt(jsonObj.GUEST_IP.total)) * 100;
+				$('#iGuestIPAssing').trigger('');
 				$('#iGuestIPAssing').trigger('configure', {
 					"min" : 0,
 					"max" : jsonObj.GUEST_IP.total,
 					"fgColor" : '#00c0ef',
 					"inputColor" : '#00c0ef'
 				});
-				if (percent >= 80) {
+				if (((parseInt(jsonObj.GUEST_IP.used) / parseInt(jsonObj.GUEST_IP.total)) * 100) >= 80) {
 					$('#iGuestIPAssing').trigger('configure', {
 						"fgColor" : '#ff0000',
 						"inputColor" : '#ff0000'
 					});
 				}
+				$('#iGuestIPAssing').val("").trigger('change');
 				$('#iGuestIPAssing').val(jsonObj.GUEST_IP.used).trigger('change');
 
+				$('#lGuestIPAssingTotal').text("");
 				$('#lGuestIPAssingTotal').text(vGuestIPTotal);
+				$('#lGuestIPAssingValue').html("");
 				$('#lGuestIPAssingValue').html(vGuestIPValue);
 			}
 
 			clearGuestIPAssignStatusAjaxCall();
 			m_guestIPAssignStatusAjaxCall = setInterval(guestIPAssignStatusAjaxCall, guestIPAssignStatusCallTime);// 페이지 로딩 데이터 조회 후 polling 시간 변경
 		}
+		jsonObj = null;
 	} catch (e) {
 		console.log("dashboard.js guestIPAssignStatusAjaxCall() Error Log : " + e.message);
 	}
@@ -464,6 +474,7 @@ function certifyProcessAjaxCall() {
 				// plot.setupGrid()
 				//console.log("getdata : " + data1.length);
 				certifyProcessChart.Line(getData(), m_lineChartOption);
+				//data1 = null, data2 = null, labels = null, totalPoints = null;
 				if (realtime === "on")
 					setTimeout(update, certifyProcessCallTime);
 			}
@@ -487,11 +498,13 @@ function certifyProcessAjaxCall() {
 
 			// Create the line chart
 			certifyProcessChart.Line(getData(), m_lineChartOption);
+			//data1 = null, data2 = null, labels = null, totalPoints = null;
 
 			// clearCertifyProcessAjaxCall();
 			// m_certifyProcessAjaxCall = setInterval(certifyProcessAjaxCall,
 			// 5000);// 페이지 로딩 데이터 조회 후 polling 시간 변경
 		}
+		jsonObj = null;
 	} catch (e) {
 		console.log("dashboard.js certifyProcessAjaxCall() Error Log : " + e.message);
 	}
@@ -505,8 +518,7 @@ function clearCertifyProcessAjaxCall() {
 // IP 신청 현황  Ajax Call 메서드
 function askIPStatusAjaxCall() {
 	try {
-		var data = tempChartData();
-		var jsonObj = eval("(" + data + ')'); // JSonString 형식의 데이터를
+		var jsonObj = eval("(" + tempChartData() + ')'); // JSonString 형식의 데이터를
 		// Ojbect형식으로 변경
 
 		if (jsonObj != '') {
@@ -623,6 +635,7 @@ function askIPStatusAjaxCall() {
 			// Create the line chartvar 
 			askIPStatusBarChart.Bar(getData(), m_barChartOptions);
 		}
+		jsonObj = null;
 	} catch (e) {
 		console.log("dashboard.js askIPStatusAjaxCall() Error Log : " + e.message);
 	}
@@ -681,6 +694,7 @@ function dnsStatusAjaxCall() {
 
 		cleardnsStatusAjaxCall();
 		m_dnsStatusAjaxCall = setInterval(dnsStatusAjaxCall, dnsStatusCallTime);// 페이지 로딩 데이터 조회 후 polling 시간 변경
+		jsonObj = null;
 	} catch (e) {
 		console.log("dashboard.js dnsStatusAjaxCall() Error Log : " + e.message);
 	}
@@ -725,21 +739,23 @@ function segmentLeasingIPAssignedAjaxCall() {
 						vSeverity = vWarnning;
 					}
 					
-					vhtml = vhtml + "<tr><td style=\"width:42%; text-align:left\"><span class=\"progress-text\">" + obj.segment + "</span></td>" +
-									"<td style=\"width:43%\">" +
+					vhtml = vhtml + "<tr><td style=\"width:300px; text-align:left\"><span class=\"progress-text\">" + obj.segment + "</span></td>" +
+									"<td style=\"width:100%\">" +
 									"	<div class=\"progress sm\">" +
 									"		<div class=\"progress-bar " + vSeverity + " \" style=\"width: " + obj.value + "%;\"></div>" +
 									"	</div>"+
 									"</td>" +
-									"<td style=\"width:15%\"><span class=\"progress-number\"><b>" + obj.value + " %</b></span></td></tr>";					
+									"<td style=\"width:80px\"><span class=\"progress-number\"><b>" + obj.value + " %</b></span></td></tr>";					
 				});
 			};			
-			html = vhtml + "</table></div>";
+			vhtml = vhtml + "</table></div>";
 			$('#divleaseIPAvailable').html(vhtml);
+			vhtml = null;
 		};
 
 		clearsegmentLeasingIPAssignedAjaxCall();
 		m_segmentLeasingIPAssignedAjaxCall = setInterval(segmentLeasingIPAssignedAjaxCall, segmentLeasingIPAssignedCallTime);// 페이지 로딩 데이터 조회 후 polling 시간 변경
+		jsonObj = null;
 	} catch (e) {
 		console.log("dashboard.js segmentLeasingIPAssignedAjaxCall() Error Log : " + e.message);
 	}
@@ -805,7 +821,7 @@ function assignmentIPStatusAjaxCall() {
 				}
 			};
 		};
-
+		jsonObj = null;
 
 		function getProgressSeverity(value) {
 			var vRet = "progress-bar";
@@ -820,6 +836,7 @@ function assignmentIPStatusAjaxCall() {
 		
 		clearassignmentIPStatus();
 		m_assignmentIPStatusAjaxCall = setInterval(assignmentIPStatusAjaxCall, assignmentIPStatusCallTime);// 페이지 로딩 데이터 조회 후 polling 시간 변경
+		jsonObj = null;
 	} catch (e) {
 		console.log("dashboard.js assignmentIPStatusAjaxCall() Error Log : " + e.message);
 	}
@@ -879,6 +896,7 @@ function hwUsedStatusAjaxCall() {
 
 		clearHWUsedStatusAjaxCall();
 		m_hwUsedStatusAjaxCall = setInterval(hwUsedStatusAjaxCall, hwUsedStatusCallTime);// 페이지 로딩 데이터 조회 후 polling 시간 변경
+		jsonObj = null;
 	} catch (e) {
 		console.log("dashboard.js hwUsedStatusAjaxCall() Error Log : " + e.message);
 	}
@@ -938,6 +956,7 @@ function osUsedStatusAjaxCall() {
 
 		clearOSUsedStatusAjaxCall();
 		m_osUsedStatusAjaxCall = setInterval(osUsedStatusAjaxCall, osUsedStatusCallTime);// 페이지 로딩 데이터 조회 후 polling 시간 변경
+		jsonObj = null;
 	} catch (e) {
 		console.log("dashboard.js osUsedStatusAjaxCall() Error Log : " + e.message);
 	}
@@ -997,6 +1016,7 @@ function serviceUsedStatusAjaxCall() {
 
 		clearServiceUsedStatusAjaxCall();
 		m_serviceUsedStatusAjaxCall = setInterval(serviceUsedStatusAjaxCall, serviceUsedStatusCallTime);// 페이지 로딩 데이터 조회 후 polling 시간 변경
+		jsonObj = null;
 	} catch (e) {
 		console.log("dashboard.js serviceUsedStatusAjaxCall() Error Log : " + e.message);
 	}
@@ -1056,6 +1076,7 @@ function vendorUsedStatusAjaxCall() {
 
 		clearVendorUsedStatusAjaxCall();
 		m_vendorUsedStatusAjaxCall = setInterval(vendorUsedStatusAjaxCall, vendorUsedStatusCallTime);// 페이지 로딩 데이터 조회 후 polling 시간 변경
+		jsonObj = null;
 	} catch (e) {
 		console.log("dashboard.js vendorUsedStatusAjaxCall() Error Log : " + e.message);
 	}
@@ -1077,7 +1098,7 @@ function eventLogAjaxCall() {
 		var vTop5 = Math.floor(Math.random() * 100) + 1;
 
 		var dataSet = tempIntegrationLogData();
-		
+
 		//console.log(dataSet);
 		var jsonObj = eval("(" + dataSet + ')'); // JSonString 형식의 데이터를
 		// Ojbect형식으로 변경
@@ -1126,6 +1147,9 @@ function eventLogAjaxCall() {
 		
 		clearEventLogAjaxCall();
 		//m_eventLogAjaxCall = setInterval(eventLogAjaxCall, eventLogCallTime);// 페이지 로딩 데이터 조회 후 polling 시간 변경
+
+		dataSet = null;
+		jsonObj = null;
 	} catch (e) {
 		console.log("dashboard.js eventLogAjaxCall() Error Log : " + e.message);
 	}
