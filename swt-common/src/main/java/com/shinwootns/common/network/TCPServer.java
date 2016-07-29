@@ -14,8 +14,8 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.log4j.Logger;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 // 작업 중......
@@ -23,7 +23,7 @@ import org.apache.log4j.Logger;
 
 public class TCPServer implements Runnable {
 
-	private final Logger _logger = Logger.getLogger(this.getClass());
+	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
 	protected int _serverPort = 0;
 	protected int _threadCount = 2;

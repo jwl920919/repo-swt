@@ -4,7 +4,6 @@ import org.apache.log4j.Level;
 
 import com.shinwootns.common.network.SyslogEntity;
 import com.shinwootns.common.network.SyslogReceiveHandler;
-import com.shinwootns.common.utils.LogUtils;
 import com.shinwootns.common.utils.TimeUtils;
 
 public class testSyslogHandlerImpl implements SyslogReceiveHandler {

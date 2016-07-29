@@ -8,12 +8,12 @@ import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecuteResultHandler;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.PumpStreamHandler;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SystemUtils {
 
-	private static final Logger _logger = Logger.getLogger(SystemUtils.class);
+	private final static Logger _logger = LoggerFactory.getLogger(SystemUtils.class);
 	
 	public static void executeCommandAsync(CommandLine command) {
 		

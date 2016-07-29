@@ -15,24 +15,31 @@
     </select>
     
     
-    <!-- ############################ DHCP ############################ -->
+    <!-- ############################ Insight ############################ -->
     
     <select id="selectInsightByHost" resultType="com.shinwootns.data.entity.DeviceInsight">
 		SELECT * FROM device_insight WHERE host = #{host}
 	</select>
     
-    <insert id="insertInsight" parameterType="com.shinwootns.data.entity.DhcpNetwork">
+    <insert id="insertInsight" parameterType="com.shinwootns.data.entity.DeviceInsight">
 		<![CDATA[
-			INSERT INTO device_insight (site_id, host, version, insert_time, update_time)
-			VALUES ( #{site_id}, #{host}, #{version}, now(), now() ) 
+			INSERT INTO device_insight (site_id, host, port, version, cluster_mode, cluster_index, insert_time, update_time)
+			VALUES ( #{site_id}, #{host}, #{port}, #{version}, #{cluster_mode}, #{cluster_index}, now(), now() ) 
 		]]>
 	</insert>
 	
-	<update id="updateInsight" parameterType="com.shinwootns.data.entity.DhcpNetwork">
+	<update id="updateInsight" parameterType="com.shinwootns.data.entity.DeviceInsight">
 		<![CDATA[
 			UPDATE device_insight
-			SET site_id=#{site_id}, host=#{host}, port=#{port}, version=#{version}, enable_collect=#{enable_collect}, update_time=now()
+			SET site_id=#{site_id}, host=#{host}, port=#{port}, version=#{version}, cluster_mode=#{cluster_mode}, cluster_index=#{cluster_index}, update_time=now()
 			WHERE host=#{host}
+		]]>
+	</update>
+	
+	<update id="updateInsightMaster" parameterType="com.shinwootns.data.entity.DeviceInsight">
+		<![CDATA[
+			UPDATE device_insight SET is_master=true WHERE host = #{host} AND site_id = #{site_id};
+			UPDATE device_insight SET is_master=false WHERE host != #{host} AND site_id = #{site_id};
 		]]>
 	</update>
     

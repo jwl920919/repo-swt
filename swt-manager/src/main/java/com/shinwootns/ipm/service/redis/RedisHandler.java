@@ -1,6 +1,7 @@
-package com.shinwootns.ipm.service.handler;
+package com.shinwootns.ipm.service.redis;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.shinwootns.common.cache.RedisClient;
 import com.shinwootns.common.cache.RedisManager;
@@ -10,9 +11,9 @@ import com.shinwootns.ipm.config.ApplicationProperty;
 
 public class RedisHandler {
 	
-	private final Logger _logger = Logger.getLogger(this.getClass());
+	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
-	RedisManager rm = new RedisManager();
+	private RedisManager rm = new RedisManager();
 	
 	//region Singleton
 	private static RedisHandler _instance = null;

@@ -2,8 +2,8 @@ package test.mq;
 
 import java.util.ArrayList;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.shinwootns.common.mq.MQManager;
 import com.shinwootns.common.mq.client.*;
@@ -12,7 +12,7 @@ import com.shinwootns.common.utils.TimeUtils;
 
 public class RoutingTask extends testBaseTask {
 	
-	private final Logger _logger = Logger.getLogger(this.getClass());
+	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
 	private String type = "";
 	private int index = 0;
@@ -152,14 +152,14 @@ public class RoutingTask extends testBaseTask {
 		int rand = (int)(Math.random() * 10) % 5;
 		
 		if (rand == 0)
-			return Level.FATAL.toString();
+			return "FATAL";
 		else if (rand == 2)
-			return Level.ERROR.toString();
+			return "ERROR";
 		else if (rand == 4)
-			return Level.WARN.toString();
+			return "WARN";
 		else if (rand == 3)
-			return Level.INFO.toString();
+			return "INFO";
 		else
-			return Level.DEBUG.toString();
+			return "DEBUG";
 	}
 }

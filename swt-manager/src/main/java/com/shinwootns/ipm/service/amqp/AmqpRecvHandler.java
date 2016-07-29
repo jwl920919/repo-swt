@@ -1,4 +1,4 @@
-package com.shinwootns.ipm.service.handler;
+package com.shinwootns.ipm.service.amqp;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

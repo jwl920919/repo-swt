@@ -1,6 +1,7 @@
 package com.shinwootns.ipm.collector.service.amqp;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.shinwootns.common.mq.MQManager;
 import com.shinwootns.common.mq.MQManager.MQClientType;
@@ -17,7 +18,7 @@ import com.shinwootns.ipm.collector.config.ApplicationProperty;
 
 public class RabbitmqHandler {
 	
-	private final Logger _logger = Logger.getLogger(this.getClass());
+	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
 	private MQManager manager = new MQManager();
 	
@@ -57,9 +58,14 @@ public class RabbitmqHandler {
 		}
 		
 		if (result)
-			_logger.info((new StringBuilder()).append("Succeed connect rabbitmq... amqp:\\").append(appProperty.rabbitmqHost).append(":").append(appProperty.rabbitmqPort));
+			_logger.info((new StringBuilder())
+					.append("Succeed connect rabbitmq... amqp:\\").append(appProperty.rabbitmqHost).append(":").append(appProperty.rabbitmqPort)
+					.toString());
 		else
-			_logger.info((new StringBuilder()).append("Failed connect rabbitmq... amqp:\\").append(appProperty.rabbitmqHost).append(":").append(appProperty.rabbitmqPort));
+			_logger.info((new StringBuilder())
+					.append("Failed connect rabbitmq... amqp:\\").append(appProperty.rabbitmqHost).append(":").append(appProperty.rabbitmqPort)
+					.toString()
+					);
 		
 		return result;
 	}

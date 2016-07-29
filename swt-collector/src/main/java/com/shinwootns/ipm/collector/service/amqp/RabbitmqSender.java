@@ -1,7 +1,6 @@
 package com.shinwootns.ipm.collector.service.amqp;
 
-import org.apache.log4j.Logger;
-//import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.slf4j.Logger;
 
 import com.google.gson.JsonObject;
 import com.shinwootns.ipm.collector.SpringBeanProvider;

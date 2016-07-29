@@ -1,6 +1,7 @@
 package com.shinwootns.common.infoblox;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.http.entity.ContentType;
 
 import com.google.gson.JsonArray;
@@ -13,32 +14,28 @@ import com.shinwootns.common.utils.StringUtils;
 
 public class InfobloxWAPIHandler {
 	
-	private final Logger _logger = Logger.getLogger(this.getClass());
+	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
-	private HttpClient restClient = new HttpClient();
+	private HttpClient restClient = null;
 
 	private String baseURL = "";
 	private String host = "";
 	private String id = "";
 	private String pwd = "";
 	
-	//region Constructor
-	public InfobloxWAPIHandler(String host, String id, String pwd) {
-		
+	//region connect / close
+	public boolean connect(String host, String id, String pwd) {
+
 		this.host = host;
 		this.baseURL = ((new StringBuilder()).append("https://").append(host)).toString();
 		this.id = id;
 		this.pwd = pwd;
 		
-		Connect();
-	}
-	//endregion
-	
-	//region Connect WAPI
-	public boolean Connect() {
-		
 		try
 		{
+			if (restClient == null)
+				restClient = new HttpClient();
+			
 			// Connect WAPI
 			if (restClient.Connect_Https(baseURL, id, pwd) == false) {
 				return false;
@@ -47,15 +44,29 @@ public class InfobloxWAPIHandler {
 			return true;
 		}
 		catch(Exception ex) {
-			_logger.fatal(ex.getMessage(), ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		
 		return false;
+	}
+	
+	public void close() {
+		try {
+			if (restClient != null)
+				restClient.Close();
+		}
+		catch(Exception ex) {}
+		finally {
+			restClient = null;
+		}
 	}
 	//endregion
 	
 	//region [WAPI] Get Network Info 
 	public JsonArray getNetworkInfo() {
+		
+		if (restClient == null)
+			return null;
 		
 		try
 		{
@@ -76,7 +87,7 @@ public class InfobloxWAPIHandler {
 			return JsonUtils.parseJsonArray(value);
 		}
 		catch(Exception ex) {
-			_logger.fatal(ex.getMessage(), ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		
 		return null;
@@ -85,6 +96,9 @@ public class InfobloxWAPIHandler {
 
 	//region [WAPI] Get Filter Info
 	public JsonArray getFilterInfo() {
+		
+		if (restClient == null)
+			return null;
 		
 		try
 		{
@@ -105,7 +119,7 @@ public class InfobloxWAPIHandler {
 			return JsonUtils.parseJsonArray(value);
 		}
 		catch(Exception ex) {
-			_logger.fatal(ex.getMessage(), ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		
 		return null;
@@ -114,6 +128,9 @@ public class InfobloxWAPIHandler {
 
 	//region [WAPI] Get Range Info
 	public JsonArray getRangeInfo() {
+		
+		if (restClient == null)
+			return null;
 		
 		try
 		{
@@ -134,7 +151,7 @@ public class InfobloxWAPIHandler {
 			return JsonUtils.parseJsonArray(value);
 		}
 		catch(Exception ex) {
-			_logger.fatal(ex.getMessage(), ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		
 		return null;
@@ -143,6 +160,9 @@ public class InfobloxWAPIHandler {
 
 	//region [WAPI] Get Grid Info
 	public JsonArray getGridInfo() {
+		
+		if (restClient == null)
+			return null;
 		
 		try
 		{
@@ -163,7 +183,7 @@ public class InfobloxWAPIHandler {
 			return JsonUtils.parseJsonArray(value);
 		}
 		catch(Exception ex) {
-			_logger.fatal(ex.getMessage(), ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		
 		return null;
@@ -173,6 +193,9 @@ public class InfobloxWAPIHandler {
 	//region [WAPI] Get MacFilter
 	public JsonArray getMacFilter(String macAddr) {
 
+		if (restClient == null)
+			return null;
+		
 		try
 		{
 			StringBuilder sb = new StringBuilder();
@@ -194,7 +217,7 @@ public class InfobloxWAPIHandler {
 			return JsonUtils.parseJsonArray(value);
 		}
 		catch(Exception ex) {
-			_logger.fatal(ex.getMessage(), ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		
 		return null;
@@ -203,6 +226,9 @@ public class InfobloxWAPIHandler {
 	
 	//region [WAPI] Insert MacFilter
 	public boolean insertMacFilter(String macAddr, String filterName, String userName) {
+		
+		if (restClient == null)
+			return false;
 		
 		try
 		{
@@ -221,7 +247,7 @@ public class InfobloxWAPIHandler {
 			
 		}
 		catch(Exception ex) {
-			_logger.fatal(ex.getMessage(), ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		
 		return false;
@@ -231,6 +257,9 @@ public class InfobloxWAPIHandler {
 	//region [WAPI] Delete MacFilter
 	public boolean deleteMacFilter(String macAddr) {
 
+		if (restClient == null)
+			return false;
+		
 		try
 		{
 			// 1. Get MacFilter
@@ -258,7 +287,7 @@ public class InfobloxWAPIHandler {
 				return true;
 		}
 		catch(Exception ex) {
-			_logger.fatal(ex.getMessage(), ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		
 		return false;
@@ -267,6 +296,9 @@ public class InfobloxWAPIHandler {
 	
 	//region [WAPI] Get IPv4Address
 	public NextPageData getIPv4AddressFirst(int splitCount, String network) {
+		
+		if (restClient == null)
+			return null;
 		
 		try
 		{
@@ -309,13 +341,16 @@ public class InfobloxWAPIHandler {
 			return new NextPageData(resultArray, nextPageId);
 		}
 		catch(Exception ex) {
-			_logger.fatal(ex.getMessage(), ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		
 		return null;
 	}
 	
 	public NextPageData getIPv4AddressNext(int splitCount, String nextPageId) {
+		
+		if (restClient == null)
+			return null;
 		
 		if (nextPageId == null || nextPageId.isEmpty())
 			return null;
@@ -352,7 +387,7 @@ public class InfobloxWAPIHandler {
 			return new NextPageData(resultArray, nextPageId);
 		}
 		catch(Exception ex) {
-			_logger.fatal(ex.getMessage(), ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		
 		return null;
@@ -361,6 +396,9 @@ public class InfobloxWAPIHandler {
 	
 	//region [WAPI] Get Ipv6address
 	public NextPageData getIPv6AddressFirst(int splitCount, String network) {
+		
+		if (restClient == null)
+			return null;
 		
 		/*
 		try
@@ -420,6 +458,9 @@ public class InfobloxWAPIHandler {
 	
 	public NextPageData getIPv6AddressNext(int splitCount, String nextPageId) {
 		
+		if (restClient == null)
+			return null;
+		
 		if (nextPageId == null || nextPageId.isEmpty())
 			return null;
 		/*
@@ -462,6 +503,9 @@ public class InfobloxWAPIHandler {
 	
 	//region [WAPI] Get Lease IP
 	public NextPageData getLeaseIPFirst(int splitCount, String network) {
+		
+		if (restClient == null)
+			return null;
 		
 		JsonArray resultArray = new JsonArray(); 
 		
@@ -514,13 +558,16 @@ public class InfobloxWAPIHandler {
 			return new NextPageData(resultArray, nextPageId);
 		}
 		catch(Exception ex) {
-			_logger.fatal(ex.getMessage(), ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		
 		return null;
 	}
 	
 	public NextPageData getLeaseIPNext(int splitCount, String nextPageId) {
+		
+		if (restClient == null)
+			return null;
 		
 		if (nextPageId == null || nextPageId.isEmpty())
 			return null;
@@ -564,7 +611,7 @@ public class InfobloxWAPIHandler {
 			
 		}
 		catch(Exception ex) {
-			_logger.fatal(ex.getMessage(), ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		
 		return null;
@@ -574,6 +621,9 @@ public class InfobloxWAPIHandler {
 	//region [WAPI] Get Fixed IP
 	public JsonArray getFixedIPList() {
 
+		if (restClient == null)
+			return null;
+		
 		try
 		{
 			StringBuilder sb = new StringBuilder();
@@ -594,7 +644,7 @@ public class InfobloxWAPIHandler {
 			return JsonUtils.parseJsonArray(value);
 		}
 		catch(Exception ex) {
-			_logger.fatal(ex.getMessage(), ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		
 		return null;
@@ -603,6 +653,10 @@ public class InfobloxWAPIHandler {
 	
 	//region [WAPI] Get Device Status
 	public JsonArray getNodeInfo(String hostName) {
+		
+		if (restClient == null)
+			return null;
+		
 		try
 		{
 			StringBuilder sb = new StringBuilder();
@@ -624,7 +678,7 @@ public class InfobloxWAPIHandler {
 			return JsonUtils.parseJsonArray(value);
 		}
 		catch(Exception ex) {
-			_logger.fatal(ex.getMessage(), ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		return null;
 	}
@@ -632,6 +686,10 @@ public class InfobloxWAPIHandler {
 	
 	//region [WAPI] Get License info
 	public JsonArray getLicenseInfo(String hwid) {
+		
+		if (restClient == null)
+			return null;
+		
 		try
 		{
 			StringBuilder sb = new StringBuilder();
@@ -653,7 +711,7 @@ public class InfobloxWAPIHandler {
 			return JsonUtils.parseJsonArray(value);
 		}
 		catch(Exception ex) {
-			_logger.fatal(ex.getMessage(), ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		return null;
 	}
@@ -661,6 +719,10 @@ public class InfobloxWAPIHandler {
 
 	//region [WAPI] Get Service enable
 	public JsonArray getServiceEnableInfo(String hostname) {
+		
+		if (restClient == null)
+			return null;
+		
 		try
 		{
 			StringBuilder sb = new StringBuilder();
@@ -682,10 +744,43 @@ public class InfobloxWAPIHandler {
 			return JsonUtils.parseJsonArray(value);
 		}
 		catch(Exception ex) {
-			_logger.fatal(ex.getMessage(), ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		return null;
 	}
 	//endregion
 	
+	//region [WAPI] Get HA Info
+	public JsonArray getHAInfo(String hostname) {
+		
+		if (restClient == null)
+			return null;
+		
+		try
+		{
+			StringBuilder sb = new StringBuilder();
+			
+			sb.append("/wapi/v2.3/member");
+			sb.append("?_return_type=json");
+			sb.append("&_return_fields=lan2_port_setting,enable_ha,vip_setting,master_candidate,upgrade_group,");
+			sb.append("&host_name=").append(hostname);
+			
+			String value = restClient.Get(sb.toString());
+			
+			if (value == null)
+				return null;
+			
+			// Change unescape-unicode
+			value = StringUtils.unescapeUnicodeString(value);
+			
+			// JsonArray Parser
+			return JsonUtils.parseJsonArray(value);
+		}
+		catch(Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+		}
+		return null;
+	}
+	//endregion
+
 }

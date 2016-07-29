@@ -15,7 +15,7 @@ import com.shinwootns.data.entity.DeviceDhcp;
 import com.shinwootns.ipm.collector.config.ApplicationProperty;
 import com.shinwootns.ipm.collector.data.SharedData;
 import com.shinwootns.ipm.collector.service.infoblox.DhcpHandler;
-import com.shinwootns.data.status.DhcpStatus;
+import com.shinwootns.data.status.DhcpDeviceStatus;
 
 @RestController
 public class DeviceController {
@@ -36,11 +36,20 @@ public class DeviceController {
 		if (dhcp == null)
 			return "";
 		
-		DhcpHandler handler = new DhcpHandler(dhcp.getHost(), dhcp.getWapiUserid(), dhcp.getWapiPassword(), dhcp.getSnmpCommunity()); 
+		DhcpDeviceStatus dhcpStatus = null;
 		
-		DhcpStatus dhcpStatus = handler.getHWStatus();
+		DhcpHandler handler = new DhcpHandler(); 
 		
-        return JsonUtils.serialize(dhcpStatus);
+		if ( handler.Connect(dhcp.getHost(), dhcp.getWapiUserid(), dhcp.getWapiPassword(), dhcp.getSnmpCommunity()) ) {
+			dhcpStatus = handler.getDeviceStatus();
+		}
+
+		handler.close();
+		
+		if (dhcpStatus != null)
+			return JsonUtils.serialize(dhcpStatus);
+		
+		return "{}";
     }
 	
 }

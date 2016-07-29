@@ -1,34 +1,14 @@
 package com.shinwootns.ipm.worker.task;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import org.apache.log4j.Logger;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.shinwootns.common.utils.CryptoUtils;
-import com.shinwootns.common.utils.IPv4Range;
-import com.shinwootns.common.utils.JsonUtils;
-import com.shinwootns.common.utils.NetworkUtils;
-import com.shinwootns.common.utils.TimeUtils;
 import com.shinwootns.data.entity.DeviceDhcp;
-import com.shinwootns.data.entity.DhcpFixedIp;
-import com.shinwootns.data.entity.DhcpIpStatus;
-import com.shinwootns.data.entity.DhcpMacFilter;
-import com.shinwootns.data.entity.DhcpNetwork;
-import com.shinwootns.data.entity.DhcpRange;
-import com.shinwootns.ipm.SpringBeanProvider;
-import com.shinwootns.ipm.data.mapper.DhcpMapper;
-//import com.shinwootns.ipm.service.handler.InfobloxWAPIHandler;
-//import com.shinwootns.ipm.service.handler.InfobloxWAPIHandler.NextPageData;
 import com.shinwootns.ipm.worker.BaseWorker;
 
 public class CollectDhcpTask extends BaseWorker{
 	
-	private final Logger _logger = Logger.getLogger(this.getClass());
+	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
 	private DeviceDhcp device;
 	

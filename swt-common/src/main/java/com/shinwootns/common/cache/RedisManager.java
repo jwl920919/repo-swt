@@ -1,9 +1,7 @@
 package com.shinwootns.common.cache;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-
-import com.shinwootns.common.utils.LogUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -12,7 +10,7 @@ import redis.clients.jedis.exceptions.JedisConnectionException;
 
 public class RedisManager {
 
-	private final Logger _logger = Logger.getLogger(this.getClass());
+	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
 	private JedisPoolConfig _config = null;
 	private JedisPool _redisPool = null;

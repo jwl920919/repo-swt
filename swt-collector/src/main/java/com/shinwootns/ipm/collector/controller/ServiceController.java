@@ -109,7 +109,7 @@ public class ServiceController {
 					.append(", SiteName=").append(siteInfo.getSiteName())
 					.toString()
 			);
-			SharedData.getInstance().site_info = siteInfo;
+			SharedData.getInstance().setsiteInfo( siteInfo );
 			
 			// Load DHCP
 			DeviceDhcp dhcpInfo = dataMapper.selectDeviceDhcp(siteInfo.getSiteId());
@@ -139,7 +139,8 @@ public class ServiceController {
 				insight.setSiteId(siteInfo.getSiteId());
 				insight.setPort(appProperty.serverPort);
 				insight.setVersion(appProperty.version);
-				insight.setEnableCollect(true);
+				insight.setClusterMode(appProperty.clusterMode);
+				insight.setClusterIndex(appProperty.clusterIndex);
 				
 				// Update
 				int affected = dataMapper.updateInsight(insight);

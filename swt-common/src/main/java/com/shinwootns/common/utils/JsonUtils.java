@@ -98,7 +98,7 @@ public class JsonUtils {
 		return ele.getAsNumber().longValue();
 	}
 	
-	public static boolean getValueToBoolean(JsonObject jObj, String key, boolean defaultValue) {
+	public static Boolean getValueToBoolean(JsonObject jObj, String key, Boolean defaultValue) {
 		
 		if (jObj == null)
 			return defaultValue;

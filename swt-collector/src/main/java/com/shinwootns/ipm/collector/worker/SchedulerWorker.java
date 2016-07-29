@@ -11,36 +11,39 @@ import com.shinwootns.common.cache.RedisClient;
 import com.shinwootns.common.cache.RedisManager.RedisPoolStatus;
 import com.shinwootns.common.utils.JsonUtils;
 import com.shinwootns.data.entity.DeviceDhcp;
+import com.shinwootns.ipm.collector.WorkerManager;
 import com.shinwootns.ipm.collector.data.SharedData;
 import com.shinwootns.ipm.collector.service.cluster.ClusterManager;
 import com.shinwootns.ipm.collector.service.infoblox.DhcpHandler;
 import com.shinwootns.ipm.collector.service.redis.RedisHandler;
-import com.shinwootns.data.status.DhcpStatus;
+import com.shinwootns.data.status.DhcpDeviceStatus;
 
-public class SchedulerWorker extends BaseWorker {
+public class SchedulerWorker implements Runnable {
 	
 	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
 	private final static int SCHEDULER_THREAD_COUNT = 2;
-	
-	public final static String KEY_DEIVCE_DHCP_STATUS = "status:device:dhcp";
 	
 	private ScheduledExecutorService schedulerService = Executors.newScheduledThreadPool(SCHEDULER_THREAD_COUNT);
 	
 	@Override
 	public void run() {
 		
+		ClusterManager.getInstance().updateMember();
+		ClusterManager.getInstance().checkMaster();
+		
 		_logger.info("SchedulerWorker... start.");
 		
-		// 3 Seconds
+		// Update ClusterMember
 		schedulerService.scheduleWithFixedDelay(
 				new Runnable() {
 					@Override
 					public void run() {
-						run3SecCycle();
+						ClusterManager.getInstance().updateMember();
+						ClusterManager.getInstance().checkMaster();
 					}
 				}
-				,0 ,3 ,TimeUnit.SECONDS
+				,0 ,5 ,TimeUnit.SECONDS
 		);
 		
 		// 10 Seconds
@@ -66,8 +69,7 @@ public class SchedulerWorker extends BaseWorker {
 		);
 		
 		// wait termination
-		while(this.isStopFlag() == false) {
-			
+		while(true) {
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
@@ -75,24 +77,15 @@ public class SchedulerWorker extends BaseWorker {
 			}
 		}
 		
-		// shutdown scheduler service
+		// shutdown scheduler
 		schedulerService.shutdown();
 		
 		_logger.info("SchedulerWorker... end.");
 	}
 	
-	// 3 Seconds
-	private void run3SecCycle() {
-		
-		ClusterManager.getInstance().updateMember();
-	}
-	
 	// 10 Seconds
 	private void run10SecCycle() {
-
-		ClusterManager.getInstance().checkMaster();
-		
-		updateRedisDhcpStatus();
+		// ...
 	}
 	
 	// 30 Seconds
@@ -100,51 +93,6 @@ public class SchedulerWorker extends BaseWorker {
 		
 		displayStatus();
 	}
-	
-	//region [FUNC] Update Dhcp Status
-	private void updateRedisDhcpStatus() {
-		
-		if ( ClusterManager.getInstance().isMaster() == false)
-			return;
-		
-		if (SharedData.getInstance().site_info == null)
-			return;
-		
-		DeviceDhcp dhcp = SharedData.getInstance().dhcpDevice;
-		if (dhcp == null)
-			return;
-		
-		RedisClient client = RedisHandler.getInstance().getRedisClient();
-		if(client != null)
-			return;
-
-		try {
-			
-			// DHCP Handler
-			DhcpHandler handler = new DhcpHandler(dhcp.getHost(), dhcp.getWapiUserid(), dhcp.getWapiPassword(), dhcp.getSnmpCommunity());
-			
-			DhcpStatus dhcpStatus = handler.getHWStatus();
-			
-			if (dhcpStatus != null) {
-				
-				// Serialize to Json
-				String json = JsonUtils.serialize(dhcpStatus);
-				
-				// Set value
-				client.set((new StringBuilder())
-						.append(KEY_DEIVCE_DHCP_STATUS).append(":")
-						.append(SharedData.getInstance().site_info.getSiteId()).toString()
-						, json
-				);
-			}
-			
-		} catch(Exception ex) {
-			_logger.error(ex.getMessage(), ex);
-		}finally {
-			client.close();
-		}
-	}
-	//endregion
 	
 	//region [FUNC] Display Status
 	private void displayStatus() {

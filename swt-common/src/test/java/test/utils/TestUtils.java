@@ -6,8 +6,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.shinwootns.common.utils.CollectionUtils;
 import com.shinwootns.common.utils.CryptoUtils;
@@ -18,7 +19,7 @@ import com.shinwootns.common.utils.NetworkUtils.InterfaceInfo;
 
 public class TestUtils {
 
-	private final Logger _logger = Logger.getLogger(this.getClass());
+	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
 	
 	/*
@@ -113,6 +114,7 @@ public class TestUtils {
 		}
 	}*/
 	
+	/*
 	@Test
 	public void testCollectionUtils() throws Exception {
 		
@@ -136,5 +138,5 @@ public class TestUtils {
 		System.out.println(linkedMap2.toString());
 		
 	}
-
+	 */
 }

@@ -1,6 +1,9 @@
 package com.shinwootns.ipm.collector.service.infoblox;
 
-import org.apache.log4j.Logger;
+import java.util.LinkedList;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -10,8 +13,11 @@ import com.shinwootns.common.snmp.SnmpResult;
 import com.shinwootns.common.snmp.SnmpUtil;
 import com.shinwootns.common.utils.JsonUtils;
 import com.shinwootns.common.utils.TimeUtils;
-import com.shinwootns.data.status.DhcpStatus;
-import com.shinwootns.data.status.DhcpStatus.License;
+import com.shinwootns.data.status.DhcpCounter;
+import com.shinwootns.data.status.DhcpDeviceStatus;
+import com.shinwootns.data.status.DhcpDeviceStatus.License;
+import com.shinwootns.data.status.DhcpVrrpStatus;
+import com.shinwootns.data.status.DnsCounter;
 
 public class DhcpHandler {
 	
@@ -21,6 +27,8 @@ public class DhcpHandler {
 	private final static String OID_ibHardwareType = "1.3.6.1.4.1.7779.3.1.1.2.1.4.0";
 	private final static String OID_ibSerialNumber = "1.3.6.1.4.1.7779.3.1.1.2.1.6.0";
 	private final static String OID_ibNiosVersion = "1.3.6.1.4.1.7779.3.1.1.2.1.7.0";
+	private final static String OID_ibDHCPStatistics = ".1.3.6.1.4.1.7779.3.1.1.4.1.3";				// DHCP Counter
+	private final static String OID_ibZoneStatisticsEntry = ".1.3.6.1.4.1.7779.3.1.1.3.1.1.1";		// DNS Counter
 	private final static String OID_ibSystemMonitorCpuUsage = "1.3.6.1.4.1.7779.3.1.1.2.1.8.1.1.0";
 	private final static String OID_ibSystemMonitorMemUsage = "1.3.6.1.4.1.7779.3.1.1.2.1.8.2.1.0";
 	private final static String OID_ibMemberServiceStatusEntry = "1.3.6.1.4.1.7779.3.1.1.2.1.9.1";
@@ -36,33 +44,31 @@ public class DhcpHandler {
 	//ibNode2ServiceStatus	1.3.6.1.4.1.7779.3.1.1.2.1.11.1.2
 	//ibNode2ServiceDesc	1.3.6.1.4.1.7779.3.1.1.2.1.11.1.3
 	
-	private final Logger _logger = Logger.getLogger(this.getClass());
+	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
 	private String host = "";
 	private String wapiUser = "";
 	private String wapiPasswd = "";
 	private String snmpCommunity = "";
 	
-	private InfobloxWAPIHandler wapiHandler; 
+	private InfobloxWAPIHandler wapiHandler = null;
 	
-	public DhcpHandler(String host, String wapiId, String wapiPwd, String snmpCommunity) {
+	//region Connect WAPI & SNMP
+	public boolean Connect(String host, String wapiId, String wapiPwd, String snmpCommunity) {
 		
 		this.host = host;
 		this.wapiUser = wapiId;
 		this.wapiPasswd = wapiPwd;
 		this.snmpCommunity = snmpCommunity;
 		
-		//WAPI Handler
-		wapiHandler = new InfobloxWAPIHandler(this.host, this.wapiUser, this.wapiPasswd);
-	}
-	
-	//region Connect WAPI & SNMP
-	public boolean Connect() {
-		
 		try
 		{
+			//WAPI Handler
+			if (wapiHandler == null)
+				wapiHandler = new InfobloxWAPIHandler();
+			
 			// Connect WAPI
-			if (wapiHandler.Connect()) {
+			if (wapiHandler.connect(this.host, this.wapiUser, this.wapiPasswd) == false) {
 				_logger.error( (new StringBuilder().append(host).append(", Connect WAPI... failed")).toString() );
 				return false;
 			}
@@ -78,10 +84,20 @@ public class DhcpHandler {
 			return true;
 		}
 		catch(Exception ex) {
-			_logger.fatal(ex.getMessage(), ex);
+			_logger.error(ex.getMessage(), ex);
 		}
 		
 		return false;
+	}
+	
+	public void close() {
+		try {
+			wapiHandler.close();
+		}
+		catch(Exception ex) {}
+		finally {
+			wapiHandler = null;
+		}
 	}
 	//endregion
 	
@@ -127,7 +143,7 @@ public class DhcpHandler {
 	}
 	//endregion
 	
-	//region [SNMP] Get Infoblox NioVersion
+	//region [SNMP] Get NioVersion
 	public String getNiosVersion() {
 		
 		SnmpUtil snmpUtil = new SnmpUtil(this.host, this.snmpCommunity);
@@ -140,10 +156,10 @@ public class DhcpHandler {
 	}
 	//endregion
 	
-	//region Get HW Status
-	public DhcpStatus getHWStatus() {
+	//region [FUNC] Get Device Status
+	public DhcpDeviceStatus getDeviceStatus() {
 		
-		DhcpStatus dhcpStatus = new DhcpStatus();
+		DhcpDeviceStatus dhcpStatus = new DhcpDeviceStatus();
 		dhcpStatus.host = this.host;
 		dhcpStatus.host_name = getSysName();
 		dhcpStatus.sys_uptime = getSysUptime();
@@ -191,8 +207,133 @@ public class DhcpHandler {
 	}
 	//endregion
 	
+	//region [FUNC] getVRRPStatus
+	public DhcpVrrpStatus getVRRPStatus() {
+		
+		DhcpVrrpStatus vrrp = new DhcpVrrpStatus();
+		vrrp.collect_time = TimeUtils.currentTimeMilis() / 1000;
+		
+		try {
+			
+			String hostName = getSysName();
+
+			// Get Node Info
+			JsonArray jArray = wapiHandler.getHAInfo(hostName);
+
+			if (jArray == null || jArray.size() == 0)
+				return null;
+			
+			JsonObject jObj = jArray.get(0).getAsJsonObject();
+			
+			vrrp.enable_ha = JsonUtils.getValueToBoolean(jObj, "enable_ha", false);
+			vrrp.master_candidate = JsonUtils.getValueToBoolean(jObj, "master_candidate", false);
+			vrrp.group_position = JsonUtils.getValueToString(jObj, "upgrade_group", "");
+			
+			// Lan2 Port Setting
+			JsonElement lan2Setting = jObj.get("lan2_port_setting");
+			if (lan2Setting != null && lan2Setting instanceof JsonObject) {
+				vrrp.lan2_port_setting = JsonUtils.getValueToBoolean(lan2Setting.getAsJsonObject(), "enabled", false);
+				vrrp.nic_failover_enabled = JsonUtils.getValueToBoolean(lan2Setting.getAsJsonObject(), "nic_failover_enabled", false);
+			}
+			
+			// VIP Setting
+			JsonElement vipSetting = jObj.get("vip_setting");
+			if (vipSetting != null && vipSetting instanceof JsonObject) {
+				vrrp.vrrp_address = JsonUtils.getValueToString(vipSetting, "address", "");
+				vrrp.vrrp_gateway = JsonUtils.getValueToString(vipSetting, "gateway", "");
+				vrrp.vrrp_subnet = JsonUtils.getValueToString(vipSetting, "subnet_mask", "");
+			}
+			
+			/*
+			JsonElement svcComm = jArray.get(0).getAsJsonObject().get("member_service_communication");
+			if (svcComm != null && svcComm instanceof JsonArray) {
+				
+				JsonArray array = svcComm.getAsJsonArray();
+				
+				//extractNodeInfo(dhcpStatus, jNodeArray);
+			}*/
+
+		}
+		catch(Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+		}
+		
+		return vrrp;
+	}
+	//endregion
+	
+	//region [FUNC] getDhcpCounter
+	public DhcpCounter getDhcpCounter() {
+		
+		DhcpCounter counter = new DhcpCounter();
+		counter.collect_time = TimeUtils.currentTimeMilis() / 1000;
+		
+		SnmpUtil snmpUtil = new SnmpUtil(this.host, this.snmpCommunity);
+		LinkedList<SnmpResult> listResult = snmpUtil.snmpWalk(1, OID_ibDHCPStatistics, 1000, 3);
+		
+		if (listResult != null) {
+			for(SnmpResult result : listResult) {
+				
+				int index = result.getOid().get(13);
+				
+				if ( index == 1 )
+					counter.discovers = (int)result.getValueNumber().doubleValue();
+				else if ( index == 2 )
+					counter.requests = (int)result.getValueNumber().doubleValue();
+				else if ( index == 3 )
+					counter.releases = (int)result.getValueNumber().doubleValue();
+				else if ( index == 4 )
+					counter.offers = (int)result.getValueNumber().doubleValue();
+				else if ( index == 5 )
+					counter.acks = (int)result.getValueNumber().doubleValue();
+				else if ( index == 6 )
+					counter.nacks = (int)result.getValueNumber().doubleValue();
+				else if ( index == 7 )
+					counter.declines = (int)result.getValueNumber().doubleValue();
+				else if ( index == 8 )
+					counter.informs = (int)result.getValueNumber().doubleValue();
+			}
+		}
+		
+		return counter;
+	}
+	//endregion
+	
+	//region [FUNC] getDnsCounter
+	public DnsCounter getDnsCounter() {
+		
+		DnsCounter counter = new DnsCounter();
+		counter.collect_time = TimeUtils.currentTimeMilis() / 1000;
+		
+		SnmpUtil snmpUtil = new SnmpUtil(this.host, this.snmpCommunity);
+		LinkedList<SnmpResult> listResult = snmpUtil.snmpWalk(1, OID_ibZoneStatisticsEntry, 1000, 3);
+		
+		if (listResult != null) {
+			for(SnmpResult result : listResult) {
+				
+				int index = result.getOid().get( 14 ); 
+				
+				if (index == 2)
+					counter.success = (int)result.getValueNumber().doubleValue();
+				else if (index == 3)
+					counter.referral = (int)result.getValueNumber().doubleValue();
+				else if (index == 4)
+					counter.nxrrset = (int)result.getValueNumber().doubleValue();
+				else if (index == 5)
+					counter.nxdomain = (int)result.getValueNumber().doubleValue();
+				else if (index == 6)
+					counter.recursion = (int)result.getValueNumber().doubleValue();
+				else if (index == 7)
+					counter.failure = (int)result.getValueNumber().doubleValue();
+			}
+		}
+		
+		return counter;
+	}
+	//endregion
+	
 	//region Extract Node Info
-	private void extractNodeInfo(DhcpStatus dhcpStatus, JsonArray jNodeArray) {
+	private void extractNodeInfo(DhcpDeviceStatus dhcpStatus, JsonArray jNodeArray) {
 		
 		if (dhcpStatus == null || jNodeArray == null)
 			return;
@@ -350,7 +491,7 @@ public class DhcpHandler {
 	//endregion
 
 	//region Extract License Info
-	private void extractLicenseInfo(DhcpStatus dhcpStatus, JsonArray jLicenseArray) {
+	private void extractLicenseInfo(DhcpDeviceStatus dhcpStatus, JsonArray jLicenseArray) {
 		
 		if (dhcpStatus == null || jLicenseArray == null)
 			return;
@@ -368,7 +509,7 @@ public class DhcpHandler {
 	//endregion
 	
 	//region Extract Service Enabled
-	private void extractServiceEnableInfo(DhcpStatus dhcpStatus, JsonArray jServiceArray) {
+	private void extractServiceEnableInfo(DhcpDeviceStatus dhcpStatus, JsonArray jServiceArray) {
 		
 		if (dhcpStatus == null || jServiceArray == null)
 			return;
@@ -393,4 +534,5 @@ public class DhcpHandler {
 		}
 	}
 	//endregion
+
 }

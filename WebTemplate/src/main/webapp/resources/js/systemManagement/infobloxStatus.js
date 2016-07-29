@@ -2,28 +2,31 @@ $("#layDiv").css("visibility", "hidden");
 // iMemoryUsg iSwapUsg iDbUsg iDiskUsg iCapacityUsg
 var m_hardwareStateAjaxCall;
 var m_redundancyStateAjaxCall;
-var hardwareStateAjaxCallTime = 100;
-var redundancyStateAjaxCallTime = 100;
+var m_DchpMessageAjaxCall;
+var hardwareStateAjaxCallTime = 5000;
+var redundancyStateAjaxCallTime = 5000;
+var DchpMessageAjaxCallTime = 5000;
 var hwData;
 var rData;
+var dhcpData;
 
 $(document).ready(function() {
-    HardwareStateAjaxCall();
+    AllClearAjaxCall();
+    m_hardwareStateAjaxCall = setInterval(HardwareStateAjaxCall, 0);
+    m_redundancyStateAjaxCall = setInterval(redundancyStateAjaxCall, 0);
+    m_DchpMessageAjaxCall = setInterval(DchpMessageAjaxCall, 0);
     jQueryKnob(); // jQueryKnob 차트관련 스크립트
+    fnPieChartTooltipBind($("#dhcpPieChart"));
 });
-
+$(window).resize(function() {
+    $('#dhcp-table').css('width', $('#dhcp-body').width() - 150);
+}).resize();
 // jQueryKnob 차트관련 스크립트
 function jQueryKnob() {
     /* jQueryKnob 차트관련 스크립트 */
     $(".knob")
             .knob(
                     {
-                        /*
-                         * change : function (value) { //console.log("change : " +
-                         * value); }, release : function (value) {
-                         * console.log("release : " + value); }, cancel :
-                         * function () { console.log("cancel : " + this.value); },
-                         */
                         draw : function() {
 
                             // "tron" case
@@ -72,39 +75,101 @@ function jQueryKnob() {
                             }
                         }
                     });
-    /* END JQUERY KNOB */
 }
+// DHCP 메세지 정보를 불러오기 위한 AjaxCall
+function DchpMessageAjaxCall() {
+    try {
+        $.getJSON("/systemManagement/getDhcpMessagesInfo", function(json) {
+            dhcpData = json.resultValue;
+            if (dhcpData != "") {
+                if (dhcpData.dhcp_msg_info != "") {
+                    $.plot("#dhcpPieChart", dhcpData.dhcp_msg_info, {
+                        series : {
+                            pie : {
+                                show : true,
+                                radius : 1,
+                                // innerRadius: 0.5,
+                                label : {
+                                    show : true,
+                                    radius : 2 / 3,
+                                    formatter : labelFormatter,
+                                    threshold : 0.1
+                                }
+                            },
+                            trendline : {
+                                show : true
+                            }
+                        },
+                        legend : {
+                            show : false
+                        },
+                        grid : {
+                            hoverable : true,
+                            clickable : true
+                        }
+                    });
+                    
+                    //dhcp-td-1
+                    $('#dhcp-td-1').html(dhcpData.dhcp_msg_info[0].data);
+                    $('#dhcp-td-2').html(dhcpData.dhcp_msg_info[1].data);
+                    $('#dhcp-td-3').html(dhcpData.dhcp_msg_info[2].data);
+                    $('#dhcp-td-4').html(dhcpData.dhcp_msg_info[3].data);
+                    $('#dhcp-td-5').html(dhcpData.dhcp_msg_info[4].data);
+                    $('#dhcp-td-6').html(dhcpData.dhcp_msg_info[5].data);
+                    $('#dhcp-td-7').html(dhcpData.dhcp_msg_info[6].data);
+                    $('#dhcp-td-8').html(dhcpData.dhcp_msg_info[7].data);
+                    
+                    
+
+                    clearDchpMessageAjaxCall();
+                    m_DchpMessageAjaxCall = setInterval(DchpMessageAjaxCall,
+                            DchpMessageAjaxCallTime);// 페이지 로딩 데이터 조회 후 polling
+                    // 시간 변경
+                }
+            }
+        });
+
+        
+    } catch (e) {
+        console.log("infobloxStatus.js DchpMessageAjaxCall() Error Log : "
+                + e.message);
+    }
+}
+function clearDchpMessageAjaxCall() {
+    clearInterval(m_DchpMessageAjaxCall);
+}
+
 // 하드웨어 정보를 불러오기 위한 AjaxCall
 function HardwareStateAjaxCall() {
     try {
 
         $.getJSON("/systemManagement/getHwInfo", function(json) {
             hwData = json.resultValue;
+            if (hwData != "") {
+                setInfobloxCpuUsgStatus();
+                setInfobloxMemoryUsgStatus();
+                setInfobloxSwapUsgStatus();
+                setInfobloxDbUsgStatus();
+                setInfobloxDiskUsgStatus();
+                setInfobloxCapacityUsgStatus();
+                setInfobloxHost();
+                setInfobloxHostName();
+                setInfobloxHardwareID();
+                setInfobloxSysUptime();
+                setInfobloxSysTmep();
+                setInfobloxPowerStatus();
+                setInfobloxFanStatus();
+                setInfobloxLicenseStatus();
+                setInfobloxServiceStatus();
+                setInfobloxOS();
+                setInfobloxCollectTime();
+                clearHardwareStateAjaxCall();
+                m_hardwareStateAjaxCall = setInterval(HardwareStateAjaxCall,
+                        hardwareStateAjaxCallTime);// 페이지 로딩 데이터 조회 후 polling
+                                                    // 시간 변경
+            }
         });
 
-        if (hwData != "") {
-            setInfobloxCpuUsgStatus();
-            setInfobloxMemoryUsgStatus();
-            setInfobloxSwapUsgStatus();
-            setInfobloxDbUsgStatus();
-            setInfobloxDiskUsgStatus();
-            setInfobloxCapacityUsgStatus();
-            setInfobloxHost();
-            setInfobloxHostName();
-            setInfobloxHardwareID();
-            setInfobloxSysUptime();
-            setInfobloxSysTmep();
-            setInfobloxPowerStatus();
-            setInfobloxFanStatus();
-            setInfobloxLicenseStatus();
-            setInfobloxServiceStatus();
-            setInfobloxOS();
-            setInfobloxCollectTime();
-            clearHardwareStateAjaxCall();
-            m_hardwareStateAjaxCall = setInterval(HardwareStateAjaxCall,
-                    hardwareStateAjaxCallTime);// 페이지 로딩 데이터 조회 후 polling 시간 변경
-            hardwareStateAjaxCallTime = 5000;
-        }
     } catch (e) {
         console.log("infobloxStatus.js HardwareStateAjaxCall() Error Log : "
                 + e.message);
@@ -117,20 +182,24 @@ function clearHardwareStateAjaxCall() {
 
 function redundancyStateAjaxCall() {
     try {
-        rData = "{\"lan2_port_setting\":true,\"enable_ha\":true,\"vrrp_address\":\"192.168.1.11\",\"vrrp_subnet\":\"255.255.255.0\",";
-        rData += "\"vrrp_gateway\":\"192.168.1.254\",\"master_candidate\":true,\"upgrade_group\":\"GridMaster\",\"collect_time\":1469614415}";
-        if (rData != "") {
-            setPortRedundancyEnabled();
-            setHaEnabled();
-            setVrrpAddrsetting();
-            setVrrpSubnetsetting();
-            setVrrpGatewaysetting();
-            setGridEnabled();
-            setGridStatus();
-            m_redundancyStateAjaxCall = setInterval(redundancyStateAjaxCall,
-                    hardwareStateAjaxCallTime);// 페이지 로딩 데이터 조회 후 polling 시간 변경
-            redundancyStateAjaxCallTime = 5000;
-        }
+        $.getJSON("/systemManagement/getRedundancyStatus", function(json) {
+            rData = json.resultValue;
+            if (rData != "") {
+                setPortRedundancyEnabled();
+                setHaEnabled();
+                setVrrpAddrsetting();
+                setVrrpSubnetsetting();
+                setVrrpGatewaysetting();
+                setGridEnabled();
+                setGridStatus();
+                setInfobloxRedundancyCollectTime();
+                clearRedundancyStateAjaxCall();
+                m_redundancyStateAjaxCall = setInterval(redundancyStateAjaxCall,
+                        redundancyStateAjaxCallTime);// 페이지 로딩 데이터 조회 후 polling
+                // 시간 변경
+            }
+        });
+       
     } catch (e) {
         console.log("infobloxStatus.js redundancyStateAjaxCall() Error Log : "
                 + e.message);
@@ -485,7 +554,7 @@ function setInfobloxCollectTime() {
         if (hwData.collect_time != "") {
             $('#hw-collect-time').html(
                     new Date(hwData.collect_time * 1000)
-                            .format('yyyy/MM/dd hh:mm:ss'));
+                            .format('yyyy/MM/dd HH:mm:ss'));
         }
     } catch (e) {
         console.log("infobloxStatus.js setInfobloxCollectTime() Error Log : "
@@ -516,6 +585,12 @@ function setInfobloxServiceStatus() {
 
 function setPortRedundancyEnabled() {
     try {
+        $('#lan2-port-setting').attr("class", "fa fa-circle normal");
+        if (rData.lan2_port_setting) {
+            $('#lan2-port-setting').addClass('normal');
+        } else {
+            $('#lan2-port-setting').addClass('error');
+        }
     } catch (e) {
         console.log("infobloxStatus.js setPortRedundancyEnabled() Error Log : "
                 + e.message);
@@ -523,6 +598,13 @@ function setPortRedundancyEnabled() {
 }
 function setHaEnabled() {
     try {
+        console.log(rData);
+        $('#enable-ha').attr("class", "fa fa-circle normal");
+        if (rData.enable_ha) {
+            $('#enable-ha').addClass('normal');
+        } else {
+            $('#enable-ha').addClass('error');
+        }
     } catch (e) {
         console
                 .log("infobloxStatus.js setHaEnabled() Error Log : "
@@ -531,6 +613,9 @@ function setHaEnabled() {
 }
 function setVrrpAddrsetting() {
     try {
+        if (rData.vrrp_address != "") {
+            $('#vrrp-address').html(rData.vrrp_address);
+        }
     } catch (e) {
         console.log("infobloxStatus.js setVrrpAddrsetting() Error Log : "
                 + e.message);
@@ -538,6 +623,9 @@ function setVrrpAddrsetting() {
 }
 function setVrrpSubnetsetting() {
     try {
+        if (rData.vrrp_subnet != "") {
+            $('#vrrp-subnet').html(rData.vrrp_subnet);
+        }
     } catch (e) {
         console.log("infobloxStatus.js setVrrpSubnetsetting() Error Log : "
                 + e.message);
@@ -545,6 +633,9 @@ function setVrrpSubnetsetting() {
 }
 function setVrrpGatewaysetting() {
     try {
+        if (rData.vrrp_gateway != "") {
+            $('#vrrp-gateway').html(rData.vrrp_gateway);
+        }
     } catch (e) {
         console.log("infobloxStatus.js setVrrpGatewaysetting() Error Log : "
                 + e.message);
@@ -552,6 +643,12 @@ function setVrrpGatewaysetting() {
 }
 function setGridEnabled() {
     try {
+        $('#master-candidate').attr("class", "fa fa-circle");
+        if (rData.master_candidate) {
+            $('#master-candidate').addClass('normal');
+        } else {
+            $('#master-candidate').addClass('error');
+        }
     } catch (e) {
         console.log("infobloxStatus.js setGridEnabled() Error Log : "
                 + e.message);
@@ -559,11 +656,28 @@ function setGridEnabled() {
 }
 function setGridStatus() {
     try {
+        if (rData.group_position != "") {
+            $('#grid-status').html(rData.group_position);
+        }
     } catch (e) {
         console.log("infobloxStatus.js setGridStatus() Error Log : "
                 + e.message);
     }
 }
+
+// collect time setting
+function setInfobloxRedundancyCollectTime() {
+    try {
+        if (rData.collect_time != "") {
+            $('#reduncdancy-collect-time').html(
+                    new Date(rData.collect_time * 1000)
+                            .format('yyyy/MM/dd HH:mm:ss'));
+        }
+    } catch (e) {
+        console.log("infobloxStatus.js setInfobloxCollectTime() Error Log : "
+                + e.message);
+    }
+};
 
 // DateFormat setting
 Date.prototype.format = function(f) {
@@ -600,3 +714,57 @@ Date.prototype.format = function(f) {
         }
     });
 };
+
+// Pie Chart Tooltip Bind
+function fnPieChartTooltipBind(chart) {
+    function showTooltip(x, y, contents) {
+        $('<div id="tooltip">' + contents + '</div>').css({
+            position : 'absolute',
+            display : 'none',
+            top : y + 10,
+            left : x + 10,
+            border : '1px solid #fdd',
+            padding : '2px',
+            'background-color' : '#f2f2f2',
+            color : '#000000',
+            opacity : 0.9
+        }).appendTo("body").fadeIn(200);
+    }
+
+    var previousPoint = null;
+    chart.bind("plothover", function(event, pos, item) {
+        $("#x").text(pos.pageX);
+        $("#y").text(pos.pageY);
+        if (item) {
+
+            // alert(typeof item.series.label === 'string');
+            // alert(item.series.label + ", " +item.series.data);
+            if (previousPoint != item.datapoint) {
+                previousPoint = item.datapoint;
+                $("#tooltip").remove();
+                // showTooltip(pos.pageX, pos.pageY, "Hover @" + pos.pageX + " ,
+                // " + pos.pageY);
+                showTooltip(pos.pageX, pos.pageY, item.series.label + " : "
+                        + item.series.data[0][1]);
+            }
+        } else {
+            $("#tooltip").remove();
+            previousPoint = null;
+        }
+    });
+    chart.bind("plotclick", function(event, pos, item) {
+        if (item) {
+            $("#clickdata").text(
+                    "You clicked point " + item.dataIndex + " in "
+                            + item.series.label + ".");
+            // plot.highlight(item.series, item.datapoint);
+
+        }
+    });
+}
+
+function AllClearAjaxCall() {
+    clearInterval(m_hardwareStateAjaxCall);
+    clearInterval(m_redundancyStateAjaxCall);
+    clearInterval(m_DchpMessageAjaxCall);
+}

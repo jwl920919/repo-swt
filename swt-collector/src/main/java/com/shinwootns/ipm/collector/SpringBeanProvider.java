@@ -1,6 +1,7 @@
 package com.shinwootns.ipm.collector;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -10,7 +11,7 @@ import com.shinwootns.ipm.collector.data.mapper.DataMapper;
 @Component
 public class SpringBeanProvider {
 	
-	private final Logger _logger = Logger.getLogger(this.getClass());
+	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
 	private ApplicationContext _context = null;
 	private ApplicationProperty appProperty = null;
