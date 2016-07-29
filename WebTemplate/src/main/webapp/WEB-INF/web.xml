@@ -11,8 +11,6 @@
 	</context-param>
 	
 	<!--  log4j -->
-	
-
 	<context-param>
 		<param-name>webAppRootKey</param-name>
 		<param-value>myapp.root</param-value>
