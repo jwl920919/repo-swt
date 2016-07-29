@@ -41,8 +41,7 @@ import scala.annotation.meta.setter;
 
 @Controller
 public class PageController {
-	private final static java.text.SimpleDateFormat SIMPLE_DATE_FORMAT = new java.text.SimpleDateFormat(
-			"yyyy-MM-dd HH:mm:ss");
+	private final static java.text.SimpleDateFormat SIMPLE_DATE_FORMAT = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	private static final Logger logger = LoggerFactory.getLogger(PageController.class);
 	private Gson gson = new Gson();		
 	private AjaxResult result = new AjaxResult();
