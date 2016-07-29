@@ -1,5 +1,7 @@
 package com.shinwootns.ipm.collector.service.infoblox;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 
 import org.slf4j.Logger;
@@ -9,10 +11,17 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.shinwootns.common.infoblox.InfobloxWAPIHandler;
+import com.shinwootns.common.infoblox.NextPageData;
 import com.shinwootns.common.snmp.SnmpResult;
 import com.shinwootns.common.snmp.SnmpUtil;
 import com.shinwootns.common.utils.JsonUtils;
+import com.shinwootns.common.utils.NetworkUtils;
 import com.shinwootns.common.utils.TimeUtils;
+import com.shinwootns.common.utils.ip.IPAddr;
+import com.shinwootns.common.utils.ip.IPNetwork;
+import com.shinwootns.data.entity.DhcpIpStatus;
+import com.shinwootns.data.entity.DhcpNetwork;
+import com.shinwootns.data.entity.DhcpRange;
 import com.shinwootns.data.status.DhcpCounter;
 import com.shinwootns.data.status.DhcpDeviceStatus;
 import com.shinwootns.data.status.DhcpDeviceStatus.License;
@@ -155,6 +164,260 @@ public class DhcpHandler {
 		return null;
 	}
 	//endregion
+	
+	//region [FUNC] Get Network
+	public LinkedList<DhcpNetwork> getDhcpNetwork(int site_id) {
+		
+		LinkedList<DhcpNetwork> listNetwork = new LinkedList<DhcpNetwork>();
+		
+		if (wapiHandler == null)
+			return listNetwork;
+
+		try {
+		
+			// Collect Network
+			JsonArray jArray = wapiHandler.getNetworkInfo();
+			
+			if (jArray != null)
+			for(JsonElement obj : jArray) {
+				
+				String network = JsonUtils.getValueToString((JsonObject)obj, "network", "");
+				
+				if (network != null && network.isEmpty() == false) {
+					
+					DhcpNetwork dhcpNetwork = new DhcpNetwork();
+					dhcpNetwork.setSiteId(site_id);
+					dhcpNetwork.setNetwork(network);
+					dhcpNetwork.setComment(JsonUtils.getValueToString(obj, "comment", ""));
+					
+					IPNetwork ipNetwork = new IPNetwork(network);
+					dhcpNetwork.setStartIp(ipNetwork.getStartIP().toString());
+					dhcpNetwork.setEndIp(ipNetwork.getEndIP().toString());
+					// IP Num
+					dhcpNetwork.setStartNum(ipNetwork.getStartIP().getNumberToBigInteger());
+					dhcpNetwork.setEndNum(ipNetwork.getEndIP().getNumberToBigInteger());
+					// IP Counts
+					dhcpNetwork.setIpCount(ipNetwork.getIPCount());
+					
+					// IPv6
+					if (network.indexOf(":") >= 0 ) {
+						dhcpNetwork.setIpType("IPV6");
+					}
+					// IPv4
+					else if (network.indexOf(".") >= 0 ) {
+						dhcpNetwork.setIpType("IPV4");
+					}
+										
+					listNetwork.add(dhcpNetwork);
+				}
+			}
+		}
+		catch(Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+		}
+
+		return listNetwork;
+	}
+	//endregion
+	
+	//region [FUNC] Get Range
+	public LinkedList<DhcpRange> getDhcpRange(int site_id) {
+		
+		LinkedList<DhcpRange> listRange = new LinkedList<DhcpRange>();
+		
+		if (wapiHandler == null)
+			return listRange;
+
+		try {
+		
+			// Collect Range
+			JsonArray jArray = wapiHandler.getRangeInfo();
+			
+			if (jArray != null)
+			for(JsonElement obj : jArray) {
+				
+				String network = JsonUtils.getValueToString((JsonObject)obj, "network", "");
+				
+				if (network != null && network.isEmpty() == false) {
+					
+					DhcpRange dhcpRange = new DhcpRange();
+					dhcpRange.setSiteId(site_id);
+					dhcpRange.setNetwork(network);
+					dhcpRange.setStartIp(JsonUtils.getValueToString((JsonObject)obj, "start_addr", ""));
+					dhcpRange.setEndIp(JsonUtils.getValueToString((JsonObject)obj, "end_addr", ""));
+					
+					IPAddr startIPAddr = new IPAddr(dhcpRange.getStartIp());
+					IPAddr endIPAddr = new IPAddr(dhcpRange.getEndIp());
+					
+					// IP Num
+					dhcpRange.setStartNum(startIPAddr.getNumberToBigInteger());
+					dhcpRange.setEndNum(endIPAddr.getNumberToBigInteger());
+					// IP Count
+					dhcpRange.setIpCount(endIPAddr.getNumberToBigInteger().subtract(startIPAddr.getNumberToBigInteger()));
+					
+					// IPv6
+					if (network.indexOf(":") >= 0 ) {
+						dhcpRange.setIpType("IPV6");
+					}
+					// IPv4
+					else if (network.indexOf(".") >= 0 ) {
+						dhcpRange.setIpType("IPV4");
+					}
+					
+					
+					listRange.add(dhcpRange);
+				}
+			}
+		}
+		catch(Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+		}
+
+		return listRange;
+	}
+	//endregion
+	
+	//region [FUNC] Get IP Status
+	public LinkedList<DhcpIpStatus> getDhcpIpStatus(int site_id, DhcpNetwork network) {
+
+		LinkedList<DhcpIpStatus> listIPStatus = new LinkedList<DhcpIpStatus>();
+		
+		if (wapiHandler == null)
+			return listIPStatus;
+		
+		int splitCount = 100;
+		int ipCount = 0;
+		
+		HashMap<String, DhcpIpStatus> mapIp = new HashMap<String, DhcpIpStatus>();
+		
+		if (network.getIpType().equals("IPV4")) {
+			// Collect IPv4
+			NextPageData nextData1 = wapiHandler.getIPv4AddressFirst(splitCount, network.getNetwork());
+			extractIpv4Data(site_id, nextData1, mapIp);
+			
+			while(nextData1 != null && nextData1.IsExistNextPage()) {
+				
+				nextData1 = wapiHandler.getIPv4AddressNext(splitCount, nextData1.nextPageID);
+				extractIpv4Data(site_id, nextData1, mapIp);
+			}
+		}
+		else if (network.getIpType().equals("IPV6")) {
+			// Collect IPv6
+			//NextPageData nextData2 = wapiHandler.getIPv6AddressFirst(splitCount, network);
+			//extractIpv6Data(nextData2, mapIp);
+				
+			//while(nextData2 != null && nextData2.IsExistNextPage()) {
+
+			//	nextData2 = wapiHandler.getIPv6AddressNext(splitCount, nextData2.nextPageID);
+			//	extractIpv6Data(nextData2, mapIp);
+			
+		 	//}
+		}
+		
+		// Collect Lease IP
+		NextPageData nextData3 = wapiHandler.getLeaseIPFirst(splitCount, network.getNetwork());
+		extractLeaseIpData(nextData3, mapIp);
+		
+		while(nextData3 != null && nextData3.IsExistNextPage()) {
+			
+			nextData3 = wapiHandler.getLeaseIPNext(splitCount, nextData3.nextPageID);
+			extractLeaseIpData(nextData3, mapIp);
+		}
+		
+		listIPStatus.addAll(mapIp.values());
+		
+		return listIPStatus;
+	}
+	//endregion
+	
+	private void extractIpv4Data(int site_id, NextPageData nextData, HashMap<String, DhcpIpStatus> mapIp) {
+		
+		if (nextData == null || nextData.jArrayData == null)
+			return;
+		
+		for(JsonElement ele : nextData.jArrayData) {
+			
+			JsonObject jObj = ele.getAsJsonObject();
+			
+			try
+			{
+				DhcpIpStatus ip = new DhcpIpStatus();
+				ip.setSiteId(site_id);
+				ip.setIpaddr(JsonUtils.getValueToString(jObj, "ip_address", ""));
+				ip.setIpNum( (new IPAddr(ip.getIpaddr()).getNumberToBigInteger()) );
+				ip.setIpType("IPV4");
+				ip.setNetwork(JsonUtils.getValueToString(jObj, "network", ""));
+				ip.setMacaddr(JsonUtils.getValueToString(jObj, "mac_address", "").toUpperCase());
+				ip.setIsConflict(JsonUtils.getValueToBoolean(jObj, "is_conflict", false));
+				ip.setStatus(JsonUtils.getValueToString(jObj, "status", ""));
+				ip.setLeaseState(JsonUtils.getValueToString(jObj, "lease_state", ""));
+				ip.setDiscoverStatus(JsonUtils.getValueToString(jObj, "discover_now_status", ""));
+				ip.setFingerprint(JsonUtils.getValueToString(jObj, "fingerprint", ""));
+				
+				// merge value
+				ip.setHostname(JsonUtils.getMergeValueToString(jObj, "names", ""));
+				ip.setConflictTypes(JsonUtils.getMergeValueToString(jObj, "conflict_types", ""));
+				ip.setObjTypes(JsonUtils.getMergeValueToString(jObj, "types", ""));
+				ip.setUsage(JsonUtils.getMergeValueToString(jObj, "usage", ""));
+				ip.setHostOs(JsonUtils.getMergeValueToString(jObj, "discovered_data.os", ""));
+				
+				
+				long lastDiscoverd = JsonUtils.getValueToNumber(jObj, "discovered_data.last_discovered", 0);
+				if (lastDiscoverd > 0)
+					ip.setLastDiscovered(TimeUtils.convertLongToTimestamp(lastDiscoverd * 1000));
+
+				// Put Data
+				if (mapIp.containsKey(ip.getIpaddr()) == false)
+					mapIp.put(ip.getIpaddr(), ip);
+				else
+					_logger.warn("Check duplicated ipv4 address :" + ip.getIpaddr());
+			}
+			catch(Exception ex) {
+				_logger.error(ex.getMessage(), ex);
+			}
+		}
+	}
+	
+	private void extractIpv6Data(NextPageData nextData, HashMap<String, DhcpIpStatus> mapIp) {
+		
+	}
+	
+	private void extractLeaseIpData(NextPageData nextData, HashMap<String, DhcpIpStatus> mapIp) {
+		
+		if (nextData == null || nextData.jArrayData == null)
+			return;
+		
+		for(Object obj : nextData.jArrayData) {
+			
+			try
+			{
+				JsonObject jObj = (JsonObject)obj; 
+				
+				String ipAddr = JsonUtils.getValueToString(jObj, "address", "");
+				if (ipAddr == null || ipAddr.isEmpty())
+					continue;
+				
+				if (mapIp.containsKey(ipAddr))
+				{
+					DhcpIpStatus ip = mapIp.get(ipAddr);
+					
+					ip.setIsNeverEnds(JsonUtils.getValueToBoolean(jObj, "never_ends", false));
+					ip.setIsNeverStart(JsonUtils.getValueToBoolean(jObj, "never_starts", false));
+					
+					long startTime = JsonUtils.getValueToNumber((JsonObject)obj, "starts", 0);
+					if (startTime > 0)
+						ip.setLeaseStartTime(TimeUtils.convertLongToTimestamp(startTime * 1000));
+					
+					long endTime = JsonUtils.getValueToNumber((JsonObject)obj, "ends", 0);
+					if (endTime > 0)
+						ip.setLeaseEndTime(TimeUtils.convertLongToTimestamp(endTime * 1000));
+				}
+			}
+			catch(Exception ex) {
+				_logger.error(ex.getMessage(), ex);
+			}
+		}
+	}
 	
 	//region [FUNC] Get Device Status
 	public DhcpDeviceStatus getDeviceStatus() {

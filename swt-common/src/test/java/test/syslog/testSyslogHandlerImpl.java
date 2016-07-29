@@ -1,5 +1,6 @@
 package test.syslog;
 
+/*
 import org.apache.log4j.Level;
 
 import com.shinwootns.common.network.SyslogEntity;
@@ -16,3 +17,4 @@ public class testSyslogHandlerImpl implements SyslogReceiveHandler {
 		// ...
 	}
 }
+*/

@@ -41,7 +41,7 @@ public class SyslogWorker implements Runnable {
 			return;
 		
 		if ( _logger != null)
-			_logger.info(String.format("Syslog Producer#%d... start.", this._index));
+			_logger.info( (new StringBuilder()).append("Syslog Producer#").append(this._index).append("... start.").toString());
 		
 		List<SyslogEntity> listSyslog = SharedData.getInstance().popSyslogList(1000, 500);
 
@@ -78,7 +78,6 @@ public class SyslogWorker implements Runnable {
 				
 				listSyslog.clear();
 				
-				//_logger.debug( String.format("Syslog Producer#%d... process end:%d", this._index, count));
 			}
 
 			try {
@@ -89,6 +88,6 @@ public class SyslogWorker implements Runnable {
 		}
 		
 		if ( this._logger != null)
-			_logger.info(String.format("Syslog Producer#%d... end.", this._index));
+			_logger.info( (new StringBuilder()).append("Syslog Producer#").append(this._index).append("... end.").toString());
 	}
 }

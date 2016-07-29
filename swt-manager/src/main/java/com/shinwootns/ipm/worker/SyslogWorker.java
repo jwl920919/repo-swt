@@ -1,6 +1,9 @@
 package com.shinwootns.ipm.worker;
 
+/*
 import java.util.List;
+import java.util.Timer;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +42,7 @@ public class SyslogWorker extends BaseWorker {
 		if (isSkipInDebugMode())
 			return;
 
-		_logger.info(String.format("SyslogWorker#%d... start.", this._index));
+		_logger.info((new StringBuilder()).append("SyslogWorker#").append(this._index).append("... start.").toString());
 		
 		List<JsonObject> listSyslog = null;
 		
@@ -72,62 +75,70 @@ public class SyslogWorker extends BaseWorker {
 			
 			listSyslog.clear();
 			listSyslog = null;
+			
+			try {
+				Thread.sleep(0);
+			} catch (InterruptedException e) {
+				break;
+			}
 		}
+		
+		_logger.info((new StringBuilder()).append("SyslogWorker#").append(this._index).append("... end.").toString());
 		
 		//if ( this._logger != null)
 		//	_logger.info(String.format("Syslog Consumer#%d... end.", this._index));
 		
-		/*
-		// Process Infoblox DHCP
-		try
-		{
-			String rawData = _syslog.getData();
-
-			// Remove Carriage-Return & Line-Feed
-			rawData = rawData.replaceAll("\\r\\n|\\r|\\n", " ");
-			
-			// Trim
-			rawData = rawData.trim();
-			
-			JSonObject jResult = SyslogParser.processSyslog(rawData);
-			
-			// Check Result
-	        if (jResult != null && jResult.containsKey("result") && jResult.get("result") == Boolean.TRUE)
-	        {
-	        	System.out.println(String.format("%s", jResult.toJSONString()));
-	        	
-	        	return;
-	        }
-	        else
-	        {
-	        	//System.out.println(String.format("[Unknown] %s", rawData));
-	        }
-
-		}
-		catch(Exception ex)
-		{
-			_logger.error(ex.getMessage(), ex);
-		}
-		*/
+		
+//		// Process Infoblox DHCP
+//		try
+//		{
+//			String rawData = _syslog.getData();
+//
+//			// Remove Carriage-Return & Line-Feed
+//			rawData = rawData.replaceAll("\\r\\n|\\r|\\n", " ");
+//			
+//			// Trim
+//			rawData = rawData.trim();
+//			
+//			JSonObject jResult = SyslogParser.processSyslog(rawData);
+//			
+//			// Check Result
+//	        if (jResult != null && jResult.containsKey("result") && jResult.get("result") == Boolean.TRUE)
+//	        {
+//	        	System.out.println(String.format("%s", jResult.toJSONString()));
+//	        	
+//	        	return;
+//	        }
+//	        else
+//	        {
+//	        	//System.out.println(String.format("[Unknown] %s", rawData));
+//	        }
+//
+//		}
+//		catch(Exception ex)
+//		{
+//			_logger.error(ex.getMessage(), ex);
+//		}
+		
 	}
 	
 	private void parseSyslog(JsonObject jObj) {
-		/*
-		String rawData = jObj.getData();
-
-		// Remove Carriage-Return & Line-Feed
-		rawData = rawData.replaceAll("\\r\\n|\\r|\\n", " ");
 		
-		// Trim
-		rawData = rawData.trim();
+//		String rawData = jObj.getData();
+//
+//		// Remove Carriage-Return & Line-Feed
+//		rawData = rawData.replaceAll("\\r\\n|\\r|\\n", " ");
+//		
+//		// Trim
+//		rawData = rawData.trim();
+//		
+//		JSONObject jobj = new JSONObject();
+//		jobj.put("host", syslog.getHost());
+//		jobj.put("facility", syslog.getFacility());
+//		jobj.put("severity", syslog.getSeverity());
+//		jobj.put("recv_time", syslog.getRecvTime());
+//		jobj.put("message", rawData);
 		
-		JSONObject jobj = new JSONObject();
-		jobj.put("host", syslog.getHost());
-		jobj.put("facility", syslog.getFacility());
-		jobj.put("severity", syslog.getSeverity());
-		jobj.put("recv_time", syslog.getRecvTime());
-		jobj.put("message", rawData);
-		*/
 
 	}
 	
@@ -146,3 +157,4 @@ public class SyslogWorker extends BaseWorker {
 		SharedData.getInstance().eventQueue.put(eventLog);
 	}
 }
+*/

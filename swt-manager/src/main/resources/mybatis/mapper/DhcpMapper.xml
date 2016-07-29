@@ -10,56 +10,12 @@
 		]]>
 	</select>
 	
-	<insert id="insertDhcpNetwork" parameterType="com.shinwootns.data.entity.DhcpNetwork">
-		<![CDATA[
-			INSERT INTO dhcp_network (site_id, network, start_ip, end_ip, comment)
-			VALUES ( #{site_id}, #{network}, #{start_ip}, #{end_ip}, #{comment} ) 
-		]]>
-	</insert>
-	
-	<update id="updateDhcpNetwork" parameterType="com.shinwootns.data.entity.DhcpNetwork">
-		<![CDATA[
-			UPDATE dhcp_network
-			SET start_ip=#{start_ip}, end_ip=#{end_ip}, comment=#{comment}, update_time=now()
-			WHERE site_id=#{site_id} AND network =#{network}
-		]]>
-	</update>
-	
-	<delete id="deleteDhcpNetwork">
-		<![CDATA[
-			DELETE FROM dhcp_network
-			WHERE site_id=#{site_id} AND network =#{network}
-		]]>
-	</delete>
-	
 	<!-- ############################ DHCP RANGE ############################ -->
 	<select id="selectDhcpRangeBySiteId" resultType="com.shinwootns.data.entity.DhcpRange">
 		<![CDATA[
 			SELECT * FROM dhcp_range WHERE site_id=#{site_id}
 		]]>
 	</select>
-	
-	<insert id="insertDhcpRange" parameterType="com.shinwootns.data.entity.DhcpRange">
-		<![CDATA[
-			INSERT INTO dhcp_range (site_id, network, start_ip, end_ip)
-			VALUES ( #{site_id}, #{network}, #{start_ip}, #{end_ip} ) 
-		]]>
-	</insert>
-	
-	<update id="updateDhcpRange" parameterType="com.shinwootns.data.entity.DhcpRange">
-		<![CDATA[
-			UPDATE dhcp_range
-			SET end_ip=#{end_ip}, update_time=now()
-			WHERE site_id=#{site_id} AND network =#{network} AND start_ip = #{start_ip}
-		]]>
-	</update>
-	
-	<delete id="deleteDhcpRange">
-		<![CDATA[
-			DELETE FROM dhcp_range
-			WHERE site_id=#{site_id} AND network = #{network} AND start_ip = #{start_ip}
-		]]>
-	</delete>
 	
 	<!-- ############################ DHCP Fixed IP ############################ -->
 	<select id="selectDhcpFixedIpBySiteId" resultType="com.shinwootns.data.entity.DhcpFixedIp">

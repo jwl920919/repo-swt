@@ -1,5 +1,8 @@
 package test.utils;
 
+import java.math.BigInteger;
+import java.net.UnknownHostException;
+import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -12,20 +15,58 @@ import org.slf4j.LoggerFactory;
 
 import com.shinwootns.common.utils.CollectionUtils;
 import com.shinwootns.common.utils.CryptoUtils;
-import com.shinwootns.common.utils.IPv4Range;
 import com.shinwootns.common.utils.NetworkUtils;
-import com.shinwootns.common.utils.NetworkUtils.InterfaceIP;
-import com.shinwootns.common.utils.NetworkUtils.InterfaceInfo;
+import com.shinwootns.common.utils.ip.IPAddr;
+import com.shinwootns.common.utils.ip.IPNetwork;
+import com.shinwootns.common.utils.ip.ipv6.IPv6AddressRange;
+import com.shinwootns.common.utils.ip.ipv6.IPv6Network;
 
 public class TestUtils {
 
 	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
 	
-	/*
 	@Test
 	public void testNetworkUtilsIPv4() {
 
+		System.out.println("--------------------------------------------");
+		
+		try {
+			
+			System.out.println(new IPAddr("192.168.1.50"));					// IPv4
+			System.out.println(new IPAddr("fe80::226:2dff:fefa:cd1f"));		// IPv6
+			System.out.println(new IPAddr("::ffff:192.168.0.1"));			// IPv4 (Mapped IPv6)
+			
+			System.out.println("--------------------------------------------");
+			
+			// IPv4 network
+			String data = "192.168.0.0/24";
+			IPNetwork network = new IPNetwork(data);
+			
+			System.out.println(data);
+			System.out.println("NETWORK : " + network);
+			System.out.println("START   : " + network.getStartIP());
+			System.out.println("END     : " +network.getEndIP());
+			System.out.println("COUNT   : " +network.getIPCount());
+			
+			System.out.println("--------------------------------------------");
+			
+			// IPv6 network
+			data = "2001:0db8:85a3::8a2e:0370:7334/24";
+			network = new IPNetwork(data);
+			
+			System.out.println(data);
+			System.out.println("NETWORK : " + network);
+			System.out.println("START   : " + network.getStartIP());
+			System.out.println("END     : " +network.getEndIP());
+			System.out.println("COUNT   : " +network.getIPCount());
+			
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+	    
+	
+		/*
 		// ipToNumber
 		System.out.println("===========================");
 		String ipAddress = "192.168.0.12";
@@ -49,9 +90,8 @@ public class TestUtils {
 
 		System.out.println("Start IP = " + iprange.getStartIPToString());
 		System.out.println("end IP = " + iprange.getEndIPToString());
-
+		*/
 	}
-	*/
 
 	/*
 	@Test

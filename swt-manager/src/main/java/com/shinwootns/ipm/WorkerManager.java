@@ -9,7 +9,6 @@ import com.shinwootns.ipm.worker.BaseWorker;
 import com.shinwootns.ipm.worker.EventWorker;
 import com.shinwootns.ipm.worker.MasterJobWoker;
 import com.shinwootns.ipm.worker.SchedulerWorker;
-import com.shinwootns.ipm.worker.SyslogWorker;
 
 public class WorkerManager {
 	
@@ -51,6 +50,7 @@ public class WorkerManager {
 			// Start Scheduler
 			if (_scheduler == null) {
 				_scheduler = new Thread(new SchedulerWorker());
+				_scheduler.setName("SchedulerWorker");
 				_scheduler.start();
 			}
 			
@@ -58,6 +58,7 @@ public class WorkerManager {
 			for(int i=0; i<EVENT_WORKER_COUNT; i++) {
 				if (_eventWorker[i] == null) {
 					_eventWorker[i] = new Thread(new EventWorker(i, _logger));
+					_eventWorker[i].setName((new StringBuilder()).append("_eventWorker#").append(i).toString());
 					_eventWorker[i].start();
 				}
 			}
@@ -125,6 +126,7 @@ public class WorkerManager {
 				_logger.info("Call start MasterJobWorker");
 				
 				_masterJobThread = new Thread(new MasterJobWoker());
+				_masterJobThread.setName("MasterJobWoker");
 				_masterJobThread.start();
 			}
 		}

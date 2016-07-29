@@ -1,102 +1,20 @@
 package com.shinwootns.common.utils;
 
+import java.math.BigInteger;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
+//import com.shinwootns.common.utils.ip.ipv4.IPv4Range;
+
 public class NetworkUtils {
-	
-	enum IP_TYPE {
-		IPv4, IPv6
-	};
-	
-	public static class InterfaceIP {
-		public IP_TYPE ipType;
-		public String ipaddr;
-	};
-	
-	public static class InterfaceInfo {
-		
-		// ifnum
-		public int index;
-		
-		// name
-		public String name;
-		public String displayName;
-		
-		// macAddr
-		public String macAddr;
-		
-		// ipv4, ipv6
-		public List<InterfaceIP> listIPAddr;
-	};
-	
-	public static List<InterfaceInfo> getInterfaceInfo() {
 
-		List<InterfaceInfo> listInterface = new ArrayList<InterfaceInfo>();
-		
-		Enumeration<NetworkInterface> interfaces;
-
-		try {
-			
-			interfaces = NetworkInterface.getNetworkInterfaces();
-			
-			while (interfaces.hasMoreElements()){
-			    
-				NetworkInterface current = interfaces.nextElement();
-			    
-				if (!current.isUp() || current.isLoopback() || current.isVirtual()) 
-						continue;
-				
-				InterfaceInfo inf = new InterfaceInfo();
-				inf.index = current.getIndex();
-				inf.macAddr = NetworkUtils.MacAddrToString(current.getHardwareAddress());
-				inf.name = current.getName();
-				inf.displayName = current.getDisplayName();
-				inf.listIPAddr = new ArrayList<InterfaceIP>();
-			    
-			    Enumeration<InetAddress> addresses = current.getInetAddresses();
-			    while (addresses.hasMoreElements()) {
-			        InetAddress current_addr = addresses.nextElement();
-			        if (current_addr.isLoopbackAddress())
-			        	continue;
-			        
-			        
-			        InterfaceIP ip = new InterfaceIP();
-			        
-			        if ( current_addr instanceof Inet6Address )
-			        {
-			        	// IPv6
-			        	ip.ipType = IP_TYPE.IPv6;
-			        	ip.ipaddr = current_addr.getHostAddress();
-			        	
-			        	int index = ip.ipaddr.indexOf("%");
-			        	if ( index > 0 )
-			        		ip.ipaddr = ip.ipaddr.substring(0, index); 
-			        }
-			        else
-			        {
-			        	// IPv4
-			        	ip.ipType = IP_TYPE.IPv4;
-			        	ip.ipaddr = current_addr.getHostAddress();
-			        }
-			        
-			        inf.listIPAddr.add(ip);
-			    }
-			    
-			    listInterface.add(inf);
-			}
-			
-		} catch (SocketException e1) {
-			e1.printStackTrace();
-		}
-		return listInterface;
-	}
-	
+	//region MacAddr to String
 	public static String MacAddrToString(byte[] macAddr) {
 		
 		StringBuilder sb = new StringBuilder(); 
@@ -115,7 +33,11 @@ public class NetworkUtils {
 		
 		return sb.toString();
 	}
+	//endregion
 	
+	
+	/*
+	//region IPv4 To Long
 	public static long IPv4ToLong(String ipAddress) {
 
 		long result = 0;
@@ -139,7 +61,9 @@ public class NetworkUtils {
 
 		return result;
 	}
+	//endregion
 
+	//region Long to IPv4
 	public static String longToIPv4(long ipNumber) {
 
 		StringBuilder sb = new StringBuilder();
@@ -154,7 +78,9 @@ public class NetworkUtils {
 
 		return sb.toString();
 	}
+	//endregion
 	
+	//region Get IPv4Range ("1.1.1.0/24")
 	public static IPv4Range getIPV4Range(String network) {
 		
 		int index = network.indexOf("/");
@@ -171,7 +97,9 @@ public class NetworkUtils {
 		
 		return null;
 	}
+	//endregion
 
+	//region Get IPv4Range ("1.1.1.0", "255.255.255.0")
 	public static IPv4Range getIPV4Range(String networkIP, String netmask) {
 		
 		long _network = IPv4ToLong(networkIP);
@@ -182,7 +110,9 @@ public class NetworkUtils {
 
 		return new IPv4Range(startIP, endIP);
 	}
-
+	//endregion
+	
+	//region Get IPv4Range ("1.1.1.0", 24)
 	public static IPv4Range getIPV4Range(String networkIP, int bits) {
 		
 		if (bits < 0 || bits > 32)
@@ -196,5 +126,23 @@ public class NetworkUtils {
 
 		return new IPv4Range(startIP, endIP);
 	}
+	//endregion
+
+	//region IPv4 & IPv6 to BigInteger ("1.1.1.1" or "2607:f0d0:1002:0051:0000:0000:0000:0004")
+	public static BigInteger IPToBigInteger(String ipaddr) {
+		
+		try {
+			InetAddress ip = InetAddress.getByName(ipaddr);
+			byte[] bytes = ip.getAddress();
+		    return new BigInteger(1, bytes);
+		    
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	//endregion
+
+	*/
 }
 

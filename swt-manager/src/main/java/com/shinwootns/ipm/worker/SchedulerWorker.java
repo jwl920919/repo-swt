@@ -23,7 +23,7 @@ public class SchedulerWorker extends BaseWorker {
 		ClusterManager.getInstance().updateMember();
 		ClusterManager.getInstance().checkMaster();
 		
-		_logger.info(String.format("SchedulerWorker... start."));
+		_logger.info("SchedulerWorker... start.");
 		
 		// 3 Seconds
 		schedulerService.scheduleWithFixedDelay(
@@ -59,6 +59,8 @@ public class SchedulerWorker extends BaseWorker {
 		
 		// shutdown scheduler service
 		schedulerService.shutdown();
+		
+		_logger.info("SchedulerWorker... end.");
 	}
 	
 	// 3 Seconds

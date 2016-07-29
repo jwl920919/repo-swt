@@ -32,7 +32,7 @@ public class SpringBeanProvider {
     public ApplicationContext getApplicationContext() {
     	
     	if (_context != null)
-    		_logger.info( String.format("AppContextProvider - getApplicationContext : %s", this._context.toString()));
+    		_logger.info( (new StringBuilder()).append("getApplicationContext :").append(this._context.toString()).toString());
     	
         return _context;
     }
@@ -41,7 +41,7 @@ public class SpringBeanProvider {
         this._context = context;
         
         if (this._context != null)
-        	_logger.info( String.format("AppContextProvider - setApplicationContext : %s", this._context.toString()));
+        	_logger.info( (new StringBuilder()).append("setApplicationContext : ").append(this._context.toString()).toString());
     }
     //endregion
     

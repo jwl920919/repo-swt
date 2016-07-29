@@ -1,6 +1,7 @@
 package com.shinwootns.data.entity;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.sql.Timestamp;
 
 
@@ -9,27 +10,28 @@ public class DhcpIpStatus implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Integer site_id;
+	private String network;
 	private String ipaddr;
-	private String discover_status;
-	private String duid;
-	private String fingerprint;
-	private String host_os;
-	private String host_name;
+	private BigInteger ip_num;
 	private String ip_type;
+	private String macaddr;
+	private String status;
+	private String duid;
 	private Boolean is_conflict;
+	private String conflict_types;
+	private String lease_state;
+	private String obj_types;
+	private String discover_status;
+	private String usage;
+	private String host_name;
+	private String host_os;
+	private String fingerprint;
 	private Boolean is_never_ends;
 	private Boolean is_never_start;
-	private String conflict_types;
-	private Timestamp last_discovered;
-	private Timestamp lease_end_time;
 	private Timestamp lease_start_time;
-	private String lease_state;
-	private String macaddr;
-	private String network;
-	private String obj_types;
-	private String status;
+	private Timestamp lease_end_time;
+	private Timestamp last_discovered;
 	private Timestamp update_time;
-	private String usage;
 	private String user_description;
 
 	public DhcpIpStatus() {
@@ -217,6 +219,14 @@ public class DhcpIpStatus implements Serializable {
 
 	public void setIsNeverStart(Boolean is_never_start) {
 		this.is_never_start = is_never_start;
+	}
+
+	public BigInteger getIpNum() {
+		return ip_num;
+	}
+
+	public void setIpNum(BigInteger ip_num) {
+		this.ip_num = ip_num;
 	}
 
 }

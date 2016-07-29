@@ -1,5 +1,6 @@
 package test.thread;
 
+/*
 import java.util.Random;
 
 public class TestTask implements Runnable {
@@ -35,3 +36,4 @@ public class TestTask implements Runnable {
 		return this.sleepTime;
 	}
 }
+*/

@@ -32,19 +32,19 @@ public class SpringBeanProvider {
 
 	//region [FUNC] get / set ApplicationContext
     public ApplicationContext getApplicationContext() {
-    	
-    	if (_context != null)
-    		_logger.info( String.format("AppContextProvider - getApplicationContext : %s", this._context.toString()));
-    	
-        return _context;
+    	synchronized(this) {
+    		return _context;
+    	}
     }
  
     public void setApplicationContext(ApplicationContext context) {
     	
-        this._context = context;
+    	synchronized(this) {
+    		this._context = context;
+    	}
         
         if (this._context != null)
-        	_logger.info( String.format("AppContextProvider - setApplicationContext : %s", this._context.toString()));
+        	_logger.info( (new StringBuilder()).append("setApplicationContext : ").append(this._context).toString());
     }
     //endregion
     

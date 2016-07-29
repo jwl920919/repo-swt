@@ -1,4 +1,7 @@
-package com.shinwootns.common.utils;
+package com.shinwootns.common.utils.ip.ipv4;
+
+/*
+import com.shinwootns.common.utils.NetworkUtils;
 
 public class IPv4Range {
 	private long _startIP = 0;
@@ -36,3 +39,4 @@ public class IPv4Range {
 		return NetworkUtils.longToIPv4(this._endIP);
 	}
 }
+*/

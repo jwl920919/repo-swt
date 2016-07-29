@@ -1,10 +1,16 @@
 package com.shinwootns.ipm.collector.data.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.shinwootns.data.entity.DeviceDhcp;
 import com.shinwootns.data.entity.DeviceInsight;
+import com.shinwootns.data.entity.DeviceNetwork;
+import com.shinwootns.data.entity.DhcpIpStatus;
+import com.shinwootns.data.entity.DhcpNetwork;
+import com.shinwootns.data.entity.DhcpRange;
 import com.shinwootns.data.entity.SiteInfo;
 
 @Mapper
@@ -13,8 +19,26 @@ public interface DataMapper {
 	// Site Info
 	SiteInfo selectSiteInfoByCode(@Param("site_code")String site_code);
 	
-	// DHCP
+	// Device DHCP
 	DeviceDhcp selectDeviceDhcp(@Param("site_id")int site_id);
+	
+	// DHCP Network
+	List<DhcpNetwork> selectDhcpNetworkBySiteId(@Param("site_id")int site_id);
+	int insertDhcpNetwork(DhcpNetwork network);
+	int updateDhcpNetwork(DhcpNetwork network);
+	int deleteDhcpNetwork(@Param("site_id")int site_id, @Param("network")String network);
+	
+	// DHCP Range
+	List<DhcpRange> selectDhcpRangeBySiteId(@Param("site_id")int site_id);
+	int insertDhcpRange(DhcpRange range);
+	int updateDhcpRange(DhcpRange range);
+	int deleteDhcpRange(@Param("site_id")int site_id, @Param("network")String network, @Param("start_ip")String start_ip);
+	
+	// DHCP IP Status
+	List<DhcpIpStatus> selectDhcpIpStatusByNetwork(@Param("site_id")int site_id, @Param("network")String network);
+	int insertDhcpIpStatus(DhcpIpStatus ip);
+	int updateDhcpIpStatus(DhcpIpStatus ip);
+	int deleteDhcpIpStatus(@Param("site_id")int site_id, @Param("ipaddr")String ipaddr);
 	
 	// Insight
 	DeviceInsight selectInsightByHost(@Param("host")String host);

@@ -1,5 +1,6 @@
 package test.mq;
 
+/*
 import java.util.ArrayList;
 
 import org.slf4j.Logger;
@@ -130,3 +131,4 @@ public class SingleTask extends testBaseTask {
 		System.out.println(String.format("Consumer#%d end.", index));
 	}
 }
+*/

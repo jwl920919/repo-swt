@@ -36,7 +36,7 @@ public class PropertyUtils {
 			// Is exist?
 			File file = new File(filepath);
 			if (file.exists() == false) {
-				_logger.error(String.format("ERROR - Not exist properties file : '%s'", filepath));
+				_logger.error( (new StringBuilder()).append("ERROR - Not exist properties file : ").append(filepath).toString());
 				return false;
 			}
 			
@@ -99,7 +99,7 @@ public class PropertyUtils {
 		
 		if ( _properties.containsKey(key) == false )
 		{
-			_logger.error(String.format("ERROR - Not defined properties key : '%s'", key));
+			_logger.error((new StringBuilder()).append("ERROR - Not defined properties key : ").append(key).toString());
 			return defaultValue;
 		}
 		
@@ -110,7 +110,7 @@ public class PropertyUtils {
 		
 		if ( _properties.containsKey(key) == false )
 		{
-			_logger.error(String.format("ERROR - Not defined properties key : '%s'", key));
+			_logger.error((new StringBuilder()).append("ERROR - Not defined properties key : ").append(key).toString());
 			return defaultValue;
 		}
 		
@@ -123,7 +123,7 @@ public class PropertyUtils {
 		}
 		catch(Exception ex)
 		{
-			_logger.error(String.format("ERROR - Invalid properties number value : '%s'", sVlaue));
+			_logger.error((new StringBuilder()).append("ERROR - Invalid properties number value : ").append(sVlaue).toString());
 		}
 		
 		return defaultValue;

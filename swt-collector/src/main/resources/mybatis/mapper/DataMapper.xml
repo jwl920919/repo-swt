@@ -14,6 +14,106 @@
         SELECT * FROM device_dhcp WHERE site_id=#{site_id} ORDER BY device_id LIMIT 1
     </select>
     
+    <!-- ############################ DHCP NETWORK ############################ -->
+	<select id="selectDhcpNetworkBySiteId" resultType="com.shinwootns.data.entity.DhcpNetwork">
+		<![CDATA[
+			SELECT * FROM dhcp_network WHERE site_id=#{site_id}
+		]]>
+	</select>
+	
+	<insert id="insertDhcpNetwork" parameterType="com.shinwootns.data.entity.DhcpNetwork">
+		<![CDATA[
+			INSERT INTO dhcp_network (site_id, network, ip_type, start_ip, end_ip, start_num, end_num, ip_count, comment)
+			VALUES ( #{site_id}, #{network}, #{ip_type}, #{start_ip}, #{end_ip}, #{start_num}, #{end_num}, #{ip_count}, #{comment} ) 
+		]]>
+	</insert>
+	
+	<update id="updateDhcpNetwork" parameterType="com.shinwootns.data.entity.DhcpNetwork">
+		<![CDATA[
+			UPDATE dhcp_network
+			SET ip_type=#{ip_type}, start_ip=#{start_ip}, end_ip=#{end_ip}, start_num=#{start_num}, ip_count=#{ip_count}, end_num=#{end_num}
+				, comment=#{comment}, update_time=now()
+			WHERE site_id=#{site_id} AND network =#{network}
+		]]>
+	</update>
+	
+	<delete id="deleteDhcpNetwork">
+		<![CDATA[
+			DELETE FROM dhcp_network
+			WHERE site_id=#{site_id} AND network =#{network}
+		]]>
+	</delete>
+    
+    <!-- ############################ DHCP RANGE ############################ -->
+	<select id="selectDhcpRangeBySiteId" resultType="com.shinwootns.data.entity.DhcpRange">
+		<![CDATA[
+			SELECT * FROM dhcp_range WHERE site_id=#{site_id}
+		]]>
+	</select>
+	
+	<insert id="insertDhcpRange" parameterType="com.shinwootns.data.entity.DhcpRange">
+		<![CDATA[
+			INSERT INTO dhcp_range (site_id, network, ip_type, start_ip, end_ip, start_num, end_num, ip_count)
+			VALUES ( #{site_id}, #{network}, #{ip_type}, #{start_ip}, #{end_ip}, #{start_num}, #{end_num}, #{ip_count} ) 
+		]]>
+	</insert>
+	
+	<update id="updateDhcpRange" parameterType="com.shinwootns.data.entity.DhcpRange">
+		<![CDATA[
+			UPDATE dhcp_range
+			SET end_ip=#{end_ip}, ip_type=#{ip_type}, start_num=#{start_num}, end_num=#{end_num}, ip_count=#{ip_count}, update_time=now()
+			WHERE site_id=#{site_id} AND network =#{network} AND start_ip = #{start_ip}
+		]]>
+	</update>
+	
+	<delete id="deleteDhcpRange">
+		<![CDATA[
+			DELETE FROM dhcp_range
+			WHERE site_id=#{site_id} AND network = #{network} AND start_ip = #{start_ip}
+		]]>
+	</delete>
+	
+	<!-- ############################ DHCP IP STATUS ############################ -->
+	<select id="selectDhcpIpStatusByNetwork" resultType="com.shinwootns.data.entity.DhcpIpStatus">
+		<![CDATA[
+			SELECT * FROM dhcp_ip_status WHERE site_id=#{site_id} AND network=#{network}
+		]]>
+	</select>
+	
+	<insert id="insertDhcpIpStatus" parameterType="com.shinwootns.data.entity.DhcpIpStatus">
+		<![CDATA[
+			INSERT INTO dhcp_ip_status (
+				site_id, network, ipaddr, ip_type, ip_num, macaddr, duid, is_conflict
+				, conflict_types, status, lease_state, obj_types, discover_status
+				, usage, host_name, host_os, fingerprint, lease_start_time, lease_end_time
+				, last_discovered, is_never_ends, is_never_start, update_time)
+			VALUES ( 
+				#{site_id}, #{network}, #{ipaddr}, #{ip_type}, #{ip_num}, #{macaddr}, #{duid}, #{is_conflict}
+				, #{conflict_types}, #{status}, #{lease_state}, #{obj_types}, #{discover_status}
+				, #{usage}, #{host_name}, #{host_os}, #{fingerprint}, #{lease_start_time}
+				, #{lease_end_time}, #{last_discovered}, #{is_never_ends}, #{is_never_start}, now() ) 
+		]]>
+	</insert>
+	
+	<update id="updateDhcpIpStatus" parameterType="com.shinwootns.data.entity.DhcpIpStatus">
+		<![CDATA[
+			UPDATE dhcp_ip_status
+			SET network=#{network}, ip_type=#{ip_type}, ip_num=#{ip_num}, macaddr=#{macaddr}, duid=#{duid}, is_conflict=#{is_conflict}, conflict_types=#{conflict_types}
+				, status=#{status}, lease_state=#{lease_state}, obj_types=#{obj_types}, discover_status=#{discover_status}
+				, usage=#{usage}, host_name=#{host_name}, host_os=#{host_os}, fingerprint=#{fingerprint}
+				, lease_start_time=#{lease_start_time}, lease_end_time=#{lease_end_time}, last_discovered=#{last_discovered}
+				, is_never_ends=#{is_never_ends}, is_never_start=#{is_never_start}
+				, update_time=now()
+			WHERE site_id=#{site_id} AND ipaddr=#{ipaddr}
+		]]>
+	</update>
+	
+	<delete id="deleteDhcpIpStatus">
+		<![CDATA[
+			DELETE FROM dhcp_ip_status
+			WHERE site_id=#{site_id} AND ipaddr=#{ipaddr}
+		]]>
+	</delete>
     
     <!-- ############################ Insight ############################ -->
     

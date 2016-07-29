@@ -49,14 +49,15 @@ public class WorkerManager {
 			
 			// Start Scheduler
 			if (_scheduler == null) {
-				_scheduler = new Thread(new SchedulerWorker());
+				_scheduler = new Thread(new SchedulerWorker(), "SchedulerWorker");
 				_scheduler.start();
 			}
 			
 			// Start Syslog Worker
 			for(int i=0; i<SYSLOG_WORKER_COUNT; i++) {
 				if (_syslogWorker[i] == null) {
-					_syslogWorker[i] = new Thread(new SyslogWorker(i, _logger));
+					_syslogWorker[i] = new Thread(new SyslogWorker(i, _logger)
+								, (new StringBuilder()).append("SyslogWorker#").append(i).toString());
 					_syslogWorker[i].start();
 				}
 			}
@@ -128,7 +129,7 @@ public class WorkerManager {
 
 				_logger.info("Call start MasterJobWorker");
 				
-				_masterJobThread = new Thread(new MasterJobWoker());
+				_masterJobThread = new Thread(new MasterJobWoker(), "MasterJobWoker");
 				_masterJobThread.start();
 			}
 		}

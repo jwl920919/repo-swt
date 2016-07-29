@@ -1,8 +1,14 @@
 package com.shinwootns.common.utils;
 
 import java.io.ByteArrayOutputStream;
+import java.net.Inet6Address;
 import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecuteResultHandler;
@@ -15,6 +21,36 @@ public class SystemUtils {
 
 	private final static Logger _logger = LoggerFactory.getLogger(SystemUtils.class);
 	
+	public enum OS_Type {
+		UNKNOWN, WINDOWS, LINUX, UNIX, MAC, SOLARIS  
+	}
+	
+	public enum IP_TYPE {
+		IPv4, IPv6
+	};
+	
+	public static class InterfaceIP {
+		public IP_TYPE ipType;
+		public String ipaddr;
+	};
+	
+	public static class InterfaceInfo {
+		
+		// ifnum
+		public int index;
+		
+		// name
+		public String name;
+		public String displayName;
+		
+		// macAddr
+		public String macAddr;
+		
+		// ipv4, ipv6
+		public List<InterfaceIP> listIPAddr;
+	};
+	
+	//region [FUNC] Execute Command (Async)
 	public static void executeCommandAsync(CommandLine command) {
 		
 		_logger.info(String.format("execAsync(). command: " + command.toString()));
@@ -32,7 +68,9 @@ public class SystemUtils {
 		
 		executor = null;
 	}
+	//endregion
 	
+	//region [FUNC] Execute Command
 	public static String executeCommand(CommandLine command) {
 		
 		_logger.info(String.format("executeCommand(). command: " + command.toString()));
@@ -75,11 +113,9 @@ public class SystemUtils {
 		
 		return result;
 	}
+	//endregion
 	
-	enum OS_Type {
-		UNKNOWN, WINDOWS, LINUX, UNIX, MAC, SOLARIS  
-	}
-	
+	//region [FUNC] Get OS name
 	public static OS_Type GetOSName() {
 		String osName = System.getProperty("os.name");
 		
@@ -101,7 +137,9 @@ public class SystemUtils {
 		
 		return OS_Type.UNKNOWN;
 	}
+	//endregion
 	
+	//region [FUNC] Get HostName
 	public static String getHostName() {
 		try {
 			return InetAddress.getLocalHost().getHostName();
@@ -113,54 +151,69 @@ public class SystemUtils {
 		
 		return "";
 	}
+	//endregion
 	
-	
-	/*
-	public static Vector executeCommand(String command, Logger logger) {
-		
-		Vector result = new Vector();
-		
-		Process process = null;
-		BufferedReader bufferedReader = null;
+	//region [FUNC] Get InterfaceInfo
+	public static List<InterfaceInfo> getInterfaceInfo() {
 
-		String line;
+		List<InterfaceInfo> listInterface = new ArrayList<InterfaceInfo>();
 		
-        try
-        {
-            process = Runtime.getRuntime().exec(command);
-            
-            bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            
-            while((line = bufferedReader.readLine()) != null) {
-                result.add(line);
-            }
-        }
-        catch(Exception e)
-        {
-            logger.error(e.getMessage());
-        }
-        finally {
-        	
-        	if (bufferedReader != null)
-        	{
-        		try {
-					bufferedReader.close();
-				} catch (Exception e) {}
-        		
-        		bufferedReader = null;
-        	}
-        	
-        	if (process != null) {
-        		
-        		try {
-        			process.destroy();
-        		} catch (Exception e) {}
-        		
-                process = null;
-        	}
-        }
-        
-        return result;
+		Enumeration<NetworkInterface> interfaces;
+
+		try {
+			
+			interfaces = NetworkInterface.getNetworkInterfaces();
+			
+			while (interfaces.hasMoreElements()){
+			    
+				NetworkInterface current = interfaces.nextElement();
+			    
+				if (!current.isUp() || current.isLoopback() || current.isVirtual()) 
+						continue;
+				
+				InterfaceInfo inf = new InterfaceInfo();
+				inf.index = current.getIndex();
+				inf.macAddr = NetworkUtils.MacAddrToString(current.getHardwareAddress());
+				inf.name = current.getName();
+				inf.displayName = current.getDisplayName();
+				inf.listIPAddr = new ArrayList<InterfaceIP>();
+			    
+			    Enumeration<InetAddress> addresses = current.getInetAddresses();
+			    while (addresses.hasMoreElements()) {
+			        InetAddress current_addr = addresses.nextElement();
+			        if (current_addr.isLoopbackAddress())
+			        	continue;
+			        
+			        
+			        InterfaceIP ip = new InterfaceIP();
+			        
+			        if ( current_addr instanceof Inet6Address )
+			        {
+			        	// IPv6
+			        	ip.ipType = IP_TYPE.IPv6;
+			        	ip.ipaddr = current_addr.getHostAddress();
+			        	
+			        	int index = ip.ipaddr.indexOf("%");
+			        	if ( index > 0 )
+			        		ip.ipaddr = ip.ipaddr.substring(0, index); 
+			        }
+			        else
+			        {
+			        	// IPv4
+			        	ip.ipType = IP_TYPE.IPv4;
+			        	ip.ipaddr = current_addr.getHostAddress();
+			        }
+			        
+			        inf.listIPAddr.add(ip);
+			    }
+			    
+			    listInterface.add(inf);
+			}
+			
+		} catch (SocketException e1) {
+			e1.printStackTrace();
+		}
+		return listInterface;
 	}
-	*/
+	//endregion
 }

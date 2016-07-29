@@ -16,15 +16,9 @@ public interface DhcpMapper {
 	
 	// DHCP Network
 	List<DhcpNetwork> selectDhcpNetworkBySiteId(@Param("site_id")int site_id);
-	int insertDhcpNetwork(DhcpNetwork network);
-	int updateDhcpNetwork(DhcpNetwork network);
-	int deleteDhcpNetwork(@Param("site_id")int site_id, @Param("network")String network);
 	
 	// DHCP Range
 	List<DhcpRange> selectDhcpRangeBySiteId(@Param("site_id")int site_id);
-	int insertDhcpRange(DhcpRange range);
-	int updateDhcpRange(DhcpRange range);
-	int deleteDhcpRange(@Param("site_id")int site_id, @Param("network")String network, @Param("start_ip")String start_ip);
 	
 	// DHCP Fixed IP
 	List<DhcpFixedIp> selectDhcpFixedIpBySiteId(@Param("site_id")int site_id);

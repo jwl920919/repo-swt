@@ -4,7 +4,7 @@ import com.google.gson.JsonArray;
 
 public class NextPageData {
 	
-	public JsonArray jArrayData = null;
+	public JsonArray jArrayData = new JsonArray();
 	public String nextPageID = null;
 	
 	public NextPageData(JsonArray jArrayData, String nextPageID) {

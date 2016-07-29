@@ -9,8 +9,12 @@ public class PoolStatus {
 	
 	@Override
 	public String toString() {
-		return String.format("PoolStatus - Active:%d, PoolSize:%d, TaskQueue:%d, Completed:%d"
-				,activeCount, poolSize, taskQueueSize, completedCount);
+		return (new StringBuilder())
+				.append("PoolStatus - Active:").append(activeCount)
+				.append(", PoolSize:").append(poolSize)
+				.append(", TaskQueue:").append(taskQueueSize)
+				.append(", Completed:").append(completedCount)
+				.toString();
 	}
 	
 	public int getActiveCount() {

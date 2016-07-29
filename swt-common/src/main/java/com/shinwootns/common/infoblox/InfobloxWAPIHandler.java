@@ -7,10 +7,10 @@ import org.apache.http.entity.ContentType;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.shinwootns.common.http.HttpClient;
-import com.shinwootns.common.utils.IPv4Range;
 import com.shinwootns.common.utils.JsonUtils;
 import com.shinwootns.common.utils.NetworkUtils;
 import com.shinwootns.common.utils.StringUtils;
+import com.shinwootns.common.utils.ip.IPNetwork;
 
 public class InfobloxWAPIHandler {
 	
@@ -67,24 +67,54 @@ public class InfobloxWAPIHandler {
 		
 		if (restClient == null)
 			return null;
+
+		JsonArray arrayIPv4 = null;
+		JsonArray arrayIPv6 = null;
 		
 		try
 		{
-			StringBuilder sb = new StringBuilder();
+			// IPv4
+			{
+				StringBuilder sb = new StringBuilder();
+				sb.append("/wapi/v1.0/network");
+				sb.append("?_return_type=json");
+				
+				String value = restClient.Get(sb.toString(), null);
+				
+				if (value != null) {
+	
+					value = StringUtils.unescapeUnicodeString(value);
+					
+					arrayIPv4 = JsonUtils.parseJsonArray(value);
+				}
+			}
 			
-			sb.append("/wapi/v1.0/network");
-			sb.append("?_return_type=json");
+			// IPv6
+			{
+				StringBuilder sb = new StringBuilder();
+				sb.append("/wapi/v1.0/ipv6network");
+				sb.append("?_return_type=json");
+				
+				String value = restClient.Get(sb.toString(), null);
+				
+				if (value != null) {
+	
+					value = StringUtils.unescapeUnicodeString(value);
+					
+					arrayIPv6 = JsonUtils.parseJsonArray(value);
+				}
+			}
 			
-			String value = restClient.Get(sb.toString(), null);
+			// Merge
+			JsonArray array = new JsonArray();
 			
-			if (value == null)
-				return null;
+			if (arrayIPv4 != null)
+				array.addAll(arrayIPv4);
 			
-			// Change unescape-unicode
-			value = StringUtils.unescapeUnicodeString(value);
+			if (arrayIPv6 != null)
+				array.addAll(arrayIPv6);
 			
-			// JsonArray Parser
-			return JsonUtils.parseJsonArray(value);
+			return array;
 		}
 		catch(Exception ex) {
 			_logger.error(ex.getMessage(), ex);
@@ -132,23 +162,65 @@ public class InfobloxWAPIHandler {
 		if (restClient == null)
 			return null;
 		
+		
+		JsonArray arrayIPv4 = null;
+		JsonArray arrayIPv6 = null;
+		
 		try
 		{
-			StringBuilder sb = new StringBuilder();
 			
-			sb.append("/wapi/v1.0/range");
-			sb.append("?_return_type=json");
+			// IPv4 Range
+			{
+				StringBuilder sb = new StringBuilder();
+				
+				sb.append("/wapi/v1.0/range");
+				sb.append("?_return_type=json");
+				
+				String value = restClient.Get(sb.toString(), null);
+				
+				if (value == null)
+					return null;
+				
+				// Change unescape-unicode
+				value = StringUtils.unescapeUnicodeString(value);
+				
+				if (value != null) {
+					value = StringUtils.unescapeUnicodeString(value);
+					arrayIPv4 = JsonUtils.parseJsonArray(value);
+				}
+			}
 			
-			String value = restClient.Get(sb.toString(), null);
+			// IPv6 Range
+			{
+				StringBuilder sb = new StringBuilder();
+				
+				sb.append("/wapi/v1.0/ipv6range");
+				sb.append("?_return_type=json");
+				
+				String value = restClient.Get(sb.toString(), null);
+				
+				if (value == null)
+					return null;
+				
+				// Change unescape-unicode
+				value = StringUtils.unescapeUnicodeString(value);
+				
+				if (value != null) {
+					value = StringUtils.unescapeUnicodeString(value);
+					arrayIPv6 = JsonUtils.parseJsonArray(value);
+				}
+			}
 			
-			if (value == null)
-				return null;
+			// Merge
+			JsonArray array = new JsonArray();
 			
-			// Change unescape-unicode
-			value = StringUtils.unescapeUnicodeString(value);
+			if (arrayIPv4 != null)
+				array.addAll(arrayIPv4);
 			
-			// JsonArray Parser
-			return JsonUtils.parseJsonArray(value);
+			if (arrayIPv6 != null)
+				array.addAll(arrayIPv6);
+			
+			return array;
 		}
 		catch(Exception ex) {
 			_logger.error(ex.getMessage(), ex);
@@ -304,13 +376,13 @@ public class InfobloxWAPIHandler {
 		{
 			StringBuilder sb = new StringBuilder();
 
-			sb.append("/wapi/v2.3/ipv4address");
-			sb.append("?_paging=1");
-			sb.append("&_max_results=").append(splitCount);
-			sb.append("&_return_as_object=1");
-			sb.append("&_return_type=json");
-			sb.append("&network=").append(network);							// '192.168.1.0/25'
-			sb.append("&_return_fields=")
+			sb.append("/wapi/v2.3/ipv4address")
+			.append("?_paging=1")
+			.append("&_max_results=").append(splitCount)
+			.append("&_return_as_object=1")
+			.append("&_return_type=json")
+			.append("&network=").append(network)							// '192.168.1.0/25'
+			.append("&_return_fields=")
 				.append("ip_address,network,mac_address,names")
 				.append(",is_conflict,conflict_types")
 				.append(",discover_now_status")
@@ -359,10 +431,10 @@ public class InfobloxWAPIHandler {
 		{
 			StringBuilder sb = new StringBuilder();
 
-			sb.append("/wapi/v2.3/ipv4address");
-			sb.append("?_return_type=json");
-			sb.append("&_max_results=").append(splitCount);
-			sb.append("&_page_id=").append(nextPageId);
+			sb.append("/wapi/v2.3/ipv4address")
+			.append("?_return_type=json")
+			.append("&_max_results=").append(splitCount)
+			.append("&_page_id=").append(nextPageId);
 
 			String value = restClient.Get(sb.toString());
 			
@@ -403,31 +475,29 @@ public class InfobloxWAPIHandler {
 		/*
 		try
 		{
-			Map params = new HashMap<String, String>();
+			StringBuilder sb = new StringBuilder();
 			
 			// First Page
-			params.put("_paging", 1);
-			params.put("_max_results", splitCount);
-			params.put("_return_as_object", 1);
-			params.put("_return_type", "json");
-			params.put("network", network);							// '192.168.1.0/25'
-			params.put("_return_fields", 
-					((new StringBuilder())
-					.append("ip_address,network,duid,names")
-					.append(",is_conflict")
-					.append(",discover_now_status")
-					//.append(",conflict_types")
-					.append(",lease_state,status")
-					.append(",types,usage")
-					.append(",fingerprint")
-					.append(",discovered_data.os,discovered_data.last_discovered")
-					).toString()
-			);
+			sb.append("/wapi/v2.3/ipv6address")
+			.append("?_paging=1")
+			.append("&_max_results=").append(splitCount)
+			.append("&_return_as_object=1")
+			.append("&_return_type=json")
+			.append("&network=").append(network)
+			.append("&_return_fields=")
+				.append("ip_address,network,duid,names")
+				.append(",is_conflict")
+				.append(",discover_now_status")
+				//.append(",conflict_types")
+				.append(",lease_state,status")
+				.append(",types,usage")
+				.append(",fingerprint")
+				.append(",discovered_data.os,discovered_data.last_discovered");
 			
 			// type = LEASE, DHCP_RANGE
 			// usage = DHCP
 
-			String value = restClient.Get("/wapi/v2.3/ipv6address", params);
+			String value = restClient.Get(sb.toString());
 			
 			if (value == null)
 				return null;
@@ -518,10 +588,14 @@ public class InfobloxWAPIHandler {
 			sb.append("&_max_results=").append(splitCount);
 			sb.append("&_return_as_object=1");
 			sb.append("&_return_type=json");
-
-			IPv4Range range = NetworkUtils.getIPV4Range(network);
-			sb.append("&address%3E=").append(range.getStartIPToString());		// > : %3E
-			sb.append("&address%3C=").append(range.getEndIPToString());			// < : %3C
+			
+			//IPv4Range range = NetworkUtils.getIPV4Range(network);
+			//sb.append("&address%3E=").append(range.getStartIPToString());		// > : %3E
+			//sb.append("&address%3C=").append(range.getEndIPToString());			// < : %3C
+			
+			IPNetwork ipNetwork = new IPNetwork(network);
+			sb.append("&address%3E=").append(ipNetwork.getStartIP().toString());		// > = %3E
+			sb.append("&address%3C=").append(ipNetwork.getEndIP().toString());			// < = %3C
 
 			sb.append("&_return_fields=")
 				.append("address,network,binding_state")

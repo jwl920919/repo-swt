@@ -41,7 +41,7 @@ public class EventWorker extends BaseWorker {
 		if (isSkipInDebugMode())
 			return;
 		
-		_logger.info(String.format("EventWorker#%d... start.", this._index));
+		_logger.info((new StringBuilder()).append("EventWorker#").append( this._index).append("... start.").toString());
 		
 		// get EventMapper
 		EventMapper eventMapper = SpringBeanProvider.getInstance().getEventMapper();
@@ -69,8 +69,15 @@ public class EventWorker extends BaseWorker {
 					_logger.error(ex.getMessage(), ex);
 				}
 			}
+			
+			try {
+				Thread.sleep(0);
+			} catch (InterruptedException e) {
+				break;
+			}
 		}
 	
+		_logger.info((new StringBuilder()).append("EventWorker#").append( this._index).append("... end.").toString());
 	}
 
 }
