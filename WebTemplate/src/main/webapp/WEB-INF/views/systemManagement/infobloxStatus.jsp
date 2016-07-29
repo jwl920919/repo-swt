@@ -356,7 +356,7 @@
 	</div>
 </section>
 
-<script src="resources/plugins/jQuery/jquery-3.1.0.min.js"></script>
+<!-- <script src="resources/plugins/jQuery/jquery-3.1.0.min.js"></script> -->
 <!-- jQuery Knob -->
 <script src="../resources/plugins/knob/jquery.knob.js"></script>
 <!-- ChartJS 1.0.1 -->

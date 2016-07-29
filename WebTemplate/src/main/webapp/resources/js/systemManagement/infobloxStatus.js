@@ -19,14 +19,19 @@ $(document).ready(function() {
     // m_DchpMessageAjaxCall = setInterval(DchpMessageAjaxCall, 0);
     // m_DnsMessageAjaxCall = setInterval(DnsMessageAjaxCall, 0);
     refleshDatas();
+    tableResizing();
     jQueryKnob(); // jQueryKnob 차트관련 스크립트
     fnPieChartTooltipBind($("#dhcpPieChart"));
     fnPieChartTooltipBind($("#dnsPieChart"));
 });
 
-$(window).resize(function() {
+var wheight, wWidth;
+
+window.onresize = function(event) {
     tableResizing();
-}).resize();
+};
+
+
 
 function refleshDatas() {
     $.getJSON("/systemManagement/getInfobloxdatas", function(json) {
@@ -49,10 +54,10 @@ function refleshDatas() {
     // m_DchpMessageAjaxCall = setInterval(DchpMessageAjaxCall, 100);
     // m_DnsMessageAjaxCall = setInterval(DnsMessageAjaxCall, 100);
 }
-
+//메세지 테이블 사이즈 조절
 function tableResizing() {
-    $('#dhcp-table').css('width', $('#dhcp-body').width() - 185);
-    $('#dns-table').css('width', $('#dns-body').width() - 185);
+    $('#dhcp-table').css('width', $('#dhcp-body').width() - 190);
+    $('#dns-table').css('width', $('#dns-body').width() - 190);
 }
 // jQueryKnob 차트관련 스크립트
 function jQueryKnob() {

@@ -47,6 +47,9 @@ public class SystemManagementActionController {
 	StringRedisTemplate redisTemplate;
 
 	// region getInfobloxdatas
+	/** 4가지 데이터를 모두 redis에서 수집하여 Get Method에 응답<br/>
+	 * 한가지라도 수집에 실패하면 result 값에 false을 추가
+	 * */
 	@RequestMapping(value = "getInfobloxdatas", method = RequestMethod.GET, produces = "application/text; charset=utf8")
 	public @ResponseBody Object getInfobloxdatas(HttpServletRequest request, HttpSession session) {
 		logger.info("getInfobloxdatas : " + request.getLocalAddr());
@@ -67,6 +70,7 @@ public class SystemManagementActionController {
 				Iterator iterator = licensesInfo.iterator();
 				while (iterator.hasNext()) {
 					JSONObject jObj = (JSONObject) iterator.next();
+					//라이센스 남은 기간 측정
 					long expiryDate = CommonHelper.objectToLong(jObj.get("expiry_date")) * 1000;
 					long now = calendar.getTimeInMillis();
 					long gap = (expiryDate - now) / 1000;
@@ -109,7 +113,7 @@ public class SystemManagementActionController {
 				StringBuffer sb = new StringBuffer("");
 				// json main
 				sb.append("{ \"dhcp_msg_info\" : [");
-				// json sub
+				// label, data, color를 지정
 				sb.append("{ \"label\":\"DISCOVERS\",\"data\":");
 				sb.append(dhcpMessagesInfo.get("discovers"));
 				sb.append(",\"color\": \"#00a65a\"},{ \"label\":\"OFFERS\",\"data\":");
@@ -145,7 +149,7 @@ public class SystemManagementActionController {
 				StringBuffer sb = new StringBuffer("");
 				// json main
 				sb.append("{ \"dns_msg_info\" : [");
-				// json sub
+				// label, data, color를 지정
 				sb.append("{ \"label\":\"SUCCESS\",\"data\":");
 				sb.append(dnsMessagesInfo.get("success"));
 				sb.append(",\"color\": \"#00a65a\"},{ \"label\":\"REFERRAL\",\"data\":");
@@ -180,6 +184,19 @@ public class SystemManagementActionController {
 		}
 	}
 	// endregion
+	
+	/** 
+	 * result 객체에 data, resultValue를 모두 담아서 전송하는 경우는 상관이 없으나
+	 * 한가지만 보낼 경우 이전 페이지 또는 이전에 사용하였던 데이터가 남아서 같이
+	 * 넘어가는 경우가 발생하여 init() 메소드를 항상 상단에서 사용하여 object clear
+	 * 과정을 거치고 처리
+	*/
+	private void init() {
+		result.data = null;
+		result.resultValue = null;
+	}
+	
+	
 	// // region getHwInfo
 	// @RequestMapping(value = "getHwInfo", method = RequestMethod.GET, produces
 	// = "application/text; charset=utf8")
@@ -363,9 +380,6 @@ public class SystemManagementActionController {
 	// }
 	//
 	// endregion
-
-	private void init() {
-		result.data = null;
-		result.resultValue = null;
-	}
+	
+	
 }
