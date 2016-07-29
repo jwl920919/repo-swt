@@ -7,7 +7,6 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.shinwootns.common.stp.SmartThreadPool;
 import com.shinwootns.ipm.service.cluster.ClusterManager;
 
 public class SchedulerWorker extends BaseWorker {

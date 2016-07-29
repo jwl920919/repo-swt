@@ -36,11 +36,20 @@ public class DeviceController {
 		if (dhcp == null)
 			return "";
 		
-		DhcpHandler handler = new DhcpHandler(dhcp.getHost(), dhcp.getWapiUserid(), dhcp.getWapiPassword(), dhcp.getSnmpCommunity()); 
+		DhcpDeviceStatus dhcpStatus = null;
 		
-		DhcpDeviceStatus dhcpStatus = handler.getDeviceStatus();
+		DhcpHandler handler = new DhcpHandler(); 
 		
-        return JsonUtils.serialize(dhcpStatus);
+		if ( handler.Connect(dhcp.getHost(), dhcp.getWapiUserid(), dhcp.getWapiPassword(), dhcp.getSnmpCommunity()) ) {
+			dhcpStatus = handler.getDeviceStatus();
+		}
+
+		handler.close();
+		
+		if (dhcpStatus != null)
+			return JsonUtils.serialize(dhcpStatus);
+		
+		return "{}";
     }
 	
 }

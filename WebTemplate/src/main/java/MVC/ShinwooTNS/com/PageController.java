@@ -90,6 +90,12 @@ public class PageController {
 	public String Main(Locale locale, Model model, HttpServletRequest request, HttpServletResponse response) {
 		logger.info("Main : " + request.getLocalAddr());
 		System.out.println("Main Controller");
+		logger.info("Join User IP : " + request.getRemoteAddr());
+		System.out.println("");
+		System.out.println("===============================================");
+		System.out.println("Join User IP : " + request.getRemoteAddr());
+		System.out.println("===============================================");
+		System.out.println("");
 		// Session에 로그인 정보가 있는지 체크
 		HttpSession session = request.getSession(true);
 		System.out.println(session.getAttribute("login_chk"));

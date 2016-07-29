@@ -27,7 +27,6 @@ public class WorkerManager {
 	Thread _masterJobThread = null;								// Master Job Thread
 	Thread[] _eventWorker = new Thread[EVENT_WORKER_COUNT];		// Event Thread
 
-	//private SmartThreadPool _workerPool = new SmartThreadPool();
 	private SmartThreadPool _taskPool = new SmartThreadPool();
 	
 	//region Singleton

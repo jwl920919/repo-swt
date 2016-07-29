@@ -2,17 +2,13 @@ package test.thread;
 
 import com.shinwootns.common.stp.SmartThreadPool;
 
+/*
 public class TestThread extends Thread {
 
 	public SmartThreadPool pool = new SmartThreadPool();
 
 	int taskIndex = 0;
 	
-	/*
-	protected void finalize() {
-		shutdownAndWait();
-	}*/
-
 	@Override
 	public void run() {
 
@@ -78,3 +74,5 @@ public class TestThread extends Thread {
 		System.out.println("ShutdownAndWait.");
 	}
 }
+
+*/

@@ -1,18 +1,10 @@
 package com.shinwootns.ipm.collector;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.ConcurrentLinkedQueue;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.shinwootns.common.network.SyslogEntity;
 import com.shinwootns.common.stp.PoolStatus;
 import com.shinwootns.common.stp.SmartThreadPool;
-import com.shinwootns.common.utils.TimeUtils;
-import com.shinwootns.ipm.collector.data.SharedData;
 import com.shinwootns.ipm.collector.worker.MasterJobWoker;
 import com.shinwootns.ipm.collector.worker.SchedulerWorker;
 import com.shinwootns.ipm.collector.worker.SyslogWorker;

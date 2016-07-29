@@ -1,5 +1,6 @@
 package com.shinwootns.common.snmp;
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
@@ -47,7 +48,11 @@ public class SnmpUtil {
 	
 	//region SnmpGet
 	public SnmpResult snmpGet(int version, String oidString, int timeout, int retryCnt) {
+
+		Snmp snmp = null;
+		TransportMapping transport = null;
 		SnmpResult result = null;
+		PDU pdu = null;
 
 		try {
 			Address targetAddress = GenericAddress.parse("udp:" + _ip + "/" + _port);
@@ -80,15 +85,15 @@ public class SnmpUtil {
 			}
 
 			// Create PDU object
-			PDU pdu = new PDU();
+			pdu = new PDU();
 			pdu.add(new VariableBinding(oid));
 			pdu.setType(PDU.GET);
 			pdu.setRequestID(new Integer32(1));
 			
-			TransportMapping transport = new DefaultUdpTransportMapping();
+			transport = new DefaultUdpTransportMapping();
 
 			// Create Snmp
-			Snmp snmp = new Snmp(transport);
+			snmp = new Snmp(transport);
 
 			// Listen
 			transport.listen();
@@ -124,6 +129,8 @@ public class SnmpUtil {
 								}
 							}
 						}
+						
+						responsePDU.clear();
 					}
 				} else {
 					// System.out.println("Error: Response PDU is null");
@@ -134,7 +141,36 @@ public class SnmpUtil {
 				_logger.debug(e.getMessage(), e);
 			else
 				e.printStackTrace();
+		} finally {
+			
+			if (pdu != null) {
+				try {
+					pdu.clear();
+				} catch (Exception e) {}
+				finally {
+				}
+			}
+			
+			if (snmp != null)
+			{
+				try {
+					snmp.close();
+				} catch (Exception e) {}
+				finally {
+					snmp = null;
+				}
+			}
+			
+			if (transport != null) {
+				try {
+					transport.close();
+				} catch (Exception e) {}
+				finally {
+					transport = null;
+				}
+			}
 		}
+		
 
 		return result;
 	}
@@ -143,6 +179,9 @@ public class SnmpUtil {
 	//region SnmpWalk
 	public LinkedList<SnmpResult> snmpWalk(int version, String oidString, int timeout, int retryCnt) {
 
+		DefaultUdpTransportMapping transport = null;
+		Snmp snmp = null;
+		
 		LinkedList<SnmpResult> listResult = new LinkedList<SnmpResult>();
 
 		try {
@@ -176,16 +215,16 @@ public class SnmpUtil {
 			}
 
 			// Create Transport
-			DefaultUdpTransportMapping transport = new DefaultUdpTransportMapping();
+			transport = new DefaultUdpTransportMapping();
 
 			// Create Snmp
-			Snmp snmp = new Snmp(transport);
+			snmp = new Snmp(transport);
 
 			// Listen
 			transport.listen();
-
+			
 			TreeUtils treeUtils = new TreeUtils(snmp, new DefaultPDUFactory());
-
+			
 			// Get Subtree
 			List<TreeEvent> events = treeUtils.getSubtree(target, oid);
 
@@ -228,6 +267,25 @@ public class SnmpUtil {
 				_logger.debug(e.getMessage(), e);
 			else
 				e.printStackTrace();
+		} finally {
+			if (snmp != null)
+			{
+				try {
+					snmp.close();
+				} catch (Exception e) {}
+				finally {
+					snmp = null;
+				}
+			}
+			
+			if (transport != null) {
+				try {
+					transport.close();
+				} catch (Exception e) {}
+				finally {
+					transport = null;
+				}
+			}
 		}
 
 		return listResult;
