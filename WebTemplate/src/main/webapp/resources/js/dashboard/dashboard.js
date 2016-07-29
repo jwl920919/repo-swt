@@ -13,8 +13,8 @@ var m_eventLogAjaxCall
 
 var systemStatusCallTime = 1000;
 var guestIPAssignStatusCallTime = 5000;
-var certifyProcessCallTime = 5000;
-var askIPStatusCallTime = 5000;
+var certifyProcessCallTime = 1000;
+var askIPStatusCallTime = 1000;
 var dnsStatusCallTime = 5000;
 var segmentLeasingIPAssignedCallTime = 5000;
 var assignmentIPStatusCallTime = 5000;
@@ -24,6 +24,17 @@ var serviceUsedStatusCallTime = 5000;
 var vendorUsedStatusCallTime = 5000;
 var eventLogCallTime = 5000;
 
+
+var vCpu;
+var vMEMORY;
+var vDisk;
+var vNetwork;
+var certifyProcessChart;
+var certifyProcessChartData;
+var m_lineChartOption;
+var m_barChartOptions;
+
+var askIPStatusBarChart;
 
 $(document).ready(
 		function() {
@@ -158,7 +169,7 @@ function systemStatusAjaxCall() {
 		if (jsonObj != "") {
 			// CPU (core1:90%)
 			if (jsonObj.CPU != '') {
-				var vCpu = '<table style=\"border-color:red;\" border=\"0\">';
+				vCpu = '<table style=\"border-color:red;\" border=\"0\">';
 				$.each(jsonObj.CPU, function(index, obj) {
 					// vCpu = vCpu + obj.seq + " : " + obj.value + "<LABEL
 					// style=\"font-size: 20px\">"+ obj.unit + "</LABEL></br>";
@@ -179,7 +190,7 @@ function systemStatusAjaxCall() {
 				// + jsonObj.MEMORY.total + "<LABEL style=\"font-size: 20px\">"+
 				// jsonObj.MEMORY.unit + "</LABEL>";
 
-				var vMEMORY = '<table style=\"border-color:red;\" border=\"0\">';
+				vMEMORY = '<table style=\"border-color:red;\" border=\"0\">';
 				vMEMORY = vMEMORY
 						+ "<tr><td style=\"width:40px;text-align:right\">"
 						+ jsonObj.MEMORY.value
@@ -195,34 +206,33 @@ function systemStatusAjaxCall() {
 			}
 			// DISK (C:16G/100G)
 			if (jsonObj.DISK != '') {
-				var vDisk = '<table style=\"border-color:red;\" border=\"0\">';
-				$
-						.each(
-								jsonObj.DISK,
-								function(index, obj) {
-									// vDisk = vDisk + obj.seq + ": - " +
-									// obj.usage + "<LABEL style=\"font-size:
-									// 15px\">"+ obj.unit + "</LABEL>" + " / "
-									// + obj.total + "<LABEL style=\"font-size:
-									// 15px\">"+ obj.unit + "</LABEL>" +
-									// "</br>";
+				vDisk = '<table style=\"border-color:red;\" border=\"0\">';
+				$.each(
+						jsonObj.DISK,
+						function(index, obj) {
+							// vDisk = vDisk + obj.seq + ": - " +
+							// obj.usage + "<LABEL style=\"font-size:
+							// 15px\">"+ obj.unit + "</LABEL>" + " / "
+							// + obj.total + "<LABEL style=\"font-size:
+							// 15px\">"+ obj.unit + "</LABEL>" +
+							// "</br>";
 
-									vDisk = vDisk
-											+ "<tr><td>"
-											+ obj.seq
-											+ ":"
-											+ "</td><td style=\"width:60px;text-align:right\">"
-											+ obj.usage
-											+ "<LABEL style=\"font-size: 15px\">"
-											+ obj.unit
-											+ "</LABEL>"
-											+ "</td><td style=\"width:20px;text-align:center\"> / </td>"
-											+ "<td style=\"width:60px;\">"
-											+ obj.total
-											+ "<LABEL style=\"font-size: 15px\">"
-											+ obj.unit + "</LABEL>"
-											+ "</td></tr>";
-								});
+							vDisk = vDisk
+									+ "<tr><td>"
+									+ obj.seq
+									+ ":"
+									+ "</td><td style=\"width:60px;text-align:right\">"
+									+ obj.usage
+									+ "<LABEL style=\"font-size: 15px\">"
+									+ obj.unit
+									+ "</LABEL>"
+									+ "</td><td style=\"width:20px;text-align:center\"> / </td>"
+									+ "<td style=\"width:60px;\">"
+									+ obj.total
+									+ "<LABEL style=\"font-size: 15px\">"
+									+ obj.unit + "</LABEL>"
+									+ "</td></tr>";
+						});
 				vDisk = vDisk + "</table>";
 				$('#lDiskValue').html(vDisk);
 			}
@@ -238,30 +248,29 @@ function systemStatusAjaxCall() {
 				// + obj.total + "<LABEL style=\"font-size: 15px\">"+ obj.unit +
 				// "</LABEL>" + "</br>";
 
-				var vNetwork = '<table style=\"border-color:red;\" border=\"0\">';
-				$
-						.each(
-								jsonObj.NETWORK,
-								function(index, obj) {
-									if (obj.seq == "IN") {
-										obj.seq += "　";
-									}
-									vNetwork = vNetwork
-											+ "<tr><td>"
-											+ obj.seq
-											+ " : "
-											+ "</td><td style=\"width:80px;text-align:right\">"
-											+ obj.usage
-											+ "<LABEL style=\"font-size: 15px\">"
-											+ obj.unit
-											+ "</LABEL>"
-											+ "</td><td style=\"width:20px;text-align:center\"> / </td>"
-											+ "<td style=\"width:80px;\">"
-											+ obj.total
-											+ "<LABEL style=\"font-size: 15px\">"
-											+ obj.unit + "</LABEL>"
-											+ "</td></tr>";
-								});
+				vNetwork = '<table style=\"border-color:red;\" border=\"0\">';
+				$.each(
+						jsonObj.NETWORK,
+						function(index, obj) {
+							if (obj.seq == "IN") {
+								obj.seq += "　";
+							}
+							vNetwork = vNetwork
+									+ "<tr><td>"
+									+ obj.seq
+									+ " : "
+									+ "</td><td style=\"width:80px;text-align:right\">"
+									+ obj.usage
+									+ "<LABEL style=\"font-size: 15px\">"
+									+ obj.unit
+									+ "</LABEL>"
+									+ "</td><td style=\"width:20px;text-align:center\"> / </td>"
+									+ "<td style=\"width:80px;\">"
+									+ obj.total
+									+ "<LABEL style=\"font-size: 15px\">"
+									+ obj.unit + "</LABEL>"
+									+ "</td></tr>";
+						});
 				vNetwork = vNetwork + "</table>";
 				$('#lNetworkValue').html(vNetwork);
 			}
@@ -355,8 +364,7 @@ function certifyProcessAjaxCall() {
 	try {
 		// console.log("certifyProcessAjaxCall");
 
-		var data = tempChartData();
-		var jsonObj = eval("(" + data + ')'); // JSonString 형식의 데이터를
+		var jsonObj = eval("(" + tempChartData() + ')'); // JSonString 형식의 데이터를
 		// Ojbect형식으로 변경
 
 		if (jsonObj != '') {
@@ -376,13 +384,19 @@ function certifyProcessAjaxCall() {
 		    //- LINE CHART -
 		    //--------------
 			$("#certifyProcessChart").html('');
-			var certifyProcessChartCanvas = $("#certifyProcessChart").get(0).getContext("2d");
-			// This will get the first returned node in the jQuery collection.
-			var certifyProcessChart = new Chart(certifyProcessChartCanvas);
+			if (typeof certifyProcessChart === 'undefined') {
+				//var certifyProcessChartCanvas = $("#certifyProcessChart").get(0).getContext("2d");
+				// This will get the first returned node in the jQuery collection.
+				certifyProcessChart = new Chart($("#certifyProcessChart").get(0).getContext("2d"));
+			}
 			var data1 = [], data2 = [], labels = [], totalPoints = 100;
 
+			if (typeof m_lineChartOption === 'undefined') {
+				lineChartOption();
+			}
+
 			function getData() {
-				var certifyProcessChartData = {
+				certifyProcessChartData = {
 					labels : getRandomLabels(labels),
 					datasets : [ {
 						label : "Electronics",
@@ -449,7 +463,7 @@ function certifyProcessAjaxCall() {
 				// Since the axes don't change, we don't need to call
 				// plot.setupGrid()
 				//console.log("getdata : " + data1.length);
-				certifyProcessChart.Line(getData(), lineChartOption());
+				certifyProcessChart.Line(getData(), m_lineChartOption);
 				if (realtime === "on")
 					setTimeout(update, certifyProcessCallTime);
 			}
@@ -472,7 +486,7 @@ function certifyProcessAjaxCall() {
 			 */
 
 			// Create the line chart
-			certifyProcessChart.Line(getData(), lineChartOption());
+			certifyProcessChart.Line(getData(), m_lineChartOption);
 
 			// clearCertifyProcessAjaxCall();
 			// m_certifyProcessAjaxCall = setInterval(certifyProcessAjaxCall,
@@ -507,11 +521,15 @@ function askIPStatusAjaxCall() {
 		    //-------------
 		    //- BAR CHART -
 		    //-------------
-			var askIPStatusChartCanvas = $("#askIPStatusChart").get(0).getContext("2d");
-			var barChart = new Chart(askIPStatusChartCanvas);
+			if (typeof askIPStatusBarChart === 'undefined') {
+				askIPStatusBarChart = new Chart($("#askIPStatusChart").get(0).getContext("2d"));
+			}
 			var data1 = [], data2 = [], labels = [], totalPoints = 10;
 
-		    barChart.Bar(getData(), barChartOption());
+			if (typeof m_barChartOptions === 'undefined') {
+				barChartOption();
+			}
+			askIPStatusBarChart.Bar(getData(), m_barChartOptions);
 		    
 		    
 			function getData() {
@@ -580,7 +598,7 @@ function askIPStatusAjaxCall() {
 			var realtime = "on"; // If == to on then fetch data every x
 									// seconds. else stop fetching
 			function update() {
-			    barChart.Bar(getData(), barChartOption());
+				askIPStatusBarChart.Bar(getData(), m_barChartOptions);
 				if (realtime === "on")
 					setTimeout(update, askIPStatusCallTime);
 			}
@@ -603,7 +621,7 @@ function askIPStatusAjaxCall() {
 			 */
 
 			// Create the line chartvar 
-		    barChart.Bar(getData(), barChartOption());
+			askIPStatusBarChart.Bar(getData(), m_barChartOptions);
 		}
 	} catch (e) {
 		console.log("dashboard.js askIPStatusAjaxCall() Error Log : " + e.message);
@@ -1139,7 +1157,7 @@ function AllClearAjaxCall() {
 
 // 인증 처리 현황 라인 차트 옵션
 function lineChartOption() {
-	var chartOptions = {
+	m_lineChartOption = {
 		animation : false,
 		// Boolean - If we should show the scale at all
 		showScale : true,
@@ -1214,16 +1232,15 @@ function lineChartOption() {
 	// // String - full date format (used for point labels)
 	// scaleDateTimeFormat: "mmm d, yyyy, hh:MM",
 	};
-	return chartOptions;
 }
 
 // IP 신청 현황 바 차트 옵션
 function barChartOption() {
-	var barChartOptions = {
+	m_barChartOptions = {
 			animation : false,
 			max : 100,
-	min : 0,
-	stepSize : 50,
+			min : 0,
+			stepSize : 50,
 			
 		      //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
 		      scaleBeginAtZero: true,
@@ -1252,11 +1269,11 @@ function barChartOption() {
 		      maintainAspectRatio: true
 		    };
     
-	barChartOptions.datasetFill = false;
-	return barChartOptions;
+	m_barChartOptions.datasetFill = false;
 }
 
 //Pie Chart Tooltip Bind
+var previousPoint;
 function fnPieChartTooltipBind(chart){
 	function showTooltip(x, y, contents) { 
 	    $('<div id="tooltip">' + contents + '</div>').css( { 
@@ -1272,7 +1289,7 @@ function fnPieChartTooltipBind(chart){
 	    }).appendTo("body").fadeIn(200); 
 	}
 	
-	var previousPoint = null; 
+	previousPoint = null; 
 	chart.bind("plothover", function (event, pos, item) { 
 	    $("#x").text(pos.pageX); 
 	    $("#y").text(pos.pageY);
@@ -1305,7 +1322,7 @@ function fnPieChartTooltipBind(chart){
 //========================================================//
 // 차트 임시데이터 생성 메서드
 function tempChartData() {
-	var data = "{\"CERTIFYPRECESS\": ["
+	return "{\"CERTIFYPRECESS\": ["
 			+ "{\"time\": \"2016-06-30 01:00:00\",\"request\": 126,\"complete\": 602},"
 			+ "{\"time\": \"2016-06-30 01:01:00\",\"request\": 222,\"complete\": 483},"
 			+ "{\"time\": \"2016-06-30 01:02:00\",\"request\": 27,\"complete\": 725},"
@@ -1486,7 +1503,6 @@ function tempChartData() {
 			+ "{\"time\": \"2016-06-30 03:57:00\",\"request\": 845,\"complete\": 61},"
 			+ "{\"time\": \"2016-06-30 03:58:00\",\"request\": 87,\"complete\": 852},"
 			+ "{\"time\": \"2016-06-30 03:59:00\",\"request\": 344,\"complete\": 66}]}";
-	return data;
 }
 
 function tempIntegrationLogData(){
