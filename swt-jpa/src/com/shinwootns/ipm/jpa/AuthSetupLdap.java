@@ -55,9 +55,6 @@ public class AuthSetupLdap implements Serializable {
 
 	private Integer port;
 
-	@Column(name="site_id")
-	private Integer siteId;
-
 	@Column(name="ssl_enable")
 	private Boolean sslEnable;
 
@@ -186,14 +183,6 @@ public class AuthSetupLdap implements Serializable {
 
 	public void setPort(Integer port) {
 		this.port = port;
-	}
-
-	public Integer getSiteId() {
-		return this.siteId;
-	}
-
-	public void setSiteId(Integer siteId) {
-		this.siteId = siteId;
 	}
 
 	public Boolean getSslEnable() {

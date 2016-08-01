@@ -2,6 +2,7 @@ package com.shinwootns.ipm.jpa;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 
@@ -33,6 +34,9 @@ public class DhcpIpStatus implements Serializable {
 
 	@Column(name="host_os")
 	private String hostOs;
+
+	@Column(name="ip_num")
+	private BigDecimal ipNum;
 
 	@Column(name="ip_type")
 	private String ipType;
@@ -132,6 +136,14 @@ public class DhcpIpStatus implements Serializable {
 
 	public void setHostOs(String hostOs) {
 		this.hostOs = hostOs;
+	}
+
+	public BigDecimal getIpNum() {
+		return this.ipNum;
+	}
+
+	public void setIpNum(BigDecimal ipNum) {
+		this.ipNum = ipNum;
 	}
 
 	public String getIpType() {

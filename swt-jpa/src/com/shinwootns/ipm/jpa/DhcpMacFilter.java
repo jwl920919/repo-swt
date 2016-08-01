@@ -18,11 +18,22 @@ public class DhcpMacFilter implements Serializable {
 	@EmbeddedId
 	private DhcpMacFilterPK id;
 
+	@Column(name="default_expiration_time")
+	private Integer defaultExpirationTime;
+
+	private Boolean disable;
+
+	@Column(name="enforce_expiration_times")
+	private Boolean enforceExpirationTimes;
+
 	@Column(name="filter_desc")
 	private String filterDesc;
 
 	@Column(name="insert_time")
 	private Timestamp insertTime;
+
+	@Column(name="never_expires")
+	private Boolean neverExpires;
 
 	@Column(name="update_time")
 	private Timestamp updateTime;
@@ -36,6 +47,30 @@ public class DhcpMacFilter implements Serializable {
 
 	public void setId(DhcpMacFilterPK id) {
 		this.id = id;
+	}
+
+	public Integer getDefaultExpirationTime() {
+		return this.defaultExpirationTime;
+	}
+
+	public void setDefaultExpirationTime(Integer defaultExpirationTime) {
+		this.defaultExpirationTime = defaultExpirationTime;
+	}
+
+	public Boolean getDisable() {
+		return this.disable;
+	}
+
+	public void setDisable(Boolean disable) {
+		this.disable = disable;
+	}
+
+	public Boolean getEnforceExpirationTimes() {
+		return this.enforceExpirationTimes;
+	}
+
+	public void setEnforceExpirationTimes(Boolean enforceExpirationTimes) {
+		this.enforceExpirationTimes = enforceExpirationTimes;
 	}
 
 	public String getFilterDesc() {
@@ -52,6 +87,14 @@ public class DhcpMacFilter implements Serializable {
 
 	public void setInsertTime(Timestamp insertTime) {
 		this.insertTime = insertTime;
+	}
+
+	public Boolean getNeverExpires() {
+		return this.neverExpires;
+	}
+
+	public void setNeverExpires(Boolean neverExpires) {
+		this.neverExpires = neverExpires;
 	}
 
 	public Timestamp getUpdateTime() {

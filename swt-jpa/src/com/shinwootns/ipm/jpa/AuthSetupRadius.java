@@ -24,6 +24,9 @@ public class AuthSetupRadius implements Serializable {
 	@Column(name="auth_port")
 	private Integer authPort;
 
+	@Column(name="auth_type")
+	private String authType;
+
 	@Column(name="called_station_id")
 	private String calledStationId;
 
@@ -39,9 +42,6 @@ public class AuthSetupRadius implements Serializable {
 
 	@Column(name="service_type")
 	private String serviceType;
-
-	@Column(name="site_id")
-	private Integer siteId;
 
 	@Column(name="timeout_sec")
 	private Integer timeoutSec;
@@ -71,6 +71,14 @@ public class AuthSetupRadius implements Serializable {
 
 	public void setAuthPort(Integer authPort) {
 		this.authPort = authPort;
+	}
+
+	public String getAuthType() {
+		return this.authType;
+	}
+
+	public void setAuthType(String authType) {
+		this.authType = authType;
 	}
 
 	public String getCalledStationId() {
@@ -119,14 +127,6 @@ public class AuthSetupRadius implements Serializable {
 
 	public void setServiceType(String serviceType) {
 		this.serviceType = serviceType;
-	}
-
-	public Integer getSiteId() {
-		return this.siteId;
-	}
-
-	public void setSiteId(Integer siteId) {
-		this.siteId = siteId;
 	}
 
 	public Integer getTimeoutSec() {
