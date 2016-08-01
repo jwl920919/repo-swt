@@ -2073,7 +2073,9 @@ deg
 	color: #444;
 	display: block;
 	padding: 10px;
-	position: relative
+	overflow: hidden;
+  	text-overflow: ellipsis;
+  	white-space: nowrap
 }
 
 .box-header.with-border {
@@ -2088,6 +2090,14 @@ deg
 	{
 	display: inline-block;
 	font-size: 16px;
+	margin: 0;
+	line-height: 1
+}
+
+.box-header>.fa, .box-header>.glyphicon, .box-header>.ion, .box-header .dashbaord-box-title-small
+	{	
+	display: inline-block;
+	font-size: 14px;
 	margin: 0;
 	line-height: 1
 }

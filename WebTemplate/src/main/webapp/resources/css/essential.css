@@ -106,7 +106,14 @@ td.essential-td-cursor-pointer {
 	height: 30px;
 	font-size: 12px;
 	vertical-align: middle;
-	padding: 5px 10px 5px 10px;
+	padding: 6px 10px;
+}
+
+.dashboard-box-btn {
+	height: 20px !important;
+	width : 20px
+	text-align : center;
+	padding: 3.5px 5px 5px 5px !important;
 }
 
 #datatable_paginate {
