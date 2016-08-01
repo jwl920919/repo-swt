@@ -197,7 +197,7 @@ CREATE INDEX event_log_idx ON public.event_log USING btree (device_id, collect_t
 --==========================================================================================
 
 -- AUTH_TYPE
-CREATE TABLE public.auth_type
+CREATE TABLE auth_type
 (
   auth_type_id integer NOT NULL,
   auth_name character varying(64) NOT NULL,
@@ -206,7 +206,7 @@ CREATE TABLE public.auth_type
 );
 
 -- AUTH_ORDER
-CREATE TABLE public.auth_order
+CREATE TABLE auth_order
 (
   site_id integer NOT NULL,
   sequence_type character varying(32) DEFAULT 'sequence',
@@ -215,18 +215,6 @@ CREATE TABLE public.auth_order
   CONSTRAINT auth_order_id_pkey PRIMARY KEY (site_id, auth_type_id, auth_order)
 );
 
-
--- AUTH_LDAP_GROUP
-CREATE SEQUENCE public.auth_ldap_group_id_seq;
-CREATE TABLE public.auth_ldap_group
-(
-  ldap_group_id integer NOT NULL DEFAULT nextval('auth_ldap_group_id_seq'::regclass),
-  auth_type_id integer DEFAULT 1,
-  domain_name character varying(512) NOT NULL,
-  group_name character varying(512) NOT NULL,
-  group_type character varying(64) NOT NULL,
-  CONSTRAINT ldap_group_id_pkey PRIMARY KEY (ldap_group_id)
-);
 
 -- AUTH_SETUP_ID Sequence
 CREATE SEQUENCE public.auth_setup_id_seq;
@@ -259,6 +247,17 @@ CREATE TABLE public.auth_setup_ldap
   kerberos_realm character varying(128),
   
   CONSTRAINT auth_setup_ldap_id_pkey PRIMARY KEY (setup_id)
+);
+
+-- AUTH_SETUP_LDAP_GROUP
+CREATE TABLE auth_setup_ldap_group
+(
+  setup_id integer NOT NULL,
+  auth_type_id integer DEFAULT 1,
+  group_dn character varying(512) NOT NULL,
+  group_name character varying(512) NOT NULL,
+  group_type character varying(64) NOT NULL,
+  CONSTRAINT auth_setup_ldap_group_id_pkey PRIMARY KEY (setup_id, group_dn)
 );
 
 -- AUTH_SETUP_ESB
@@ -335,6 +334,10 @@ CREATE TABLE public.dhcp_mac_filter
   site_id integer NOT NULL,
   filter_name character varying(128) NOT NULL,
   filter_desc character varying(512),
+  disable boolean DEFAULT false,
+  never_expires	boolean,
+  default_expiration_time integer,
+  enforce_expiration_times boolean;
   insert_time timestamp with time zone DEFAULT current_timestamp,
   update_time timestamp with time zone DEFAULT current_timestamp,
   CONSTRAINT dhcp_mac_filter_pkey PRIMARY KEY (site_id, filter_name)

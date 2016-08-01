@@ -85,7 +85,7 @@ public class JsonUtils {
 		}
 	}
 	
-	public static long getValueToNumber(JsonObject jObj, String key, long defaultValue) {
+	public static Long getValueToLong(JsonObject jObj, String key, Long defaultValue) {
 		
 		if (jObj == null)
 			return defaultValue;
@@ -96,6 +96,19 @@ public class JsonUtils {
 			return defaultValue;
 		
 		return ele.getAsNumber().longValue();
+	}
+	
+	public static Integer getValueToInteger(JsonObject jObj, String key, Integer defaultValue) {
+		
+		if (jObj == null)
+			return defaultValue;
+		
+		JsonElement ele = jObj.get(key);
+		
+		if (ele == null)
+			return defaultValue;
+		
+		return ele.getAsNumber().intValue();
 	}
 	
 	public static Boolean getValueToBoolean(JsonObject jObj, String key, Boolean defaultValue) {
@@ -111,10 +124,15 @@ public class JsonUtils {
 		return ele.getAsBoolean();
 	}
 	
-	public static Timestamp getValueToTimestamp(JsonObject jObj, String key, long defaultValue) {
+	public static Timestamp getValueToTimestamp(JsonObject jObj, String key, Long defaultValue) {
 		
-		if (jObj == null)
-			return new Timestamp(defaultValue);
+		
+		if (jObj == null) {
+			if (defaultValue == null)
+				return null;
+			else
+				return new Timestamp(defaultValue);
+		}
 		
 		JsonElement ele = jObj.get(key);
 
