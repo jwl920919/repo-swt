@@ -63,7 +63,7 @@ public class EventWorker extends BaseWorker {
 				
 				try {
 					// Insert to db
-					eventMapper.insert(event);
+					eventMapper.insertEventLog(event);
 				}
 				catch (Exception ex) {
 					_logger.error(ex.getMessage(), ex);

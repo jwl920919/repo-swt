@@ -199,36 +199,41 @@ CREATE INDEX event_log_idx ON public.event_log USING btree (device_id, collect_t
 -- AUTH_TYPE
 CREATE TABLE auth_type
 (
-  auth_type_id integer NOT NULL,
-  auth_name character varying(64) NOT NULL,
   auth_type character varying(32) NOT NULL,
-  CONSTRAINT auth_type_id_pkey PRIMARY KEY (auth_type_id)
-);
-
--- AUTH_ORDER
-CREATE TABLE auth_order
-(
-  site_id integer NOT NULL,
-  sequence_type character varying(32) DEFAULT 'sequence',
-  auth_type_id integer NOT NULL,
-  auth_order integer NOT NULL,
-  CONSTRAINT auth_order_id_pkey PRIMARY KEY (site_id, auth_type_id, auth_order)
+  auth_name character varying(64) NOT NULL,
+  CONSTRAINT auth_type_id_pkey PRIMARY KEY (auth_type)
 );
 
 
 -- AUTH_SETUP_ID Sequence
-CREATE SEQUENCE public.auth_setup_id_seq;
+CREATE SEQUENCE auth_setup_id_seq;
+
+-- AUTH_SETUP
+CREATE TABLE auth_setup
+(
+  setup_id integer NOT NULL DEFAULT nextval('auth_setup_id_seq'::regclass),
+  auth_type character varying(32) NOT NULL,
+  site_id integer DEFAULT 0,
+  setup_name character varying(128),
+  disable boolean NOT NULL DEFAULT false,
+  order_num integer DEFAULT 9999,
+  insert_time timestamp with time zone DEFAULT current_timestamp,
+  update_time timestamp with time zone DEFAULT current_timestamp,
+  CONSTRAINT auth_setup_id_pkey PRIMARY KEY (setup_id)
+);
+COMMENT ON COLUMN auth_setup.site_id IS 'SiteID, (0 = Global)';
+
 
 -- AUTH_SETUP_LDAP
 CREATE TABLE public.auth_setup_ldap
 (
-  setup_id integer NOT NULL DEFAULT nextval('auth_setup_id_seq'::regclass),
-  site_id integer NOT NULL,
+  setup_id integer NOT NULL,
+  auth_type character varying(32) NOT NULL,
+  
   host character varying(64) NOT NULL,
   port integer NOT NULL,
   ssl_enable boolean NOT NULL DEFAULT false,
   
-  auth_type character varying(32) NOT NULL,
   bind_domain character varying(128) NOT NULL,
   bind_passwd character varying(64) NOT NULL,
   base_domain character varying(128) NOT NULL,
@@ -253,7 +258,8 @@ CREATE TABLE public.auth_setup_ldap
 CREATE TABLE auth_setup_ldap_group
 (
   setup_id integer NOT NULL,
-  auth_type_id integer DEFAULT 1,
+  auth_type character varying(32) NOT NULL,
+  
   group_dn character varying(512) NOT NULL,
   group_name character varying(512) NOT NULL,
   group_type character varying(64) NOT NULL,
@@ -263,20 +269,21 @@ CREATE TABLE auth_setup_ldap_group
 -- AUTH_SETUP_ESB
 CREATE TABLE public.auth_setup_esb
 (
-  setup_id integer NOT NULL DEFAULT nextval('auth_setup_id_seq'::regclass),
-  site_id integer NOT NULL,
+  setup_id integer NOT NULL,
+  auth_type character varying(32) NOT NULL,
+
   url character varying(256) NOT NULL,
   user_id character varying(64) NOT NULL,
   user_passwd character varying(64) NOT NULL,
-  
   CONSTRAINT auth_setup_esb_id_pkey PRIMARY KEY (setup_id)
 );
 
 -- AUTH_SETUP_RADIUS
 CREATE TABLE public.auth_setup_radius
 (
-  setup_id integer NOT NULL DEFAULT nextval('auth_setup_id_seq'::regclass),
-  site_id integer NOT NULL,
+  setup_id integer NOT NULL,
+  auth_type character varying(32) NOT NULL,
+  
   host character varying(64) NOT NULL,
   password character varying(128) NOT NULL,
   auth_port integer NOT NULL,
@@ -286,7 +293,6 @@ CREATE TABLE public.auth_setup_radius
   nas_identifier character varying(64) NOT NULL,
   service_type character varying(64) DEFAULT 'Login-User',
   called_station_id character varying(64) NOT NULL,
-  
   CONSTRAINT auth_setup_radius_id_pkey PRIMARY KEY (setup_id)
 );
 
@@ -337,14 +343,14 @@ CREATE TABLE public.dhcp_mac_filter
   disable boolean DEFAULT false,
   never_expires	boolean,
   default_expiration_time integer,
-  enforce_expiration_times boolean;
+  enforce_expiration_times boolean,
   insert_time timestamp with time zone DEFAULT current_timestamp,
   update_time timestamp with time zone DEFAULT current_timestamp,
   CONSTRAINT dhcp_mac_filter_pkey PRIMARY KEY (site_id, filter_name)
 );
 
 -- DHCP FIXED IP
-CREATE TABLE public.dhcp_fixed_ip
+CREATE TABLE dhcp_fixed_ip
 (
   site_id integer NOT NULL,
   network character varying(64) NOT NULL,
@@ -354,9 +360,17 @@ CREATE TABLE public.dhcp_fixed_ip
   ip_num numeric NOT NULL,
   comment character varying(256),
   disable boolean DEFAULT false,
+  ipv4_match_client character varying(18),
+  ipv6_address_type character varying(18), 
+  ipv6_duid character varying(64),
+  ipv6_prefix character varying(64),
+  ipv6_prefix_bits integer,
   update_time timestamp with time zone DEFAULT current_timestamp,
   CONSTRAINT dhcp_fixed_ip_pkey PRIMARY KEY (site_id, ipaddr)
 );
+
+COMMENT ON COLUMN dhcp_fixed_ip.ipv4_match_client IS 'MAC_ADDRESS, CLIENT_ID, RESERVED, CIRCUIT_ID, REMOTE_ID';
+COMMENT ON COLUMN dhcp_fixed_ip.ipv6_address_type IS 'ADDRESS, BOTH, PREFIX';
 
 
 -- DHCP IP STATUS
@@ -388,6 +402,8 @@ CREATE TABLE dhcp_ip_status
   user_description character varying(256),
   CONSTRAINT dhcp_ip_status_pkey PRIMARY KEY (site_id, ipaddr)
 );
+CREATE INDEX dhcp_ip_status_idx ON dhcp_ip_status USING btree (status, lease_state, obj_types, is_conflict);
+
 COMMENT ON COLUMN dhcp_ip_status.ip_type IS 'IPV4, IPV6';
 COMMENT ON COLUMN dhcp_ip_status.status IS 'The current status of the address (USED, UNUSED)';
 COMMENT ON COLUMN dhcp_ip_status.lease_state IS '(ABANDONED, ACTIVE, BACKUP, DECLINED, EXPIRED, FREE, OFFERED, RELEASED, RESET, STATIC)';
@@ -445,3 +461,68 @@ CREATE TABLE public.client_history
   CONSTRAINT client_history_pkey PRIMARY KEY (macaddr, duid, )
 );
 */
+
+
+
+
+--==========================================================================================
+-- VIEW
+--==========================================================================================
+
+DROP VIEW view_network_ip_status;
+
+CREATE OR REPLACE VIEW view_network_ip_status
+AS
+
+SELECT site_id, ip_type, network, start_ip, end_ip, comment
+, ip_count, ip_total
+, CASE WHEN ip_total > 0 THEN TRUNC(ip_count/ip_total*100.0, 2) ELSE 0.00 END total_usage
+, rgip_count, range_total
+, CASE WHEN range_total > 0 THEN TRUNC(rgip_count/range_total*100.0, 2) ELSE 0.00 END alloc_usage
+FROM
+(
+	SELECT nw.site_id, nw.ip_type, nw.start_num, nw.network, nw.start_ip, nw.end_ip, nw.comment
+		, nw.ip_count ip_total
+		, COALESCE(SUM(ip.ip_count),0) ip_count
+		, COALESCE(SUM(rg.ip_count),0) range_total
+		, COALESCE(SUM(rgip.ip_count),0) rgip_count
+	FROM dhcp_network nw
+	-- Ip Count
+	LEFT OUTER JOIN (
+		SELECT nw.ip_type, nw.network , COUNT(ip.ip_num) ip_count
+		FROM dhcp_network nw, dhcp_ip_status ip
+		WHERE nw.start_num <= ip.ip_num AND ip.ip_num <= nw.end_num 
+		AND status = 'USED'
+		AND (is_never_ends = true 
+			OR is_conflict = true 
+			OR lease_state = 'ACTIVE' 
+			OR lease_state = 'ABANDONED'
+			OR obj_types LIKE '%FA%'
+			OR obj_types LIKE '%RESERVATION%'
+		)
+		GROUP BY nw.ip_type, nw.network, nw.ip_count
+		
+	) ip ON nw.ip_type = ip.ip_type AND nw.network = ip.network
+	-- IP Total Count in Range
+	LEFT OUTER JOIN dhcp_range rg ON nw.start_num <= rg.start_num AND rg.end_num <= nw.end_num
+	-- IP Count in Range
+	LEFT OUTER JOIN (
+	
+		SELECT nw.ip_type, nw.network, COUNT(ip.ip_num) ip_count
+		FROM dhcp_network nw, dhcp_range rg, dhcp_ip_status ip
+		WHERE nw.start_num <= rg.start_num AND rg.end_num <= nw.end_num
+		AND rg.start_num <= ip.ip_num AND ip.ip_num <= rg.end_num
+		AND status = 'USED'
+		AND (is_never_ends = true 
+			OR is_conflict = true 
+			OR lease_state = 'ACTIVE' 
+			OR lease_state = 'ABANDONED'
+			OR obj_types LIKE '%FA%'
+			OR obj_types LIKE '%RESERVATION%'
+		)
+		GROUP BY nw.ip_type, nw.network, nw.ip_count
+		
+	) rgip ON nw.ip_type = rgip.ip_type AND nw.network = rgip.network
+	GROUP BY nw.site_id, nw.ip_type, nw.start_num, nw.network, nw.ip_count, nw.start_ip, nw.end_ip, nw.comment
+) status
+ORDER BY site_id, ip_type, start_num;

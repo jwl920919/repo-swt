@@ -1,5 +1,6 @@
 package com.shinwootns.ipm.collector.service.infoblox;
 
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -17,6 +18,7 @@ import com.shinwootns.common.utils.JsonUtils;
 import com.shinwootns.common.utils.TimeUtils;
 import com.shinwootns.common.utils.ip.IPAddr;
 import com.shinwootns.common.utils.ip.IPNetwork;
+import com.shinwootns.data.entity.DhcpFixedIp;
 import com.shinwootns.data.entity.DhcpIpStatus;
 import com.shinwootns.data.entity.DhcpMacFilter;
 import com.shinwootns.data.entity.DhcpNetwork;
@@ -275,7 +277,9 @@ public class DhcpHandler {
 					dhcpRange.setStartNum(startIPAddr.getNumberToBigInteger());
 					dhcpRange.setEndNum(endIPAddr.getNumberToBigInteger());
 					// IP Count
-					dhcpRange.setIpCount(endIPAddr.getNumberToBigInteger().subtract(startIPAddr.getNumberToBigInteger()));
+					dhcpRange.setIpCount(endIPAddr.getNumberToBigInteger()
+							.subtract(startIPAddr.getNumberToBigInteger())
+							.add(new BigInteger("1")));
 					
 					// IPv6
 					if (network.indexOf(":") >= 0 ) {
@@ -331,6 +335,79 @@ public class DhcpHandler {
 			}
 			
 			return listFilter;
+		}
+		catch(Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+		}
+		
+		return null;
+	}
+	//endregion
+	
+	//region [FUNC] get Fixed IP
+	public LinkedList<DhcpFixedIp> getDhcpFixedIP(int site_id) {
+		
+		if (wapiHandler == null)
+			return null;
+
+		try {
+			LinkedList<DhcpFixedIp> listFixedIp = new LinkedList<DhcpFixedIp>();
+			
+			// IPv4
+			{
+				JsonArray jArray = wapiHandler.getFixedIPList();
+			
+				for(JsonElement jEle : jArray) {
+					
+					if (jEle != null && jEle.isJsonObject()) {
+						
+						JsonObject jObj = jEle.getAsJsonObject();
+						
+						DhcpFixedIp fixedIp = new DhcpFixedIp();
+						fixedIp.setSiteId(site_id);
+						fixedIp.setIpType("IPV4");
+						fixedIp.setNetwork(JsonUtils.getValueToString(jObj, "network", ""));
+						fixedIp.setIpaddr(JsonUtils.getValueToString(jObj, "ipv4addr", ""));
+						fixedIp.setIpNum(new IPAddr(fixedIp.getIpaddr()).getNumberToBigInteger());
+						fixedIp.setComment(JsonUtils.getValueToString(jObj, "comment", ""));
+						fixedIp.setMacaddr(JsonUtils.getValueToString(jObj, "mac", ""));
+						fixedIp.setDisable(JsonUtils.getValueToBoolean(jObj, "disable", false));
+						fixedIp.setMatchClient(JsonUtils.getValueToString(jObj, "match_client", ""));
+											
+						listFixedIp.add(fixedIp);
+					}
+				}
+			}
+			// IPv6 
+			{
+				JsonArray jArray = wapiHandler.getFixedIPv6List();
+				
+				for(JsonElement jEle : jArray) {
+					
+					if (jEle != null && jEle.isJsonObject()) {
+						
+						JsonObject jObj = jEle.getAsJsonObject();
+						
+						DhcpFixedIp fixedIp = new DhcpFixedIp();
+						fixedIp.setSiteId(site_id);
+						fixedIp.setIpType("IPV6");
+						fixedIp.setNetwork(JsonUtils.getValueToString(jObj, "network", ""));
+						fixedIp.setIpaddr(JsonUtils.getValueToString(jObj, "ipv6addr", ""));
+						fixedIp.setIpNum(new IPAddr(fixedIp.getIpaddr()).getNumberToBigInteger());
+						fixedIp.setComment(JsonUtils.getValueToString(jObj, "comment", ""));
+						fixedIp.setIpv6Duid(JsonUtils.getValueToString(jObj, "duid", ""));
+						fixedIp.setDisable(JsonUtils.getValueToBoolean(jObj, "disable", false));
+						fixedIp.setIpv6AddressType(JsonUtils.getValueToString(jObj, "address_type", ""));
+						fixedIp.setIpv6Prefix(JsonUtils.getValueToString(jObj, "ipv6prefix", ""));
+						fixedIp.setIpv6PrefixBits(JsonUtils.getValueToInteger(jObj, "ipv6prefix_bits", null));
+											
+						listFixedIp.add(fixedIp);
+					}
+				}
+			}
+			
+			
+			return listFixedIp;
 		}
 		catch(Exception ex) {
 			_logger.error(ex.getMessage(), ex);

@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import com.shinwootns.common.cache.RedisClient;
 import com.shinwootns.common.utils.JsonUtils;
 import com.shinwootns.data.entity.DeviceDhcp;
+import com.shinwootns.data.entity.DhcpFixedIp;
 import com.shinwootns.data.entity.DhcpIpStatus;
 import com.shinwootns.data.entity.DhcpMacFilter;
 import com.shinwootns.data.entity.DhcpNetwork;
@@ -42,9 +43,18 @@ public class MasterJobWoker implements Runnable {
 		
 		_logger.info("MasterJobWoker... start.");
 		
-		collectDhcp();
+		// collectDhcp info (60 sec)
+		schedulerService.scheduleWithFixedDelay(
+				new Runnable() {
+					@Override
+					public void run() {
+						collectDhcp();
+					}
+				}
+				,0 ,60 ,TimeUnit.SECONDS
+		);
 		
-		// FixedDelay 10 seconds
+		// updateDhcpStatus (10 sec)
 		schedulerService.scheduleWithFixedDelay(
 				new Runnable() {
 					@Override
@@ -69,6 +79,7 @@ public class MasterJobWoker implements Runnable {
 		_logger.info("MasterJobWoker... end.");
 	}
 	
+	//region [FUNC] Collect Dhcp
 	public void collectDhcp() {
 		
 		if (SharedData.getInstance().getSiteID() <= 0)
@@ -81,14 +92,17 @@ public class MasterJobWoker implements Runnable {
 		DhcpHandler handler = new DhcpHandler();
 		if ( handler.Connect(dhcp.getHost(), dhcp.getWapiUserid(), dhcp.getWapiPassword(), dhcp.getSnmpCommunity()) ) {
 			
-			// Collect Filter
-			collectMacFilter(handler);
-			
 			// Collect Network
 			LinkedList<DhcpNetwork> listNetwork = collectDhcpNetwork(handler);
 			
 			// Collect Range
 			collectDhcpRange(handler);
+
+			// Collect Filter
+			collectMacFilter(handler);
+			
+			// Collect Fixed IP
+			collectFixedIP(handler);
 			
 			// Collect IP Status
 			for(DhcpNetwork network : listNetwork) {
@@ -96,34 +110,6 @@ public class MasterJobWoker implements Runnable {
 			}
 		}
 		handler.close();
-	}
-	
-	//region [FUNC] Collect Mac Filter
-	private void collectMacFilter(DhcpHandler handler) {
-		
-		LinkedList<DhcpMacFilter> listFilter = handler.getDhcpMacFilter(SharedData.getInstance().getSiteID());
-		
-		if (listFilter != null) {
-			DataMapper dataMapper = SpringBeanProvider.getInstance().getDataMapper();
-			if (dataMapper == null)
-				return;
-				
-			for(DhcpMacFilter filter : listFilter) {
-				
-				try
-				{
-					if (filter != null && filter.getFilterName().isEmpty() == false) {
-						int affected = dataMapper.updateDhcpFilter(filter);
-						
-						if (affected == 0)
-							affected = dataMapper.insertDhcpFilter(filter);
-					}
-				}
-				catch(Exception ex) {
-					_logger.error(ex.getMessage(), ex);
-				}
-			}
-		}
 	}
 	//endregion
 	
@@ -139,11 +125,10 @@ public class MasterJobWoker implements Runnable {
 			DataMapper dataMapper = SpringBeanProvider.getInstance().getDataMapper();
 			if (dataMapper == null)
 				return null;
-				
-			for(DhcpNetwork network : listNetwork) {
-				
-				try
-				{
+			
+			try
+			{
+				for(DhcpNetwork network : listNetwork) {
 					if (network != null && network.getNetwork().isEmpty() == false) {
 						int affected = dataMapper.updateDhcpNetwork(network);
 						
@@ -151,9 +136,12 @@ public class MasterJobWoker implements Runnable {
 							affected = dataMapper.insertDhcpNetwork(network);
 					}
 				}
-				catch(Exception ex) {
-					_logger.error(ex.getMessage(), ex);
-				}
+				
+				_logger.info("collectDhcpNetwork()... OK");
+			}
+			catch(Exception ex) {
+				_logger.error("collectDhcpNetwork()... Failed");
+				_logger.error(ex.getMessage(), ex);
 			}
 		}
 		
@@ -171,20 +159,88 @@ public class MasterJobWoker implements Runnable {
 			if (dataMapper == null)
 				return;
 				
-			for(DhcpRange range : listRange) {
-				
-				try
-				{
+			try
+			{
+				for(DhcpRange range : listRange) {
 					if (range != null && range.getNetwork().isEmpty() == false) {
+						
 						int affected = dataMapper.updateDhcpRange(range);
 						
 						if (affected == 0)
 							affected = dataMapper.insertDhcpRange(range);
 					}
 				}
-				catch(Exception ex) {
-					_logger.error(ex.getMessage(), ex);
+				
+				_logger.info("collectDhcpRange()... OK");
+			}
+			catch(Exception ex) {
+				_logger.error("collectDhcpRange()... Failed");
+				_logger.error(ex.getMessage(), ex);
+			}
+		}
+	}
+	//endregion
+	
+	//region [FUNC] Collect Mac Filter
+	private void collectMacFilter(DhcpHandler handler) {
+		
+		LinkedList<DhcpMacFilter> listFilter = handler.getDhcpMacFilter(SharedData.getInstance().getSiteID());
+		
+		if (listFilter != null) {
+			DataMapper dataMapper = SpringBeanProvider.getInstance().getDataMapper();
+			if (dataMapper == null)
+				return;
+			
+			try
+			{
+				for(DhcpMacFilter filter : listFilter) {
+
+					if (filter != null && filter.getFilterName().isEmpty() == false) {
+					
+						int affected = dataMapper.updateDhcpFilter(filter);
+						
+						if (affected == 0)
+							affected = dataMapper.insertDhcpFilter(filter);
+					}
 				}
+				
+				_logger.info("collectMacFilter()... OK");
+			}
+			catch(Exception ex) {
+				_logger.error("collectMacFilter()... Failed");
+				_logger.error(ex.getMessage(), ex);
+			}
+		}
+	}
+	//endregion
+
+	//region [FUNC] Collect Fixed IP
+	private void collectFixedIP(DhcpHandler handler) {
+		
+		LinkedList<DhcpFixedIp> listFilter = handler.getDhcpFixedIP(SharedData.getInstance().getSiteID());
+		
+		if (listFilter != null) {
+			DataMapper dataMapper = SpringBeanProvider.getInstance().getDataMapper();
+			if (dataMapper == null)
+				return;
+				
+			try
+			{
+				for(DhcpFixedIp fixedIp : listFilter) {
+				
+					if (fixedIp != null && fixedIp.getIpaddr().isEmpty() == false) {
+						int affected = dataMapper.updateDhcpFixedIp(fixedIp);
+						
+						if (affected == 0)
+							affected = dataMapper.insertDhcpFixedIp(fixedIp);
+					}
+				}
+				
+				_logger.info("collectFixedIP()... OK");
+			}
+			catch(Exception ex) {
+				_logger.error("collectFixedIP()... Failed");
+				_logger.error(ex.getMessage(), ex);
 			}
 		}
 	}
@@ -212,14 +268,14 @@ public class MasterJobWoker implements Runnable {
 		LinkedList<DhcpIpStatus> listIpStatus = handler.getDhcpIpStatus(SharedData.getInstance().getSiteID(), network);
 		
 		if (listIpStatus != null) {
-			
-			for(DhcpIpStatus ipStatus : listIpStatus) {
+
+			try
+			{
+				for(DhcpIpStatus ipStatus : listIpStatus) {
 				
 				if (ipStatus == null)
 					continue;
 				
-				try
-				{
 					// DELETE
 					if ( (ipStatus.getMacaddr() == null || ipStatus.getMacaddr().isEmpty()) &&
 							(ipStatus.getDuid() == null || ipStatus.getDuid().isEmpty()) &&
@@ -247,9 +303,12 @@ public class MasterJobWoker implements Runnable {
 						}
 					}
 				}
-				catch(Exception ex) {
-					_logger.error(ex.getMessage(), ex);
-				}
+				
+				_logger.info((new StringBuilder()).append("collectDhcpIpSatus(").append(network.getNetwork()).append(")... OK").toString());
+			}
+			catch(Exception ex) {
+				_logger.error((new StringBuilder()).append("collectDhcpIpSatus(").append(network.getNetwork()).append(")... Failed").toString());
+				_logger.error(ex.getMessage(), ex);
 			}
 		}
 	}
@@ -312,6 +371,7 @@ public class MasterJobWoker implements Runnable {
 			}
 			
 		} catch(Exception ex) {
+			_logger.error("updateDhcpDeviceStatus()... Failed");
 			_logger.error(ex.getMessage(), ex);
 		}
 	}
@@ -346,6 +406,7 @@ public class MasterJobWoker implements Runnable {
 			}
 
 		} catch(Exception ex) {
+			_logger.error("updateDhcpVrrpStatus()... Failedd");
 			_logger.error(ex.getMessage(), ex);
 		}
 	}
@@ -380,6 +441,7 @@ public class MasterJobWoker implements Runnable {
 			}
 
 		} catch(Exception ex) {
+			_logger.error("updateDhcpCount()... Failed");
 			_logger.error(ex.getMessage(), ex);
 		}
 	}
@@ -414,6 +476,7 @@ public class MasterJobWoker implements Runnable {
 			}
 
 		} catch(Exception ex) {
+			_logger.error("updateDnsCount()... Failed");
 			_logger.error(ex.getMessage(), ex);
 		}
 	}

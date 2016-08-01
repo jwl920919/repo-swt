@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 import com.shinwootns.ipm.config.ApplicationProperty;
 import com.shinwootns.ipm.data.mapper.DeviceMapper;
-import com.shinwootns.ipm.data.mapper.DhcpMapper;
 import com.shinwootns.ipm.data.mapper.EventMapper;
 
 @Component
@@ -96,24 +95,4 @@ public class SpringBeanProvider {
     	
     	return deviceMapper;
     }
-
-    public DhcpMapper getDhcpMapper() {
-    	
-    	if (_context == null)
-    		return null;
-    	
-    	DhcpMapper dhcpMapper = null;
-    	
-    	try
-    	{
-    		dhcpMapper = _context.getBean("dhcpMapper", DhcpMapper.class);
-    	}
-    	catch(Exception ex) {
-    		_logger.error("SpringBeanProvider.getDhcpMapper().... failed");
-    		_logger.error(ex.getMessage(), ex);
-    	}
-    	
-    	return dhcpMapper;
-    }
-    //endregion
 }

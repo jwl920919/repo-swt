@@ -1,72 +1,21 @@
 --==========================================================================================
--- SYSTEM
---==========================================================================================
-
--- SITE_INFO
-
-
---==========================================================================================
 -- AUTH
 --==========================================================================================
 
 -- AUTH_TYPE
-INSERT INTO public.auth_type (auth_type_id, auth_name, auth_type) VALUES (1, 'Active Directory', 'ldap');
-INSERT INTO public.auth_type (auth_type_id, auth_name, auth_type) VALUES (2, 'Radius', 'radius');
-INSERT INTO public.auth_type (auth_type_id, auth_name, auth_type) VALUES (3, 'mySingle', 'esb');
+INSERT INTO public.auth_type (auth_type, auth_name) VALUES ('ldap', 'Active Directory'),
+INSERT INTO public.auth_type (auth_type, auth_name) VALUES ('radius', 'Radius'),
+INSERT INTO public.auth_type (auth_type, auth_name) VALUES ('esb', 'mySingle'),
 
 
--- AUTH_LDAP_GROUP
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=Administrators,CN=Builtin,DC=samsung,DC=com', 'samsung.com/Builtin/Administrators',',''Local');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=Users,CN=Builtin,DC=samsung,DC=com','samsung.com/Builtin/Users','Local');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=Guests,CN=Builtin,DC=samsung,DC=com','samsung.com/Builtin/Guests','Local');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=Print Operators,CN=Builtin,DC=samsung,DC=com','samsung.com/Builtin/Print Operators','Local');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=Backup Operators,CN=Builtin,DC=samsung,DC=com','samsung.com/Builtin/Backup Operators','Local');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=Replicator,CN=Builtin,DC=samsung,DC=com','samsung.com/Builtin/Replicator','Local');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=Remote Desktop Users,CN=Builtin,DC=samsung,DC=com','samsung.com/Builtin/Remote Desktop Users','Local');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=Network Configuration Operators,CN=Builtin,DC=samsung,DC=com','samsung.com/Builtin/Network Configuration Operators','Local');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=Performance Monitor Users,CN=Builtin,DC=samsung,DC=com','samsung.com/Builtin/Performance Monitor Users','Local');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=Performance Log Users,CN=Builtin,DC=samsung,DC=com','samsung.com/Builtin/Performance Log Users','Local');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=Distributed COM Users,CN=Builtin,DC=samsung,DC=com','samsung.com/Builtin/Distributed COM Users','Local');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=IIS_IUSRS,CN=Builtin,DC=samsung,DC=com','samsung.com/Builtin/IIS_IUSRS','Local');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=Cryptographic Operators,CN=Builtin,DC=samsung,DC=com','samsung.com/Builtin/Cryptographic Operators','Local');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=Event Log Readers,CN=Builtin,DC=samsung,DC=com','samsung.com/Builtin/Event Log Readers','Local');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=Certificate Service DCOM Access,CN=Builtin,DC=samsung,DC=com','samsung.com/Builtin/Certificate Service DCOM Access','Local');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=Domain Computers,CN=Users,DC=samsung,DC=com','samsung.com/Users/Domain Computers','Global');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=Domain Controllers,CN=Users,DC=samsung,DC=com','samsung.com/Users/Domain Controllers','Global');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=Schema Admins,CN=Users,DC=samsung,DC=com','samsung.com/Users/Schema Admins','Universal');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=Enterprise Admins,CN=Users,DC=samsung,DC=com','samsung.com/Users/Enterprise Admins','Universal');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=Cert Publishers,CN=Users,DC=samsung,DC=com','samsung.com/Users/Cert Publishers','Local');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=Domain Admins,CN=Users,DC=samsung,DC=com','samsung.com/Users/Domain Admins','Global');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=Domain Users,CN=Users,DC=samsung,DC=com','samsung.com/Users/Domain Users','Global');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=Domain Guests,CN=Users,DC=samsung,DC=com','samsung.com/Users/Domain Guests','Global');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=Group Policy Creator Owners,CN=Users,DC=samsung,DC=com','samsung.com/Users/Group Policy Creator Owners','Global');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=RAS and IAS Servers,CN=Users,DC=samsung,DC=com','samsung.com/Users/RAS and IAS Servers','Local');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=Server Operators,CN=Builtin,DC=samsung,DC=com','samsung.com/Builtin/Server Operators','Local');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=Account Operators,CN=Builtin,DC=samsung,DC=com','samsung.com/Builtin/Account Operators','Local');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=Pre-Windows 2000 Compatible Access,CN=Builtin,DC=samsung,DC=com','samsung.com/Builtin/Pre-Windows 2000 Compatible Access','Local');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=Incoming Forest Trust Builders,CN=Builtin,DC=samsung,DC=com','samsung.com/Builtin/Incoming Forest Trust Builders','Local');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=Windows Authorization Access Group,CN=Builtin,DC=samsung,DC=com','samsung.com/Builtin/Windows Authorization Access Group','Local');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=Terminal Server License Servers,CN=Builtin,DC=samsung,DC=com','samsung.com/Builtin/Terminal Server License Servers','Local');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=Allowed RODC Password Replication Group,CN=Users,DC=samsung,DC=com','samsung.com/Users/Allowed RODC Password Replication Group','Local');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=Denied RODC Password Replication Group,CN=Users,DC=samsung,DC=com','samsung.com/Users/Denied RODC Password Replication Group','Local');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=Read-only Domain Controllers,CN=Users,DC=samsung,DC=com','samsung.com/Users/Read-only Domain Controllers','Global');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=Enterprise Read-only Domain Controllers,CN=Users,DC=samsung,DC=com','samsung.com/Users/Enterprise Read-only Domain Controllers','Universal');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=DnsAdmins,CN=Users,DC=samsung,DC=com','samsung.com/Users/DnsAdmins','Local');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=DnsUpdateProxy,CN=Users,DC=samsung,DC=com','samsung.com/Users/DnsUpdateProxy','Global');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=sales,CN=Users,DC=samsung,DC=com','samsung.com/Users/sales','Global');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=ssi,CN=Users,DC=samsung,DC=com','samsung.com/Users/ssi','Global');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=sarc,CN=Users,DC=samsung,DC=com','samsung.com/Users/sarc','Global');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=SQLServer2005SQLBrowserUser$WIN-RBSCMN8DD7D,CN=Users,DC=samsung,DC=com','samsung.com/Users/SQLServer2005SQLBrowserUser$WIN-RBSCMN8DD7D','Local');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=SQLServer2005MSSQLServerADHelperUser$WIN-RBSCMN8DD7D,CN=Users,DC=samsung,DC=com','samsung.com/Users/SQLServer2005MSSQLServerADHelperUser$WIN-RBSCMN8DD7D','Local');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=SQLServer2005MSSQLUser$WIN-RBSCMN8DD7D$WHATSUP,CN=Users,DC=samsung,DC=com','samsung.com/Users/SQLServer2005MSSQLUser$WIN-RBSCMN8DD7D$WHATSUP','Local');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=DHCP Users,CN=Users,DC=samsung,DC=com','samsung.com/Users/DHCP Users','Local');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=DHCP Administrators,CN=Users,DC=samsung,DC=com','samsung.com/Users/DHCP Administrators','Local');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=TelnetClients,CN=Users,DC=samsung,DC=com','samsung.com/Users/TelnetClients','Local');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=sea,CN=Users,DC=samsung,DC=com','samsung.com/Users/sea','Global');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=1,CN=Users,DC=samsung,DC=com','samsung.com/Users/1','Global');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=2,CN=Users,DC=samsung,DC=com','samsung.com/Users/2','Global');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=3,CN=Users,DC=samsung,DC=com','samsung.com/Users/3','Global');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=4,CN=Users,DC=samsung,DC=com','samsung.com/Users/4','Global');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=5,CN=Users,DC=samsung,DC=com','samsung.com/Users/5','Global');
-INSERT INTO public.auth_ldap_group(domain_name, group_name, group_type) VALUES ('CN=Radius,OU=RadiusServer,DC=samsung,DC=com','samsung.com/RadiusServer/Radius','Global');
 
+
+INSERT INTO auth_setup(setup_id, auth_type, site_id, setup_name, disable, order_num, insert_time, update_time)
+	VALUES(1, 'ldap', 0, 'Global AD', false, 1, now(), now()); 
+
+INSERT INTO auth_setup_ldap(
+            setup_id, auth_type, host, port, ssl_enable, bind_domain, bind_passwd, 
+            base_domain, user_class, user_attr, user_name_attr, user_memberof_attr, 
+            group_class, group_name_attr, group_member_attr, kerberos_enable, 
+            kerberos_host, kerberos_port, kerberos_realm)
+    VALUES (1,'ldap','192.168.1.80',389,false,'admin','shinwoo123!','DC=shinwootns-dev,DC=com','person','sAMAccountName','displayName','memberOf','group','name','member',false,'',88,'');

@@ -16,20 +16,10 @@ public interface DeviceMapper {
 	List<DeviceDhcp> selectDhcpBySiteId(@Param("site_id")int site_id);
 	DeviceDhcp selectDhcpByInsightHost(@Param("host")String host);
 
-	
 	// Insight
 	List<DeviceInsight> selectInsight();
 	DeviceInsight selectInsightByDeviceId(@Param("device_id")int device_id);
 	int insertInsight(DeviceInsight device);
 	int updateInsight(DeviceInsight device);
 	int deleteInsight(DeviceInsight device);
-	
-	/*
-	// SELECT device_nfo
-	List<DeviceEntity> selectDevice();
-	List<DeviceEntity> selectDeviceByType(String device_type);
-	DeviceEntity selectDeviceById(int device_id);
-	
-	void updateDevice(DeviceEntity deviceInfo);
-	*/
 }

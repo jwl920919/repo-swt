@@ -621,7 +621,32 @@ public class InfobloxWAPIHandler {
 		
 		sb.append("/wapi/v2.3/fixedaddress");
 		sb.append("?_return_type=json");
-		sb.append("&_return_fields=ipv4addr,network,mac,comment,disable,name");
+		sb.append("&_return_fields=ipv4addr,network,mac,comment,disable,name,match_client");
+		
+		String value = restClient.Get(sb.toString());
+		
+		if (value == null)
+			return null;
+		
+		// Change unescape-unicode
+		value = StringUtils.unescapeUnicodeString(value);
+		
+		// JsonArray Parser
+		return JsonUtils.parseJsonArray(value);
+	}
+	//endregion
+	
+	//region [WAPI] Get Fixed IPv6
+	public JsonArray getFixedIPv6List() {
+
+		if (restClient == null)
+			return null;
+		
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("/wapi/v2.3/ipv6fixedaddress");
+		sb.append("?_return_type=json");
+		sb.append("&_return_fields=ipv6addr,duid,ipv6prefix,ipv6prefix_bits,network,comment,disable,name,address_type");
 		
 		String value = restClient.Get(sb.toString());
 		
