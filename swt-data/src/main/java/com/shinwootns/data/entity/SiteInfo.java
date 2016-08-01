@@ -8,8 +8,10 @@ public class SiteInfo implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Integer site_id;
-	private String site_code;
 	private String site_name;
+	private String site_code;
+	private String description;
+	private Boolean site_master;
 
 	public Integer getSiteId() {
 		return this.site_id;
@@ -33,6 +35,22 @@ public class SiteInfo implements Serializable {
 
 	public void setSiteName(String siteName) {
 		this.site_name = siteName;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public Boolean getSiteMaster() {
+		return site_master;
+	}
+
+	public void setSiteMaster(Boolean site_master) {
+		this.site_master = site_master;
 	}
 
 }

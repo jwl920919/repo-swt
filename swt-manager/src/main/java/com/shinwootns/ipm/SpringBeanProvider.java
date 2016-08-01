@@ -6,6 +6,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import com.shinwootns.ipm.config.ApplicationProperty;
+import com.shinwootns.ipm.data.mapper.DashboardMapper;
 import com.shinwootns.ipm.data.mapper.DeviceMapper;
 import com.shinwootns.ipm.data.mapper.EventMapper;
 
@@ -94,5 +95,24 @@ public class SpringBeanProvider {
     	}
     	
     	return deviceMapper;
+    }
+    
+    public DashboardMapper getDashboardMapper() {
+    	
+    	if (_context == null)
+    		return null;
+    	
+    	DashboardMapper dashboardMapper = null;
+    	
+    	try
+    	{
+    		dashboardMapper = _context.getBean("dashboardMapper", DashboardMapper.class);
+    	}
+    	catch(Exception ex) {
+    		_logger.error("SpringBeanProvider.getDashboardMapper().... failed");
+    		_logger.error(ex.getMessage(), ex);
+    	}
+    	
+    	return dashboardMapper;
     }
 }

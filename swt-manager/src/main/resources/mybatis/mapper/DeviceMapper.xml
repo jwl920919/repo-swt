@@ -3,6 +3,12 @@
         
 <mapper namespace="com.shinwootns.ipm.data.mapper.DeviceMapper">
 
+	<!-- ############################ Site ############################ -->
+
+	<select id="selectSiteInfo" resultType="com.shinwootns.data.entity.SiteInfo">
+		SELECT * FROM site_info
+	</select>
+
 	<!-- ############################ DHCP ############################ -->
 	<select id="selectDhcp" resultType="com.shinwootns.data.entity.DeviceDhcp">
 		SELECT * FROM device_dhcp WHERE 1=1

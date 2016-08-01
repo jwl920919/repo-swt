@@ -36,7 +36,7 @@ public class DeviceController {
     }
 	
 	
-	
+	/*
 	//==========================================================================
 	// INSIGHT
 	//==========================================================================
@@ -61,6 +61,7 @@ public class DeviceController {
 		
         return deviceMapper.insertInsight(device);
     }
+    */
 	
 	/*
 	@RequestMapping(value = "/api/device/insights", method = RequestMethod.PUT)
