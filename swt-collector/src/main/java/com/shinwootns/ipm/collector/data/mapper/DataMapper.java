@@ -9,6 +9,7 @@ import com.shinwootns.data.entity.DeviceDhcp;
 import com.shinwootns.data.entity.DeviceInsight;
 import com.shinwootns.data.entity.DeviceNetwork;
 import com.shinwootns.data.entity.DhcpIpStatus;
+import com.shinwootns.data.entity.DhcpMacFilter;
 import com.shinwootns.data.entity.DhcpNetwork;
 import com.shinwootns.data.entity.DhcpRange;
 import com.shinwootns.data.entity.SiteInfo;
@@ -21,6 +22,12 @@ public interface DataMapper {
 	
 	// Device DHCP
 	DeviceDhcp selectDeviceDhcp(@Param("site_id")int site_id);
+	
+	// DHCP Mac Filter
+	List<DhcpMacFilter> selectDhcpFilterBySiteId(@Param("site_id")int site_id);
+	int insertDhcpFilter(DhcpMacFilter range);
+	int updateDhcpFilter(DhcpMacFilter range);
+	int deleteDhcpFilter(@Param("site_id")int site_id, @Param("filter_name")String filter_name);
 	
 	// DHCP Network
 	List<DhcpNetwork> selectDhcpNetworkBySiteId(@Param("site_id")int site_id);

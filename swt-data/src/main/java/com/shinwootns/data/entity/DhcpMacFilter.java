@@ -11,6 +11,10 @@ public class DhcpMacFilter implements Serializable {
 	private Integer site_id;
 	private String filter_name;
 	private String filter_desc;
+	private Boolean disable;
+	private Boolean never_expires;
+	private Integer default_expiration_time;
+	private Boolean enforce_expiration_times;
 	private Timestamp insert_time;
 	private Timestamp update_time;
 
@@ -55,6 +59,38 @@ public class DhcpMacFilter implements Serializable {
 
 	public void setUpdateTime(Timestamp updateTime) {
 		this.update_time = updateTime;
+	}
+
+	public Integer getDefaultExpiration_time() {
+		return default_expiration_time;
+	}
+
+	public void setDefaultExpiration_time(Integer default_expiration_time) {
+		this.default_expiration_time = default_expiration_time;
+	}
+
+	public Boolean getDisable() {
+		return disable;
+	}
+
+	public void setDisable(Boolean disable) {
+		this.disable = disable;
+	}
+
+	public Boolean getNeverExpires() {
+		return never_expires;
+	}
+
+	public void setNeverExpires(Boolean never_expires) {
+		this.never_expires = never_expires;
+	}
+
+	public Boolean getEnforceExpiration_times() {
+		return enforce_expiration_times;
+	}
+
+	public void setEnforceExpiration_times(Boolean enforce_expiration_times) {
+		this.enforce_expiration_times = enforce_expiration_times;
 	}
 
 }

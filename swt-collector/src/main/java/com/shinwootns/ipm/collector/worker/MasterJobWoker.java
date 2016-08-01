@@ -14,6 +14,7 @@ import com.shinwootns.common.cache.RedisClient;
 import com.shinwootns.common.utils.JsonUtils;
 import com.shinwootns.data.entity.DeviceDhcp;
 import com.shinwootns.data.entity.DhcpIpStatus;
+import com.shinwootns.data.entity.DhcpMacFilter;
 import com.shinwootns.data.entity.DhcpNetwork;
 import com.shinwootns.data.entity.DhcpRange;
 import com.shinwootns.data.key.RedisKeys;
@@ -36,25 +37,12 @@ public class MasterJobWoker implements Runnable {
 	
 	private ScheduledExecutorService schedulerService = Executors.newScheduledThreadPool(SCHEDULER_THREAD_COUNT);
 	
-	// DHCP Handler
-	DhcpHandler handler = null;
-
 	@Override
 	public void run() {
 		
 		_logger.info("MasterJobWoker... start.");
 		
-		// DHCP Handler
-		if (handler == null)
-			handler = new DhcpHandler();
-		
-		
-		LinkedList<DhcpNetwork> listNetwork = collectDhcpNetwork();
-		collectDhcpRange();
-		for(DhcpNetwork network : listNetwork) {
-			collectDhcpIpSatus(network);
-		}
-		
+		collectDhcp();
 		
 		// FixedDelay 10 seconds
 		schedulerService.scheduleWithFixedDelay(
@@ -81,177 +69,196 @@ public class MasterJobWoker implements Runnable {
 		_logger.info("MasterJobWoker... end.");
 	}
 	
+	public void collectDhcp() {
+		
+		if (SharedData.getInstance().getSiteID() <= 0)
+			return;
+		
+		DeviceDhcp dhcp = SharedData.getInstance().dhcpDevice;
+		if (dhcp == null)
+			return;
+		
+		DhcpHandler handler = new DhcpHandler();
+		if ( handler.Connect(dhcp.getHost(), dhcp.getWapiUserid(), dhcp.getWapiPassword(), dhcp.getSnmpCommunity()) ) {
+			
+			// Collect Filter
+			collectMacFilter(handler);
+			
+			// Collect Network
+			LinkedList<DhcpNetwork> listNetwork = collectDhcpNetwork(handler);
+			
+			// Collect Range
+			collectDhcpRange(handler);
+			
+			// Collect IP Status
+			for(DhcpNetwork network : listNetwork) {
+				collectDhcpIpSatus(handler, network);
+			}
+		}
+		handler.close();
+	}
+	
+	//region [FUNC] Collect Mac Filter
+	private void collectMacFilter(DhcpHandler handler) {
+		
+		LinkedList<DhcpMacFilter> listFilter = handler.getDhcpMacFilter(SharedData.getInstance().getSiteID());
+		
+		if (listFilter != null) {
+			DataMapper dataMapper = SpringBeanProvider.getInstance().getDataMapper();
+			if (dataMapper == null)
+				return;
+				
+			for(DhcpMacFilter filter : listFilter) {
+				
+				try
+				{
+					if (filter != null && filter.getFilterName().isEmpty() == false) {
+						int affected = dataMapper.updateDhcpFilter(filter);
+						
+						if (affected == 0)
+							affected = dataMapper.insertDhcpFilter(filter);
+					}
+				}
+				catch(Exception ex) {
+					_logger.error(ex.getMessage(), ex);
+				}
+			}
+		}
+	}
+	//endregion
+	
 	//region [FUNC] Collect DHCP Network
-	public LinkedList<DhcpNetwork> collectDhcpNetwork() {
+	private LinkedList<DhcpNetwork> collectDhcpNetwork(DhcpHandler handler) {
 		
 		if (SharedData.getInstance().getSiteID() <= 0)
 			return null;
 		
-		DeviceDhcp dhcp = SharedData.getInstance().dhcpDevice;
-		if (dhcp == null)
-			return null;
+		LinkedList<DhcpNetwork> listNetwork = handler.getDhcpNetwork(SharedData.getInstance().getSiteID());
 		
-		LinkedList<DhcpNetwork> listNetwork = null;
-		
-		if ( handler.Connect(dhcp.getHost(), dhcp.getWapiUserid(), dhcp.getWapiPassword(), dhcp.getSnmpCommunity()) ) {
-
-			listNetwork = handler.getDhcpNetwork(SharedData.getInstance().getSiteID());
-			
-			if (listNetwork != null) {
-				DataMapper dataMapper = SpringBeanProvider.getInstance().getDataMapper();
-				if (dataMapper == null)
-					return null;
-					
-				for(DhcpNetwork network : listNetwork) {
-					
-					if (network == null)
-						continue;
-					
-					try
-					{
-						if (network.getNetwork().isEmpty() == false) {
-							int affected = dataMapper.updateDhcpNetwork(network);
-							
-							if (affected == 0)
-								affected = dataMapper.insertDhcpNetwork(network);
-						}
+		if (listNetwork != null) {
+			DataMapper dataMapper = SpringBeanProvider.getInstance().getDataMapper();
+			if (dataMapper == null)
+				return null;
+				
+			for(DhcpNetwork network : listNetwork) {
+				
+				try
+				{
+					if (network != null && network.getNetwork().isEmpty() == false) {
+						int affected = dataMapper.updateDhcpNetwork(network);
+						
+						if (affected == 0)
+							affected = dataMapper.insertDhcpNetwork(network);
 					}
-					catch(Exception ex) {
-						_logger.error(ex.getMessage(), ex);
-					}
+				}
+				catch(Exception ex) {
+					_logger.error(ex.getMessage(), ex);
 				}
 			}
 		}
-		handler.close();
 		
 		return listNetwork;
 	}
 	//endregion
 	
 	//region [FUNC] Collect DHCP Range
-	public void collectDhcpRange() {
+	private void collectDhcpRange(DhcpHandler handler) {
 		
-		if (SharedData.getInstance().getSiteID() <= 0)
-			return;
+		LinkedList<DhcpRange> listRange = handler.getDhcpRange(SharedData.getInstance().getSiteID());
 		
-		DeviceDhcp dhcp = SharedData.getInstance().dhcpDevice;
-		if (dhcp == null)
-			return;
-		
-		if ( handler.Connect(dhcp.getHost(), dhcp.getWapiUserid(), dhcp.getWapiPassword(), dhcp.getSnmpCommunity()) ) {
-
-			LinkedList<DhcpRange> listRange = handler.getDhcpRange(SharedData.getInstance().getSiteID());
-			
-			if (listRange != null) {
-				DataMapper dataMapper = SpringBeanProvider.getInstance().getDataMapper();
-				if (dataMapper == null)
-					return;
-					
-				for(DhcpRange range : listRange) {
-					
-					if (range == null)
-						continue;
-					
-					try
-					{
-						if (range.getNetwork().isEmpty() == false) {
-							int affected = dataMapper.updateDhcpRange(range);
-							
-							if (affected == 0)
-								affected = dataMapper.insertDhcpRange(range);
-						}
+		if (listRange != null) {
+			DataMapper dataMapper = SpringBeanProvider.getInstance().getDataMapper();
+			if (dataMapper == null)
+				return;
+				
+			for(DhcpRange range : listRange) {
+				
+				try
+				{
+					if (range != null && range.getNetwork().isEmpty() == false) {
+						int affected = dataMapper.updateDhcpRange(range);
+						
+						if (affected == 0)
+							affected = dataMapper.insertDhcpRange(range);
 					}
-					catch(Exception ex) {
-						_logger.error(ex.getMessage(), ex);
-					}
+				}
+				catch(Exception ex) {
+					_logger.error(ex.getMessage(), ex);
 				}
 			}
 		}
-		handler.close();
 	}
 	//endregion
 	
 	//region [FUNC] Collect IP Status
-	public void collectDhcpIpSatus(DhcpNetwork network) {
-		
-		if (SharedData.getInstance().getSiteID() <= 0)
-			return;
-		
-		DeviceDhcp dhcp = SharedData.getInstance().dhcpDevice;
-		if (dhcp == null)
-			return;
+	private void collectDhcpIpSatus(DhcpHandler handler, DhcpNetwork network) {
 		
 		DataMapper dataMapper = SpringBeanProvider.getInstance().getDataMapper();
 		if (dataMapper == null)
 			return;
 		
-		if ( handler.Connect(dhcp.getHost(), dhcp.getWapiUserid(), dhcp.getWapiPassword(), dhcp.getSnmpCommunity()) ) {
-			
-			// Previous IP Status
-			List<DhcpIpStatus> listPrevData = dataMapper.selectDhcpIpStatusByNetwork(SharedData.getInstance().getSiteID(), network.getNetwork());
-			
-			HashSet<String> setPrevIPAddr = new HashSet<String>(); 
+		// Previous IP Status
+		List<DhcpIpStatus> listPrevData = dataMapper.selectDhcpIpStatusByNetwork(SharedData.getInstance().getSiteID(), network.getNetwork());
+		
+		HashSet<String> setPrevIPAddr = new HashSet<String>(); 
 
-			for(DhcpIpStatus prevIp : listPrevData) {
-				if (setPrevIPAddr.contains(prevIp.getIpaddr()) == false )
-					setPrevIPAddr.add(prevIp.getIpaddr());
-			}
-			
+		for(DhcpIpStatus prevIp : listPrevData) {
+			if (setPrevIPAddr.contains(prevIp.getIpaddr()) == false )
+				setPrevIPAddr.add(prevIp.getIpaddr());
+		}
+		
 
-			// Collect IP Status
-			LinkedList<DhcpIpStatus> listIpStatus = handler.getDhcpIpStatus(SharedData.getInstance().getSiteID(), network);
+		// Collect IP Status
+		LinkedList<DhcpIpStatus> listIpStatus = handler.getDhcpIpStatus(SharedData.getInstance().getSiteID(), network);
+		
+		if (listIpStatus != null) {
 			
-			if (listIpStatus != null) {
+			for(DhcpIpStatus ipStatus : listIpStatus) {
 				
-				for(DhcpIpStatus ipStatus : listIpStatus) {
-					
-					if (ipStatus == null)
-						continue;
-					
-					try
+				if (ipStatus == null)
+					continue;
+				
+				try
+				{
+					// DELETE
+					if ( (ipStatus.getMacaddr() == null || ipStatus.getMacaddr().isEmpty()) &&
+							(ipStatus.getDuid() == null || ipStatus.getDuid().isEmpty()) &&
+							(ipStatus.getIsConflict() == null || ipStatus.getIsConflict() == false) &&
+							(ipStatus.getStatus() == null || ipStatus.getStatus().equals("UNUSED")) &&
+							(ipStatus.getLeaseState() == null || ipStatus.getLeaseState().isEmpty() || ipStatus.getLeaseState().equals("FREE")) &&
+							(ipStatus.getDiscoverStatus() == null || ipStatus.getDiscoverStatus().isEmpty() || ipStatus.getDiscoverStatus().equals("NONE")) &&
+							(ipStatus.getObjTypes() == null || ipStatus.getObjTypes().isEmpty() 
+								|| ipStatus.getObjTypes().equals("DHCP_RANGE"))
+						) 
 					{
-						// DELETE
-						if ( (ipStatus.getMacaddr() == null || ipStatus.getMacaddr().isEmpty()) &&
-								(ipStatus.getDuid() == null || ipStatus.getDuid().isEmpty()) &&
-								(ipStatus.getIsConflict() == null || ipStatus.getIsConflict() == false) &&
-								(ipStatus.getStatus() == null || ipStatus.getStatus().equals("UNUSED")) &&
-								(ipStatus.getLeaseState() == null || ipStatus.getLeaseState().isEmpty() || ipStatus.getLeaseState().equals("FREE")) &&
-								(ipStatus.getDiscoverStatus() == null || ipStatus.getDiscoverStatus().isEmpty() || ipStatus.getDiscoverStatus().equals("NONE")) &&
-								(ipStatus.getObjTypes() == null || ipStatus.getObjTypes().isEmpty() 
-									|| ipStatus.getObjTypes().equals("DHCP_RANGE"))
-							) 
-						{
-							// Delete when previous data exist
-							if (setPrevIPAddr.contains(ipStatus.getIpaddr())) {
-								dataMapper.deleteDhcpIpStatus(ipStatus.getSiteId(), ipStatus.getIpaddr());
-							}
-						}
-						else {
-							// Update or Insert
-							if (ipStatus.getIpaddr().isEmpty() == false) {
-								
-								int affected = dataMapper.updateDhcpIpStatus(ipStatus);
-								
-								if (affected == 0)
-									affected = dataMapper.insertDhcpIpStatus(ipStatus);
-							}
+						// Delete when previous data exist
+						if (setPrevIPAddr.contains(ipStatus.getIpaddr())) {
+							dataMapper.deleteDhcpIpStatus(ipStatus.getSiteId(), ipStatus.getIpaddr());
 						}
 					}
-					catch(Exception ex) {
-						_logger.error(ex.getMessage(), ex);
+					else {
+						// Update or Insert
+						if (ipStatus.getIpaddr().isEmpty() == false) {
+							
+							int affected = dataMapper.updateDhcpIpStatus(ipStatus);
+							
+							if (affected == 0)
+								affected = dataMapper.insertDhcpIpStatus(ipStatus);
+						}
 					}
 				}
-			} 
+				catch(Exception ex) {
+					_logger.error(ex.getMessage(), ex);
+				}
+			}
 		}
 	}
+	//endregion
 	
 	//region [FUNC] Update DHCP
 	public void updateDhcpStatus() {
 		
 		if ( ClusterManager.getInstance().isMaster() == false)
-			return;
-		
-		if (SharedData.getInstance().getSiteID() <= 0)
 			return;
 		
 		DeviceDhcp dhcp = SharedData.getInstance().dhcpDevice;
@@ -261,9 +268,10 @@ public class MasterJobWoker implements Runnable {
 		RedisClient client = RedisHandler.getInstance().getRedisClient();
 		if(client == null)
 			return;
-
+		
+		DhcpHandler handler = new DhcpHandler();
 		if ( handler.Connect(dhcp.getHost(), dhcp.getWapiUserid(), dhcp.getWapiPassword(), dhcp.getSnmpCommunity()) ) {
-
+		
 			updateDhcpDeviceStatus(handler, client);
 			updateDhcpVrrpStatus(handler, client);
 			updateDhcpCounter(handler, client);
