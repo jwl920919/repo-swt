@@ -18,8 +18,8 @@ public class AuthSetupEsb implements Serializable {
 	@Column(name="setup_id")
 	private Integer setupId;
 
-	@Column(name="site_id")
-	private Integer siteId;
+	@Column(name="auth_type")
+	private String authType;
 
 	private String url;
 
@@ -40,12 +40,12 @@ public class AuthSetupEsb implements Serializable {
 		this.setupId = setupId;
 	}
 
-	public Integer getSiteId() {
-		return this.siteId;
+	public String getAuthType() {
+		return this.authType;
 	}
 
-	public void setSiteId(Integer siteId) {
-		this.siteId = siteId;
+	public void setAuthType(String authType) {
+		this.authType = authType;
 	}
 
 	public String getUrl() {

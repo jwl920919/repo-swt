@@ -7,29 +7,25 @@ import org.apache.ibatis.annotations.Param;
 
 import com.shinwootns.data.entity.DeviceDhcp;
 import com.shinwootns.data.entity.DeviceInsight;
+import com.shinwootns.data.entity.SiteInfo;
 
 @Mapper
 public interface DeviceMapper {
+	
+	// SiteInfo
+	List<SiteInfo> selectSiteInfo();
 	
 	// DHCP
 	List<DeviceDhcp> selectDhcp();
 	List<DeviceDhcp> selectDhcpBySiteId(@Param("site_id")int site_id);
 	DeviceDhcp selectDhcpByInsightHost(@Param("host")String host);
 
-	
+	/*
 	// Insight
 	List<DeviceInsight> selectInsight();
 	DeviceInsight selectInsightByDeviceId(@Param("device_id")int device_id);
 	int insertInsight(DeviceInsight device);
 	int updateInsight(DeviceInsight device);
 	int deleteInsight(DeviceInsight device);
-	
-	/*
-	// SELECT device_nfo
-	List<DeviceEntity> selectDevice();
-	List<DeviceEntity> selectDeviceByType(String device_type);
-	DeviceEntity selectDeviceById(int device_id);
-	
-	void updateDevice(DeviceEntity deviceInfo);
 	*/
 }

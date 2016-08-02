@@ -19,13 +19,19 @@ public class DeviceInsight implements Serializable {
 	@Column(name="device_id")
 	private Integer deviceId;
 
-	@Column(name="enable_collect")
-	private Boolean enableCollect;
+	@Column(name="cluster_index")
+	private Integer clusterIndex;
+
+	@Column(name="cluster_mode")
+	private String clusterMode;
 
 	private String host;
 
 	@Column(name="insert_time")
 	private Timestamp insertTime;
+
+	@Column(name="is_master")
+	private Boolean isMaster;
 
 	private Integer port;
 
@@ -48,12 +54,20 @@ public class DeviceInsight implements Serializable {
 		this.deviceId = deviceId;
 	}
 
-	public Boolean getEnableCollect() {
-		return this.enableCollect;
+	public Integer getClusterIndex() {
+		return this.clusterIndex;
 	}
 
-	public void setEnableCollect(Boolean enableCollect) {
-		this.enableCollect = enableCollect;
+	public void setClusterIndex(Integer clusterIndex) {
+		this.clusterIndex = clusterIndex;
+	}
+
+	public String getClusterMode() {
+		return this.clusterMode;
+	}
+
+	public void setClusterMode(String clusterMode) {
+		this.clusterMode = clusterMode;
 	}
 
 	public String getHost() {
@@ -70,6 +84,14 @@ public class DeviceInsight implements Serializable {
 
 	public void setInsertTime(Timestamp insertTime) {
 		this.insertTime = insertTime;
+	}
+
+	public Boolean getIsMaster() {
+		return this.isMaster;
+	}
+
+	public void setIsMaster(Boolean isMaster) {
+		this.isMaster = isMaster;
 	}
 
 	public Integer getPort() {

@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import com.shinwootns.data.entity.DeviceDhcp;
 import com.shinwootns.data.entity.DeviceInsight;
 import com.shinwootns.data.entity.DeviceNetwork;
+import com.shinwootns.data.entity.DhcpFixedIp;
 import com.shinwootns.data.entity.DhcpIpStatus;
 import com.shinwootns.data.entity.DhcpMacFilter;
 import com.shinwootns.data.entity.DhcpNetwork;
@@ -23,12 +24,6 @@ public interface DataMapper {
 	// Device DHCP
 	DeviceDhcp selectDeviceDhcp(@Param("site_id")int site_id);
 	
-	// DHCP Mac Filter
-	List<DhcpMacFilter> selectDhcpFilterBySiteId(@Param("site_id")int site_id);
-	int insertDhcpFilter(DhcpMacFilter range);
-	int updateDhcpFilter(DhcpMacFilter range);
-	int deleteDhcpFilter(@Param("site_id")int site_id, @Param("filter_name")String filter_name);
-	
 	// DHCP Network
 	List<DhcpNetwork> selectDhcpNetworkBySiteId(@Param("site_id")int site_id);
 	int insertDhcpNetwork(DhcpNetwork network);
@@ -40,6 +35,18 @@ public interface DataMapper {
 	int insertDhcpRange(DhcpRange range);
 	int updateDhcpRange(DhcpRange range);
 	int deleteDhcpRange(@Param("site_id")int site_id, @Param("network")String network, @Param("start_ip")String start_ip);
+
+	// DHCP Mac Filter
+	List<DhcpMacFilter> selectDhcpFilterBySiteId(@Param("site_id")int site_id);
+	int insertDhcpFilter(DhcpMacFilter range);
+	int updateDhcpFilter(DhcpMacFilter range);
+	int deleteDhcpFilter(@Param("site_id")int site_id, @Param("filter_name")String filter_name);
+	
+	// DHCP Fixed IP
+	List<DhcpFixedIp> selectDhcpFixedIpBySiteId(@Param("site_id")int site_id);
+	int insertDhcpFixedIp(DhcpFixedIp range);
+	int updateDhcpFixedIp(DhcpFixedIp range);
+	int deleteDhcpFixedIp(@Param("site_id")int site_id, @Param("ipaddr")String ipaddr);
 	
 	// DHCP IP Status
 	List<DhcpIpStatus> selectDhcpIpStatusByNetwork(@Param("site_id")int site_id, @Param("network")String network);

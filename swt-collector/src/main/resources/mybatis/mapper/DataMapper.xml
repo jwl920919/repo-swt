@@ -14,36 +14,6 @@
         SELECT * FROM device_dhcp WHERE site_id=#{site_id} ORDER BY device_id LIMIT 1
     </select>
     
-    <!-- ############################ DHCP Filter ############################ -->
-	<select id="selectDhcpFilterBySiteId" resultType="com.shinwootns.data.entity.DhcpMacFilter">
-		<![CDATA[
-			SELECT * FROM dhcp_mac_filter WHERE site_id=#{site_id}
-		]]>
-	</select>
-	
-	<insert id="insertDhcpFilter" parameterType="com.shinwootns.data.entity.DhcpMacFilter">
-		<![CDATA[
-			INSERT INTO dhcp_mac_filter (site_id, filter_name, filter_desc, disable, never_expires, default_expiration_time, enforce_expiration_times, insert_time, update_time)
-			VALUES ( #{site_id}, #{filter_name}, #{filter_desc}, #{disable}, #{never_expires}, #{default_expiration_time}, #{enforce_expiration_times}, now(), now() ) 
-		]]>
-	</insert>
-	
-	<update id="updateDhcpFilter" parameterType="com.shinwootns.data.entity.DhcpMacFilter">
-		<![CDATA[
-			UPDATE dhcp_mac_filter
-			SET filter_desc = #{filter_desc}, disable = #{disable}, never_expires = #{never_expires}
-				, default_expiration_time = #{default_expiration_time}, enforce_expiration_times = #{enforce_expiration_times}, update_time=now()
-			WHERE site_id=#{site_id} AND filter_name=#{filter_name}
-		]]>
-	</update>
-	
-	<delete id="deleteDhcpFilter">
-		<![CDATA[
-			DELETE FROM dhcp_mac_filter
-			WHERE site_id=#{site_id} AND filter_name=#{filter_name}
-		]]>
-	</delete>
-    
     <!-- ############################ DHCP NETWORK ############################ -->
 	<select id="selectDhcpNetworkBySiteId" resultType="com.shinwootns.data.entity.DhcpNetwork">
 		<![CDATA[
@@ -100,6 +70,70 @@
 		<![CDATA[
 			DELETE FROM dhcp_range
 			WHERE site_id=#{site_id} AND network = #{network} AND start_ip = #{start_ip}
+		]]>
+	</delete>
+	
+	<!-- ############################ DHCP Filter ############################ -->
+	<select id="selectDhcpFilterBySiteId" resultType="com.shinwootns.data.entity.DhcpMacFilter">
+		<![CDATA[
+			SELECT * FROM dhcp_mac_filter WHERE site_id=#{site_id}
+		]]>
+	</select>
+	
+	<insert id="insertDhcpFilter" parameterType="com.shinwootns.data.entity.DhcpMacFilter">
+		<![CDATA[
+			INSERT INTO dhcp_mac_filter (site_id, filter_name, filter_desc, disable, never_expires, default_expiration_time, enforce_expiration_times, insert_time, update_time)
+			VALUES ( #{site_id}, #{filter_name}, #{filter_desc}, #{disable}, #{never_expires}, #{default_expiration_time}, #{enforce_expiration_times}, now(), now() ) 
+		]]>
+	</insert>
+	
+	<update id="updateDhcpFilter" parameterType="com.shinwootns.data.entity.DhcpMacFilter">
+		<![CDATA[
+			UPDATE dhcp_mac_filter
+			SET filter_desc = #{filter_desc}, disable = #{disable}, never_expires = #{never_expires}
+				, default_expiration_time = #{default_expiration_time}, enforce_expiration_times = #{enforce_expiration_times}, update_time=now()
+			WHERE site_id=#{site_id} AND filter_name=#{filter_name}
+		]]>
+	</update>
+	
+	<delete id="deleteDhcpFilter">
+		<![CDATA[
+			DELETE FROM dhcp_mac_filter
+			WHERE site_id=#{site_id} AND filter_name=#{filter_name}
+		]]>
+	</delete>
+	
+	<!-- ############################ DHCP Fixed IP ############################ -->
+	<select id="selectDhcpFixedIpBySiteId" resultType="com.shinwootns.data.entity.DhcpFixedIp">
+		<![CDATA[
+			SELECT * FROM dhcp_fixed_ip WHERE site_id=#{site_id}
+		]]>
+	</select>
+	
+	<insert id="insertDhcpFixedIp" parameterType="com.shinwootns.data.entity.DhcpFixedIp">
+		<![CDATA[
+			INSERT INTO dhcp_fixed_ip (site_id, network, ipaddr, macaddr, ip_type, ip_num, comment, disable, ipv4_match_client
+				,ipv6_address_type, ipv6_duid, ipv6_prefix, ipv6_prefix_bits, update_time)
+			VALUES ( #{site_id}, #{network}, #{ipaddr}, #{macaddr}, #{ip_type}, #{ip_num}, #{comment}, #{disable}, #{ipv4_match_client}
+				, #{ipv6_address_type}, #{ipv6_duid}, #{ipv6_prefix}, #{ipv6_prefix_bits}, now() ) 
+		]]>
+	</insert>
+	
+	<update id="updateDhcpFixedIp" parameterType="com.shinwootns.data.entity.DhcpFixedIp">
+		<![CDATA[
+			UPDATE dhcp_fixed_ip
+			SET network = #{network}, macaddr = #{macaddr}, ip_type = #{ip_type}, ip_num = #{ip_num}, comment = #{comment}
+				, disable = #{disable}, ipv4_match_client = #{ipv4_match_client}
+				, ipv6_address_type = #{ipv6_address_type}, ipv6_duid = #{ipv6_duid}, ipv6_prefix = #{ipv6_prefix}, ipv6_prefix_bits = #{ipv6_prefix_bits}
+				, update_time=now()
+			WHERE site_id=#{site_id} AND ipaddr=#{ipaddr}
+		]]>
+	</update>
+	
+	<delete id="deleteDhcpFixedIp">
+		<![CDATA[
+			DELETE FROM dhcp_fixed_ip
+			WHERE site_id=#{site_id} AND ipaddr=#{ipaddr}
 		]]>
 	</delete>
 	

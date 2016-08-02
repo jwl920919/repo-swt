@@ -11,7 +11,7 @@ import com.shinwootns.data.entity.EventData;
 public interface EventMapper {
 
 	// Event
-	public void insert(EventData eventLog);
+	int insertEventLog(EventData eventLog);
 
 }
 

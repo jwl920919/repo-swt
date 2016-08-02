@@ -82,7 +82,9 @@ public class IPNetwork {
 	
 	public BigInteger getIPCount() {
 		if ( this._startIP != null && this._endIP != null) {
-			BigInteger result = this._endIP.getNumberToBigInteger().subtract( this._startIP.getNumberToBigInteger() );
+			BigInteger result = this._endIP.getNumberToBigInteger()
+					.subtract( this._startIP.getNumberToBigInteger() )
+					.add(new BigInteger("1"));
 			return result;
 		}
 		
