@@ -251,7 +251,7 @@ function systemStatusAjaxCall() {
 				// + obj.total + "<LABEL style=\"font-size: 15px\">"+ obj.unit +
 				// "</LABEL>" + "</br>";
 
-				vNetwork = '<table style=\"border-color:red;\" border=\"0\">';
+				vNetwork = '<table style=\"border-color:red; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; \" border=\"0\">';
 				$.each(
 						jsonObj.NETWORK,
 						function(index, obj) {
@@ -725,11 +725,10 @@ function segmentLeasingIPAssignedAjaxCall() {
 								     		"\"segment\": \"12.12.15.0/24\",\"value\": "+vTop4+"},{"+
 								     		"\"segment\": \"25.25.1.0/24\",\"value\": "+vTop5+"}]}";
 		//console.log(data);
-		var jsonObj = eval("(" + data + ')'); // JSonString 형식의 데이터를
-		// Ojbect형식으로 변경
+		var jsonObj = eval("(" + data + ')'); // JSonString 형식의 데이터를 Ojbect형식으로 변경
 		if (jsonObj != '') {
 			if (jsonObj.LeaseIPAvailable != '') {
-				var vhtml = "<div class=\"progress-group\"><table class=\"col-xs-12\" border=0 style=\"height:135px\">";
+				var vhtml = "<div class=\"progress-group\"><table class=\"col-lg-12-noPadding\" border=0 style=\"table-layout:fixed; height:140px; margin-bottom:-5px\">";
 				$.each(jsonObj.LeaseIPAvailable, function(index, obj) {
 					var vSeverity = vNormal;
 					if (obj.value >= 80) {
@@ -739,13 +738,13 @@ function segmentLeasingIPAssignedAjaxCall() {
 						vSeverity = vWarnning;
 					}
 					
-					vhtml = vhtml + "<tr><td style=\"width:300px; text-align:left\"><span class=\"progress-text\">" + obj.segment + "</span></td>" +
-									"<td style=\"width:100%\">" +
+					vhtml = vhtml + "<tr><td style=\"width:140px; text-align:left\"><span class=\"progress-text\">" + obj.segment + "</span></td>" +
+									"<td style=\"width:100%; padding:5px 0px\">" +
 									"	<div class=\"progress sm\">" +
 									"		<div class=\"progress-bar " + vSeverity + " \" style=\"width: " + obj.value + "%;\"></div>" +
 									"	</div>"+
 									"</td>" +
-									"<td style=\"width:80px\"><span class=\"progress-number\"><b>" + obj.value + " %</b></span></td></tr>";					
+									"<td style=\"width:45px\"><span class=\"progress-number\"><b>" + obj.value + " %</b></span></td></tr>";					
 				});
 			};			
 			vhtml = vhtml + "</table></div>";
@@ -1050,18 +1049,18 @@ function vendorUsedStatusAjaxCall() {
 			if (jsonObj.USEDSTATUS != '') {
 		
 				$.plot("#vendorPieChart", jsonObj.USEDSTATUS, {
-						series: {
-							pie: {
-								show: true,
-								radius: 1,
+					series: {
+						pie: {
+							show: true,
+							radius: 1,
 	//							innerRadius: 0.5,
-								label: {
-									show: true,
-									radius: 2 / 3,
-									formatter: labelFormatter,
-									threshold: 0.1
-								}
+							label: {
+								show: true,
+								radius: 2 / 3,
+								formatter: labelFormatter,
+								threshold: 0.1
 							}
+						}
 					},
 					legend: {
 						show: true

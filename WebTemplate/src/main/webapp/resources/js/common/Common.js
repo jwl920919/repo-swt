@@ -7,7 +7,8 @@ function systemAlert(message) {
  * divElement : alert을 가지고 있는 div ID type : alert-warning, alert-danger,
  * alert-info, alert-success title : 경고, 주의 등의 팝업 타이틀 message : 팝업 문구
  */
-function systemAlert(divElement, type, title, message) {
+function systemAlertNotify(divElement, type, title, message) {
+    getWindowPoint();
     $("#layDiv").attr("style", "visibility: visible");
     $("#alertTitle").text(title);
     $("#alertMessage").text(message);
@@ -17,7 +18,7 @@ function systemAlert(divElement, type, title, message) {
     // .alert-info
     // .alert-success
     var tag = "";
-    tag += "<div id='custom-alert' class='alert " + type
+    tag += "<div id='custom-alert-notify' class='alert " + type
             + " alert-dismissible fade in' role='alert'>";
     tag += "     <button onclick='fnAlertClose(\"layDiv\")' type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>";
     tag += "     <h4><i class='icon fa fa-warning'></i><label>" + title
@@ -45,7 +46,7 @@ function getWindowPoint() {
  * 0.68) fnName : button클릭시 실행 될 function 이름 (function이 없을시 ''로 공백문자열을 parameter값으로 주면됨)
  * message : 팝업 문구 confirm 버튼 추가
  */
-function systemAlert(divElement, type, title, message, confirmButtonValue, buttonColor, fnName) {
+function systemAlertConfirm(divElement, type, title, message, confirmButtonValue, buttonColor, fnName) {
     getWindowPoint();
     $("#layDiv").attr("style", "visibility: visible");
     $("#alertTitle").text(title);
@@ -56,7 +57,7 @@ function systemAlert(divElement, type, title, message, confirmButtonValue, butto
     // .alert-info
     // .alert-success
     var tag = "";
-    tag += "<div id='custom-alert' class='alert " + type
+    tag += "<div id='custom-alert-confirm' class='alert " + type
             + " alert-dismissible fade in' role='alert' >";
     tag += "     <button onclick='fnAlertClose(\"layDiv\")' type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>";
     tag += "     <h4><i class='icon fa fa-warning'></i><label>" + title
@@ -167,7 +168,7 @@ Date.prototype.format = function(f) {
             getLanguage("saturday") ];
     var d = this;
 
-    return f.replace(/(yyyy|yy|MM|dd|E|hh|mm|ss|a\/p)/gi, function($1) {
+    return f.replace(/(yyyy|yy|MM|dd|E|hh|h|mm|ss|a\/p)/gi, function($1) {
         switch ($1) {
         case "yyyy":
             return d.getFullYear();
@@ -183,6 +184,8 @@ Date.prototype.format = function(f) {
             return d.getHours().zf(2);
         case "hh":
             return ((h = d.getHours() % 12) ? h : 12).zf(2);
+        case "h":
+            return ((h = d.getHours() % 12) ? h : 12).zf(1);
         case "mm":
             return d.getMinutes().zf(2);
         case "ss":

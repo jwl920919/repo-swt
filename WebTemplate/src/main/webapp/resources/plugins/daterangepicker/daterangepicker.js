@@ -44,24 +44,67 @@
         this.isShowing = false;
 
         //create the picker HTML object
+//        var DRPTemplate = '<div class="daterangepicker dropdown-menu">' +
+//                '<div class="calendar first left"></div>' +
+//                '<div class="calendar second right"></div>' +
+//                '<div class="ranges">' +
+//                  '<div class="range_inputs">' +
+//                    '<div class="daterangepicker_start_input">' +
+//                      '<label for="daterangepicker_start"></label>' +
+//                      '<input class="input-mini" type="text" name="daterangepicker_start" value="" />' +
+//                    '</div>' +
+//                    '<div class="daterangepicker_end_input">' +
+//                      '<label for="daterangepicker_end"></label>' +
+//                      '<input class="input-mini" type="text" name="daterangepicker_end" value="" />' +
+//                    '</div>' +
+//                    '<button class="applyBtn" disabled="disabled"></button>&nbsp;' +
+//                    '<button class="cancelBtn"></button>' +
+//                  '</div>' +
+//                '</div>' +
+//              '</div>';
+        
         var DRPTemplate = '<div class="daterangepicker dropdown-menu">' +
-                '<div class="calendar first left"></div>' +
-                '<div class="calendar second right"></div>' +
-                '<div class="ranges">' +
-                  '<div class="range_inputs">' +
-                    '<div class="daterangepicker_start_input">' +
-                      '<label for="daterangepicker_start"></label>' +
-                      '<input class="input-mini" type="text" name="daterangepicker_start" value="" />' +
-                    '</div>' +
-                    '<div class="daterangepicker_end_input">' +
-                      '<label for="daterangepicker_end"></label>' +
-                      '<input class="input-mini" type="text" name="daterangepicker_end" value="" />' +
-                    '</div>' +
-                    '<button class="applyBtn" disabled="disabled"></button>&nbsp;' +
-                    '<button class="cancelBtn"></button>' +
-                  '</div>' +
-                '</div>' +
-              '</div>';
+	        		'<table>' +
+	        			'<tr>' +
+		        			'<td>' +
+			                  '<div class="range_inputs">' +
+			        				'<div class="calendar second right"></div>' +
+		    			            '<div class="daterangepicker_start_input" >' +
+		    			            	'<table style="margin-left:5px">' +
+        									'<tr>' +
+        										'<td style="width:65px"><label style="text-align:right" for="daterangepicker_start"></label></td>' +
+        										'<td><input class="input-mini" style="margin-left:5px; width:129px" type="text" name="daterangepicker_start" value="" /></td>' +
+        									'</tr>' +
+        								'</table>' +
+		    			            '</div>' +
+	    	                    '</div>' +
+		        			'</td>' +
+	        				'<td>' +
+			                  '<div class="range_inputs">' +
+		        		        	'<div class="calendar first left"></div>' +
+		    			            '<div class="daterangepicker_end_input">' +
+		    			            	'<table style="margin-left:5px">' +
+											'<tr>' +
+												'<td style="width:65px"><label style="text-align:right" for="daterangepicker_end"></label></td>' +
+												'<td><input class="input-mini" style="margin-left:5px; width:129px" type="text" name="daterangepicker_end" value="" /></td>' +
+											'</tr>' +
+										'</table>' +
+		    			            '</div>' +
+	    	                    '</div>' +
+	        				'</td>' +
+	        			'</tr>' +
+	        			'<tr>' +
+	    					'<td colspan=\"2\">' +
+		    			        '<div class="ranges" style="width:100%; text-align:right">' +
+		    			          '<div class="range_inputs">' +
+			    			          '<button class="applyBtn" disabled="disabled"></button>&nbsp;' +
+			    			          '<button class="cancelBtn"></button>' +
+		    			          '</div>' +
+		    			        '</div>' +
+	    					'</td>' +
+	        			'</tr>' +
+	        		'</table>' +       
+		      '</div>';
 
         //custom options
         if (typeof options !== 'object' || options === null)
@@ -144,10 +187,14 @@
             this.separator = ' - ';
 
             this.locale = {
-                applyLabel: 'Apply',
-                cancelLabel: 'Cancel',
-                fromLabel: 'From',
-                toLabel: 'To',
+//                applyLabel: 'Apply',
+//                cancelLabel: 'Cancel',
+//                fromLabel: 'From' starttime,
+//                toLabel: 'To',
+            	applyLabel: getLanguage("apply"),
+                cancelLabel: getLanguage("cancel"),
+                fromLabel: getLanguage("starttime") + " : ",
+                toLabel: getLanguage("endtime") + " : ",
                 weekLabel: 'W',
                 customRangeLabel: 'Custom Range',
                 daysOfWeek: moment.weekdaysMin(),
@@ -495,8 +542,8 @@
         },
 
         updateFormInputs: function () {
-            this.container.find('input[name=daterangepicker_start]').val(this.startDate.format(this.format));
-            this.container.find('input[name=daterangepicker_end]').val(this.endDate.format(this.format));
+            this.container.find('input[name=daterangepicker_start]').val(this.startDate.format(this.format).replace(/AM/gi, getLanguage("am")).replace(/PM/gi, getLanguage("pm")));
+            this.container.find('input[name=daterangepicker_end]').val(this.endDate.format(this.format).replace(/AM/gi, getLanguage("am")).replace(/PM/gi, getLanguage("pm")));
 
             if (this.startDate.isSame(this.endDate) || this.startDate.isBefore(this.endDate)) {
                 this.container.find('button.applyBtn').removeAttr('disabled');
@@ -678,8 +725,8 @@
                 this.updateView();
             } else {
                 var dates = this.ranges[label];
-                this.container.find('input[name=daterangepicker_start]').val(dates[0].format(this.format));
-                this.container.find('input[name=daterangepicker_end]').val(dates[1].format(this.format));
+                this.container.find('input[name=daterangepicker_start]').val(dates[0].format(this.format).replace(/AM/gi, getLanguage("am")).replace(/PM/gi, getLanguage("pm")));
+                this.container.find('input[name=daterangepicker_end]').val(dates[1].format(this.format).replace(/AM/gi, getLanguage("am")).replace(/PM/gi, getLanguage("pm")));
             }
         },
 
@@ -720,11 +767,15 @@
 
         updateInputText: function() {
             if (this.element.is('input') && !this.singleDatePicker) {
-                this.element.val(this.startDate.format(this.format) + this.separator + this.endDate.format(this.format));
+                var timetext = this.startDate.format(this.format) + this.separator + this.endDate.format(this.format);
+                this.element.val( timetext.replace(/AM/gi, getLanguage("am")).replace(/PM/gi, getLanguage("pm")) );
                 this.element.trigger('change');
+    			//console.log("updateInputText1 timetext : " + timetext + "; replace : " + this.element.val());
             } else if (this.element.is('input')) {
-                this.element.val(this.endDate.format(this.format));
-                this.element.trigger('change');
+                var timetext = this.endDate.format(this.format);
+                this.element.val( timetext.replace(/AM/gi, getLanguage("am")).replace(/PM/gi, getLanguage("pm")) );
+                this.element.trigger('change');                
+    			//console.log("updateInputText2 timetext : " + timetext + "; replace : " + this.element.val());
             }
         },
 
@@ -783,9 +834,9 @@
             var cal = $(e.target).parents('.calendar');
 
             if (cal.hasClass('left')) {
-                this.container.find('input[name=daterangepicker_start]').val(this.leftCalendar.calendar[row][col].format(this.format));
+                this.container.find('input[name=daterangepicker_start]').val(this.leftCalendar.calendar[row][col].format(this.format).replace(/AM/gi, getLanguage("am")).replace(/PM/gi, getLanguage("pm")));
             } else {
-                this.container.find('input[name=daterangepicker_end]').val(this.rightCalendar.calendar[row][col].format(this.format));
+                this.container.find('input[name=daterangepicker_end]').val(this.rightCalendar.calendar[row][col].format(this.format).replace(/AM/gi, getLanguage("am")).replace(/PM/gi, getLanguage("pm")));
             }
         },
 
@@ -852,9 +903,15 @@
         },
 
         clickApply: function (e) {
-            this.updateInputText();
-            this.hide();
-            this.element.trigger('apply.daterangepicker', this);
+			var startDate = this.container.find('input[name=daterangepicker_start]').val();
+			var endDate = this.container.find('input[name=daterangepicker_end]').val();
+			//console.log("clickApply : " + startDate + " ; " + endDate);
+			
+        	if (checkDate(startDate, endDate)) {
+	            this.updateInputText();
+	            this.hide();
+	            this.element.trigger('apply.daterangepicker', this);
+        	}
         },
 
         clickCancel: function (e) {
@@ -1217,7 +1274,7 @@
                     if (selected.minute() > max_minute)
                         selected.minute(max_minute);
                 }
-
+                
                 for (i = 0; i < 60; i += this.timePickerIncrement) {
                     var num = i;
                     if (num < 10)
@@ -1251,7 +1308,7 @@
                 }
 
                 if (this.timePicker12Hour) {
-                    html += '<select class="ampmselect">';
+                    html += '<select class="ampmselect" style="font-size:9pt">';
 
                     // Disallow selection before the minDate or after the maxDate
                     var am_html = '';
@@ -1264,11 +1321,11 @@
                     if (maxDate && (side == 'right' || this.singleDatePicker) && selected.format('YYYY-MM-DD') == maxDate.format('YYYY-MM-DD') && maxDate.hour() < 12) {
                         pm_html = ' disabled="disabled" class="disabled"';
                     }
-
+                    
                     if (selected.hour() >= 12) {
-                        html += '<option value="AM"' + am_html + '>AM</option><option value="PM" selected="selected"' + pm_html + '>PM</option>';
+                        html += '<option value="AM"' + am_html + '>'+getLanguage("am")+'</option><option value="PM" selected="selected"' + pm_html + '>'+getLanguage("pm")+'</option>';
                     } else {
-                        html += '<option value="AM" selected="selected"' + am_html + '>AM</option><option value="PM"' + pm_html + '>PM</option>';
+                        html += '<option value="AM" selected="selected"' + am_html + '>'+getLanguage("am")+'</option><option value="PM"' + pm_html + '>'+getLanguage("pm")+'</option>';
                     }
                     html += '</select>';
                 }
@@ -1301,4 +1358,24 @@
         return this;
     };
 
+    checkDate = function(start, end){
+    	var ret = false;
+    	try {
+			
+		} catch (e) {
+			console.log("daterangepicker.js checkDate Error Log : " + e.message);
+		}
+    	if (start != '' && end != '') {
+			var startDate = new Date(start);
+			var endDate = new Date(end);
+
+			if (startDate >= endDate) {
+				systemAlertNotify("divAlertArea", "alert-warning", getLanguage("warning"), getLanguage("checkSearchDate"));
+			}
+			else {
+				ret = true;
+			}
+    	}
+		return ret;
+    }
 }));

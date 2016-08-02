@@ -88,7 +88,7 @@ var selectedRow;
 function tdClickEvent(obj){
 	try
 	{
-		//systemAlert("divAlertArea", "alert-danger", getLanguage("warning"), $(obj).html());
+		//systemAlertNotify("divAlertArea", "alert-danger", getLanguage("warning"), $(obj).html());
 		//alert($(obj).html().trim());
 		if (obj != "") {
 			selectedRow = obj;

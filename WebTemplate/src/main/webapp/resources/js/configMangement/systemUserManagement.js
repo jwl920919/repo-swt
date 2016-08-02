@@ -106,7 +106,7 @@ $('#checkbox_controller').click(function() {
 
 $('#delete-button').click(
         function() {
-            systemAlert("divAlertArea", "alert-warning", "삭제",
+        	systemAlertConfirm("divAlertArea", "alert-warning", "삭제",
                     "정말 유저 정보를 삭제하시겠습니까?", "삭제", "#ce891c",
                     'userInformDeleteEvent');
 
@@ -351,14 +351,14 @@ $('#save-button').click(
                             success : function(data) {
                                 var jsonObj = eval("(" + data + ')');
                                 if (jsonObj.result == true) {
-                                    systemAlert("divAlertArea", "alert-info",
+                                	systemAlertConfirm("divAlertArea", "alert-info",
                                             "계정생성", "계정생성에 성공하셨습니다.", "확인",
                                             "rgba(60, 141, 188, 0.68)", '');
                                     $('#idTxt').val('');
                                     clear();
                                     table.ajax.reload();
                                 } else {
-                                    systemAlert("divAlertArea",
+                                	systemAlertConfirm("divAlertArea",
                                             "alert-warning", "계정생성",
                                             "계정생성에 실패하셨습니다.", "확인", "#ce891c",
                                             '');
@@ -366,11 +366,11 @@ $('#save-button').click(
                             }
                         })
                     } else {
-                        systemAlert("divAlertArea", "alert-warning", "아이디",
+                    	systemAlertConfirm("divAlertArea", "alert-warning", "아이디",
                                 "아이디 중복 확인하세요", "확인", "#ce891c", '');
                     }
                 } else {
-                    systemAlert("divAlertArea", "alert-warning", "패스워드",
+                	systemAlertConfirm("divAlertArea", "alert-warning", "패스워드",
                             "패스워드 일치 여부를 확인하세요", "확인", "#ce891c", '');
                 }
                 break;
@@ -395,11 +395,11 @@ $('#save-button').click(
                         success : function(data) {
                             var jsonObj = eval("(" + data + ')');
                             if (jsonObj.result == true) {
-                                systemAlert("divAlertArea", "alert-info",
+                            	systemAlertConfirm("divAlertArea", "alert-info",
                                         "계정변경", "계정변경 성공하셨습니다.", "확인",
                                         "rgba(60, 141, 188, 0.68)", '');
                             } else {
-                                systemAlert("divAlertArea", "alert-warning",
+                            	systemAlertConfirm("divAlertArea", "alert-warning",
                                         "계정변경", "계정변경 실패하셨습니다.", "확인",
                                         "#ce891c", '');
                             }

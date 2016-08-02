@@ -8,23 +8,19 @@
 	<!-- Description : 데시보드 메뉴 데이터 조회 -->
 	<!-- Controller : -->
 	<select id="select_UI_MENU_MASTER" resultType="java.util.HashMap">
-		SELECT
-		"menu_master"."master_cd", "menu_master"."master_namekey",
-		"menu_master"."master_desc",
-		"menu_master"."master_order",
-		"menu_master"."master_url", "menu_master"."master_icon",
-		"menu_sub"."sub_cd", "menu_sub"."subname_key", "menu_sub"."sub_desc",
-		"menu_sub"."sub_order",
-		"menu_sub"."sub_Url", "menu_sub"."sub_icon",
-		"menu_sub"."controller_mapping"
-		FROM "menu_master"
-		RIGHT OUTER JOIN
-		"menu_sub"
-		ON "menu_master"."master_cd" = "menu_sub"."master_cd"
-		WHERE
-		"menu_sub"."display_yn" = TRUE
-		ORDER BY "menu_master"."master_order",
-		"menu_sub"."sub_order";
+		SELECT "menu_master"."master_cd", "menu_master"."master_namekey",
+               "menu_master"."master_desc",
+               "menu_master"."master_order",
+               "menu_master"."master_url", "menu_master"."master_icon",
+               "menu_sub"."sub_cd", "menu_sub"."subname_key", "menu_sub"."sub_desc",
+               "menu_sub"."sub_order",
+               "menu_sub"."sub_Url", "menu_sub"."sub_icon",
+               "menu_sub"."controller_mapping"
+		  FROM "menu_master"
+               RIGHT OUTER JOIN "menu_sub" 
+		          ON "menu_master"."master_cd" = "menu_sub"."master_cd"
+		 WHERE "menu_sub"."display_yn" = TRUE
+		 ORDER BY "menu_master"."master_order", "menu_sub"."sub_order";
 	</select>
 
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
@@ -266,16 +262,15 @@
 	<!-- Insert Date : 2016-07-11 -->
 	<!-- Insert User : KCM -->
 	<!-- Description : IP관리 > 고정IP현황 - 세그먼트별 데이터 -->
-	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
+	<!-- Controller : MVC.ShinwooTNS.action.IPManagementActionController -->
 	<select id="select_IP_MANAGEMENT_SEGMENT" resultType="java.util.HashMap">
-		SELECT * FROM "dhcp_network" ,(SELECT count(*) allcount FROM
-		"dhcp_network") as allcount
-		WHERE site_id = ${siteid}
-		AND (network like CONCAT('%', #{searchValue}, '%') OR comment like
-		CONCAT('%', #{searchValue}, '%')
-		OR start_ip like CONCAT('%', #{searchValue}, '%') OR end_ip like
-		CONCAT('%', #{searchValue}, '%'))
-		ORDER BY
+		SELECT * 
+		  FROM "dhcp_network", (SELECT count(*) allcount
+                                  FROM "dhcp_network") as allcount
+		                         WHERE site_id = ${siteid}
+		                           AND (network like CONCAT('%', #{searchValue}, '%') OR comment like CONCAT('%', #{searchValue}, '%')
+		                            OR start_ip like CONCAT('%', #{searchValue}, '%') OR end_ip like CONCAT('%', #{searchValue}, '%'))
+		 ORDER BY
 		<choose>
 			<when test="orderColumn == 'comment'"> ${orderColumn} ${orderType} </when>
 			<when test="orderColumn != 'comment'"> inet(${orderColumn}) ${orderType} </when>
@@ -287,7 +282,7 @@
 	<!-- Insert Date : 2016-07-12 -->
 	<!-- Insert User : KCM -->
 	<!-- Description : IP관리 > 고정IP현황 - 세그먼트별 상세 데이터 -->
-	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
+	<!-- Controller : MVC.ShinwooTNS.action.IPManagementActionController -->
 	<select id="select_IP_MANAGEMENT_SEGMENT_DETAIL" resultType="java.util.HashMap">
 		SET TIMEZONE TO '${time_zone}';
 		SELECT * FROM 
@@ -334,7 +329,7 @@
 	<!-- Insert Date : 2016-07-15 -->
 	<!-- Insert User : KCM -->
 	<!-- Description : IP관리 > 고정IP현황 - 세그먼트별 ip map 데이터 - DHCP Range -->
-	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
+	<!-- Controller : MVC.ShinwooTNS.action.IPManagementActionController -->
 	<select id="select_IP_MANAGEMENT_SEGMENT_DETAIL_MAP_DHCPRANGE" resultType="java.util.HashMap">
 		SELECT "netzone".*, "range"."start_ip" AS "dhcp_start_ip", "range"."end_ip" AS "dhcp_end_ip"
 		  FROM "dhcp_network" AS "netzone", "dhcp_range" AS "range"
@@ -348,7 +343,7 @@
 	<!-- Insert Date : 2016-07-15 -->
 	<!-- Insert User : KCM -->
 	<!-- Description : IP관리 > 고정IP현황 - 세그먼트별 ip map 데이터 -->
-	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
+	<!-- Controller : MVC.ShinwooTNS.action.IPManagementActionController -->
 	<select id="select_IP_MANAGEMENT_SEGMENT_DETAIL_MAPDATA" resultType="java.util.HashMap">
 		SET TIMEZONE TO '${time_zone}';
 		SELECT * FROM (
@@ -439,7 +434,7 @@
 	<!-- Insert Date : 2016-07-25 -->
 	<!-- Insert User : KCM -->
 	<!-- Description : Lease IP현황 > ip현황 데이터 -->
-	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
+	<!-- Controller : MVC.ShinwooTNS.action.IPManagementActionController -->
 	<select id="select_LEASEIP_STATUS_DATA" resultType="java.util.HashMap">
 		SET TIMEZONE TO '${time_zone}';
 		
@@ -494,6 +489,75 @@
 		</choose>
 		OFFSET #{startIndex} LIMIT #{length};
 		DROP function fnRowCount(int,text,text,text,text);
+	</select>
+	
+
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-08-02 -->
+	<!-- Insert User : KCM -->
+	<!-- Description : IP관리 > IP 요청/승인 현황  데이터 -->
+	<!-- Controller : MVC.ShinwooTNS.action.IPManagementActionController -->
+	<select id="select_IP_MANAGEMENT_CERTIFY_STATUS_DATA" resultType="java.util.HashMap">
+		SET TIMEZONE TO '${time_zone}';
+		SELECT "apply"."user_id", "apply"."user_site_id", "usersite"."site_name",
+		       COALESCE("apply"."user_name", '') AS "user_name",
+		       COALESCE("apply"."user_phone_num", '') AS "user_phone_num", 
+		 	   "apply"."apply_site_id", "applysite"."site_name", "apply"."apply_static_ip_type",
+		 	   COALESCE("apply"."apply_static_ipaddr", '') AS "apply_static_ipaddr",
+		 	   COALESCE("apply"."apply_static_ip_num", '0') AS "apply_static_ip_num",
+		 	   COALESCE(to_char("apply"."apply_start_time",'YYYY-MM-DD HH24:MI:SS'),'') AS "apply_start_time",
+		 	   COALESCE(to_char("apply"."apply_end_time",'YYYY-MM-DD HH24:MI:SS'),'') AS "apply_end_time",
+		 	   COALESCE("apply"."apply_description", '') AS "apply_description",
+		 	   COALESCE(to_char("apply"."apply_time",'YYYY-MM-DD HH24:MI:SS'),'') AS "apply_time",
+		 	   COALESCE("apply"."settlement_status", '0') AS "settlement_status",
+		 	   COALESCE("apply"."settlement_chief_id", '') AS "settlement_chief_id",
+		 	   COALESCE("apply"."settlement_description", '') AS "settlement_description",
+	   	 	   COALESCE(to_char("apply"."settlement_time",'YYYY-MM-DD HH24:MI:SS'),'') AS "settlement_time",
+		 	   COALESCE("apply"."issuance_ip_type", '') AS "issuance_ip_type",
+		 	   COALESCE("apply"."issuance_ipaddr", '') AS "issuance_ipaddr",
+		 	   COALESCE("apply"."issuance_ip_num", '0') AS "issuance_ip_num",
+		 	   COALESCE(to_char("apply"."issuance_start_time",'YYYY-MM-DD HH24:MI:SS'),'') AS "settlement_time",
+		 	   COALESCE(to_char("apply"."issuance_end_time",'YYYY-MM-DD HH24:MI:SS'),'') AS "issuance_end_time",
+     		   "rowCount"."allCount"
+		  FROM "user_apply_ip_info" AS "apply", "site_info" AS "usersite", "site_info" AS "applysite",
+               (SELECT count(*) AS "allCount"
+                  FROM "user_apply_ip_info" AS "apply", "site_info" AS "usersite", "site_info" AS "applysite"
+                 WHERE "apply"."user_site_id" = "usersite"."site_id"
+                   AND "apply"."apply_site_id" = "applysite"."site_id"
+				<choose>
+					<when test="siteid != 0"> AND "apply"."apply_site_id" = #{siteid} </when>
+				</choose>
+				<choose>
+					<when test="settlementstatus > 0"> AND "apply"."settlement_status" = #{settlementstatus} </when> 
+				</choose>
+                   AND ("usersite"."site_name" like CONCAT('%', #{searchValue}, '%') OR "applysite"."site_name" like CONCAT('%', #{searchValue}, '%') OR
+		   	           "apply"."user_name" like CONCAT('%', #{searchValue}, '%') OR "apply"."user_phone_num" like CONCAT('%', #{searchValue}, '%') OR
+		       		   "apply"."apply_static_ip_type" like CONCAT('%', #{searchValue}, '%') OR "apply"."apply_static_ipaddr" like CONCAT('%', #{searchValue}, '%') OR
+		       		   "apply"."apply_description" like CONCAT('%', #{searchValue}, '%') OR "apply"."settlement_chief_id" like CONCAT('%', #{searchValue}, '%') OR
+		       		   "apply"."settlement_description" like CONCAT('%', #{searchValue}, '%') OR "apply"."issuance_ip_type" like CONCAT('%', #{searchValue}, '%') OR
+		       		   "apply"."issuance_ipaddr" like CONCAT('%', #{searchValue}, '%') OR "apply"."issuance_ip_type" like CONCAT('%', #{searchValue}, '%'))
+		   		   AND "apply"."settlement_status" = #{settlementstatus}
+  		           AND ("apply"."apply_time" &lt;= timestamp '${endtime}' AND "apply"."apply_time" &gt;= timestamp '${starttime}')) AS "rowCount"
+		 WHERE "apply"."user_site_id" = "usersite"."site_id"
+		   AND "apply"."apply_site_id" = "applysite"."site_id"
+		<choose>
+			<when test="siteid != 0"> AND "apply"."apply_site_id" = #{siteid} </when> 
+		</choose>
+		<choose>
+			<when test="settlementstatus > 0"> AND "apply"."settlement_status" = #{settlementstatus} </when> 
+		</choose>
+		   AND ("usersite"."site_name" like CONCAT('%', #{searchValue}, '%') OR "applysite"."site_name" like CONCAT('%', #{searchValue}, '%') OR
+		   	   "apply"."user_name" like CONCAT('%', #{searchValue}, '%') OR "apply"."user_phone_num" like CONCAT('%', #{searchValue}, '%') OR
+		       "apply"."apply_static_ip_type" like CONCAT('%', #{searchValue}, '%') OR "apply"."apply_static_ipaddr" like CONCAT('%', #{searchValue}, '%') OR
+		       "apply"."apply_description" like CONCAT('%', #{searchValue}, '%') OR "apply"."settlement_chief_id" like CONCAT('%', #{searchValue}, '%') OR
+		       "apply"."settlement_description" like CONCAT('%', #{searchValue}, '%') OR "apply"."issuance_ip_type" like CONCAT('%', #{searchValue}, '%') OR
+		       "apply"."issuance_ipaddr" like CONCAT('%', #{searchValue}, '%') OR "apply"."issuance_ip_type" like CONCAT('%', #{searchValue}, '%'))
+  		   AND ("apply"."apply_time" &lt;= timestamp '${endtime}' AND "apply"."apply_time" &gt;= timestamp '${starttime}')
+		<choose>
+			<when test="orderColumn == 'apply_static_ipaddr' or orderColumn == 'issuance_ipaddr'"> ORDER BY inet(${orderColumn}) ${orderType} </when>
+			<when test="orderColumn != 'apply_static_ipaddr' and orderColumn != 'issuance_ipaddr'"> ORDER BY ${orderColumn} ${orderType} </when>
+		</choose>
+		OFFSET #{startIndex} LIMIT #{length};
 	</select>
 
 </mapper>

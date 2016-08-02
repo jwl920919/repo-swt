@@ -149,15 +149,15 @@
 						<div class="box dashboard-box box-success">
 							<div class="box-header">
 								<i class="fa fa-bar-chart-o"></i>
-	
-								<h3 class="box-title-small"><%=LanguageHelper.GetLanguage("guestIPAssinment")%></h3>
+								<h3 class="box-title-small" data-toggle="tooltip" title="<%=LanguageHelper.GetLanguage("guestIPAssinment")%>">
+								<%=LanguageHelper.GetLanguage("guestIPAssinment")%></h3>
 								<!-- tools box -->
 								<div class="pull-right box-tools">
-									<button type="button" class="btn bg-teal btn-sm"
+									<button type="button" class="btn dashboard-box-btn bg-teal btn-sm"
 										data-widget="collapse">
 										<i class="fa fa-minus"></i>
 									</button>
-									<button type="button" class="btn bg-teal btn-sm"
+									<button type="button" class="btn dashboard-box-btn bg-teal btn-sm"
 										data-widget="remove" data-toggle="tooltip" title="Remove">
 										<i class="fa fa-times"></i>
 									</button>
@@ -166,7 +166,7 @@
 							</div>
 							<div class="box-body">
 								<!-- ./col -->
-				                <div class="col-xs-12 text-center" style="height: 120px;">
+				                <div class="col-xs-12 text-center" style="height: 125px;">
 				                	<input id="iGuestIPAssing" type="text" class="knob" data-thickness="0.3" data-angleArc="250" data-angleOffset="-125" 
 				                		data-max="100" value="0" data-width="110" data-height="100" 
 				                		data-inputColor="#00c0ef" 
@@ -186,20 +186,21 @@
 					</section>
 					<!-- ./Guest IP 할당현황 -->
 					
-					<!-- DNS 할당 현황  -->
+					<!-- DNS 사용 현황  -->
 					<section class="col-lg-6">
 						<div class="box dashboard-box box-info">
 							<div class="box-header">
 								<i class="fa fa-envelope"></i>
 
-								<h3 class="box-title-small"><%=LanguageHelper.GetLanguage("dnsAssignment")%></h3>
+								<h3 class="box-title-small" data-toggle="tooltip" title="<%=LanguageHelper.GetLanguage("dnsAssignment")%>">
+								<%=LanguageHelper.GetLanguage("dnsAssignment")%></h3>
 								<!-- tools box -->
 								<div class="pull-right box-tools">
-									<button type="button" class="btn bg-teal btn-sm"
+									<button type="button" class="btn dashboard-box-btn bg-teal btn-sm"
 										data-widget="collapse">
 										<i class="fa fa-minus"></i>
 									</button>
-									<button type="button" class="btn bg-teal btn-sm"
+									<button type="button" class="btn dashboard-box-btn bg-teal btn-sm"
 										data-widget="remove" data-toggle="tooltip" title="Remove">
 										<i class="fa fa-times"></i>
 									</button>
@@ -207,7 +208,7 @@
 								<!-- ./ tools -->
 							</div>
 							<div class="box-body">
-								<table class="col-xs-12 table-bordered" style="text-align: center; height: 135px; margin-top: -15px;">
+								<table class="col-xs-12 table-bordered" style="text-align: center; height: 136px; margin-top: -10px;">
 									<tr style="height: 30%; background-color:  #404040;">
 										<td class="col-xs-4" style="vertical-align: bottom"><font color="#ffffff" size="4"><label id=lSuccess></label></font>
 										</td>
@@ -252,9 +253,10 @@
 					<!-- 인증 처리 현황 -->
 					<div class="box dashboard-box box-warning">
 						<div class="box-header">
-							<i class="fa fa-envelope"></i>
+							<i class="fa fa-area-chart"></i>
 
-							<h3 class="box-title-small"><%=LanguageHelper.GetLanguage("certifyProcess")%></h3>
+							<h3 class="box-title-small" data-toggle="tooltip" title="<%=LanguageHelper.GetLanguage("certifyProcess")%>">
+							<%=LanguageHelper.GetLanguage("certifyProcess")%></h3>
 							<!-- tools box -->
 							<div class="box-tools pull-right">
 							  Real time
@@ -262,11 +264,11 @@
 									<button type="button" class="btn btn-default btn-xs active" data-toggle="on">On</button>
 									<button type="button" class="btn btn-default btn-xs" data-toggle="off">Off</button>
 								</div>
-								<button type="button" class="btn bg-teal btn-sm"
+								<button type="button" class="btn dashboard-box-btn bg-teal btn-sm"
 									data-widget="collapse">
 									<i class="fa fa-minus"></i>
 								</button>
-								<button type="button" class="btn bg-teal btn-sm"
+								<button type="button" class="btn dashboard-box-btn bg-teal btn-sm"
 									data-widget="remove" data-toggle="tooltip" title="Remove">
 									<i class="fa fa-times"></i>
 								</button>
@@ -296,16 +298,17 @@
 					<section class="col-lg-6">
 						<div class="box dashboard-box box-blue">
 							<div class="box-header">
-								<i class="fa fa-envelope"></i>
+								<i class="fa fa-pie-chart"></i>
 	
-								<h3 class="box-title-small"><%=LanguageHelper.GetLanguage("hardwareByUsed")%></h3>
+								<h3 class="box-title-small" data-toggle="tooltip" title="<%=LanguageHelper.GetLanguage("hardwareByUsed")%>">
+								<%=LanguageHelper.GetLanguage("hardwareByUsed")%></h3>
 								<!-- tools box -->
 								<div class="pull-right box-tools">
-									<button type="button" class="btn bg-teal btn-sm"
+									<button type="button" class="btn dashboard-box-btn bg-teal btn-sm"
 										data-widget="collapse">
 										<i class="fa fa-minus"></i>
 									</button>
-									<button type="button" class="btn bg-teal btn-sm"
+									<button type="button" class="btn dashboard-box-btn bg-teal btn-sm"
 										data-widget="remove" data-toggle="tooltip" title="Remove">
 										<i class="fa fa-times"></i>
 									</button>
@@ -324,16 +327,17 @@
 					<section class="col-lg-6">
 						<div class="box dashboard-box box-red">
 							<div class="box-header">
-								<i class="fa fa-envelope"></i>
+								<i class="fa fa-pie-chart"></i>
 
-								<h3 class="box-title-small"><%=LanguageHelper.GetLanguage("osByUsed")%></h3>
+								<h3 class="box-title-small" data-toggle="tooltip" title="<%=LanguageHelper.GetLanguage("osByUsed")%>">
+								<%=LanguageHelper.GetLanguage("osByUsed")%></h3>
 								<!-- tools box -->
 								<div class="pull-right box-tools">
-									<button type="button" class="btn bg-teal btn-sm"
+									<button type="button" class="btn dashboard-box-btn bg-teal btn-sm"
 										data-widget="collapse">
 										<i class="fa fa-minus"></i>
 									</button>
-									<button type="button" class="btn bg-teal btn-sm"
+									<button type="button" class="btn dashboard-box-btn bg-teal btn-sm"
 										data-widget="remove" data-toggle="tooltip" title="Remove">
 										<i class="fa fa-times"></i>
 									</button>
@@ -361,16 +365,16 @@
 					<section class="col-lg-6">
 						<div class="box dashboard-box box-yellow">
 							<div class="box-header">
-								<i class="fa fa-envelope"></i>
-
-								<h3 class="box-title-small"><%=LanguageHelper.GetLanguage("segmentByLeaseIP")%></h3>
+								<i class="fa  fa-tasks"></i>
+								<h3 class="box-title-small" data-toggle="tooltip" title="<%=LanguageHelper.GetLanguage("segmentByLeaseIP")%>">
+								<%=LanguageHelper.GetLanguage("segmentByLeaseIP")%></h3>
 								<!-- tools box -->
 								<div class="pull-right box-tools">
-									<button type="button" class="btn bg-teal btn-sm"
+									<button type="button" class="btn dashboard-box-btn bg-teal btn-sm"
 										data-widget="collapse">
 										<i class="fa fa-minus"></i>
 									</button>
-									<button type="button" class="btn bg-teal btn-sm"
+									<button type="button" class="btn dashboard-box-btn bg-teal btn-sm"
 										data-widget="remove" data-toggle="tooltip" title="Remove">
 										<i class="fa fa-times"></i>
 									</button>
@@ -378,7 +382,7 @@
 								<!-- ./ tools -->
 							</div>
 							<div class="box-body">
-								<div class="col-xs-12" id="divleaseIPAvailable" style="text-align: center; height: 135px; margin-top: -15px;">
+								<div class="col-lg-12-noPadding" id="divleaseIPAvailable" style="text-align: center; margin-top: -10px;">
 								</div>
 							</div>
 						</div>
@@ -389,23 +393,24 @@
 					<section class="col-lg-6">
 						<div class="box dashboard-box box-green">
 							<div class="box-header">
-								<i class="fa fa-envelope"></i>
+								<i class="fa fa-sliders"></i>
 
-								<h3 class="box-title-small"><%=LanguageHelper.GetLanguage("fixedleaseunusedipallocationstatus")%></h3>
+								<h3 class="box-title-small" data-toggle="tooltip" title="<%=LanguageHelper.GetLanguage("fixedleaseunusedipallocationstatus")%>">
+								<%=LanguageHelper.GetLanguage("fixedleaseunusedipallocationstatus")%></h3>
 								<!-- tools box -->
 								<div class="pull-right box-tools">
-									<button type="button" class="btn bg-teal btn-sm"
+									<button type="button" class="btn dashboard-box-btn bg-teal btn-sm"
 										data-widget="collapse">
 										<i class="fa fa-minus"></i>
 									</button>
-									<button type="button" class="btn bg-teal btn-sm"
+									<button type="button" class="btn dashboard-box-btn bg-teal btn-sm"
 										data-widget="remove" data-toggle="tooltip" title="Remove">
 										<i class="fa fa-times"></i>
 									</button>
 								</div>
 								<!-- ./ tools -->
 							</div>
-							<div class="box-body" style="text-align: center; height: 155px; margin-top: -15px;">
+							<div class="box-body" style="text-align: center; height: 155px; margin-top: -10px;">
 								<!-- 고정 IP 할당 현황 -->
 								<div class="info-box bg-light-blue">
 									<span class="info-box-icon"><i class="fa fa-lock"></i></span>						
@@ -450,16 +455,17 @@
 					<!-- IP 신청 현황  -->
 					<div class="box dashboard-box box-gray">
 						<div class="box-header">
-							<i class="fa fa-envelope"></i>
+							<i class="fa fa-bar-chart"></i>
 
-							<h3 class="box-title-small"><%=LanguageHelper.GetLanguage("askIPStatus")%></h3>
+							<h3 class="box-title-small" data-toggle="tooltip" title="<%=LanguageHelper.GetLanguage("askIPStatus")%>">
+							<%=LanguageHelper.GetLanguage("askIPStatus")%></h3>
 							<!-- tools box -->
 							<div class="pull-right box-tools">
-								<button type="button" class="btn bg-teal btn-sm"
+								<button type="button" class="btn dashboard-box-btn bg-teal btn-sm"
 									data-widget="collapse">
 									<i class="fa fa-minus"></i>
 								</button>
-								<button type="button" class="btn bg-teal btn-sm"
+								<button type="button" class="btn dashboard-box-btn bg-teal btn-sm"
 									data-widget="remove" data-toggle="tooltip" title="Remove">
 									<i class="fa fa-times"></i>
 								</button>
@@ -483,16 +489,17 @@
 					<section class="col-lg-6">
 						<div class="box dashboard-box box-cyan">
 							<div class="box-header">
-								<i class="fa fa-envelope"></i>
+								<i class="fa fa-pie-chart"></i>
 
-								<h3 class="box-title-small"><%=LanguageHelper.GetLanguage("serviceByUsed")%></h3>
+								<h3 class="box-title-small" data-toggle="tooltip" title="<%=LanguageHelper.GetLanguage("serviceByUsed")%>">
+								<%=LanguageHelper.GetLanguage("serviceByUsed")%></h3>
 								<!-- tools box -->
 								<div class="pull-right box-tools">
-									<button type="button" class="btn bg-teal btn-sm"
+									<button type="button" class="btn dashboard-box-btn bg-teal btn-sm"
 										data-widget="collapse">
 										<i class="fa fa-minus"></i>
 									</button>
-									<button type="button" class="btn bg-teal btn-sm"
+									<button type="button" class="btn dashboard-box-btn bg-teal btn-sm"
 										data-widget="remove" data-toggle="tooltip" title="Remove">
 										<i class="fa fa-times"></i>
 									</button>
@@ -507,19 +514,20 @@
 					</section>
 					<!-- ./서비스별 사용 현황 -->
 					<!-- 벤더별 사용 현황 -->
-					<section class="col-lg-6-noPadding">
+					<section class="col-lg-6">
 						<div class="box dashboard-box box-brown">
 							<div class="box-header">
-								<i class="fa fa-envelope"></i>
+								<i class="fa fa-pie-chart"></i>
 
-								<h3 class="box-title-small"><%=LanguageHelper.GetLanguage("VendorByUsed")%></h3>
+								<h3 class="box-title-small" data-toggle="tooltip" title="<%=LanguageHelper.GetLanguage("VendorByUsed")%>">
+								<%=LanguageHelper.GetLanguage("VendorByUsed")%></h3>
 								<!-- tools box -->
 								<div class="pull-right box-tools">
-									<button type="button" class="btn bg-teal btn-sm"
+									<button type="button" class="btn dashboard-box-btn bg-teal btn-sm"
 										data-widget="collapse">
 										<i class="fa fa-minus"></i>
 									</button>
-									<button type="button" class="btn bg-teal btn-sm"
+									<button type="button" class="btn dashboard-box-btn bg-teal btn-sm"
 										data-widget="remove" data-toggle="tooltip" title="Remove">
 										<i class="fa fa-times"></i>
 									</button>
@@ -540,58 +548,59 @@
 			<!-- ./right col -->			
 		</div>
 		<!-- ./main top row -->
-		
-		<!-- main bottom row -->		
-		<!-- 통합이벤트 -->
-		<div class="col-lg-12">
-			<div class="box dashboard-box box-purple">
-				<div class="box-header">
-					<i class="fa fa-envelope"></i>
-	
-					<h3 class="box-title"><%=LanguageHelper.GetLanguage("eventLog")%></h3>
-					<!-- tools box -->
-					<div class="pull-right box-tools">
-						<button type="button" class="btn bg-teal btn-sm"
-							data-widget="collapse">
-							<i class="fa fa-minus"></i>
-						</button>
-						<button type="button" class="btn bg-teal btn-sm"
-							data-widget="remove" data-toggle="tooltip" title="Remove">
-							<i class="fa fa-times"></i>
-						</button>
-					</div>
-					<!-- ./ tools -->
-				</div>
-				<div class="box-body" style="margin-bottom: 5px">
-					<center>
-						<table id="datatable" name="eventLog" class="essential-table" style="width: 98% !important">
-							<thead>
-								<tr>
-<%-- 									<th width="10%"><%=LanguageHelper.GetLanguage("datetime")%></th> --%>
-<!-- 									<th width="7%">Facility</th> -->
-<%-- 									<th width="7%"><%=LanguageHelper.GetLanguage("type")%></th> --%>
-<%-- 									<th width="10%"><%=LanguageHelper.GetLanguage("server")%></th> --%>
-<%-- 									<th width="*"><%=LanguageHelper.GetLanguage("message")%></th> --%>
-									<th width="160px"><%=LanguageHelper.GetLanguage("datetime")%></th>
-									<th width="100px">Facility</th>
-									<th width="100px"><%=LanguageHelper.GetLanguage("type")%></th>
-									<th width="180px"><%=LanguageHelper.GetLanguage("server")%></th>
-									<th width="AUTO"><%=LanguageHelper.GetLanguage("message")%></th>
-								</tr>
-							</thead>
-							<tbody>
-							</tbody>
-						</table>
-					</center>
-				</div>
-			</div>
-		</div>
-		<!-- ./통합이벤트 -->		
-		<!-- ./main bottom row -->
 	</section>
 	<!-- ./main section -->
 </div>
 <!-- ./main row -->
 
+<!-- 통합이벤트 row -->
+<div class="row">
+<!-- 통합이벤트 -->
+	<div class="col-lg-12">
+		<div class="box dashboard-box box-purple">
+			<div class="box-header">
+				<i class="fa fa-list-ol"></i>
+
+				<h3 class="box-title"><%=LanguageHelper.GetLanguage("eventLog")%></h3>
+				<!-- tools box -->
+				<div class="pull-right box-tools">
+					<button type="button" class="btn dashboard-box-btn bg-teal btn-sm"
+						data-widget="collapse">
+						<i class="fa fa-minus"></i>
+					</button>
+					<button type="button" class="btn dashboard-box-btn bg-teal btn-sm"
+						data-widget="remove" data-toggle="tooltip" title="Remove">
+						<i class="fa fa-times"></i>
+					</button>
+				</div>
+				<!-- ./ tools -->
+			</div>
+			<div class="box-body" style="margin-bottom: 5px">
+				<center style="margin-top: -15px !important;">
+					<table id="datatable" name="eventLog" class="essential-table" style="width: 98% !important;">
+						<thead>
+							<tr>
+<%-- 									<th width="10%"><%=LanguageHelper.GetLanguage("datetime")%></th> --%>
+<!-- 									<th width="7%">Facility</th> -->
+<%-- 									<th width="7%"><%=LanguageHelper.GetLanguage("type")%></th> --%>
+<%-- 									<th width="10%"><%=LanguageHelper.GetLanguage("server")%></th> --%>
+<%-- 									<th width="*"><%=LanguageHelper.GetLanguage("message")%></th> --%>
+								<th width="160px"><%=LanguageHelper.GetLanguage("datetime")%></th>
+								<th width="100px">Facility</th>
+								<th width="100px"><%=LanguageHelper.GetLanguage("type")%></th>
+								<th width="180px"><%=LanguageHelper.GetLanguage("server")%></th>
+								<th width="AUTO"><%=LanguageHelper.GetLanguage("message")%></th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</center>
+			</div>
+		</div>
+	</div>
+	<!-- ./통합이벤트 -->
+</div>
+<!-- ./통합이벤트 row -->
 </section>
 

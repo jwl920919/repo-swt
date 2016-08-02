@@ -72,12 +72,12 @@ $('.save-button').click(
                     var jsonObj = eval("(" + data + ')');
                     if (jsonObj.result == true) {
                         console.log('changeGroupsAuthority : ' + true);
-                        systemAlert("divAlertArea", "alert-info", "저장",
+                        systemAlertConfirm("divAlertArea", "alert-info", "저장",
                                 "저장에 성공 하였습니다.", "확인",
                                 "rgba(60, 141, 188, 0.68)", "saveConfirm");
                     } else {
                         console.log('changeGroupsAuthority : ' + false);
-                        systemAlert("divAlertArea", "alert-warning", "저장",
+                        systemAlertConfirm("divAlertArea", "alert-warning", "저장",
                                 "저장에 실패 하였습니다.", "확인",
                                 "rgba(60, 141, 188, 0.68)", "saveConfirm");
                     }
