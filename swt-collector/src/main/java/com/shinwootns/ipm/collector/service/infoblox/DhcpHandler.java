@@ -445,15 +445,14 @@ public class DhcpHandler {
 			}
 			else if (network.getIpType().equals("IPV6")) {
 				// Collect IPv6
-				//NextPageData nextData2 = wapiHandler.getIPv6AddressFirst(splitCount, network);
-				//extractIpv6Data(nextData2, mapIp);
+				NextPageData nextData2 = wapiHandler.getIPv6AddressFirst(splitCount, network.getNetwork());
+				extractIpv6Data(site_id, nextData2, mapIp);
 					
-				//while(nextData2 != null && nextData2.IsExistNextPage()) {
+				while(nextData2 != null && nextData2.IsExistNextPage()) {
 	
-				//	nextData2 = wapiHandler.getIPv6AddressNext(splitCount, nextData2.nextPageID);
-				//	extractIpv6Data(nextData2, mapIp);
-				
-			 	//}
+					nextData2 = wapiHandler.getIPv6AddressNext(splitCount, nextData2.nextPageID);
+					extractIpv6Data(site_id, nextData2, mapIp);
+			 	}
 			}
 			
 			// Collect Lease IP
@@ -529,8 +528,52 @@ public class DhcpHandler {
 	//endregion
 
 	//region [FUNC] Extract IPv6 Data
-	private void extractIpv6Data(NextPageData nextData, HashMap<String, DhcpIpStatus> mapIp) {
+	private void extractIpv6Data(int site_id, NextPageData nextData, HashMap<String, DhcpIpStatus> mapIp) {
 		
+		if (nextData == null || nextData.jArrayData == null)
+			return;
+		
+		for(JsonElement ele : nextData.jArrayData) {
+			
+			JsonObject jObj = ele.getAsJsonObject();
+			
+			try
+			{
+				DhcpIpStatus ip = new DhcpIpStatus();
+				ip.setSiteId(site_id);
+				ip.setIpaddr(JsonUtils.getValueToString(jObj, "ip_address", ""));
+				ip.setIpNum( (new IPAddr(ip.getIpaddr()).getNumberToBigInteger()) );
+				ip.setIpType("IPV6");
+				ip.setNetwork(JsonUtils.getValueToString(jObj, "network", ""));
+				ip.setDuid(JsonUtils.getValueToString(jObj, "duid", "").toUpperCase());
+				ip.setIsConflict(JsonUtils.getValueToBoolean(jObj, "is_conflict", false));
+				ip.setStatus(JsonUtils.getValueToString(jObj, "status", ""));
+				ip.setLeaseState(JsonUtils.getValueToString(jObj, "lease_state", ""));
+				ip.setDiscoverStatus(JsonUtils.getValueToString(jObj, "discover_now_status", ""));
+				ip.setFingerprint(JsonUtils.getValueToString(jObj, "fingerprint", ""));
+				
+				// merge value
+				ip.setHostname(JsonUtils.getMergeValueToString(jObj, "names", ""));
+				ip.setConflictTypes(JsonUtils.getMergeValueToString(jObj, "conflict_types", ""));
+				ip.setObjTypes(JsonUtils.getMergeValueToString(jObj, "types", ""));
+				ip.setUsage(JsonUtils.getMergeValueToString(jObj, "usage", ""));
+				ip.setHostOs(JsonUtils.getMergeValueToString(jObj, "discovered_data.os", ""));
+				
+				
+				Long lastDiscoverd = JsonUtils.getValueToLong(jObj, "discovered_data.last_discovered", 0L);
+				if (lastDiscoverd != null && lastDiscoverd > 0)
+					ip.setLastDiscovered(TimeUtils.convertLongToTimestamp(lastDiscoverd * 1000));
+
+				// Put Data
+				if (mapIp.containsKey(ip.getIpaddr()) == false)
+					mapIp.put(ip.getIpaddr(), ip);
+				else
+					_logger.warn("Check duplicated ipv4 address :" + ip.getIpaddr());
+			}
+			catch(Exception ex) {
+				_logger.error(ex.getMessage(), ex);
+			}
+		}
 	}
 	//endregion
 

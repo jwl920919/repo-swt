@@ -408,23 +408,20 @@ public class InfobloxWAPIHandler {
 		if (restClient == null)
 			return null;
 		
-		/*
 		try
 		{
 			StringBuilder sb = new StringBuilder();
 			
 			// First Page
 			sb.append("/wapi/v2.3/ipv6address")
-			.append("?_paging=1")
+			.append("?_paging=1&_return_as_object=1&_return_type=json")
 			.append("&_max_results=").append(splitCount)
-			.append("&_return_as_object=1")
-			.append("&_return_type=json")
-			.append("&network=").append(network)
+			.append("&network=").append(network)			// 2002:cafe:feed::/112
 			.append("&_return_fields=")
 				.append("ip_address,network,duid,names")
 				.append(",is_conflict")
 				.append(",discover_now_status")
-				//.append(",conflict_types")
+				.append(",conflict_types")
 				.append(",lease_state,status")
 				.append(",types,usage")
 				.append(",fingerprint")
@@ -448,7 +445,7 @@ public class InfobloxWAPIHandler {
 				return null;
 			
 			// next_page_id
-			String nextPageId = (String)jObj.get("next_page_id");
+			String nextPageId = JsonUtils.getValueToString(jObj, "next_page_id", "");
 			
 			// result
 			JsonArray resultArray = (JsonArray)jObj.get("result");
@@ -456,9 +453,9 @@ public class InfobloxWAPIHandler {
 			return new NextPageData(resultArray, nextPageId);
 		}
 		catch(Exception ex) {
-			_logger.fatal(ex.getMessage(), ex);
+			_logger.error(ex.getMessage(), ex);
 		}
-		*/
+
 		return null;
 	}
 	
@@ -469,15 +466,16 @@ public class InfobloxWAPIHandler {
 		
 		if (nextPageId == null || nextPageId.isEmpty())
 			return null;
-		/*
+
 		try
 		{
-			Map params = new HashMap<String, String>();
-			params.put("_max_results", splitCount);
-			params.put("_page_id", nextPageId);
-			params.put("_return_type", "json");
+			StringBuilder sb = new StringBuilder();
+			sb.append("/wapi/v2.3/ipv6address")
+				.append("?_max_results=").append(splitCount)
+				.append("&_page_id=").append(nextPageId)
+				.append("&_return_type=json");
 
-			String value = restClient.Get("/wapi/v2.3/ipv6address", params);
+			String value = restClient.Get(sb.toString());
 			
 			if (value == null)
 				return null;
@@ -492,7 +490,7 @@ public class InfobloxWAPIHandler {
 				return null;
 
 			// next_page_id
-			nextPageId = (String)jObj.get("next_page_id");
+			nextPageId = JsonUtils.getValueToString(jObj, "next_page_id", "");
 			
 			// result
 			JsonArray resultArray = (JsonArray)jObj.get("result");
@@ -500,9 +498,9 @@ public class InfobloxWAPIHandler {
 			return new NextPageData(resultArray, nextPageId);
 		}
 		catch(Exception ex) {
-			_logger.fatal(ex.getMessage(), ex);
+			_logger.error(ex.getMessage(), ex);
 		}
-		*/
+
 		return null;
 	}
 	//endregion
