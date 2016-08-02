@@ -11,7 +11,7 @@ import com.shinwootns.ipm.config.ApplicationProperty;
 import com.shinwootns.ipm.data.SharedData;
 import com.shinwootns.ipm.data.mapper.EventMapper;
 
-public class EventWorker extends BaseWorker {
+public class EventWorker implements Runnable {
 
 	private Logger _logger = null;
 	
@@ -50,7 +50,7 @@ public class EventWorker extends BaseWorker {
 		
 		List<EventData> listEvent = null;
 		
-		while(true)
+		while(!Thread.currentThread().isInterrupted())
 		{
 			listEvent = SharedData.getInstance().eventQueue.pop(500, 100);
 			if (listEvent == null)
@@ -68,12 +68,6 @@ public class EventWorker extends BaseWorker {
 				catch (Exception ex) {
 					_logger.error(ex.getMessage(), ex);
 				}
-			}
-			
-			try {
-				Thread.sleep(0);
-			} catch (InterruptedException e) {
-				break;
 			}
 		}
 	

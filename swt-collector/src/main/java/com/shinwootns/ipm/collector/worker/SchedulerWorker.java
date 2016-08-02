@@ -69,7 +69,7 @@ public class SchedulerWorker implements Runnable {
 		);
 		
 		// wait termination
-		while(true) {
+		while(!Thread.currentThread().isInterrupted()) {
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {

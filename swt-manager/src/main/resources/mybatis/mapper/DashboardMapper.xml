@@ -12,5 +12,33 @@
 		</if>
 		LIMIT 10
 	</select>
+	
+	
+	<!-- ############################ Lease IP Status ############################ -->
+	
+	<select id="selectViewLeaseIpStatus" resultType="com.shinwootns.data.entity.ViewLeaseIpStatus">
+		SELECT 
+		SUM(fixed_ip) fixed_ip
+		, SUM(lease_ip) lease_ip
+		, SUM(unused_ip) unused_ip
+		, SUM(total_count) total_count
+		FROM
+		(
+			SELECT SUM(fixed_ip) fixed_ip
+			, SUM(lease_ip) lease_ip
+			, SUM(unused_ip) unused_ip
+			, SUM(total_count) total_count
+			FROM view_lease_ip_status
+			WHERE 1=1
+			<if test="site_id != null">
+				AND site_id = #{site_id}
+			</if>
+			<if test="ip_type != null">
+				AND ip_type = #{ip_type}
+			</if>
+			UNION 
+			SELECT 0 fixed_ip, 0 lease_ip, 0 unused_ip, 0 total_count
+		)status
+	</select>
 
 </mapper>

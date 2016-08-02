@@ -45,7 +45,7 @@ public class SyslogWorker implements Runnable {
 		
 		List<SyslogEntity> listSyslog = SharedData.getInstance().popSyslogList(1000, 500);
 
-		while(true)
+		while(!Thread.currentThread().isInterrupted())
 		{
 			listSyslog = SharedData.getInstance().popSyslogList(1000, 500);
 			

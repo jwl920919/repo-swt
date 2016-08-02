@@ -8,8 +8,6 @@ INSERT INTO public.auth_type (auth_type, auth_name) VALUES ('radius', 'Radius'),
 INSERT INTO public.auth_type (auth_type, auth_name) VALUES ('esb', 'mySingle'),
 
 
-
-
 INSERT INTO auth_setup(setup_id, auth_type, site_id, setup_name, disable, order_num, insert_time, update_time)
 	VALUES(1, 'ldap', 0, 'Global AD', false, 1, now(), now()); 
 
@@ -19,3 +17,10 @@ INSERT INTO auth_setup_ldap(
             group_class, group_name_attr, group_member_attr, kerberos_enable, 
             kerberos_host, kerberos_port, kerberos_realm)
     VALUES (1,'ldap','192.168.1.80',389,false,'admin','shinwoo123!','DC=shinwootns-dev,DC=com','person','sAMAccountName','displayName','memberOf','group','name','member',false,'',88,'');
+    
+    
+--==========================================================================================
+-- DEVICE
+--==========================================================================================
+INSERT INTO device_network (site_id, host, device_type, snmp_community) VALUES(1, '192.168.1.35', 'SWITCH', 'public') 
+INSERT INTO device_network (site_id, host, device_type, snmp_community) VALUES(1, '192.168.1.36', 'SWITCH', 'public') 

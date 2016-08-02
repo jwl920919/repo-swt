@@ -21,4 +21,6 @@ public class RedisKeys {
 	
 	// Dashboard
 	public final static String KEY_DASHBOARD_NETWORK_IP		= "status:dashboard:network_ip_status";	// ~:{SiteID}
+	public final static String KEY_DASHBOARD_LEASE_IPV4		= "status:dashboard:lease_ipv4_status";	// ~:{SiteID}
+	public final static String KEY_DASHBOARD_LEASE_IPV6		= "status:dashboard:lease_ipv6_status";	// ~:{SiteID}
 }

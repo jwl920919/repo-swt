@@ -3,6 +3,7 @@ package com.shinwootns.common.datatype;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 import com.shinwootns.common.utils.TimeUtils;
 
@@ -24,7 +25,12 @@ public class ExtendedQueue<T> {
 	}
 	
 	public Object pop() {
-		return _queue.poll();
+		
+		try {
+			return _queue.poll(100, TimeUnit.MILLISECONDS);
+		} catch (InterruptedException e) {
+			return null;
+		}
 	}
 	
 	public LinkedList<T> popAll() {
@@ -33,7 +39,13 @@ public class ExtendedQueue<T> {
 		
 		while(true)
 		{
-			T data = _queue.poll();
+			
+			T data;
+			try {
+				data = _queue.poll(100, TimeUnit.MILLISECONDS);
+			} catch (InterruptedException e) {
+				break;
+			}
 			
 			if (data == null)
 				break;
@@ -51,7 +63,13 @@ public class ExtendedQueue<T> {
 		int count = 0;
 		while(count < popCount )
 		{
-			T data = _queue.poll();
+			
+			T data;
+			try {
+				data = _queue.poll(100, TimeUnit.MILLISECONDS);
+			} catch (InterruptedException e) {
+				break;
+			}
 			
 			if (data == null)
 				break;
@@ -72,7 +90,13 @@ public class ExtendedQueue<T> {
 		int count = 0;
 		while(count < popCount )
 		{
-			T data = _queue.poll();
+			T data;
+			
+			try {
+				data = _queue.poll(100, TimeUnit.MILLISECONDS);
+			} catch (InterruptedException e) {
+				break;
+			}
 			
 			if (data != null)
 			{
