@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 
 
 public class ViewNetworkIpStatus implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
 
 	private Integer site_id;
