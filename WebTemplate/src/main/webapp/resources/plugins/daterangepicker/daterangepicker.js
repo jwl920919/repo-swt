@@ -44,24 +44,67 @@
         this.isShowing = false;
 
         //create the picker HTML object
+//        var DRPTemplate = '<div class="daterangepicker dropdown-menu">' +
+//                '<div class="calendar first left"></div>' +
+//                '<div class="calendar second right"></div>' +
+//                '<div class="ranges">' +
+//                  '<div class="range_inputs">' +
+//                    '<div class="daterangepicker_start_input">' +
+//                      '<label for="daterangepicker_start"></label>' +
+//                      '<input class="input-mini" type="text" name="daterangepicker_start" value="" />' +
+//                    '</div>' +
+//                    '<div class="daterangepicker_end_input">' +
+//                      '<label for="daterangepicker_end"></label>' +
+//                      '<input class="input-mini" type="text" name="daterangepicker_end" value="" />' +
+//                    '</div>' +
+//                    '<button class="applyBtn" disabled="disabled"></button>&nbsp;' +
+//                    '<button class="cancelBtn"></button>' +
+//                  '</div>' +
+//                '</div>' +
+//              '</div>';
+        
         var DRPTemplate = '<div class="daterangepicker dropdown-menu">' +
-                '<div class="calendar first left"></div>' +
-                '<div class="calendar second right"></div>' +
-                '<div class="ranges">' +
-                  '<div class="range_inputs">' +
-                    '<div class="daterangepicker_start_input">' +
-                      '<label for="daterangepicker_start"></label>' +
-                      '<input class="input-mini" type="text" name="daterangepicker_start" value="" />' +
-                    '</div>' +
-                    '<div class="daterangepicker_end_input">' +
-                      '<label for="daterangepicker_end"></label>' +
-                      '<input class="input-mini" type="text" name="daterangepicker_end" value="" />' +
-                    '</div>' +
-                    '<button class="applyBtn" disabled="disabled"></button>&nbsp;' +
-                    '<button class="cancelBtn"></button>' +
-                  '</div>' +
-                '</div>' +
-              '</div>';
+	        		'<table>' +
+	        			'<tr>' +
+		        			'<td>' +
+			                  '<div class="range_inputs">' +
+			        				'<div class="calendar second right"></div>' +
+		    			            '<div class="daterangepicker_start_input" >' +
+		    			            	'<table style="margin-left:5px">' +
+        									'<tr>' +
+        										'<td style="width:65px"><label style="text-align:right" for="daterangepicker_start"></label></td>' +
+        										'<td><input class="input-mini" style="margin-left:5px; width:129px" type="text" name="daterangepicker_start" value="" /></td>' +
+        									'</tr>' +
+        								'</table>' +
+		    			            '</div>' +
+	    	                    '</div>' +
+		        			'</td>' +
+	        				'<td>' +
+			                  '<div class="range_inputs">' +
+		        		        	'<div class="calendar first left"></div>' +
+		    			            '<div class="daterangepicker_end_input">' +
+		    			            	'<table style="margin-left:5px">' +
+											'<tr>' +
+												'<td style="width:65px"><label style="text-align:right" for="daterangepicker_end"></label></td>' +
+												'<td><input class="input-mini" style="margin-left:5px; width:129px" type="text" name="daterangepicker_end" value="" /></td>' +
+											'</tr>' +
+										'</table>' +
+		    			            '</div>' +
+	    	                    '</div>' +
+	        				'</td>' +
+	        			'</tr>' +
+	        			'<tr>' +
+	    					'<td colspan=\"2\">' +
+		    			        '<div class="ranges" style="width:100%; text-align:right">' +
+		    			          '<div class="range_inputs">' +
+			    			          '<button class="applyBtn" disabled="disabled"></button>&nbsp;' +
+			    			          '<button class="cancelBtn"></button>' +
+		    			          '</div>' +
+		    			        '</div>' +
+	    					'</td>' +
+	        			'</tr>' +
+	        		'</table>' +       
+		      '</div>';
 
         //custom options
         if (typeof options !== 'object' || options === null)
@@ -123,7 +166,8 @@
             this.showWeekNumbers = false;
             this.timePicker = false;
             this.timePickerSeconds = false;
-            this.timePickerIncrement = 30;
+//            this.timePickerIncrement = 30;
+            this.timePickerIncrement = 1;
             this.timePicker12Hour = true;
             this.singleDatePicker = false;
             this.ranges = {};
@@ -144,10 +188,14 @@
             this.separator = ' - ';
 
             this.locale = {
-                applyLabel: 'Apply',
-                cancelLabel: 'Cancel',
-                fromLabel: 'From',
-                toLabel: 'To',
+//                applyLabel: 'Apply',
+//                cancelLabel: 'Cancel',
+//                fromLabel: 'From' starttime,
+//                toLabel: 'To',
+            	applyLabel: getLanguage("apply"),
+                cancelLabel: getLanguage("cancel"),
+                fromLabel: getLanguage("starttime") + " : ",
+                toLabel: getLanguage("endtime") + " : ",
                 weekLabel: 'W',
                 customRangeLabel: 'Custom Range',
                 daysOfWeek: moment.weekdaysMin(),
@@ -275,7 +323,8 @@
             }
 
             if (typeof options.timePickerIncrement === 'number') {
-                this.timePickerIncrement = options.timePickerIncrement;
+                //this.timePickerIncrement = options.timePickerIncrement;
+                this.timePickerIncrement = 1;
             }
 
             if (typeof options.timePicker12Hour === 'boolean') {
@@ -852,9 +901,13 @@
         },
 
         clickApply: function (e) {
-            this.updateInputText();
-            this.hide();
-            this.element.trigger('apply.daterangepicker', this);
+			var startDate = this.container.find('input[name=daterangepicker_start]').val();
+			var endDate = this.container.find('input[name=daterangepicker_end]').val();
+        	if (checkDate(startDate, endDate)) {
+	            this.updateInputText();
+	            this.hide();
+	            this.element.trigger('apply.daterangepicker', this);
+        	}
         },
 
         clickCancel: function (e) {
@@ -1217,7 +1270,7 @@
                     if (selected.minute() > max_minute)
                         selected.minute(max_minute);
                 }
-
+                
                 for (i = 0; i < 60; i += this.timePickerIncrement) {
                     var num = i;
                     if (num < 10)
@@ -1301,4 +1354,24 @@
         return this;
     };
 
+    checkDate = function(start, end){
+    	var ret = false;
+    	try {
+			
+		} catch (e) {
+			console.log("daterangepicker.js checkDate Error Log : " + e.message);
+		}
+    	if (start != '' && end != '') {
+			var startDate = new Date(start);
+			var endDate = new Date(end);
+
+			if (startDate >= endDate) {
+				systemAlertNotify("divAlertArea", "alert-warning", getLanguage("warning"), getLanguage("checkSearchDate"));
+			}
+			else {
+				ret = true;
+			}
+    	}
+		return ret;
+    }
 }));

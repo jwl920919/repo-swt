@@ -1,53 +1,54 @@
 var table;
 $(document).ready(function() {
-
+	$('#reservationtime').daterangepicker({timePicker: true, timePickerIncrement: 30, format: 'YYYY-MM-DD h:mm A'});
+	
 	$("#layDiv").css("visibility","hidden");
 
 	try
 	{
-		var tag = "";
-		var jObj = Object();
-	    jObj.search_key = "";
-		    
-	    $.ajax({
-	        url : 'ipManagement/dhcp_Network_Select',
-	        type : "POST",
-	        data : JSON.stringify(jObj),
-	        dataType : "text",
-	        success : function(data) {
-	            var jsonObj = eval("(" + data + ')');
-		            if (jsonObj.result == true) {
-		            	//console.log("jsonObj.data : " + jsonObj.data);
-		            	
-		            	$.each(jsonObj.data, function (index, obj) {		            		
-		            		if (tag == '') {
-		            			tag += "<option selected class='placeholderSelectOption' value=''>" + getLanguage("chooseasegment") + "</option>";
-			            		tag += "<option value='ALL' class='selectoption_black_color'>" + getLanguage("all") + "</option>";
-		            			fnSelectData('ALL', ''); //첫 로딩 시 첫번재 데이터로 조회
-							}
-		            		tag += "<option value='" + obj.network + "' class='selectoption_black_color'>";
-		                    tag += obj.network;
-		                    tag += "</option>";
-			            });
-	            }
-	        },
-	        complete: function(data) {
-	        	//console.log(tag);
-	        	$('#sbSegment').append(tag);
-	        }
-	    });
+//		var tag = "";
+//		var jObj = Object();
+//	    jObj.search_key = "";
+//		    
+//	    $.ajax({
+//	        url : 'ipManagement/dhcp_Network_Select',
+//	        type : "POST",
+//	        data : JSON.stringify(jObj),
+//	        dataType : "text",
+//	        success : function(data) {
+//	            var jsonObj = eval("(" + data + ')');
+//		            if (jsonObj.result == true) {
+//		            	//console.log("jsonObj.data : " + jsonObj.data);
+//		            	
+//		            	$.each(jsonObj.data, function (index, obj) {		            		
+//		            		if (tag == '') {
+//		            			tag += "<option selected class='placeholderSelectOption' value=''>" + getLanguage("chooseasegment") + "</option>";
+//			            		tag += "<option value='ALL' class='selectoption_black_color'>" + getLanguage("all") + "</option>";
+//		            			fnSelectData('ALL', ''); //첫 로딩 시 첫번재 데이터로 조회
+//							}
+//		            		tag += "<option value='" + obj.network + "' class='selectoption_black_color'>";
+//		                    tag += obj.network;
+//		                    tag += "</option>";
+//			            });
+//	            }
+//	        },
+//	        complete: function(data) {
+//	        	//console.log(tag);
+//	        	$('#sbSegment').append(tag);
+//	        }
+//	    });
 	    
 	} catch (e) {
 		console.log("leaseIPStatus.js $(document).ready Error Log : " + e.message);
 	}
 
-	//세그먼트 Selectbox change 이벤트
-	$('#sbSegment').change(function() {
-	    if ($(this).val() != '') {
-	    	$('#sbSegment').removeClass("selectoption_grey_color").addClass("selectoption_black_color");
-        	fnSelectData($("#sbSegment option:selected").val(), $("#txtSearch").val());
-	     }
-	});
+//	//세그먼트 Selectbox change 이벤트
+//	$('#sbSegment').change(function() {
+//	    if ($(this).val() != '') {
+//	    	$('#sbSegment').removeClass("selectoption_grey_color").addClass("selectoption_black_color");
+//        	fnSelectData($("#sbSegment option:selected").val(), $("#txtSearch").val());
+//	     }
+//	});
 	
 	//조회 버튼 클릭 이벤트
 	$('#btnSearch').click(function() {		

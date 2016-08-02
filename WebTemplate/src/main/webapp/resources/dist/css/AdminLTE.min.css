@@ -968,7 +968,8 @@ a:hover, a:active, a:focus {
 
 .dropdown-menu {
 	box-shadow: none;
-	border-color: #eee
+/* 	border-color: #eee */
+	border-color: #a2a2a2
 }
 
 .dropdown-menu>li>a {

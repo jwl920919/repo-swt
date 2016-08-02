@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"%>
 <%@ page import="Common.Helper.LanguageHelper"%>
+
+
 <script src="resources/plugins/datatables/dataTables.buttons.min.js"></script>
 <script src="resources/plugins/datatables/buttons.flash.min.js"></script>
 <script src="resources/plugins/datatables/buttons.html5.min.js"></script>
@@ -8,13 +10,14 @@
 <script src="resources/plugins/datatables/vfs_fonts.js"></script>
 <script src="resources/plugins/datatables/jszip.min.js"></script>
 <script src="resources/js/common/Datatable-Essential.js"></script>
-<script src="resources/js/ipManagement/leaseIPStatus.js"></script>
+<script src="resources/js/ipManagement/ipCertifyStatus.js"></script>
 
 <!-- Alert Start -->
 <div id="layDiv">
 	<div class="alert-box"></div>
 	<div id="divAlertArea"></div>
-</div>
+</div>		
+<!-- Alert End -->
 
 <section class="white-paper">
 	<div class="row" id="defaultDiv">
@@ -27,15 +30,27 @@
 		                <table>
 		                	<tr>
 		                		<td>
-		                			<label style="width: 80px; margin-right:10px; text-align:right"><%=LanguageHelper.GetLanguage("segment")%> : </label>
+		                			<label style="width:80px; margin-right:10px; text-align:right"><%=LanguageHelper.GetLanguage("inquiryTime")%> : </label>
+		                		</td>
+		                		<td class="input-group date">
+									<!-- Date and time range -->	
+									<input style="width:320px;" type="text" class="form-control" id="reservationtime">
+									<!-- /.Date and time range -->
 		                		</td>
 		                		<td>
-			                		<select id="sbSegment" class="form-control selectoption_grey_color" style="width:210px">
+		                			<label style="width:80px; margin-right:10px; text-align:right"><%=LanguageHelper.GetLanguage("status")%> : </label>
+		                		</td>
+		                		<td>
+			                		<select id="sbSegment" class="form-control selectoption_grey_color" style="width:80px">
+			                			<option value="" selected>전체</option>
+			                			<option value="0">요청</option>
+			                			<option value="1">승인</option>
+			                			<option value="2">반려</option>
 									</select>
 		                		</td>
 		                		<td>
 		                			<input type="text" style="width:250px; margin-left:15px;" class="form-control" id="txtSearch"
-										placeholder="<%=LanguageHelper.GetLanguage("IPMAChostnameinput")%>">
+										placeholder="<%=LanguageHelper.GetLanguage("inputSearchWord")%>">
 		                		</td>
 		                		<td style="width:100%; text-align:right; padding-right:10px">
 		                			<button type="button" class="btn btn-primary" id="btnSearch"><%=LanguageHelper.GetLanguage("inquiry")%></button>

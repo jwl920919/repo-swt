@@ -1,5 +1,4 @@
 $(document).ready(function() {
-
 	// Javascript에서 Language갑 가져오기 예제 1
 	// var aTitle = '<%=LanguageHelper.GetLanguage("Title")%> ';
 	// alert(aTitle);
@@ -38,7 +37,7 @@ $(document).ready(function() {
 	
 	//서버 Controller에서 넘어온 Message 출력해주기
 	if($("#hiddenError").text() != ''){
-		systemAlert("divAlertArea", "alert-warning", getLanguage("warning"), $("#hiddenError").text());
+		systemAlertNotify("divAlertArea", "alert-warning", getLanguage("warning"), $("#hiddenError").text());
 		$("#hiddenError").text('');
 	}
 
@@ -50,9 +49,9 @@ $(document).ready(function() {
 		var vID = $("#txtID").val();
 		var vPW = $("#txtPassword").val();
 		if (vID == "") {
-			systemAlert("divAlertArea", "alert-warning", getLanguage("warning"), getLanguage("PleaseenteryourID"));
+			systemAlertNotify("divAlertArea", "alert-warning", getLanguage("warning"), getLanguage("PleaseenteryourID"));
 		} else if (vPW == "") {
-			systemAlert("divAlertArea", "alert-warning", getLanguage("warning"), getLanguage("Pleaseenterapassword"));
+			systemAlertNotify("divAlertArea", "alert-warning", getLanguage("warning"), getLanguage("Pleaseenterapassword"));
 		} else {
 			bValidation = true;
 		}

@@ -270,7 +270,7 @@ $('#userGroupTable-modify-button').click(function() {
 $('#placeOfBusinessTable-delete-button')
         .click(
                 function() {
-                    systemAlert(
+                	systemAlertConfirm(
                             "divAlertArea",
                             "alert-warning",
                             "삭제",
@@ -280,7 +280,7 @@ $('#placeOfBusinessTable-delete-button')
 $('#userGroupTable-delete-button')
         .click(
                 function() {
-                    systemAlert(
+                	systemAlertConfirm(
                             "divAlertArea",
                             "alert-warning",
                             "삭제",
