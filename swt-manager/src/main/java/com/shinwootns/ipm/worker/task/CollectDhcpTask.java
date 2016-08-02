@@ -4,9 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.shinwootns.data.entity.DeviceDhcp;
-import com.shinwootns.ipm.worker.BaseWorker;
 
-public class CollectDhcpTask extends BaseWorker{
+public class CollectDhcpTask implements Runnable{
 	
 	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	

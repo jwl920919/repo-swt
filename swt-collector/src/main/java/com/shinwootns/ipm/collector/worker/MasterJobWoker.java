@@ -66,7 +66,7 @@ public class MasterJobWoker implements Runnable {
 		);
 		
 		// wait
-		while(true) {
+		while(!Thread.currentThread().isInterrupted()) {
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
@@ -92,6 +92,9 @@ public class MasterJobWoker implements Runnable {
 		DhcpHandler handler = new DhcpHandler();
 		if ( handler.Connect(dhcp.getHost(), dhcp.getWapiUserid(), dhcp.getWapiPassword(), dhcp.getSnmpCommunity()) ) {
 			
+			
+			_logger.info("collectDhcp()... Start");
+			
 			// Collect Network
 			LinkedList<DhcpNetwork> listNetwork = collectDhcpNetwork(handler);
 			
@@ -108,6 +111,8 @@ public class MasterJobWoker implements Runnable {
 			for(DhcpNetwork network : listNetwork) {
 				collectDhcpIpSatus(handler, network);
 			}
+			
+			_logger.info("collectDhcp()... End");
 		}
 		handler.close();
 	}

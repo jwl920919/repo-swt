@@ -7,6 +7,9 @@ import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 
 import com.google.gson.JsonArray;
 import com.shinwootns.common.cache.RedisClient;
@@ -22,6 +25,7 @@ import com.shinwootns.data.status.DhcpDeviceStatus;
 import com.shinwootns.data.status.DhcpVrrpStatus;
 import com.shinwootns.data.status.DnsCounter;
 import com.shinwootns.ipm.SpringBeanProvider;
+import com.shinwootns.ipm.WorkerManager;
 import com.shinwootns.ipm.data.mapper.DashboardMapper;
 import com.shinwootns.ipm.data.mapper.DeviceMapper;
 import com.shinwootns.ipm.service.redis.RedisHandler;
@@ -51,7 +55,7 @@ public class MasterJobWoker implements Runnable {
 		);
 		
 		// wait
-		while(true) {
+		while(!Thread.currentThread().isInterrupted()) {
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
@@ -83,7 +87,7 @@ public class MasterJobWoker implements Runnable {
 				DashboardNetworkIpStatus ipStatus = new DashboardNetworkIpStatus(); 
 				
 				for(ViewNetworkIpStatus data : listStatus) {
-					ipStatus.addIPStatus(data.getNetwork(), data.getAllocUsage().doubleValue());
+					ipStatus.addIPStatus(data.getNetwork(), data.getRangeUsage().doubleValue());
 				}
 				
 				// Serialize to Json
@@ -112,7 +116,7 @@ public class MasterJobWoker implements Runnable {
 						DashboardNetworkIpStatus ipStatus = new DashboardNetworkIpStatus(); 
 						
 						for(ViewNetworkIpStatus data : listSiteStatus) {
-							ipStatus.addIPStatus(data.getNetwork(), data.getAllocUsage().doubleValue());
+							ipStatus.addIPStatus(data.getNetwork(), data.getRangeUsage().doubleValue());
 						}
 						
 						// Serialize to Json

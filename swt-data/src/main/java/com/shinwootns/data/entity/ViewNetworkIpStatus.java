@@ -13,22 +13,24 @@ public class ViewNetworkIpStatus implements Serializable {
 	private String start_ip;
 	private String end_ip;
 	private String comment;
-	private BigDecimal ip_count;
+	
+	private BigDecimal used_ip;
 	private BigDecimal ip_total;
-	private BigDecimal total_usage;
-	private BigDecimal rgip_count;
+	private BigDecimal ip_usage;
+	
+	private BigDecimal range_used;
 	private BigDecimal range_total;
-	private BigDecimal alloc_usage;
+	private BigDecimal range_usage;
 
 	public ViewNetworkIpStatus() {
 	}
 
-	public BigDecimal getAllocUsage() {
-		return this.alloc_usage;
+	public BigDecimal getRangeUsage() {
+		return this.range_usage;
 	}
 
-	public void setAllocUsage(BigDecimal allocUsage) {
-		this.alloc_usage = allocUsage;
+	public void setRangeUsage(BigDecimal range_usage) {
+		this.range_usage = range_usage;
 	}
 
 	public String getComment() {
@@ -47,12 +49,12 @@ public class ViewNetworkIpStatus implements Serializable {
 		this.end_ip = endIp;
 	}
 
-	public BigDecimal getIpCount() {
-		return this.ip_count;
+	public BigDecimal getUsedIp() {
+		return this.used_ip;
 	}
 
-	public void setIpCount(BigDecimal ipCount) {
-		this.ip_count = ipCount;
+	public void setUsedIp(BigDecimal used_ip) {
+		this.used_ip = used_ip;
 	}
 
 	public BigDecimal getIpTotal() {
@@ -87,12 +89,12 @@ public class ViewNetworkIpStatus implements Serializable {
 		this.range_total = rangeTotal;
 	}
 
-	public BigDecimal getRgipCount() {
-		return this.rgip_count;
+	public BigDecimal getRangeUsed() {
+		return this.range_used;
 	}
 
-	public void setRgipCount(BigDecimal rgipCount) {
-		this.rgip_count = rgipCount;
+	public void setRangeUsed(BigDecimal range_used) {
+		this.range_used = range_used;
 	}
 
 	public Integer getSiteId() {
@@ -111,12 +113,12 @@ public class ViewNetworkIpStatus implements Serializable {
 		this.start_ip = startIp;
 	}
 
-	public BigDecimal getTotalUsage() {
-		return this.total_usage;
+	public BigDecimal getIpUsage() {
+		return this.ip_usage;
 	}
 
-	public void setTotalUsage(BigDecimal totalUsage) {
-		this.total_usage = totalUsage;
+	public void setIpUsage(BigDecimal ip_usage) {
+		this.ip_usage = ip_usage;
 	}
 
 }

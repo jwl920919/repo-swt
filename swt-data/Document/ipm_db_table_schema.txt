@@ -469,8 +469,31 @@ CREATE TABLE public.client_history
 -- VIEW
 --==========================================================================================
 
-DROP VIEW view_network_ip_status;
+-- DROP VIEW view_ip_status
+CREATE OR REPLACE VIEW view_ip_status 
+AS 
+SELECT ip.site_id, ip.network, ip.ip_type, ip.ipaddr, ip.ip_num, ip.macaddr, ip.duid
+, CASE WHEN range.start_ip IS NOT NULL THEN true ELSE false END is_range
+, CASE	
+	WHEN obj_types LIKE '%NETWORK%' THEN 'NETWORK'
+	WHEN (is_never_ends = true OR obj_types LIKE '%FA%') THEN 'FIXED'
+	WHEN obj_types LIKE '%RESERVATION%' THEN 'RESERVATION'
+	WHEN lease_state = 'ABANDONED' OR is_conflict = true THEN 'CONFLICT'
+	WHEN lease_state = 'ACTIVE' THEN 'LEASE'
+	WHEN lease_state = 'FREE' THEN NULL	-- Range & Free
+	WHEN status = 'USED' THEN 'USED'	-- OutRange & Used
+	ELSE 'FREE'
+	END ip_status 
+, ip.lease_start_time, ip.lease_end_time
+, ip.host_name, ip.fingerprint
+, ip.update_time
+FROM dhcp_ip_status ip
+LEFT OUTER JOIN dhcp_range range ON range.start_num <= ip.ip_num AND ip.ip_num <= range.end_num
+ORDER BY ip.ip_num
 
+
+
+-- DROP VIEW view_network_ip_status;
 CREATE OR REPLACE VIEW view_network_ip_status
 AS
 

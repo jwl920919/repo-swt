@@ -2,10 +2,10 @@ package com.shinwootns.ipm;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ConfigurableApplicationContext;
 
 import com.shinwootns.common.stp.PoolStatus;
 import com.shinwootns.common.stp.SmartThreadPool;
-import com.shinwootns.ipm.worker.BaseWorker;
 import com.shinwootns.ipm.worker.EventWorker;
 import com.shinwootns.ipm.worker.MasterJobWoker;
 import com.shinwootns.ipm.worker.SchedulerWorker;
@@ -77,26 +77,40 @@ public class WorkerManager {
 	{
 		synchronized(this) 
 		{
+			if (_masterJobThread != null) {
+				try {
+					_masterJobThread.interrupt();
+					_masterJobThread.join();
+					
+				} catch (InterruptedException e) {
+				} finally {
+					_masterJobThread = null;
+				}
+			}
+			
 			try {
-				if (_scheduler != null)
+				if (_scheduler != null) {
+					_scheduler.interrupt();
 					_scheduler.join();
+				}
 			} catch (InterruptedException e) {
 			}finally {
 				_scheduler = null;
 			}
-			
+
 			// Stop EventWorker
-			for(int i=1; i<=EVENT_WORKER_COUNT; i++) {
+			for(int i=0; i<EVENT_WORKER_COUNT; i++) {
 				try {
-					if (_eventWorker[i] != null)
+					if (_eventWorker[i] != null) {
+						_eventWorker[i].interrupt();
 						_eventWorker[i].join();
-					
+					}
 				} catch (InterruptedException e) {
 				} finally {
 					_eventWorker[i] = null;
 				}
 			}
-			
+
 			_taskPool.shutdownAndWait();
 			
 			_logger.info("WorkerManager....... stop");
@@ -111,7 +125,7 @@ public class WorkerManager {
 	//endregion
 	
 	//region [FUNC] Add Task
-	public void AddTask(BaseWorker task) {
+	public void AddTask(Runnable task) {
 		_taskPool.addTask(task);
 	}
 	//endregion
@@ -136,12 +150,19 @@ public class WorkerManager {
 		
 		synchronized(this) 
 		{
-			if (_masterJobThread != null && _masterJobThread.isInterrupted() == false) {
+			if (_masterJobThread != null) {
 				
 				_logger.info("Call stop MasterJobWorker");
 				
-				_masterJobThread.interrupt();
-				_masterJobThread = null;
+				try {
+					
+					_masterJobThread.interrupt();
+					_masterJobThread.join();
+					
+				} catch (InterruptedException e) {
+				} finally {
+					_masterJobThread = null;
+				}
 			}
 		}
 	}
@@ -155,6 +176,17 @@ public class WorkerManager {
 		}
 		
 		return false;
+	}
+	//endregion
+
+	//region [FUNC] Terminate application
+	public void TerminateApplication() {
+		
+		WorkerManager.getInstance().stop();
+		ConfigurableApplicationContext appContext = (ConfigurableApplicationContext)SpringBeanProvider.getInstance().getApplicationContext();
+		appContext.close();
+		
+		_logger.info("======================= Terminate Application ========================");
 	}
 	//endregion
 }

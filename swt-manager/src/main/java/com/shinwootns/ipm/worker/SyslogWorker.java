@@ -14,7 +14,7 @@ import com.shinwootns.ipm.SpringBeanProvider;
 import com.shinwootns.ipm.config.ApplicationProperty;
 import com.shinwootns.ipm.data.SharedData;
 
-public class SyslogWorker extends BaseWorker {
+public class SyslogWorker implements Runnable {
 
 	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	private int _index = 0;
@@ -46,7 +46,7 @@ public class SyslogWorker extends BaseWorker {
 		
 		List<JsonObject> listSyslog = null;
 		
-		while(true)
+		while(!Thread.currentThread().isInterrupted())
 		{
 			listSyslog = SharedData.getInstance().syslogQueue.pop(500, 100);
 			if (listSyslog == null)

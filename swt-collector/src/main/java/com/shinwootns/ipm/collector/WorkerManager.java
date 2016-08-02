@@ -2,6 +2,7 @@ package com.shinwootns.ipm.collector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ConfigurableApplicationContext;
 
 import com.shinwootns.common.stp.PoolStatus;
 import com.shinwootns.common.stp.SmartThreadPool;
@@ -76,24 +77,37 @@ public class WorkerManager {
 	//region [FUNC] stop
 	public void stop()
 	{
-		stopMasterJobWorker();
-		
 		synchronized(this) 
 		{
+			if (_masterJobThread != null) {
+				try {
+					_masterJobThread.interrupt();
+					_masterJobThread.join();
+					
+				} catch (InterruptedException e) {
+				} finally {
+					_masterJobThread = null;
+				}
+			}
+			
 			// Stop Scheduller
 			try {
-				if (_scheduler != null)
+				if (_scheduler != null) {
+					_scheduler.interrupt();
 					_scheduler.join();
+				}
 			} catch (InterruptedException e) {
 			}finally {
 				_scheduler = null;
 			}
 			
 			// Stop Syslog Worker
-			for(int i=1; i<=SYSLOG_WORKER_COUNT; i++) {
+			for(int i=0; i<SYSLOG_WORKER_COUNT; i++) {
 				try {
-					if (_syslogWorker[i] != null)
+					if (_syslogWorker[i] != null) {
+						_syslogWorker[i].interrupt();
 						_syslogWorker[i].join();
+					}
 					
 				} catch (InterruptedException e) {
 				} finally {
@@ -139,12 +153,18 @@ public class WorkerManager {
 		
 		synchronized(this) 
 		{
-			if (_masterJobThread != null && _masterJobThread.isInterrupted() == false) {
+			if (_masterJobThread != null) {
 				
 				_logger.info("Call stop MasterJobWorker");
 				
-				_masterJobThread.interrupt();
-				_masterJobThread = null;
+				try {
+					_masterJobThread.interrupt();
+					_masterJobThread.join();
+					
+				} catch (InterruptedException e) {
+				} finally {
+					_masterJobThread = null;
+				}
 			}
 		}
 	}
@@ -158,6 +178,17 @@ public class WorkerManager {
 		}
 		
 		return false;
+	}
+	//endregion
+
+	//region [FUNC] Terminate application
+	public void TerminateApplication() {
+		
+		WorkerManager.getInstance().stop();
+		ConfigurableApplicationContext appContext = (ConfigurableApplicationContext)SpringBeanProvider.getInstance().getApplicationContext();
+		appContext.close();
+		
+		_logger.info("======================= Terminate Application ========================");
 	}
 	//endregion
 }

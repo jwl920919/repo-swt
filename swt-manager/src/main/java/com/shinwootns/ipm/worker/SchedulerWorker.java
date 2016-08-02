@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import com.shinwootns.ipm.service.cluster.ClusterManager;
 
-public class SchedulerWorker extends BaseWorker {
+public class SchedulerWorker implements Runnable {
 	
 	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
@@ -48,7 +48,7 @@ public class SchedulerWorker extends BaseWorker {
 		);
 		
 		// wait termination
-		while(this.isStopFlag() == false) {
+		while(!Thread.currentThread().isInterrupted()) {
 			
 			try {
 				Thread.sleep(100);
