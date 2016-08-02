@@ -68,4 +68,14 @@ public class IP_MANAGEMENT_Service_Impl implements IP_MANAGEMENT_Service_Interfa
 		// TODO Auto-generated method stub
 		return ipManagementDao.select_LEASEIP_STATUS_DATA(parameters);
 	}
+
+	/**
+	 * <p>
+	 * IP관리 > IP 요청/승인 현황 데이터 조회.
+	 * </p> 
+	 **/
+	public List<Map<String,Object>> select_IP_MANAGEMENT_CERTIFY_STATUS_DATA(HashMap<String, Object> parameters) {
+		// TODO Auto-generated method stub
+		return ipManagementDao.select_IP_MANAGEMENT_CERTIFY_STATUS_DATA(parameters);
+	}
 }

@@ -1,46 +1,13 @@
 var table;
 $(document).ready(function() {
-	$('#reservationtime').daterangepicker({timePicker: true, timePickerIncrement: 30, format: 'YYYY-MM-DD h:mm A'});
 	
 	$("#layDiv").css("visibility","hidden");
 
-	try
-	{
-//		var tag = "";
-//		var jObj = Object();
-//	    jObj.search_key = "";
-//		    
-//	    $.ajax({
-//	        url : 'ipManagement/dhcp_Network_Select',
-//	        type : "POST",
-//	        data : JSON.stringify(jObj),
-//	        dataType : "text",
-//	        success : function(data) {
-//	            var jsonObj = eval("(" + data + ')');
-//		            if (jsonObj.result == true) {
-//		            	//console.log("jsonObj.data : " + jsonObj.data);
-//		            	
-//		            	$.each(jsonObj.data, function (index, obj) {		            		
-//		            		if (tag == '') {
-//		            			tag += "<option selected class='placeholderSelectOption' value=''>" + getLanguage("chooseasegment") + "</option>";
-//			            		tag += "<option value='ALL' class='selectoption_black_color'>" + getLanguage("all") + "</option>";
-//		            			fnSelectData('ALL', ''); //첫 로딩 시 첫번재 데이터로 조회
-//							}
-//		            		tag += "<option value='" + obj.network + "' class='selectoption_black_color'>";
-//		                    tag += obj.network;
-//		                    tag += "</option>";
-//			            });
-//	            }
-//	        },
-//	        complete: function(data) {
-//	        	//console.log(tag);
-//	        	$('#sbSegment').append(tag);
-//	        }
-//	    });
-	    
-	} catch (e) {
-		console.log("leaseIPStatus.js $(document).ready Error Log : " + e.message);
-	}
+	var currentdate = new Date();
+	var previewdate = new Date(currentdate.getFullYear(),currentdate.getMonth(),currentdate.getDate()-1, currentdate.getHours(), currentdate.getMinutes(), currentdate.getSeconds());
+	$('#reservationtime').daterangepicker({timePicker: true, timePickerIncrement: 1, format: 'YYYY-MM-DD h:mm A'});
+	$('#reservationtime').data('daterangepicker').setStartDate(previewdate);
+	$('#reservationtime').data('daterangepicker').setEndDate(currentdate);
 
 //	//세그먼트 Selectbox change 이벤트
 //	$('#sbSegment').change(function() {
@@ -51,87 +18,90 @@ $(document).ready(function() {
 //	});
 	
 	//조회 버튼 클릭 이벤트
-	$('#btnSearch').click(function() {		
-	    if ($("#sbSegment option:selected").val() != '') {
-        	//console.log("btnSearch.click value true : " + $("#sbSegment option:selected").val());
-        	//console.log("txtSearch value : " + $("#txtSearch").val());
-        	fnSelectData($("#sbSegment option:selected").val(), $("#txtSearch").val());
+	$('#btnSearch').click(function() {
+		var startDate = new Date($('#reservationtime').data('daterangepicker').startDate.toLocaleString()).format("yyyy-MM-dd HH:mm:ss");
+		var endDate = new Date($('#reservationtime').data('daterangepicker').endDate.toLocaleString()).format("yyyy-MM-dd HH:mm:ss");		
+	    if ($("#sbCerifyStatus option:selected").val() != '') {
+        	fnSelectData(startDate, endDate, $("#sbCerifyStatus option:selected").val(), $("#txtSearch").val());
 	    }
-	    else {
-        	fnSelectData('ALL', $("#txtSearch").val());
-		}	    	
 	});
-});
-
-/**
- * fnSelectData function
-**/
-fnSelectData = function(value, search) {
 	
-	try
-	{	    
-		table = $('#datatable').DataTable(
-	            {
-	            	"bJQueryUI": true,	
-	                "destroy" : true,
-	                "paging" : true,
-	                "searching" : false,
-	                "lengthChange" : true,
-	                "ordering" : true,
-	                "info" : false,
-	                "bAutoWidth": false,
-	                "processing" : true,
-	                "serverSide" : true,
-	                "sScrollX": "100%",
-	                "sScrollXInner": "3000",
-	                "bScrollCollapse": true,
-	                "ajax" : {
-	                    url : 'ipManagement/leaseIPStatus_Data_Select',
-	                    "dataType" : "jsonp",
-	                    "type" : "POST",
-	                    "jsonp" : "callback",
-	                    "data" : function(data,type) {
-	                    	data.search.value = search;
-	                        data.search_key = data.search.value;
-	                        data.network = value;
-	                        data.timezone = getClientTimeZoneName();
-	                    }
-	                },	                
-				    "columnDefs": [{ className: "essential-td-left", "targets": [ 0,2,3,7,9,10 ] },
-				                   { className: "essential-td-left", "targets": [ 11,12,16 ] }],
-	                "order" : [ [ 0, 'asc' ] ],
-	                "columns" : [	{"data" : "ipaddr"},
-									{"data" : "macaddr"},
-									{"data" : "host_name"},
-									{"data" : "host_os"},
-									{"data" : "duid"},
-									{"data" : "status"},
-									{"data" : "lease_state"},
-									{"data" : "obj_types"},
-									{"data" : "discover_status"},
-									{"data" : "usage"},
-									{"data" : "fingerprint"},
-									{"data" : "is_never_ends"},
-									{"data" : "is_never_start"},
-									{"data" : "lease_start_time"},
-									{"data" : "lease_end_time"},
-									{"data" : "last_discovered"},
-									{"data" : "user_description"}]
-	            });
-		
-		//검색, 엔트리 위치 정렬
-		$(function() {
-		    var d_wrap = $('#datatable_wrapper .row:first');
-		    var d_length = $('#datatable_wrapper .row:first .col-sm-6:eq(0)');
-		    var d_filter = $('#datatable_wrapper .row:first .col-sm-6:eq(1)');
-		    d_length.append(d_filter);
-		    d_wrap.prepend(d_filter);
-		});
-	} catch (e) {
-		console.log("leaseIPStatus.js fnSelectData Error Log : " + e.message);
-	}
-}
+	/**
+	 * fnSelectData function
+	**/
+	fnSelectData = function(statrdatetime, enddatetime, status, searchText) {
+		console.log(statrdatetime, enddatetime, status, searchText);
+		try
+		{	    
+			table = $('#datatable').DataTable(
+		            {
+		            	"bJQueryUI": true,	
+		                "destroy" : true,
+		                "paging" : true,
+		                "searching" : false,
+		                "lengthChange" : true,
+		                "ordering" : true,
+		                "info" : false,
+		                "bAutoWidth": false,
+		                "processing" : true,
+		                "serverSide" : true,
+		                "sScrollX": "100%",
+		                "sScrollXInner": "3000",
+		                "bScrollCollapse": true,
+		                "ajax" : {
+		                    url : 'ipManagement/ipCertifyStatus_Data_Select',
+		                    "dataType" : "jsonp",
+		                    "type" : "POST",
+		                    "jsonp" : "callback",
+		                    "data" : function(data,type) {
+		                    	data.search.value = searchText;
+		                        data.search_key = data.search.value;
+		                        data.startTime = statrdatetime;
+		                        data.endTime = enddatetime;
+		                        data.settlementstatus = status == "ALL" ? -1 : status;
+		                        data.timezone = getClientTimeZoneName();
+		                    }
+		                },	                
+					    "columnDefs": [{ className: "essential-td-left", "targets": [ 0,2,3,7,9,10 ] },
+					                   { className: "essential-td-left", "targets": [ 11,12,16 ] }],
+		                "order" : [ [ 0, 'asc' ] ],
+		                "columns" : [	{"data" : "user_id"},
+										{"data" : "user_site_id"},
+										{"data" : "site_name"},
+										{"data" : "user_name"},
+										{"data" : "user_phone_num"},
+										{"data" : "apply_static_ip_type"},
+										{"data" : "apply_static_ipaddr"},
+										{"data" : "apply_static_ip_num"},
+										{"data" : "apply_start_time"},
+										{"data" : "apply_end_time"},
+										{"data" : "apply_description"},
+										{"data" : "apply_time"},
+										{"data" : "settlement_status"},
+										{"data" : "settlement_chief_id"},
+										{"data" : "settlement_description"},
+										{"data" : "settlement_time"},
+										{"data" : "issuance_ip_type"},
+										{"data" : "issuance_ipaddr"}]	            
+						});
+			
+			//검색, 엔트리 위치 정렬
+			$(function() {
+			    var d_wrap = $('#datatable_wrapper .row:first');
+			    var d_length = $('#datatable_wrapper .row:first .col-sm-6:eq(0)');
+			    var d_filter = $('#datatable_wrapper .row:first .col-sm-6:eq(1)');
+			    d_length.append(d_filter);
+			    d_wrap.prepend(d_filter);
+			});
+		} catch (e) {
+			console.log("ipCertifyStatus.js fnSelectData Error Log : " + e.message);
+		}
+	};
 
+	//초기 데이터 조회
+	fnSelectData(previewdate.format("yyyy-MM-dd HH:mm:ss"), currentdate.format("yyyy-MM-dd HH:mm:ss"), $("#sbCerifyStatus option:selected").val(), $("#txtSearch").val());
+
+});
 /**
  * tr 이벤트 핸들러
 **/

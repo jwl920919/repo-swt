@@ -168,7 +168,7 @@ Date.prototype.format = function(f) {
             getLanguage("saturday") ];
     var d = this;
 
-    return f.replace(/(yyyy|yy|MM|dd|E|hh|mm|ss|a\/p)/gi, function($1) {
+    return f.replace(/(yyyy|yy|MM|dd|E|hh|h|mm|ss|a\/p)/gi, function($1) {
         switch ($1) {
         case "yyyy":
             return d.getFullYear();
@@ -184,6 +184,8 @@ Date.prototype.format = function(f) {
             return d.getHours().zf(2);
         case "hh":
             return ((h = d.getHours() % 12) ? h : 12).zf(2);
+        case "h":
+            return ((h = d.getHours() % 12) ? h : 12).zf(1);
         case "mm":
             return d.getMinutes().zf(2);
         case "ss":

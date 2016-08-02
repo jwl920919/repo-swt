@@ -166,8 +166,7 @@
             this.showWeekNumbers = false;
             this.timePicker = false;
             this.timePickerSeconds = false;
-//            this.timePickerIncrement = 30;
-            this.timePickerIncrement = 1;
+            this.timePickerIncrement = 30;
             this.timePicker12Hour = true;
             this.singleDatePicker = false;
             this.ranges = {};
@@ -323,8 +322,7 @@
             }
 
             if (typeof options.timePickerIncrement === 'number') {
-                //this.timePickerIncrement = options.timePickerIncrement;
-                this.timePickerIncrement = 1;
+                this.timePickerIncrement = options.timePickerIncrement;
             }
 
             if (typeof options.timePicker12Hour === 'boolean') {
@@ -544,8 +542,8 @@
         },
 
         updateFormInputs: function () {
-            this.container.find('input[name=daterangepicker_start]').val(this.startDate.format(this.format));
-            this.container.find('input[name=daterangepicker_end]').val(this.endDate.format(this.format));
+            this.container.find('input[name=daterangepicker_start]').val(this.startDate.format(this.format).replace(/AM/gi, getLanguage("am")).replace(/PM/gi, getLanguage("pm")));
+            this.container.find('input[name=daterangepicker_end]').val(this.endDate.format(this.format).replace(/AM/gi, getLanguage("am")).replace(/PM/gi, getLanguage("pm")));
 
             if (this.startDate.isSame(this.endDate) || this.startDate.isBefore(this.endDate)) {
                 this.container.find('button.applyBtn').removeAttr('disabled');
@@ -727,8 +725,8 @@
                 this.updateView();
             } else {
                 var dates = this.ranges[label];
-                this.container.find('input[name=daterangepicker_start]').val(dates[0].format(this.format));
-                this.container.find('input[name=daterangepicker_end]').val(dates[1].format(this.format));
+                this.container.find('input[name=daterangepicker_start]').val(dates[0].format(this.format).replace(/AM/gi, getLanguage("am")).replace(/PM/gi, getLanguage("pm")));
+                this.container.find('input[name=daterangepicker_end]').val(dates[1].format(this.format).replace(/AM/gi, getLanguage("am")).replace(/PM/gi, getLanguage("pm")));
             }
         },
 
@@ -769,11 +767,15 @@
 
         updateInputText: function() {
             if (this.element.is('input') && !this.singleDatePicker) {
-                this.element.val(this.startDate.format(this.format) + this.separator + this.endDate.format(this.format));
+                var timetext = this.startDate.format(this.format) + this.separator + this.endDate.format(this.format);
+                this.element.val( timetext.replace(/AM/gi, getLanguage("am")).replace(/PM/gi, getLanguage("pm")) );
                 this.element.trigger('change');
+    			//console.log("updateInputText1 timetext : " + timetext + "; replace : " + this.element.val());
             } else if (this.element.is('input')) {
-                this.element.val(this.endDate.format(this.format));
-                this.element.trigger('change');
+                var timetext = this.endDate.format(this.format);
+                this.element.val( timetext.replace(/AM/gi, getLanguage("am")).replace(/PM/gi, getLanguage("pm")) );
+                this.element.trigger('change');                
+    			//console.log("updateInputText2 timetext : " + timetext + "; replace : " + this.element.val());
             }
         },
 
@@ -832,9 +834,9 @@
             var cal = $(e.target).parents('.calendar');
 
             if (cal.hasClass('left')) {
-                this.container.find('input[name=daterangepicker_start]').val(this.leftCalendar.calendar[row][col].format(this.format));
+                this.container.find('input[name=daterangepicker_start]').val(this.leftCalendar.calendar[row][col].format(this.format).replace(/AM/gi, getLanguage("am")).replace(/PM/gi, getLanguage("pm")));
             } else {
-                this.container.find('input[name=daterangepicker_end]').val(this.rightCalendar.calendar[row][col].format(this.format));
+                this.container.find('input[name=daterangepicker_end]').val(this.rightCalendar.calendar[row][col].format(this.format).replace(/AM/gi, getLanguage("am")).replace(/PM/gi, getLanguage("pm")));
             }
         },
 
@@ -903,6 +905,8 @@
         clickApply: function (e) {
 			var startDate = this.container.find('input[name=daterangepicker_start]').val();
 			var endDate = this.container.find('input[name=daterangepicker_end]').val();
+			//console.log("clickApply : " + startDate + " ; " + endDate);
+			
         	if (checkDate(startDate, endDate)) {
 	            this.updateInputText();
 	            this.hide();
@@ -1304,7 +1308,7 @@
                 }
 
                 if (this.timePicker12Hour) {
-                    html += '<select class="ampmselect">';
+                    html += '<select class="ampmselect" style="font-size:9pt">';
 
                     // Disallow selection before the minDate or after the maxDate
                     var am_html = '';
@@ -1317,11 +1321,11 @@
                     if (maxDate && (side == 'right' || this.singleDatePicker) && selected.format('YYYY-MM-DD') == maxDate.format('YYYY-MM-DD') && maxDate.hour() < 12) {
                         pm_html = ' disabled="disabled" class="disabled"';
                     }
-
+                    
                     if (selected.hour() >= 12) {
-                        html += '<option value="AM"' + am_html + '>AM</option><option value="PM" selected="selected"' + pm_html + '>PM</option>';
+                        html += '<option value="AM"' + am_html + '>'+getLanguage("am")+'</option><option value="PM" selected="selected"' + pm_html + '>'+getLanguage("pm")+'</option>';
                     } else {
-                        html += '<option value="AM" selected="selected"' + am_html + '>AM</option><option value="PM"' + pm_html + '>PM</option>';
+                        html += '<option value="AM" selected="selected"' + am_html + '>'+getLanguage("am")+'</option><option value="PM"' + pm_html + '>'+getLanguage("pm")+'</option>';
                     }
                     html += '</select>';
                 }
