@@ -28,7 +28,7 @@ import com.shinwootns.data.status.LeaseIpStatus;
 import com.shinwootns.ipm.SpringBeanProvider;
 import com.shinwootns.ipm.WorkerManager;
 import com.shinwootns.ipm.data.mapper.DashboardMapper;
-import com.shinwootns.ipm.data.mapper.DeviceMapper;
+import com.shinwootns.ipm.data.mapper.DataMapper;
 import com.shinwootns.ipm.service.redis.RedisHandler;
 
 public class MasterJobWoker implements Runnable {
@@ -69,17 +69,18 @@ public class MasterJobWoker implements Runnable {
 		_logger.info("MasterJobWoker... end.");
 	}
 	
+	//region [FUNC] UpdateDashboardData
 	private void UpdateDashboardData() {
 		
 		DashboardMapper dahsboardMapper = SpringBeanProvider.getInstance().getDashboardMapper();
 		if (dahsboardMapper == null)
 			return;
 		
-		DeviceMapper deviceMapper = SpringBeanProvider.getInstance().getDeviceMapper();
-		if (deviceMapper == null)
+		DataMapper dataMapper = SpringBeanProvider.getInstance().getDataMapper();
+		if (dataMapper == null)
 			return;
 		
-		List<SiteInfo> listSite = deviceMapper.selectSiteInfo();
+		List<SiteInfo> listSite = dataMapper.selectSiteInfo();
 		
 		RedisClient redis = RedisHandler.getInstance().getRedisClient();
 		if(redis == null)
@@ -94,6 +95,7 @@ public class MasterJobWoker implements Runnable {
 
 		redis.close();
 	}
+	//endregion
 	
 	//region [FUNC] Update Network IP Status
 	private void UpdateNetworkIpStatus(DashboardMapper dahsboardMapper, RedisClient redis, List<SiteInfo> listSite) {

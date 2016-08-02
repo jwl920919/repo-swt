@@ -1,5 +1,6 @@
 package com.shinwootns.ipm.controller;
 
+/*
 import java.util.Random;
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -87,59 +88,7 @@ public class DashboardController {
 		
 		jObj.add("HA", haObj);
 		
-		/*
-		{
-			  "CPU": [
-			    {
-			      "seq": "core1",       //CPU Name
-			      "value": 90, //CPU 사용률
-			      "unit": "%" //Unit
-			    },
-			    {
-			      "seq": "core2",       //CPU Name
-			      "value": 80, //CPU 사용률
-			      "unit": "%" //Unit
-			    }
-			  ],
-			  "MEMORY": {
-			    "value": 4,               //Memory 사용량
-			    "total": 8,                //Memory 총용량
-			    "unit": "G"               용
-			  },
-			  "DISK": [
-			    {
-			      "seq": "C", //드라이브 구분
-			      "usage": "16",        //드라이브 사용량
-			      "total": 100,          //드라이브 총용량
-			      "unit": "G" //Unit
-			    },
-			    {
-			      "seq": "D", //드라이브 구분
-			      "usage": "99",        //드라이브 사용량
-			      "total": 100,          //드라이브 총용량
-			      "unit": "G" //Unit
-			    }
-			  ],
-			  "NETWORK": [
-			    {
-			      "seq": "IN", //회선 구분
-			      "usage": "16",        //회선 사용량
-			      "total": 100,          //회선 Bandwidth
-			      "unit": "bps"         //Unit
-			    },
-			    {
-			      "seq": "OUT",        //회선 구분
-			      "usage": "30",        //회선 사용량
-			      "total": 100,          //회선 Bandwidth
-			      "unit": "bps"         //Unit
-			    }
-			  ],
-			  "HA": {
-			    "STATE": "TRUE"        //이중화 설정? 상태
-			  }
-			}
-		 */
-		
 		return jObj.toString();
 	}
 }
+*/

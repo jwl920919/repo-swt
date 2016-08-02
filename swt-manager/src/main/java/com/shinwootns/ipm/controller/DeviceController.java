@@ -16,16 +16,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.shinwootns.data.entity.DeviceDhcp;
 import com.shinwootns.data.entity.DeviceInsight;
-import com.shinwootns.ipm.data.mapper.DeviceMapper;
+import com.shinwootns.ipm.data.mapper.DataMapper;
 
+/*
 @RestController
 public class DeviceController {
 	
 	private final Logger _logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
-	private DeviceMapper deviceMapper;
+	private DataMapper deviceMapper;
 	
+
 	//==========================================================================
 	// DHCP
 	//==========================================================================
@@ -35,8 +37,6 @@ public class DeviceController {
         return deviceMapper.selectDhcpByInsightHost(host);
     }
 	
-	
-	/*
 	//==========================================================================
 	// INSIGHT
 	//==========================================================================
@@ -61,9 +61,8 @@ public class DeviceController {
 		
         return deviceMapper.insertInsight(device);
     }
-    */
+
 	
-	/*
 	@RequestMapping(value = "/api/device/insights", method = RequestMethod.PUT)
     @ResponseBody
     public int updateInsight(@RequestBody DeviceInsight device) {
@@ -72,5 +71,6 @@ public class DeviceController {
 			return 0;
 		
         return deviceMapper.updateInsight(device);
-    }*/
+    }
 }
+*/

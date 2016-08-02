@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
 import com.shinwootns.ipm.data.mapper.DashboardMapper;
-import com.shinwootns.ipm.data.mapper.DeviceMapper;
+import com.shinwootns.ipm.data.mapper.DataMapper;
 import com.shinwootns.ipm.data.mapper.EventMapper;
 
 @Configuration
@@ -14,7 +14,7 @@ public class MapperConfig {
 	private EventMapper eventMapper;
 	
 	@Autowired
-	private DeviceMapper deviceMapper;
+	private DataMapper dataMapper;
 	
 	@Autowired
 	private DashboardMapper dashboardMapper;

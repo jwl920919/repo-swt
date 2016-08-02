@@ -25,21 +25,11 @@ public class MainApplication implements CommandLineRunner {
 			
 			_logger.error(ex.getMessage(), ex);
 			
-			if (appContext != null)
-				appContext.close();
-			
-			WorkerManager.getInstance().TerminateApplication();
+			//WorkerManager.getInstance().TerminateApplication();
 		}
 	}
 	
 	@Override
 	public void run(String... arg0) throws Exception {
-		
-		/*
-		List<DeviceDhcp> listDhcp = deviceMapper.selectDeviceDhcp();
-		
-		for(DeviceDhcp dhcp : listDhcp) {
-			System.out.println(dhcp.getHost());
-		}*/
 	}
 }
