@@ -8,8 +8,8 @@ insight:
   version: 0.1.1
   license: TEST000000
   cluster:
-    mode: master    # master, slave
-    index: 0        # 0 ~ 99
+    mode: slave      # master, slave
+    index: 100       # 0 ~ 99
   redis:
     host: shinwootnskr.iptime.org
     port: 6379
@@ -25,7 +25,8 @@ insight:
   # debug mode
   debug_enable: true
   debug:
-    enable_recv_syslog: false
+    enable_recv_syslog: true
+    force_start_cluster_master: false
 
 #====================================
 # server
