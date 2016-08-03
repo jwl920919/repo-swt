@@ -63,6 +63,11 @@ public class RedisClient {
 	}
 	//endregion
 	
+	
+	public Jedis getJedis() {
+		return this._redis;
+	}
+	
 	//region [FUNC] get Keys
 	public HashSet<String> getKeys(String pattern) {
 		
@@ -285,6 +290,23 @@ public class RedisClient {
 	//endregion
 	
 	//region [FUNC] zadd / zcount / zrank
+	
+	public Long zadd(String key, double score, String member) {
+		
+		synchronized(this)
+		{
+			try {
+				if (this._redis != null)
+					return this._redis.zadd(key, score, member);
+			}
+			catch(Exception ex) {
+				_logger.error(ex.getMessage(), ex);
+			}
+		}
+		
+		return null;
+	}
+	
 	public Long zadd(String key, Map<String, Double> scoreMembers) {
 		
 		synchronized(this)
@@ -369,6 +391,7 @@ public class RedisClient {
 	//endregion
 	
 	//region [FUNC] zrangeByScore / zrevrangeByScore
+	
 	public Set<String> zrangeByScore(String key, double min, double max, int offset, int count) {
 		synchronized(this)
 		{
@@ -432,4 +455,31 @@ public class RedisClient {
 	}
 	//endregion
 
+	public void flushDB() {
+		
+		synchronized(this)
+		{
+			try {
+				if (this._redis != null)
+					this._redis.flushDB();
+			}
+			catch(Exception ex) {
+				_logger.error(ex.getMessage(), ex);
+			}
+		}
+	}
+	
+	public void flushAll() {
+		
+		synchronized(this)
+		{
+			try {
+				if (this._redis != null)
+					this._redis.flushAll();
+			}
+			catch(Exception ex) {
+				_logger.error(ex.getMessage(), ex);
+			}
+		}
+	}
 }

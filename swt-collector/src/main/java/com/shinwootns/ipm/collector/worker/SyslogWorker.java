@@ -5,11 +5,13 @@ import java.util.List;
 import org.slf4j.Logger;
 
 import com.google.gson.JsonObject;
+import com.shinwootns.common.cache.RedisClient;
 import com.shinwootns.common.network.SyslogEntity;
 import com.shinwootns.ipm.collector.SpringBeanProvider;
 import com.shinwootns.ipm.collector.config.ApplicationProperty;
 import com.shinwootns.ipm.collector.data.SharedData;
 import com.shinwootns.ipm.collector.service.amqp.RabbitmqSender;
+import com.shinwootns.ipm.collector.service.redis.RedisHandler;
 
 public class SyslogWorker implements Runnable {
 
@@ -44,13 +46,27 @@ public class SyslogWorker implements Runnable {
 			_logger.info( (new StringBuilder()).append("Syslog Producer#").append(this._index).append("... start.").toString());
 		
 		List<SyslogEntity> listSyslog = SharedData.getInstance().popSyslogList(1000, 500);
-
+		
 		while(!Thread.currentThread().isInterrupted())
 		{
 			listSyslog = SharedData.getInstance().popSyslogList(1000, 500);
 			
 			if (listSyslog != null && listSyslog.size() > 0)
 			{
+				
+				// to Redis
+				RedisClient redis = RedisHandler.getInstance().getRedisClient();
+				if (redis == null)
+					return;
+				
+				for(SyslogEntity syslog : listSyslog)
+				{
+					//redis.zadd("syslog", scoreMembers)
+				}
+				
+				redis.close();
+				
+				/*
 				int count = listSyslog.size();
 				
 				for(SyslogEntity syslog : listSyslog)
@@ -73,17 +89,11 @@ public class SyslogWorker implements Runnable {
 					jobj.addProperty("recv_time", syslog.getRecvTime());
 					jobj.addProperty("message", rawData);
 					
-					RabbitmqSender.SendData(jobj, _logger);
+					//RabbitmqSender.SendData(jobj, _logger);
 				}
 				
 				listSyslog.clear();
-				
-			}
-
-			try {
-				Thread.sleep(10);
-			} catch (InterruptedException e) {
-				break;
+				*/
 			}
 		}
 		
