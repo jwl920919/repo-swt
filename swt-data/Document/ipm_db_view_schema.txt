@@ -4,6 +4,7 @@
 --==========================================================================================
 
 -- DROP VIEW view_ip_status
+
 CREATE OR REPLACE VIEW public.view_ip_status AS 
  SELECT ip.site_id,
     ip.network,
@@ -18,9 +19,11 @@ CREATE OR REPLACE VIEW public.view_ip_status AS
         END AS is_range,
         CASE
             WHEN ip.obj_types::text ~~ '%NETWORK%'::text THEN 'NETWORK'::text
-            WHEN ip.is_never_ends = true OR ip.obj_types::text ~~ '%FA%'::text THEN 'FIXED'::text
+            WHEN ip.obj_types::text ~~ '%BROADCAST%'::text THEN 'BROADCAST'::text
+            WHEN ip.obj_types::text ~~ '%FA%'::text THEN 'FIXED'::text
             WHEN ip.obj_types::text ~~ '%RESERVATION%'::text THEN 'RESERVATION'::text
-            WHEN ip.lease_state::text = 'ABANDONED'::text OR ip.is_conflict = true THEN 'CONFLICT'::text
+            WHEN ip.lease_state::text = 'ABANDONED'::text THEN 'ABANDONED'::text
+            WHEN ip.is_conflict = true THEN 'CONFLICT'::text
             WHEN ip.lease_state::text = 'ACTIVE'::text THEN 'LEASE'::text
             WHEN ip.lease_state::text = 'FREE'::text OR ip.lease_state::text = 'RELEASED'::text OR ip.lease_state::text = 'EXPIRED'::text THEN NULL::text
             WHEN ip.status::text = 'USED'::text THEN 'USED'::text
@@ -35,6 +38,39 @@ CREATE OR REPLACE VIEW public.view_ip_status AS
      LEFT JOIN dhcp_range range ON range.start_num <= ip.ip_num AND ip.ip_num <= range.end_num
   ORDER BY ip.ip_num;
 
+
+-- DROP VIEW view_lease_ip_status
+
+CREATE OR REPLACE VIEW public.view_lease_ip_status AS 
+ SELECT range.site_id,
+    range.ip_type,
+    COALESCE(sum(status.fixed_ip), 0::numeric) AS fixed_ip,
+    COALESCE(sum(status.lease_ip), 0::numeric) AS lease_ip,
+    COALESCE(sum(range.ip_count), 0::numeric) - COALESCE(sum(status.used_total), 0::numeric) AS unused_ip,
+    COALESCE(sum(range.ip_count), 0::numeric) AS total_count
+   FROM ( SELECT dhcp_range.site_id,
+            dhcp_range.ip_type,
+            sum(dhcp_range.ip_count) AS ip_count
+           FROM dhcp_range
+          GROUP BY dhcp_range.site_id, dhcp_range.ip_type) range
+     LEFT JOIN ( SELECT view_ip_status.site_id,
+            view_ip_status.ip_type,
+                CASE
+                    WHEN view_ip_status.ip_status = 'FIXED'::text THEN sum(1)
+                    ELSE NULL::bigint
+                END AS fixed_ip,
+                CASE
+                    WHEN view_ip_status.ip_status = ANY (ARRAY['LEASE'::text, 'NETWORK'::text, 'BROADCAST'::text, 'RESERVATION'::text, 'CONFLICT'::text]) THEN sum(1)
+                    ELSE NULL::bigint
+                END AS lease_ip,
+                CASE
+                    WHEN COALESCE(view_ip_status.ip_status, ''::text) <> ''::text THEN sum(1)
+                    ELSE NULL::bigint
+                END AS used_total
+           FROM view_ip_status
+          WHERE view_ip_status.is_range = true
+          GROUP BY view_ip_status.site_id, view_ip_status.ip_type, view_ip_status.ip_status) status ON range.site_id = status.site_id AND range.ip_type::text = status.ip_type::text
+  GROUP BY range.site_id, range.ip_type;
 
 
 -- DROP VIEW view_network_ip_status;
@@ -94,36 +130,3 @@ CREATE OR REPLACE VIEW public.view_network_ip_status AS
   ORDER BY status.site_id, status.ip_type, status.start_num;
 
 
-
--- DROP VIEW view_lease_ip_status
-
-CREATE OR REPLACE VIEW public.view_lease_ip_status AS 
- SELECT range.site_id,
-    range.ip_type,
-    COALESCE(sum(status.fixed_ip), 0::numeric) AS fixed_ip,
-    COALESCE(sum(status.lease_ip), 0::numeric) AS lease_ip,
-    COALESCE(sum(range.ip_count), 0::numeric) - COALESCE(sum(status.used_total), 0::numeric) AS unused_ip,
-    COALESCE(sum(range.ip_count), 0::numeric) AS total_count
-   FROM ( SELECT dhcp_range.site_id,
-            dhcp_range.ip_type,
-            sum(dhcp_range.ip_count) AS ip_count
-           FROM dhcp_range
-          GROUP BY dhcp_range.site_id, dhcp_range.ip_type) range
-     LEFT JOIN ( SELECT view_ip_status.site_id,
-            view_ip_status.ip_type,
-                CASE
-                    WHEN view_ip_status.ip_status = ANY (ARRAY['FIXED'::text, 'NETWORK'::text, 'RESERVATION'::text, 'CONFLICT'::text]) THEN sum(1)
-                    ELSE NULL::bigint
-                END AS fixed_ip,
-                CASE
-                    WHEN view_ip_status.ip_status = 'LEASE'::text THEN sum(1)
-                    ELSE NULL::bigint
-                END AS lease_ip,
-                CASE
-                    WHEN COALESCE(view_ip_status.ip_status, ''::text) <> ''::text THEN sum(1)
-                    ELSE NULL::bigint
-                END AS used_total
-           FROM view_ip_status
-          WHERE view_ip_status.is_range = true
-          GROUP BY view_ip_status.site_id, view_ip_status.ip_type, view_ip_status.ip_status) status ON range.site_id = status.site_id AND range.ip_type::text = status.ip_type::text
-  GROUP BY range.site_id, range.ip_type;

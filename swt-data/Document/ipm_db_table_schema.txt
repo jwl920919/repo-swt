@@ -413,6 +413,9 @@ COMMENT ON COLUMN dhcp_ip_status.obj_types IS 'The types of associated objects (
 COMMENT ON COLUMN dhcp_ip_status.usage IS 'Indicates whether the IP address is configured for DNS or DHCP (DHCP,DNS)';
 
 
+
+
+
 /*
 -- DHCP_LEASE_IP
 CREATE TABLE dhcp_lease_ip

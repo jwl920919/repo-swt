@@ -14,7 +14,8 @@ public class RedisHandler {
 	
 	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
-	RedisManager rm = new RedisManager();
+	//RedisManager 
+	RedisManager rm = null;
 	
 	//region Singleton
 	private static RedisHandler _instance = null;
@@ -34,41 +35,67 @@ public class RedisHandler {
 		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
 		if (appProperty == null)
 			return false;
-		
-		boolean result = false;
-		try
+
+		synchronized(this)
 		{
-			result = rm.connect(
-					appProperty.redisHost, 
-					appProperty.redisPort, 
-					CryptoUtils.Decode_AES128(appProperty.redisPassword), 0);
-		}
-		catch(Exception ex) {
-			_logger.error(ex.getMessage(), ex);
-			result = false;
-		}
-		
-		if ( result == false)
-		{
-			System.out.println("Redis connection failed.");
-			return false;
+			try {
+				if (rm != null) {
+					rm.close();
+				}
+			} catch(Exception ex) {
+			} finally {
+				rm = null;
+			}
+			
+			try
+			{
+				rm = new RedisManager(
+						appProperty.redisHost
+						, appProperty.redisPort
+						, CryptoUtils.Decode_AES128(appProperty.redisPassword)
+						, 0);
+				
+				if ( rm.connect() ) {
+					System.out.println("Redis connection... OK");
+					return false;
+				}
+				else {
+					System.out.println("Redis connection... Failed");
+					return false;
+				}
+			}
+			catch(Exception ex) {
+				_logger.error(ex.getMessage(), ex);
+			}
 		}
 
-		return true;
+		return false;
 	}
 	//endregion
 	
 	//region [FUNC] get RedisClient
 	public RedisClient getRedisClient() {
 		
-		RedisClient redis = rm.createRedisClient();
+		RedisClient redis = null;
 		
-		if (redis == null) {
-			return null;
-		}
-		else if (redis.isConnect() == false) {
-			redis.close();
-			return null;
+		synchronized(this)
+		{
+			redis = rm.createRedisClient();
+			
+			if (redis == null) {
+				return null;
+			}
+			else if (redis.isConnect() == false) {
+				
+				redis.close();
+				redis = null;
+				
+				rm.reconnect();
+				
+				redis = rm.createRedisClient();
+				
+				return redis;
+			}
 		}
 		
 		return redis;
@@ -77,7 +104,11 @@ public class RedisHandler {
 	
 	//region [FUNC] get PoolStatus
 	public RedisPoolStatus getPoolStatus() {
-		return rm.getPoolStatus();
+		
+		synchronized(this)
+		{
+			return rm.getPoolStatus();
+		}
 	}
 	//endregion
 }
