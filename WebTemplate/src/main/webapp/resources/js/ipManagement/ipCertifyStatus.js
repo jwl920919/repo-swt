@@ -3,8 +3,9 @@ $(document).ready(function() {
 	
 	$("#layDiv").css("visibility","hidden");
 
+	var prevday = 100;
 	var currentdate = new Date();
-	var previewdate = new Date(currentdate.getFullYear(),currentdate.getMonth(),currentdate.getDate()-1, currentdate.getHours(), currentdate.getMinutes(), currentdate.getSeconds());
+	var previewdate = new Date(currentdate.getFullYear(),currentdate.getMonth(),currentdate.getDate()-prevday, currentdate.getHours(), currentdate.getMinutes(), currentdate.getSeconds());
 	$('#reservationtime').daterangepicker({timePicker: true, timePickerIncrement: 1, format: 'YYYY-MM-DD h:mm A'});
 	$('#reservationtime').data('daterangepicker').setStartDate(previewdate);
 	$('#reservationtime').data('daterangepicker').setEndDate(currentdate);
@@ -25,6 +26,14 @@ $(document).ready(function() {
         	fnSelectData(startDate, endDate, $("#sbCerifyStatus option:selected").val(), $("#txtSearch").val());
 	    }
 	});
+	
+	//조회버튼을 default 버튼으로 이벤트 생성한다.
+	$(document).bind('keypress', function(e) {
+		if(e.keyCode==13){
+			$(document).focus();
+            $('#btnSearch').trigger('click');
+		}
+    });
 	
 	/**
 	 * fnSelectData function
@@ -62,27 +71,37 @@ $(document).ready(function() {
 		                        data.timezone = getClientTimeZoneName();
 		                    }
 		                },	                
-					    "columnDefs": [{ className: "essential-td-left", "targets": [ 0,2,3,7,9,10 ] },
-					                   { className: "essential-td-left", "targets": [ 11,12,16 ] }],
+					    "columnDefs": [{ className: "essential-td-left", "targets": [ 8,11,15,18 ] },
+					               	   { className: "essential-td-display_none", "targets": [ 0,3,9,13,19 ] },],
 		                "order" : [ [ 0, 'asc' ] ],
-		                "columns" : [	{"data" : "user_id"},
-										{"data" : "user_site_id"},
-										{"data" : "site_name"},
-										{"data" : "user_name"},
-										{"data" : "user_phone_num"},
-										{"data" : "apply_static_ip_type"},
-										{"data" : "apply_static_ipaddr"},
-										{"data" : "apply_static_ip_num"},
-										{"data" : "apply_start_time"},
-										{"data" : "apply_end_time"},
-										{"data" : "apply_description"},
-										{"data" : "apply_time"},
-										{"data" : "settlement_status"},
-										{"data" : "settlement_chief_id"},
-										{"data" : "settlement_description"},
-										{"data" : "settlement_time"},
-										{"data" : "issuance_ip_type"},
-										{"data" : "issuance_ipaddr"}]	            
+		                "columns" : [	{"data" : "settlement_status"},			//0
+		                             	{"data" : "settlement_status_text"},	//1
+		                             	{"data" : "user_id"},					//2
+										{"data" : "user_site_id"},				//3
+										{"data" : "site_name"},					//4
+										{"data" : "user_name"},					//5
+										{"data" : "user_phone_num"},			//6
+										{"data" : "apply_static_ip_type"},		//7
+										{"data" : "apply_static_ipaddr"},		//8
+										{"data" : "apply_static_ip_num"},		//9
+										{"data" : "apply_use_time"},			//10
+										{"data" : "apply_description"},			//11
+										{"data" : "apply_time"},				//12
+										{"data" : "settlement_chief_id"},		//13
+										{"data" : "settlement_chief_name"},		//14
+										{"data" : "settlement_description"},	//15
+										{"data" : "settlement_time"},			//16
+										{"data" : "issuance_ip_type"},			//17
+										{"data" : "issuance_ipaddr"},			//18
+										{"data" : "issuance_ip_num"},			//19
+										{"data" : "issuance_use_time"}],		//20	
+		                "createdRow": function( row, data, dataIndex ) {
+		                	//alert($(row).children(0).html());
+		                	//Datatable TR Create Event
+		    			    if ( $(row).children(0).html() == "0" ) {
+		    			        $(row).addClass( 'essential-tr-cursor-pointer' );
+		    			    }
+		    			  }
 						});
 			
 			//검색, 엔트리 위치 정렬
@@ -106,5 +125,11 @@ $(document).ready(function() {
  * tr 이벤트 핸들러
 **/
 function trClickEvent (obj){
-	return false;
+	var settlement_status = $(obj).children(':eq(0)').text();
+	if (settlement_status == 0) {
+		alert("승인 팝업 연동 준비 중입니다.");
+	}
+	else{
+		return false;
+	}
 }

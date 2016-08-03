@@ -84,5 +84,12 @@ $(document).ready(function() {
 			return bValidation;
 		}
 	});
+	
+	//로그인 버튼을 default 버튼으로 이벤트 생성한다.
+	$(document).bind('keypress', function(e) {
+		if(e.keyCode==13){
+            $('#bLogin').trigger('click');
+		}
+    });
 
 });

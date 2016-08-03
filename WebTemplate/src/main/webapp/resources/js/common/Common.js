@@ -268,3 +268,40 @@ function sleep(milliseconds) {
         }
     }
 }
+
+function Format_comma(val){
+	var formatValue="";
+	
+	try {
+		//console.log("Format_Input : " + val+"");
+		if (val != "0") {
+			var newValue = val+""; //숫자를 문자열로 변환
+			var len = newValue.length;  
+			var ch="";
+			var j=1;
+		
+			// 콤마제거  
+			newValue = newValue.replace(/\,/gi, ' ');
+		
+			// comma제거된 문자열 길이
+			len = newValue.length;
+		
+			for(i=len ; i>0 ; i--){
+				ch = newValue.substring(i-1,i);
+				formatValue = ch + formatValue;
+				if ((j%3) == 0 && i>1 ){
+					formatValue=","+formatValue;
+				}
+				j++
+			}
+		}
+		else {
+			formatValue = val;
+		}
+	} catch (e) {
+		console.log("Format_comma Error : " + e.message);
+	}
+
+	//console.log("Format_comma : " + formatValue);
+	return formatValue;
+}

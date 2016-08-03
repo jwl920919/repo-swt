@@ -35,7 +35,7 @@
 		                		</td>
 		                		<td>
 		                			<input type="text" style="width:250px; margin-left:15px;" class="form-control" id="txtSearch"
-										placeholder="<%=LanguageHelper.GetLanguage("IPMAChostnameinput")%>">
+										placeholder="<%=LanguageHelper.GetLanguage("ipmachostnameinput")%>">
 		                		</td>
 		                		<td style="width:100%; text-align:right; padding-right:10px">
 		                			<button type="button" class="btn btn-primary" id="btnSearch"><%=LanguageHelper.GetLanguage("inquiry")%></button>

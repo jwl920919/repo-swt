@@ -41,11 +41,11 @@
 		                			<label style="width:80px; margin-right:10px; text-align:right"><%=LanguageHelper.GetLanguage("status")%> : </label>
 		                		</td>
 		                		<td>
-			                		<select id="sbCerifyStatus" class="form-control selectoption_grey_color" style="width:80px">
-			                			<option value="ALL" selected>전체</option>
-			                			<option value="0">요청</option>
-			                			<option value="1">승인</option>
-			                			<option value="2">반려</option>
+			                		<select id="sbCerifyStatus" class="form-control selectoption_grey_color" style="width:120px">
+			                			<option value="ALL" selected><%=LanguageHelper.GetLanguage("all")%></option>
+			                			<option value="0"><%=LanguageHelper.GetLanguage("requestApproval")%></option>
+			                			<option value="1"><%=LanguageHelper.GetLanguage("approval")%></option>
+			                			<option value="2"><%=LanguageHelper.GetLanguage("return")%></option>
 									</select>
 		                		</td>
 		                		<td>
@@ -64,24 +64,27 @@
 						<table id="datatable" name="datatable" class="essential-table" style="width: 98%">
 							<thead>
 								<tr>
-									<th width="4%">user_id</th>
-									<th width="4%">user_site_id</th>
-									<th width="6%">site_name</th>
-									<th width="4%">user_name</th>
-									<th width="4%">user_phone_num</th>
-									<th width="4%">apply_static_ip_type</th>
-									<th width="4%">apply_static_ipaddr</th>
-									<th width="7%">apply_static_ip_num</th>
-									<th width="4%">apply_start_time</th>
-									<th width="4%">apply_end_time</th>
-									<th width="7%">apply_description</th>
-									<th width="4%">apply_time</th>
-									<th width="4%">settlement_status</th>
-									<th width="5%">settlement_chief_id</th>
-									<th width="5%">settlement_description</th>
-									<th width="4%">settlement_time</th>
-									<th width="6%">issuance_ip_type</th>
-									<th width="6%">issuance_ipaddr</th>
+									<th width="0%" style="display:none;">settlement_status</th>
+									<th width="4%"><%=LanguageHelper.GetLanguage("status")%></th>
+									<th width="6.25%"><%=LanguageHelper.GetLanguage("applicant")%> <%=LanguageHelper.GetLanguage("ID")%></th>
+									<th width="0%" style="display:none;">user_site_id</th>
+									<th width="6.25%"><%=LanguageHelper.GetLanguage("applicant")%> <%=LanguageHelper.GetLanguage("site")%></th>
+									<th width="6.25%"><%=LanguageHelper.GetLanguage("applicant")%> <%=LanguageHelper.GetLanguage("Name")%></th>
+									<th width="6.25%"><%=LanguageHelper.GetLanguage("applicant")%> <%=LanguageHelper.GetLanguage("contactnum")%></th>
+									<th width="4%"><%=LanguageHelper.GetLanguage("applyIPType")%></th>
+									<th width="6.25%"><%=LanguageHelper.GetLanguage("applyIP")%></th>
+									<th width="0%" style="display:none;">apply_static_ip_num</th>
+									<th width="7.25%"><%=LanguageHelper.GetLanguage("applyUseTime")%></th>
+									<th width="8.75%"><%=LanguageHelper.GetLanguage("applyDesc")%></th>
+									<th width="6.25%"><%=LanguageHelper.GetLanguage("applyTime")%></th>
+									<th width="0%" style="display:none;">settlement_chief_id</th>
+									<th width="6.25%"><%=LanguageHelper.GetLanguage("settlementChief")%></th>
+									<th width="8.5%"><%=LanguageHelper.GetLanguage("settlementDesc")%></th>
+									<th width="6.25%"><%=LanguageHelper.GetLanguage("settlementTime")%></th>
+									<th width="4%"><%=LanguageHelper.GetLanguage("issuanceIPType")%></th>
+									<th width="6.25%"><%=LanguageHelper.GetLanguage("issuanceIP")%></th>
+									<th width="0%" style="display:none;">issuance_ip_num</th>
+									<th width="7.25%"><%=LanguageHelper.GetLanguage("issuanceUseTime")%></th>
 								</tr>
 							</thead>
 							<tbody>

@@ -265,15 +265,15 @@
 	<!-- Controller : MVC.ShinwooTNS.action.IPManagementActionController -->
 	<select id="select_IP_MANAGEMENT_SEGMENT" resultType="java.util.HashMap">
 		SELECT * 
-		  FROM "dhcp_network", (SELECT count(*) allcount
-                                  FROM "dhcp_network") as allcount
+		  FROM "view_network_ip_status", (SELECT count(*) allcount
+                                  FROM "view_network_ip_status") as allcount
 		                         WHERE site_id = ${siteid}
 		                           AND (network like CONCAT('%', #{searchValue}, '%') OR comment like CONCAT('%', #{searchValue}, '%')
 		                            OR start_ip like CONCAT('%', #{searchValue}, '%') OR end_ip like CONCAT('%', #{searchValue}, '%'))
 		 ORDER BY
 		<choose>
-			<when test="orderColumn == 'comment'"> ${orderColumn} ${orderType} </when>
-			<when test="orderColumn != 'comment'"> inet(${orderColumn}) ${orderType} </when>
+			<when test="orderColumn == 'comment' or orderColumn == 'ip_type' or orderColumn == 'ip_count'"> ${orderColumn} ${orderType} </when>
+			<when test="orderColumn != 'comment' and orderColumn != 'ip_type' and orderColumn != 'ip_count'"> inet(${orderColumn}) ${orderType} </when>
 		</choose>
 		OFFSET #{startIndex} LIMIT #{length};
 	</select>
@@ -286,37 +286,40 @@
 	<select id="select_IP_MANAGEMENT_SEGMENT_DETAIL" resultType="java.util.HashMap">
 		SET TIMEZONE TO '${time_zone}';
 		SELECT * FROM 
-            (SELECT "network", "ipaddr", COALESCE("ip_type",'') AS "ip_type", COALESCE("macaddr",'') AS "macaddr", COALESCE("duid",'') AS "duid", "is_conflict", 
-                    COALESCE("conflict_types",'') AS "conflict_types", COALESCE("status",'') AS "status", COALESCE("lease_state",'') AS "lease_state",
-                    COALESCE("obj_types",'') AS "obj_types", COALESCE("discover_status",'') AS "discover_status", COALESCE("usage",'') AS "usage", 
-		            COALESCE("host_name",'') AS "host_name", COALESCE("host_os",'') AS "host_os", COALESCE("fingerprint",'') AS "fingerprint", 
-		            COALESCE("is_never_ends", FALSE) AS "is_never_ends", COALESCE("is_never_start", FALSE) AS "is_never_start",
-                    COALESCE(to_char("lease_start_time",'YYYY-MM-DD HH24:MI:SS'),'') AS "lease_start_time",
-                    COALESCE(to_char("lease_end_time",'YYYY-MM-DD HH24:MI:SS'),'') AS "lease_end_time",
-                    COALESCE(to_char("last_discovered",'YYYY-MM-DD HH24:MI:SS'),'') AS "last_discovered",
-                    COALESCE("user_description",'') AS "user_description"
-               FROM "dhcp_ip_status"
-              WHERE "site_id" = #{siteid} AND "network" = #{network} 
-                AND ("network" like CONCAT('%', #{searchValue}, '%') OR "ipaddr" like CONCAT('%', #{searchValue}, '%') OR 
-                     "ip_type" like CONCAT('%', #{searchValue}, '%') OR "macaddr" like CONCAT('%', #{searchValue}, '%') OR 
-                     "duid" like CONCAT('%', #{searchValue}, '%') OR "conflict_types" like CONCAT('%', #{searchValue}, '%') OR
-                     "status" like CONCAT('%', #{searchValue}, '%') OR "lease_state" like CONCAT('%', #{searchValue}, '%') OR
-                     "obj_types" like CONCAT('%', #{searchValue}, '%') OR "discover_status" like CONCAT('%', #{searchValue}, '%') OR
-                     "usage" like CONCAT('%', #{searchValue}, '%') OR "host_name" like CONCAT('%', #{searchValue}, '%') OR
-                     "host_os" like CONCAT('%', #{searchValue}, '%') OR "fingerprint" like CONCAT('%', #{searchValue}, '%') OR
-                     "user_description" like CONCAT('%', #{searchValue}, '%'))
-              UNION
-             SELECT "network" AS "network", "ipaddr" AS "ipaddr", '' AS "ip_type", "macaddr" AS "macaddr", '' AS "duid", false AS "is_conflict", '' AS "conflict_types",
-                    'FIXED' AS "status", '' AS "lease_state", '' AS "obj_types", '' AS "discover_status", '' AS "usage", '' AS "host_name", '' AS "host_os",
-                    '' AS "fingerprint", false AS "is_never_ends", false AS "is_never_start", '' AS "lease_start_time", '' AS "lease_end_time",
-                    COALESCE(to_char("update_time",'YYYY-MM-DD HH24:MI:SS'),'') AS "last_discovered",
-                    "comment" AS "user_description"
-               FROM "dhcp_fixed_ip"
-              WHERE "site_id" = #{siteid} AND "network" = #{network}) AS main,
-            (SELECT COUNT("ipaddr") AS "allcount"
-		       FROM (SELECT "ipaddr" FROM "dhcp_ip_status" WHERE "site_id" = #{siteid} AND "network" = #{network}
-		      UNION
-             SELECT "ipaddr" FROM "dhcp_fixed_ip" WHERE "site_id" = #{siteid} AND "network" = #{network}) as TCount) as countTable
+		    (SELECT "statusView"."network", "statusView"."ipaddr",
+		            COALESCE("statusView"."ip_type",'') AS "ip_type",
+		            COALESCE("statusView"."macaddr",'') AS "macaddr",
+		            COALESCE("statusView"."duid",'') AS "duid",
+		            COALESCE("statusView"."ip_status",'') AS "ip_status",    
+		            COALESCE("statusView"."host_name",'') AS "host_name",
+		            COALESCE("statusTable"."host_os",'') AS "host_os",    
+		            COALESCE("statusView"."fingerprint",'') AS "fingerprint",     
+		            COALESCE(to_char("statusView"."lease_start_time",'YYYY-MM-DD HH24:MI:SS'),'') AS "lease_start_time",
+		            COALESCE(to_char("statusView"."lease_end_time",'YYYY-MM-DD HH24:MI:SS'),'') AS "lease_end_time",
+		            COALESCE("statusTable"."user_description",'') AS "user_description"
+		       FROM "view_ip_status" as "statusView", "dhcp_ip_status" AS "statusTable"
+		      WHERE "statusView"."site_id" = "statusTable"."site_id"
+		        AND "statusView"."ipaddr" = "statusTable"."ipaddr"
+		        and "statusView"."site_id" = #{siteid}
+		        AND "statusView"."network" = #{network}
+		        AND ("statusView"."network" like CONCAT('%', #{searchValue}, '%') OR "statusView"."ipaddr" like CONCAT('%', #{searchValue}, '%') OR 
+		             "statusView"."ip_type" like CONCAT('%', #{searchValue}, '%') OR "statusView"."macaddr" like CONCAT('%', #{searchValue}, '%') OR 
+		             "statusView"."duid" like CONCAT('%', #{searchValue}, '%') OR "statusView"."ip_status" like CONCAT('%', #{searchValue}, '%') OR
+		             "statusView"."host_name" like CONCAT('%', #{searchValue}, '%') OR "statusTable"."host_os" like CONCAT('%', #{searchValue}, '%') OR
+		             "statusView"."fingerprint" like CONCAT('%', #{searchValue}, '%') OR "statusTable"."user_description" like CONCAT('%', #{searchValue}, '%')
+		        )) AS mainTable,             
+		    (SELECT COUNT ("statusView"."network") AS "allcount"
+		       FROM "view_ip_status" as "statusView", "dhcp_ip_status" AS "statusTable"
+		      WHERE "statusView"."site_id" = "statusTable"."site_id"
+		        AND "statusView"."ipaddr" = "statusTable"."ipaddr"
+		        and "statusView"."site_id" = #{siteid}
+		        AND "statusView"."network" = #{network}
+		        AND ("statusView"."network" like CONCAT('%', #{searchValue}, '%') OR "statusView"."ipaddr" like CONCAT('%', #{searchValue}, '%') OR 
+		             "statusView"."ip_type" like CONCAT('%', #{searchValue}, '%') OR "statusView"."macaddr" like CONCAT('%', #{searchValue}, '%') OR 
+		             "statusView"."duid" like CONCAT('%', #{searchValue}, '%') OR "statusView"."ip_status" like CONCAT('%', #{searchValue}, '%') OR
+		             "statusView"."host_name" like CONCAT('%', #{searchValue}, '%') OR "statusTable"."host_os" like CONCAT('%', #{searchValue}, '%') OR
+		             "statusView"."fingerprint" like CONCAT('%', #{searchValue}, '%') OR "statusTable"."user_description" like CONCAT('%', #{searchValue}, '%')
+		        )) as countTable
 		 ORDER BY
 		<choose>
 			<when test="orderColumn == 'network' or orderColumn == 'ipaddr'"> inet(${orderColumn}) ${orderType} </when>
@@ -505,19 +508,20 @@
 		 	   "apply"."apply_site_id", "applysite"."site_name", "apply"."apply_static_ip_type",
 		 	   COALESCE("apply"."apply_static_ipaddr", '') AS "apply_static_ipaddr",
 		 	   COALESCE("apply"."apply_static_ip_num", '0') AS "apply_static_ip_num",
-		 	   COALESCE(to_char("apply"."apply_start_time",'YYYY-MM-DD HH24:MI:SS'),'') AS "apply_start_time",
-		 	   COALESCE(to_char("apply"."apply_end_time",'YYYY-MM-DD HH24:MI:SS'),'') AS "apply_end_time",
+		 	   COALESCE(to_char("apply"."apply_start_time",'YYYY-MM-DD'),'') || ' ~ ' ||
+		 	   COALESCE(to_char("apply"."apply_end_time",'YYYY-MM-DD'),'') AS "apply_use_time",
 		 	   COALESCE("apply"."apply_description", '') AS "apply_description",
 		 	   COALESCE(to_char("apply"."apply_time",'YYYY-MM-DD HH24:MI:SS'),'') AS "apply_time",
 		 	   COALESCE("apply"."settlement_status", '0') AS "settlement_status",
 		 	   COALESCE("apply"."settlement_chief_id", '') AS "settlement_chief_id",
+		 	   COALESCE("apply"."settlement_chief_name", '') AS "settlement_chief_name",
 		 	   COALESCE("apply"."settlement_description", '') AS "settlement_description",
 	   	 	   COALESCE(to_char("apply"."settlement_time",'YYYY-MM-DD HH24:MI:SS'),'') AS "settlement_time",
 		 	   COALESCE("apply"."issuance_ip_type", '') AS "issuance_ip_type",
 		 	   COALESCE("apply"."issuance_ipaddr", '') AS "issuance_ipaddr",
 		 	   COALESCE("apply"."issuance_ip_num", '0') AS "issuance_ip_num",
-		 	   COALESCE(to_char("apply"."issuance_start_time",'YYYY-MM-DD HH24:MI:SS'),'') AS "settlement_time",
-		 	   COALESCE(to_char("apply"."issuance_end_time",'YYYY-MM-DD HH24:MI:SS'),'') AS "issuance_end_time",
+		 	   COALESCE(to_char("apply"."issuance_start_time",'YYYY-MM-DD'),'') || ' ~ ' ||
+		 	   COALESCE(to_char("apply"."issuance_end_time",'YYYY-MM-DD'),'') AS "issuance_use_time",
      		   "rowCount"."allCount"
 		  FROM "user_apply_ip_info" AS "apply", "site_info" AS "usersite", "site_info" AS "applysite",
                (SELECT count(*) AS "allCount"
@@ -528,12 +532,13 @@
 					<when test="siteid != 0"> AND "apply"."apply_site_id" = #{siteid} </when>
 				</choose>
 				<choose>
-					<when test="settlementstatus > 0"> AND "apply"."settlement_status" = #{settlementstatus} </when> 
+					<when test="settlementstatus >= 0"> AND "apply"."settlement_status" = #{settlementstatus} </when> 
 				</choose>
                    AND ("usersite"."site_name" like CONCAT('%', #{searchValue}, '%') OR "applysite"."site_name" like CONCAT('%', #{searchValue}, '%') OR
 		   	           "apply"."user_name" like CONCAT('%', #{searchValue}, '%') OR "apply"."user_phone_num" like CONCAT('%', #{searchValue}, '%') OR
 		       		   "apply"."apply_static_ip_type" like CONCAT('%', #{searchValue}, '%') OR "apply"."apply_static_ipaddr" like CONCAT('%', #{searchValue}, '%') OR
 		       		   "apply"."apply_description" like CONCAT('%', #{searchValue}, '%') OR "apply"."settlement_chief_id" like CONCAT('%', #{searchValue}, '%') OR
+		       		   "apply"."settlement_chief_name" like CONCAT('%', #{searchValue}, '%') OR
 		       		   "apply"."settlement_description" like CONCAT('%', #{searchValue}, '%') OR "apply"."issuance_ip_type" like CONCAT('%', #{searchValue}, '%') OR
 		       		   "apply"."issuance_ipaddr" like CONCAT('%', #{searchValue}, '%') OR "apply"."issuance_ip_type" like CONCAT('%', #{searchValue}, '%'))
 		   		   AND "apply"."settlement_status" = #{settlementstatus}
@@ -544,18 +549,19 @@
 			<when test="siteid != 0"> AND "apply"."apply_site_id" = #{siteid} </when> 
 		</choose>
 		<choose>
-			<when test="settlementstatus > 0"> AND "apply"."settlement_status" = #{settlementstatus} </when> 
+			<when test="settlementstatus >= 0"> AND "apply"."settlement_status" = #{settlementstatus} </when> 
 		</choose>
 		   AND ("usersite"."site_name" like CONCAT('%', #{searchValue}, '%') OR "applysite"."site_name" like CONCAT('%', #{searchValue}, '%') OR
 		   	   "apply"."user_name" like CONCAT('%', #{searchValue}, '%') OR "apply"."user_phone_num" like CONCAT('%', #{searchValue}, '%') OR
 		       "apply"."apply_static_ip_type" like CONCAT('%', #{searchValue}, '%') OR "apply"."apply_static_ipaddr" like CONCAT('%', #{searchValue}, '%') OR
 		       "apply"."apply_description" like CONCAT('%', #{searchValue}, '%') OR "apply"."settlement_chief_id" like CONCAT('%', #{searchValue}, '%') OR
+		       "apply"."settlement_chief_name" like CONCAT('%', #{searchValue}, '%') OR
 		       "apply"."settlement_description" like CONCAT('%', #{searchValue}, '%') OR "apply"."issuance_ip_type" like CONCAT('%', #{searchValue}, '%') OR
 		       "apply"."issuance_ipaddr" like CONCAT('%', #{searchValue}, '%') OR "apply"."issuance_ip_type" like CONCAT('%', #{searchValue}, '%'))
   		   AND ("apply"."apply_time" &lt;= timestamp '${endtime}' AND "apply"."apply_time" &gt;= timestamp '${starttime}')
 		<choose>
-			<when test="orderColumn == 'apply_static_ipaddr' or orderColumn == 'issuance_ipaddr'"> ORDER BY inet(${orderColumn}) ${orderType} </when>
-			<when test="orderColumn != 'apply_static_ipaddr' and orderColumn != 'issuance_ipaddr'"> ORDER BY ${orderColumn} ${orderType} </when>
+			<when test="orderColumn == 'apply_static_ipaddr' or orderColumn == 'issuance_ipaddr'"> ORDER BY "settlement_status", inet(${orderColumn}) ${orderType} </when>
+			<when test="orderColumn != 'apply_static_ipaddr' and orderColumn != 'issuance_ipaddr'"> ORDER BY "settlement_status", ${orderColumn} ${orderType} </when>
 		</choose>
 		OFFSET #{startIndex} LIMIT #{length};
 	</select>

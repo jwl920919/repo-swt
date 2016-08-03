@@ -27,13 +27,37 @@ $(document).ready(function() {
 				    "columnDefs": [
 	//			                   { className: "essential-td-display_none", "targets": [ 0 ] },
 				                   { className: "essential-td-left essential-td-cursor-pointer", "targets": [ 0 ] },
-				                   { className: "essential-td-left", "targets": [ 1 ] },
-				                   { className: "essential-td-left", "targets": [ 2 ] },
-				                   { className: "essential-td-left", "targets": [ 3 ] }],
+				                   { className: "essential-td-left", "targets": [ 2,3,10 ] },
+				                   { className: "essential-td-right", "targets": [ 4,5,6,7,8,9 ] }],
 	                "order" : [ [ 0, 'asc' ] ],
 	                "columns" : [ {"data" : "network"},
+	                              {"data" : "ip_type"},
 	                              {"data" : "start_ip"},
 	                              {"data" : "end_ip"},
+	                              {"data" : "used_ip",
+										"render":function(data,type,full,meta){
+											return Format_comma(data);
+										}},
+			                      {"data" : "ip_total",
+										"render":function(data,type,full,meta){	
+											return Format_comma(data);
+										}},
+			                      {"data" : "ip_usage",
+										"render":function(data,type,full,meta){	
+											return data + "%";
+										}},
+			                      {"data" : "range_used",
+										"render":function(data,type,full,meta){	
+											return Format_comma(data);
+										}},
+			                      {"data" : "range_total",
+										"render":function(data,type,full,meta){	
+											return Format_comma(data);
+										}},
+			                      {"data" : "range_usage",
+										"render":function(data,type,full,meta){	
+											return data + "%";
+										}},
 	                              {"data" : "comment"}, ],
 	//                              dom: 'Bfrtip',
 	//                              buttons: [{extend: 'copyHtml5',exportOptions: {columns: [ 1, ':visible' ]}},
@@ -54,8 +78,6 @@ $(document).ready(function() {
 	
 		//datatable 첫번째 td 클릭 이벤트 바인딩
 		$('#datatable').delegate('tbody>tr>td:first-child', 'click', function() {
-			//$('#datatable').delegate('tbody>tr>td:nth-child(2)', 'click', function() {
-			//console.log("td click event : " + this);
 		    tdClickEvent(this);
 		});
 	} catch (e) {
@@ -126,7 +148,7 @@ function tdClickEvent(obj){
 		                "processing" : true,
 		                "serverSide" : true,
 		                "sScrollX": "100%",
-		                "sScrollXInner": "3000",
+		                "sScrollXInner": "2000",
 		                "bScrollCollapse": true,
 		                "ajax" : {
 		                    url : 'ipManagement/staticIPStatus_Segment_Detail_Select',
@@ -139,8 +161,7 @@ function tdClickEvent(obj){
 		                        data.timezone = getClientTimeZoneName();
 		                    }
 		                },
-					    "columnDefs": [{ className: "essential-td-left", "targets": [ 0,2,3,7,9,10 ] },
-					                   { className: "essential-td-left", "targets": [ 11,12,17,18 ] }],
+					    "columnDefs": [{ className: "essential-td-left", "targets": [ 0,2,3,5,7,10 ] }],
 	//	                "aoColumns": [
 	//	                              { "data" : "ipaddr", "sWidth": "300%" }, // 1st column width 
 	//	                              { "data" : "ip_type", "sWidth": "1000%" }, // 2nd column width 
@@ -172,34 +193,17 @@ function tdClickEvent(obj){
 	//	                        ],
 	//
 		                "order" : [ [ 0, 'asc' ] ],
-		                "columns" : [	{"data" : "ipaddr"},
-										{"data" : "ip_type"},
-										{"data" : "macaddr"},
-										{"data" : "duid"},
-										{"data" : "is_conflict",
-												"render":function(data,type,full,meta){	                              
-															if(data){
-																return data;
-															}else{
-																	//return "<button class='btn btn-block btn-info btn-sm' id='pdsSelect'> 선택</button>";
-																return data;
-															}
-														}
-												},
-										{"data" : "status"},
-										{"data" : "lease_state"},
-										{"data" : "obj_types"},
-										{"data" : "discover_status"},
-										{"data" : "usage"},
-										{"data" : "host_name"},
-										{"data" : "host_os"},
-										{"data" : "fingerprint"},
-										{"data" : "is_never_ends"},
-										{"data" : "is_never_start"},
-										{"data" : "lease_start_time"},
-										{"data" : "lease_end_time"},
-										{"data" : "last_discovered"},
-										{"data" : "user_description"}]
+		                "columns" : [ {"data" : "ipaddr"},
+									  {"data" : "ip_type"},
+									  {"data" : "macaddr"},
+									  {"data" : "duid"},
+									  {"data" : "ip_status"},
+									  {"data" : "host_name"},
+									  {"data" : "host_os"},
+									  {"data" : "fingerprint"},
+									  {"data" : "lease_start_time"},
+									  {"data" : "lease_end_time"},
+									  {"data" : "user_description"}]
 		            });
 			//$('div.dataTables_scrollBody').css('maxHeight', 600);
 			//$("#datatable_detail tbody").css('maxHeight', 650);

@@ -24,6 +24,7 @@ import com.google.gson.reflect.TypeToken;
 
 import Common.DTO.AjaxResult;
 import Common.Helper.CommonHelper;
+import Common.Helper.LanguageHelper;
 import Common.ServiceInterface.IP_MANAGEMENT_Service_Interface;
 
 @Controller
@@ -50,7 +51,7 @@ public class IPManagementActionController {
 		int totalCount = 0;
 
 		try {
-			String[] columns = { "network", "start_ip", "end_ip", "comment" };
+			String[] columns = { "network", "ip_type", "start_ip", "end_ip", "ip_count", "comment" };
 			HashMap<String, Object> parameters = Common.Helper.DatatableHelper.getDatatableParametas(request, columns, 0);
 
 			parameters.put("siteid", session.getAttribute("site_id").toString());
@@ -305,12 +306,10 @@ public class IPManagementActionController {
 		int totalCount = 0;
 
 		try {
-			String[] columns = { "user_id", "user_site_id", "site_name", "user_name", "user_phone_num",
-					"apply_static_ip_type", "apply_static_ipaddr", "apply_static_ip_num",
-					"apply_start_time", "apply_end_time", "apply_description", "apply_time",
-					"settlement_status", "settlement_chief_id", "settlement_description", "settlement_time",
-					"issuance_ip_type", "issuance_ipaddr", "issuance_ip_num", "settlement_time", "issuance_end_time" };
-
+			String[] columns = { "user_id","site_name","user_name","user_phone_num","apply_static_ip_type","apply_static_ipaddr",
+								 "apply_use_time","apply_description","apply_time","settlement_chief_name","settlement_description","settlement_time",
+								 "issuance_ip_type","issuance_ipaddr","issuance_use_time" };
+			
 			String m_timezone = request.getParameter("timezone");
 			String m_starttime = request.getParameter("startTime");
 			String m_endtime = request.getParameter("endTime");
@@ -330,6 +329,20 @@ public class IPManagementActionController {
 
 				if (dataList.size() > 0) {
 					totalCount = Integer.parseInt(((Map<String, Object>) dataList.get(0)).get("allCount").toString());
+					
+					//결재 상태에 대한 코드 값을 한글(Text)로 변환
+					for (Map<String, Object> mapdata : dataList) {
+						int status = Integer.parseInt(mapdata.get("settlement_status").toString());
+						if (status == 0) {
+							mapdata.put("settlement_status_text", LanguageHelper.GetLanguage("requestApproval"));
+						}
+						else if (status == 1) {
+							mapdata.put("settlement_status_text", LanguageHelper.GetLanguage("approval"));							
+						}
+						else if (status == 2) {
+							mapdata.put("settlement_status_text", LanguageHelper.GetLanguage("return"));							
+						}
+					}
 				}
 
 				jsonArray = gson.toJsonTree(dataList).getAsJsonArray();
