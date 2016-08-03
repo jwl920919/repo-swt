@@ -132,21 +132,11 @@
 									            <ul>
 									               <li class="li_unused"><span class="li_Label">Unused</span></li>
 									               <li class="li_used"><span class="li_Label">Used</span></li>
-									               <li class="li_conflict"><span class="li_Label">Conflict</span></li>
-									               <li class="li_pending"><span class="li_Label">Pending</span></li>
-									               <li class="li_unmanaged"><span class="li_Label">Unmanaged</span></li>
-									               <li class="li_fixed"><span class="li_Label">Fixed Address / Reservation</span></li>
-									               <li class="li_object"><span class="li_Label">DNS Object</span></li>
-									               <li class="li_hostnotindns"><span class="li_Label">Host<span class="ib-ipam-freeware-hidden">Not In DNS/DHCP</span></span></li>
-									               <li class="li_activeLease"><span class="li_Label">Active Lease</span></li>
 									            </ul>
 						        			</td>
 						        			<td class="ipmap-legend">
 									            <ul>
 									               <li class="li_Selecting"><span class="li_Label">Selected IP Address</span></li>
-									           	   <li class="li_range"><span class="li_Label">DHCP Range</span></li>
-									           	   <li class="li_exclusion"><span class="li_Label">DHCP Exclusion Range</span></li>
-									           	   <li class="li_reservedrange"><span class="li_Label">Reserved Range</span></li>
 									            </ul>
 						        			</td>
 						        		</tr>

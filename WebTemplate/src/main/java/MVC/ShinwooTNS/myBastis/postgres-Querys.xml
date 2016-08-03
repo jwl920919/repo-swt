@@ -334,12 +334,12 @@
 	<!-- Description : IP관리 > 고정IP현황 - 세그먼트별 ip map 데이터 - DHCP Range -->
 	<!-- Controller : MVC.ShinwooTNS.action.IPManagementActionController -->
 	<select id="select_IP_MANAGEMENT_SEGMENT_DETAIL_MAP_DHCPRANGE" resultType="java.util.HashMap">
-		SELECT "netzone".*, "range"."start_ip" AS "dhcp_start_ip", "range"."end_ip" AS "dhcp_end_ip"
-		  FROM "dhcp_network" AS "netzone", "dhcp_range" AS "range"
-		 WHERE "netzone"."site_id" = "range"."site_id"
-		   AND "netzone"."network" = "range"."network"
-		   AND "netzone"."site_id" = #{siteid} AND "netzone"."network" = #{network}
-		 ORDER BY inet("netzone"."network")
+		SELECT "network".*, "range"."start_ip" AS "dhcp_start_ip", "range"."end_ip" as "dhcp_end_ip"
+		  FROM "view_network_ip_status" as "network", "dhcp_range" AS "range"
+		 WHERE "network"."site_id" = "range"."site_id"
+           and "network"."network" = "range"."network"
+		   and "network"."site_id" = #{siteid} AND "network"."network" = #{network}
+		 ORDER BY inet("network"."network")
 	</select>
 
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->

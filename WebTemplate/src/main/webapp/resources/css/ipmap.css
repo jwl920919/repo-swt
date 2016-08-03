@@ -42,92 +42,90 @@
 }
 
 #place .selecting {	
-	background-image: url("../images/ipmap/selectedip.png");
+	background-image: url("../images/ipmap/selected-unused.png");
 }
 #place .dhcpRange {
-	background-image: url("../images/ipmap/dhcprange.png");
+	background-image: url("../images/ipmap/dhcprange-unused.png");
 }
-#place .activeLease {
-	background-image: url("../images/ipmap/activeLease.png");
+
+#place .unused {
+	background-image: url("../images/ipmap/unused.png");
+}
+#place .network {
+	background-image: url("../images/ipmap/network.png");
+}
+#place .broadcast {
+	background-image: url("../images/ipmap/broadcast.png");
+}
+#place .fixed {
+	background-image: url("../images/ipmap/fixed.png");
+}
+#place .reservation {
+	background-image: url("../images/ipmap/reservation.png");
 }
 #place .conflict {
 	background-image: url("../images/ipmap/conflict.png");
 }
-#place .fixed {
-	background-image: url("../images/ipmap/fixedaddress.png");
-}
-#place .hostnotindns {
-	background-image: url("../images/ipmap/hostnotindns.png");
-}
-#place .object {
-	background-image: url("../images/ipmap/dnsobject.png");
-}
-#place .pending {
-	background-image: url("../images/ipmap/pending.png");
-}
-#place .unmanaged {
-	background-image: url("../images/ipmap/unmanaged.png");
-}
-#place .unused {
-	background-image: url("../images/ipmap/unused.png");
+#place .lease {
+	background-image: url("../images/ipmap/lease.png");
 }
 #place .used {
 	background-image: url("../images/ipmap/used.png");
 }
-#place .dhcpRange_activeLease {
-	background-image: url("../images/ipmap/dhcprange-activeLease.png");
+
+
+
+#place .dhcp_unused {
+	background-image: url("../images/ipmap/dhcp-unused.png");
 }
-#place .dhcpRange_conflict {
-	background-image: url("../images/ipmap/dhcprange-conflict.png");
+#place .dhcp_network {
+	background-image: url("../images/ipmap/dhcp-network.png");
 }
-#place .dhcpRange_fixed {
-	background-image: url("../images/ipmap/dhcprange-fixedaddress.png");
+#place .dhcp_broadcast {
+	background-image: url("../images/ipmap/dhcp-broadcast.png");
 }
-#place .dhcpRange_hostnotindns {
-	background-image: url("../images/ipmap/dhcprange-hostnotindns.png");
+#place .dhcp_fixed {
+	background-image: url("../images/ipmap/dhcp-fixed.png");
 }
-#place .dhcpRange_dnsObject {
-	background-image: url("../images/ipmap/dhcprange-dnsobject.png");
+#place .dhcp_reservation {
+	background-image: url("../images/ipmap/dhcp-reservation.png");
 }
-#place .dhcpRange_pending {
-	background-image: url("../images/ipmap/dhcprange-pending.png");
+#place .dhcp_conflict {
+	background-image: url("../images/ipmap/dhcp-conflict.png");
 }
-#place .dhcpRange_unmanaged {
-	background-image: url("../images/ipmap/dhcprange-unmanaged.png");
+#place .dhcp_lease {
+	background-image: url("../images/ipmap/dhcp-lease.png");
 }
-#place .dhcpRange_unused {
-	background-image: url("../images/ipmap/dhcprange-unused.png");
+#place .dhcp_used {
+	background-image: url("../images/ipmap/dhcp-used.png");
 }
-#place .dhcpRange_used {
-	background-image: url("../images/ipmap/dhcprange-used.png");
+
+
+#place .selected_unused {
+	background-image: url("../images/ipmap/selected-unused.png");
 }
-#place .selected_activeLease {
-	background-image: url("../images/ipmap/selected-activeLease.png");
+#place .selected_network {
+	background-image: url("../images/ipmap/selected-network.png");
+}
+#place .selected_broadcast {
+	background-image: url("../images/ipmap/selected-broadcast.png");
+}
+#place .selected_fixed {
+	background-image: url("../images/ipmap/selected-fixed.png");
+}
+#place .selected_reservation {
+	background-image: url("../images/ipmap/selected-reservation.png");
 }
 #place .selected_conflict {
 	background-image: url("../images/ipmap/selected-conflict.png");
 }
-#place .selected_fixedaddress {
-	background-image: url("../images/ipmap/selected-fixedaddress.png");
-}
-#place .selected_hostnotindns {
-	background-image: url("../images/ipmap/selected-hostnotindns.png");
-}
-#place .selecte_dnsobject {
-	background-image: url("../images/ipmap/selected-dnsobject.png");
-}
-#place .selected_pending {
-	background-image: url("../images/ipmap/selected-pending.png");
-}
-#place .selected_unmanaged {
-	background-image: url("../images/ipmap/selected-unmanaged.png");
-}
-#place .selected_unused {
-	background-image: url("../images/ipmap/selected-unused.png");
+#place .selected_lease {
+	background-image: url("../images/ipmap/selected-lease.png");
 }
 #place .selected_used {
 	background-image: url("../images/ipmap/selected-used.png");
 }
+
 
 #place .row-3, #place .row-4 {
 	/*margin-top: 10px;*/	
@@ -138,43 +136,34 @@
 	padding-bottom: 20px;
 }
 .li_Selecting {	
-	list-style-image: url("../images/ipmap/org-selectedip.png");
-}
-.li_activeLease {
-	list-style-image: url("../images/ipmap/org-activeLease.png");
-}
-.li_conflict {
-	list-style-image: url("../images/ipmap/org-conflict.png");
-}
-.li_exclusion {
-	list-style-image: url("../images/ipmap/org-dhcpexclusion.png");
-}
-.li_fixed {
-	list-style-image: url("../images/ipmap/org-Fixedaddress.png");
-}
-.li_hostnotindns {
-	list-style-image: url("../images/ipmap/org-hostnotindns.png");
-}
-.li_object {
-	list-style-image: url("../images/ipmap/org-dnsobject.png");
-}
-.li_pending {
-	list-style-image: url("../images/ipmap/org-pending.png");
-}
-.li_range {
-	list-style-image: url("../images/ipmap/org-dhcprange.png");
-}
-.li_reservedrange {
-	list-style-image: url("../images/ipmap/org-reservedrange.png");
-}
-.li_unmanaged {
-	list-style-image: url("../images/ipmap/org-unmanaged.png");
+	list-style-image: url("../images/ipmap/selected-unused.png");
 }
 .li_unused {
-	list-style-image: url("../images/ipmap/org-unused.png");
+	list-style-image: url("../images/ipmap/unused.png");
+}
+.li_network {
+	list-style-image: url("../images/ipmap/network.png");
+}
+.li_broadcast {
+	list-style-image: url("../images/ipmap/broadcast.png");
+}
+.li_fixed {
+	list-style-image: url("../images/ipmap/fixed.png");
+}
+.li_reservation {
+	list-style-image: url("../images/ipmap/reservation.png");
+}
+.li_conflict {
+	list-style-image: url("../images/ipmap/conflictt.png");
+}
+.li_lease {
+	list-style-image: url("../images/ipmap/lease.png");
 }
 .li_used {
-	list-style-image: url("../images/ipmap/org-used.png");
+	list-style-image: url("../images/ipmap/used.png");
+}
+.li_range {
+	list-style-image: url("../images/ipmap/dhcp-unused.png");
 }
 
 .ipmap-legend {

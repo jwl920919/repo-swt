@@ -139,6 +139,7 @@ public class IPManagementActionController {
 					new TypeToken<HashMap<String, Object>>() {
 					}.getType());
 			String m_timezone = parameters.get("timezone").toString();
+			String m_network = parameters.get("network").toString();
 
 			String siteID = session.getAttribute("site_id").toString();
 			if (!siteID.equals("")) {
@@ -180,8 +181,15 @@ public class IPManagementActionController {
 
 				System.out.println("time_zone : " + m_timezone);
 				parameters.put("time_zone", m_timezone);
-				List<Map<String, Object>> allDataList = ipManagementService
-						.select_IP_MANAGEMENT_SEGMENT_DETAIL_MAPDATA(parameters);
+				parameters.put("searchValue", "");
+				parameters.put("siteid", Integer.parseInt(siteID));
+				parameters.put("network", m_network);
+				parameters.put("orderColumn", "ipaddr");
+				parameters.put("orderType", "ASC");
+				parameters.put("startIndex", 0);
+				parameters.put("length", Integer.MAX_VALUE);
+				//List<Map<String, Object>> allDataList = ipManagementService.select_IP_MANAGEMENT_SEGMENT_DETAIL_MAPDATA(parameters);
+				List<Map<String, Object>> allDataList = ipManagementService.select_IP_MANAGEMENT_SEGMENT_DETAIL(parameters);
 
 				result.result = true;
 				result.data = dataList;
