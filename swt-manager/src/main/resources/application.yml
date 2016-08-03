@@ -46,13 +46,10 @@ spring:
     hibernate:
       ddlAuto: none
       naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
-  # amqp
-  #rabbitmq:
-  #  host: shinwootnskr.iptime.org
-  #  port: 5672
-  #  username: admin
-  #  password: shinwoo123!
-  #  virtual-host: /
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
 
 #====================================
 # banner

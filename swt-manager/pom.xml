@@ -29,12 +29,12 @@
 			<artifactId>swt-common</artifactId>
 			<version>0.1.7</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.shinwootns.data</groupId>
 			<artifactId>swt-data</artifactId>
 			<version>0.1.1</version>
-  		</dependency>
+		</dependency>
 
 		<dependency>
 			<groupId>javax.persistence</groupId>
@@ -86,20 +86,11 @@
 			<version>1.1.1</version>
 		</dependency>
 
-		<!-- 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-amqp</artifactId>
-		</dependency>
-		-->
+		<!-- <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-amqp</artifactId> 
+			</dependency> -->
 
-		<!-- 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-configuration-processor</artifactId>
-			<optional>true</optional>
-		</dependency>
-		 -->
+		<!-- <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-configuration-processor</artifactId> 
+			<optional>true</optional> </dependency> -->
 
 		<!-- Exclude default spring logging service -->
 		<dependency>
@@ -128,22 +119,33 @@
 			<dependency> <groupId>org.wso2.siddhi</groupId> <artifactId>siddhi-core</artifactId> 
 			<version>3.0.5</version> </dependency> -->
 
+		<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-jasper</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<build>
 		<plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>1.3.6.RELEASE</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>1.3.6.RELEASE</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
 	</build>
 </project>

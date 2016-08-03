@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        
+<mapper namespace="com.shinwootns.ipm.data.mapper.DataMapper">
+
+	<!-- ############################ Site ############################ -->
+	<select id="selectSiteInfo" resultType="com.shinwootns.data.entity.SiteInfo">
+		SELECT * FROM site_info
+	</select>
+	
+	
+	<!-- ############################ Auth ############################ -->
+	<select id="selectAuthSetup" resultType="com.shinwootns.data.entity.AuthSetup">
+		SELECT *
+		FROM auth_setup
+		WHERE disable = false
+		ORDER BY order_num
+	</select>
+	
+	
+	<!-- ############################ InSight ############################ -->
+	<select id="selectInsight" parameterType="hashMap" resultType="com.shinwootns.data.entity.DeviceInsight">
+		SELECT * 
+		FROM device_insight 
+		WHERE 1=1
+		<if test="site_id != null">
+			AND site_id = #{site_id}
+		</if>
+		<if test="device_id != null">
+			AND device_id = #{device_id}
+		</if>
+		<if test="is_master != null">
+			AND is_master = #{is_master}
+		</if>
+	</select>
+	
+	
+	
+
+	<!-- ############################ DHCP ############################ -->
+	<select id="selectDhcp" resultType="com.shinwootns.data.entity.DeviceDhcp">
+		SELECT * FROM device_dhcp WHERE 1=1
+		<if test="device_id != null">
+			AND device_id = #{device_id}
+		</if>
+	</select>
+	
+	<select id="selectDhcpByInsightHost" resultType="com.shinwootns.data.entity.DeviceDhcp">
+		SELECT dhcp.*
+		FROM site_info site, device_dhcp dhcp, device_insight ins
+		WHERE site.site_id = dhcp.site_id
+		AND dhcp.site_id = ins.site_id
+		AND ins.host = #{host}
+	</select>
+
+</mapper>
