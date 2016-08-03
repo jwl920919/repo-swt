@@ -38,6 +38,9 @@ public class ApplicationProperty {
 	
 	@Value("${insight.debug.enable_recv_syslog:true}")
 	public boolean enable_recv_syslog;
+	
+	@Value("${insight.debug.force_start_cluster_master:false}")
+	public boolean force_start_cluster_master;
 	//}} Debug Mode
 	
 	// Redis

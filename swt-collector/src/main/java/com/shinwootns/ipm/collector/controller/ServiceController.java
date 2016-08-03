@@ -64,7 +64,14 @@ public class ServiceController {
 		if (appProperty.debugEnable == false || appProperty.enable_recv_syslog == true )
 		{
 			// Start receive handler
-			SyslogManager.getInstance().start(new SyslogReceiveHandlerImpl());
+			if ( SyslogManager.getInstance().start(new SyslogReceiveHandlerImpl()) ) {
+				_logger.info("SyslogManager.getInstance().start()... OK");
+			}
+			else {
+				_logger.info("SyslogManager.getInstance().start()... failed");
+				
+				WorkerManager.getInstance().TerminateApplication();
+			}
 		}
 	}
 	

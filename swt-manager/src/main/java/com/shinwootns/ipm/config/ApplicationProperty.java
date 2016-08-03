@@ -25,6 +25,9 @@ public class ApplicationProperty {
 	public int clusterSalveIndex;
 	
 	//{{ Debug Mode
+	@Value("${insight.debug.force_start_cluster_master:false}")
+	public boolean force_start_cluster_master;
+	
 	@Value("${ipm.debug.enable:false}")
 	public boolean debugEnable;
 	

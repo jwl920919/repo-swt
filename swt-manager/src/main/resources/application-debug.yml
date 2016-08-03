@@ -6,8 +6,8 @@ ipm:
   version: 0.1.1
   license: TEST000000
   cluster:
-    mode: master    # master, slave
-    slave-index: 0  # 0 ~ 99
+    mode: slave       # master, slave
+    slave-index: 100  # 0 ~ 999
   redis:
     host: shinwootnskr.iptime.org
     port: 6379
@@ -26,6 +26,7 @@ ipm:
     enable_recv_syslog: false
     enable_insert_event: false
     enable_device_collect: false
+    force_start_cluster_master: true
     
 #====================================
 # Security

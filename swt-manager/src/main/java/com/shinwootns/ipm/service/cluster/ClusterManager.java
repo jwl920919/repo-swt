@@ -212,7 +212,7 @@ public class ClusterManager {
 
 	//region [FUNC] set Master Node
 	private void setMasterNode(boolean isMasterNode) {
-
+		
 		// If changed cluster mode.
 		if (this.isMasterNode != isMasterNode) {
 
@@ -226,12 +226,26 @@ public class ClusterManager {
 
 			this.isMasterNode = isMasterNode;
 
+			// MASTER
 			if (this.isMasterNode) {
+				
 				// Start MasterJobWorker
 				WorkerManager.getInstance().startMasterJobWorker();
-			} else {
-				// Stop MasterJobWorker
-				WorkerManager.getInstance().stopMasterJobWorker();
+				
+			}
+			// SLAVE
+			else {
+				
+				// Debug Mode - force_start_cluster_master
+				ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
+				if (appProperty != null && appProperty.debugEnable && appProperty.force_start_cluster_master) {
+					// Debug Mode -  force_start_cluster_master
+					WorkerManager.getInstance().startMasterJobWorker();
+				}
+				else {
+					// Stop MasterJobWorker
+					WorkerManager.getInstance().stopMasterJobWorker();
+				}
 			}
 		}
 	}
