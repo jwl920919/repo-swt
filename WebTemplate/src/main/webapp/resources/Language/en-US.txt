@@ -63,6 +63,8 @@
 	"deviceTypeByAccessPolicy":						"단말종류별 제한 정책 설정",
 	"osTypeByAccessPolicy":							"OS종류별 제한 정책 설정",
 	"hostnameByAccessPolicy":						"호스트네임별 제한 정책 설정",
+	"accessPolicy":									"제한 정책 설정",
+	"accessPolicySetting":							"설정관리",
 	"userCertifySetting":							"사용자 인증 설정",
 	"infobloxStatus":								"Infoblox현황정보",
 	"dhcp/dnsSetting":								"DHCP/DNS설정",
@@ -136,6 +138,8 @@
     "next": 										"Next",
     "previous": 									"Previous",
     "ip":		 									"IP",
+    "ipv4":		 									"IPv4",
+    "ipv6":		 									"IPv6",
     "mac":		 									"MAC",
     "user":		 									"user",
     "all":		 									"ALL",
@@ -172,6 +176,6 @@
     "totalipcount":									"총 IP 갯수",
     "ipUtilization":								"IP 사용률",
     "rangeipcount":									"사용 Range IP 수",
-    "totalrangecount":									"총 Range 수",
+    "totalrangecount":								"총 Range 수",
     "rangeUtilization":								"Range 사용률"
 }

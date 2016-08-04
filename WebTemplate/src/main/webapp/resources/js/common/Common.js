@@ -18,7 +18,7 @@ function systemAlertNotify(divElement, type, title, message) {
     // .alert-info
     // .alert-success
     var tag = "";
-    tag += "<div id='custom-alert-notify' class='alert " + type
+    tag += "<div id='custom-alert' class='alert " + type
             + " alert-dismissible fade in' role='alert'>";
     tag += "     <button onclick='fnAlertClose(\"layDiv\")' type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>";
     tag += "     <h4><i class='icon fa fa-warning'></i><label>" + title
@@ -57,7 +57,7 @@ function systemAlertConfirm(divElement, type, title, message, confirmButtonValue
     // .alert-info
     // .alert-success
     var tag = "";
-    tag += "<div id='custom-alert-confirm' class='alert " + type
+    tag += "<div id='custom-alert' class='alert " + type
             + " alert-dismissible fade in' role='alert' >";
     tag += "     <button onclick='fnAlertClose(\"layDiv\")' type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>";
     tag += "     <h4><i class='icon fa fa-warning'></i><label>" + title

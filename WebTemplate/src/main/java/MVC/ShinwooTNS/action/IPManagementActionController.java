@@ -51,7 +51,7 @@ public class IPManagementActionController {
 		int totalCount = 0;
 
 		try {
-			String[] columns = { "network", "ip_type", "start_ip", "end_ip", "ip_count", "comment" };
+			String[] columns = { "network", "ip_type", "start_ip", "end_ip", "used_ip", "ip_total", "ip_usage", "range_used", "range_total", "range_usage", "comment" };
 			HashMap<String, Object> parameters = Common.Helper.DatatableHelper.getDatatableParametas(request, columns, 0);
 
 			parameters.put("siteid", session.getAttribute("site_id").toString());
@@ -86,10 +86,9 @@ public class IPManagementActionController {
 		int totalCount = 0;
 
 		try {
-			String[] columns = { "ipaddr", "ip_type", "macaddr", "duid", "is_conflict", "conflict_types", "status",
-					"lease_state", "obj_types", "discover_status", "usage", "host_name", "host_os", "fingerprint",
-					// "is_never_ends", "is_never_start",
-					"lease_start_time", "lease_end_time", "last_discovered", "user_description", "description" };
+			String[] columns = { "ip_type", "macaddr", "duid", "ip_status", "host_name", "host_os", "fingerprint",
+					"lease_start_time", "lease_end_time", "user_description" };			
+			
 			String m_network = request.getParameter("network");
 			String m_timezone = request.getParameter("timezone");
 			HashMap<String, Object> parameters = Common.Helper.DatatableHelper.getDatatableParametas(request, columns, 0);
@@ -139,6 +138,7 @@ public class IPManagementActionController {
 					new TypeToken<HashMap<String, Object>>() {
 					}.getType());
 			String m_timezone = parameters.get("timezone").toString();
+			String m_network = parameters.get("network").toString();
 
 			String siteID = session.getAttribute("site_id").toString();
 			if (!siteID.equals("")) {
@@ -180,8 +180,15 @@ public class IPManagementActionController {
 
 				System.out.println("time_zone : " + m_timezone);
 				parameters.put("time_zone", m_timezone);
-				List<Map<String, Object>> allDataList = ipManagementService
-						.select_IP_MANAGEMENT_SEGMENT_DETAIL_MAPDATA(parameters);
+				parameters.put("searchValue", "");
+				parameters.put("siteid", Integer.parseInt(siteID));
+				parameters.put("network", m_network);
+				parameters.put("orderColumn", "ipaddr");
+				parameters.put("orderType", "ASC");
+				parameters.put("startIndex", 0);
+				parameters.put("length", Integer.MAX_VALUE);
+				//List<Map<String, Object>> allDataList = ipManagementService.select_IP_MANAGEMENT_SEGMENT_DETAIL_MAPDATA(parameters);
+				List<Map<String, Object>> allDataList = ipManagementService.select_IP_MANAGEMENT_SEGMENT_DETAIL(parameters);
 
 				result.result = true;
 				result.data = dataList;
@@ -258,9 +265,13 @@ public class IPManagementActionController {
 		int totalCount = 0;
 
 		try {
-			String[] columns = { "ipaddr", "macaddr", "host_name", "host_os", "duid", "status", "lease_state", "obj_types",
-			           "discover_status", "usage", "fingerprint", "is_never_ends", "is_never_start", "lease_start_time",
-			           "lease_end_time", "last_discovered", "user_description" };
+			String[] columns = {  "ipaddr", "macaddr", "host_name", "host_os", "duid", "status", "lease_state", "obj_types", "discover_status",
+							"usage", "fingerprint", "is_never_ends", "is_never_start", "lease_start_time", "lease_end_time", "last_discovered", "user_description" };
+			
+			
+			
+			
+			
 			String m_network = request.getParameter("network");
 			String m_timezone = request.getParameter("timezone");
 			HashMap<String, Object> parameters = Common.Helper.DatatableHelper.getDatatableParametas(request, columns, 0);
@@ -306,9 +317,9 @@ public class IPManagementActionController {
 		int totalCount = 0;
 
 		try {
-			String[] columns = { "user_id","site_name","user_name","user_phone_num","apply_static_ip_type","apply_static_ipaddr",
-								 "apply_use_time","apply_description","apply_time","settlement_chief_name","settlement_description","settlement_time",
-								 "issuance_ip_type","issuance_ipaddr","issuance_use_time" };
+			String[] columns = { "settlement_status", "settlement_status_text", "user_id", "user_site_id", "site_name", "user_name", "user_phone_num", "apply_static_ip_type",
+						"apply_static_ipaddr", "apply_static_ip_num", "apply_use_time", "apply_description", "apply_time", "settlement_chief_id",
+						"settlement_chief_name", "settlement_description", "settlement_time", "issuance_ip_type", "issuance_ipaddr", "issuance_ip_num", "issuance_use_time" };
 			
 			String m_timezone = request.getParameter("timezone");
 			String m_starttime = request.getParameter("startTime");

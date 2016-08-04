@@ -185,15 +185,14 @@
 						</div>
 					</section>
 					<!-- ./Guest IP 할당현황 -->
-					
-					<!-- DNS 사용 현황  -->
+										
+					<!-- 세그먼트별 Lease IP 할당 현황 -->
 					<section class="col-lg-6">
-						<div class="box dashboard-box box-info">
+						<div class="box dashboard-box box-yellow">
 							<div class="box-header">
-								<i class="fa fa-envelope"></i>
-
-								<h3 class="box-title-small" data-toggle="tooltip" title="<%=LanguageHelper.GetLanguage("dnsAssignment")%>">
-								<%=LanguageHelper.GetLanguage("dnsAssignment")%></h3>
+								<i class="fa  fa-tasks"></i>
+								<h3 class="box-title-small" data-toggle="tooltip" title="<%=LanguageHelper.GetLanguage("segmentByLeaseIP")%>">
+								<%=LanguageHelper.GetLanguage("segmentByLeaseIP")%></h3>
 								<!-- tools box -->
 								<div class="pull-right box-tools">
 									<button type="button" class="btn dashboard-box-btn bg-teal btn-sm"
@@ -208,44 +207,81 @@
 								<!-- ./ tools -->
 							</div>
 							<div class="box-body">
-								<table class="col-xs-12 table-bordered" style="text-align: center; height: 136px; margin-top: -10px;">
-									<tr style="height: 30%; background-color:  #404040;">
-										<td class="col-xs-4" style="vertical-align: bottom"><font color="#ffffff" size="4"><label id=lSuccess></label></font>
-										</td>
-										<td class="col-xs-4" style="vertical-align: bottom"><font color="#ffffff" size="4"><label id=lReferral></label></font>
-										</td>
-										<td class="col-xs-4" style="vertical-align: bottom"><font color="#ffffff" size="4"><label id=lNXRRSet></label></font>
-										</td>
-									</tr>
-									<tr style="height: 20%;">
-										<td style="background-color:  #bfff80;">Success
-										</td>
-										<td style="background-color:  #ffc266;">Referral
-										</td>
-										<td style="background-color:  #e6e600;">NXRRSet
-										</td>
-									</tr>
-									<tr style="height: 30%; background-color:  #404040;">
-										<td class="col-xs-4" style="vertical-align: bottom"><font color="#ffffff" size="4"><label id=lNXDomain></label></font>
-										</td>
-										<td class="col-xs-4" style="vertical-align: bottom"><font color="#ffffff" size="4"><label id=lRecursion></label></font>
-										</td>
-										<td class="col-xs-4" style="vertical-align: bottom"><font color="#ffffff" size="4"><label id=lFailure></label></font>
-										</td>
-									</tr>
-									<tr style="height: 20%;">
-										<td style="background-color:  #008080;">NXDomain
-										</td>
-										<td style="background-color:  #b3ffb3;">Recursion
-										</td>
-										<td style="background-color:  #ff4d88;">Failure
-										</td>
-									</tr>
-								</table>
+								<div class="col-lg-12-noPadding" id="divleaseIPAvailable" style="text-align: center; margin-top: -10px;">
+								</div>
 							</div>
 						</div>
 					</section>
+					<!-- ./세그먼트별 Lease IP 할당 현황 -->
+					
+					
+					
+					<!-- DNS 사용 현황  -->
+<!-- 					<section class="col-lg-6"> -->
+<!-- 						<div class="box dashboard-box box-info"> -->
+<!-- 							<div class="box-header"> -->
+<!-- 								<i class="fa fa-envelope"></i> -->
+
+<%-- 								<h3 class="box-title-small" data-toggle="tooltip" title="<%=LanguageHelper.GetLanguage("dnsAssignment")%>"> --%>
+<%-- 								<%=LanguageHelper.GetLanguage("dnsAssignment")%></h3> --%>
+<!-- 								tools box -->
+<!-- 								<div class="pull-right box-tools"> -->
+<!-- 									<button type="button" class="btn dashboard-box-btn bg-teal btn-sm" -->
+<!-- 										data-widget="collapse"> -->
+<!-- 										<i class="fa fa-minus"></i> -->
+<!-- 									</button> -->
+<!-- 									<button type="button" class="btn dashboard-box-btn bg-teal btn-sm" -->
+<!-- 										data-widget="remove" data-toggle="tooltip" title="Remove"> -->
+<!-- 										<i class="fa fa-times"></i> -->
+<!-- 									</button> -->
+<!-- 								</div> -->
+<!-- 								./ tools -->
+<!-- 							</div> -->
+<!-- 							<div class="box-body"> -->
+<!-- 								<table class="col-xs-12 table-bordered" style="text-align: center; height: 136px; margin-top: -10px;"> -->
+<!-- 									<tr style="height: 30%; background-color:  #404040;"> -->
+<!-- 										<td class="col-xs-4" style="vertical-align: bottom"><font color="#ffffff" size="4"><label id=lSuccess></label></font> -->
+<!-- 										</td> -->
+<!-- 										<td class="col-xs-4" style="vertical-align: bottom"><font color="#ffffff" size="4"><label id=lReferral></label></font> -->
+<!-- 										</td> -->
+<!-- 										<td class="col-xs-4" style="vertical-align: bottom"><font color="#ffffff" size="4"><label id=lNXRRSet></label></font> -->
+<!-- 										</td> -->
+<!-- 									</tr> -->
+<!-- 									<tr style="height: 20%;"> -->
+<!-- 										<td style="background-color:  #bfff80;">Success -->
+<!-- 										</td> -->
+<!-- 										<td style="background-color:  #ffc266;">Referral -->
+<!-- 										</td> -->
+<!-- 										<td style="background-color:  #e6e600;">NXRRSet -->
+<!-- 										</td> -->
+<!-- 									</tr> -->
+<!-- 									<tr style="height: 30%; background-color:  #404040;"> -->
+<!-- 										<td class="col-xs-4" style="vertical-align: bottom"><font color="#ffffff" size="4"><label id=lNXDomain></label></font> -->
+<!-- 										</td> -->
+<!-- 										<td class="col-xs-4" style="vertical-align: bottom"><font color="#ffffff" size="4"><label id=lRecursion></label></font> -->
+<!-- 										</td> -->
+<!-- 										<td class="col-xs-4" style="vertical-align: bottom"><font color="#ffffff" size="4"><label id=lFailure></label></font> -->
+<!-- 										</td> -->
+<!-- 									</tr> -->
+<!-- 									<tr style="height: 20%;"> -->
+<!-- 										<td style="background-color:  #008080;">NXDomain -->
+<!-- 										</td> -->
+<!-- 										<td style="background-color:  #b3ffb3;">Recursion -->
+<!-- 										</td> -->
+<!-- 										<td style="background-color:  #ff4d88;">Failure -->
+<!-- 										</td> -->
+<!-- 									</tr> -->
+<!-- 								</table> -->
+<!-- 							</div> -->
+<!-- 						</div> -->
+<!-- 					</section> -->
 					<!-- ./DNS 할당 현황  -->
+					
+					
+					
+					
+					
+					
 				</div>
 				<!-- ./left col - 1 row -->
 				<!-- left col - 2 row -->
@@ -360,36 +396,8 @@
 			<!-- right col -->
 			<section class="col-lg-6-noPadding">
 				<!-- right col - 1 row -->
-				<div >
-					<!-- 세그먼트별 Lease IP 할당 현황 -->
-					<section class="col-lg-6">
-						<div class="box dashboard-box box-yellow">
-							<div class="box-header">
-								<i class="fa  fa-tasks"></i>
-								<h3 class="box-title-small" data-toggle="tooltip" title="<%=LanguageHelper.GetLanguage("segmentByLeaseIP")%>">
-								<%=LanguageHelper.GetLanguage("segmentByLeaseIP")%></h3>
-								<!-- tools box -->
-								<div class="pull-right box-tools">
-									<button type="button" class="btn dashboard-box-btn bg-teal btn-sm"
-										data-widget="collapse">
-										<i class="fa fa-minus"></i>
-									</button>
-									<button type="button" class="btn dashboard-box-btn bg-teal btn-sm"
-										data-widget="remove" data-toggle="tooltip" title="Remove">
-										<i class="fa fa-times"></i>
-									</button>
-								</div>
-								<!-- ./ tools -->
-							</div>
-							<div class="box-body">
-								<div class="col-lg-12-noPadding" id="divleaseIPAvailable" style="text-align: center; margin-top: -10px;">
-								</div>
-							</div>
-						</div>
-					</section>
-					<!-- ./세그먼트별 Lease IP 할당 현황 -->
-					
-					<!-- 고정, 리스, 미사용 IP 할당 현황  -->
+				<div >					
+					<!-- IPv4 고정, 리스, 미사용 IP 할당 현황  -->
 					<section class="col-lg-6">
 						<div class="box dashboard-box box-green">
 							<div class="box-header">
@@ -447,7 +455,67 @@
 							</div>
 						</div>
 					</section>
-					<!-- ./고정, 리스, 미사용 IP 할당 현황  -->
+					<!-- ./IPv4 고정, 리스, 미사용 IP 할당 현황  -->
+					
+					<!-- IPv6 고정, 리스, 미사용 IP 할당 현황  -->
+					<section class="col-lg-6">
+						<div class="box dashboard-box box-green">
+							<div class="box-header">
+								<i class="fa fa-sliders"></i>
+
+								<h3 class="box-title-small" data-toggle="tooltip" title="<%=LanguageHelper.GetLanguage("fixedleaseunusedipallocationstatus")%>">
+								<%=LanguageHelper.GetLanguage("fixedleaseunusedipallocationstatus")%></h3>
+								<!-- tools box -->
+								<div class="pull-right box-tools">
+									<button type="button" class="btn dashboard-box-btn bg-teal btn-sm"
+										data-widget="collapse">
+										<i class="fa fa-minus"></i>
+									</button>
+									<button type="button" class="btn dashboard-box-btn bg-teal btn-sm"
+										data-widget="remove" data-toggle="tooltip" title="Remove">
+										<i class="fa fa-times"></i>
+									</button>
+								</div>
+								<!-- ./ tools -->
+							</div>
+							<div class="box-body" style="text-align: center; height: 155px; margin-top: -10px;">
+								<!-- 고정 IP 할당 현황 -->
+								<div class="info-box bg-light-blue">
+									<span class="info-box-icon"><i class="fa fa-lock"></i></span>						
+						            <div class="info-box-content" id="divStaticIP">
+<!-- 										<span class="progress-description">미사용 IP</span> -->
+<!-- 										<div class="progress"> -->
+<!-- 											<div class="progress-bar progress-bar-danger" style="width: 87.6%"></div> -->
+<!-- 										</div> -->
+						            </div>
+								</div>
+								<!-- ./고정 IP 할당 현황 -->
+								<!-- 리스 IP 할당 현황 -->
+								<div class="info-box bg-green">
+									<span class="info-box-icon"><i class="fa fa-user"></i></span>						
+						            <div class="info-box-content" id="divLeaseIP">>
+<!-- 						            	<span class="progress-description"></span> -->
+<!-- 						            	<div class="progress"> -->
+<!-- 						            		<div class="progress-bar progress-bar-warning" style="width: 60%"></div> -->
+<!-- 						            	</div> -->
+						            </div>
+								</div>
+								<!-- ./리스 IP 할당 현황 -->
+								<!-- 미사용 IP 할당 현황 -->
+								<div class="info-box bg-aqua">
+									<span class="info-box-icon"><i class="fa fa-user-times"></i></span>						
+						            <div class="info-box-content" id="divUnusedIP">>
+<!-- 						            	<span class="progress-description"></span> -->
+<!-- 						            	<div class="progress"> -->
+<!-- 						            		<div class="progress-bar" style="width: 50%"></div> -->
+<!-- 						            	</div> -->
+						            </div>
+								</div>
+								<!-- ./미사용 IP 할당 현황 -->
+							</div>
+						</div>
+					</section>
+					<!-- ./IPv6 고정, 리스, 미사용 IP 할당 현황  -->
 				</div>
 				<!-- ./right col - 1 row -->
 				<!-- right col - 2 row -->
