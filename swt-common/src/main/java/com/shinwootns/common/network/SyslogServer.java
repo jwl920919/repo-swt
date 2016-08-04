@@ -110,15 +110,15 @@ public class SyslogServer extends Thread {
 					if (rawSyslog.isEmpty()) continue;
 					//if (rawSyslog.charAt(0) != '<') continue;
 					
-					if ( rawSyslog.charAt(0) != '<' )
+					if ( rawSyslog.charAt(0) == '<' )
 					{
 						int nIndex2 = rawSyslog.indexOf('>', 1);
 						
 						if (nIndex2 > 0)
 						{
-							String sPriority = rawSyslog.substring(1, nIndex2);
+							String priority = rawSyslog.substring(1, nIndex2);
 							
-							nPriority = Integer.parseInt( sPriority );
+							nPriority = Integer.parseInt( priority );
 							
 							nFacility = (int)(nPriority / 7);
 							nSeverity = nPriority % 8;

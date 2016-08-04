@@ -6,11 +6,12 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
+import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.JsonObject;
-import com.shinwootns.common.cache.RedisClient;
 import com.shinwootns.common.utils.CollectionUtils;
 import com.shinwootns.common.utils.SystemUtils;
 import com.shinwootns.common.utils.TimeUtils;
@@ -22,6 +23,8 @@ import com.shinwootns.ipm.collector.config.ApplicationProperty;
 import com.shinwootns.ipm.collector.data.SharedData;
 import com.shinwootns.ipm.collector.data.mapper.DataMapper;
 import com.shinwootns.ipm.collector.service.redis.RedisHandler;
+
+import redis.clients.jedis.Jedis;
 
 public class ClusterManager {
 
@@ -57,7 +60,7 @@ public class ClusterManager {
 			if (SharedData.getInstance().getSiteID() <= 0)
 				return;
 	
-			RedisClient redis = RedisHandler.getInstance().getRedisClient();
+			Jedis redis = RedisHandler.getInstance().getRedisClient();
 			if (redis == null)
 				return;
 	
@@ -84,7 +87,7 @@ public class ClusterManager {
 				redis.set(key.toString(), String.format("%d", rank));
 	
 				// Expire Time
-				redis.expireTime(key.toString(), EXPIRE_TIME_MEMBER);
+				redis.expire(key.toString(), EXPIRE_TIME_MEMBER);
 				
 			} catch (Exception ex) {
 				_logger.error(ex.getMessage(), ex);
@@ -107,7 +110,7 @@ public class ClusterManager {
 			if (SharedData.getInstance().getSiteID() <= 0)
 				return;
 			
-			RedisClient redis = RedisHandler.getInstance().getRedisClient();
+			Jedis redis = RedisHandler.getInstance().getRedisClient();
 			if (redis == null)
 				return;
 			
@@ -120,7 +123,7 @@ public class ClusterManager {
 					.append(":*");
 				
 				// Get Keys
-				HashSet<String> keys = redis.getKeys(keyPattern.toString());
+				Set<String> keys = redis.keys(keyPattern.toString());
 				
 				// Get Values
 				HashMap<String, Integer> mapMember = new HashMap<String, Integer>();
@@ -181,7 +184,7 @@ public class ClusterManager {
 	//region [FUNC] Get MasterName
 	public String getMasterName() {
 
-		RedisClient redis = RedisHandler.getInstance().getRedisClient();
+		Jedis redis = RedisHandler.getInstance().getRedisClient();
 		if (redis == null)
 			return "";
 		
@@ -217,7 +220,7 @@ public class ClusterManager {
 		if (appProperty == null)
 			return false;
 		
-		RedisClient redis = RedisHandler.getInstance().getRedisClient();
+		Jedis redis = RedisHandler.getInstance().getRedisClient();
 		if (redis == null)
 			return false;
 		
@@ -254,7 +257,7 @@ public class ClusterManager {
 		if (appProperty == null)
 			return;
 
-		RedisClient redis = RedisHandler.getInstance().getRedisClient();
+		Jedis redis = RedisHandler.getInstance().getRedisClient();
 		if (redis == null)
 			return;
 		

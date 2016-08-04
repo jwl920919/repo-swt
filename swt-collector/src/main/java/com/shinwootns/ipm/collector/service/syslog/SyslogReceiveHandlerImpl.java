@@ -15,9 +15,7 @@ public class SyslogReceiveHandlerImpl implements SyslogReceiveHandler {
 
 	public void processSyslog(SyslogEntity syslog) {
 
-		// Add task
+		// Put into buffer
 		SharedData.getInstance().addSyslogData(syslog);
-		
-		//System.out.println(syslog.getData());
 	}
 }

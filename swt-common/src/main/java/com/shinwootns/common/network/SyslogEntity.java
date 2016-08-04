@@ -8,6 +8,17 @@ public class SyslogEntity {
 	private long recvTime;
 	private String data;
 
+	@Override
+	public String toString() {
+		return (new StringBuilder())
+			.append("[SyslogEntity] recvTime=").append(recvTime)
+			.append(", host=").append(host)
+			.append(", severity=").append(severity)
+			.append(", facility=").append(facility)
+			.append(", data=").append(data)
+			.toString();
+	}
+	
 	public String getHost() {
 		return host;
 	}

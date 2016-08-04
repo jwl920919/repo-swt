@@ -10,8 +10,8 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.shinwootns.common.cache.RedisClient;
 import com.shinwootns.common.utils.JsonUtils;
+import com.shinwootns.data.entity.ClientInfo;
 import com.shinwootns.data.entity.DeviceDhcp;
 import com.shinwootns.data.entity.DhcpFixedIp;
 import com.shinwootns.data.entity.DhcpIpStatus;
@@ -25,10 +25,13 @@ import com.shinwootns.data.status.DhcpVrrpStatus;
 import com.shinwootns.data.status.DnsCounter;
 import com.shinwootns.ipm.collector.SpringBeanProvider;
 import com.shinwootns.ipm.collector.data.SharedData;
+import com.shinwootns.ipm.collector.data.mapper.ClientMapper;
 import com.shinwootns.ipm.collector.data.mapper.DataMapper;
 import com.shinwootns.ipm.collector.service.cluster.ClusterManager;
 import com.shinwootns.ipm.collector.service.infoblox.DhcpHandler;
 import com.shinwootns.ipm.collector.service.redis.RedisHandler;
+
+import redis.clients.jedis.Jedis;
 
 public class MasterJobWoker implements Runnable {
 
@@ -38,10 +41,18 @@ public class MasterJobWoker implements Runnable {
 	
 	private ScheduledExecutorService schedulerService = Executors.newScheduledThreadPool(SCHEDULER_THREAD_COUNT);
 	
+	private Thread _syslogPublisher = null;
+	
 	@Override
 	public void run() {
 		
 		_logger.info("MasterJobWoker... start.");
+		
+		// Start syslogPublisher
+		if (_syslogPublisher == null) {
+			_syslogPublisher = new Thread(new SyslogPublisher(), "SyslogPublisher");
+			_syslogPublisher.start();
+		}
 		
 		// collectDhcp info (60 sec)
 		schedulerService.scheduleWithFixedDelay(
@@ -71,6 +82,17 @@ public class MasterJobWoker implements Runnable {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
 				break;
+			}
+		}
+		
+		// End syslogPublisher
+		if (_syslogPublisher != null) {
+			try {
+				_syslogPublisher.interrupt();
+				_syslogPublisher.join();
+			}catch(Exception ex ) {
+			}finally{
+				_syslogPublisher = null;
 			}
 		}
 		
@@ -306,6 +328,34 @@ public class MasterJobWoker implements Runnable {
 							if (affected == 0)
 								affected = dataMapper.insertDhcpIpStatus(ipStatus);
 						}
+						
+						// Update Client Info
+						if (ipStatus.getMacaddr() != null && ipStatus.getMacaddr().length() > 0)
+						{
+							ClientMapper clientMapper = SpringBeanProvider.getInstance().getClientMapper();
+							if (clientMapper == null)
+								return;
+							
+							// Client Info
+							ClientInfo clientInfo = new ClientInfo();
+							clientInfo.setMacaddr(ipStatus.getMacaddr());
+							clientInfo.setIpType(ipStatus.getIpType());
+							clientInfo.setLastIp(ipStatus.getIpaddr());
+							
+							if (ipStatus.getFingerprint() != null && ipStatus.getFingerprint().length() > 0)
+								clientInfo.setOs(ipStatus.getFingerprint());
+							
+							if (ipStatus.getHostname() != null && ipStatus.getHostname().length() > 0)
+								clientInfo.setHostname(ipStatus.getHostname());
+							
+							if (ipStatus.getDuid() != null && ipStatus.getDuid().length() > 0)
+								clientInfo.setDuid(ipStatus.getDuid());
+							
+							int affected = clientMapper.updateClientInfo(clientInfo);
+							
+							if (affected == 0)
+								affected = clientMapper.insertClientInfo(clientInfo);
+						}
 					}
 				}
 				
@@ -329,7 +379,7 @@ public class MasterJobWoker implements Runnable {
 		if (dhcp == null)
 			return;
 		
-		RedisClient client = RedisHandler.getInstance().getRedisClient();
+		Jedis client = RedisHandler.getInstance().getRedisClient();
 		if(client == null)
 			return;
 		
@@ -348,7 +398,7 @@ public class MasterJobWoker implements Runnable {
 	//endregion
 
 	//region [FUNC] Update DHCP - Device Status
-	private void updateDhcpDeviceStatus(DhcpHandler handler, RedisClient client) {
+	private void updateDhcpDeviceStatus(DhcpHandler handler, Jedis client) {
 
 		if (handler == null || client == null)
 			return;
@@ -383,7 +433,7 @@ public class MasterJobWoker implements Runnable {
 	//endregion
 
 	//region [FUNC] Update DHCP - VRRP Status
-	private void updateDhcpVrrpStatus(DhcpHandler handler, RedisClient client) {
+	private void updateDhcpVrrpStatus(DhcpHandler handler, Jedis client) {
 
 		if (handler == null || client == null)
 			return;
@@ -418,7 +468,7 @@ public class MasterJobWoker implements Runnable {
 	//endregion
 	
 	//region [FUNC] Update DHCP - DHCP Counter
-	private void updateDhcpCounter(DhcpHandler handler, RedisClient client) {
+	private void updateDhcpCounter(DhcpHandler handler, Jedis client) {
 
 		if (handler == null || client == null)
 			return;
@@ -453,7 +503,7 @@ public class MasterJobWoker implements Runnable {
 	//endregion
 	
 	//region [FUNC] Update DHCP - DNS Counter
-	private void updateDnsCounter(DhcpHandler handler, RedisClient client) {
+	private void updateDnsCounter(DhcpHandler handler, Jedis client) {
 
 		if (handler == null || client == null)
 			return;

@@ -7,8 +7,7 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.shinwootns.common.cache.RedisClient;
-import com.shinwootns.common.cache.RedisManager.RedisPoolStatus;
+import com.shinwootns.common.redis.RedisManager.RedisPoolStatus;
 import com.shinwootns.common.utils.JsonUtils;
 import com.shinwootns.data.entity.DeviceDhcp;
 import com.shinwootns.ipm.collector.WorkerManager;

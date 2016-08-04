@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        
+<mapper namespace="com.shinwootns.ipm.collector.data.mapper.ClientMapper">
+
+    <!-- ############################ Client Info ############################ -->
+	<select id="selectClientInfo" resultType="com.shinwootns.data.entity.ClientInfo">
+		<![CDATA[
+			SELECT * FROM client_info WHERE macaddr=#{macaddr}
+		]]>
+	</select>
+	
+	<insert id="insertClientInfo" parameterType="com.shinwootns.data.entity.ClientInfo">
+		<![CDATA[
+			INSERT INTO client_info (macaddr, duid, hostname, vendor, model, os, ip_type, last_ip, update_time)
+			VALUES ( #{macaddr}, #{duid}, #{hostname}, #{vendor}, #{model}, #{os}, #{ip_type}, #{last_ip}, now() ) 
+		]]>
+	</insert>
+	
+	<update id="updateClientInfo" parameterType="com.shinwootns.data.entity.ClientInfo">
+		UPDATE client_info
+		SET update_time = now() 
+		<if test="duid != null">
+		, duid = #{duid}
+		</if>
+		<if test="hostname != null">
+		, hostname = #{hostname}
+		</if>
+		<if test="vendor != null">
+		, vendor = #{vendor}
+		</if>
+		<if test="model != null">
+		, model = #{model}
+		</if>
+		<if test="os != null">
+		, os=#{os}
+		</if>
+		<if test="ip_type != null">
+		, ip_type=#{ip_type}
+		</if>
+		<if test="last_ip != null">
+		, last_ip=#{last_ip}
+		</if>
+		WHERE macaddr=#{macaddr}
+	</update>
+
+</mapper>

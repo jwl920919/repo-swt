@@ -12,7 +12,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import com.google.gson.JsonArray;
-import com.shinwootns.common.cache.RedisClient;
 import com.shinwootns.common.utils.JsonUtils;
 import com.shinwootns.data.entity.DeviceDhcp;
 import com.shinwootns.data.entity.SiteInfo;
@@ -30,6 +29,8 @@ import com.shinwootns.ipm.WorkerManager;
 import com.shinwootns.ipm.data.mapper.DashboardMapper;
 import com.shinwootns.ipm.data.mapper.DataMapper;
 import com.shinwootns.ipm.service.redis.RedisHandler;
+
+import redis.clients.jedis.Jedis;
 
 public class MasterJobWoker implements Runnable {
 
@@ -82,7 +83,7 @@ public class MasterJobWoker implements Runnable {
 		
 		List<SiteInfo> listSite = dataMapper.selectSiteInfo();
 		
-		RedisClient redis = RedisHandler.getInstance().getRedisClient();
+		Jedis redis = RedisHandler.getInstance().getRedisClient();
 		if(redis == null)
 			return;
 		
@@ -98,7 +99,7 @@ public class MasterJobWoker implements Runnable {
 	//endregion
 	
 	//region [FUNC] Update Network IP Status
-	private void UpdateNetworkIpStatus(DashboardMapper dahsboardMapper, RedisClient redis, List<SiteInfo> listSite) {
+	private void UpdateNetworkIpStatus(DashboardMapper dahsboardMapper, Jedis redis, List<SiteInfo> listSite) {
 		
 		try
 		{
@@ -109,6 +110,9 @@ public class MasterJobWoker implements Runnable {
 				NetworkIpStatus ipStatus = new NetworkIpStatus(); 
 				
 				for(ViewNetworkIpStatus data : listStatus) {
+					
+					//System.out.println(data.getNetwork() + " : " + data.getRangeUsage().doubleValue());
+					
 					ipStatus.addIPStatus(data.getNetwork(), data.getRangeUsage().doubleValue());
 				}
 				
@@ -156,7 +160,7 @@ public class MasterJobWoker implements Runnable {
 	//endregion
 	
 	//region [FUNC] Update Lease IP Status
-	private void UpdateLeaseIpStatus(DashboardMapper dahsboardMapper, RedisClient redis, List<SiteInfo> listSite, String ip_type, String redisKey) {
+	private void UpdateLeaseIpStatus(DashboardMapper dahsboardMapper, Jedis redis, List<SiteInfo> listSite, String ip_type, String redisKey) {
 		
 		try
 		{

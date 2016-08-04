@@ -12,6 +12,7 @@
     
     <mappers>
     	<mapper resource="mybatis/mapper/DataMapper.xml"/>
+    	<mapper resource="mybatis/mapper/ClientMapper.xml"/>
     </mappers>
  
 </configuration>

@@ -3,24 +3,27 @@ package com.shinwootns.ipm.collector.worker;
 import java.util.List;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gson.JsonObject;
-import com.shinwootns.common.cache.RedisClient;
 import com.shinwootns.common.network.SyslogEntity;
+import com.shinwootns.common.utils.JsonUtils;
+import com.shinwootns.data.key.RedisKeys;
 import com.shinwootns.ipm.collector.SpringBeanProvider;
 import com.shinwootns.ipm.collector.config.ApplicationProperty;
 import com.shinwootns.ipm.collector.data.SharedData;
 import com.shinwootns.ipm.collector.service.amqp.RabbitmqSender;
 import com.shinwootns.ipm.collector.service.redis.RedisHandler;
 
-public class SyslogWorker implements Runnable {
+import redis.clients.jedis.Jedis;
 
-	private Logger _logger = null;
+public class SyslogPutter implements Runnable {
+
+	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	private int _index = 0;
 	
-	public SyslogWorker(int index, Logger logger) {
+	public SyslogPutter(int index) {
 		this._index = index;
-		this._logger = logger;
 	}
 	
 	private boolean isSkipInDebugMode() {
@@ -47,21 +50,27 @@ public class SyslogWorker implements Runnable {
 		
 		List<SyslogEntity> listSyslog = SharedData.getInstance().popSyslogList(1000, 500);
 		
+		String redisKey = RedisKeys.KEY_DATA_SYSLOG + ":" + SharedData.getInstance().getSiteID();
+		
 		while(!Thread.currentThread().isInterrupted())
 		{
-			listSyslog = SharedData.getInstance().popSyslogList(1000, 500);
+			listSyslog = SharedData.getInstance().popSyslogList(100, 100);
 			
 			if (listSyslog != null && listSyslog.size() > 0)
 			{
 				
 				// to Redis
-				RedisClient redis = RedisHandler.getInstance().getRedisClient();
+				Jedis redis = RedisHandler.getInstance().getRedisClient();
 				if (redis == null)
 					return;
 				
 				for(SyslogEntity syslog : listSyslog)
 				{
-					//redis.zadd("syslog", scoreMembers)
+					// Remove Carriage-Return & Line-Feed
+					syslog.setData( syslog.getData().replaceAll("\\r\\n|\\r|\\n|\\t", " ").trim() );
+					
+					// Put to Redis
+					redis.zadd(redisKey, syslog.getRecvTime()/1000, JsonUtils.serialize(syslog).toString());
 				}
 				
 				redis.close();

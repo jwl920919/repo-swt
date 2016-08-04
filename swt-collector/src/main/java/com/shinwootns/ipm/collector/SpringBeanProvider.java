@@ -6,6 +6,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import com.shinwootns.ipm.collector.config.ApplicationProperty;
+import com.shinwootns.ipm.collector.data.mapper.ClientMapper;
 import com.shinwootns.ipm.collector.data.mapper.DataMapper;
 
 @Component
@@ -76,4 +77,26 @@ public class SpringBeanProvider {
     	return dataMapper;
     }
     //endregion
+    
+  	//region [FUNC] getClientMapper
+	public ClientMapper getClientMapper() {
+    	
+    	if (_context == null)
+    		return null;
+    	
+    	ClientMapper clientMapper = null;
+    	
+    	try
+    	{
+    		clientMapper = _context.getBean("clientMapper", ClientMapper.class);
+    	}
+    	catch(Exception ex) {
+    		_logger.error("SpringBeanProvider.getClientMapper().... failed");
+    		_logger.error(ex.getMessage(), ex);
+    	}
+    	
+    	return clientMapper;
+    }
+    //endregion
+    
 }
