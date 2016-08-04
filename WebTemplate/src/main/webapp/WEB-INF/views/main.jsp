@@ -95,7 +95,9 @@
 <!-- resources/js/common/Datatable-Essential.js은 각 페이지에 넣어주지 않으면 #datatable 객체에 접근이 불가능 하여 각 페이지에 입력해주어야됨. -->
 <script type="text/javascript" type="text/javascript">
 $(document).ready(function() {
-
+	var sessionMaintainCallTime = (1000 * 60) * 10;
+	var m_sessionMaintainCallTime;
+	
 	//console.log("menu : " + "${menuHTML}");
 	$("#ulMenuArea").append("${menuHTML}");
 	$("#divVersion").append("<b>Version</b> 1.0.0");
@@ -114,6 +116,9 @@ $(document).ready(function() {
         $('#siteDropdownLi').attr("disabled","true");
         $('#siteDropdownLi').removeClass("dropdown tasks-menu");
  	}
+
+	clearInterval(m_sessionMaintainCallTime);
+	m_sessionMaintainCallTime = setInterval(sessionMaintainAjaxCall, sessionMaintainCallTime);
 });
 </script>
 <script src="resources/js/main/main.js"></script>

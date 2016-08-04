@@ -136,6 +136,8 @@
     "next": 										"Next",
     "previous": 									"Previous",
     "ip":		 									"IP",
+    "ipv4":		 									"IPv4",
+    "ipv6":		 									"IPv6",
     "mac":		 									"MAC",
     "user":		 									"user",
     "all":		 									"ALL",
@@ -172,6 +174,6 @@
     "totalipcount":									"총 IP 갯수",
     "ipUtilization":								"IP 사용률",
     "rangeipcount":									"사용 Range IP 수",
-    "totalrangecount":									"총 Range 수",
+    "totalrangecount":								"총 Range 수",
     "rangeUtilization":								"Range 사용률"
 }
