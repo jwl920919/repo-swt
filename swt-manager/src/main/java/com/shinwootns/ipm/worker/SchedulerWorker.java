@@ -7,7 +7,9 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.shinwootns.common.redis.RedisManager.RedisPoolStatus;
 import com.shinwootns.ipm.service.cluster.ClusterManager;
+import com.shinwootns.ipm.service.redis.RedisHandler;
 
 public class SchedulerWorker implements Runnable {
 	
@@ -47,6 +49,17 @@ public class SchedulerWorker implements Runnable {
 				,0, 10 , TimeUnit.SECONDS
 		);
 		
+		// 30 Seconds
+		schedulerService.scheduleWithFixedDelay(
+				new Runnable() {
+					@Override
+					public void run() {
+						run30SecCycle();
+					}
+				}
+				,0, 30 , TimeUnit.SECONDS
+		);
+		
 		// wait termination
 		while(!Thread.currentThread().isInterrupted()) {
 			
@@ -72,4 +85,24 @@ public class SchedulerWorker implements Runnable {
 	public void run10SecCycle() {
 		ClusterManager.getInstance().checkMaster();
 	}
+	
+	// 30 Seconds
+	public void run30SecCycle() {
+		displayStatus();
+	}
+		
+	//region [FUNC] Display Status
+	private void displayStatus() {
+		
+		// Redis
+		RedisPoolStatus status = RedisHandler.getInstance().getPoolStatus();
+		
+		if (status != null) {
+			_logger.info((new StringBuilder())
+					.append("REDIS-STATUS : ").append(status)
+					.toString()
+			);
+		}
+	}
+	//endregion
 }

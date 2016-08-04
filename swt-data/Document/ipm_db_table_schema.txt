@@ -416,54 +416,50 @@ COMMENT ON COLUMN dhcp_ip_status.usage IS 'Indicates whether the IP address is c
 
 
 
-/*
--- DHCP_LEASE_IP
-CREATE TABLE dhcp_lease_ip
+-- client_info
+CREATE TABLE client_info
 (
-  site_id integer NOT NULL,
-  network character varying(64) NOT NULL,
-  ipaddr character varying(40) NOT NULL,
-  ip_type character varying(18),
-  macaddr character varying(18),
+  macaddr character varying(18) NOT NULL DEFAULT '',
   duid character varying(64),
   hostname character varying(64),
-  state character varying(16),
-  username character varying(64),
-  fingerprint character varying(128),
-  OS character varying(128),  
-  lease_start_time timestamp with time zone,
-  lease_end_time timestamp with time zone,
-  last_discovered timestamp with time zone,
-  description character varying(256),
+  vendor character varying(64),
+  model character varying(64),
+  os character varying(128),
+  ip_type character varying(18),
+  last_ip character varying(64),
+  comment character varying(256),
   update_time timestamp with time zone DEFAULT current_timestamp,
-  CONSTRAINT dhcp_lease_ip_pkey PRIMARY KEY (site_id, ipaddr)
+  CONSTRAINT client_info_pkey PRIMARY KEY (macaddr)
 );
-COMMENT ON COLUMN dhcp_lease_ip.state IS 'ABANDONED, ACTIVE, BACKUP, DECLINED, EXPIRED, FREE, OFFERED, RELEASED, RESET, STATIC';
-*/
 
-/*
--- client_history
-CREATE SEQUENCE client_id_seq;
-CREATE TABLE public.client_history
+CREATE TABLE client_device_type
 (
-  client_id integer NOT NULL DEFAULT nextval('client_id_seq'::regclass),
-  
-  macaddr character varying(18),
-  duid character varying(64),
-  
-  segment_id integer NOT NULL,
-  ipaddr character varying(40) NOT NULL,
-  ip_type character varying(18),
-  
-  duid character varying(64),
-  hostname character varying(64),
-  state character varying(16),
-  
-  insert_time timestamp with time zone,
-  
-  CONSTRAINT client_history_pkey PRIMARY KEY (macaddr, duid, )
+  vendor character varying(64) NOT NULL DEFAULT '',
+  compare_type_vendor character varying(18) NOT NULL DEFAULT 'EQUAL',
+  model character varying(64) NOT NULL DEFAULT '',
+  compare_type_model character varying(18) NOT NULL DEFAULT 'EQUAL',
+  os character varying(128) NOT NULL DEFAULT '',
+  compare_type_os character varying(18) NOT NULL DEFAULT 'EQUAL',
+  hostname character varying(128) NOT NULL DEFAULT '',
+  compare_type_hostname character varying(18) NOT NULL DEFAULT 'EQUAL',
+  device_type character varying(128),
+  CONSTRAINT client_device_type_pkey PRIMARY KEY (vendor, model, os, hostname)
 );
-*/
 
+COMMENT ON COLUMN client_device_type.compare_type_vendor IS 'EQUAL, LIKE';
+COMMENT ON COLUMN client_device_type.compare_type_model IS 'EQUAL, LIKE';
+COMMENT ON COLUMN client_device_type.compare_type_os IS 'EQUAL, LIKE';
 
+-- client_connection_history
+CREATE TABLE client_connection_history
+(
+  macaddr character varying(18) NOT NULL DEFAULT '',
+  site_id integer NOT NULL,
+  client_ip character varying(64),
+  ip_type character varying(64),
+  switch_name character varying(64),
+  port character varying(64),
+  collect_time timestamp with time zone DEFAULT current_timestamp,
+  CONSTRAINT client_connection_history_pkey PRIMARY KEY (macaddr)
+);
 

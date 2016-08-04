@@ -18,9 +18,11 @@ public class RedisKeys {
 	public final static String KEY_STATUS_DHCP_COUNTER		= "status:dhcp:dhcp_counter";		// ~:{SiteID}
 	public final static String KEY_STATUS_DNS_COUNTER		= "status:dhcp:dns_counter";		// ~:{SiteID}
 	
-	
 	// Dashboard
 	public final static String KEY_DASHBOARD_NETWORK_IP		= "status:dashboard:network_ip_status";	// ~:{SiteID}
 	public final static String KEY_DASHBOARD_LEASE_IPV4		= "status:dashboard:lease_ipv4_status";	// ~:{SiteID}
 	public final static String KEY_DASHBOARD_LEASE_IPV6		= "status:dashboard:lease_ipv6_status";	// ~:{SiteID}
+	
+	// Data
+	public final static String KEY_DATA_SYSLOG				= "data:syslog";					// ~:{SiteID}
 }

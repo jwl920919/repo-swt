@@ -3,12 +3,13 @@ package com.shinwootns.ipm.collector.service.redis;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.shinwootns.common.cache.RedisClient;
-import com.shinwootns.common.cache.RedisManager;
-import com.shinwootns.common.cache.RedisManager.RedisPoolStatus;
+import com.shinwootns.common.redis.RedisManager;
+import com.shinwootns.common.redis.RedisManager.RedisPoolStatus;
 import com.shinwootns.common.utils.CryptoUtils;
 import com.shinwootns.ipm.collector.SpringBeanProvider;
 import com.shinwootns.ipm.collector.config.ApplicationProperty;
+
+import redis.clients.jedis.Jedis;
 
 public class RedisHandler {
 	
@@ -74,9 +75,9 @@ public class RedisHandler {
 	//endregion
 	
 	//region [FUNC] get RedisClient
-	public RedisClient getRedisClient() {
+	public Jedis getRedisClient() {
 		
-		RedisClient redis = null;
+		Jedis redis = null;
 		
 		synchronized(this)
 		{
@@ -85,7 +86,7 @@ public class RedisHandler {
 			if (redis == null) {
 				return null;
 			}
-			else if (redis.isConnect() == false) {
+			else if (redis.isConnected() == false || redis.ping() == null) {
 				
 				redis.close();
 				redis = null;

@@ -1,10 +1,10 @@
-package com.shinwootns.ipm.service.syslog;
+package com.shinwootns.ipm.collector.service.syslog;
 
 import com.google.gson.JsonObject;
 
 public class SyslogHandler {
 	
-	public JsonObject processSyslog(String rawMessage)
+	public DhcpMessage processSyslog(String rawMessage)
 	{
     	// ex) Feb 24 17:38:33 192.168.1.11 dhcpd[22231]: DHCPREQUEST for 192.168.1.12 from 6c:29:95:05:38:a4 (BJPARK) via eth1 uid 01:6c:29:95:05:38:a4 (RENEW)
     	
@@ -23,7 +23,7 @@ public class SyslogHandler {
         // Keyword (DHCPDISCOVER, DHCPOFFER, ...)
         String keyword = rawMessage.substring(nIndex2+3, nIndex3);
         
-        JsonObject result = null;
+        DhcpMessage result = null;
         
         // Discover (C->S)
         if (keyword.equals("DHCPDISCOVER"))
@@ -105,7 +105,7 @@ public class SyslogHandler {
         return result;
     }
 	
-	private JsonObject processDISCOVER(String message) {
+	private DhcpMessage processDISCOVER(String message) {
 
 		// [DHCPDISCOVER]
         // from 00:26:66:d1:69:69 via eth1 : network 192.168.1.0 / 24: no free leases
@@ -117,17 +117,17 @@ public class SyslogHandler {
 		if (result1.isFindFlag() == false)
 			return null;
 		
-		JsonObject result = new JsonObject();
-		result.addProperty("type", "DHCPDISCOVER");
-		result.addProperty("ip", "");
-		result.addProperty("mac", result1.getValue());
-		result.addProperty("renew", (message.indexOf("(RENEW)") > 0)? true : false);
-		result.addProperty("result", true);
+		DhcpMessage result = new DhcpMessage();
+		result.setDhcpType("DHCPDISCOVER");
+		result.setIpType("IPV4");
+		result.setIp("");
+		result.setMac(result1.getValue());
+		result.setRenew((message.indexOf("(RENEW)") > 0)? true : false);
         
         return result;
     }
 
-	private JsonObject processOFFER(String message) {
+	private DhcpMessage processOFFER(String message) {
 
 		// [DHCPOFFER]
         // DHCPOFFER on 192.168.1.20 to 00:26:66:d1:69:69 via eth1 relay eth1 lease-duration 120 offered-duration 10 uid 01:00:26:66:d1:69:69
@@ -142,17 +142,17 @@ public class SyslogHandler {
 		if (result2.isFindFlag() == false)
 			return null;
 		
-		JsonObject result = new JsonObject();
-		result.addProperty("type", "DHCPOFFER");
-		result.addProperty("ip", result1.getValue());
-		result.addProperty("mac", result2.getValue());
-		result.addProperty("renew", (message.indexOf("(RENEW)") > 0)? true : false);
-		result.addProperty("result", true);
+		DhcpMessage result = new DhcpMessage();
+		result.setDhcpType("DHCPOFFER");
+		result.setIpType("IPV4");
+		result.setIp(result1.getValue());
+		result.setMac(result2.getValue());
+		result.setRenew((message.indexOf("(RENEW)") > 0)? true : false);
         
         return result;
 	}
 	
-	private JsonObject processDHCPREQUEST(String message)
+	private DhcpMessage processDHCPREQUEST(String message)
     {
         String sIP = "", sMac = "";
 
@@ -170,17 +170,17 @@ public class SyslogHandler {
 		if (result2.isFindFlag() == false)
 			return null;
 		
-		JsonObject result = new JsonObject();
-		result.addProperty("type", "DHCPREQUEST");
-		result.addProperty("ip", result1.getValue());
-		result.addProperty("mac", result2.getValue());
-		result.addProperty("renew", (message.indexOf("(RENEW)") > 0)? true : false);
-		result.addProperty("result", true);
+		DhcpMessage result = new DhcpMessage();
+		result.setDhcpType("DHCPREQUEST");
+		result.setIpType("IPV4");
+		result.setIp(result1.getValue());
+		result.setMac(result2.getValue());
+		result.setRenew((message.indexOf("(RENEW)") > 0)? true : false);
         
         return result;
     }
 	
-	private JsonObject processDHCPACK(String message)
+	private DhcpMessage processDHCPACK(String message)
     {
         // [DHCPACK]
         // to 192.168.1.115 (28:e3:47:4c:45:14) via eth1
@@ -198,17 +198,17 @@ public class SyslogHandler {
 		if (result2.isFindFlag() == false)
 			return null;
 		
-		JsonObject result = new JsonObject();
-		result.addProperty("type", "DHCPACK");
-		result.addProperty("ip", result1.getValue());
-		result.addProperty("mac", result2.getValue());
-		result.addProperty("renew", (message.indexOf("(RENEW)") > 0)? true : false);
-		result.addProperty("result", true);	
+		DhcpMessage result = new DhcpMessage();
+		result.setDhcpType("DHCPACK");
+		result.setIpType("IPV4");
+		result.setIp(result1.getValue());
+		result.setMac(result2.getValue());
+		result.setRenew((message.indexOf("(RENEW)") > 0)? true : false);
 
 		return result;
     }
 
-	private JsonObject processNACK(String message)
+	private DhcpMessage processNACK(String message)
     {
         // [DHCPNAK]
         // on 192.168.1.103 to d0:7e:35:7e:93:1b via eth1
@@ -221,17 +221,17 @@ public class SyslogHandler {
 		if (result2.isFindFlag() == false)
 			return null;
 		
-		JsonObject result = new JsonObject();
-		result.addProperty("type", "DHCPNAK");
-		result.addProperty("ip", result1.getValue());
-		result.addProperty("mac", result2.getValue());
-		result.addProperty("renew", (message.indexOf("(RENEW)") > 0)? true : false);
-		result.addProperty("result", true);
+		DhcpMessage result = new DhcpMessage();
+		result.setDhcpType("DHCPNAK");
+		result.setIpType("IPV4");
+		result.setIp(result1.getValue());
+		result.setMac(result2.getValue());
+		result.setRenew((message.indexOf("(RENEW)") > 0)? true : false);
 		
 		return result;
     }
 
-	private JsonObject processINFORM(String message)
+	private DhcpMessage processINFORM(String message)
     {
         // [DHCPINFORM]
         // from 192.168.1.115 via eth1
@@ -240,17 +240,17 @@ public class SyslogHandler {
 		if (result1.isFindFlag() == false)
 			return null;
 		
-		JsonObject result = new JsonObject();
-		result.addProperty("type", "DHCPINFORM");
-		result.addProperty("ip", result1.getValue());
-		result.addProperty("mac", "");
-		result.addProperty("renew", (message.indexOf("(RENEW)") > 0)? true : false);
-		result.addProperty("result", true);
+		DhcpMessage result = new DhcpMessage();
+		result.setDhcpType("DHCPINFORM");
+		result.setIpType("IPV4");
+		result.setIp(result1.getValue());
+		result.setMac("");
+		result.setRenew((message.indexOf("(RENEW)") > 0)? true : false);
         
         return result;
     }
 
-	private JsonObject processEXPIRE(String message)
+	private DhcpMessage processEXPIRE(String message)
     {
         String sIP = "", sMac = "";
 
@@ -265,17 +265,17 @@ public class SyslogHandler {
 		if (result2.isFindFlag() == false)
 			return null;
 		
-		JsonObject result = new JsonObject();
-		result.addProperty("type", "DHCPEXPIRE");
-		result.addProperty("ip", result1.getValue());
-		result.addProperty("mac", result2.getValue());
-		result.addProperty("renew", (message.indexOf("(RENEW)") > 0)? true : false);
-		result.addProperty("result", true);
+		DhcpMessage result = new DhcpMessage();
+		result.setDhcpType("DHCPEXPIRE");
+		result.setIpType("IPV4");
+		result.setIp(result1.getValue());
+		result.setMac(result2.getValue());
+		result.setRenew((message.indexOf("(RENEW)") > 0)? true : false);
         
         return result;
     }
 
-	private JsonObject processRELEASE(String message)
+	private DhcpMessage processRELEASE(String message)
     {
         // [DHCPRELEASE]
         // of 192.168.1.101 from 98:83:89:14:4f:9e (JS) via eth1 (found)uid 01:98:83:89:14:4f:9e
@@ -288,12 +288,12 @@ public class SyslogHandler {
 		if (result2.isFindFlag() == false)
 			return null;
 		
-		JsonObject result = new JsonObject();
-		result.addProperty("type", "DHCPRELEASE");
-		result.addProperty("ip", result1.getValue());
-		result.addProperty("mac", result2.getValue());
-		result.addProperty("renew", (message.indexOf("(RENEW)") > 0)? true : false);
-		result.addProperty("result", true);
+		DhcpMessage result = new DhcpMessage();
+		result.setDhcpType("DHCPRELEASE");
+		result.setIpType("IPV4");
+		result.setIp(result1.getValue());
+		result.setMac(result2.getValue());
+		result.setRenew((message.indexOf("(RENEW)") > 0)? true : false);
         
         return result;
     }

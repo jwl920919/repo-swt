@@ -2,6 +2,7 @@ package com.shinwootns.ipm.jpa;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 
@@ -21,6 +22,27 @@ public class DhcpFixedIp implements Serializable {
 	private String comment;
 
 	private Boolean disable;
+
+	@Column(name="ip_num")
+	private BigDecimal ipNum;
+
+	@Column(name="ip_type")
+	private String ipType;
+
+	@Column(name="ipv4_match_client")
+	private String ipv4MatchClient;
+
+	@Column(name="ipv6_address_type")
+	private String ipv6AddressType;
+
+	@Column(name="ipv6_duid")
+	private String ipv6Duid;
+
+	@Column(name="ipv6_prefix")
+	private String ipv6Prefix;
+
+	@Column(name="ipv6_prefix_bits")
+	private Integer ipv6PrefixBits;
 
 	private String macaddr;
 
@@ -54,6 +76,62 @@ public class DhcpFixedIp implements Serializable {
 
 	public void setDisable(Boolean disable) {
 		this.disable = disable;
+	}
+
+	public BigDecimal getIpNum() {
+		return this.ipNum;
+	}
+
+	public void setIpNum(BigDecimal ipNum) {
+		this.ipNum = ipNum;
+	}
+
+	public String getIpType() {
+		return this.ipType;
+	}
+
+	public void setIpType(String ipType) {
+		this.ipType = ipType;
+	}
+
+	public String getIpv4MatchClient() {
+		return this.ipv4MatchClient;
+	}
+
+	public void setIpv4MatchClient(String ipv4MatchClient) {
+		this.ipv4MatchClient = ipv4MatchClient;
+	}
+
+	public String getIpv6AddressType() {
+		return this.ipv6AddressType;
+	}
+
+	public void setIpv6AddressType(String ipv6AddressType) {
+		this.ipv6AddressType = ipv6AddressType;
+	}
+
+	public String getIpv6Duid() {
+		return this.ipv6Duid;
+	}
+
+	public void setIpv6Duid(String ipv6Duid) {
+		this.ipv6Duid = ipv6Duid;
+	}
+
+	public String getIpv6Prefix() {
+		return this.ipv6Prefix;
+	}
+
+	public void setIpv6Prefix(String ipv6Prefix) {
+		this.ipv6Prefix = ipv6Prefix;
+	}
+
+	public Integer getIpv6PrefixBits() {
+		return this.ipv6PrefixBits;
+	}
+
+	public void setIpv6PrefixBits(Integer ipv6PrefixBits) {
+		this.ipv6PrefixBits = ipv6PrefixBits;
 	}
 
 	public String getMacaddr() {
