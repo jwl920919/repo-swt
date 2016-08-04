@@ -1,15 +1,15 @@
 package com.shinwootns.ipm.service.cluster;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
+import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.JsonObject;
-import com.shinwootns.common.cache.RedisClient;
 import com.shinwootns.common.utils.CollectionUtils;
 import com.shinwootns.common.utils.SystemUtils;
 import com.shinwootns.common.utils.TimeUtils;
@@ -19,6 +19,8 @@ import com.shinwootns.ipm.WorkerManager;
 import com.shinwootns.ipm.config.ApplicationProperty;
 import com.shinwootns.ipm.service.redis.RedisHandler;
 
+import redis.clients.jedis.Jedis;
+
 public class ClusterManager {
 
 	private final Logger _logger = LoggerFactory.getLogger(getClass());
@@ -27,7 +29,7 @@ public class ClusterManager {
 	private final static int EXPIRE_TIME_MEMBER = 10;
 	
 	// is Master
-	private boolean isMasterNode = false;
+	private Boolean isMasterNode = null;
 
 	//region Singleton
 	private static ClusterManager _instance = null;
@@ -50,7 +52,7 @@ public class ClusterManager {
 			if (appProperty == null)
 				return;
 	
-			RedisClient redis = RedisHandler.getInstance().getRedisClient();
+			Jedis redis = RedisHandler.getInstance().getRedisClient();
 			if (redis == null)
 				return;
 	
@@ -76,7 +78,7 @@ public class ClusterManager {
 				redis.set(key.toString(), String.format("%d", rank));
 	
 				// Set expire time
-				redis.expireTime(key.toString(), EXPIRE_TIME_MEMBER);
+				redis.expire(key.toString(), EXPIRE_TIME_MEMBER);
 				
 			} catch (Exception ex) {
 				_logger.error(ex.getMessage(), ex);
@@ -96,14 +98,15 @@ public class ClusterManager {
 			if ( appProperty == null ) 
 				return;
 			 
-			RedisClient redis = RedisHandler.getInstance().getRedisClient();
+			Jedis redis = RedisHandler.getInstance().getRedisClient();
 			if (redis == null)
 				return;
 			
 			try
 			{
 				// Get Keys
-				HashSet<String> keys = redis.getKeys( (new StringBuilder())
+				Set<String> keys = redis.keys( 
+						(new StringBuilder())
 						.append(RedisKeys.KEY_IPM_CLUSTER_MEMBER)
 						.append(":*")
 						.toString()
@@ -162,7 +165,7 @@ public class ClusterManager {
 	//region [FUNC] Get MasterName
 	public String getMasterName() {
 
-		RedisClient redis = RedisHandler.getInstance().getRedisClient();
+		Jedis redis = RedisHandler.getInstance().getRedisClient();
 		if (redis == null)
 			return "";
 
@@ -189,7 +192,7 @@ public class ClusterManager {
 		if (appProperty == null)
 			return false;
 		
-		RedisClient redis = RedisHandler.getInstance().getRedisClient();
+		Jedis redis = RedisHandler.getInstance().getRedisClient();
 		if (redis == null)
 			return false;
 
@@ -214,7 +217,7 @@ public class ClusterManager {
 	private void setMasterNode(boolean isMasterNode) {
 		
 		// If changed cluster mode.
-		if (this.isMasterNode != isMasterNode) {
+		if (this.isMasterNode == null || this.isMasterNode != isMasterNode) {
 
 			_logger.info( (new StringBuilder())
 					.append("************************************")
@@ -258,7 +261,7 @@ public class ClusterManager {
 		if (appProperty == null)
 			return;
 
-		RedisClient redis = RedisHandler.getInstance().getRedisClient();
+		Jedis redis = RedisHandler.getInstance().getRedisClient();
 		if (redis == null)
 			return;
 		

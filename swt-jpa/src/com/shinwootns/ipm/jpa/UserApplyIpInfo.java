@@ -67,6 +67,9 @@ public class UserApplyIpInfo implements Serializable {
 	@Column(name="settlement_chief_id")
 	private String settlementChiefId;
 
+	@Column(name="settlement_chief_name")
+	private String settlementChiefName;
+
 	@Column(name="settlement_description")
 	private String settlementDescription;
 
@@ -78,6 +81,12 @@ public class UserApplyIpInfo implements Serializable {
 
 	@Column(name="user_id")
 	private String userId;
+
+	@Column(name="user_name")
+	private String userName;
+
+	@Column(name="user_phone_num")
+	private String userPhoneNum;
 
 	@Column(name="user_site_id")
 	private Integer userSiteId;
@@ -221,6 +230,14 @@ public class UserApplyIpInfo implements Serializable {
 		this.settlementChiefId = settlementChiefId;
 	}
 
+	public String getSettlementChiefName() {
+		return this.settlementChiefName;
+	}
+
+	public void setSettlementChiefName(String settlementChiefName) {
+		this.settlementChiefName = settlementChiefName;
+	}
+
 	public String getSettlementDescription() {
 		return this.settlementDescription;
 	}
@@ -251,6 +268,22 @@ public class UserApplyIpInfo implements Serializable {
 
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+
+	public String getUserName() {
+		return this.userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getUserPhoneNum() {
+		return this.userPhoneNum;
+	}
+
+	public void setUserPhoneNum(String userPhoneNum) {
+		this.userPhoneNum = userPhoneNum;
 	}
 
 	public Integer getUserSiteId() {

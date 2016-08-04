@@ -130,3 +130,83 @@ CREATE OR REPLACE VIEW public.view_network_ip_status AS
   ORDER BY status.site_id, status.ip_type, status.start_num;
 
 
+
+CREATE OR REPLACE VIEW view_client_info AS
+
+SELECT macaddr, duid, hostname, vendor, model, os, device_type, ip_type, last_ip, comment, update_time 
+FROM
+(
+	SELECT COALESCE(rank() OVER (PARTITION BY client.macaddr ORDER BY dt.priority DESC), 0) rankNum
+		, dt.priority
+		, client.macaddr, client.duid, client.hostname, client.vendor, client.model, client.os, COALESCE(dt.device_type, '') device_type, client.ip_type, client.last_ip, client.comment, client.update_time
+	FROM client_info client
+	LEFT OUTER JOIN (
+
+		SELECT *,
+			COALESCE(CASE WHEN COALESCE(os, '') != '' THEN (CASE WHEN COALESCE(compare_type_os, '') != 'EQUAL' THEN 2000 ELSE 1000 END) END,0)
+			+ COALESCE(CASE WHEN COALESCE(model, '') != '' THEN (CASE WHEN COALESCE(compare_type_model, '') != 'EQUAL' THEN 200 ELSE 100 END) END,0)
+			+ COALESCE(CASE WHEN COALESCE(vendor, '') != '' THEN (CASE WHEN COALESCE(compare_type_vendor, '') != 'EQUAL' THEN 20 ELSE 10 END) END,0)
+			+ COALESCE(CASE WHEN COALESCE(hostname, '') != '' THEN (CASE WHEN COALESCE(compare_type_hostname, '') != 'EQUAL' THEN 2 ELSE 1 END) END,0) 
+			priority
+		FROM client_device_type
+
+	) dt ON 
+		( COALESCE(dt.vendor,'') != '' OR COALESCE(dt.model,'') != '' OR COALESCE(dt.os,'') != '' OR COALESCE(dt.hostname,'') != '' )
+		AND 
+		(
+			(
+				COALESCE(dt.vendor,'') = '' 
+				OR  
+				(
+					COALESCE(dt.vendor,'') != '' 
+					AND 
+					( 
+						(COALESCE(dt.compare_type_vendor,'') = 'EQUAL' AND client.vendor = dt.vendor ) 
+						OR 
+						(COALESCE(dt.compare_type_vendor,'') = 'LIKE' AND client.vendor LIKE dt.vendor )
+					)
+				)
+			)
+			AND
+			( 	
+				COALESCE(dt.model,'') = '' 
+				OR 
+				( 
+					COALESCE(dt.model,'') != '' 
+					AND ( 
+						(COALESCE(dt.compare_type_model,'') = 'EQUAL' AND client.model = dt.model )
+						OR
+						(COALESCE(dt.compare_type_model,'') = 'LIKE' AND client.model LIKE dt.model )
+					)
+				)
+			)
+			AND
+			( 	
+				COALESCE(dt.os,'') = '' 
+				OR 
+				( 
+					COALESCE(dt.os,'') != '' 
+					AND ( 
+						(COALESCE(dt.compare_type_os,'') = 'EQUAL' AND client.os = dt.os )
+						OR
+						(COALESCE(dt.compare_type_os,'') = 'LIKE' AND client.os LIKE dt.os )
+					)
+				)
+			)
+			AND
+			( 	
+				COALESCE(dt.hostname,'') = '' 
+				OR 
+				( 
+					COALESCE(dt.hostname,'') != '' 
+					AND ( 
+						(COALESCE(dt.compare_type_hostname,'') = 'EQUAL' AND client.hostname = dt.hostname )
+						OR
+						(COALESCE(dt.compare_type_hostname,'') = 'LIKE' AND client.hostname LIKE dt.hostname )
+					)
+				)
+			)
+		)
+	WHERE 1=1
+) result
+WHERE rankNum <= 1

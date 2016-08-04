@@ -1,4 +1,4 @@
-package com.shinwootns.common.cache;
+package com.shinwootns.common.redis;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -127,6 +127,7 @@ public class RedisManager {
 	//endregion
 	
 	//region [FUNC] createRedisClient
+	/*
 	public RedisClient createRedisClient() {
 		
 		synchronized(this) 
@@ -149,6 +150,26 @@ public class RedisManager {
 		}
 		return null;
 	}
+	*/
+	public Jedis createRedisClient() {
+		
+		synchronized(this) 
+		{
+			try
+			{
+				Jedis redis = _redisPool.getResource();
+				return redis;
+			}
+			catch(JedisConnectionException ex) {
+				_logger.error(ex.getMessage(), ex);
+			}
+			catch(Exception ex) {
+				_logger.error(ex.getMessage(), ex);
+			}
+		}
+		return null;
+	}
+
 	//endregion
 	
 	//region [FUNC] getPoolStatus

@@ -10,6 +10,7 @@
 		<if test="site_id != null">
 			AND site_id = #{site_id}
 		</if>
+		ORDER BY range_usage DESC
 		LIMIT 10
 	</select>
 	

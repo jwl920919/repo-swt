@@ -144,7 +144,7 @@ public class JsonUtils {
 		return (new Gson()).toJson(obj);
 	}
 	
-	public Object deserialize(String json, Type typeof){
+	public static Object deserialize(String json, Type typeof){
 		return (new Gson()).fromJson(json, typeof);
 	}
 

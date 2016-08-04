@@ -22,7 +22,7 @@
 					<h3 class="box-title-small">장비상태</h3>
 					<div class='hw-collect-time collect-time'></div>
 					<div id="reflesh-bottom">
-						<button type="button" class="btn btn-info btn-sm"
+						<button type="button" class="btn dashboard-box-btn btn-info btn-sm"
 							style="margin: 4px 8px;" onclick="refleshDatas();">
 							<i class="fa fa-refresh"></i>
 						</button>
@@ -32,7 +32,7 @@
 					</div>
 					<!-- tools box -->
 					<div class="pull-right box-tools">
-						<button type="button" class="btn bg-teal btn-sm"
+						<button type="button" class="btn dashboard-box-btn bg-teal btn-sm"
 							data-widget="collapse">
 							<i class="fa fa-minus"></i>
 						</button>
@@ -122,7 +122,7 @@
 						style="visibility: hidden;"></div>
 					<!-- tools box -->
 					<div class="pull-right box-tools">
-						<button type="button" class="btn bg-teal btn-sm"
+						<button type="button" class="btn dashboard-box-btn bg-teal btn-sm"
 							data-widget="collapse">
 							<i class="fa fa-minus"></i>
 						</button>
@@ -215,7 +215,7 @@
 						style="visibility: hidden;"></div>
 					<!-- tools box -->
 					<div class="pull-right box-tools">
-						<button type="button" class="btn bg-teal btn-sm"
+						<button type="button" class="btn dashboard-box-btn bg-teal btn-sm"
 							data-widget="collapse">
 							<i class="fa fa-minus"></i>
 						</button>
@@ -277,7 +277,7 @@
 
 					<!-- tools box -->
 					<div class="pull-right box-tools">
-						<button type="button" class="btn bg-teal btn-sm"
+						<button type="button" class="btn dashboard-box-btn bg-teal btn-sm"
 							data-widget="collapse">
 							<i class="fa fa-minus"></i>
 						</button>
@@ -321,7 +321,7 @@
 
 					<!-- tools box -->
 					<div class="pull-right box-tools">
-						<button type="button" class="btn bg-teal btn-sm"
+						<button type="button" class="btn dashboard-box-btn bg-teal btn-sm"
 							data-widget="collapse">
 							<i class="fa fa-minus"></i>
 						</button>

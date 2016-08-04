@@ -1,0 +1,20 @@
+.essential-table>tbody>tr>td {
+	vertical-align: middle !important;
+}
+
+.permit-btn {
+	height: 30px;
+	width: 45px;
+	font-size: 11px;
+	vertical-align: middle;
+	padding: 5px 10px;
+	background-color: #00a65a;
+	color: white;
+	border-color: #008d4c;
+	border-radius: 10px 10px 10px 10px !important;
+}
+
+.deny-btn {
+	
+}
+

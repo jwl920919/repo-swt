@@ -8,14 +8,14 @@ import com.shinwootns.common.stp.PoolStatus;
 import com.shinwootns.common.stp.SmartThreadPool;
 import com.shinwootns.ipm.collector.worker.MasterJobWoker;
 import com.shinwootns.ipm.collector.worker.SchedulerWorker;
-import com.shinwootns.ipm.collector.worker.SyslogWorker;
+import com.shinwootns.ipm.collector.worker.SyslogPutter;
 
 public class WorkerManager {
 	
 	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
 	// Worker Count
-	private static final int SYSLOG_WORKER_COUNT = 3;
+	private static final int SYSLOG_PUTTER_COUNT = 2;
 	
 	// Task Count
 	private static final int TASK_MIN_COUNT = 32;
@@ -27,7 +27,7 @@ public class WorkerManager {
 
 	Thread _scheduler = null;									// Scheduler Thread
 	Thread _masterJobThread = null;								// Master Job Thread
-	Thread[] _syslogWorker = new Thread[SYSLOG_WORKER_COUNT];	// Syslog Thread
+	Thread[] _syslogWorker = new Thread[SYSLOG_PUTTER_COUNT];	// Syslog Thread
 	
 	//region Singleton
 	private static WorkerManager _instance = null;
@@ -54,11 +54,11 @@ public class WorkerManager {
 				_scheduler.start();
 			}
 			
-			// Start Syslog Worker
-			for(int i=0; i<SYSLOG_WORKER_COUNT; i++) {
+			// Start Syslog Putter
+			for(int i=0; i<SYSLOG_PUTTER_COUNT; i++) {
 				if (_syslogWorker[i] == null) {
-					_syslogWorker[i] = new Thread(new SyslogWorker(i, _logger)
-								, (new StringBuilder()).append("SyslogWorker#").append(i).toString());
+					_syslogWorker[i] = new Thread(new SyslogPutter(i)
+								, (new StringBuilder()).append("SyslogPutter#").append(i).toString());
 					_syslogWorker[i].start();
 				}
 			}
@@ -102,7 +102,7 @@ public class WorkerManager {
 			}
 			
 			// Stop Syslog Worker
-			for(int i=0; i<SYSLOG_WORKER_COUNT; i++) {
+			for(int i=0; i<SYSLOG_PUTTER_COUNT; i++) {
 				try {
 					if (_syslogWorker[i] != null) {
 						_syslogWorker[i].interrupt();

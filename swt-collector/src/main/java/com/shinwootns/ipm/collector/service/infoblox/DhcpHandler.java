@@ -546,6 +546,10 @@ public class DhcpHandler {
 				ip.setIpType("IPV6");
 				ip.setNetwork(JsonUtils.getValueToString(jObj, "network", ""));
 				ip.setDuid(JsonUtils.getValueToString(jObj, "duid", "").toUpperCase());
+				
+				if (ip.getDuid() != null && ip.getDuid().length() == 41)
+					ip.setMacaddr( ip.getDuid().substring(24) );
+				
 				ip.setIsConflict(JsonUtils.getValueToBoolean(jObj, "is_conflict", false));
 				ip.setStatus(JsonUtils.getValueToString(jObj, "status", ""));
 				ip.setLeaseState(JsonUtils.getValueToString(jObj, "lease_state", ""));
