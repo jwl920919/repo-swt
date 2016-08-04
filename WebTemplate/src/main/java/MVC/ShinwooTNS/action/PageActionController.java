@@ -75,6 +75,29 @@ public class PageActionController {
 		return gson.toJson(result);
 	}
 	
+	@RequestMapping(value = "/session_Maintain", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+	public String session_Maintain(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		System.out.println("session_Maintain");
+		logger.info("session_Maintain : " + request.getLocalAddr());
+		result = new AjaxResult();
+		
+		try {
+			HttpSession session = request.getSession(true);
+			System.out.println(session.getAttribute("login_chk"));
+			if (session.getAttribute("login_chk") == null)
+			{
+				return "redirect:login";
+			}
+			result.result = true;
+
+		}  catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e.getMessage());
+			return "redirect:login";
+		}
+		return gson.toJson(result);
+	}
+	
 	@RequestMapping(value = "/select_site_info", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object select_site_info(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		System.out.println("select_site_info");

@@ -431,7 +431,10 @@ function fnIPMapDraw(startipNumber, DHCP_RangeArr, BROADCAST_Arr, NETWORK_Arr, U
 		                	var BROADCAST_dClassIP = dClassIPHelper(BROADCAST_Arr[index].ipaddr);
 		
 		                	if (ipNo == parseInt(BROADCAST_dClassIP,10)) {
-		                		if (className.includes(ipMapSettings.dhcpRangeCss)) {
+		                		console.log("1 : " + ipMapSettings.dhcpRangeCss);
+		                		console.log("2 : " + className);
+		                		console.log("3 : " + className.indexOf(ipMapSettings.dhcpRangeCss) > 0);
+		                		if (className.indexOf(ipMapSettings.dhcpRangeCss) > 0) {
 	                    			className += ' ' + ipMapSettings.dhcp_broadcastCss;
 								}
 		                		else {
@@ -450,201 +453,200 @@ function fnIPMapDraw(startipNumber, DHCP_RangeArr, BROADCAST_Arr, NETWORK_Arr, U
 		            		}
 						}
 		            }
-//
-//		            console.log("NETWORK_Arr.length : " + NETWORK_Arr.length);
-//		            if (NETWORK_Arr.length > 0) {
-//		            	for (var index = NETWORK_Arr.length - 1; index >= 0; index--) {					
-//		                	var NETWORK_dClassIP = dClassIPHelper(NETWORK_Arr[index].ipaddr);
-//		
-//		                	if (ipNo == parseInt(NETWORK_dClassIP,10)) {
-//		                		if (className.includes(ipMapSettings.dhcpRangeCss)) {
-//	                    			className += ' ' + ipMapSettings.dhcp_networkCss;
-//								}
-//		                		else {
-//	                    			className += ' ' + ipMapSettings.networkCss;
-//								}
-//		                		className = className.replace(' ' + ipMapSettings.dhcpRangeCss, '').replace(' ' + ipMapSettings.unusedCss, '');
-//		                		address = NETWORK_Arr[index].ipaddr; 
-//		                		status = NETWORK_Arr[index].ip_status;
-////		                		conflict = NETWORK_Arr[index].is_conflict;
-////		                		usage = NETWORK_Arr[index].usage;
-////		                		lease_state = NETWORK_Arr[index].lease_state;
-////		                		fingerprint = NETWORK_Arr[index].fingerprint;
-//		    	                NETWORK_Arr.splice(index, 1);
-//		    	                break;
-//		    	            }
-//						}
-//		            }
-//		            
-//		            if (UNUSED_Arr.length > 0) {
-//		            	for (var index = UNUSED_Arr.length - 1; index >= 0; index--) {					
-//		                	var UNUSED_dClassIP = dClassIPHelper(UNUSED_Arr[index].ipaddr);
-//		
-//		                	if (ipNo == parseInt(UNUSED_dClassIP,10)) {
-//		                		if (className.includes(ipMapSettings.dhcpRangeCss)) {
-//	                    			className += ' ' + ipMapSettings.dhcp_unusedCss;
-//								}
-//		                		else {
-//	                    			className.replace(' ' + ipMapSettings.unusedCss, '');
-//	                    			className += ' ' + ipMapSettings.unusedCss;
-//								}
-//		                		className = className.replace(' ' + ipMapSettings.dhcpRangeCss, '');
-//		                		address = UNUSED_Arr[index].ipaddr; 
-//		                		status = UNUSED_Arr[index].ip_status;
-////		                		conflict = UNUSED_Arr[index].is_conflict;
-////		                		usage = UNUSED_Arr[index].usage;
-////		                		lease_state = UNUSED_Arr[index].lease_state;
-////		                		fingerprint = UNUSED_Arr[index].fingerprint;
-//		    	                UNUSED_Arr.splice(index, 1);
-//		    	                break;
-//		    	            }
-//						}
-//		            }
-//
-//		            if (FIXED_Arr.length > 0) {
-//		            	for (var index = FIXED_Arr.length - 1; index >= 0; index--) {					
-//		                	var FIXED_dClassIP = dClassIPHelper(FIXED_Arr[index].ipaddr);
-//		
-//		                	if (ipNo == parseInt(FIXED_dClassIP,10)) {
-//		                		if (className.includes(ipMapSettings.dhcpRangeCss)) {
-//	                    			className += ' ' + ipMapSettings.dhcp_fixedCss;
-//								}
-//		                		else {
-//	                    			className += ' ' + ipMapSettings.fixedCss;
-//								}
-//		                		className = className.replace(' ' + ipMapSettings.dhcpRangeCss, '').replace(' ' + ipMapSettings.unusedCss, '');
-//		                		address = FIXED_Arr[index].ipaddr; 
-//		                		status = FIXED_Arr[index].ip_status;
-////		                		conflict = FIXED_Arr[index].is_conflict;
-////		                		usage = FIXED_Arr[index].usage;
-////		                		lease_state = FIXED_Arr[index].lease_state;
-////		                		fingerprint = FIXED_Arr[index].fingerprint;
-//		    	                FIXED_Arr.splice(index, 1);
-//		    	                break;
-//		    	            }
-//						}
-//		            }
-//		            
-//		            if (RESERVATION_Arr.length > 0) {
-//		            	for (var index = RESERVATION_Arr.length - 1; index >= 0; index--) {					
-//		                	var RESERVATION_dClassIP = dClassIPHelper(RESERVATION_Arr[index].ipaddr);
-//		
-//		                	if (ipNo == parseInt(RESERVATION_dClassIP,10)) {
-//		                		if (className.includes(ipMapSettings.dhcpRangeCss)) {
-//	                    			className += ' ' + ipMapSettings.dhcp_reservationCss;
-//								}
-//		                		else {
-//	                    			className += ' ' + ipMapSettings.reservationCss;
-//								}
-//		                		className = className.replace(' ' + ipMapSettings.dhcpRangeCss, '').replace(' ' + ipMapSettings.unusedCss, '');
-//		                		address = RESERVATION_Arr[index].ipaddr; 
-//		                		status = RESERVATION_Arr[index].ip_status;
-////		                		conflict = RESERVATION_Arr[index].is_conflict;
-////		                		usage = RESERVATION_Arr[index].usage;
-////		                		lease_state = RESERVATION_Arr[index].lease_state;
-////		                		fingerprint = RESERVATION_Arr[index].fingerprint;
-//		    	                RESERVATION_Arr.splice(index, 1);
-//		    	                break;
-//		    	            }
-//						}
-//		            }
-//		            		            
-//		            if (CONFLICT_Arr.length > 0) {
-//		            	for (var index = CONFLICT_Arr.length - 1; index >= 0; index--) {					
-//		                	var CONFLICT_dClassIP = dClassIPHelper(CONFLICT_Arr[index].ipaddr);
-//		
-//		                	if (ipNo == parseInt(CONFLICT_dClassIP,10)) {
-//		                		if (className.includes(ipMapSettings.dhcpRangeCss)) {
-//	                    			className += ' ' + ipMapSettings.dhcp_conflictCss;
-//								}
-//		                		else {
-//	                    			className += ' ' + ipMapSettings.conflictCss;
-//								}
-//		                		className = className.replace(' ' + ipMapSettings.dhcpRangeCss, '').replace(' ' + ipMapSettings.unusedCss, '');
-//		                		address = CONFLICT_Arr[index].ipaddr; 
-//		                		status = CONFLICT_Arr[index].ip_status;
-////		                		conflict = CONFLICT_Arr[index].is_conflict;
-////		                		usage = CONFLICT_Arr[index].usage;
-////		                		lease_state = CONFLICT_Arr[index].lease_state;
-////		                		fingerprint = CONFLICT_Arr[index].fingerprint;
-//		    	                CONFLICT_Arr.splice(index, 1);
-//		    	                break;
-//		    	            }
-//						}
-//		            }
-//		            		            
-//		            if (LEASE_Arr.length > 0) {
-//		            	for (var index = LEASE_Arr.length - 1; index >= 0; index--) {					
-//		                	var LEASE_dClassIP = dClassIPHelper(LEASE_Arr[index].ipaddr);
-//		
-//		                	if (ipNo == parseInt(LEASE_dClassIP,10)) {
-//		                		if (className.includes(ipMapSettings.dhcpRangeCss)) {
-//	                    			className += ' ' + ipMapSettings.dhcp_leaseCss;
-//								}
-//		                		else {
-//	                    			className += ' ' + ipMapSettings.leaseCss;
-//								}
-//		                		className = className.replace(' ' + ipMapSettings.dhcpRangeCss, '').replace(' ' + ipMapSettings.unusedCss, '');
-//		                		address = LEASE_Arr[index].ipaddr; 
-//		                		status = LEASE_Arr[index].ip_status;
-////		                		conflict = LEASE_Arr[index].is_conflict;
-////		                		usage = LEASE_Arr[index].usage;
-////		                		lease_state = LEASE_Arr[index].lease_state;
-////		                		fingerprint = LEASE_Arr[index].fingerprint;
-//		    	                LEASE_Arr.splice(index, 1);
-//		    	                break;
-//		    	            }
-//						}
-//		            }
-//		            		            
-//		            if (USED_Arr.length > 0) {
-//		            	for (var index = USED_Arr.length - 1; index >= 0; index--) {					
-//		                	var USED_dClassIP = dClassIPHelper(USED_Arr[index].ipaddr);
-//		
-//		                	if (ipNo == parseInt(USED_dClassIP,10)) {
-//		                		if (className.includes(ipMapSettings.dhcpRangeCss)) {
-//	                    			className += ' ' + ipMapSettings.dhcp_usedCss;
-//								}
-//		                		else {
-//	                    			className += ' ' + ipMapSettings.usedCss;
-//								}
-//		                		className = className.replace(' ' + ipMapSettings.dhcpRangeCss, '').replace(' ' + ipMapSettings.unusedCss, '');
-//		                		address = USED_Arr[index].ipaddr; 
-//		                		status = USED_Arr[index].status;
-////		                		conflict = USED_Arr[index].is_conflict;
-////		                		usage = USED_Arr[index].usage;
-////		                		lease_state = USED_Arr[index].lease_state;
-////		                		fingerprint = USED_Arr[index].fingerprint;
-//		    	                USED_Arr.splice(index, 1);
-//		    	                break;
-//		    	            }
-//						}
-//		            }
-//		            
-//		            if (ETC_Arr.length > 0) {
-//		            	for (var index = ETC_Arr.length - 1; index >= 0; index--) {					
-//		                	var ETC_dClassIP = dClassIPHelper(ETC_Arr[index].ipaddr);
-//		
-//		                	if (ipNo == parseInt(ETC_dClassIP,10)) {
-//		                		if (className.includes(ipMapSettings.dhcpRangeCss)) {
-//	                    			className += ' ' + ipMapSettings.dhcp_unusedCss;
-//								}
-//		                		else {
-//	                    			className.replace(' ' + ipMapSettings.unusedCss, '');
-//	                    			className += ' ' + ipMapSettings.unusedCss;
-//								}
-//		                		className = className.replace(' ' + ipMapSettings.dhcpRangeCss, '');
-//		                		address = ETC_Arr[index].ipaddr; 
-//		                		status = ETC_Arr[index].ip_status;
-////		                		conflict = ETC_Arr[index].is_conflict;
-////		                		usage = ETC_Arr[index].usage;
-////		                		lease_state = ETC_Arr[index].lease_state;
-////		                		fingerprint = ETC_Arr[index].fingerprint;
-//		    	                ETC_Arr.splice(index, 1);
-//		    	                break;
-//		    	            }
-//						}
-//		            }
+
+		            if (NETWORK_Arr.length > 0) {
+		            	for (var index = NETWORK_Arr.length - 1; index >= 0; index--) {					
+		                	var NETWORK_dClassIP = dClassIPHelper(NETWORK_Arr[index].ipaddr);
+		
+		                	if (ipNo == parseInt(NETWORK_dClassIP,10)) {
+		                		if (className.indexOf(ipMapSettings.dhcpRangeCss) > 0) {
+	                    			className += ' ' + ipMapSettings.dhcp_networkCss;
+								}
+		                		else {
+	                    			className += ' ' + ipMapSettings.networkCss;
+								}
+		                		className = className.replace(' ' + ipMapSettings.dhcpRangeCss, '').replace(' ' + ipMapSettings.unusedCss, '');
+		                		address = NETWORK_Arr[index].ipaddr; 
+		                		status = NETWORK_Arr[index].ip_status;
+//		                		conflict = NETWORK_Arr[index].is_conflict;
+//		                		usage = NETWORK_Arr[index].usage;
+//		                		lease_state = NETWORK_Arr[index].lease_state;
+//		                		fingerprint = NETWORK_Arr[index].fingerprint;
+		    	                NETWORK_Arr.splice(index, 1);
+		    	                break;
+		    	            }
+						}
+		            }
+		            
+		            if (UNUSED_Arr.length > 0) {
+		            	for (var index = UNUSED_Arr.length - 1; index >= 0; index--) {					
+		                	var UNUSED_dClassIP = dClassIPHelper(UNUSED_Arr[index].ipaddr);
+		
+		                	if (ipNo == parseInt(UNUSED_dClassIP,10)) {
+		                		if (className.indexOf(ipMapSettings.dhcpRangeCss) > 0) {
+	                    			className += ' ' + ipMapSettings.dhcp_unusedCss;
+								}
+		                		else {
+	                    			className.replace(' ' + ipMapSettings.unusedCss, '');
+	                    			className += ' ' + ipMapSettings.unusedCss;
+								}
+		                		className = className.replace(' ' + ipMapSettings.dhcpRangeCss, '');
+		                		address = UNUSED_Arr[index].ipaddr; 
+		                		status = UNUSED_Arr[index].ip_status;
+//		                		conflict = UNUSED_Arr[index].is_conflict;
+//		                		usage = UNUSED_Arr[index].usage;
+//		                		lease_state = UNUSED_Arr[index].lease_state;
+//		                		fingerprint = UNUSED_Arr[index].fingerprint;
+		    	                UNUSED_Arr.splice(index, 1);
+		    	                break;
+		    	            }
+						}
+		            }
+
+		            if (FIXED_Arr.length > 0) {
+		            	for (var index = FIXED_Arr.length - 1; index >= 0; index--) {					
+		                	var FIXED_dClassIP = dClassIPHelper(FIXED_Arr[index].ipaddr);
+		
+		                	if (ipNo == parseInt(FIXED_dClassIP,10)) {
+		                		if (className.indexOf(ipMapSettings.dhcpRangeCss) > 0) {
+	                    			className += ' ' + ipMapSettings.dhcp_fixedCss;
+								}
+		                		else {
+	                    			className += ' ' + ipMapSettings.fixedCss;
+								}
+		                		className = className.replace(' ' + ipMapSettings.dhcpRangeCss, '').replace(' ' + ipMapSettings.unusedCss, '');
+		                		address = FIXED_Arr[index].ipaddr; 
+		                		status = FIXED_Arr[index].ip_status;
+//		                		conflict = FIXED_Arr[index].is_conflict;
+//		                		usage = FIXED_Arr[index].usage;
+//		                		lease_state = FIXED_Arr[index].lease_state;
+//		                		fingerprint = FIXED_Arr[index].fingerprint;
+		    	                FIXED_Arr.splice(index, 1);
+		    	                break;
+		    	            }
+						}
+		            }
+		            
+		            if (RESERVATION_Arr.length > 0) {
+		            	for (var index = RESERVATION_Arr.length - 1; index >= 0; index--) {					
+		                	var RESERVATION_dClassIP = dClassIPHelper(RESERVATION_Arr[index].ipaddr);
+		
+		                	if (ipNo == parseInt(RESERVATION_dClassIP,10)) {
+		                		if (className.indexOf(ipMapSettings.dhcpRangeCss) > 0) {
+	                    			className += ' ' + ipMapSettings.dhcp_reservationCss;
+								}
+		                		else {
+	                    			className += ' ' + ipMapSettings.reservationCss;
+								}
+		                		className = className.replace(' ' + ipMapSettings.dhcpRangeCss, '').replace(' ' + ipMapSettings.unusedCss, '');
+		                		address = RESERVATION_Arr[index].ipaddr; 
+		                		status = RESERVATION_Arr[index].ip_status;
+//		                		conflict = RESERVATION_Arr[index].is_conflict;
+//		                		usage = RESERVATION_Arr[index].usage;
+//		                		lease_state = RESERVATION_Arr[index].lease_state;
+//		                		fingerprint = RESERVATION_Arr[index].fingerprint;
+		    	                RESERVATION_Arr.splice(index, 1);
+		    	                break;
+		    	            }
+						}
+		            }
+		            		            
+		            if (CONFLICT_Arr.length > 0) {
+		            	for (var index = CONFLICT_Arr.length - 1; index >= 0; index--) {					
+		                	var CONFLICT_dClassIP = dClassIPHelper(CONFLICT_Arr[index].ipaddr);
+		
+		                	if (ipNo == parseInt(CONFLICT_dClassIP,10)) {
+		                		if (className.indexOf(ipMapSettings.dhcpRangeCss) > 0) {
+	                    			className += ' ' + ipMapSettings.dhcp_conflictCss;
+								}
+		                		else {
+	                    			className += ' ' + ipMapSettings.conflictCss;
+								}
+		                		className = className.replace(' ' + ipMapSettings.dhcpRangeCss, '').replace(' ' + ipMapSettings.unusedCss, '');
+		                		address = CONFLICT_Arr[index].ipaddr; 
+		                		status = CONFLICT_Arr[index].ip_status;
+//		                		conflict = CONFLICT_Arr[index].is_conflict;
+//		                		usage = CONFLICT_Arr[index].usage;
+//		                		lease_state = CONFLICT_Arr[index].lease_state;
+//		                		fingerprint = CONFLICT_Arr[index].fingerprint;
+		    	                CONFLICT_Arr.splice(index, 1);
+		    	                break;
+		    	            }
+						}
+		            }
+		            		            
+		            if (LEASE_Arr.length > 0) {
+		            	for (var index = LEASE_Arr.length - 1; index >= 0; index--) {					
+		                	var LEASE_dClassIP = dClassIPHelper(LEASE_Arr[index].ipaddr);
+		
+		                	if (ipNo == parseInt(LEASE_dClassIP,10)) {
+		                		if (className.indexOf(ipMapSettings.dhcpRangeCss) > 0) {
+	                    			className += ' ' + ipMapSettings.dhcp_leaseCss;
+								}
+		                		else {
+	                    			className += ' ' + ipMapSettings.leaseCss;
+								}
+		                		className = className.replace(' ' + ipMapSettings.dhcpRangeCss, '').replace(' ' + ipMapSettings.unusedCss, '');
+		                		address = LEASE_Arr[index].ipaddr; 
+		                		status = LEASE_Arr[index].ip_status;
+//		                		conflict = LEASE_Arr[index].is_conflict;
+//		                		usage = LEASE_Arr[index].usage;
+//		                		lease_state = LEASE_Arr[index].lease_state;
+//		                		fingerprint = LEASE_Arr[index].fingerprint;
+		    	                LEASE_Arr.splice(index, 1);
+		    	                break;
+		    	            }
+						}
+		            }
+		            		            
+		            if (USED_Arr.length > 0) {
+		            	for (var index = USED_Arr.length - 1; index >= 0; index--) {					
+		                	var USED_dClassIP = dClassIPHelper(USED_Arr[index].ipaddr);
+		
+		                	if (ipNo == parseInt(USED_dClassIP,10)) {
+		                		if (className.indexOf(ipMapSettings.dhcpRangeCss) > 0) {
+	                    			className += ' ' + ipMapSettings.dhcp_usedCss;
+								}
+		                		else {
+	                    			className += ' ' + ipMapSettings.usedCss;
+								}
+		                		className = className.replace(' ' + ipMapSettings.dhcpRangeCss, '').replace(' ' + ipMapSettings.unusedCss, '');
+		                		address = USED_Arr[index].ipaddr; 
+		                		status = USED_Arr[index].status;
+//		                		conflict = USED_Arr[index].is_conflict;
+//		                		usage = USED_Arr[index].usage;
+//		                		lease_state = USED_Arr[index].lease_state;
+//		                		fingerprint = USED_Arr[index].fingerprint;
+		    	                USED_Arr.splice(index, 1);
+		    	                break;
+		    	            }
+						}
+		            }
+		            
+		            if (ETC_Arr.length > 0) {
+		            	for (var index = ETC_Arr.length - 1; index >= 0; index--) {					
+		                	var ETC_dClassIP = dClassIPHelper(ETC_Arr[index].ipaddr);
+		
+		                	if (ipNo == parseInt(ETC_dClassIP,10)) {
+		                		if (className.indexOf(ipMapSettings.dhcpRangeCss) > 0) {
+	                    			className += ' ' + ipMapSettings.dhcp_unusedCss;
+								}
+		                		else {
+	                    			className.replace(' ' + ipMapSettings.unusedCss, '');
+	                    			className += ' ' + ipMapSettings.unusedCss;
+								}
+		                		className = className.replace(' ' + ipMapSettings.dhcpRangeCss, '');
+		                		address = ETC_Arr[index].ipaddr; 
+		                		status = ETC_Arr[index].ip_status;
+//		                		conflict = ETC_Arr[index].is_conflict;
+//		                		usage = ETC_Arr[index].usage;
+//		                		lease_state = ETC_Arr[index].lease_state;
+//		                		fingerprint = ETC_Arr[index].fingerprint;
+		    	                ETC_Arr.splice(index, 1);
+		    	                break;
+		    	            }
+						}
+		            }
 		            
 		            var html = '<li class="' + className + '" data-toggle=\"tooltip\" data-html=\"true\"' +
 		            			  'data-title=\"<table><tr><td style=\'text-align:left;\'>IP Address: ' + address + '</td></tr>';

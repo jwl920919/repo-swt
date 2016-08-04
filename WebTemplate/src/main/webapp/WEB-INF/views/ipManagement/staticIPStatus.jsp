@@ -130,13 +130,20 @@
 						        		<tr>
 						        			<td>
 									            <ul>
+									               <li class="li_network"><span class="li_Label">Network</span></li>
+									               <li class="li_broadcast"><span class="li_Label">Broadcast</span></li>
+									               <li class="li_fixed"><span class="li_Label">Fixed</span></li>
+									               <li class="li_reservation"><span class="li_Label">Reservation</span></li>
+									               <li class="li_conflict"><span class="li_Label">Conflict</span></li>
+									               <li class="li_lease"><span class="li_Label">Lease</span></li>
 									               <li class="li_unused"><span class="li_Label">Unused</span></li>
 									               <li class="li_used"><span class="li_Label">Used</span></li>
 									            </ul>
 						        			</td>
 						        			<td class="ipmap-legend">
 									            <ul>
-									               <li class="li_Selecting"><span class="li_Label">Selected IP Address</span></li>
+									               <li class="li_Selecting"><span class="li_Label">IP Selected</span></li>
+									               <li class="li_range"><span class="li_Label">DHCP Range</span></li>
 									            </ul>
 						        			</td>
 						        		</tr>

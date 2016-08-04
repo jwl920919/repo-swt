@@ -45,7 +45,7 @@
 	background-image: url("../images/ipmap/selected-unused.png");
 }
 #place .dhcpRange {
-	background-image: url("../images/ipmap/dhcprange-unused.png");
+	background-image: url("../images/ipmap/dhcp-unused.png");
 }
 
 #place .unused {
@@ -143,6 +143,7 @@
 }
 .li_network {
 	list-style-image: url("../images/ipmap/network.png");
+	margin-bottom: 5px;
 }
 .li_broadcast {
 	list-style-image: url("../images/ipmap/broadcast.png");
@@ -154,7 +155,7 @@
 	list-style-image: url("../images/ipmap/reservation.png");
 }
 .li_conflict {
-	list-style-image: url("../images/ipmap/conflictt.png");
+	list-style-image: url("../images/ipmap/conflict.png");
 }
 .li_lease {
 	list-style-image: url("../images/ipmap/lease.png");
