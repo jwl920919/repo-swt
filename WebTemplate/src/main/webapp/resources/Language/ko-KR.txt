@@ -63,6 +63,8 @@
 	"deviceTypeByAccessPolicy":						"단말종류별 제한 정책 설정",
 	"osTypeByAccessPolicy":							"OS종류별 제한 정책 설정",
 	"hostnameByAccessPolicy":						"호스트명별 제한 정책 설정",
+	"accessPolicy":									"제한 정책 설정",
+	"accessPolicySetting":							"설정관리",
 	"userCertifySetting":							"사용자 인증 설정",
 	"infobloxStatus":								"Infoblox현황정보",
 	"dhcp/dnsSetting":								"DHCP/DNS설정",
