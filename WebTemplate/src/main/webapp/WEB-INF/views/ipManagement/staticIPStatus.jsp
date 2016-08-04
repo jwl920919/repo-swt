@@ -42,7 +42,7 @@
 									<th width="100px"><%=LanguageHelper.GetLanguage("usedipcount")%></th>
 									<th width="100px"><%=LanguageHelper.GetLanguage("totalipcount")%></th>
 									<th width="100px"><%=LanguageHelper.GetLanguage("ipUtilization")%></th>
-									<th width="120px"><%=LanguageHelper.GetLanguage("rangeipcount")%></th>
+									<th width="140px"><%=LanguageHelper.GetLanguage("rangeipcount")%></th>
 									<th width="100px"><%=LanguageHelper.GetLanguage("totalrangecount")%></th>
 									<th width="100px"><%=LanguageHelper.GetLanguage("rangeUtilization")%></th>
 									<th width="*"><%=LanguageHelper.GetLanguage("comment")%></th>
@@ -74,7 +74,7 @@
 				<div class="box-body">
 					<!-- Custom Tabs -->
 					<div class="nav-tabs-custom">
-						<ul class="nav nav-tabs">
+						<ul class="nav nav-tabs" id="tapheader">
 							<li class="active"><a href="#tab_1" data-toggle="tab">List</a></li>
 							<li><a href="#tab_2" data-toggle="tab">Map</a></li>
 						</ul>

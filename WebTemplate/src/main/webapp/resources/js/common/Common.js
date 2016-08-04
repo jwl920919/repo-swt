@@ -275,6 +275,10 @@ function Format_comma(val){
 	try {
 		//console.log("Format_Input : " + val+"");
 		if (val != "0") {
+			if (val >= 1000000) {
+				console.log("val :" + val);
+				return fnConvertNumberToUnitValue(val);
+			}
 			var newValue = val+""; //숫자를 문자열로 변환
 			var len = newValue.length;  
 			var ch="";
@@ -304,4 +308,171 @@ function Format_comma(val){
 
 	//console.log("Format_comma : " + formatValue);
 	return formatValue;
+}
+
+/**
+ * bps 단위 변경
+ */
+function fncConvertUnitValue(piValue, psUnit) {
+    var return_value = "";
+
+    var vdValue = piValue;
+    var vdUnitValue = 1000000.0;
+    var viDivCount = 0;
+    var vsUnit = "";
+
+    if (psUnit == "bps") {
+        vdUnitValue = 1000.0;
+    }
+    else if (psUnit == "pps")
+    {
+        vdUnitValue = 1000.0;        
+    }
+    else if (psUnit == "byte") {
+        vdUnitValue = 1024.0;
+    }
+
+
+    while (vdValue / vdUnitValue >= 1) {
+        vdValue = vdValue / vdUnitValue;
+        viDivCount++;
+    }
+
+    switch (viDivCount) {
+        case 0: break;
+        case 1: vsUnit = "K"; break;
+        case 2: vsUnit = "M"; break;
+        case 3: vsUnit = "G"; break;
+        case 4: vsUnit = "T"; break;
+        case 5: vsUnit = "P"; break;
+        case 6: vsUnit = "E"; break;
+        case 7: vsUnit = "Z"; break;
+        case 8: vsUnit = "Y"; break;
+        default: vsUnit = "..."; break;
+            //case 0: vsUnit = psUnit; break;
+            //case 1: vsUnit = "K" + psUnit; break;
+            //case 2: vsUnit = "M" + psUnit; break;
+            //case 3: vsUnit = "G" + psUnit; break;
+            //case 4: vsUnit = "T" + psUnit; break;
+            //case 5: vsUnit = "P" + psUnit; break;
+            //case 6: vsUnit = "E" + psUnit; break;
+            //case 7: vsUnit = "Z" + psUnit; break;
+            //case 8: vsUnit = "Y" + psUnit; break;
+            //default: vsUnit = "..."; break;
+    }
+
+    return_value = Math.abs(vdValue).toFixed(1) + " " + vsUnit;
+
+    return return_value;
+}
+
+/**
+ * 숫자 단위 변경
+ */
+function fnConvertNumberToUnitValue(value) {
+//	var won  = (pWon+"").replace(/,/g, "");
+//	//var arrWon  = ["원", "만", "억", "조", "경", "해", "자", "양", "구", "간", "정"];
+//	var arrWon  = ["", "만", "억", "조", "경", "해", "자", "양", "구", "간", "정"];
+//	var changeWon = "";
+//	var pattern = /(-?[0-9]+)([0-9]{4})/;
+//	while(pattern.test(won)) {                   
+//		won = won.replace(pattern,"$1,$2");
+//	}
+//	var arrCnt = won.split(",").length-1;
+//	for(var ii=0; ii<won.split(",").length; ii++) {
+//		if(arrWon[arrCnt] == undefined) {
+//			alert("값의 수가 너무 큽니다.");
+//			break;
+//		}
+//		var tmpwon=0;
+//		for(i=0;i<won.split(",")[ii].length;i++){
+//		var num1 = won.split(",")[ii].substring(i,i+1);
+//		tmpwon = tmpwon+Number(num1);
+//		}
+//		if(tmpwon > 0){
+//			changeWon += won.split(",")[ii]+arrWon[arrCnt]; //55억0000만0000원 이런 형태 방지 0000 다 짤라 버린다
+//		}
+//		arrCnt--;
+//	}
+//	return changeWon;
+ 
+	
+    var unit = ["", "만", "억", "조", "경", "해", "자", "양", "구", "간", "정"];
+    
+    
+    //value = value.toFixed(2);
+
+    if (value < 1000)
+        return String.format("{0}" + "", value.toFixed(2));
+    
+    else if (value >= 1000 && value < 10000000)
+        return String.format("{0}" + "만", (value / 1000).toFixed(2));
+
+    else if (value >= 10000000 && value < 100000000)
+        return String.format("{0}" + "천만", (value / 10000000).toFixed(2));
+    
+    else if (value >= 100000000 && value < 1000000000)
+        return String.format("{0}" + "억", (value / 100000000).toFixed(2));
+    
+    else if (value >= 1000000000 && value < 10000000000)
+        return String.format("{0}" + "십억", (value / 1000000000).toFixed(2));
+    
+    else if (value >= 10000000000 && value < 100000000000)
+        return String.format("{0}" + "백억", (value / 10000000000).toFixed(2));
+    
+    else if (value >= 100000000000 && value < 1000000000000)
+        return String.format("{0}" + "천억", (value / 100000000000).toFixed(2));
+    
+    else if (value >= 1000000000000 && value < 10000000000000)
+        return String.format("{0}" + "조", (value / 1000000000000).toFixed(2));
+    
+    else if (value >= 10000000000000)
+        return String.format("{0}", "●●●");
+    
+    else
+        return String.format("{0}" + "조 단위를 넘었습니다.");
+ 
+//    var return_value = "";
+//
+//    var vdValue = value;
+//    var vdUnitValue = 1000000.0;
+//    var viDivCount = 0;
+//    var vsUnit = "";
+//
+//    while (vdValue / vdUnitValue >= 1) {
+//        vdValue = vdValue / vdUnitValue;
+//        viDivCount++;
+//    }
+//
+//    switch (viDivCount) {
+//        case 0: break;
+//        case 1: vsUnit = "million 백만"; break;//백만
+//        case 2: vsUnit = "ten million 천만"; break;//천만
+//        case 3: vsUnit = "hundred million 억"; break;//억
+//        case 4: vsUnit = "billion 십억"; break;//십억
+//        case 5: vsUnit = "ten billion 백억"; break;//백억
+//        case 6: vsUnit = "hundred billion 조"; break;//조
+//        case 7: vsUnit = "trillion 십조"; break;//십조
+//        case 8: vsUnit = "ten trillion 백조"; break;//백조
+//        case 9: vsUnit = "hundred trillion 천조"; break;//천조
+//        default: vsUnit = "..."; break;
+////        case 1: vsUnit = "hundred 백"; break;//백
+////        case 2: vsUnit = "thousand 천"; break;//천
+////        case 3: vsUnit = "ten thousand 만"; break;//만
+////        case 4: vsUnit = "hundred thousand 십만"; break;//십만
+////        case 5: vsUnit = "million 백만"; break;//백만
+////        case 6: vsUnit = "ten million 천만"; break;//천만
+////        case 7: vsUnit = "hundred million 억"; break;//억
+////        case 8: vsUnit = "billion 십억"; break;//십억
+////        case 9: vsUnit = "ten billion 백억"; break;//백억
+////        case 10: vsUnit = "hundred billion 조"; break;//조
+////        case 11: vsUnit = "trillion 십조"; break;//십조
+////        case 12: vsUnit = "ten trillion 백조"; break;//백조
+////        case 13: vsUnit = "hundred trillion 천조"; break;//천조
+////        default: vsUnit = "..."; break;
+//    }
+//
+//    return_value = Math.abs(vdValue).toFixed(0) + " " + vsUnit;
+//
+//    return return_value;
 }

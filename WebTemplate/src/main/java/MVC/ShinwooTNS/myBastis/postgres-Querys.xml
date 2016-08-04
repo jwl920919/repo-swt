@@ -272,8 +272,8 @@
 		                            OR start_ip like CONCAT('%', #{searchValue}, '%') OR end_ip like CONCAT('%', #{searchValue}, '%'))
 		 ORDER BY
 		<choose>
-			<when test="orderColumn == 'comment' or orderColumn == 'ip_type' or orderColumn == 'ip_count'"> ${orderColumn} ${orderType} </when>
-			<when test="orderColumn != 'comment' and orderColumn != 'ip_type' and orderColumn != 'ip_count'"> inet(${orderColumn}) ${orderType} </when>
+			<when test="orderColumn == 'network' or orderColumn == 'start_ip' or orderColumn == 'end_ip'"> inet(${orderColumn}) ${orderType} </when>
+			<when test="orderColumn != 'network' and orderColumn != 'start_ip' and orderColumn != 'end_ip'"> ${orderColumn} ${orderType} </when>
 		</choose>
 		OFFSET #{startIndex} LIMIT #{length};
 	</select>

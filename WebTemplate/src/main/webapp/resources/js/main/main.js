@@ -140,34 +140,3 @@ param += "&site_master=" + master;
     });
 }
 
-/**
- * 세션유지를 위해 서버에 주기적으로 Ajax Call을 하는 function
-**/
-function sessionMaintainAjaxCall() {	
-	try
-	{
-		var tag = "";		    
-	    $.ajax({
-	        url : '/session_Maintain',
-	        type : "POST",
-	        data : null,
-	        dataType : "text",
-	        success : function(data) {
-	            var jsonObj = eval("(" + data + ')');
-		            if (jsonObj.result == true) {
-		            	//console.log("Session Maintain true!.");
-		            }
-		            else{
-		        		console.log("main.js sessionMaintainAjaxCall Error Log : Session Maintain fail!.");
-		            }
-	        },
-	        complete: function(data) {
-	        	//console.log(tag);
-	        	$('#sbSegment').append(tag);
-	        }
-	    });
-	    
-	} catch (e) {
-		console.log("leaseIPStatus.js $(document).ready Error Log : " + e.message);
-	}
-}
