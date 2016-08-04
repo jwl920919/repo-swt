@@ -87,6 +87,8 @@ public class MasterJobWoker implements Runnable {
 		if(redis == null)
 			return;
 		
+		_logger.info("UpdateDashboardData()... Start");
+		
 		// Network IP Status
 		UpdateNetworkIpStatus(dahsboardMapper, redis, listSite);
 		
@@ -95,6 +97,8 @@ public class MasterJobWoker implements Runnable {
 		UpdateLeaseIpStatus(dahsboardMapper, redis, listSite, "IPV6", RedisKeys.KEY_DASHBOARD_LEASE_IPV6);
 
 		redis.close();
+		
+		_logger.info("UpdateDashboardData()... end");
 	}
 	//endregion
 	
@@ -152,6 +156,8 @@ public class MasterJobWoker implements Runnable {
 						, json
 				);
 			}
+			
+			_logger.info("UpdateNetworkIpStatus()... ok");
 		}
 		catch(Exception ex) {
 			_logger.error(ex.getMessage(), ex);
@@ -210,6 +216,8 @@ public class MasterJobWoker implements Runnable {
 						, json
 				);
 			}
+			
+			_logger.info("UpdateLeaseIpStatus()... ok");
 		}
 		catch(Exception ex) {
 			_logger.error(ex.getMessage(), ex);

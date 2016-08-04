@@ -29,7 +29,7 @@ public class ClusterManager {
 	private final static int EXPIRE_TIME_MEMBER = 10;
 	
 	// is Master
-	private boolean isMasterNode = false;
+	private Boolean isMasterNode = null;
 
 	//region Singleton
 	private static ClusterManager _instance = null;
@@ -217,7 +217,7 @@ public class ClusterManager {
 	private void setMasterNode(boolean isMasterNode) {
 		
 		// If changed cluster mode.
-		if (this.isMasterNode != isMasterNode) {
+		if (this.isMasterNode == null || this.isMasterNode != isMasterNode) {
 
 			_logger.info( (new StringBuilder())
 					.append("************************************")
