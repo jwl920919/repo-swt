@@ -120,8 +120,8 @@ div.row {
 
 .collect-time {
 	position: absolute;
-	right: 80px;
-	top: 11px;
+    right: 60px;
+    top: 6px;
 }
 
 #reflesh-bottom {
