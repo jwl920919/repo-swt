@@ -565,7 +565,17 @@
 		</choose>
 		OFFSET #{startIndex} LIMIT #{length};
 	</select>
-
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-08-04 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : policyManagement.jsp 페이지 테이블 조회 -->
+	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
+	<select id="select_POLICY_TABLE_CONDITIONAL_SEARCH"
+		parameterType="hashmap" resultType="java.util.HashMap">
+		select si.site_name, ap.site_id, ap.vendor, ap.model, ap.device_type, ap.os, ap.hostname, ap."desc", ap.is_permit,ap.access_policy_id 
+		from access_policy as ap, site_info as si where ap.site_id = si.site_id 
+		ORDER BY ${orderColumn} ${orderType};
+	</select>
 </mapper>
 
 
