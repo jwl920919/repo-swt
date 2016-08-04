@@ -92,7 +92,7 @@
 	"status":										"상태", 
 	"set":											"설정", 
 	"notset":										"미설정",
-	"fixedleaseunusedipallocationstatus":			"고정, 리스, 미사용 IP 할당 현황",
+	"fixedleaseunusedipallocationstatus":			"할당 현황",
 	"total":										"합계",
 	"ipAssignCount":								"할당 IP 수",
 	"usingAbleIPCount":								"가용 IP 수",

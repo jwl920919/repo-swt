@@ -91,5 +91,4 @@ $(document).ready(function() {
             $('#bLogin').trigger('click');
 		}
     });
-
 });

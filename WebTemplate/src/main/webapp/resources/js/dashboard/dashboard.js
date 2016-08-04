@@ -3,7 +3,8 @@ var m_guestIPAssignStatusAjaxCall;
 var m_certifyProcessAjaxCall;
 var m_dnsStatusAjaxCall;
 var m_segmentLeasingIPAssignedAjaxCall;
-var m_assignmentIPStatusAjaxCall;
+var m_IPv4assignmentIPStatusAjaxCall;
+var m_IPv6assignmentIPStatusAjaxCall;
 var m_hwUsedStatusAjaxCall;
 var m_osUsedStatusAjaxCall;
 var m_serviceUsedStatusAjaxCall;
@@ -16,8 +17,9 @@ var guestIPAssignStatusCallTime = 5000;
 var certifyProcessCallTime = 5000;
 var askIPStatusCallTime = 5000;
 var dnsStatusCallTime = 5000;
-var segmentLeasingIPAssignedCallTime = 5000;
-var assignmentIPStatusCallTime = 5000;
+var segmentLeasingIPAssignedCallTime = 1000 * 60;
+var IPv4assignmentIPStatusCallTime = 1000 * 60;
+var IPv6assignmentIPStatusCallTime = 1000 * 60;
 var hwUsedStatusCallTime = 5000;
 var osUsedStatusCallTime = 5000;
 var serviceUsedStatusCallTime = 5000;
@@ -49,7 +51,8 @@ $(document).ready(
 			certifyProcessAjaxCall();
 			m_dnsStatusAjaxCall = setInterval(dnsStatusAjaxCall, 0);
 			m_segmentLeasingIPAssignedAjaxCall = setInterval(segmentLeasingIPAssignedAjaxCall, 0);
-			m_assignmentIPStatusAjaxCall = setInterval(assignmentIPStatusAjaxCall, 0);
+			m_IPv4assignmentIPStatusAjaxCall = setInterval(IPv4assignmentIPStatusAjaxCall, 0);
+			m_IPv6assignmentIPStatusAjaxCall = setInterval(IPv6assignmentIPStatusAjaxCall, 0);
 
 			askIPStatusAjaxCall();
 			m_hwUsedStatusAjaxCall = setInterval(hwUsedStatusAjaxCall, 0);
@@ -709,48 +712,64 @@ function cleardnsStatusAjaxCall() {
 function segmentLeasingIPAssignedAjaxCall() {
 
 	try {
+		var jObj = Object();
 		var vCritical = "progress-bar-red";
 		var vWarnning = "progress-bar-warning";
 		var vNormal = "progress-bar-aqua";
-		
-		var vTop1 = Math.floor(Math.random() * 101);
-		var vTop2 = Math.floor(Math.random() * 101);
-		var vTop3 = Math.floor(Math.random() * 101);
-		var vTop4 = Math.floor(Math.random() * 101);
-		var vTop5 = Math.floor(Math.random() * 101);
 
-		var data = "{\"LeaseIPAvailable\": [{\"segment\": \"10.10.10.0/24\",\"value\": "+vTop1+"},{"+
-								     		"\"segment\": \"192.168.1.0/24\",\"value\": "+vTop2+"},{"+
-								     		"\"segment\": \"100.100.100.100/255\",\"value\": "+vTop3+"},{"+
-								     		"\"segment\": \"12.12.15.0/24\",\"value\": "+vTop4+"},{"+
-								     		"\"segment\": \"25.25.1.0/24\",\"value\": "+vTop5+"}]}";
-		//console.log(data);
-		var jsonObj = eval("(" + data + ')'); // JSonString 형식의 데이터를 Ojbect형식으로 변경
-		if (jsonObj != '') {
-			if (jsonObj.LeaseIPAvailable != '') {
-				var vhtml = "<div class=\"progress-group\"><table class=\"col-lg-12-noPadding\" border=0 style=\"table-layout:fixed; height:140px; margin-bottom:-5px\">";
-				$.each(jsonObj.LeaseIPAvailable, function(index, obj) {
-					var vSeverity = vNormal;
-					if (obj.value >= 80) {
-						vSeverity = vCritical;
-					}
-					else if (obj.value < 80 && obj.value >= 60) {
-						vSeverity = vWarnning;
-					}
-					
-					vhtml = vhtml + "<tr><td style=\"width:140px; text-align:left\"><span class=\"progress-text\">" + obj.segment + "</span></td>" +
-									"<td style=\"width:100%; padding:5px 0px\">" +
-									"	<div class=\"progress sm\">" +
-									"		<div class=\"progress-bar " + vSeverity + " \" style=\"width: " + obj.value + "%;\"></div>" +
-									"	</div>"+
-									"</td>" +
-									"<td style=\"width:45px\"><span class=\"progress-number\"><b>" + obj.value + " %</b></span></td></tr>";					
-				});
-			};			
-			vhtml = vhtml + "</table></div>";
-			$('#divleaseIPAvailable').html(vhtml);
-			vhtml = null;
-		};
+	    $.ajax({
+	        url : 'dashboard/segmentLeasingIPAssigned_Data',
+	        type : "POST",
+	        data : JSON.stringify(jObj),
+	        dataType : "text",
+	        success : function(data) {
+	            var jsonObj = eval("(" + data + ')');
+		            if (jsonObj.result == true) {
+		            	//console.log("segmentLeasingIPAssigned_Data jsonObj.resultValue : " + jsonObj.resultValue);
+		            	//결과 값 {"LEASEIPAVAILABLE":[{"segment":"192.168.1.0/24","value":41.66},{"segment":"2002:cafe:feed::/112","value":27.69},{"segment":"3.3.3.0/24","value":0.0},{"segment":"10.10.10.0/24","value":0.0},{"segment":"172.1.0.0/24","value":0.0},{"segment":"172.1.1.0/24","value":0.0},{"segment":"ff01::/32","value":0.0},{"segment":"1.1.1.0/24","value":0.0},{"segment":"ff02::/32","value":0.0},{"segment":"2.2.2.0/24","value":0.0}]}
+		            	
+		        		// Ojbect형식으로 변경
+	        			if (jsonObj.resultValue != '') {
+	        				var obj = eval("(" + jsonObj.resultValue + ')');
+	        				
+	        				if (obj.LEASEIPAVAILABLE != '') {
+	        					var vhtml = "<div class=\"progress-group\"><table class=\"col-lg-12-noPadding\" border=0 style=\"table-layout:fixed; height:140px; margin-bottom:-5px\">";
+	        					
+	        					var ranking = 0; 
+	        					$.each(obj.LEASEIPAVAILABLE, function(index, obj) {
+	        						ranking = ranking + 1;
+	        						if (ranking > 5) {
+	        							return false;
+									}
+	        						
+	        						var vSeverity = vNormal;
+	        						if (obj.value >= 80) {
+	        							vSeverity = vCritical;
+	        						}
+	        						else if (obj.value < 80 && obj.value >= 60) {
+	        							vSeverity = vWarnning;
+	        						}
+	        						
+	        						vhtml = vhtml + "<tr><td style=\"width:40%; min-width:100px; overflow: hidden; text-align:left\"><span class=\"progress-text\" style=\"font-weight: normal;\"" +
+	        										"data-toggle=\"tooltip\" title=\"" + obj.segment + " : " + obj.value.toFixed(1) + "%\" >" + obj.segment + "</span></td>" +
+	        										"<td style=\"width:60%; min-width:50px; padding:5px 0px\">" +
+	        										"	<div class=\"progress sm\" style=\"margin:0px 5px\">" +
+	        										"		<div class=\"progress-bar " + vSeverity + " \" style=\"width: " + obj.value + "%;\"></div>" +
+	        										"	</div>"+
+	        										"</td>" +
+	        										"<td style=\"width:50px;\"><span class=\"progress-number\"><b>" + obj.value.toFixed(1) + " %</b></span></td></tr>";					
+	        					});
+	        				};			
+	        				vhtml = vhtml + "</table></div>";
+	        				$('#divleaseIPAvailable').html(vhtml);
+	        				vhtml = null;
+	        				obj, jsonObj = null;
+	        			};
+	            }
+	        },
+	        complete: function(data) {
+	        }
+	    });	
 
 		clearsegmentLeasingIPAssignedAjaxCall();
 		m_segmentLeasingIPAssignedAjaxCall = setInterval(segmentLeasingIPAssignedAjaxCall, segmentLeasingIPAssignedCallTime);// 페이지 로딩 데이터 조회 후 polling 시간 변경
@@ -765,85 +784,223 @@ function clearsegmentLeasingIPAssignedAjaxCall() {
 	clearInterval(m_segmentLeasingIPAssignedAjaxCall);
 }
 
-// 고정, 리스, 미사용 IP 할당 현황  Ajax Call 메서드
-function assignmentIPStatusAjaxCall() {
+// IPv4 고정, 리스, 미사용 IP 할당 현황  Ajax Call 메서드
+function IPv4assignmentIPStatusAjaxCall() {
+	try {
+		var jObj = Object();
+		    
+	    $.ajax({
+	        url : 'dashboard/assignmentIPv4Status_Data',
+	        type : "POST",
+	        data : JSON.stringify(jObj),
+	        dataType : "text",
+	        success : function(data) {
+	            var jsonObj = eval("(" + data + ')');
+		            if (jsonObj.result == true) {
+		            	//console.log("IPv4Status jsonObj.resultValue : " + jsonObj.resultValue);
+		            	
+		            	//결과 값{"ASSIGNMENTIPSTATUS":[{"total":4845,"staticip":17,"leaseip":26,"unusedip":4802}]}
+		            	var obj = eval("(" + jsonObj.resultValue.replace("[", "").replace("]", "") + ')');
+		            	
+		        		// Ojbect형식으로 변경
+		        		if (obj != '') {
+//		        			console.log("obj.ASSIGNMENTIPSTATUS " + obj.ASSIGNMENTIPSTATUS.total);
+		        			if (obj.ASSIGNMENTIPSTATUS != '') {
+		        				var vhtml;				
+		        				var vformat = "<span class=\"progress-description\" data-toggle=\"tooltip\" title=\"{0} - {1}% ({2}/{3})\">{0} - {1}% ({2}/{3})</span>" +
+		        								"<div class=\"progress\">" +
+		        								"<div class=\"{4}\" style=\"width: {5}%\"></div></div>";
+		        				
+		        				var vTotalValue, vStaticipPer, vLeaseipPer, vUnusedipPer = 0;
 
-	try {		
-		var vTop1 = Math.floor(Math.random() * 1001);
-		var vTop2 = Math.floor(Math.random() * 1001);
-		var vTop3 = Math.floor(Math.random() * 1001);
+		        				if (obj.ASSIGNMENTIPSTATUS.total != '') {
+		        					vTotalValue = parseInt(obj.ASSIGNMENTIPSTATUS.total);
+		        				}
+		        				
+		        				if (vTotalValue > 0) {						
+		        					if (obj.ASSIGNMENTIPSTATUS.staticip.toString() != "") {
+		        						var staticip = (parseInt(obj.ASSIGNMENTIPSTATUS.staticip));
+		        						if (staticip > 0) {
+		        							vStaticipPer = ((staticip * 100) / vTotalValue).toFixed(1);
+	        								vhtml = String.format(vformat, getLanguage("staticIP"), vStaticipPer, Format_comma(obj.ASSIGNMENTIPSTATUS.staticip),
+	        								Format_comma(vTotalValue), getProgressSeverity(vStaticipPer), vStaticipPer);	
+										}
+		        						else {
+		        							vhtml = String.format(vformat, getLanguage("staticIP"), "0", "0", vTotalValue, "progress-bar", "0");
+											
+										}
+	        							$('#divIPv4StaticIP').html(vhtml);
+		        					}
+		        					if (obj.ASSIGNMENTIPSTATUS.leaseip.toString() != "") {
+		        						var leaseip = (parseInt(obj.ASSIGNMENTIPSTATUS.leaseip));
+		        						if (leaseip > 0) {
+			        						vLeaseipPer = ((leaseip * 100) / vTotalValue).toFixed(1);
+			        						vhtml = String.format(vformat, getLanguage("leaseIP"), vLeaseipPer, Format_comma(obj.ASSIGNMENTIPSTATUS.leaseip),
+			        						Format_comma(vTotalValue), getProgressSeverity(vLeaseipPer), vLeaseipPer);	
+										}
+		        						else {
+		        							vhtml = String.format(vformat, getLanguage("leaseIP"), "0", "0", vTotalValue, "progress-bar", "0");											
+										}
+		        						$('#divIPv4LeaseIP').html(vhtml);
+		        					}
+		        					if (obj.ASSIGNMENTIPSTATUS.unusedip.toString() != "") {
+		        						var unusedip = (parseInt(obj.ASSIGNMENTIPSTATUS.unusedip));
+		        						if (unusedip > 0) {
+		        							vUnusedipPer = ((unusedip * 100) / vTotalValue).toFixed(1);
+			        						vhtml = String.format(vformat, getLanguage("unUsedIP"), vUnusedipPer, Format_comma(obj.ASSIGNMENTIPSTATUS.unusedip),
+			        						Format_comma(vTotalValue), "progress-bar", vUnusedipPer);
+										}
+		        						else {
+		        							vhtml = String.format(vformat, getLanguage("unUsedIP"), "0", "0", vTotalValue, "progress-bar", "0");											
+										}
+		        						$('#divIPv4UnusedIP').html(vhtml);
+		        					}				
+		        				}
+		        				else {
+	    							$('#divIPv4StaticIP').html(String.format(vformat, getLanguage("staticIP"), "0", "0", "0", "progress-bar", "0"));
+	        						$('#divIPv4LeaseIP').html(String.format(vformat, getLanguage("leaseIP"), "0", "0", "0", "progress-bar", "0"));
+	        						$('#divIPv4UnusedIP').html(String.format(vformat, getLanguage("unUsedIP"), "0", "0", "0", "progress-bar", "0"));
+		        				}
+		        			};
+		        		};
+		        		obj = null;
 
-		var data = "{\"ASSIGNMENTIPSTATUS\": {" +
-						"\"total\": 1000," +
-						"\"staticip\": "+vTop1+"," +
-						"\"leaseip\": "+vTop2+"," +
-						"\"unusedip\": "+vTop3+"}}";
+		        		function getProgressSeverity(value) {
+		        			var vRet = "progress-bar";
+		        			if (value >= 80) {
+		        				vRet = "progress-bar progress-bar-danger";
+		        			}
+		        			else if (60 <= value && value < 80) {
+		        				vRet = "progress-bar progress-bar-warning";
+		        			}		
+		        			return vRet;
+		        		}
+	            }
+	        },
+	        complete: function(data) {
+	        }
+	    });		
 		
-		//console.log(data);
-		var jsonObj = eval("(" + data + ')'); // JSonString 형식의 데이터를
-		// Ojbect형식으로 변경
-		if (jsonObj != '') {
-			if (jsonObj.ASSIGNMENTIPSTATUS != '') {
-				var vhtml;				
-				var vformat = "<span class=\"progress-description\">{0} - {1}%</span>" +
-								"<div class=\"progress\">" +
-								"<div class=\"{2}\" style=\"width: {3}%\"></div></div>";
-				
-				var vTotalValue, vStaticipPer, vLeaseipPer, vUnusedipPer = 0;
-
-				if (jsonObj.ASSIGNMENTIPSTATUS.total != '') {
-					vTotalValue = parseInt(jsonObj.ASSIGNMENTIPSTATUS.total);
-				}
-				
-				if (vTotalValue > 0) {						
-					if (jsonObj.ASSIGNMENTIPSTATUS.staticip != '') {
-						vStaticipPer = (parseInt(jsonObj.ASSIGNMENTIPSTATUS.staticip) * 100) / vTotalValue;
-						vhtml = String.format(vformat, getLanguage("staticIP"), vStaticipPer, 
-								getProgressSeverity(vStaticipPer), vStaticipPer);
-						//console.log("divStaticIP.html : " + vhtml + ", 토탈 : " + parseInt(jsonObj.ASSIGNMENTIPSTATUS.staticip) + ", 페센트 : " + parseInt(vStaticipValue));
-						$('#divStaticIP').html(vhtml);
-					}
-					if (jsonObj.ASSIGNMENTIPSTATUS.leaseip != '') {
-						vLeaseipPer = (parseInt(jsonObj.ASSIGNMENTIPSTATUS.leaseip) * 100) / vTotalValue;
-						vhtml = String.format(vformat, getLanguage("leaseIP"), vLeaseipPer, 
-								getProgressSeverity(vLeaseipPer), vLeaseipPer);
-						//console.log("divLeaseIP.html : " + vhtml + ", 토탈 : " + parseInt(jsonObj.ASSIGNMENTIPSTATUS.leaseip) + ", 페센트 : " + parseInt(vLeaseipValue));
-						$('#divLeaseIP').html(vhtml);
-					}
-					if (jsonObj.ASSIGNMENTIPSTATUS.unusedip != '') {
-						vUnusedipPer = (parseInt(jsonObj.ASSIGNMENTIPSTATUS.unusedip) * 100) / vTotalValue;
-						vhtml = String.format(vformat, getLanguage("unUsedIP"), vUnusedipPer, 
-								getProgressSeverity(vUnusedipPer), vUnusedipPer);
-						//console.log("divUnusedIP.html : " + vhtml + ", 토탈 : " + parseInt(jsonObj.ASSIGNMENTIPSTATUS.unusedip) + ", 페센트 : " + parseInt(vUnusedipValue));
-						$('#divUnusedIP').html(vhtml);
-					}				
-				}
-			};
-		};
-		jsonObj = null;
-
-		function getProgressSeverity(value) {
-			var vRet = "progress-bar";
-			if (value >= 80) {
-				vRet = "progress-bar progress-bar-danger";
-			}
-			else if (60 <= value && value < 80) {
-				vRet = "progress-bar progress-bar-warning";
-			}		
-			return vRet;
-		}
-		
-		clearassignmentIPStatus();
-		m_assignmentIPStatusAjaxCall = setInterval(assignmentIPStatusAjaxCall, assignmentIPStatusCallTime);// 페이지 로딩 데이터 조회 후 polling 시간 변경
+		clearIPv4assignmentIPStatus();
+		m_IPv4assignmentIPStatusAjaxCall = setInterval(IPv4assignmentIPStatusAjaxCall, IPv4assignmentIPStatusCallTime);// 페이지 로딩 데이터 조회 후 polling 시간 변경
 		jsonObj = null;
 	} catch (e) {
-		console.log("dashboard.js assignmentIPStatusAjaxCall() Error Log : " + e.message);
+		console.log("dashboard.js IPv4assignmentIPStatusAjaxCall() Error Log : " + e.message);
 	}
 }
 
-// 고정, 리스, 미사용 IP 할당 현황  Ajax Call Clear 메서드
-function clearassignmentIPStatus() {
-	clearInterval(m_assignmentIPStatusAjaxCall);
+// IPv4 고정, 리스, 미사용 IP 할당 현황  Ajax Call Clear 메서드
+function clearIPv4assignmentIPStatus() {
+	clearInterval(m_IPv4assignmentIPStatusAjaxCall);
+}
+
+//IPv4 고정, 리스, 미사용 IP 할당 현황  Ajax Call 메서드
+function IPv6assignmentIPStatusAjaxCall() {
+	try {
+		var jObj = Object();
+		    
+	    $.ajax({
+	        url : 'dashboard/assignmentIPv6Status_Data',
+	        type : "POST",
+	        data : JSON.stringify(jObj),
+	        dataType : "text",
+	        success : function(data) {
+	            var jsonObj = eval("(" + data + ')');
+		            if (jsonObj.result == true) {
+		            	//console.log("IPv6Status jsonObj.resultValue : " + jsonObj.resultValue);
+		            	
+		            	//결과 값{"ASSIGNMENTIPSTATUS":[{"total":4845,"staticip":17,"leaseip":26,"unusedip":4802}]}
+		            	var obj = eval("(" + jsonObj.resultValue.replace("[", "").replace("]", "") + ')');
+		            	
+		        		// Ojbect형식으로 변경
+		        		if (obj != '') {
+		        			if (obj.ASSIGNMENTIPSTATUS != '') {
+		        				var vhtml;				
+		        				var vformat = "<span class=\"progress-description\" data-toggle=\"tooltip\" title=\"{0} - {1}% ({2}/{3})\">{0} - {1}% ({2}/{3})</span>" +
+		        								"<div class=\"progress\">" +
+		        								"<div class=\"{4}\" style=\"width: {5}%\"></div></div>";
+		        				
+		        				var vTotalValue, vStaticipPer, vLeaseipPer, vUnusedipPer = 0;
+
+		        				if (obj.ASSIGNMENTIPSTATUS.total != '') {
+		        					vTotalValue = parseInt(obj.ASSIGNMENTIPSTATUS.total);
+		        				}
+
+		        				if (vTotalValue > 0) {
+		        					if (obj.ASSIGNMENTIPSTATUS.staticip.toString() != "") {
+		        						var staticip = (parseInt(obj.ASSIGNMENTIPSTATUS.staticip));
+		        						if (staticip > 0) {
+		        							vStaticipPer = ((staticip * 100) / vTotalValue).toFixed(1);
+	        								vhtml = String.format(vformat, getLanguage("staticIP"), vStaticipPer, Format_comma(obj.ASSIGNMENTIPSTATUS.staticip),
+        											Format_comma(vTotalValue), getProgressSeverity(vStaticipPer), vStaticipPer);	
+										}
+		        						else {
+		        							vhtml = String.format(vformat, getLanguage("staticIP"), "0", "0", vTotalValue, "progress-bar", "0");
+											
+										}
+	        							$('#divIPv6StaticIP').html(vhtml);
+		        					}
+		        					if (obj.ASSIGNMENTIPSTATUS.leaseip.toString() != "") {
+		        						var leaseip = (parseInt(obj.ASSIGNMENTIPSTATUS.leaseip));
+		        						if (leaseip > 0) {
+			        						vLeaseipPer = ((leaseip * 100) / vTotalValue).toFixed(1);
+			        						vhtml = String.format(vformat, getLanguage("leaseIP"), vLeaseipPer, Format_comma(obj.ASSIGNMENTIPSTATUS.leaseip),
+			        								Format_comma(vTotalValue), getProgressSeverity(vLeaseipPer), vLeaseipPer);	
+										}
+		        						else {
+		        							vhtml = String.format(vformat, getLanguage("leaseIP"), "0", "0", vTotalValue, "progress-bar", "0");											
+										}
+		        						$('#divIPv6LeaseIP').html(vhtml);
+		        					}
+		        					if (obj.ASSIGNMENTIPSTATUS.unusedip.toString() != "") {
+		        						var unusedip = (parseInt(obj.ASSIGNMENTIPSTATUS.unusedip));
+		        						if (unusedip > 0) {
+		        							vUnusedipPer = ((unusedip * 100) / vTotalValue).toFixed(1);
+			        						vhtml = String.format(vformat, getLanguage("unUsedIP"), vUnusedipPer, Format_comma(obj.ASSIGNMENTIPSTATUS.unusedip),
+			        								Format_comma(vTotalValue), "progress-bar", vUnusedipPer);
+										}
+		        						else {
+		        							vhtml = String.format(vformat, getLanguage("unUsedIP"), "0", "0", vTotalValue, "progress-bar", "0");											
+										}
+		        						$('#divIPv6UnusedIP').html(vhtml);
+		        					}				
+		        				}
+		        				else {
+        							$('#divIPv6StaticIP').html(String.format(vformat, getLanguage("staticIP"), "0", "0", "0", "progress-bar", "0"));
+	        						$('#divIPv6LeaseIP').html(String.format(vformat, getLanguage("leaseIP"), "0", "0", "0", "progress-bar", "0"));
+	        						$('#divIPv6UnusedIP').html(String.format(vformat, getLanguage("unUsedIP"), "0", "0", "0", "progress-bar", "0"));
+		        				}
+		        			};
+		        		};
+		        		obj = null;
+
+		        		function getProgressSeverity(value) {
+		        			var vRet = "progress-bar";
+		        			if (value >= 80) {
+		        				vRet = "progress-bar progress-bar-danger";
+		        			}
+		        			else if (60 <= value && value < 80) {
+		        				vRet = "progress-bar progress-bar-warning";
+		        			}		
+		        			return vRet;
+		        		}
+	            }
+	        },
+	        complete: function(data) {
+	        }
+	    });		
+		
+		clearIPv6assignmentIPStatus();
+		m_IPv6assignmentIPStatusAjaxCall = setInterval(IPv6assignmentIPStatusAjaxCall, IPv6assignmentIPStatusCallTime);// 페이지 로딩 데이터 조회 후 polling 시간 변경
+		jsonObj = null;
+	} catch (e) {
+		console.log("dashboard.js IPv6assignmentIPStatusAjaxCall() Error Log : " + e.message);
+	}
+}
+
+//IPv6 고정, 리스, 미사용 IP 할당 현황  Ajax Call Clear 메서드
+function clearIPv6assignmentIPStatus() {
+	clearInterval(m_IPv6assignmentIPStatusAjaxCall);
 }
 
 // HW별 사용 현황  Ajax Call 메서드
@@ -1171,6 +1328,8 @@ function AllClearAjaxCall() {
 	clearInterval(m_certifyProcessAjaxCall);
 	clearInterval(m_dnsStatusAjaxCall);
 	clearInterval(m_segmentLeasingIPAssignedAjaxCall);
+	clearInterval(m_IPv4assignmentIPStatusAjaxCall);
+	clearInterval(m_IPv6assignmentIPStatusAjaxCall);
 	clearInterval(m_hwUsedStatusAjaxCall);
 	clearInterval(m_osUsedStatusAjaxCall);
 	clearInterval(m_serviceUsedStatusAjaxCall);

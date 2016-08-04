@@ -134,9 +134,7 @@ public class IPManagementActionController {
 		result = new AjaxResult();
 
 		try {
-			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
-					new TypeToken<HashMap<String, Object>>() {
-					}.getType());
+			HashMap<String, Object> parameters = gson.fromJson(request.getReader(), new TypeToken<HashMap<String, Object>>() {}.getType());
 			String m_timezone = parameters.get("timezone").toString();
 			String m_network = parameters.get("network").toString();
 

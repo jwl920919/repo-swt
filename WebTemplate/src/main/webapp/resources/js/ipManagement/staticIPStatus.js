@@ -39,8 +39,14 @@ $(document).ready(function() {
 											return Format_comma(data);
 										}},
 			                      {"data" : "ip_total",
-										"render":function(data,type,full,meta){	
-											return Format_comma(data);
+										"render":function(data,type,full,meta){
+											var ret = Format_comma(data);
+											if (ret == "●●●") {
+												return "<span style=\"font-weight: normal;\" data-toggle=\"tooltip\" title=\"data : " + data + "\" >" + ret + "</span>";
+											}
+											else{												
+												return ret;
+											}
 										}},
 			                      {"data" : "ip_usage",
 										"render":function(data,type,full,meta){	
@@ -127,7 +133,15 @@ function tdClickEvent(obj){
 			var ipCClass = String.format("{0} ~ {1}", $(obj).parent().children().eq(1).html(), $(obj).parent().children().eq(2).html());
 			$("#segmentLabel").text(ipCClass);
 			var network = $(obj).parent().children().eq(0).html();
-					
+
+			//탭 숨기기
+			if ($(obj).parent().children().eq(1).html() == "IPV6") {
+				console.log($(obj).parent().children().eq(1).html());
+				$("#tapheader").css("visibility","collapse");
+			}
+			else{
+				$("#tapheader").css("visibility","visible");
+			} 
 			
 			$("#defaultDiv").css("display","none");
 			$("#detailDiv").css("display","block");
@@ -148,7 +162,7 @@ function tdClickEvent(obj){
 		                "processing" : true,
 		                "serverSide" : true,
 		                "sScrollX": "100%",
-		                "sScrollXInner": "2000",
+		                "sScrollXInner": "2300",
 		                "bScrollCollapse": true,
 		                "ajax" : {
 		                    url : 'ipManagement/staticIPStatus_Segment_Detail_Select',

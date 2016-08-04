@@ -403,8 +403,9 @@
 							<div class="box-header">
 								<i class="fa fa-sliders"></i>
 
-								<h3 class="box-title-small" data-toggle="tooltip" title="<%=LanguageHelper.GetLanguage("fixedleaseunusedipallocationstatus")%>">
-								<%=LanguageHelper.GetLanguage("fixedleaseunusedipallocationstatus")%></h3>
+								<h3 class="box-title-small" data-toggle="tooltip" 
+								title="<%=LanguageHelper.GetLanguage("ipv4")%> <%=LanguageHelper.GetLanguage("fixedleaseunusedipallocationstatus")%>">
+								<%=LanguageHelper.GetLanguage("ipv4")%> <%=LanguageHelper.GetLanguage("fixedleaseunusedipallocationstatus")%></h3>
 								<!-- tools box -->
 								<div class="pull-right box-tools">
 									<button type="button" class="btn dashboard-box-btn bg-teal btn-sm"
@@ -422,7 +423,7 @@
 								<!-- 고정 IP 할당 현황 -->
 								<div class="info-box bg-light-blue">
 									<span class="info-box-icon"><i class="fa fa-lock"></i></span>						
-						            <div class="info-box-content" id="divStaticIP">
+						            <div class="info-box-content" id="divIPv4StaticIP">
 <!-- 										<span class="progress-description">미사용 IP</span> -->
 <!-- 										<div class="progress"> -->
 <!-- 											<div class="progress-bar progress-bar-danger" style="width: 87.6%"></div> -->
@@ -433,7 +434,7 @@
 								<!-- 리스 IP 할당 현황 -->
 								<div class="info-box bg-green">
 									<span class="info-box-icon"><i class="fa fa-user"></i></span>						
-						            <div class="info-box-content" id="divLeaseIP">>
+						            <div class="info-box-content" id="divIPv4LeaseIP">>
 <!-- 						            	<span class="progress-description"></span> -->
 <!-- 						            	<div class="progress"> -->
 <!-- 						            		<div class="progress-bar progress-bar-warning" style="width: 60%"></div> -->
@@ -444,7 +445,7 @@
 								<!-- 미사용 IP 할당 현황 -->
 								<div class="info-box bg-aqua">
 									<span class="info-box-icon"><i class="fa fa-user-times"></i></span>						
-						            <div class="info-box-content" id="divUnusedIP">>
+						            <div class="info-box-content" id="divIPv4UnusedIP">>
 <!-- 						            	<span class="progress-description"></span> -->
 <!-- 						            	<div class="progress"> -->
 <!-- 						            		<div class="progress-bar" style="width: 50%"></div> -->
@@ -463,8 +464,9 @@
 							<div class="box-header">
 								<i class="fa fa-sliders"></i>
 
-								<h3 class="box-title-small" data-toggle="tooltip" title="<%=LanguageHelper.GetLanguage("fixedleaseunusedipallocationstatus")%>">
-								<%=LanguageHelper.GetLanguage("fixedleaseunusedipallocationstatus")%></h3>
+								<h3 class="box-title-small" data-toggle="tooltip"
+								title="<%=LanguageHelper.GetLanguage("ipv6")%> <%=LanguageHelper.GetLanguage("fixedleaseunusedipallocationstatus")%>">
+								<%=LanguageHelper.GetLanguage("ipv6")%> <%=LanguageHelper.GetLanguage("fixedleaseunusedipallocationstatus")%></h3>
 								<!-- tools box -->
 								<div class="pull-right box-tools">
 									<button type="button" class="btn dashboard-box-btn bg-teal btn-sm"
@@ -482,7 +484,7 @@
 								<!-- 고정 IP 할당 현황 -->
 								<div class="info-box bg-light-blue">
 									<span class="info-box-icon"><i class="fa fa-lock"></i></span>						
-						            <div class="info-box-content" id="divStaticIP">
+						            <div class="info-box-content" id="divIPv6StaticIP">
 <!-- 										<span class="progress-description">미사용 IP</span> -->
 <!-- 										<div class="progress"> -->
 <!-- 											<div class="progress-bar progress-bar-danger" style="width: 87.6%"></div> -->
@@ -493,7 +495,7 @@
 								<!-- 리스 IP 할당 현황 -->
 								<div class="info-box bg-green">
 									<span class="info-box-icon"><i class="fa fa-user"></i></span>						
-						            <div class="info-box-content" id="divLeaseIP">>
+						            <div class="info-box-content" id="divIPv6LeaseIP">>
 <!-- 						            	<span class="progress-description"></span> -->
 <!-- 						            	<div class="progress"> -->
 <!-- 						            		<div class="progress-bar progress-bar-warning" style="width: 60%"></div> -->
@@ -504,7 +506,7 @@
 								<!-- 미사용 IP 할당 현황 -->
 								<div class="info-box bg-aqua">
 									<span class="info-box-icon"><i class="fa fa-user-times"></i></span>						
-						            <div class="info-box-content" id="divUnusedIP">>
+						            <div class="info-box-content" id="divIPv6UnusedIP">>
 <!-- 						            	<span class="progress-description"></span> -->
 <!-- 						            	<div class="progress"> -->
 <!-- 						            		<div class="progress-bar" style="width: 50%"></div> -->
