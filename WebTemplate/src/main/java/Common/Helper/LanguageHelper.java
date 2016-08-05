@@ -16,6 +16,7 @@ import org.json.simple.parser.JSONParser;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.io.Resource;
+import org.springframework.integration.ip.config.IpAdapterParserUtils;
 
 import Common.Helper.JSONHelper;
 import MVC.ShinwooTNS.com.CustomResourceLoader;
@@ -133,7 +134,9 @@ public class LanguageHelper {
 			}
 
 			if (languageFile != null) {
-				BufferedReader br = new BufferedReader(new FileReader(languageFile));
+				FileInputStream fis = new FileInputStream(languageFile);
+				InputStreamReader isr = new InputStreamReader(fis, "UTF-8");
+				BufferedReader br = new BufferedReader(isr);
 
 				StringBuilder sb = new StringBuilder();
 				String line;

@@ -21,7 +21,6 @@ $(document).ready(function() {
 		            	
 		            	$.each(jsonObj.data, function (index, obj) {		            		
 		            		if (tag == '') {
-		            			tag += "<option selected class='placeholderSelectOption' value=''>" + getLanguage("chooseasegment") + "</option>";
 			            		tag += "<option value='ALL' class='selectoption_black_color'>" + getLanguage("all") + "</option>";
 		            			fnSelectData('ALL', ''); //첫 로딩 시 첫번재 데이터로 조회
 							}
