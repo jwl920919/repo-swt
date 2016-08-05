@@ -12,8 +12,8 @@
 	
 	<insert id="insertClientInfo" parameterType="com.shinwootns.data.entity.ClientInfo">
 		<![CDATA[
-			INSERT INTO client_info (macaddr, duid, hostname, vendor, model, os, ip_type, last_ip, update_time)
-			VALUES ( #{macaddr}, #{duid}, #{hostname}, #{vendor}, #{model}, #{os}, #{ip_type}, #{last_ip}, now() ) 
+			INSERT INTO client_info (macaddr, duid, hostname, vendor, model, os, ip_type, last_ip, last_switch, last_port, position_update, update_time )
+			VALUES ( #{macaddr}, #{duid}, #{hostname}, #{vendor}, #{model}, #{os}, #{ip_type}, #{last_ip}, #{last_switch}, #{last_port}, #{position_update}, now() ) 
 		]]>
 	</insert>
 	
@@ -33,15 +33,24 @@
 		, model = #{model}
 		</if>
 		<if test="os != null">
-		, os=#{os}
+		, os = #{os}
 		</if>
 		<if test="ip_type != null">
-		, ip_type=#{ip_type}
+		, ip_type = #{ip_type}
 		</if>
 		<if test="last_ip != null">
-		, last_ip=#{last_ip}
+		, last_ip = #{last_ip}
 		</if>
-		WHERE macaddr=#{macaddr}
+		<if test="last_switch != null">
+		, last_switch = #{last_switch}
+		</if>
+		<if test="last_port != null">
+		, last_port = #{last_port}
+		</if>
+		<if test="position_update != null">
+		, position_update = #{position_update}
+		</if>
+		WHERE macaddr = #{macaddr}
 	</update>
 
 </mapper>

@@ -53,15 +53,16 @@
 	
 	<insert id="insertDhcpRange" parameterType="com.shinwootns.data.entity.DhcpRange">
 		<![CDATA[
-			INSERT INTO dhcp_range (site_id, network, ip_type, start_ip, end_ip, start_num, end_num, ip_count)
-			VALUES ( #{site_id}, #{network}, #{ip_type}, #{start_ip}, #{end_ip}, #{start_num}, #{end_num}, #{ip_count} ) 
+			INSERT INTO dhcp_range (site_id, network, ip_type, start_ip, end_ip, start_num, end_num, ip_count, comment, disable)
+			VALUES ( #{site_id}, #{network}, #{ip_type}, #{start_ip}, #{end_ip}, #{start_num}, #{end_num}, #{ip_count}, #{comment}, #{disable} ) 
 		]]>
 	</insert>
 	
 	<update id="updateDhcpRange" parameterType="com.shinwootns.data.entity.DhcpRange">
 		<![CDATA[
 			UPDATE dhcp_range
-			SET end_ip=#{end_ip}, ip_type=#{ip_type}, start_num=#{start_num}, end_num=#{end_num}, ip_count=#{ip_count}, update_time=now()
+			SET end_ip=#{end_ip}, ip_type=#{ip_type}, start_num=#{start_num}, end_num=#{end_num}, ip_count=#{ip_count}
+				, comment=#{comment}, disable=#{disable}, update_time=now()
 			WHERE site_id=#{site_id} AND network =#{network} AND start_ip = #{start_ip}
 		]]>
 	</update>

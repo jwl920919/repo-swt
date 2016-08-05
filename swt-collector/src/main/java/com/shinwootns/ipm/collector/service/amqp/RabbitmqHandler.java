@@ -1,16 +1,12 @@
 package com.shinwootns.ipm.collector.service.amqp;
 
+import java.io.IOException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.shinwootns.common.mq.MQManager;
 import com.shinwootns.common.mq.MQManager.MQClientType;
-import com.shinwootns.common.mq.client.BaseClient;
-import com.shinwootns.common.mq.client.CustomClient;
-import com.shinwootns.common.mq.client.PublishClient;
-import com.shinwootns.common.mq.client.RoutingClient;
-import com.shinwootns.common.mq.client.SingleClient;
-import com.shinwootns.common.mq.client.TopicsClient;
 import com.shinwootns.common.mq.client.WorkQueueClient;
 import com.shinwootns.common.utils.CryptoUtils;
 import com.shinwootns.ipm.collector.SpringBeanProvider;
@@ -20,7 +16,11 @@ public class RabbitmqHandler {
 	
 	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
-	private MQManager manager = new MQManager();
+	private final static String EVENT_QUEUE_NAME 			= "ipm.event";
+	
+	private MQManager manager = null;;
+	
+	private WorkQueueClient client = null;
 	
 	//retion Singleton
 	private static RabbitmqHandler _instance = null;
@@ -41,41 +41,100 @@ public class RabbitmqHandler {
 		if (appProperty == null)
 			return false;
 		
-		boolean result = false;
-		try
+		close();
+
+		synchronized(this)
 		{
-		
-			result =  manager.Connect(
-					appProperty.rabbitmqHost, 
-					appProperty.rabbitmqPort, 
-					appProperty.rabbitmqUsername, 
-					CryptoUtils.Decode_AES128(appProperty.rabbitmqPassword), 
-					appProperty.rabbitmqVHost);
+			try
+			{
+				if (manager == null) {
+					manager = new MQManager(appProperty.rabbitmqHost, 
+							appProperty.rabbitmqPort, 
+							appProperty.rabbitmqUsername, 
+							CryptoUtils.Decode_AES128(appProperty.rabbitmqPassword), 
+							appProperty.rabbitmqVHost,
+							5000);
+				}
+			
+				if ( manager.Connect() ) {
+				
+					// Create Client
+					if (client == null)
+						client = (WorkQueueClient)manager.createMQClient(MQClientType.WorkQueue);
+						
+					if (client != null) {
+						
+						// Delcare Queue
+						client.DeclareQueue_WorkQueueMode(EVENT_QUEUE_NAME);
+					
+						// Check Connection
+						if ( client.checkConnection()) {
+						
+							_logger.info((new StringBuilder())
+									.append("Succeed connect rabbitmq... amqp:\\").append(appProperty.rabbitmqHost).append(":").append(appProperty.rabbitmqPort)
+									.toString());
+							
+							return true;
+						}
+						else {
+							client.CloseChannel();
+							client = null;
+						}
+					}
+				}
+			}
+			catch(Exception ex) {
+				_logger.error(ex.getMessage(), ex);
+			}
 		}
-		catch(Exception ex) {
-			_logger.error(ex.getMessage(), ex);
-			result = false;
-		}
 		
-		if (result)
-			_logger.info((new StringBuilder())
-					.append("Succeed connect rabbitmq... amqp:\\").append(appProperty.rabbitmqHost).append(":").append(appProperty.rabbitmqPort)
-					.toString());
-		else
-			_logger.info((new StringBuilder())
-					.append("Failed connect rabbitmq... amqp:\\").append(appProperty.rabbitmqHost).append(":").append(appProperty.rabbitmqPort)
-					.toString()
-					);
+		_logger.info((new StringBuilder())
+				.append("Failed connect rabbitmq... amqp:\\").append(appProperty.rabbitmqHost).append(":").append(appProperty.rabbitmqPort)
+				.toString()
+				);
 		
-		return result;
+		return false;
 	}
 	
 	public void close()
 	{
-		manager.Close();
+		synchronized(this)
+		{
+			if (manager != null) {
+				manager.Close();
+				manager = null;
+			}
+		}
 	}
 	//endregion
 	
+	
+	public boolean SendEvent(byte[] bytes) {
+		
+		if (client == null || bytes == null)
+			return false;
+		
+		synchronized(this)
+		{
+			try {
+				
+				return client.SendData(EVENT_QUEUE_NAME, bytes);
+				
+			} catch (IOException e) {
+				_logger.error(e.getMessage(), e);
+				
+				if (client.checkConnection() == false) {
+					client.CloseChannel();
+					client = null;
+				}
+					
+			}
+		}
+		
+		return false;
+	}
+	
+	/*
 	//region [FUNC] Get Clients
 	public SingleClient createSingleClient()
 	{
@@ -107,5 +166,5 @@ public class RabbitmqHandler {
 		return (CustomClient)manager.createMQClient(MQClientType.Custom);
 	}
 	//endregion
-
+	*/
 }

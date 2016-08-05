@@ -1,5 +1,6 @@
 package com.shinwootns.common.mq.client;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.slf4j.Logger;
@@ -56,19 +57,12 @@ public class WorkQueueClient extends BaseClient {
 	//endregion
 	
 	//region Send Data
-	public boolean SendData(String queueName, byte[] bytes)
+	public boolean SendData(String queueName, byte[] bytes) throws IOException
 	{
 		if (_channel == null)
 			return false;
 		
-		try
-		{
-			_channel.basicPublish("", queueName, null, bytes);
-		}
-		catch(Exception ex)
-		{
-			_logger.error(ex.getMessage(), ex);
-		}
+		_channel.basicPublish("", queueName, null, bytes);
 		
 		return false;
 	}

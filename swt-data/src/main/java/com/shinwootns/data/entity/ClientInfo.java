@@ -9,11 +9,13 @@ public class ClientInfo implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String macaddr;
-	private String comment;
 	private String duid;
 	private String hostname;
 	private String ip_type;
 	private String last_ip;
+	private String last_switch;
+	private String last_port;
+	private Timestamp position_update;
 	private String model;
 	private String os;
 	private Timestamp update_time;
@@ -28,14 +30,6 @@ public class ClientInfo implements Serializable {
 
 	public void setMacaddr(String macaddr) {
 		this.macaddr = macaddr;
-	}
-
-	public String getComment() {
-		return this.comment;
-	}
-
-	public void setComment(String comment) {
-		this.comment = comment;
 	}
 
 	public String getDuid() {
@@ -100,6 +94,30 @@ public class ClientInfo implements Serializable {
 
 	public void setVendor(String vendor) {
 		this.vendor = vendor;
+	}
+
+	public String getLastSwitch() {
+		return last_switch;
+	}
+
+	public void setLastSwitch(String last_switch) {
+		this.last_switch = last_switch;
+	}
+
+	public String getLastPort() {
+		return last_port;
+	}
+
+	public void setLastPort(String last_port) {
+		this.last_port = last_port;
+	}
+
+	public Timestamp getPositionUpdate() {
+		return position_update;
+	}
+
+	public void setPositionUpdate(Timestamp position_update) {
+		this.position_update = position_update;
 	}
 
 }

@@ -269,6 +269,8 @@ public class DhcpHandler {
 					dhcpRange.setNetwork(network);
 					dhcpRange.setStartIp(JsonUtils.getValueToString((JsonObject)obj, "start_addr", ""));
 					dhcpRange.setEndIp(JsonUtils.getValueToString((JsonObject)obj, "end_addr", ""));
+					dhcpRange.setComment(JsonUtils.getValueToString((JsonObject)obj, "comment", ""));
+					dhcpRange.setDisable(JsonUtils.getValueToBoolean((JsonObject)obj, "disable", false));
 					
 					IPAddr startIPAddr = new IPAddr(dhcpRange.getStartIp());
 					IPAddr endIPAddr = new IPAddr(dhcpRange.getEndIp());
