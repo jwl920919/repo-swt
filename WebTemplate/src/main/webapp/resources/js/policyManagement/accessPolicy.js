@@ -77,8 +77,10 @@ $(document)
                                                     'orderable' : false,
                                                     'render' : function(data,
                                                             type, row) {
-                                                        if(data) return '<span class="permit-btn">Permit</span>';
-                                                        else return 'false';
+                                                        if (data)
+                                                            return '<span class="permit">Permit</span>';
+                                                        else
+                                                            return '<span class="deny">Deny</span>';
                                                     }
                                                 }, {
                                                     "data" : "site_id",
@@ -91,6 +93,13 @@ $(document)
                         var d_filter = $('#accessPolicyTable_wrapper .row:first .col-sm-6:eq(1)');
                         d_length.append(d_filter);
                         d_wrap.prepend(d_filter);
+                        // 삭제버튼 위치변경
+                        $('#accessPolicyTable_paginate').parent().prepend(
+                                $('#delete-button').parent());
                     });
 
                 });
+
+function trClickEvent(clickedTr) {
+    console.log('TTT!!');
+}

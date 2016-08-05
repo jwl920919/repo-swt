@@ -2,9 +2,9 @@
 	vertical-align: middle !important;
 }
 
-.permit-btn {
+.permit {
 	height: 30px;
-	width: 45px;
+	width: 52px;
 	font-size: 11px;
 	vertical-align: middle;
 	padding: 5px 10px;
@@ -14,7 +14,15 @@
 	border-radius: 10px 10px 10px 10px !important;
 }
 
-.deny-btn {
-	
+.deny {
+	height: 30px;
+	width: 52px;
+	font-size: 11px;
+	vertical-align: middle;
+	padding: 5px 10px;
+	background-color: #dd4b39;
+	color: white;
+	border-color: #d73925;
+	border-radius: 10px 10px 10px 10px !important;
 }
 
