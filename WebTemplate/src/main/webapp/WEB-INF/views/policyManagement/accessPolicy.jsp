@@ -15,15 +15,15 @@
 </div>
 <section class="white-paper" style="text-align: center">
 	<div class="row">
-		<div class="col-xs-6">
+		<div class="col-xs-12" style="padding-left: 10px;padding-right: 10px;">
 			<div class="box-header" style="text-align: left;">
 				<i class="fa fa-cog"></i>
 				<h3 class="box-title-small">제한 정책</h3>
 			</div>
 			<div class="box-body">
 				<center>
-					<table name="datatable" id="accessPolicyTable" class="essential-table"
-						style="width: 98%">
+					<table name="datatable" id="accessPolicyTable"
+						class="essential-table" style="width: 100%;">
 						<thead>
 							<tr>
 								<th></th>
@@ -40,17 +40,14 @@
 							</tr>
 						</thead>
 					</table>
+					<div>
+						<input id='delete-button' class='btn btn-primary' style="float: left;" type="button"
+							value="<%=LanguageHelper.GetLanguage("delete")%>" />
+					</div>
 				</center>
 				<div style="margin-bottom: 10px;"></div>
 			</div>
 
-		</div>
-		<div class="col-xs-6">
-			<div class="box-header" style="text-align: left;">
-				<i class="fa fa-cog"></i>
-				<h3 class="box-title-small">-</h3>
-			</div>
-			<div class="box-body"></div>
 		</div>
 	</div>
 </section>
