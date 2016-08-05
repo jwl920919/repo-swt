@@ -1501,6 +1501,13 @@ function fnPieChartTooltipBind(chart){
 	}); 
 }
 
+/**
+ * tr 이벤트 핸들러
+**/
+function trClickEvent (obj){
+	return false;
+}
+
 //========================================================//
 // 차트 임시데이터 생성 메서드
 function tempChartData() {
