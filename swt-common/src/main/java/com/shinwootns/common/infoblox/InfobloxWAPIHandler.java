@@ -162,6 +162,7 @@ public class InfobloxWAPIHandler {
 			
 			sb.append("/wapi/v1.0/range");
 			sb.append("?_return_type=json");
+			sb.append("&_return_fields=network,network_view,start_addr,end_addr,comment,disable");
 			
 			String value = restClient.Get(sb.toString(), null);
 			
@@ -183,6 +184,7 @@ public class InfobloxWAPIHandler {
 			
 			sb.append("/wapi/v1.0/ipv6range");
 			sb.append("?_return_type=json");
+			sb.append("&_return_fields=network,network_view,start_addr,end_addr,comment,disable");
 			
 			String value = restClient.Get(sb.toString(), null);
 			

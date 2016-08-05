@@ -323,12 +323,14 @@ CREATE TABLE public.dhcp_range
 (
   site_id integer NOT NULL,
   network character varying(64) NOT NULL,
-  ip_type character varying(18),
+  ip_type character varying(18) NOT NULL,
   start_ip character varying(40) NOT NULL,
   end_ip character varying(40) NOT NULL,
   start_num numeric,
   end_num numeric,
   ip_count numeric,
+  comment character varying(128),
+  disable boolean DEFAULT false,
   insert_time timestamp with time zone DEFAULT current_timestamp,
   update_time timestamp with time zone DEFAULT current_timestamp,
   CONSTRAINT dhcp_range_pkey PRIMARY KEY (site_id, network, start_ip, end_ip)
@@ -415,7 +417,6 @@ COMMENT ON COLUMN dhcp_ip_status.usage IS 'Indicates whether the IP address is c
 
 
 
-
 -- client_info
 CREATE TABLE client_info
 (
@@ -427,6 +428,9 @@ CREATE TABLE client_info
   os character varying(128),
   ip_type character varying(18),
   last_ip character varying(64),
+  last_switch character varying(64),
+  last_port character varying(64),
+  last_update_time timestamp with time zone,
   comment character varying(256),
   update_time timestamp with time zone DEFAULT current_timestamp,
   CONSTRAINT client_info_pkey PRIMARY KEY (macaddr)

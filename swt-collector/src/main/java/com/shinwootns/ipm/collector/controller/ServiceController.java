@@ -56,6 +56,7 @@ public class ServiceController {
 		// Connect RabbitMQ
 		RabbitmqHandler.getInstance().connect();
 		
+		// Connect Redis
 		RedisHandler.getInstance().connect();
 		
 		// Start Work Manager

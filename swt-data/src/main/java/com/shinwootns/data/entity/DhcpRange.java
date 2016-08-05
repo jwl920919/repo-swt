@@ -13,6 +13,8 @@ public class DhcpRange implements Serializable {
 	private String ip_type;
 	private String start_ip;
 	private String end_ip;
+	private String comment;
+	private Boolean disable;
 	private BigInteger start_num;
 	private BigInteger end_num;
 	private BigInteger ip_count;
@@ -100,6 +102,22 @@ public class DhcpRange implements Serializable {
 
 	public void setIpCount(BigInteger ip_count) {
 		this.ip_count = ip_count;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
+	public Boolean getDisable() {
+		return disable;
+	}
+
+	public void setDisable(Boolean disable) {
+		this.disable = disable;
 	}
 
 }

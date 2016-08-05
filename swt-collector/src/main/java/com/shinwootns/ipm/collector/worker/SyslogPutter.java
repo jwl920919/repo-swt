@@ -12,7 +12,6 @@ import com.shinwootns.data.key.RedisKeys;
 import com.shinwootns.ipm.collector.SpringBeanProvider;
 import com.shinwootns.ipm.collector.config.ApplicationProperty;
 import com.shinwootns.ipm.collector.data.SharedData;
-import com.shinwootns.ipm.collector.service.amqp.RabbitmqSender;
 import com.shinwootns.ipm.collector.service.redis.RedisHandler;
 
 import redis.clients.jedis.Jedis;
