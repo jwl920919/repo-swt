@@ -560,6 +560,7 @@
 		       "apply"."issuance_ipaddr" like CONCAT('%', #{searchValue}, '%') OR "apply"."issuance_ip_type" like CONCAT('%', #{searchValue}, '%'))
   		   AND ("apply"."apply_time" &lt;= timestamp '${endtime}' AND "apply"."apply_time" &gt;= timestamp '${starttime}')
 		<choose>
+			<when test="orderColumn == 'settlement_status_text'"> ORDER BY "settlement_status" ${orderType} </when>
 			<when test="orderColumn == 'apply_static_ipaddr' or orderColumn == 'issuance_ipaddr'"> ORDER BY "settlement_status", inet(${orderColumn}) ${orderType} </when>
 			<when test="orderColumn != 'apply_static_ipaddr' and orderColumn != 'issuance_ipaddr'"> ORDER BY "settlement_status", ${orderColumn} ${orderType} </when>
 		</choose>

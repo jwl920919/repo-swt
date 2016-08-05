@@ -86,17 +86,16 @@
 									<table id="datatable_detail" name="datatable" class="essential-table" style="width: 98%">
 										<thead>
 											<tr>
-												<th width="7%"><%=LanguageHelper.GetLanguage("ip")%></th>
-												<th width="6%">IP type</th>
-												<th width="8%"><%=LanguageHelper.GetLanguage("mac")%></th>
-												<th width="7%">Duid</th>
-												<th width="7%"><%=LanguageHelper.GetLanguage("status")%></th>
-												<th width="10%"><%=LanguageHelper.GetLanguage("hostname")%></th>
-												<th width="12%"><%=LanguageHelper.GetLanguage("hostos")%></th>
-												<th width="13%">Fingerprint</th>
-												<th width="8%"><%=LanguageHelper.GetLanguage("lease")%> <%=LanguageHelper.GetLanguage("starttime")%></th>
-												<th width="8%"><%=LanguageHelper.GetLanguage("lease")%> <%=LanguageHelper.GetLanguage("endtime")%></th>
-												<th width="14%">user description</th>
+												<th width="8%"><%=LanguageHelper.GetLanguage("ip")%></th>
+												<th width="7%">IP type</th>
+												<th width="9%"><%=LanguageHelper.GetLanguage("mac")%></th>
+												<th width="8%">Duid</th>
+												<th width="8%"><%=LanguageHelper.GetLanguage("status")%></th>
+												<th width="11%"><%=LanguageHelper.GetLanguage("hostname")%></th>
+												<th width="15%"><%=LanguageHelper.GetLanguage("hostos")%></th>
+												<th width="9%"><%=LanguageHelper.GetLanguage("lease")%> <%=LanguageHelper.GetLanguage("starttime")%></th>
+												<th width="9%"><%=LanguageHelper.GetLanguage("lease")%> <%=LanguageHelper.GetLanguage("endtime")%></th>
+												<th width="16%">user description</th>
 											</tr>
 										</thead>
 										<tbody>

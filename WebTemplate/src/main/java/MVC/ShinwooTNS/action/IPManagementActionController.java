@@ -86,7 +86,7 @@ public class IPManagementActionController {
 		int totalCount = 0;
 
 		try {
-			String[] columns = { "ip_type", "macaddr", "duid", "ip_status", "host_name", "host_os", "fingerprint",
+			String[] columns = { "ip_type", "macaddr", "duid", "ip_status", "host_name", "fingerprint",
 					"lease_start_time", "lease_end_time", "user_description" };			
 			
 			String m_network = request.getParameter("network");
