@@ -57,11 +57,11 @@ public class RedisHandler {
 						, 0);
 				
 				if ( rm.connect() ) {
-					System.out.println("Redis connection... OK");
-					return false;
+					_logger.info("Redis connection... OK");
+					return true;
 				}
 				else {
-					System.out.println("Redis connection... Failed");
+					_logger.info("Redis connection... Failed");
 					return false;
 				}
 			}

@@ -69,7 +69,7 @@ public class WorkQueueClient extends BaseClient {
 	//endregion
 	
 	//region Receive Data
-	public ArrayList<String> ReceiveData(String queueName, boolean autoAck, int timeout_ms, int popCount, String charset )
+	public ArrayList<String> ReceiveData(String queueName, boolean autoAck, int timeout_ms, int popCount, String charset ) throws InterruptedException, IOException
 	{
 		if (_channel == null)
 			return null;
@@ -79,54 +79,48 @@ public class WorkQueueClient extends BaseClient {
 		
 		ArrayList<String> listData = new ArrayList<String>();
 		
-		try
+		_channel.basicConsume(queueName, autoAck, _consumer);
+		
+		long startTime = System.currentTimeMillis();
+		long estimatedTime = startTime;
+		
+		Delivery delivery;
+		
+		while(true)
 		{
-			_channel.basicConsume(queueName, autoAck, _consumer);
+			// Get Data
+			delivery = _consumer.nextDelivery(timeout_ms);
 			
-			long startTime = System.currentTimeMillis();
-			long estimatedTime = startTime;
-			
-			Delivery delivery;
-			
-			while(true)
+			if (delivery != null)
 			{
-				// Get Data
-				delivery = _consumer.nextDelivery(timeout_ms);
+				// To String
+				String message = new String(delivery.getBody(), charset);
 				
-				if (delivery != null)
+				// Add to list 
+				listData.add(message);
+				
+				if (autoAck == false)
 				{
-					// To String
-					String message = new String(delivery.getBody(), charset);
-					
-					// Add to list 
-					listData.add(message);
-					
-					if (autoAck == false)
-					{
-						// Send Ack
-						boolean multiple = false;
-						_channel.basicAck(delivery.getEnvelope().getDeliveryTag(), multiple);
-					}
+					// Send Ack
+					boolean multiple = false;
+					_channel.basicAck(delivery.getEnvelope().getDeliveryTag(), multiple);
 				}
-				else
-				{
-					Thread.sleep(100);
-				}
-				
-				estimatedTime = System.currentTimeMillis() - startTime;
-				
-				// Check Pop Count
-				if (popCount > 0 && listData.size() >= popCount)
-					break;
-				// Check Timeout
-				else if (timeout_ms < estimatedTime)
-					break;
+			}
+			else
+			{
+				Thread.sleep(100);
 			}
 			
-		} catch(Exception ex) {
-			_logger.error(ex.getMessage(), ex);
+			estimatedTime = System.currentTimeMillis() - startTime;
+			
+			// Check Pop Count
+			if (popCount > 0 && listData.size() >= popCount)
+				break;
+			// Check Timeout
+			else if (timeout_ms < estimatedTime)
+				break;
 		}
-		
+				
 		return listData;
 	}
 	//endregion

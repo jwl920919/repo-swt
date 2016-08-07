@@ -9,26 +9,25 @@ import com.shinwootns.common.mq.MQManager;
 import com.shinwootns.common.mq.MQManager.MQClientType;
 import com.shinwootns.common.mq.client.WorkQueueClient;
 import com.shinwootns.common.utils.CryptoUtils;
+import com.shinwootns.data.key.QueueNames;
 import com.shinwootns.ipm.collector.SpringBeanProvider;
 import com.shinwootns.ipm.collector.config.ApplicationProperty;
 
-public class RabbitmqHandler {
+public class RabbitMQHandler {
 	
 	private final Logger _logger = LoggerFactory.getLogger(getClass());
-	
-	private final static String EVENT_QUEUE_NAME 			= "ipm.event";
 	
 	private MQManager manager = null;;
 	
 	private WorkQueueClient client = null;
 	
-	//retion Singleton
-	private static RabbitmqHandler _instance = null;
-	private RabbitmqHandler() {}
-	public static synchronized RabbitmqHandler getInstance() {
+	//region Singleton
+	private static RabbitMQHandler _instance = null;
+	private RabbitMQHandler() {}
+	public static synchronized RabbitMQHandler getInstance() {
 
 		if (_instance == null) {
-			_instance = new RabbitmqHandler();
+			_instance = new RabbitMQHandler();
 		}
 		return _instance;
 	}
@@ -65,7 +64,7 @@ public class RabbitmqHandler {
 					if (client != null) {
 						
 						// Delcare Queue
-						client.DeclareQueue_WorkQueueMode(EVENT_QUEUE_NAME);
+						client.DeclareQueue_WorkQueueMode(QueueNames.EVENT_QUEUE_NAME);
 					
 						// Check Connection
 						if ( client.checkConnection()) {
@@ -108,7 +107,7 @@ public class RabbitmqHandler {
 	}
 	//endregion
 	
-	
+	//region SendEvent
 	public boolean SendEvent(byte[] bytes) {
 		
 		if (client == null || bytes == null)
@@ -118,7 +117,7 @@ public class RabbitmqHandler {
 		{
 			try {
 				
-				return client.SendData(EVENT_QUEUE_NAME, bytes);
+				return client.SendData(QueueNames.EVENT_QUEUE_NAME, bytes);
 				
 			} catch (IOException e) {
 				_logger.error(e.getMessage(), e);
@@ -133,38 +132,5 @@ public class RabbitmqHandler {
 		
 		return false;
 	}
-	
-	/*
-	//region [FUNC] Get Clients
-	public SingleClient createSingleClient()
-	{
-		return (SingleClient)manager.createMQClient(MQClientType.Single);
-	}
-	
-	public WorkQueueClient createWorkQueueClient()
-	{
-		return (WorkQueueClient)manager.createMQClient(MQClientType.WorkQueue);
-	}
-	
-	public PublishClient createPublishClient()
-	{
-		return (PublishClient)manager.createMQClient(MQClientType.Publish);
-	}
-	
-	public TopicsClient createTopicsClient()
-	{
-		return (TopicsClient)manager.createMQClient(MQClientType.Topics);
-	}
-	
-	public RoutingClient createRoutingClient()
-	{
-		return (RoutingClient)manager.createMQClient(MQClientType.Routing);
-	}
-	
-	public CustomClient createCustomClient()
-	{
-		return (CustomClient)manager.createMQClient(MQClientType.Custom);
-	}
 	//endregion
-	*/
 }

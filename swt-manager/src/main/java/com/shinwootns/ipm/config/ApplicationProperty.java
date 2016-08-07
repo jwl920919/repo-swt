@@ -68,7 +68,7 @@ public class ApplicationProperty {
 	public String rabbitmqPassword;
 	
 	@Value("${ipm.rabbitmq.virtual-host:/}")
-    public String virtualHost;
+    public String rabbitmqVHost;
 	
 	@Override
 	public String toString() {
@@ -87,7 +87,7 @@ public class ApplicationProperty {
 		
 		sb.append( String.format("%-30s = %s\n", "ipm.rabbitmq.host", this.rabbitmqHost ) );
 		sb.append( String.format("%-30s = %s\n", "ipm.rabbitmq.port", this.rabbitmqPort ) );
-		sb.append( String.format("%-30s = %s\n", "ipm.rabbitmq.virtual-host", this.virtualHost ) );
+		sb.append( String.format("%-30s = %s\n", "ipm.rabbitmq.virtual-host", this.rabbitmqVHost ) );
 		
 		
 		if (debugEnable) {

@@ -20,7 +20,7 @@ import com.shinwootns.common.utils.JsonUtils;
 import com.shinwootns.common.utils.TimeUtils;
 import com.shinwootns.data.key.RedisKeys;
 import com.shinwootns.ipm.collector.data.SharedData;
-import com.shinwootns.ipm.collector.service.amqp.RabbitmqHandler;
+import com.shinwootns.ipm.collector.service.amqp.RabbitMQHandler;
 import com.shinwootns.ipm.collector.service.redis.RedisHandler;
 import com.shinwootns.ipm.collector.service.syslog.DhcpMessage;
 import com.shinwootns.ipm.collector.service.syslog.SyslogHandler;
@@ -120,7 +120,7 @@ public class SyslogPublisher implements Runnable {
 							jobj.addProperty("message", entry.getValue().getData());
 
 							// Send to RabbitMQ
-							RabbitmqHandler.getInstance().SendEvent(jobj.toString().getBytes());
+							RabbitMQHandler.getInstance().SendEvent(jobj.toString().getBytes());
 						}
 
 						// DHCP Message Parsing

@@ -3,19 +3,19 @@ package com.shinwootns.data.entity;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class ClientConnectionHistory implements Serializable {
+public class ClientLocationHistory implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
 	private String macaddr;
-	private String client_ip;
-	private Timestamp collect_time;
-	private String ip_type;
-	private String port;
 	private Integer site_id;
+	private String client_ip;
+	private String ip_type;
 	private String switch_name;
+	private String port_name;
+	private Timestamp collect_time;
 
-	public ClientConnectionHistory() {
+	public ClientLocationHistory() {
 	}
 
 	public String getMacaddr() {
@@ -51,11 +51,11 @@ public class ClientConnectionHistory implements Serializable {
 	}
 
 	public String getPort() {
-		return this.port;
+		return this.port_name;
 	}
 
 	public void setPort(String port) {
-		this.port = port;
+		this.port_name = port;
 	}
 
 	public Integer getSiteId() {
@@ -66,12 +66,12 @@ public class ClientConnectionHistory implements Serializable {
 		this.site_id = siteId;
 	}
 
-	public String getSwitch_() {
+	public String getSwitchName() {
 		return this.switch_name;
 	}
 
-	public void setSwitch_(String switch_) {
-		this.switch_name = switch_;
+	public void setSwitchName(String switch_name) {
+		this.switch_name = switch_name;
 	}
 
 }

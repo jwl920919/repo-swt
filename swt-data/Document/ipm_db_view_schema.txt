@@ -35,7 +35,7 @@ CREATE OR REPLACE VIEW public.view_ip_status AS
     ip.fingerprint,
     ip.update_time
    FROM dhcp_ip_status ip
-     LEFT JOIN dhcp_range range ON range.start_num <= ip.ip_num AND ip.ip_num <= range.end_num
+     LEFT JOIN dhcp_range range ON range.start_num <= ip.ip_num AND ip.ip_num <= range.end_num AND disable = false
   ORDER BY ip.ip_num;
 
 
@@ -52,6 +52,7 @@ CREATE OR REPLACE VIEW public.view_lease_ip_status AS
             dhcp_range.ip_type,
             sum(dhcp_range.ip_count) AS ip_count
            FROM dhcp_range
+           WHERE disable = false
           GROUP BY dhcp_range.site_id, dhcp_range.ip_type) range
      LEFT JOIN ( SELECT view_ip_status.site_id,
             view_ip_status.ip_type,
@@ -127,19 +128,23 @@ CREATE OR REPLACE VIEW public.view_network_ip_status AS
                     dhcp_range.ip_type,
                     sum(dhcp_range.ip_count) AS ip_count
                    FROM dhcp_range
+                   WHERE disable = false
                   GROUP BY dhcp_range.site_id, dhcp_range.network, dhcp_range.ip_type) rg ON nw.site_id = rg.site_id AND nw.network::text = rg.network::text) status
   ORDER BY status.site_id, status.ip_type, status.start_num;
 
 
 
+
 CREATE OR REPLACE VIEW view_client_info AS
 
-SELECT macaddr, duid, hostname, vendor, model, os, device_type, ip_type, last_ip, comment, update_time 
+SELECT macaddr, duid, hostname, vendor, model, os, device_type, ip_type, last_ip, last_switch, last_port, position_update, user_comment, update_time 
 FROM
 (
 	SELECT COALESCE(rank() OVER (PARTITION BY client.macaddr ORDER BY dt.priority DESC), 0) rankNum
 		, dt.priority
-		, client.macaddr, client.duid, client.hostname, client.vendor, client.model, client.os, COALESCE(dt.device_type, '') device_type, client.ip_type, client.last_ip, client.comment, client.update_time
+		, client.macaddr, client.duid, client.hostname, client.vendor, client.model, client.os, COALESCE(dt.device_type, '') device_type, client.ip_type, client.last_ip
+		, last_switch, last_port, position_update
+		, client.user_comment, client.update_time
 	FROM client_info client
 	LEFT OUTER JOIN (
 

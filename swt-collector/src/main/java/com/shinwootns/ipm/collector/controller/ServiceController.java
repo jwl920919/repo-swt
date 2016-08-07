@@ -20,7 +20,7 @@ import com.shinwootns.ipm.collector.WorkerManager;
 import com.shinwootns.ipm.collector.config.ApplicationProperty;
 import com.shinwootns.ipm.collector.data.SharedData;
 import com.shinwootns.ipm.collector.data.mapper.DataMapper;
-import com.shinwootns.ipm.collector.service.amqp.RabbitmqHandler;
+import com.shinwootns.ipm.collector.service.amqp.RabbitMQHandler;
 import com.shinwootns.ipm.collector.service.redis.RedisHandler;
 import com.shinwootns.ipm.collector.service.syslog.SyslogReceiveHandlerImpl;
 
@@ -54,10 +54,18 @@ public class ServiceController {
 			return;
 		
 		// Connect RabbitMQ
-		RabbitmqHandler.getInstance().connect();
+		if ( RabbitMQHandler.getInstance().connect() == false ) {
+			_logger.error("RabbitMQHandler connect()... Failed.");
+			WorkerManager.getInstance().TerminateApplication();
+			return;
+		}
 		
 		// Connect Redis
-		RedisHandler.getInstance().connect();
+		if (RedisHandler.getInstance().connect() == false ) {
+			_logger.error("RedisHandler connect()... Failed.");
+			WorkerManager.getInstance().TerminateApplication();
+			return;
+		}
 		
 		// Start Work Manager
 		WorkerManager.getInstance().start();
@@ -86,7 +94,7 @@ public class ServiceController {
 		WorkerManager.getInstance().stop();
 		
 		// Close RabbitMQ
-		RabbitmqHandler.getInstance().close();
+		RabbitMQHandler.getInstance().close();
 		
 		_logger.info("Stop Service Controller.");
 	}
