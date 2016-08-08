@@ -22,7 +22,7 @@ ipm:
     
   # debug mode
   debug:
-    enable: true
+    enable: false
     enable_recv_syslog: false
     enable_insert_event: false
     enable_device_collect: false

@@ -56,6 +56,10 @@ public class RabbitMQHandler {
 		
 			if ( manager.Connect() ) {
 				
+				_logger.info((new StringBuilder())
+						.append("Succeed connect rabbitmq... amqp:\\").append(appProperty.rabbitmqHost).append(":").append(appProperty.rabbitmqPort)
+						.toString());
+				
 				startReceiveEvent();
 				
 				return true;
@@ -84,6 +88,7 @@ public class RabbitMQHandler {
 	}
 	//endregion
 	
+	//region [FUNC] Create Client
 	public WorkQueueClient createClient() {
 		
 		if (manager == null)
@@ -91,7 +96,9 @@ public class RabbitMQHandler {
 		
 		return (WorkQueueClient)manager.createMQClient(MQClientType.WorkQueue);
 	}
+	//endregion
 
+	//region [FUNC] Start Receive Event
 	private boolean startReceiveEvent() {
 
 		stopReceiveEvent();
@@ -104,7 +111,9 @@ public class RabbitMQHandler {
 		
 		return true;
 	}
+	//endregion
 	
+	//region [FUNC] Stop Receive Event
 	private void stopReceiveEvent() {
 		
 		if (receiver != null) {
@@ -117,4 +126,5 @@ public class RabbitMQHandler {
 			}
 		}
 	}
+	//endregion
 }

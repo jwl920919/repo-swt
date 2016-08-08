@@ -23,6 +23,7 @@ public class DeviceController {
 	@Autowired
 	private ApplicationProperty appProperty;
 	
+	/*
 	//==========================================================================
 	// DHCP
 	//==========================================================================
@@ -50,6 +51,6 @@ public class DeviceController {
 			return JsonUtils.serialize(dhcpStatus);
 		
 		return "{}";
-    }
+    }*/
 	
 }

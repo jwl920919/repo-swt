@@ -1,5 +1,7 @@
 package com.shinwootns.ipm.collector.controller;
 
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
@@ -13,6 +15,7 @@ import com.shinwootns.common.network.SyslogManager;
 import com.shinwootns.common.utils.CryptoUtils;
 import com.shinwootns.common.utils.SystemUtils;
 import com.shinwootns.data.entity.DeviceDhcp;
+import com.shinwootns.data.entity.DeviceIp;
 import com.shinwootns.data.entity.DeviceInsight;
 import com.shinwootns.data.entity.SiteInfo;
 import com.shinwootns.ipm.collector.SpringBeanProvider;
@@ -129,7 +132,7 @@ public class ServiceController {
 			
 			// Load DHCP
 			DeviceDhcp dhcpInfo = dataMapper.selectDeviceDhcp(siteInfo.getSiteId());
-			if (dhcpInfo != null ) {
+			if (dhcpInfo != null) {
 				
 				_logger.info( (new StringBuilder())
 						.append("[DHCP Info] host=").append(dhcpInfo.getHost())
@@ -145,8 +148,14 @@ public class ServiceController {
 				SharedData.getInstance().dhcpDevice = dhcpInfo;
 			}
 			
+			// Load Dhcp IP
+			List<DeviceIp> listDeviceIp = dataMapper.selectDeviceIP(siteInfo.getSiteId());
+			SharedData.getInstance().setDeviceId(listDeviceIp);
+
+			// Get System Info
 			String hostName = SystemUtils.getHostName();
 			
+			// Regist Insight Info
 			if (hostName.isEmpty() == false && siteInfo.getSiteId() > 0) {
 			
 				// Device Insight

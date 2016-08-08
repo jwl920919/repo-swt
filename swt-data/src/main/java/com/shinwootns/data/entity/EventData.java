@@ -8,12 +8,12 @@ public class EventData implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Integer event_id;
-	private Timestamp collect_time;
 	private Integer device_id;
 	private String event_type;
 	private String host_ip;
 	private String message;
 	private Integer severity;
+	private Timestamp collect_time;
 
 	public EventData() {
 	}

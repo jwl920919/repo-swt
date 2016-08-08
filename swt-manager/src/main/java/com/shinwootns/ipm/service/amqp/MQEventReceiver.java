@@ -7,7 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.shinwootns.common.mq.client.WorkQueueClient;
+import com.shinwootns.common.utils.JsonUtils;
+import com.shinwootns.data.entity.EventData;
 import com.shinwootns.data.key.QueueNames;
+import com.shinwootns.ipm.data.SharedData;
 
 public class MQEventReceiver implements Runnable {
 
@@ -19,6 +22,7 @@ public class MQEventReceiver implements Runnable {
 		this._handler = handler;
 	}
 	
+	@SuppressWarnings("unused")
 	@Override
 	public void run() {
 		
@@ -40,7 +44,10 @@ public class MQEventReceiver implements Runnable {
 					{
 						for (String data : listResult)
 						{
-							System.out.println(String.format(">> Event : %s", data));
+							//System.out.println(String.format(">> Event : %s", data));
+							EventData event = (EventData)JsonUtils.deserialize(data, EventData.class);
+							
+							SharedData.getInstance().eventQueue.put(event);
 						}
 						
 						listResult.clear();
@@ -54,8 +61,11 @@ public class MQEventReceiver implements Runnable {
 			} catch(InterruptedException ex) {
 				break;
 			} catch (IOException e) {
-				client.CloseChannel();
-				client = null;
+				
+				if (client != null && client.checkConnection() == false) {
+					client.CloseChannel();
+					client = null;
+				}
 			}
 		}
 		

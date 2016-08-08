@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gson.JsonArray;
 import com.shinwootns.common.utils.JsonUtils;
 import com.shinwootns.data.entity.ClientInfo;
 import com.shinwootns.data.entity.DeviceDhcp;
@@ -386,8 +387,7 @@ public class MasterJobWoker implements Runnable {
 		DhcpHandler handler = new DhcpHandler();
 		if ( handler.Connect(dhcp.getHost(), dhcp.getWapiUserid(), dhcp.getWapiPassword(), dhcp.getSnmpCommunity()) ) {
 		
-			updateDhcpDeviceStatus(handler, client);
-			updateDhcpVrrpStatus(handler, client);
+			updateDhcpMemberInfo(handler, client);
 			updateDhcpCounter(handler, client);
 			updateDnsCounter(handler, client);
 		}
@@ -397,6 +397,39 @@ public class MasterJobWoker implements Runnable {
 	}
 	//endregion
 
+	//region [FUNC] Update Member Info
+	private void updateDhcpMemberInfo(DhcpHandler handler, Jedis client) {
+
+		if (handler == null || client == null)
+			return;
+		
+		if (SharedData.getInstance().getSiteID() <= 0)
+			return;
+		
+		try {
+
+			JsonArray jArray = handler.getDhcpMemberInfo();
+			
+			if (jArray != null) {
+				
+				// Set value
+				client.set((new StringBuilder())
+						.append(RedisKeys.KEY_STATUS_DEVICE)
+						.append(":").append(SharedData.getInstance().getSiteID()).toString()
+						, jArray.toString()
+				);
+				
+				_logger.info("updateDhcpDeviceStatus()... OK");
+			}
+			
+		} catch(Exception ex) {
+			_logger.error("updateDhcpDeviceStatus()... Failed");
+			_logger.error(ex.getMessage(), ex);
+		}
+	}
+	//endregion
+	
+	/*
 	//region [FUNC] Update DHCP - Device Status
 	private void updateDhcpDeviceStatus(DhcpHandler handler, Jedis client) {
 
@@ -466,6 +499,7 @@ public class MasterJobWoker implements Runnable {
 		}
 	}
 	//endregion
+	*/
 	
 	//region [FUNC] Update DHCP - DHCP Counter
 	private void updateDhcpCounter(DhcpHandler handler, Jedis client) {

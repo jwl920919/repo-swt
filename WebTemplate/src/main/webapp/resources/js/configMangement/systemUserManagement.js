@@ -79,7 +79,7 @@ function changeGroupNames() {
                 success : function(data) {
                     var jsonObj = eval("(" + data + ')');
                     if (jsonObj.result == true) {
-                        $('#ggroupSel').find('option').remove().end();
+                        $('#groupSel').find('option').remove().end();
                         for (var i = 0; i < jsonObj.data.length; i++) {
                             $('#groupSel').append(
                                     '<option value=' + jsonObj.data[i].group_id
