@@ -180,5 +180,7 @@
     "rangeUtilization":								"Range 사용률",
     "nodataavailableintable":						"No data available in table.",
     "enable":										"활성",
-    "disable":										"비활성"
+    "disable":										"비활성",
+    "close":										"Close",
+    "saveandclose":									"Save and Close"
 }

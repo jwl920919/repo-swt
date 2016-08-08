@@ -14,18 +14,39 @@
 <script src="resources/js/ipManagement/blackListStatus.js"></script>
 
 <!-- Add, Edit modal -->
-<div class="modal modal-info modal-dialog" id="modal" style="width:600px">
+<div class="modal modal-dialog" id="modal" style="width:600px">
   <div class="modal-content" name="modalContent">
+  <!-- modal-content -->
     <div class="modal-header">
       <input type="button" class="close" name="modalClose" data-dismiss="modal" aria-label="Close" value="&times;" />
-      <h4 class="modal-title">Primary Modal</h4>
+      <h4 class="modal-title">Black List 추가</h4>
     </div>
     <div class="modal-body">
-      <p>One fine body&hellip;</p>
+    	<div class="input-group">
+			<span class="input-group-addon">사업장</span>
+				<select class="form-control">
+                    <option>option 1</option>
+                    <option>option 2</option>
+                    <option>option 3</option>
+                    <option>option 4</option>
+                    <option>option 5</option>
+				</select>
+		</div>
+      <p></p>
+    	<div class="input-group">
+			<span class="input-group-addon">사업장</span>
+				<select class="form-control">
+                    <option>option 1</option>
+                    <option>option 2</option>
+                    <option>option 3</option>
+                    <option>option 4</option>
+                    <option>option 5</option>
+				</select>
+		</div>
     </div>
     <div class="modal-footer">
-      <input type="button" class="btn btn-outline pull-left" name="modalClose" data-dismiss="modal" value="Close" />
-      <button type="button" class="btn btn-outline" id="btnSave">Save changes</button>
+      <input type="button" class="btn btn-default pull-left" name="modalClose" data-dismiss="modal" value="<%=LanguageHelper.GetLanguage("close")%>" />
+      <button type="button" class="btn btn-primary" id="btnSave"><%=LanguageHelper.GetLanguage("saveandclose")%></button>
     </div>
   </div>
   <!-- /.modal-content -->
