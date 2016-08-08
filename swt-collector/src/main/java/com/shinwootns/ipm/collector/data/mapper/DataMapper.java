@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.shinwootns.data.entity.DeviceDhcp;
+import com.shinwootns.data.entity.DeviceIp;
 import com.shinwootns.data.entity.DeviceInsight;
 import com.shinwootns.data.entity.DeviceNetwork;
 import com.shinwootns.data.entity.DhcpFixedIp;
@@ -23,6 +24,7 @@ public interface DataMapper {
 	
 	// Device DHCP
 	DeviceDhcp selectDeviceDhcp(@Param("site_id")int site_id);
+	List<DeviceIp>selectDeviceIP(@Param("site_id")int site_id);
 	
 	// DHCP Network
 	List<DhcpNetwork> selectDhcpNetworkBySiteId(@Param("site_id")int site_id);

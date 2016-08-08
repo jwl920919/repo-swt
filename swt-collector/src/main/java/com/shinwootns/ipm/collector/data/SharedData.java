@@ -1,6 +1,7 @@
 package com.shinwootns.ipm.collector.data;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -13,6 +14,7 @@ import com.shinwootns.common.network.SyslogEntity;
 import com.shinwootns.common.utils.CryptoUtils;
 import com.shinwootns.common.utils.TimeUtils;
 import com.shinwootns.data.entity.DeviceDhcp;
+import com.shinwootns.data.entity.DeviceIp;
 import com.shinwootns.data.entity.SiteInfo;
 
 public class SharedData {
@@ -29,6 +31,8 @@ public class SharedData {
 
 	// SiteInfo
 	private SiteInfo site_info = null;
+	
+	HashMap<String, Integer> mapDeviceIp = new HashMap<String, Integer>(); 
 	
 	//region Singleton
 	private static SharedData _instance = null;
@@ -60,7 +64,7 @@ public class SharedData {
 	}
 	//endregion
 	
-	//region Add Syslog Data
+	//region [FUNC] Add Syslog Data
 	public boolean addSyslogData(SyslogEntity syslog) {
 		
 		boolean bResult = false;
@@ -82,7 +86,7 @@ public class SharedData {
 	}
 	//endregion
 
-	//region Pop Syslog Data
+	//region [FUNC] Pop Syslog Data
 	public List<SyslogEntity> popSyslogList(int popCount, int timeout) {
 		
 		List<SyslogEntity> resultList = new ArrayList<SyslogEntity>();
@@ -118,4 +122,37 @@ public class SharedData {
 		return resultList;
 	}
 	//endregion
+
+	//region [FUNC] Set device IP
+	
+	public void setDeviceId(List<DeviceIp> listDhcpIp) {
+
+		if (listDhcpIp.size() == 0)
+			return;
+		
+		synchronized(mapDeviceIp) 
+		{
+			mapDeviceIp.clear();
+			
+			for(DeviceIp dhcpIp : listDhcpIp) {
+			
+				if (mapDeviceIp.containsKey(dhcpIp.getIpaddr()) == false) {
+					mapDeviceIp.put(dhcpIp.getIpaddr(), dhcpIp.getDeviceId());
+				}
+			}
+		}
+	}
+	
+	//endregion
+	
+	//region [FUNC] Get Device Id
+	public Integer getDeviceId(String ipAddr) {
+	
+		synchronized(mapDeviceIp) 
+		{
+			return mapDeviceIp.get(ipAddr);
+		}
+	}
+	//endregion
+	
 }

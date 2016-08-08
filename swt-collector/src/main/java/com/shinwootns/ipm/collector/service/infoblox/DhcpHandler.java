@@ -622,6 +622,28 @@ public class DhcpHandler {
 	}
 	//endregion
 	
+	//region [FUNC] Get Member Info
+	public JsonArray getDhcpMemberInfo() {
+		
+		if (wapiHandler == null)
+			return null;
+
+		try {
+			
+			// Collect Member
+			JsonArray jArray = wapiHandler.getDhcpMemberInfo();
+			
+			return jArray;
+			
+		}catch(Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+		}
+		
+		return null;
+	}
+	//endregion
+	
+	/*
 	//region [FUNC] Get Device Status
 	public DhcpDeviceStatus getDeviceStatus() {
 		
@@ -718,15 +740,6 @@ public class DhcpHandler {
 				vrrp.vrrp_subnet = JsonUtils.getValueToString(vipSetting, "subnet_mask", "");
 			}
 			
-			/*
-			JsonElement svcComm = jArray.get(0).getAsJsonObject().get("member_service_communication");
-			if (svcComm != null && svcComm instanceof JsonArray) {
-				
-				JsonArray array = svcComm.getAsJsonArray();
-				
-				//extractNodeInfo(dhcpStatus, jNodeArray);
-			}*/
-
 			return vrrp;
 		}
 		catch(Exception ex) {
@@ -736,6 +749,7 @@ public class DhcpHandler {
 		return null;
 	}
 	//endregion
+	*/
 	
 	//region [FUNC] getDhcpCounter
 	public DhcpCounter getDhcpCounter() {

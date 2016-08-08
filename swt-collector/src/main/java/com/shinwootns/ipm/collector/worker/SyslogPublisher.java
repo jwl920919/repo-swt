@@ -1,5 +1,6 @@
 package com.shinwootns.ipm.collector.worker;
 
+import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -15,9 +16,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.JsonObject;
+import com.mysql.jdbc.TimeUtil;
 import com.shinwootns.common.network.SyslogEntity;
 import com.shinwootns.common.utils.JsonUtils;
 import com.shinwootns.common.utils.TimeUtils;
+import com.shinwootns.data.entity.EventData;
 import com.shinwootns.data.key.RedisKeys;
 import com.shinwootns.ipm.collector.data.SharedData;
 import com.shinwootns.ipm.collector.service.amqp.RabbitMQHandler;
@@ -109,31 +112,22 @@ public class SyslogPublisher implements Runnable {
 					
 					for(Entry<String, SyslogEntity> entry : sortedMap.entrySet()) {
 						
-						//System.out.println("CurTime:"+curTime + ", " + entry.getValue().toString());
-						{
-							// Send Event
-							JsonObject jobj = new JsonObject();
-							jobj.addProperty("host", entry.getValue().getHost());
-							jobj.addProperty("facility", entry.getValue().getFacility());
-							jobj.addProperty("severity", entry.getValue().getSeverity());
-							jobj.addProperty("recv_time", entry.getValue().getRecvTime());
-							jobj.addProperty("message", entry.getValue().getData());
-
-							// Send to RabbitMQ
-							RabbitMQHandler.getInstance().SendEvent(jobj.toString().getBytes());
-						}
-
+						// Get Device ID
+						Integer deviceId = SharedData.getInstance().getDeviceId( entry.getValue().getHost() );
+						
 						// DHCP Message Parsing
-						{
-							DhcpMessage dhcpMsg = syslogHandler.processSyslog(entry.getValue().getData());
+						DhcpMessage dhcpMsg = syslogHandler.processSyslog(entry.getValue().getData());
+						
+						if (dhcpMsg != null) {
+							// DHCP
 							
-							if (dhcpMsg != null) {
-								// DHCP
-	
-								System.out.println(entry.getValue().toString());
-								System.out.println(dhcpMsg.toString());
-							}
+							// ...
+
+							System.out.println(entry.getValue().toString());
+							System.out.println(dhcpMsg.toString());
 						}
+
+						SendEventMQ(deviceId, entry.getValue());
 					}
 					mapDupCheck.clear();
 					sortedMap.clear();
@@ -146,6 +140,21 @@ public class SyslogPublisher implements Runnable {
 				break;
 			}
 		}
+	}
+	
+	private void SendEventMQ(Integer deviceId, SyslogEntity syslog) {
+
+		//Send Event
+		EventData eventData = new EventData();
+		eventData.setHostIp(syslog.getHost());
+		eventData.setDeviceId(deviceId);
+		eventData.setEventType("syslog");
+		eventData.setSeverity(syslog.getSeverity());
+		eventData.setCollectTime( new Timestamp(syslog.getRecvTime()) );
+		eventData.setMessage(syslog.getData());
+		
+		// Send to RabbitMQ
+		RabbitMQHandler.getInstance().SendEvent( JsonUtils.serialize(eventData).getBytes() );
 	}
 	
 	private LinkedHashMap<String, SyslogEntity> sortBySyslogRecvTime(Map<String, SyslogEntity> map) {

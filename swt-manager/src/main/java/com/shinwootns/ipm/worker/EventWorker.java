@@ -29,7 +29,7 @@ public class EventWorker implements Runnable {
 			return true;
 		
 		// debug_insert_event_enable
-		if (appProperty.enableInsertEvent == false)
+		if (appProperty.debugEnable == true && appProperty.enableInsertEvent == false)
 			return true;
 		
 		return false;

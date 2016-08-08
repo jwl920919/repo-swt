@@ -177,7 +177,7 @@ public class MQManager {
 				
 			} catch(Exception ex)
 			{
-				_logger.error(ex.getMessage(), ex);
+				//_logger.error(ex.getMessage(), ex);
 			} finally {
 				this._channel = null;
 			}
@@ -189,7 +189,7 @@ public class MQManager {
 				
 			} catch(Exception ex)
 			{
-				_logger.error(ex.getMessage(), ex);
+				//_logger.error(ex.getMessage(), ex);
 			} finally {
 				this._connection = null;
 			}

@@ -661,6 +661,42 @@ public class InfobloxWAPIHandler {
 	}
 	//endregion
 	
+	//region [WAPI] Get Member All() 
+	public JsonArray getDhcpMemberInfo() {
+		
+		if (restClient == null)
+			return null;
+		
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("/wapi/v2.3/member")
+			.append("?_return_type=json")
+			.append("&_return_fields=active_position,additional_ip_list,bgp_as,comment,config_addr_type")
+			.append(",dns_resolver_setting,dscp,email_setting,enable_ha,enable_lom,enable_member_redirect")
+			.append(",enable_ro_api_access,extattrs,external_syslog_backup_servers,external_syslog_server_enable")
+			.append(",host_name,ipv6_setting,ipv6_static_routes,is_dscp_capable,lan2_enabled,lan2_port_setting,lcd_input")
+			.append(",lom_network_config,master_candidate,member_service_communication,mgmt_port_setting,nat_setting,node_info")
+			.append(",ospf_list,passive_ha_arp_enabled,platform,pre_provisioning,preserve_if_owns_delegation")
+			.append(",remote_console_access_enable,router_id,service_status,service_type_configuration,snmp_setting")
+			.append(",static_routes,support_access_enable,support_access_info,syslog_proxy_setting,syslog_servers,syslog_size")
+			.append(",time_zone,upgrade_group,use_dns_resolver_setting,use_dscp,use_email_setting,use_enable_lom")
+			.append(",use_enable_member_redirect,use_external_syslog_backup_servers,use_lcd_input,use_remote_console_access_enable")
+			.append(",use_snmp_setting,use_support_access_enable,use_syslog_proxy_setting,use_time_zone,use_v4_vrrp,vip_setting,vpn_mtu");
+		
+		String value = restClient.Get(sb.toString());
+		
+		if (value == null)
+			return null;
+		
+		// Change unescape-unicode
+		value = StringUtils.unescapeUnicodeString(value);
+		
+		// JsonArray Parser
+		return JsonUtils.parseJsonArray(value);
+	}
+	//endregion
+
+	/*
 	//region [WAPI] Get Device Status
 	public JsonArray getNodeInfo(String hostName) {
 		
@@ -764,5 +800,5 @@ public class InfobloxWAPIHandler {
 		return JsonUtils.parseJsonArray(value);
 	}
 	//endregion
-
+	*/
 }
