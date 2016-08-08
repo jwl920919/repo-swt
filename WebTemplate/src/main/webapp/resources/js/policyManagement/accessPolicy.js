@@ -45,7 +45,7 @@ $(document)
                                         "columns" : [
                                                 {},
                                                 {
-                                                    "data" : "access_policy_id"
+                                                    "data" : "priority"
                                                 },
                                                 {
                                                     "data" : "site_name"
@@ -71,6 +71,14 @@ $(document)
                                                     'orderable' : false
                                                 },
                                                 {
+                                                    "data" : "access_policy_id",
+                                                    'className' : 'hidden'
+                                                },
+                                                {
+                                                    "data" : "site_id",
+                                                    'className' : 'hidden'
+                                                },
+                                                {
                                                     "width" : "100px",
                                                     "data" : "is_permit",
                                                     'searchable' : false,
@@ -82,9 +90,6 @@ $(document)
                                                         else
                                                             return '<span class="deny">Deny</span>';
                                                     }
-                                                }, {
-                                                    "data" : "site_id",
-                                                    "visible" : false
                                                 } ]
                                     });
                     $(function() {
@@ -97,9 +102,42 @@ $(document)
                         $('#accessPolicyTable_paginate').parent().prepend(
                                 $('#delete-button').parent());
                     });
+                    
+                    changeSiteNames()
 
                 });
-
+var access_policy_id,site_id;
 function trClickEvent(clickedTr) {
-    console.log('TTT!!');
+    var test = $(clickedTr).children();
+    access_policy_id =test.eq(9).text();
+    site_id = test.eq(10).text();
+    $("#priority").val(test.eq(1).text());
+    $("#site").val(site_id);
+    $("#vendor").val(test.eq(3).text());
+    $("#model").val(test.eq(4).text());
+    $("#device-type").val(test.eq(5).text());
+    $("#os").val(test.eq(6).text());
+    $("#hostname").val(test.eq(7).text());
+    $("#desc").val(test.eq(8).text());
+    $("#policy").val(test.eq(11).text());
+    
+}
+
+function changeSiteNames() {
+    $.ajax({
+                url : "policyManagement/getSiteNames",
+                type : "POST",
+                success : function(data) {
+                    var jsonObj = eval("(" + data + ')');
+                    if (jsonObj.result == true) {
+                        $('#site').find('option').remove().end();
+                        for (var i = 0; i < jsonObj.data.length; i++) {
+                            $('#site').append(
+                                    '<option value=' + jsonObj.data[i].site_id
+                                            + '>' + jsonObj.data[i].site_name
+                                            + '</option>');
+                        }
+                    }
+                }
+            });
 }

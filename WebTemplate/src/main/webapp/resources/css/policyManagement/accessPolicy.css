@@ -26,3 +26,14 @@
 	border-radius: 10px 10px 10px 10px !important;
 }
 
+.modify-label {
+	margin: 0px 5px 0px 5px;
+}
+
+#modify-area {
+	text-align: left;
+}
+
+.hidden {
+	visibility: hidden;
+}

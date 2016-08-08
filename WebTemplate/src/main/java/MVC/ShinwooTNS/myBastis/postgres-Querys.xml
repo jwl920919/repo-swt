@@ -569,12 +569,62 @@
 	<!-- Insert Date : 2016-08-04 -->
 	<!-- Insert User : 이재원 -->
 	<!-- Description : policyManagement.jsp 페이지 테이블 조회 -->
-	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
-	<select id="select_POLICY_TABLE_CONDITIONAL_SEARCH"
+	<!-- Controller : MVC.ShinwooTNS.action.PolicyManagementActionController -->
+	<select id="select_POLICY_TABLE_SITE_SEARCH"
 		parameterType="hashmap" resultType="java.util.HashMap">
-		select si.site_name, ap.site_id, ap.vendor, ap.model, ap.device_type, ap.os, ap.hostname, ap."desc", ap.is_permit,ap.access_policy_id 
+		select si.site_name, ap.site_id, ap.vendor, ap.model, ap.device_type, ap.os, ap.hostname, ap."desc", ap.is_permit,ap.access_policy_id ,ap.priority
 		from access_policy as ap, site_info as si where ap.site_id = si.site_id 
 		ORDER BY ${orderColumn} ${orderType};
+	</select>
+	
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-08-08 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : policyManagement.jsp OS Search -->
+	<!-- Controller : MVC.ShinwooTNS.action.PolicyManagementActionController -->
+	<select id="select_POLICY_OS_SEARCH"
+		parameterType="hashmap" resultType="java.util.HashMap">
+		SELECT DISTINCT os FROM view_client_info client_info WHERE os IS NOT NULL<if test="searchValue != null"> AND os like CONCAT('%', #{searchValue}, '%'</if>;
+	</select>
+	
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-08-08 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : policyManagement.jsp Vendor Search -->
+	<!-- Controller : MVC.ShinwooTNS.action.PolicyManagementActionController -->
+	<select id="select_POLICY_VENDOR_SEARCH"
+		parameterType="hashmap" resultType="java.util.HashMap">
+		SELECT DISTINCT vendor FROM view_client_info WHERE vendor IS NOT NULL<if test="searchValue != null"> AND os like CONCAT('%', #{searchValue}, '%'</if>;
+	</select>
+	
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-08-08 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : policyManagement.jsp Model Search -->
+	<!-- Controller : MVC.ShinwooTNS.action.PolicyManagementActionController -->
+	<select id="select_POLICY_MODEL_SEARCH_REF_VENDOR"
+		parameterType="hashmap" resultType="java.util.HashMap">
+		SELECT DISTINCT model FROM view_client_info WHERE model IS NOT NULL AND vendor = #{vendor}<if test="searchValue != null"> AND os like CONCAT('%', #{searchValue}, '%'</if>;
+	</select>
+	
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-08-08 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : policyManagement.jsp Model Search -->
+	<!-- Controller : MVC.ShinwooTNS.action.PolicyManagementActionController -->
+	<select id="select_POLICY_HOSTNAME_SEARCH"
+		parameterType="hashmap" resultType="java.util.HashMap">
+		SELECT DISTINCT hostname FROM view_client_info WHERE hostname IS NOT NULL<if test="searchValue != null"> AND os like CONCAT('%', #{searchValue}, '%'</if>;
+	</select>
+	
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-08-08 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : policyManagement.jsp device_type Search -->
+	<!-- Controller : MVC.ShinwooTNS.action.PolicyManagementActionController -->
+	<select id="select_POLICY_DEVICE_TYPE_SEARCH"
+		parameterType="hashmap" resultType="java.util.HashMap">
+		SELECT DISTINCT device_type FROM view_client_info WHERE device_type IS NOT NULL<if test="searchValue != null"> AND os like CONCAT('%', #{searchValue}, '%'</if>;
 	</select>
 </mapper>
 

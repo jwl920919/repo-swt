@@ -1,6 +1,7 @@
 package MVC.ShinwooTNS.action;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -23,9 +24,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import Common.DTO.AjaxResult;
+import Common.DTO.SITE_INFO_DTO;
+import Common.DTO.SYSTEM_USER_INFO_DTO;
 import Common.ServiceInterface.ACCESS_POLICY_Service_interface;
+import Common.ServiceInterface.SITE_INFO_Service_interface;
 
 @Controller
 @RequestMapping(value = "/policyManagement/")
@@ -39,10 +44,12 @@ public class PolicyManagementActionController {
 	// redisTemplate를 쓰기위해 Autowired 해준다.
 	@Autowired
 	StringRedisTemplate redisTemplate;
-	
 	@Autowired
-	ACCESS_POLICY_Service_interface accessPolicy; 
-	
+	ACCESS_POLICY_Service_interface accessPolicy;
+	@Autowired
+	SITE_INFO_Service_interface siteInfoService;
+
+	// region getAccessPolicyTableDatas
 	@RequestMapping(value = "getAccessPolicyTableDatas", method = RequestMethod.POST)
 	public void getSystemUserManagementDatatableDatas(Locale locale, Model model, HttpServletRequest request,
 			HttpServletResponse response, HttpSession session) {
@@ -50,16 +57,18 @@ public class PolicyManagementActionController {
 		System.out.println("getAccessPolicyTableDatas Controller");
 		try {
 			init();
-			String[] columns = { "access_policy_id","site_name", "vendor","model","os","device_type","hostname","desc","is_permit","site_id" };
+			String[] columns = { "access_policy_id", "site_name", "vendor", "model", "os", "device_type", "hostname",
+					"desc", "is_permit", "site_id" };
 			HashMap<String, Object> parameters = Common.Helper.DatatableHelper.getDatatableParametas(request, columns,
 					1);
 			parameters.put("site_id", Integer.parseInt(session.getAttribute("site_id").toString()));
-			List<Map<String,Object>> accessPolicyDataList = accessPolicy.select_POLICY_TABLE_CONDITIONAL_SEARCH(parameters);
+			List<Map<String, Object>> accessPolicyDataList = accessPolicy.select_POLICY_TABLE_SITE_SEARCH(parameters);
 			System.out.println(accessPolicyDataList);
 			JSONArray jsonArray = new JSONArray();
-			for (Map<String,Object> accessPolicyData : accessPolicyDataList) {
+			for (Map<String, Object> accessPolicyData : accessPolicyDataList) {
 				JSONObject jObj = new JSONObject();
 				jObj.put("access_policy_id", accessPolicyData.get("access_policy_id"));
+				jObj.put("priority", accessPolicyData.get("priority"));
 				jObj.put("site_name", accessPolicyData.get("site_name"));
 				jObj.put("vendor", accessPolicyData.get("vendor"));
 				jObj.put("model", accessPolicyData.get("model"));
@@ -74,7 +83,8 @@ public class PolicyManagementActionController {
 			}
 
 			response.setContentType("Application/json;charset=utf-8");
-			response.getWriter().println(Common.Helper.DatatableHelper.makeCallback(request, jsonArray, accessPolicyDataList.size()));
+			response.getWriter().println(
+					Common.Helper.DatatableHelper.makeCallback(request, jsonArray, accessPolicyDataList.size()));
 			response.getWriter().flush();
 			response.getWriter().close();
 		} catch (IOException e) {
@@ -83,6 +93,138 @@ public class PolicyManagementActionController {
 			logger.error(e.getMessage());
 		}
 	}
+	// endregion
+
+	// region getSiteNames
+	@RequestMapping(value = "getSiteNames", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+	public @ResponseBody Object getSiteNames(HttpServletRequest request) {
+		logger.info("getSiteNames : " + request.getLocalAddr());
+		try {
+			init();
+			List<SITE_INFO_DTO> sitesInfoList = siteInfoService.select_SITE_INFO();
+			List<Map<String, Object>> mapList = new ArrayList<>();
+			for (SITE_INFO_DTO sid : sitesInfoList) {
+				HashMap<String, Object> map = new HashMap<>();
+				map.put("site_name", sid.getSite_name());
+				map.put("site_id", sid.getSite_id());
+				mapList.add(map);
+			}
+			result.data = mapList;
+			result.result = true;
+			return gson.toJson(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.result = false;
+			return gson.toJson(result);
+		}
+	}
+	// endregion
+
+	// region getVendor
+	@RequestMapping(value = "getVendor", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+	public @ResponseBody Object getVendor(HttpServletRequest request) {
+		logger.info("getVendor : " + request.getLocalAddr());
+		try {
+			init();
+			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
+					new TypeToken<HashMap<String, Object>>() {
+					}.getType());
+			result.data = accessPolicy.select_POLICY_VENDOR_SEARCH(parameters);
+			result.result = true;
+			return gson.toJson(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.result = false;
+			return gson.toJson(result);
+		}
+
+	}
+	// endregion
+
+	// region getModel
+	@RequestMapping(value = "getModel", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+	public @ResponseBody Object getModel(HttpServletRequest request) {
+		logger.info("getModel : " + request.getLocalAddr());
+		try {
+			init();
+			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
+					new TypeToken<HashMap<String, Object>>() {
+					}.getType());
+			result.data = accessPolicy.select_POLICY_MODEL_SEARCH_REF_VENDOR(parameters);
+			result.result = true;
+			return gson.toJson(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.result = false;
+			return gson.toJson(result);
+		}
+
+	}
+	// endregion
+
+	// region getOs
+	@RequestMapping(value = "getOs", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+	public @ResponseBody Object getOs(HttpServletRequest request) {
+		logger.info("getOs : " + request.getLocalAddr());
+		try {
+			init();
+			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
+					new TypeToken<HashMap<String, Object>>() {
+					}.getType());
+			result.data = accessPolicy.select_POLICY_OS_SEARCH(parameters);
+			result.result = true;
+			return gson.toJson(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.result = false;
+			return gson.toJson(result);
+		}
+
+	}
+
+	// endregion
+	
+	// region getHostname
+	@RequestMapping(value = "getHostname", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+	public @ResponseBody Object getHostname(HttpServletRequest request) {
+		logger.info("getHostname : " + request.getLocalAddr());
+		try {
+			init();
+			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
+					new TypeToken<HashMap<String, Object>>() {
+					}.getType());
+			result.data = accessPolicy.select_POLICY_HOSTNAME_SEARCH(parameters);
+			result.result = true;
+			return gson.toJson(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.result = false;
+			return gson.toJson(result);
+		}
+
+	}
+	// endregion
+	
+	// region getDeviceType
+	@RequestMapping(value = "getDeviceType", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+	public @ResponseBody Object getDeviceType(HttpServletRequest request) {
+		logger.info("getDeviceType : " + request.getLocalAddr());
+		try {
+			init();
+			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
+					new TypeToken<HashMap<String, Object>>() {
+			}.getType());
+			result.data = accessPolicy.select_POLICY_DEVICE_TYPE_SEARCH(parameters);
+			result.result = true;
+			return gson.toJson(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.result = false;
+			return gson.toJson(result);
+		}
+		
+	}
+	// endregion
 	
 	@RequestMapping(value = "sample", method = RequestMethod.GET, produces = "application/text; charset=utf8")
 	public @ResponseBody Object getInfobloxdatas(HttpServletRequest request, HttpSession session) {
@@ -97,7 +239,7 @@ public class PolicyManagementActionController {
 			return gson.toJson(result);
 		}
 	}
-	
+
 	private void init() {
 		result.data = null;
 		result.resultValue = null;

@@ -15,8 +15,33 @@ private ACCESS_POLICY_interface accessPolicyDao;
 	}
 
 	@Override
-	public List<Map<String, Object>> select_POLICY_TABLE_CONDITIONAL_SEARCH(HashMap<String, Object> parameters) {
-		return accessPolicyDao.select_POLICY_TABLE_CONDITIONAL_SEARCH(parameters);
+	public List<Map<String, Object>> select_POLICY_TABLE_SITE_SEARCH(HashMap<String, Object> parameters) {
+		return accessPolicyDao.select_POLICY_TABLE_SITE_SEARCH(parameters);
+	}
+
+	@Override
+	public List<Map<String, Object>> select_POLICY_OS_SEARCH(HashMap<String, Object> parameters) {
+		return accessPolicyDao.select_POLICY_OS_SEARCH(parameters);
+	}
+
+	@Override
+	public List<Map<String, Object>> select_POLICY_VENDOR_SEARCH(HashMap<String, Object> parameters) {
+		return accessPolicyDao.select_POLICY_VENDOR_SEARCH(parameters);
+	}
+
+	@Override
+	public List<Map<String, Object>> select_POLICY_MODEL_SEARCH_REF_VENDOR(HashMap<String, Object> parameters) {
+		return accessPolicyDao.select_POLICY_MODEL_SEARCH_REF_VENDOR(parameters);
+	}
+
+	@Override
+	public List<Map<String, Object>> select_POLICY_HOSTNAME_SEARCH(HashMap<String, Object> parameters) {
+		return accessPolicyDao.select_POLICY_HOSTNAME_SEARCH(parameters);
+	}
+
+	@Override
+	public List<Map<String, Object>> select_POLICY_DEVICE_TYPE_SEARCH(HashMap<String, Object> parameters) {
+		return accessPolicyDao.select_POLICY_DEVICE_TYPE_SEARCH(parameters);
 	}
 
 
