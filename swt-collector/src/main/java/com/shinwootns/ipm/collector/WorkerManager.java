@@ -6,6 +6,8 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import com.shinwootns.common.stp.PoolStatus;
 import com.shinwootns.common.stp.SmartThreadPool;
+import com.shinwootns.ipm.collector.data.SharedData;
+import com.shinwootns.ipm.collector.data.mapper.DataMapper;
 import com.shinwootns.ipm.collector.worker.MasterJobWoker;
 import com.shinwootns.ipm.collector.worker.SchedulerWorker;
 import com.shinwootns.ipm.collector.worker.SyslogPutter;

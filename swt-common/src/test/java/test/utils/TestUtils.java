@@ -25,7 +25,7 @@ public class TestUtils {
 
 	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
-	
+	/*
 	@Test
 	public void testNetworkUtilsIPv4() {
 
@@ -66,33 +66,32 @@ public class TestUtils {
 		}
 	    
 	
-		/*
-		// ipToNumber
-		System.out.println("===========================");
-		String ipAddress = "192.168.0.12";
-		long ipNum = NetworkUtils.IPv4ToLong(ipAddress);
-		String newIP = NetworkUtils.longToIPv4(ipNum);
-
-		System.out.println("IP = " + ipAddress);
-		System.out.println("Num = " + ipNum);
-		System.out.println("IP = " + newIP);
-
-		// Network, netmask
-		System.out.println("===========================");
-		IPv4Range iprange = NetworkUtils.getIPV4Range("192.168.1.0", "255.255.255.128");
-
-		System.out.println("Start IP = " + iprange.getStartIPToString());
-		System.out.println("end IP = " + iprange.getEndIPToString());
-
-		// Network, bits
-		System.out.println("===========================");
-		iprange = NetworkUtils.getIPV4Range("192.168.1.0", 24);
-
-		System.out.println("Start IP = " + iprange.getStartIPToString());
-		System.out.println("end IP = " + iprange.getEndIPToString());
-		*/
+//		// ipToNumber
+//		System.out.println("===========================");
+//		String ipAddress = "192.168.0.12";
+//		long ipNum = NetworkUtils.IPv4ToLong(ipAddress);
+//		String newIP = NetworkUtils.longToIPv4(ipNum);
+//
+//		System.out.println("IP = " + ipAddress);
+//		System.out.println("Num = " + ipNum);
+//		System.out.println("IP = " + newIP);
+//
+//		// Network, netmask
+//		System.out.println("===========================");
+//		IPv4Range iprange = NetworkUtils.getIPV4Range("192.168.1.0", "255.255.255.128");
+//
+//		System.out.println("Start IP = " + iprange.getStartIPToString());
+//		System.out.println("end IP = " + iprange.getEndIPToString());
+//
+//		// Network, bits
+//		System.out.println("===========================");
+//		iprange = NetworkUtils.getIPV4Range("192.168.1.0", 24);
+//
+//		System.out.println("Start IP = " + iprange.getStartIPToString());
+//		System.out.println("end IP = " + iprange.getEndIPToString());
 	}
-
+	*/
+	
 	/*
 	@Test
 	public void testNetworkUtilsIPv6() {

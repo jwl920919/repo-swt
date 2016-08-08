@@ -19,7 +19,7 @@ public class RabbitMQHandler {
 	
 	private MQManager manager = null;;
 	
-	private WorkQueueClient client = null;
+	private WorkQueueClient _client = null;
 	
 	//region Singleton
 	private static RabbitMQHandler _instance = null;
@@ -56,30 +56,12 @@ public class RabbitMQHandler {
 				}
 			
 				if ( manager.Connect() ) {
-				
-					// Create Client
-					if (client == null)
-						client = (WorkQueueClient)manager.createMQClient(MQClientType.WorkQueue);
-						
-					if (client != null) {
-						
-						// Delcare Queue
-						client.DeclareQueue_WorkQueueMode(QueueNames.EVENT_QUEUE_NAME);
 					
-						// Check Connection
-						if ( client.checkConnection()) {
-						
-							_logger.info((new StringBuilder())
-									.append("Succeed connect rabbitmq... amqp:\\").append(appProperty.rabbitmqHost).append(":").append(appProperty.rabbitmqPort)
-									.toString());
-							
-							return true;
-						}
-						else {
-							client.CloseChannel();
-							client = null;
-						}
-					}
+					_logger.info((new StringBuilder())
+							.append("Succeed connect rabbitmq... amqp:\\").append(appProperty.rabbitmqHost).append(":").append(appProperty.rabbitmqPort)
+							.toString());
+					
+					return true;
 				}
 			}
 			catch(Exception ex) {
@@ -107,24 +89,49 @@ public class RabbitMQHandler {
 	}
 	//endregion
 	
-	//region SendEvent
-	public boolean SendEvent(byte[] bytes) {
-		
-		if (client == null || bytes == null)
-			return false;
+	private WorkQueueClient createClient() {
 		
 		synchronized(this)
 		{
+			if (manager == null)
+				return null;
+			
+			// Create Client
+			return (WorkQueueClient)manager.createMQClient(MQClientType.WorkQueue);
+		}
+	}
+	
+	//region SendEvent
+	public boolean SendEvent(byte[] bytes) {
+		
+		if (bytes == null)
+			return false;
+		
+		if (this._client == null) {
+			this._client = createClient();
+			
+			if (this._client == null)
+				return false;
+			
+			// Delcare Queue
+			this._client.DeclareQueue_WorkQueueMode(QueueNames.EVENT_QUEUE_NAME);
+		}
+		
+		synchronized(this)
+		{
+			if ( this._client == null )
+				return false;
+			
 			try {
-				
-				return client.SendData(QueueNames.EVENT_QUEUE_NAME, bytes);
+
+				return this._client.SendData(QueueNames.EVENT_QUEUE_NAME, bytes);
 				
 			} catch (IOException e) {
 				_logger.error(e.getMessage(), e);
 				
-				if (client.checkConnection() == false) {
-					client.CloseChannel();
-					client = null;
+				if (this._client != null && this._client.checkConnection() == false) {
+					this._client.CloseChannel();
+					this._client = null;
 				}
 					
 			}
