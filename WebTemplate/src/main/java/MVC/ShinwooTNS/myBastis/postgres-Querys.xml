@@ -566,16 +566,91 @@
 		</choose>
 		OFFSET #{startIndex} LIMIT #{length};
 	</select>
+	
+	
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
 	<!-- Insert Date : 2016-08-04 -->
 	<!-- Insert User : 이재원 -->
 	<!-- Description : policyManagement.jsp 페이지 테이블 조회 -->
-	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
-	<select id="select_POLICY_TABLE_CONDITIONAL_SEARCH"
+	<!-- Controller : MVC.ShinwooTNS.action.PolicyManagementActionController -->
+	<select id="select_POLICY_TABLE_SITE_SEARCH"
 		parameterType="hashmap" resultType="java.util.HashMap">
-		select si.site_name, ap.site_id, ap.vendor, ap.model, ap.device_type, ap.os, ap.hostname, ap."desc", ap.is_permit,ap.access_policy_id 
+		select si.site_name, ap.*
 		from access_policy as ap, site_info as si where ap.site_id = si.site_id 
 		ORDER BY ${orderColumn} ${orderType};
+	</select>
+	
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-08-08 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : policyManagement.jsp OS Search -->
+	<!-- Controller : MVC.ShinwooTNS.action.PolicyManagementActionController -->
+	<select id="select_POLICY_OS_SEARCH"
+		parameterType="hashmap" resultType="java.util.HashMap">
+		SELECT DISTINCT COALESCE(os,'_blank') as os FROM view_client_info <if test="searchValue != null">WHERE AND os like CONCAT('%', #{searchValue}, '%'</if> order by os;
+	</select>
+	
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-08-08 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : policyManagement.jsp Vendor Search -->
+	<!-- Controller : MVC.ShinwooTNS.action.PolicyManagementActionController -->
+	<select id="select_POLICY_VENDOR_SEARCH"
+		parameterType="hashmap" resultType="java.util.HashMap">
+		SELECT DISTINCT COALESCE(vendor,'_blank') as vendor FROM view_client_info <if test="searchValue != null">WHERE AND vendor like CONCAT('%', #{searchValue}, '%'</if> order by vendor;
+	</select>
+	
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-08-08 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : policyManagement.jsp Model Search -->
+	<!-- Controller : MVC.ShinwooTNS.action.PolicyManagementActionController -->
+	<select id="select_POLICY_MODEL_SEARCH_REF_VENDOR"
+		parameterType="hashmap" resultType="java.util.HashMap">
+		SELECT DISTINCT COALESCE(model,'_blank') as model FROM view_client_info WHERE vendor = #{vendor}<if test="searchValue != null"> AND model like CONCAT('%', #{searchValue}, '%'</if> order by model;
+	</select>
+	
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-08-08 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : policyManagement.jsp Model Search -->
+	<!-- Controller : MVC.ShinwooTNS.action.PolicyManagementActionController -->
+	<select id="select_POLICY_HOSTNAME_SEARCH"
+		parameterType="hashmap" resultType="java.util.HashMap">
+		SELECT DISTINCT COALESCE(hostname,'_blank') as hostname FROM view_client_info <if test="searchValue != null">WHERE AND hostname like CONCAT('%', #{searchValue}, '%'</if> order by hostname;
+	</select>
+	
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-08-08 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : policyManagement.jsp device_type Search -->
+	<!-- Controller : MVC.ShinwooTNS.action.PolicyManagementActionController -->
+	<select id="select_POLICY_DEVICE_TYPE_SEARCH"
+		parameterType="hashmap" resultType="java.util.HashMap">
+		SELECT DISTINCT COALESCE(device_type,'_blank') as device_type FROM view_client_info <if test="searchValue != null">WHERE AND device_type like CONCAT('%', #{searchValue}, '%'</if> order by device_type;
+	</select>
+		
+
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-08-08 -->
+	<!-- Insert User : KCM -->
+	<!-- Description : IP관리 > black list 현황  데이터 -->
+	<!-- Controller : MVC.ShinwooTNS.action.IPManagementActionController -->
+	<select id="select_IP_MANAGEMENT_BLACKLIST_STATUS_DATA" resultType="java.util.HashMap">
+		SELECT "black"."blacklist_id",
+	   		   "black"."site_id",
+	   		   "site"."site_name",
+	   		   COALESCE("black"."blacklist_enable", FALSE) AS "blacklist_enable",
+	   		   COALESCE("black"."blacklist_filter_name", '') AS "blacklist_filter_name",
+	   		   COALESCE("black"."blacklist_time_sec", 0) AS "blacklist_time_sec",
+	   		   COALESCE("black"."description", '') AS "description",
+	   		   "rowCount"."allCount"
+          FROM "site_blacklist_info" AS "black", "site_info" AS "site", 
+               (SELECT COUNT("black".*) AS "allCount" FROM "site_blacklist_info" AS "black" WHere "site_id" = #{siteid}) AS "rowCount"
+         WHERE "black"."site_id" = "site"."site_id"
+           AND "black"."site_id" = #{siteid}
+		 ORDER BY ${orderColumn} ${orderType}
+		OFFSET #{startIndex} LIMIT #{length};
 	</select>
 </mapper>
 
