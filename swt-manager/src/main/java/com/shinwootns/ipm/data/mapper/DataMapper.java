@@ -4,9 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-
-import com.shinwootns.data.entity.DeviceDhcp;
 import com.shinwootns.data.entity.DeviceInsight;
 import com.shinwootns.data.entity.SiteInfo;
 

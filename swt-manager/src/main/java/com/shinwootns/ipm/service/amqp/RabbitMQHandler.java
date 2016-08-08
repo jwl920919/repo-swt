@@ -16,8 +16,6 @@ public class RabbitMQHandler {
 	
 	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
-	public final static String EVENT_QUEUE_NAME 			= "ipm.event";
-	
 	private MQManager manager = null;;
 	
 	private Thread receiver = null;
