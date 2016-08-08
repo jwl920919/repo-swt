@@ -3,9 +3,7 @@ var table;
 $(document)
         .ready(
                 function() {
-                    // alert screen 감추기
-                    $("#site_eq").select2();
-                    $("#vendor_eq").select2();
+                    selectInit();
                     // policyManagement/getSiteNames"
                     table = $('#accessPolicyTable')
                             .DataTable(
@@ -107,6 +105,13 @@ $(document)
                                                         else
                                                             return '<span class="deny">Deny</span>';
                                                     }
+                                                },
+                                                {
+                                                    'searchable' : false,
+                                                    'orderable' : false,
+                                                    'render' : function(type, row) {
+                                                        return '<i class="fa fa-edit essential-cursor-pointer" onclick="createModifyPopup()" data-toggle="tooltip" title="" data-original-title="수정"></i>';
+                                                    }
                                                 } ]
                                     });
                     $(function() {
@@ -120,9 +125,13 @@ $(document)
                                 $('#delete-button').parent());
                     });
                 });
-var access_policy_id, site_id, os_like, device_type_like, hostname_like, model_like;
+
+var access_policy_id, site_id, site_name, vendor, device_type, os, hostname, os_like, device_type_like, hostname_like, model_like, tr;
 function trClickEvent(clickedTr) {
-    var tr = $(clickedTr).children();
+    tr = $(clickedTr).children();
+}
+
+function createModifyPopup() {
     access_policy_id = tr.eq(9).text();
     site_id = tr.eq(10).text();
     os_like = tr.eq(11).text();
@@ -132,18 +141,36 @@ function trClickEvent(clickedTr) {
     // console.log(access_policy_id+"/"+site_id+"/"+os_like+"/"+device_type_like+"/"+hostname_like+"/"+model_like);
     $("#priority").val(tr.eq(1).text());
     $("#site_eq").val(site_id);
-    $("#vendor").val(tr.eq(3).text());
-    $("#model").val(tr.eq(4).text());
-    $("#device-type").val(tr.eq(5).text());
-    $("#os").val(tr.eq(6).text());
-    $("#hostname").val(tr.eq(7).text());
+    site_name = tr.eq(2).text();
+    vendor = tr.eq(3).text();
+    model = tr.eq(4).text();
+    device_type = tr.eq(5).text();
+    os = tr.eq(6).text();
+    hostname = tr.eq(7).text();
     $("#desc").val(tr.eq(8).text());
     $("#policy").val(tr.eq(15).text());
     changeSiteNames(site_id);
     changeVendorNames();
-    $("#select2-site_eq-container").text(tr.eq(2).text());
+    changeModelNames(vendor);
+    changeDeviceType();
+    changeOs();
+    changeHostname();
+    $("#select2-site_eq-container").text(site_name);
+    $("#select2-vendor_eq-container").text(vendor);
+    $("#select2-model_eq-container").text(model);
+    $("#select2-device-type_eq-container").text(device_type);
+    $("#select2-os_eq-container").text(os);
+    $("#select2-hostname_eq-container").text(hostname);
 }
-
+// init default select to select2 object
+function selectInit() {
+    $("#site_eq").select2();
+    $("#vendor_eq").select2();
+    $("#model_eq").select2();
+    $("#device-type_eq").select2();
+    $("#os_eq").select2();
+    $("#hostname_eq").select2();
+}
 function changeSiteNames(index) {
     $.ajax({
         url : "policyManagement/getSiteNames",
@@ -172,17 +199,117 @@ function changeSiteNames(index) {
     });
 }
 function changeVendorNames() {
+    $
+            .ajax({
+                url : "policyManagement/getVendor",
+                type : "POST",
+                success : function(data) {
+                    var jsonObj = eval("(" + data + ')');
+                    if (jsonObj.result == true) {
+                        $('#vendor_eq').find('option').remove().end();
+                        for (var i = 0; i < jsonObj.data.length; i++) {
+                            if (vendor == jsonObj.data[i].vendor)
+                                $('#vendor_eq').append(
+                                        '<option selected="selected">'
+                                                + jsonObj.data[i].vendor
+                                                + '</option>');
+                            else
+                                $('#vendor_eq').append(
+                                        '<option>' + jsonObj.data[i].vendor
+                                                + '</option>');
+                        }
+                    }
+                }
+            });
+}
+function changeModelNames(v) {
+    var obj = new Object();
+    obj.vendor = v;
     $.ajax({
-        url : "policyManagement/getVendor",
+        url : "policyManagement/getModel",
+        type : "POST",
+        data : JSON.stringify(obj),
+        dataType : "text",
+        success : function(data) {
+            var jsonObj = eval("(" + data + ')');
+            if (jsonObj.result == true) {
+                $('#model_eq').find('option').remove().end();
+                for (var i = 0; i < jsonObj.data.length; i++) {
+                    if (model == jsonObj.data[i].model)
+                        $('#model_eq').append(
+                                '<option selected="selected">'
+                                        + jsonObj.data[i].model + '</option>');
+                    else
+                        $('#model_eq').append(
+                                '<option>' + jsonObj.data[i].model
+                                        + '</option>');
+                }
+            }
+        }
+    });
+}
+function changeDeviceType() {
+    $.ajax({
+        url : "policyManagement/getDeviceType",
         type : "POST",
         success : function(data) {
             var jsonObj = eval("(" + data + ')');
             if (jsonObj.result == true) {
-                $('#vendor_eq').find('option').remove().end();
+                $('#device-type_eq').find('option').remove().end();
                 for (var i = 0; i < jsonObj.data.length; i++) {
-                    $('#vendor_eq').append(
-                            '<option>'
-                                    + jsonObj.data[i].vendor + '</option>');
+                    if (device_type == jsonObj.data[i].device_type)
+                        $('#device-type_eq').append(
+                                '<option selected="selected">'
+                                        + jsonObj.data[i].device_type
+                                        + '</option>');
+                    else
+                        $('#device-type_eq').append(
+                                '<option>' + jsonObj.data[i].device_type
+                                        + '</option>');
+                }
+            }
+        }
+    });
+}
+function changeOs() {
+    $.ajax({
+        url : "policyManagement/getOs",
+        type : "POST",
+        success : function(data) {
+            var jsonObj = eval("(" + data + ')');
+            if (jsonObj.result == true) {
+                $('#os_eq').find('option').remove().end();
+                for (var i = 0; i < jsonObj.data.length; i++) {
+                    if (os == jsonObj.data[i].os)
+                        $('#os_eq').append(
+                                '<option selected="selected">'
+                                        + jsonObj.data[i].os + '</option>');
+                    else
+                        $('#os_eq').append(
+                                '<option>' + jsonObj.data[i].os + '</option>');
+                }
+            }
+        }
+    });
+}
+function changeHostname() {
+    $.ajax({
+        url : "policyManagement/getHostname",
+        type : "POST",
+        success : function(data) {
+            var jsonObj = eval("(" + data + ')');
+            if (jsonObj.result == true) {
+                $('#hostname_eq').find('option').remove().end();
+                for (var i = 0; i < jsonObj.data.length; i++) {
+                    if (os == jsonObj.data[i].hostname)
+                        $('#hostname_eq').append(
+                                '<option selected="selected">'
+                                        + jsonObj.data[i].hostname
+                                        + '</option>');
+                    else
+                        $('#hostname_eq').append(
+                                '<option>' + jsonObj.data[i].hostname
+                                        + '</option>');
                 }
             }
         }

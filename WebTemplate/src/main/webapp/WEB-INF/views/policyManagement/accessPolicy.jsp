@@ -15,6 +15,24 @@
 	<div class="alert-box"></div>
 	<div id="divAlertArea"></div>
 </div>
+<div id="modify-area" style="display: none; ">
+	<label class="modify-label">우선순위</label><input type="text"
+		id="priority" /> <label class="modify-label">사업장</label><select
+		id="site_eq" class="form-control select2"></select><label
+		class="modify-label">벤더</label><select id="vendor_eq"
+		class="form-control select2"></select><label class="modify-label">모델</label><select
+		id="model_eq" class="form-control select2"></select><label
+		class="modify-label">장비종류</label><select id="device-type_eq"
+		class="form-control select2"></select><label class="modify-label">OS</label><select
+		id="os_eq" class="form-control select2"></select><label
+		class="modify-label">Hostname</label><select id="hostname_eq"
+		class="form-control select2"></select><label class="modify-label">설명</label><input
+		type="text" id="desc" /><label class="modify-label">정책</label><select
+		class="form-control" id="policy">
+		<option>Permit</option>
+		<option>Deny</option>
+	</select>
+</div>
 <section class="white-paper" style="text-align: center">
 	<div class="row">
 		<div class="col-xs-12"
@@ -24,22 +42,6 @@
 				<h3 class="box-title-small">제한 정책</h3>
 			</div>
 			<div class="box-body">
-				<div class="col-xs-12" id="modify-area">
-					<label class="modify-label">우선순위</label><input type="text"
-						id="priority" /> <label class="modify-label">사업장</label><select
-						id="site_eq" class="form-control select2"></select><label
-						class="modify-label">벤더</label><select id="vendor_eq"
-						class="form-control select2"></select><label class="modify-label">모델</label><input
-						type="text" id="model" /><label class="modify-label">장비종류</label><input
-						type="text" id="device-type" /><label class="modify-label">OS</label><input
-						type="text" id="os" /><label class="modify-label">Hostname</label><input
-						type="text" id="hostname" /><label class="modify-label">설명</label><input
-						type="text" id="desc" /><label class="modify-label">정책</label><select
-						class="form-control" id="policy">
-						<option>Permit</option>
-						<option>Deny</option>
-					</select>&nbsp;&nbsp;<input type="button" value="수정" id="mod-btn" />
-				</div>
 				<center>
 					<table name="datatable" id="accessPolicyTable"
 						class="essential-table" style="width: 100%;">
@@ -61,6 +63,7 @@
 								<th></th>
 								<th></th>
 								<th>정책</th>
+								<th></th>
 							</tr>
 						</thead>
 					</table>
