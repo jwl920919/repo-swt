@@ -222,7 +222,7 @@ CREATE TABLE auth_setup
   CONSTRAINT auth_setup_id_pkey PRIMARY KEY (setup_id)
 );
 COMMENT ON COLUMN auth_setup.site_id IS 'SiteID, (0 = Global)';
-
+COMMENT ON COLUMN auth_setup.auth_type IS 'ldap, radius, esb';
 
 -- AUTH_SETUP_LDAP
 CREATE TABLE public.auth_setup_ldap

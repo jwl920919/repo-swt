@@ -11,6 +11,7 @@
     </typeAliases>
     
     <mappers>
+    	<mapper resource="mybatis/mapper/AuthMapper"/>
     	<mapper resource="mybatis/mapper/DataMapper.xml"/>
     	<mapper resource="mybatis/mapper/ClientMapper.xml"/>
     </mappers>

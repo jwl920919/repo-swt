@@ -6,7 +6,7 @@ ipm:
   version: 0.1.1
   license: TEST000000
   cluster:
-    mode: master       # master, slave
+    mode: slave       # master, slave
     slave-index: 1     # 0 ~ 999
   redis:
     host: shinwootnskr.iptime.org
@@ -22,11 +22,11 @@ ipm:
     
   # debug mode
   debug:
-    enable: false
+    enable: true
     enable_recv_syslog: false
     enable_insert_event: false
     enable_device_collect: false
-    force_start_cluster_master: true
+    force_start_cluster_master: false
     
 #====================================
 # Security

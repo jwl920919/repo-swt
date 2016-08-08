@@ -40,29 +40,38 @@ public class AuthCheckerLDAP extends AuthChecker {
 	// Kerberos Info
 	private LdapKeberos _kerberos = new LdapKeberos();
 
+	// Ldap Context
 	private LdapContext _ldapContext = null;
 	private boolean _sslInitialized = false;
 	
+	// Group DN
 	private Hashtable<String, LdapGroup> _groups = new Hashtable<String, LdapGroup>();		// <group_dn, group_name>
 	
+	//region [public] Set LDAP Group
 	public void setLdapGroup(Hashtable<String,LdapGroup> groups) {
 		this._groups.putAll(groups);
 	}
+	//endregion
 	
+	//region [public] Set Base DN
 	public void setBaseDn(String baseDn) {
 		this._baseDn = baseDn;
 	}
+	//endregion
 	
+	//region [public] Set User Group Attr
 	public void setUserGroupAttr(LdapUserGroupAttr userGroupAttr) {
 		this._userGroupAttr = userGroupAttr;
 	}
+	//endregion
 	
+	//region [public] Set Keberos Info
 	public void setKeberosInfo(LdapKeberos kerberos) {
 		this._kerberos = kerberos;
 	}
+	//endregion
 	
-	
-	//region Connect
+	//region [public] Connect
 	public boolean connect(String host, int port, boolean isSSL, String bindDn, String bindPw) {
 		
 		close();
@@ -113,7 +122,7 @@ public class AuthCheckerLDAP extends AuthChecker {
 	}
 	//endregion
 	
-	//region Close
+	//region [public] Close
 	public void close() {
 		if (this._ldapContext != null) {
 			try {
@@ -126,9 +135,8 @@ public class AuthCheckerLDAP extends AuthChecker {
 		}
 	}
 	//endregion
-	
 
-	//region Get NamingContexts
+	//region [public] Get NamingContexts
 	public Vector getNamingContexts() throws Exception {
 		
 		if (this._ldapContext == null)
@@ -169,7 +177,7 @@ public class AuthCheckerLDAP extends AuthChecker {
 	}
 	//endregion
 
-	//region Get LdapGroup
+	//region [public] Get LdapGroup
 	public Hashtable<String,LdapGroup> getLdapGroups(boolean isActiveDirectory, String baseDn, String groupClass) 
 			throws Exception 
 	{
@@ -279,9 +287,8 @@ public class AuthCheckerLDAP extends AuthChecker {
 		return result;
 	}
 	//endregion
-
 	
-	//region Check UserAuth
+	//region [public] Check UserAuth
 	@Override
 	public boolean checkUserAuth(String user_id, String pass_wd) throws Exception {
 		
@@ -389,7 +396,8 @@ public class AuthCheckerLDAP extends AuthChecker {
 		return checkUserAuth(userid, passwd);
 	}
 	//endregion	
-	
+
+	//region checkSimpleUserAuth
 	private boolean checkSimpleUserAuth(String user_dn, String user_pw) throws Exception {
 		
 		if (this._ldapContext == null)
@@ -436,7 +444,9 @@ public class AuthCheckerLDAP extends AuthChecker {
 		}
 		return result;
 	}
+	//endregion
 
+	//region KerberosAuthenticate
 	private boolean KerberosAuthenticate(String kerberosHost, int kerberosPort, String kerberosRealm, String user_id, String pass_wd) {
 		
 		_logger.info((new StringBuilder("Kerberos Authenticate : ")).append(kerberosHost).append(", ")
@@ -470,7 +480,9 @@ public class AuthCheckerLDAP extends AuthChecker {
 		
 		return result;
 	}
-
+	//endregion
+	
+	//region KerberosConfigurationSetting
 	private boolean KerberosConfigurationSetting(String kdcHost, int kdcPort, String realmName) {
 		
 		boolean result = false;
@@ -507,7 +519,9 @@ public class AuthCheckerLDAP extends AuthChecker {
 		}
 		return result;
 	}
+	//endregion
 
+	//region InitializeSSL
 	private void InitializeSSL() {
 		
 		if (this._sslInitialized)
@@ -540,4 +554,5 @@ public class AuthCheckerLDAP extends AuthChecker {
 			_logger.error(e.getMessage(), e);
 		}
 	}
+	//endregion
 }

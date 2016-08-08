@@ -8,16 +8,6 @@
 		SELECT * FROM site_info
 	</select>
 	
-	
-	<!-- ############################ Auth ############################ -->
-	<select id="selectAuthSetup" resultType="com.shinwootns.data.entity.AuthSetup">
-		SELECT *
-		FROM auth_setup
-		WHERE disable = false
-		ORDER BY order_num
-	</select>
-	
-	
 	<!-- ############################ InSight ############################ -->
 	<select id="selectInsight" parameterType="hashMap" resultType="com.shinwootns.data.entity.DeviceInsight">
 		SELECT * 
@@ -33,8 +23,6 @@
 			AND is_master = #{is_master}
 		</if>
 	</select>
-	
-	
 	
 
 	<!-- ############################ DHCP ############################ -->

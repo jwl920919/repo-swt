@@ -161,6 +161,8 @@ function createModifyPopup() {
     $("#select2-device-type_eq-container").text(device_type);
     $("#select2-os_eq-container").text(os);
     $("#select2-hostname_eq-container").text(hostname);
+    popupClass = "modify";
+    modalShow("modify-modal");
 }
 // init default select to select2 object
 function selectInit() {

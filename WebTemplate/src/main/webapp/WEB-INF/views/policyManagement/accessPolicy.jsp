@@ -15,24 +15,45 @@
 	<div class="alert-box"></div>
 	<div id="divAlertArea"></div>
 </div>
-<div id="modify-area" style="display: none; ">
-	<label class="modify-label">우선순위</label><input type="text"
-		id="priority" /> <label class="modify-label">사업장</label><select
-		id="site_eq" class="form-control select2"></select><label
-		class="modify-label">벤더</label><select id="vendor_eq"
-		class="form-control select2"></select><label class="modify-label">모델</label><select
-		id="model_eq" class="form-control select2"></select><label
-		class="modify-label">장비종류</label><select id="device-type_eq"
-		class="form-control select2"></select><label class="modify-label">OS</label><select
-		id="os_eq" class="form-control select2"></select><label
-		class="modify-label">Hostname</label><select id="hostname_eq"
-		class="form-control select2"></select><label class="modify-label">설명</label><input
-		type="text" id="desc" /><label class="modify-label">정책</label><select
-		class="form-control" id="policy">
-		<option>Permit</option>
-		<option>Deny</option>
-	</select>
+
+<!-- Add, Edit modal -->
+<div class="modal modal-dialog" id="modify-modal" style="width: 600px">
+	<div class="modal-content" name="modalContent">
+		<div class="modal-header">
+			<input type="button" class="close" name="modalClose"
+				data-dismiss="modal" aria-label="Close" value="&times;" />
+			<h4 class="modal-title">Primary Modal</h4>
+		</div>
+		<div class="modal-body">
+			<div id="modify-area">
+				<div><label class="modify-label">우선순위</label><input type="text"
+					id="priority" /></div> <div><label class="modify-label">사업장</label><select
+					id="site_eq" class="form-control select2"></select></div><div><label
+					class="modify-label">벤더</label><select id="vendor_eq"
+					class="form-control select2"></select></div><label class="modify-label">모델</label><select
+					id="model_eq" class="form-control select2"></select><label
+					class="modify-label">장비종류</label><select id="device-type_eq"
+					class="form-control select2"></select><label class="modify-label">OS</label><select
+					id="os_eq" class="form-control select2"></select><label
+					class="modify-label">Hostname</label><select id="hostname_eq"
+					class="form-control select2"></select><label class="modify-label">설명</label><input
+					type="text" id="desc" /><label class="modify-label">정책</label><select
+					class="form-control" id="policy">
+					<option>Permit</option>
+					<option>Deny</option>
+				</select>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<input type="button" class="btn btn-default pull-left"
+				name="modalClose" data-dismiss="modal"
+				value="<%=LanguageHelper.GetLanguage("close")%>" />
+			<button type="button" class="btn btn-primary" id="btnSave"><%=LanguageHelper.GetLanguage("saveandclose")%></button>
+		</div>
+	</div>
+	<!-- /.modal-content -->
 </div>
+<!-- /.Add, Edit modal -->
 <section class="white-paper" style="text-align: center">
 	<div class="row">
 		<div class="col-xs-12"
@@ -80,6 +101,7 @@
 	</div>
 </section>
 <!-- Select2 -->
+<script src="resources/js/common/modalPopup.js"></script>
 <script src="resources/plugins/select2/select2.full.min.js"></script>
 <script src="resources/js/common/Datatable-Essential.js"></script>
 <script src="resources/js/policyManagement/accessPolicy.js"></script>
