@@ -10,9 +10,10 @@ function modalShow(id) {
 	$("#" + id).css("display","block");
 
 	getWindowPoint();
-    var alertPositionHeight = (windowHeight / 2 + scrollTop - 150 - ($('input[name=modalContent]').innerHeight() / 2)) + 'px';
-    var alertPositionWidth = (windowWidth / 2 - ($('input[name=modalContent]').innerWidth() / 2))+ 'px';
-        
+    var alertPositionHeight = (windowHeight / 2 + scrollTop - 60 - ($('div[name=modalContent]').innerHeight() / 2)) + 'px';
+    var alertPositionWidth = (windowWidth / 2 - ($('div[name=modalContent]').innerWidth() / 2))+ 'px';
+    console.log($('input[name=modalContent]').innerHeight());
+    
     $("#" + id).css('top', alertPositionHeight);    
     $("#" + id).css('left', alertPositionWidth + " !important");
 
