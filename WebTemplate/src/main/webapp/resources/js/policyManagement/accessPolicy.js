@@ -4,7 +4,9 @@ $(document)
         .ready(
                 function() {
                     // alert screen 감추기
-
+                    $("#site_eq").select2();
+                    $("#vendor_eq").select2();
+                    // policyManagement/getSiteNames"
                     table = $('#accessPolicyTable')
                             .DataTable(
                                     {
@@ -25,7 +27,6 @@ $(document)
                                             "data" : function(data, type) {
                                                 data.search_key = data.search.value;
                                             }
-
                                         },
                                         'columnDefs' : [ {
                                             'targets' : 0,
@@ -79,6 +80,22 @@ $(document)
                                                     'className' : 'hidden'
                                                 },
                                                 {
+                                                    "data" : "os_like",
+                                                    'className' : 'hidden'
+                                                },
+                                                {
+                                                    "data" : "device_type_like",
+                                                    'className' : 'hidden'
+                                                },
+                                                {
+                                                    "data" : "hostname_like",
+                                                    'className' : 'hidden'
+                                                },
+                                                {
+                                                    "data" : "model_like",
+                                                    'className' : 'hidden'
+                                                },
+                                                {
                                                     "width" : "100px",
                                                     "data" : "is_permit",
                                                     'searchable' : false,
@@ -102,42 +119,72 @@ $(document)
                         $('#accessPolicyTable_paginate').parent().prepend(
                                 $('#delete-button').parent());
                     });
-                    
-                    changeSiteNames()
-
                 });
-var access_policy_id,site_id;
+var access_policy_id, site_id, os_like, device_type_like, hostname_like, model_like;
 function trClickEvent(clickedTr) {
-    var test = $(clickedTr).children();
-    access_policy_id =test.eq(9).text();
-    site_id = test.eq(10).text();
-    $("#priority").val(test.eq(1).text());
-    $("#site").val(site_id);
-    $("#vendor").val(test.eq(3).text());
-    $("#model").val(test.eq(4).text());
-    $("#device-type").val(test.eq(5).text());
-    $("#os").val(test.eq(6).text());
-    $("#hostname").val(test.eq(7).text());
-    $("#desc").val(test.eq(8).text());
-    $("#policy").val(test.eq(11).text());
-    
+    var tr = $(clickedTr).children();
+    access_policy_id = tr.eq(9).text();
+    site_id = tr.eq(10).text();
+    os_like = tr.eq(11).text();
+    device_type_like = tr.eq(12).text();
+    hostname_like = tr.eq(13).text();
+    model_like = tr.eq(14).text();
+    // console.log(access_policy_id+"/"+site_id+"/"+os_like+"/"+device_type_like+"/"+hostname_like+"/"+model_like);
+    $("#priority").val(tr.eq(1).text());
+    $("#site_eq").val(site_id);
+    $("#vendor").val(tr.eq(3).text());
+    $("#model").val(tr.eq(4).text());
+    $("#device-type").val(tr.eq(5).text());
+    $("#os").val(tr.eq(6).text());
+    $("#hostname").val(tr.eq(7).text());
+    $("#desc").val(tr.eq(8).text());
+    $("#policy").val(tr.eq(15).text());
+    changeSiteNames(site_id);
+    changeVendorNames();
+    $("#select2-site_eq-container").text(tr.eq(2).text());
 }
 
-function changeSiteNames() {
+function changeSiteNames(index) {
     $.ajax({
-                url : "policyManagement/getSiteNames",
-                type : "POST",
-                success : function(data) {
-                    var jsonObj = eval("(" + data + ')');
-                    if (jsonObj.result == true) {
-                        $('#site').find('option').remove().end();
-                        for (var i = 0; i < jsonObj.data.length; i++) {
-                            $('#site').append(
-                                    '<option value=' + jsonObj.data[i].site_id
-                                            + '>' + jsonObj.data[i].site_name
-                                            + '</option>');
-                        }
+        url : "policyManagement/getSiteNames",
+        type : "POST",
+        success : function(data) {
+            var jsonObj = eval("(" + data + ')');
+            if (jsonObj.result == true) {
+                $('#site_eq').find('option').remove().end();
+                for (var i = 0; i < jsonObj.data.length; i++) {
+                    if (jsonObj.data[i].site_id == index) {
+                        $('#site_eq').append(
+                                '<option selected="selected" val='
+                                        + jsonObj.data[i].site_id + '>'
+                                        + jsonObj.data[i].site_name
+                                        + '</option>');
+
+                    } else {
+                        $('#site_eq').append(
+                                '<option val=' + jsonObj.data[i].site_id + '>'
+                                        + jsonObj.data[i].site_name
+                                        + '</option>');
                     }
                 }
-            });
+            }
+        }
+    });
+}
+function changeVendorNames() {
+    $.ajax({
+        url : "policyManagement/getVendor",
+        type : "POST",
+        success : function(data) {
+            var jsonObj = eval("(" + data + ')');
+            if (jsonObj.result == true) {
+                $('#vendor_eq').find('option').remove().end();
+                for (var i = 0; i < jsonObj.data.length; i++) {
+                    $('#vendor_eq').append(
+                            '<option>'
+                                    + jsonObj.data[i].vendor + '</option>');
+                }
+            }
+        }
+    });
 }

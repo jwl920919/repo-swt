@@ -78,6 +78,10 @@ public class PolicyManagementActionController {
 				jObj.put("desc", accessPolicyData.get("desc"));
 				jObj.put("is_permit", accessPolicyData.get("is_permit"));
 				jObj.put("site_id", accessPolicyData.get("site_id"));
+				jObj.put("os_like", accessPolicyData.get("os_like"));
+				jObj.put("device_type_like", accessPolicyData.get("device_type_like"));
+				jObj.put("hostname_like", accessPolicyData.get("hostname_like"));
+				jObj.put("model_like", accessPolicyData.get("model_like"));
 				jObj.put("active", 1);
 				jsonArray.add(jObj);
 			}

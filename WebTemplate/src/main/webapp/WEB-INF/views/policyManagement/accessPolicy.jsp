@@ -8,6 +8,8 @@
 
 <link rel="stylesheet"
 	href="resources/css/policyManagement/accessPolicy.css">
+<!-- Select2 -->
+<link rel="stylesheet" href="resources/plugins/select2/select2.min.css">
 <!-- Alert Start -->
 <div id="layDiv">
 	<div class="alert-box"></div>
@@ -24,15 +26,19 @@
 			<div class="box-body">
 				<div class="col-xs-12" id="modify-area">
 					<label class="modify-label">우선순위</label><input type="text"
-						id="priority" /> <label class="modify-label js-example-disabled-results">사업장</label><select id="site"></select><label class="modify-label">벤더</label><input
-						type="text" id="vendor" /><label class="modify-label">모델</label><input
+						id="priority" /> <label class="modify-label">사업장</label><select
+						id="site_eq" class="form-control select2"></select><label
+						class="modify-label">벤더</label><select id="vendor_eq"
+						class="form-control select2"></select><label class="modify-label">모델</label><input
 						type="text" id="model" /><label class="modify-label">장비종류</label><input
 						type="text" id="device-type" /><label class="modify-label">OS</label><input
 						type="text" id="os" /><label class="modify-label">Hostname</label><input
 						type="text" id="hostname" /><label class="modify-label">설명</label><input
-						type="text" id="desc" /><label class="modify-label">정책</label><select id="policy">
-						<option>Permit</option><option>Deny</option></select>&nbsp;&nbsp;<input type="button"
-						value="수정" id="mod-btn" />
+						type="text" id="desc" /><label class="modify-label">정책</label><select
+						class="form-control" id="policy">
+						<option>Permit</option>
+						<option>Deny</option>
+					</select>&nbsp;&nbsp;<input type="button" value="수정" id="mod-btn" />
 				</div>
 				<center>
 					<table name="datatable" id="accessPolicyTable"
@@ -48,6 +54,10 @@
 								<th>OS</th>
 								<th>Hostname</th>
 								<th>설명</th>
+								<th></th>
+								<th></th>
+								<th></th>
+								<th></th>
 								<th></th>
 								<th></th>
 								<th>정책</th>
@@ -66,5 +76,7 @@
 		</div>
 	</div>
 </section>
+<!-- Select2 -->
+<script src="resources/plugins/select2/select2.full.min.js"></script>
 <script src="resources/js/common/Datatable-Essential.js"></script>
 <script src="resources/js/policyManagement/accessPolicy.js"></script>

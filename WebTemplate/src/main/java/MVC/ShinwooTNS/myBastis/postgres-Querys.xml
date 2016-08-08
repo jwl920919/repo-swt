@@ -575,7 +575,7 @@
 	<!-- Controller : MVC.ShinwooTNS.action.PolicyManagementActionController -->
 	<select id="select_POLICY_TABLE_SITE_SEARCH"
 		parameterType="hashmap" resultType="java.util.HashMap">
-		select si.site_name, ap.site_id, ap.vendor, ap.model, ap.device_type, ap.os, ap.hostname, ap."desc", ap.is_permit,ap.access_policy_id ,ap.priority
+		select si.site_name, ap.*
 		from access_policy as ap, site_info as si where ap.site_id = si.site_id 
 		ORDER BY ${orderColumn} ${orderType};
 	</select>
