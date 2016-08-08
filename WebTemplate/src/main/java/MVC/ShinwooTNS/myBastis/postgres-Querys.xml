@@ -566,6 +566,8 @@
 		</choose>
 		OFFSET #{startIndex} LIMIT #{length};
 	</select>
+	
+	
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
 	<!-- Insert Date : 2016-08-04 -->
 	<!-- Insert User : 이재원 -->
@@ -576,6 +578,29 @@
 		select si.site_name, ap.site_id, ap.vendor, ap.model, ap.device_type, ap.os, ap.hostname, ap."desc", ap.is_permit,ap.access_policy_id 
 		from access_policy as ap, site_info as si where ap.site_id = si.site_id 
 		ORDER BY ${orderColumn} ${orderType};
+	</select>
+		
+
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-08-08 -->
+	<!-- Insert User : KCM -->
+	<!-- Description : IP관리 > black list 현황  데이터 -->
+	<!-- Controller : MVC.ShinwooTNS.action.IPManagementActionController -->
+	<select id="select_IP_MANAGEMENT_BLACKLIST_STATUS_DATA" resultType="java.util.HashMap">
+		SELECT "black"."blacklist_id",
+	   		   "black"."site_id",
+	   		   "site"."site_name",
+	   		   COALESCE("black"."blacklist_enable", FALSE) AS "blacklist_enable",
+	   		   COALESCE("black"."blacklist_filter_name", '') AS "blacklist_filter_name",
+	   		   COALESCE("black"."blacklist_time_sec", 0) AS "blacklist_time_sec",
+	   		   COALESCE("black"."description", '') AS "description",
+	   		   "rowCount"."allCount"
+          FROM "site_blacklist_info" AS "black", "site_info" AS "site", 
+               (SELECT COUNT("black".*) AS "allCount" FROM "site_blacklist_info" AS "black" WHere "site_id" = #{siteid}) AS "rowCount"
+         WHERE "black"."site_id" = "site"."site_id"
+           AND "black"."site_id" = #{siteid}
+		 ORDER BY ${orderColumn} ${orderType}
+		OFFSET #{startIndex} LIMIT #{length};
 	</select>
 </mapper>
 
