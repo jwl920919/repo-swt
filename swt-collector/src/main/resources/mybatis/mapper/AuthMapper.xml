@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        
+<mapper namespace="com.shinwootns.ipm.collector.data.mapper.AuthMapper">
+
+	<!-- ############################ Auth ############################ -->
+	<select id="selectAuthSetup" resultType="com.shinwootns.data.entity.AuthSetup">
+		SELECT * FROM auth_setup WHERE disable = false ORDER BY order_num
+	</select>
+	
+	<select id="selectAuthSetupLdap" resultType="com.shinwootns.data.entity.AuthSetupLdap">
+		SELECT * FROM auth_setup_ldap WHERE setup_id = #{setup_id}
+	</select>
+	
+	<select id="selectAuthSetupRadius" resultType="com.shinwootns.data.entity.AuthSetupLdap">
+		SELECT * FROM auth_setup_radius WHERE setup_id = #{setup_id}
+	</select>
+	
+	<select id="selectAuthSetupEsb" resultType="com.shinwootns.data.entity.AuthSetupLdap">
+		SELECT * FROM auth_setup_esb WHERE setup_id = #{setup_id}
+	</select>
+    
+</mapper>

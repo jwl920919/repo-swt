@@ -22,6 +22,10 @@
 <link rel="stylesheet" href="resources/bootstrap/css/font-awesome.min.css">
 <!-- Ionicons -->
 <link rel="stylesheet" href="resources/bootstrap/css/ionicons.min.css">
+<!-- iCheck for checkboxes and radio inputs -->
+<link rel="stylesheet" href="resources/plugins/iCheck/all.css">
+<!-- Select2 -->
+<link rel="stylesheet" href="resources/plugins/select2/select2.min.css">
 <!-- Theme style -->
 <link rel="stylesheet" href="resources/dist/css/AdminLTE.min.css">
 <!-- AdminLTE Skins. Choose a skin from the css/skins

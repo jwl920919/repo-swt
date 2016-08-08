@@ -1,11 +1,14 @@
 package com.shinwootns.ipm.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.ui.Model;
@@ -15,14 +18,25 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.JsonObject;
+import com.shinwootns.common.auth.AuthCheckerLDAP;
+import com.shinwootns.common.auth.LdapUserGroupAttr;
+import com.shinwootns.common.utils.JsonUtils;
+import com.shinwootns.data.entity.AuthSetup;
+import com.shinwootns.data.entity.AuthSetupEsb;
+import com.shinwootns.data.entity.AuthSetupLdap;
+import com.shinwootns.data.entity.AuthSetupRadius;
+import com.shinwootns.ipm.data.SharedData;
+import com.shinwootns.ipm.data.mapper.AuthMapper;
 import com.shinwootns.ipm.data.mapper.DataMapper;
+import com.shinwootns.ipm.service.auth.AuthCheckHandler;
+import com.shinwootns.ipm.service.auth.AuthParam;
+import com.shinwootns.ipm.service.auth.AuthResult;
 
 
 @RestController
 public class APIController {
 	
-	//@Autowired
-	//private DataMapper dataMapper;
+	private final Logger _logger = LoggerFactory.getLogger(this.getClass());
 	
 	@RequestMapping(value="/api/auth", method=RequestMethod.GET)
 	public String checkAuth(
@@ -32,12 +46,20 @@ public class APIController {
 	{
 		JsonObject json = new JsonObject();
 		
-		json.addProperty("userid", userid);
-		json.addProperty("result", true);
+		//json.addProperty("userid", userid);
+		//json.addProperty("result", true);
 		
-		// ...
 		
-		return json.toString();
+		AuthParam param = new AuthParam();
+		param.setUserId(userid);
+		param.setPassword(password);
+		param.setMacAddr(macaddr);
+		
+		AuthCheckHandler handler = new AuthCheckHandler();
+
+		AuthResult result = handler.checkLogin(param);
+		
+		return JsonUtils.serialize(result).toString();
 	}
 	
 	/*
