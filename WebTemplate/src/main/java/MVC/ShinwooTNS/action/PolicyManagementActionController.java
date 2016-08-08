@@ -3,6 +3,7 @@ package MVC.ShinwooTNS.action;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -187,7 +188,7 @@ public class PolicyManagementActionController {
 	}
 
 	// endregion
-	
+
 	// region getHostname
 	@RequestMapping(value = "getHostname", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object getHostname(HttpServletRequest request) {
@@ -208,7 +209,7 @@ public class PolicyManagementActionController {
 
 	}
 	// endregion
-	
+
 	// region getDeviceType
 	@RequestMapping(value = "getDeviceType", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object getDeviceType(HttpServletRequest request) {
@@ -217,7 +218,7 @@ public class PolicyManagementActionController {
 			init();
 			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
 					new TypeToken<HashMap<String, Object>>() {
-			}.getType());
+					}.getType());
 			result.data = accessPolicy.select_POLICY_DEVICE_TYPE_SEARCH(parameters);
 			result.result = true;
 			return gson.toJson(result);
@@ -226,10 +227,10 @@ public class PolicyManagementActionController {
 			result.result = false;
 			return gson.toJson(result);
 		}
-		
+
 	}
 	// endregion
-	
+
 	@RequestMapping(value = "sample", method = RequestMethod.GET, produces = "application/text; charset=utf8")
 	public @ResponseBody Object getInfobloxdatas(HttpServletRequest request, HttpSession session) {
 		logger.info("sample : " + request.getLocalAddr());

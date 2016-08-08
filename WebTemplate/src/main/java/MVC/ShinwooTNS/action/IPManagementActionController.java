@@ -383,25 +383,13 @@ public class IPManagementActionController {
 		int totalCount = 0;
 
 		try {
-			String[] columns = { "settlement_status", "settlement_status_text", "user_id", "user_site_id", "site_name", "user_name", "user_phone_num", "apply_static_ip_type",
-						"apply_static_ipaddr", "apply_static_ip_num", "apply_use_time", "apply_description", "apply_time", "settlement_chief_id",
-						"settlement_chief_name", "settlement_description", "settlement_time", "issuance_ip_type", "issuance_ipaddr", "issuance_ip_num", "issuance_use_time" };
-			
-			String m_timezone = request.getParameter("timezone");
-			String m_starttime = request.getParameter("startTime");
-			String m_endtime = request.getParameter("endTime");
-			String m_settlementstatus = request.getParameter("settlementstatus");
+			String[] columns = { "blacklist_id", "site_id", "site_name", "blacklist_enable", "blacklist_filter_name", "blacklist_time_sec", "description" };
 
 			HashMap<String, Object> parameters = Common.Helper.DatatableHelper.getDatatableParametas(request, columns, 0);
 
 			String siteID = session.getAttribute("site_id").toString();
 			if (!siteID.equals("")) {
 				parameters.put("siteid", Integer.parseInt(siteID));
-				parameters.put("time_zone", m_timezone);
-				parameters.put("starttime", m_starttime);
-				parameters.put("endtime", m_endtime);
-				parameters.put("settlementstatus",  Integer.parseInt(m_settlementstatus));
-
 				dataList = ipManagementService.select_IP_MANAGEMENT_BLACKLIST_STATUS_DATA(parameters);
 
 				if (dataList.size() > 0) {

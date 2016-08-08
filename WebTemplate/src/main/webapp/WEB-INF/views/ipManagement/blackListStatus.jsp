@@ -10,7 +10,81 @@
 <script src="resources/plugins/datatables/vfs_fonts.js"></script>
 <script src="resources/plugins/datatables/jszip.min.js"></script>
 <script src="resources/js/common/Datatable-Essential.js"></script>
-<script src="resources/js/ipManagement/ipCertifyStatus.js"></script>
+<script src="resources/js/common/modalPopup.js"></script>
+<script src="resources/js/ipManagement/blackListStatus.js"></script>
+
+<!-- Add, Edit modal -->
+<div class="modal modal-dialog" id="modal" style="width:600px">
+  <div class="modal-content" name="modalContent">
+  <!-- modal-content -->
+    <div class="modal-header">
+      <input type="button" class="close" name="modalClose" data-dismiss="modal" aria-label="Close" value="&times;" />
+      <h4 class="modal-title">Black List 추가</h4>
+    </div>
+    <div class="modal-body">
+    	<div class="input-group">
+			<span class="input-group-addon">사업장</span>
+			<select class="form-control">
+                   <option>option 1</option>
+                   <option>option 2</option>
+                   <option>option 3</option>
+                   <option>option 4</option>
+                   <option>option 5</option>
+			</select>
+		</div>
+        </p>
+    	<div class="input-group">
+			<span class="input-group-addon">사업장</span>
+			<select class="form-control">
+                   <option>option 1</option>
+                   <option>option 2</option>
+                   <option>option 3</option>
+                   <option>option 4</option>
+                   <option>option 5</option>
+			</select>
+		</div>
+        </p>
+    	<div class="input-group">
+			<span class="input-group-addon">사업장</span>
+			<select class="form-control">
+                   <option>option 1</option>
+                   <option>option 2</option>
+                   <option>option 3</option>
+                   <option>option 4</option>
+                   <option>option 5</option>
+			</select>
+		</div>
+        </p>
+    	<div class="input-group">
+			<span class="input-group-addon">사업장</span>
+			<select class="form-control">
+                   <option>option 1</option>
+                   <option>option 2</option>
+                   <option>option 3</option>
+                   <option>option 4</option>
+                   <option>option 5</option>
+			</select>
+		</div>
+        </p>
+    	<div class="input-group">
+			<span class="input-group-addon">사업장</span>
+			<select class="form-control">
+                   <option>option 1</option>
+                   <option>option 2</option>
+                   <option>option 3</option>
+                   <option>option 4</option>
+                   <option>option 5</option>
+			</select>
+		</div>
+    </div>
+    <div class="modal-footer">
+      <input type="button" class="btn btn-default pull-left" name="modalClose" data-dismiss="modal" value="<%=LanguageHelper.GetLanguage("close")%>" />
+      <button type="button" class="btn btn-primary" id="btnSave"><%=LanguageHelper.GetLanguage("saveandclose")%></button>
+    </div>
+  </div>
+  <!-- /.modal-content -->
+</div>
+<!-- /.Add, Edit modal -->
 
 <!-- Alert Start -->
 <div id="layDiv">
@@ -19,72 +93,60 @@
 </div>		
 <!-- Alert End -->
 
+
 <section class="white-paper">
 	<div class="row" id="defaultDiv">
 		<div class="col-lg-12">
 			<div class="box box-primary">
-				<div class="pagebox-header with-border">				
+<!-- 				<div class="pagebox-header with-border">				 -->
 <!-- 				<div class="box-header"> -->
-					<div>						
-		                <!-- select -->
-		                <table>
-		                	<tr>
-		                		<td>
-		                			<label style="width:80px; margin-right:10px; text-align:right"><%=LanguageHelper.GetLanguage("inquiryTime")%> : </label>
-		                		</td>
-		                		<td class="input-group date">
-									<!-- Date and time range -->	
-									<input style="width:330px;" type="text" class="form-control" id="reservationtime" name="reservationtime">
-									<!-- /.Date and time range -->
-		                		</td>
-		                		<td>
-		                			<label style="width:80px; margin-right:10px; text-align:right"><%=LanguageHelper.GetLanguage("status")%> : </label>
-		                		</td>
-		                		<td>
-			                		<select id="sbCerifyStatus" class="form-control selectoption_grey_color" style="width:120px">
-			                			<option value="ALL" selected><%=LanguageHelper.GetLanguage("all")%></option>
-			                			<option value="0"><%=LanguageHelper.GetLanguage("requestApproval")%></option>
-			                			<option value="1"><%=LanguageHelper.GetLanguage("approval")%></option>
-			                			<option value="2"><%=LanguageHelper.GetLanguage("return")%></option>
-									</select>
-		                		</td>
-		                		<td>
-		                			<input type="text" style="width:250px; margin-left:15px;" class="form-control" id="txtSearch"
-										placeholder="<%=LanguageHelper.GetLanguage("inputSearchWord")%>">
-		                		</td>
-		                		<td style="width:100%; text-align:right; padding-right:10px">
-		                			<button type="button" class="btn btn-primary" id="btnSearch"><%=LanguageHelper.GetLanguage("inquiry")%></button>
-		                		</td>
-		                	</tr>
-		                </table>
-					</div>
-				</div>
+<!-- 					<div>						 -->
+<!-- 		                select -->
+<!-- 		                <table> -->
+<!-- 		                	<tr> -->
+<!-- 		                		<td> -->
+<%-- 		                			<label style="width:80px; margin-right:10px; text-align:right"><%=LanguageHelper.GetLanguage("inquiryTime")%> : </label> --%>
+<!-- 		                		</td> -->
+<!-- 		                		<td class="input-group date"> -->
+<!-- 									Date and time range	 -->
+<!-- 									<input style="width:330px;" type="text" class="form-control" id="reservationtime" name="reservationtime"> -->
+<!-- 									/.Date and time range -->
+<!-- 		                		</td> -->
+<!-- 		                		<td> -->
+<%-- 		                			<label style="width:80px; margin-right:10px; text-align:right"><%=LanguageHelper.GetLanguage("status")%> : </label> --%>
+<!-- 		                		</td> -->
+<!-- 		                		<td> -->
+<!-- 			                		<select id="sbCerifyStatus" class="form-control selectoption_grey_color" style="width:120px"> -->
+<%-- 			                			<option value="ALL" selected><%=LanguageHelper.GetLanguage("all")%></option> --%>
+<%-- 			                			<option value="0"><%=LanguageHelper.GetLanguage("requestApproval")%></option> --%>
+<%-- 			                			<option value="1"><%=LanguageHelper.GetLanguage("approval")%></option> --%>
+<%-- 			                			<option value="2"><%=LanguageHelper.GetLanguage("return")%></option> --%>
+<!-- 									</select> -->
+<!-- 		                		</td> -->
+<!-- 		                		<td> -->
+<!-- 		                			<input type="text" style="width:250px; margin-left:15px;" class="form-control" id="txtSearch" -->
+<%-- 										placeholder="<%=LanguageHelper.GetLanguage("inputSearchWord")%>"> --%>
+<!-- 		                		</td> -->
+<!-- 		                		<td style="width:100%; text-align:right; padding-right:10px"> -->
+<%-- 		                			<button type="button" class="btn btn-primary" id="btnSearch"><%=LanguageHelper.GetLanguage("inquiry")%></button> --%>
+<!-- 		                		</td> -->
+<!-- 		                	</tr> -->
+<!-- 		                </table> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
 				<div class="box-header">
 					<center>
 						<table id="datatable" name="datatable" class="essential-table" style="width: 98%">
 							<thead>
 								<tr>
-									<th width="0%" style="display:none;">settlement_status</th>
-									<th width="4%"><%=LanguageHelper.GetLanguage("status")%></th>
-									<th width="6.25%"><%=LanguageHelper.GetLanguage("applicant")%> <%=LanguageHelper.GetLanguage("ID")%></th>
-									<th width="0%" style="display:none;">user_site_id</th>
-									<th width="6.25%"><%=LanguageHelper.GetLanguage("applicant")%> <%=LanguageHelper.GetLanguage("site")%></th>
-									<th width="6.25%"><%=LanguageHelper.GetLanguage("applicant")%> <%=LanguageHelper.GetLanguage("Name")%></th>
-									<th width="6.25%"><%=LanguageHelper.GetLanguage("applicant")%> <%=LanguageHelper.GetLanguage("contactnum")%></th>
-									<th width="4%"><%=LanguageHelper.GetLanguage("applyIPType")%></th>
-									<th width="6.25%"><%=LanguageHelper.GetLanguage("applyIP")%></th>
-									<th width="0%" style="display:none;">apply_static_ip_num</th>
-									<th width="7.25%"><%=LanguageHelper.GetLanguage("applyUseTime")%></th>
-									<th width="8.75%"><%=LanguageHelper.GetLanguage("applyDesc")%></th>
-									<th width="6.25%"><%=LanguageHelper.GetLanguage("applyTime")%></th>
-									<th width="0%" style="display:none;">settlement_chief_id</th>
-									<th width="6.25%"><%=LanguageHelper.GetLanguage("settlementChief")%></th>
-									<th width="8.5%"><%=LanguageHelper.GetLanguage("settlementDesc")%></th>
-									<th width="6.25%"><%=LanguageHelper.GetLanguage("settlementTime")%></th>
-									<th width="4%"><%=LanguageHelper.GetLanguage("issuanceIPType")%></th>
-									<th width="6.25%"><%=LanguageHelper.GetLanguage("issuanceIP")%></th>
-									<th width="0%" style="display:none;">issuance_ip_num</th>
-									<th width="7.25%"><%=LanguageHelper.GetLanguage("issuanceUseTime")%></th>
+									<th width="0%" style="display:none;">blacklist_id</th>
+									<th width="0%" style="display:none;">site_id</th>
+									<th width="20%"><%=LanguageHelper.GetLanguage("site")%></th>
+									<th width="20%">blacklist_enable</th>
+									<th width="20%">blacklist_filter_name</th>
+									<th width="20%">blacklist_time_sec</th>
+									<th width="20%">description</th>
+									<th width="20%"></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -96,3 +158,4 @@
 		</div>
 	</div>
 </section>
+

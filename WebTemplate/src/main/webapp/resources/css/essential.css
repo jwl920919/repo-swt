@@ -106,6 +106,10 @@ tr.essential-tr-cursor-pointer {
 	background-color: #efefef;
 }
 
+.essential-cursor-pointer {
+	cursor: pointer;
+}
+
 .btn {
 	height: 30px;
 	font-size: 12px;
@@ -723,3 +727,11 @@ table td[class*="col-"], table th[class*="col-"] {
 .dataTables_scroll{
 	padding:0px 10px;
 }
+
+.modal {
+  position: absolute;
+  display: none;
+  z-index: 999;
+  background: transparent !important;
+}
+

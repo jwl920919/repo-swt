@@ -587,7 +587,7 @@
 	<!-- Controller : MVC.ShinwooTNS.action.PolicyManagementActionController -->
 	<select id="select_POLICY_OS_SEARCH"
 		parameterType="hashmap" resultType="java.util.HashMap">
-		SELECT DISTINCT COALESCE(os,'_blank') as os FROM view_client_info <if test="searchValue != null">WHERE AND os like CONCAT('%', #{searchValue}, '%'</if> order by os;
+		SELECT DISTINCT COALESCE(os,'') as os FROM view_client_info <if test="searchValue != null">WHERE AND os like CONCAT('%', #{searchValue}, '%'</if> order by os;
 	</select>
 	
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
@@ -597,7 +597,7 @@
 	<!-- Controller : MVC.ShinwooTNS.action.PolicyManagementActionController -->
 	<select id="select_POLICY_VENDOR_SEARCH"
 		parameterType="hashmap" resultType="java.util.HashMap">
-		SELECT DISTINCT COALESCE(vendor,'_blank') as vendor FROM view_client_info <if test="searchValue != null">WHERE AND vendor like CONCAT('%', #{searchValue}, '%'</if> order by vendor;
+		SELECT DISTINCT COALESCE(vendor,'') as vendor FROM view_client_info <if test="searchValue != null">WHERE AND vendor like CONCAT('%', #{searchValue}, '%'</if> order by vendor;
 	</select>
 	
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
@@ -607,7 +607,7 @@
 	<!-- Controller : MVC.ShinwooTNS.action.PolicyManagementActionController -->
 	<select id="select_POLICY_MODEL_SEARCH_REF_VENDOR"
 		parameterType="hashmap" resultType="java.util.HashMap">
-		SELECT DISTINCT COALESCE(model,'_blank') as model FROM view_client_info WHERE vendor = #{vendor}<if test="searchValue != null"> AND model like CONCAT('%', #{searchValue}, '%'</if> order by model;
+		SELECT DISTINCT COALESCE(model,'') as model FROM view_client_info WHERE vendor = #{vendor}<if test="searchValue != null"> AND model like CONCAT('%', #{searchValue}, '%'</if> order by model;
 	</select>
 	
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
@@ -617,7 +617,7 @@
 	<!-- Controller : MVC.ShinwooTNS.action.PolicyManagementActionController -->
 	<select id="select_POLICY_HOSTNAME_SEARCH"
 		parameterType="hashmap" resultType="java.util.HashMap">
-		SELECT DISTINCT COALESCE(hostname,'_blank') as hostname FROM view_client_info <if test="searchValue != null">WHERE AND hostname like CONCAT('%', #{searchValue}, '%'</if> order by hostname;
+		SELECT DISTINCT COALESCE(hostname,'') as hostname FROM view_client_info <if test="searchValue != null">WHERE AND hostname like CONCAT('%', #{searchValue}, '%'</if> order by hostname;
 	</select>
 	
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
@@ -627,7 +627,7 @@
 	<!-- Controller : MVC.ShinwooTNS.action.PolicyManagementActionController -->
 	<select id="select_POLICY_DEVICE_TYPE_SEARCH"
 		parameterType="hashmap" resultType="java.util.HashMap">
-		SELECT DISTINCT COALESCE(device_type,'_blank') as device_type FROM view_client_info <if test="searchValue != null">WHERE AND device_type like CONCAT('%', #{searchValue}, '%'</if> order by device_type;
+		SELECT DISTINCT COALESCE(device_type,'') as device_type FROM view_client_info <if test="searchValue != null">WHERE AND device_type like CONCAT('%', #{searchValue}, '%'</if> order by device_type;
 	</select>
 		
 
@@ -648,7 +648,9 @@
           FROM "site_blacklist_info" AS "black", "site_info" AS "site", 
                (SELECT COUNT("black".*) AS "allCount" FROM "site_blacklist_info" AS "black" WHere "site_id" = #{siteid}) AS "rowCount"
          WHERE "black"."site_id" = "site"."site_id"
-           AND "black"."site_id" = #{siteid}
+           AND "black"."site_id" = #{siteid}           
+           AND ("site"."site_name" like CONCAT('%', #{searchValue}, '%') OR "black"."blacklist_filter_name" like CONCAT('%', #{searchValue}, '%') OR
+                to_char("black"."blacklist_time_sec", '999') like CONCAT('%', #{searchValue}, '%') OR "black"."description" like CONCAT('%', #{searchValue}, '%'))  
 		 ORDER BY ${orderColumn} ${orderType}
 		OFFSET #{startIndex} LIMIT #{length};
 	</select>
