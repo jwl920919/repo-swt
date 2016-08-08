@@ -150,6 +150,10 @@ button, select {
 	text-transform: none
 }
 
+select {
+	padding-left : 8px !important
+}
+
 button, html input[type=button], input[type=reset], input[type=submit] {
 	-webkit-appearance: button;
 	cursor: pointer
