@@ -177,5 +177,8 @@
     "ipUtilization":								"IP 사용률",
     "rangeipcount":									"사용 Range IP 수",
     "totalrangecount":								"총 Range 수",
-    "rangeUtilization":								"Range 사용률"
+    "rangeUtilization":								"Range 사용률",
+    "nodataavailableintable":						"조회된 데이터가 없습니다.",
+    "enable":										"활성",
+    "disable":										"비활성"
 }

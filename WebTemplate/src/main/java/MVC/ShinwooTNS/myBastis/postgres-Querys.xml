@@ -598,7 +598,9 @@
           FROM "site_blacklist_info" AS "black", "site_info" AS "site", 
                (SELECT COUNT("black".*) AS "allCount" FROM "site_blacklist_info" AS "black" WHere "site_id" = #{siteid}) AS "rowCount"
          WHERE "black"."site_id" = "site"."site_id"
-           AND "black"."site_id" = #{siteid}
+           AND "black"."site_id" = #{siteid}           
+           AND ("site"."site_name" like CONCAT('%', #{searchValue}, '%') OR "black"."blacklist_filter_name" like CONCAT('%', #{searchValue}, '%') OR
+                to_char("black"."blacklist_time_sec", '999') like CONCAT('%', #{searchValue}, '%') OR "black"."description" like CONCAT('%', #{searchValue}, '%'))  
 		 ORDER BY ${orderColumn} ${orderType}
 		OFFSET #{startIndex} LIMIT #{length};
 	</select>
