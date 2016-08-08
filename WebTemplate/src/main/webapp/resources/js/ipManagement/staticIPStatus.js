@@ -131,7 +131,7 @@ function tdClickEvent(obj){
 	//		alert("Parent1 : " + $(obj).parent().children().eq(2).html());
 	
 			
-			var ipCClass = String.format("{0} ~ {1}", $(obj).parent().children().eq(1).html(), $(obj).parent().children().eq(2).html());
+			var ipCClass = String.format("{0} ~ {1}", $(obj).parent().children().eq(2).html(), $(obj).parent().children().eq(3).html());
 			$("#segmentLabel").text(ipCClass);
 			var network = $(obj).parent().children().eq(0).html();
 
@@ -176,7 +176,7 @@ function tdClickEvent(obj){
 		                        data.timezone = getClientTimeZoneName();
 		                    }
 		                },
-					    "columnDefs": [{ className: "essential-td-left", "targets": [ 0,2,3,5,7,10 ] }],
+					    "columnDefs": [{ className: "essential-td-left", "targets": [ 0,2,3,5,6,9 ] }],
 	//	                "aoColumns": [
 	//	                              { "data" : "ipaddr", "sWidth": "300%" }, // 1st column width 
 	//	                              { "data" : "ip_type", "sWidth": "1000%" }, // 2nd column width 
@@ -214,7 +214,6 @@ function tdClickEvent(obj){
 									  {"data" : "duid"},
 									  {"data" : "ip_status"},
 									  {"data" : "host_name"},
-									  {"data" : "host_os"},
 									  {"data" : "fingerprint"},
 									  {"data" : "lease_start_time"},
 									  {"data" : "lease_end_time"},
@@ -399,7 +398,7 @@ function fnIPMapSetting(){
         dhcp_conflictCss: 'dhcp_conflict',
         dhcp_leaseCss: 'dhcp_lease',
         dhcp_usedCss: 'dhcp_used',
-        
+                
         selected_unusedCss: 'selected_unused',
         selected_networkCss: 'selected_network',
         selected_broadcastCss: 'selected_broadcast',
@@ -407,8 +406,8 @@ function fnIPMapSetting(){
         selected_reservationCss: 'selected_reservation',
         selected_conflictCss: 'selected_conflict',
         selected_leaseCss: 'selected_lease',
-        selected_usedCss: 'selected_used',
-    };
+        selected_usedCss: 'selected_used'
+    }
 }
 
 function fnIPMapDraw(startipNumber, DHCP_RangeArr, BROADCAST_Arr, NETWORK_Arr, UNUSED_Arr, FIXED_Arr, RESERVATION_Arr, CONFLICT_Arr, LEASE_Arr, USED_Arr, ETC_Arr){
@@ -793,16 +792,16 @@ rectangleClick = function (obj) {
 	    
 	    //leaseCss
 	    else if ($(obj).hasClass(ipMapSettings.leaseCss)) {
-	    	$(obj).removeClass(ipMapSettings.leaseCss).addClass(ipMapSettings.leaseCss+ "ORG").addClass(ipMapSettings.selected_conflictCss);
+	    	$(obj).removeClass(ipMapSettings.leaseCss).addClass(ipMapSettings.leaseCss+ "ORG").addClass(ipMapSettings.selected_leaseCss);
 	    }
 	    else if ($(obj).hasClass(ipMapSettings.dhcp_leaseCss)) {
-	    	$(obj).removeClass(ipMapSettings.dhcp_leaseCss).addClass(ipMapSettings.dhcp_leaseCss+ "ORG").addClass(ipMapSettings.selected_conflictCss);
+	    	$(obj).removeClass(ipMapSettings.dhcp_leaseCss).addClass(ipMapSettings.dhcp_leaseCss+ "ORG").addClass(ipMapSettings.selected_leaseCss);
 	    }
 	    else if ($(obj).hasClass(ipMapSettings.leaseCss+ "ORG")) {
-	    	$(obj).removeClass(ipMapSettings.selected_conflictCss).removeClass(ipMapSettings.leaseCss+ "ORG").addClass(ipMapSettings.leaseCss);
+	    	$(obj).removeClass(ipMapSettings.selected_leaseCss).removeClass(ipMapSettings.leaseCss+ "ORG").addClass(ipMapSettings.leaseCss);
 	    }
 	    else if ($(obj).hasClass(ipMapSettings.dhcp_leaseCss+ "ORG")) {
-	    	$(obj).removeClass(ipMapSettings.selected_conflictCss).removeClass(ipMapSettings.dhcp_leaseCss+ "ORG").addClass(ipMapSettings.dhcp_leaseCss);
+	    	$(obj).removeClass(ipMapSettings.selected_leaseCss).removeClass(ipMapSettings.dhcp_leaseCss+ "ORG").addClass(ipMapSettings.dhcp_leaseCss);
 	    }
 	    
 	    //usedCss

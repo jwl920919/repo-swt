@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.shinwootns.ipm.SpringBeanProvider;
 import com.shinwootns.ipm.WorkerManager;
 import com.shinwootns.ipm.config.ApplicationProperty;
+import com.shinwootns.ipm.service.amqp.RabbitMQHandler;
 import com.shinwootns.ipm.service.cluster.ClusterManager;
 import com.shinwootns.ipm.service.redis.RedisHandler;
 
@@ -51,9 +52,19 @@ public class ServiceController {
 		
 		_logger.info(appProperty.toString());
 		
+		// Connect RabbitMQ
+		if ( RabbitMQHandler.getInstance().connect() == false ) {
+			_logger.error("RabbitMQHandler connect()... Failed.");
+			WorkerManager.getInstance().TerminateApplication();
+			return;
+		}
 		
-		// Redis
-		RedisHandler.getInstance().connect();
+		// Connect Redis
+		if (RedisHandler.getInstance().connect() == false ) {
+			_logger.error("RedisHandler connect()... Failed.");
+			WorkerManager.getInstance().TerminateApplication();
+			return;
+		}
 		
 		// Cluster Info
 		ClusterManager.getInstance().updateMember();
@@ -64,8 +75,11 @@ public class ServiceController {
 	
 	@PreDestroy
 	public void stopService() {
+		
 		// Stop
 		WorkerManager.getInstance().stop();
+		
+		RabbitMQHandler.getInstance().close();
 		
 		_logger.info("Stop Service Controller.");
 	}

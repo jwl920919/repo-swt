@@ -3,7 +3,6 @@ package com.shinwootns.ipm.collector.worker;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -17,11 +16,11 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gson.JsonObject;
 import com.shinwootns.common.network.SyslogEntity;
-import com.shinwootns.common.utils.CollectionUtils;
 import com.shinwootns.common.utils.JsonUtils;
 import com.shinwootns.common.utils.TimeUtils;
 import com.shinwootns.data.key.RedisKeys;
 import com.shinwootns.ipm.collector.data.SharedData;
+import com.shinwootns.ipm.collector.service.amqp.RabbitMQHandler;
 import com.shinwootns.ipm.collector.service.redis.RedisHandler;
 import com.shinwootns.ipm.collector.service.syslog.DhcpMessage;
 import com.shinwootns.ipm.collector.service.syslog.SyslogHandler;
@@ -111,17 +110,29 @@ public class SyslogPublisher implements Runnable {
 					for(Entry<String, SyslogEntity> entry : sortedMap.entrySet()) {
 						
 						//System.out.println("CurTime:"+curTime + ", " + entry.getValue().toString());
-						
-						// Send End
+						{
+							// Send Event
+							JsonObject jobj = new JsonObject();
+							jobj.addProperty("host", entry.getValue().getHost());
+							jobj.addProperty("facility", entry.getValue().getFacility());
+							jobj.addProperty("severity", entry.getValue().getSeverity());
+							jobj.addProperty("recv_time", entry.getValue().getRecvTime());
+							jobj.addProperty("message", entry.getValue().getData());
+
+							// Send to RabbitMQ
+							RabbitMQHandler.getInstance().SendEvent(jobj.toString().getBytes());
+						}
 
 						// DHCP Message Parsing
-						DhcpMessage dhcpMsg = syslogHandler.processSyslog(entry.getValue().getData());
-						
-						if (dhcpMsg != null) {
-							// DHCP
-
-							System.out.println(entry.getValue().toString());
-							System.out.println(dhcpMsg.toString());
+						{
+							DhcpMessage dhcpMsg = syslogHandler.processSyslog(entry.getValue().getData());
+							
+							if (dhcpMsg != null) {
+								// DHCP
+	
+								System.out.println(entry.getValue().toString());
+								System.out.println(dhcpMsg.toString());
+							}
 						}
 					}
 					mapDupCheck.clear();

@@ -17,7 +17,7 @@ public class MQManager {
 	private String _userName = "";
 	private String _password = "";
 	private String _virtualHost = "/";
-	private int _handshakeTimeout = 10;
+	private int _handshakeTimeout = 5000;
 
 	private ConnectionFactory _factory = null;
 	private Connection _connection = null;
@@ -28,41 +28,46 @@ public class MQManager {
 		Single, WorkQueue, Publish, Routing, Topics, Custom, RPC
 	}
 	
-	//region Connect
-	public boolean Connect(String host, int port, String userName, String password, String virtualHost)
-	{
+	public MQManager(String host, int port, String userName, String password, String virtualHost, int handshakeTimeout) {
 		this._host = host;
 		this._port = port;
 		this._userName = userName;
 		this._password = password;
 		this._virtualHost = virtualHost;
+		this._handshakeTimeout = handshakeTimeout;
 		
+		if (this._handshakeTimeout < 5000)
+			this._handshakeTimeout = 5000;
+		
+		// Factory
+		_factory = null;
+		_factory = new ConnectionFactory();
+		_factory.setHost(this._host);
+		_factory.setPort(this._port);
+		_factory.setUsername(this._userName);
+		_factory.setPassword(this._password);
+		_factory.setVirtualHost(this._virtualHost);
+		
+		_factory.setHandshakeTimeout(handshakeTimeout);
+	}
+	
+	//region Connect
+	public boolean Connect()
+	{
 		Close();
 		
-		if (_factory == null)
+		synchronized(this)
 		{
 			try
 			{
-				// Factory
-				_factory = new ConnectionFactory();
-				_factory.setHost(this._host);
-				_factory.setPort(this._port);
-				_factory.setUsername(this._userName);
-				_factory.setPassword(this._password);
-				_factory.setVirtualHost(this._virtualHost);
-				
-				_factory.setHandshakeTimeout(10000);
-
 				// Connection
+				if (_factory == null)
+					return false;
+					
 				_connection = _factory.newConnection();
 				
-				if (_connection == null)
-				{
-					Close();
-					return false;
-				}
-				
-				return true;
+				if (_connection != null)
+					return true;
 			}
 			catch(Exception ex)
 			{
@@ -77,7 +82,7 @@ public class MQManager {
 	// URI = "amqp://username:password@hostName:portNumber/virtualHost"
 	//
     // ex) amqp://userid:password@192.168.1.10:5672/
-	// 
+	/* 
 	public boolean Connect(String uri)
 	{
 		Close();
@@ -112,45 +117,48 @@ public class MQManager {
 		
 		return false;
 	}
-	
+	*/
 	//endregion
 	
 	//region Create MQClient
 	public BaseClient createMQClient(MQClientType clientType)
 	{
-		if (_factory == null || _connection == null)
-			return null;
-		
-		try
+		synchronized(this) 
 		{
-			// Channel
-			_channel = _connection.createChannel();
-			
-			if (_channel == null)
+			if (_factory == null || _connection == null)
 				return null;
 			
-			// Single
-			if (clientType == MQClientType.Single)
-				return new SingleClient(_channel);
-			// WorkQueue
-			else if (clientType == MQClientType.WorkQueue)
-				return new WorkQueueClient(_channel);
-			// Publish
-			else if (clientType == MQClientType.Publish)
-				return new PublishClient(_channel);
-			// Routing
-			else if (clientType == MQClientType.Routing)
-				return new RoutingClient(_channel);
-			// Topics
-			else if (clientType == MQClientType.Topics)
-				return new TopicsClient(_channel);
-			else
-			// Default
-				return new CustomClient(_channel);
-		}
-		catch(Exception ex)
-		{
-			_logger.error(ex.getMessage(), ex);
+			try
+			{
+				// Channel
+				_channel = _connection.createChannel();
+				
+				if (_channel == null)
+					return null;
+				
+				// Single
+				if (clientType == MQClientType.Single)
+					return new SingleClient(_channel);
+				// WorkQueue
+				else if (clientType == MQClientType.WorkQueue)
+					return new WorkQueueClient(_channel);
+				// Publish
+				else if (clientType == MQClientType.Publish)
+					return new PublishClient(_channel);
+				// Routing
+				else if (clientType == MQClientType.Routing)
+					return new RoutingClient(_channel);
+				// Topics
+				else if (clientType == MQClientType.Topics)
+					return new TopicsClient(_channel);
+				else
+				// Default
+					return new CustomClient(_channel);
+			}
+			catch(Exception ex)
+			{
+				_logger.error(ex.getMessage(), ex);
+			}
 		}
 			
 		return null;
@@ -160,30 +168,31 @@ public class MQManager {
 	//region Close
 	public void Close() {
 		
-		try
+		synchronized(this)
 		{
-			if (this._channel != null && this._channel.isOpen())
-				this._channel.close();
-		}
-		catch(Exception ex)
-		{
-			_logger.error(ex.getMessage(), ex);
-		}
-		finally {
-			this._channel = null;
-		}
-		
-		try
-		{
-			if (this._connection != null && this._connection.isOpen())
-				this._connection.close();
-		}
-		catch(Exception ex)
-		{
-			_logger.error(ex.getMessage(), ex);
-		}
-		finally {
-			this._connection = null;
+			try
+			{
+				if (this._channel != null)
+					this._channel.close();
+				
+			} catch(Exception ex)
+			{
+				_logger.error(ex.getMessage(), ex);
+			} finally {
+				this._channel = null;
+			}
+			
+			try
+			{
+				if (this._connection != null)
+					this._connection.close();
+				
+			} catch(Exception ex)
+			{
+				_logger.error(ex.getMessage(), ex);
+			} finally {
+				this._connection = null;
+			}
 		}
 	}
 	//endregion

@@ -3,12 +3,6 @@ $(document).ready(function() {
 	
 	$("#layDiv").css("visibility","hidden");
 
-	var prevday = 1;
-	var currentdate = new Date();
-	var previewdate = new Date(currentdate.getFullYear(),currentdate.getMonth(),currentdate.getDate()-prevday, currentdate.getHours(), currentdate.getMinutes(), currentdate.getSeconds());
-	$('#reservationtime').daterangepicker({timePicker: true, timePickerIncrement: 1, format: 'YYYY-MM-DD h:mm A'});
-	$('#reservationtime').data('daterangepicker').setStartDate(previewdate);
-	$('#reservationtime').data('daterangepicker').setEndDate(currentdate);
 
 //	//세그먼트 Selectbox change 이벤트
 //	$('#sbSegment').change(function() {

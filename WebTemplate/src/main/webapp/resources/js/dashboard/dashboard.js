@@ -12,19 +12,19 @@ var m_vendorUsedStatusAjaxCall;
 var m_eventLogAjaxCall
 
 
-var systemStatusCallTime = 1000;
-var guestIPAssignStatusCallTime = 5000;
-var certifyProcessCallTime = 5000;
-var askIPStatusCallTime = 5000;
-var dnsStatusCallTime = 5000;
+var systemStatusCallTime = 5000;
+var guestIPAssignStatusCallTime = 10000;
+var certifyProcessCallTime = 1000 * 60;
+var askIPStatusCallTime = 1000 * 60;
+var dnsStatusCallTime = 10000;
 var segmentLeasingIPAssignedCallTime = 1000 * 60;
 var IPv4assignmentIPStatusCallTime = 1000 * 60;
 var IPv6assignmentIPStatusCallTime = 1000 * 60;
-var hwUsedStatusCallTime = 5000;
-var osUsedStatusCallTime = 5000;
-var serviceUsedStatusCallTime = 5000;
-var vendorUsedStatusCallTime = 5000;
-var eventLogCallTime = 5000;
+var hwUsedStatusCallTime = 10000;
+var osUsedStatusCallTime = 10000;
+var serviceUsedStatusCallTime = 10000;
+var vendorUsedStatusCallTime = 10000;
+var eventLogCallTime = 10000;
 
 
 var vCpu;
