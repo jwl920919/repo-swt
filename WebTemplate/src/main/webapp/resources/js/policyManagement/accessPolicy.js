@@ -172,6 +172,7 @@ function selectInit() {
     $("#device-type_eq").select2();
     $("#os_eq").select2();
     $("#hostname_eq").select2();
+    $("#policy").select2();
 }
 function changeSiteNames(index) {
     $.ajax({

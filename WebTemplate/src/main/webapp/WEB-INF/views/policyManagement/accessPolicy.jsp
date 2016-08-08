@@ -26,22 +26,45 @@
 		</div>
 		<div class="modal-body">
 			<div id="modify-area">
-				<div><label class="modify-label">우선순위</label><input type="text"
-					id="priority" /></div> <div><label class="modify-label">사업장</label><select
-					id="site_eq" class="form-control select2"></select></div><div><label
-					class="modify-label">벤더</label><select id="vendor_eq"
-					class="form-control select2"></select></div><label class="modify-label">모델</label><select
-					id="model_eq" class="form-control select2"></select><label
-					class="modify-label">장비종류</label><select id="device-type_eq"
-					class="form-control select2"></select><label class="modify-label">OS</label><select
-					id="os_eq" class="form-control select2"></select><label
-					class="modify-label">Hostname</label><select id="hostname_eq"
-					class="form-control select2"></select><label class="modify-label">설명</label><input
-					type="text" id="desc" /><label class="modify-label">정책</label><select
-					class="form-control" id="policy">
-					<option>Permit</option>
-					<option>Deny</option>
-				</select>
+				<div>
+					<label class="modify-label">우선순위</label><input type="text"
+						id="priority" class="modify-text" />
+				</div>
+				<div>
+					<label class="modify-label">사업장</label><select id="site_eq"
+						class="form-control select2"></select>
+				</div>
+				<div>
+					<label class="modify-label">벤더</label><select id="vendor_eq"
+						class="form-control select2"></select>
+				</div>
+				<div>
+					<label class="modify-label">모델</label><select id="model_eq"
+						class="form-control select2"></select><a class="custom-btn custom-btn-app" id="model-mode-change"><i class="fa fa-exchange"></i></a>
+				</div>
+				<div>
+					<label class="modify-label">장비종류</label><select id="device-type_eq"
+						class="form-control select2"></select><a class="custom-btn custom-btn-app" id="device-type-mode-change"><i class="fa fa-exchange"></i></a>
+				</div>
+				<div>
+					<label class="modify-label">OS</label><select id="os_eq"
+						class="form-control select2"></select><a class="custom-btn custom-btn-app" id="os-mode-change"><i class="fa fa-exchange"></i></a>
+				</div>
+				<div>
+					<label class="modify-label">Hostname</label><select
+						id="hostname_eq" class="form-control select2"></select><a class="custom-btn custom-btn-app" id="hostname-mode-change"><i class="fa fa-exchange"></i></a>
+				</div>
+				<div>
+					<label class="modify-label">설명</label><input type="text" id="desc"
+						class="modify-text" />
+				</div>
+				<div>
+					<label class="modify-label">정책</label><select class="form-control select2"
+						id="policy">
+						<option>Permit</option>
+						<option>Deny</option>
+					</select>
+				</div>
 			</div>
 		</div>
 		<div class="modal-footer">

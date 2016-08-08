@@ -27,7 +27,8 @@
 }
 
 .modify-label {
-	margin: 0px 5px 0px 5px;
+	margin: 7px 0px 7px 0px;
+	width: 14%;
 }
 
 #modify-area {
@@ -36,4 +37,52 @@
 
 .hidden {
 	visibility: hidden;
+}
+
+.modify-text {
+	top: 3px;
+	position: relative;
+	padding-left: 19px;
+	background-color: #fff;
+	border: 1px solid #aaa;
+	border-radius: 4px;
+	padding-top: 5px;
+}
+
+.select2-container, .modify-text {
+	width: 74% !important;
+}
+
+
+.custom-btn-app:hover {
+    background: #f4f4f4;
+    color: #444;
+    border-color: #aaa;
+}
+
+.custom-btn.focus, .custom-btn:focus, .custom-btn:hover {
+    color: #333;
+    text-decoration: none;
+}
+.custom-btn {
+    height: 30px;
+    font-size: 14px;
+    vertical-align: middle;
+    padding: 6px 10px;
+    display: inline-block;
+    white-space: nowrap;
+    touch-action: manipulation;
+    cursor: pointer;
+    box-shadow: none;
+}
+.custom-btn-app {
+    border-radius: 3px;
+    position: relative;
+    min-width: 30px;
+    margin-left: 21px;
+    margin-right: 10px;
+    text-align: center;
+    color: #666;
+    border: 1px solid #ddd;
+    background-color: #f4f4f4;
 }
