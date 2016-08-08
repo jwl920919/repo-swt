@@ -21,60 +21,66 @@
       <input type="button" class="close" name="modalClose" data-dismiss="modal" aria-label="Close" value="&times;" />
       <h4 class="modal-title">Black List 추가</h4>
     </div>
+    <style type="text/css">
+    	.input-group {
+    	width:100%;
+    	}
+    	.test {
+    	width:15%;
+    	float:left;
+    	}
+    	.test3 {
+    	}
+/*     	.test2 { */
+/*     	    border-right: 1px !important; */
+/* 		    border-right-style: solid !important; */
+/* 		    border-right-color: #d2d6de !important; */
+/* 		    width: 84px; */
+/*     	} */
+    </style>
     <div class="modal-body">
     	<div class="input-group">
-			<span class="input-group-addon">사업장</span>
-			<select class="form-control">
+			<span class="input-group-addon test">사업장</span>
+			<div class="test3">
+			<select class="form-control" id="selectSite">
                    <option>option 1</option>
                    <option>option 2</option>
                    <option>option 3</option>
                    <option>option 4</option>
                    <option>option 5</option>
 			</select>
+			</div>
 		</div>
-        </p>
     	<div class="input-group">
-			<span class="input-group-addon">사업장</span>
-			<select class="form-control">
-                   <option>option 1</option>
-                   <option>option 2</option>
-                   <option>option 3</option>
-                   <option>option 4</option>
-                   <option>option 5</option>
-			</select>
+			<span class="input-group-addon test test2">활성화</span>
+			<div class="test3">
+			<input type="checkbox" class="minimal" style="margin-left:10px">활성
+			<input type="checkbox" class="minimal" style="margin-left:10px">비활성
+			</div>
 		</div>
-        </p>
     	<div class="input-group">
-			<span class="input-group-addon">사업장</span>
-			<select class="form-control">
-                   <option>option 1</option>
-                   <option>option 2</option>
-                   <option>option 3</option>
-                   <option>option 4</option>
-                   <option>option 5</option>
-			</select>
+    		<span class="input-group-addon test">필터</span>
+    		<div class="test3">
+				<input type="email" class="form-control" id="exampleInputEmail1" placeholder="Filter">
+			</div>
 		</div>
-        </p>
     	<div class="input-group">
-			<span class="input-group-addon">사업장</span>
-			<select class="form-control">
-                   <option>option 1</option>
-                   <option>option 2</option>
-                   <option>option 3</option>
-                   <option>option 4</option>
-                   <option>option 5</option>
-			</select>
+			<span class="input-group-addon test">시간</span>
+			<div class="test3">
+				<select class="form-control">
+	                   <option>option 1 초</option>
+	                   <option>option 2</option>
+	                   <option>option 3</option>
+	                   <option>option 4</option>
+	                   <option>option 5</option>
+				</select>
+			</div>
 		</div>
-        </p>
     	<div class="input-group">
-			<span class="input-group-addon">사업장</span>
-			<select class="form-control">
-                   <option>option 1</option>
-                   <option>option 2</option>
-                   <option>option 3</option>
-                   <option>option 4</option>
-                   <option>option 5</option>
-			</select>
+			<span class="input-group-addon test">설명</span>
+			<div class="test3">
+				<textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
+			</div>
 		</div>
     </div>
     <div class="modal-footer">
