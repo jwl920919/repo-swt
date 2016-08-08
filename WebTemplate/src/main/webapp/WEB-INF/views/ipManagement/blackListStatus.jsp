@@ -13,6 +13,7 @@
 <script src="resources/js/common/modalPopup.js"></script>
 <script src="resources/js/ipManagement/blackListStatus.js"></script>
 
+    		
 <!-- Add, Edit modal -->
 <div class="modal modal-dialog" id="modal" style="width:600px">
   <div class="modal-content" name="modalContent">
@@ -21,27 +22,11 @@
       <input type="button" class="close" name="modalClose" data-dismiss="modal" aria-label="Close" value="&times;" />
       <h4 class="modal-title">Black List 추가</h4>
     </div>
-    <style type="text/css">
-    	.input-group {
-    	width:100%;
-    	}
-    	.test {
-    	width:15%;
-    	float:left;
-    	}
-    	.test3 {
-    	}
-/*     	.test2 { */
-/*     	    border-right: 1px !important; */
-/* 		    border-right-style: solid !important; */
-/* 		    border-right-color: #d2d6de !important; */
-/* 		    width: 84px; */
-/*     	} */
-    </style>
+    
     <div class="modal-body">
-    	<div class="input-group">
-			<span class="input-group-addon test">사업장</span>
-			<div class="test3">
+    	<div class="input-group modal-input-group">
+			<span class="input-group-addon modal-content-header">사업장</span>
+			<div class="modal-content-body">
 			<select class="form-control" id="selectSite">
                    <option>option 1</option>
                    <option>option 2</option>
@@ -51,22 +36,22 @@
 			</select>
 			</div>
 		</div>
-    	<div class="input-group">
-			<span class="input-group-addon test test2">활성화</span>
-			<div class="test3">
+    	<div class="input-group modal-input-group">
+			<div class="input-group-addon modal-content-header">활성화</div>
+			<div class="modal-content-body modal-content-box">
 			<input type="checkbox" class="minimal" style="margin-left:10px">활성
 			<input type="checkbox" class="minimal" style="margin-left:10px">비활성
 			</div>
 		</div>
-    	<div class="input-group">
-    		<span class="input-group-addon test">필터</span>
-    		<div class="test3">
+    	<div class="input-group modal-input-group">
+    		<div class="input-group-addon modal-content-header">필터</div>
+    		<div class="modal-content-body">
 				<input type="email" class="form-control" id="exampleInputEmail1" placeholder="Filter">
 			</div>
 		</div>
-    	<div class="input-group">
-			<span class="input-group-addon test">시간</span>
-			<div class="test3">
+    	<div class="input-group modal-input-group">
+			<span class="input-group-addon modal-content-header">시간</span>
+			<div class="modal-content-body">
 				<select class="form-control">
 	                   <option>option 1 초</option>
 	                   <option>option 2</option>
@@ -76,12 +61,14 @@
 				</select>
 			</div>
 		</div>
-    	<div class="input-group">
-			<span class="input-group-addon test">설명</span>
-			<div class="test3">
+    	<div class="input-group modal-input-group" style="margin-bottom: 0px">
+			<span class="input-group-addon modal-content-header">설명</span>
+			
+			<div class="modal-content-body">
 				<textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
 			</div>
 		</div>
+		
     </div>
     <div class="modal-footer">
       <input type="button" class="btn btn-default pull-left" name="modalClose" data-dismiss="modal" value="<%=LanguageHelper.GetLanguage("close")%>" />

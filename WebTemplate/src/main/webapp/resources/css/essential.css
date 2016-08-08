@@ -735,3 +735,23 @@ table td[class*="col-"], table th[class*="col-"] {
   background: transparent !important;
 }
 
+.modal-input-group {
+    	width:100%;
+    	margin-bottom: 5px;
+    	}
+    	.modal-content-header {
+    	width:15%;
+    	float:left;
+    	    line-height: 1.42857143;
+    	}
+    	.modal-content-body {
+    	width:85%;
+    	float:left;
+    	}
+    	.modal-content-box {
+    	    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+        border: 1px solid #ccc;
+        border-color: #d2d6de;
+    	}

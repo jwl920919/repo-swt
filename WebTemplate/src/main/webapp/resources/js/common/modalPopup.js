@@ -25,9 +25,13 @@ function modalShow(id) {
     
     try {
     	fnShowEvent();
-	} catch (e) {
-		console.log(e.message);
-	}
+    	var t = $('.modal-content-header');
+        for(var t2=0 ;t2 < t.length; t2++){
+            $(t[t2]).css("height",$(t[t2]).parent().height());
+        }
+    } catch (e) {
+	console.log(e.message);
+    }
 }
 function modalClose(id) {
 	$("#" + id).css("display","none");
