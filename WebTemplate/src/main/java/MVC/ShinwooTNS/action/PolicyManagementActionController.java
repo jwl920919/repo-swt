@@ -64,7 +64,6 @@ public class PolicyManagementActionController {
 					1);
 			parameters.put("site_id", Integer.parseInt(session.getAttribute("site_id").toString()));
 			List<Map<String, Object>> accessPolicyDataList = accessPolicy.select_POLICY_TABLE_SITE_SEARCH(parameters);
-			System.out.println(accessPolicyDataList);
 			JSONArray jsonArray = new JSONArray();
 			for (Map<String, Object> accessPolicyData : accessPolicyDataList) {
 				JSONObject jObj = new JSONObject();
@@ -230,20 +229,33 @@ public class PolicyManagementActionController {
 
 	}
 	// endregion
-
-	@RequestMapping(value = "sample", method = RequestMethod.GET, produces = "application/text; charset=utf8")
-	public @ResponseBody Object getInfobloxdatas(HttpServletRequest request, HttpSession session) {
-		logger.info("sample : " + request.getLocalAddr());
-		init();
+	
+	// region access_policy_modify
+	@RequestMapping(value = "access_policy_modify", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+	public @ResponseBody Object access_policy_modify(HttpServletRequest request) {
+		logger.info("access_policy_modify : " + request.getLocalAddr());
 		try {
-			result.result = true;
+			init();
+			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
+					new TypeToken<HashMap<String, Object>>() {
+					}.getType());
+			parameters.put("access_policy_id", Integer.parseInt(parameters.get("access_policy_id").toString()));
+			parameters.put("priority", Integer.parseInt(parameters.get("priority").toString()));
+			parameters.put("site_id", Integer.parseInt(parameters.get("site_id").toString()));
+			int cnt = accessPolicy.update_ACCESS_POLICY_INFORM(parameters);
+			if (cnt > -1)
+				result.result = true;
+			else
+				result.result = false;
 			return gson.toJson(result);
 		} catch (Exception e) {
 			e.printStackTrace();
 			result.result = false;
 			return gson.toJson(result);
 		}
+
 	}
+	// endregion
 
 	private void init() {
 		result.data = null;

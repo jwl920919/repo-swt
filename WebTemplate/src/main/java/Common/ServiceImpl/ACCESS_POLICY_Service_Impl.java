@@ -44,5 +44,10 @@ private ACCESS_POLICY_interface accessPolicyDao;
 		return accessPolicyDao.select_POLICY_DEVICE_TYPE_SEARCH(parameters);
 	}
 
+	@Override
+	public int update_ACCESS_POLICY_INFORM(HashMap<String, Object> parameters) {
+		return accessPolicyDao.update_ACCESS_POLICY_INFORM(parameters);
+	}
+
 
 }

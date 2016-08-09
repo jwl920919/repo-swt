@@ -39,16 +39,6 @@
 	visibility: hidden;
 }
 
-.modify-text {
-	top: 3px;
-	position: relative;
-	padding-left: 19px;
-	background-color: #fff;
-	border: 1px solid #aaa;
-	border-radius: 4px;
-	padding-top: 5px;
-}
-
 /* .select2-container, .modify-text { */
 /* 	width: 74% !important; */
 /* } */
@@ -79,15 +69,15 @@
 	border-radius: 3px;
 	position: relative;
 	width: 10%;
-    margin-left: 5px;
-	margin-right: 10px;
+	margin-left: 16px;
 	text-align: center;
 	color: #666;
 	border: 1px solid #ddd;
 	background-color: #f4f4f4;
+	float:left;
 }
 
-
-.select2-container {
-	width: 80% !important;
+.select2-container, .modify-text {
+	width: 85% !important;
+	float: left;
 }
