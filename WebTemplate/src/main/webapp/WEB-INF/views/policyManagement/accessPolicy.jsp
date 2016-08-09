@@ -11,7 +11,7 @@
 <!-- Select2 -->
 <link rel="stylesheet" href="resources/plugins/select2/select2.min.css">
 <!-- Alert Start -->
-<div id="layDiv">
+<div id="layDiv" style="visibility : hidden;">
 	<div class="alert-box"></div>
 	<div id="divAlertArea"></div>
 </div>
@@ -24,9 +24,7 @@
 				data-dismiss="modal" aria-label="Close" value="&times;" />
 			<h4 class="modal-title">정책 수정</h4>
 		</div>
-		<div id="modify-body" class="modal-body">
-			
-		</div>
+		<div id="modify-body" class="modal-body"></div>
 		<div class="modal-footer">
 			<input type="button" class="btn btn-default pull-left"
 				name="modalClose" data-dismiss="modal"
@@ -51,8 +49,8 @@
 						class="essential-table" style="width: 100%;">
 						<thead>
 							<tr>
-								<th><input name="select_all" id="accessPolicyTable_checkbox_controller"
-										type="checkbox" /></th>
+								<th><input name="select_all"
+									id="accessPolicyTable_checkbox_controller" type="checkbox" /></th>
 								<th>우선순위</th>
 								<th>사업장</th>
 								<th>벤더</th>
@@ -72,13 +70,23 @@
 							</tr>
 						</thead>
 					</table>
-					<div>
-						<input id='delete-button' class='btn btn-primary'
-							style="float: left;" type="button"
-							value="<%=LanguageHelper.GetLanguage("delete")%>" />
+					<!-- 					style='bottom: 13px; position: absolute; width: 98.4%; left: 9px;' -->
+					<div id="bottom-btn-row" class='row'>
+						<div class='col-sm-1' style='padding-left: 14px;    margin-top: 4px;'>
+							<input id='delete-button' class='btn btn-primary'
+								style="float: left;" type="button"
+								value="<%=LanguageHelper.GetLanguage("delete")%>" />
+						</div>
+						<div class='col-sm-10' id='page-box'>
+						</div>
+						<div class='col-sm-1' style='padding-right: 14px;    margin-top: 4px;'>
+							<input id='add-button' class='btn btn-primary'
+								style="float: right;" type="button"
+								value="<%=LanguageHelper.GetLanguage("add")%>" />
+						</div>
 					</div>
 				</center>
-				<div style="margin-bottom: 10px;"></div>
+				<div style="margin-bottom: 17px;"></div>
 			</div>
 
 		</div>

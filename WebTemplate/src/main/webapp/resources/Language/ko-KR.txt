@@ -182,9 +182,9 @@
     "enable":										"활성",
     "disable":										"비활성",
     "close":										"닫기",
-    "saveandclose":									"저장후 닫기",
-    
-    "filter":										"필터",    
+    "saveandclose":									"저장후 닫기",    
+    "filter":										"필터", 
+    "filtername":									"필터명",    
     "usedclass":									"사용여부",    
     "used":											"사용",    
     "unused":										"미사용",    
@@ -193,5 +193,6 @@
     "selectwhetherornottouse":						"사용여부를 선택해주세요.",    
     "enterthefiltername":							"필터명을 입력해주세요.",    
     "selectthefiltertime":							"필터 시간을 선택해주세요.",    
-    "enterdescriptionoftheregisterfilter":			"등록할 필터에 대한 설명을 입력해주세요."
+    "enterdescriptionoftheregisterfilter":			"등록할 필터에 대한 설명을 입력해주세요.",    
+    "areyousureyouwanttodelete":					"삭제하시겠습니까?"
 }

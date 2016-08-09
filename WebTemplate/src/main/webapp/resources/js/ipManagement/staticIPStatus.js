@@ -3,7 +3,7 @@ $(document).ready(function() {
 	try
 	{
 		//console.log($('#datatable'));
-		$("#layDiv").css("visibility","hidden");		
+//		$("#layDiv").css("visibility","hidden");		
 		table = $('#datatable').DataTable(
 	            {
 	                "destroy" : true,

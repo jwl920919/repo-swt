@@ -4,23 +4,6 @@ var initParam;
 $(document).ready(function() {	
 
 	modalClose("modal");
-	
-//	//세그먼트 Selectbox change 이벤트
-//	$('#sbSegment').change(function() {
-//	    if ($(this).val() != '') {
-//	    	$('#sbSegment').removeClass("selectoption_grey_color").addClass("selectoption_black_color");
-//        	fnSelectData($("#sbSegment option:selected").val(), $("#txtSearch").val());
-//	     }
-//	});
-	
-	//조회 버튼 클릭 이벤트
-//	$('#btnSearch').click(function() {
-//		var startDate = new Date($('#reservationtime').data('daterangepicker').startDate.toLocaleString()).format("yyyy-MM-dd HH:mm:ss");
-//		var endDate = new Date($('#reservationtime').data('daterangepicker').endDate.toLocaleString()).format("yyyy-MM-dd HH:mm:ss");		
-//	    if ($("#sbCerifyStatus option:selected").val() != '') {
-//        	fnSelectData(startDate, endDate, $("#sbCerifyStatus option:selected").val(), $("#txtSearch").val());
-//	    }
-//	});
 
 	//추가 버튼 클릭 이벤트
 	$('#add-row').click(function() {
@@ -80,7 +63,7 @@ $(document).ready(function() {
 									{"data" : "blacklist_filter_name"},	//4
 									{"data" : "blacklist_time_sec",
 										"render":function(data,type,full,meta){	                              
-											return data + getLanguage("second");
+											return data + " " + getLanguage("second");
 										}},	//5
 									{"data" : "description"},
                                     {"data" : "button",
@@ -162,19 +145,29 @@ function trClickEvent (obj){
 //	}
 }
 
+/**
+ * 추가 버튼 클릭 이벤트 핸들러
+**/
 fnAdd = function(obj){
 	popupClass = "add";
 	modalShow("modal");
 }
 
+/**
+ * Datatable Row의 수정 버튼 클릭 이벤트 핸들러
+**/
 fnModify = function(obj){
 	popupClass = "modify";
 	initParam = obj;
 	modalShow("modal");
 }
 
+/**
+ * Datatable Row의 삭제 버튼 클릭 이벤트 핸들러
+**/
 fnDelete = function(obj){
-	var res = obj.split(",");
+	initParam = obj;
+//	var res = obj.split(",");
 //	console.log("res[0] : " + res[0]);
 //	console.log("res[1] : " + res[1]);
 //	console.log("res[2] : " + res[2]);
@@ -190,39 +183,63 @@ fnDelete = function(obj){
 //  blacklist_filter_name,
 //  blacklist_time_sec,
 //  description
+	
+	//삭제 여부를 묻고 fnDeleteEvent 함수에서 처리
+	systemAlertConfirm("divAlertArea", "alert-warning", getLanguage("delete"), getLanguage("areyousureyouwanttodelete"), getLanguage("delete"), "#ce891c", 'fnDeleteEvent');
 }
 
-//추가,수정 모달 팝업 Show 이벤트 핸들러
+/**
+ * 추가,수정 모달 팝업 Show 이벤트 핸들러
+**/
 fnShowEvent = function(){
+	var param = Object();
 	try {
 		if (popupClass == "add") {
 			//추가 팝업 초기화
 			$("#selectSite").val(siteid);
-			console.log("radio[name=rEnable] : " + $(":input:radio[name=rEnable]:checked").val());
-			$('input:radio[name=rEnable]:input[value='+ true +']').attr("checked", true);
+			$('input:radio[name=rEnable]:input[value=true]').prop("checked", true);
 			$("#inputFilter").val("");
 			$("#selectTime").val(60);
 			$("#txtareaDesc").val("");
 			
 			$('#btnSave').unbind( "click" );		
 			$('#btnSave').click(function() {
-				//추가 기능 수행
-				
+				//추가 기능 수행				
 				if (checkVaridation()) {
-					
+					param.functionclass = "add";
+					param.time_zone = getClientTimeZoneName();
+					param.siteid = $("#selectSite").val();
+					param.blackenable = $(":input:radio[name=rEnable]:checked").val();
+					param.filtername = $("#inputFilter").val();
+					param.filtertime = $("#selectTime").val();
+					param.description = $("#txtareaDesc").val();
+					param.blacklistid = "-1"; //추가시는 의미없는 데이터임
+				    
+				    $.ajax({
+				        url : 'systemManagement/blackListSetting_Data_Insert_Update_Delete',
+				        type : "POST",
+				        data : JSON.stringify(param),
+				        dataType : "text",
+				        success : function(data) {
+				            var jsonObj = eval("(" + data + ')');
+				            alert("저장 : " +jsonObj.result);
+				            if (jsonObj.result == true) {
+				            	table.ajax.reload(); //데이터 제 조회
+				            }
+				        },
+				        complete: function(data) {
+				        }
+				    });
 					modalClose("modal");	
 				}
 			});	
 		}
 		else if (popupClass == "modify") {
 			//수정 팝업 초기화
-			console.log("fnShowEvent initParam : " + initParam);
-			var res = initParam.split(",");
-			console.log("initParam[0] : " + res[0]);
-			
+			var res = initParam.split(",");			
 			var blacklist_id = res[0];
 			$("#selectSite").val(res[1]);
-			$('input:radio[name=rEnable]:input[value='+res[3]+']').attr("checked", true);
+			$('input:radio[name=rEnable]:input[value='+res[3]+']').prop("checked", true);
 			$("#inputFilter").val(res[4]);
 			$("#selectTime").val(res[5]);
 			$("#txtareaDesc").val(res[6]);
@@ -231,7 +248,33 @@ fnShowEvent = function(){
 			$('#btnSave').unbind( "click" );
 			$('#btnSave').click(function() {
 				//수정 기능 수행
-				modalClose("modal");
+				if (checkVaridation()) {
+					param.functionclass = "modify";
+					param.time_zone = getClientTimeZoneName();
+					param.siteid = $("#selectSite").val();
+					param.blackenable = $(":input:radio[name=rEnable]:checked").val();
+					param.filtername = $("#inputFilter").val();
+					param.filtertime = $("#selectTime").val();
+					param.description = $("#txtareaDesc").val();
+					param.blacklistid = blacklist_id;
+					
+				    $.ajax({
+				        url : 'systemManagement/blackListSetting_Data_Insert_Update_Delete',
+				        type : "POST",
+				        data : JSON.stringify(param),
+				        dataType : "text",
+				        success : function(data) {
+				            var jsonObj = eval("(" + data + ')');
+				            alert("수정 : " +jsonObj.result);
+				            if (jsonObj.result == true) {
+				            	table.ajax.reload(); //데이터 제 조회
+				            }
+				        },
+				        complete: function(data) {
+				        }
+				    });
+					modalClose("modal");	
+				}
 			});
 		}
 		
@@ -241,9 +284,45 @@ fnShowEvent = function(){
 	}
 }
 
-//사업장 정보 조회
+/**
+ * 삭제 이벤트 핸들러
+**/
+fnDeleteEvent = function(){
+	var param = Object();
+	var res = initParam.split(",");	
+	param.functionclass = "delete";
+	console.log("fnDeleteEvent ; " + res[0]);
+	param.blacklistid = res[0];
+	param.siteid = "0";
+	param.filtertime = "0";
+	
+	try {		
+	    $.ajax({
+	        url : 'systemManagement/blackListSetting_Data_Insert_Update_Delete',
+	        type : "POST",
+	        data : JSON.stringify(param),
+	        dataType : "text",
+	        success : function(data) {
+	            var jsonObj = eval("(" + data + ')');
+	            alert("삭제 : " +jsonObj.result);
+	            if (jsonObj.result == true) {
+	            	table.ajax.reload(); //데이터 제 조회
+	            }
+	        },
+	        complete: function(data) {
+	        }
+	    });	
+	} catch (e) {
+		console.log(e.message);
+	}
+}
+
+/**
+ * 모달 팝업의 사업장 정보 조회 이벤트 핸들러
+**/
 fnSiteInfoSearch = function(){
 	var tag = "";
+	
     $.ajax({
         url : 'select_site_info',
         type : "POST",
@@ -271,7 +350,9 @@ fnSiteInfoSearch = function(){
     });
 }
 
-//저장 전 항목 체크
+/**
+ * 추가, 수정 전 항목 체크
+**/
 checkVaridation = function(){
 	var ret = true;
 	if ($("#selectSite").val() == "") {

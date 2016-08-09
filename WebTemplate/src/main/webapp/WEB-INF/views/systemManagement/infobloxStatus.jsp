@@ -9,7 +9,7 @@
 	href="resources/css/systemManagement/infobloxStatus.css">
 
 <!-- Alert Start -->
-<div id="layDiv">
+<div id="layDiv" style="visibility : hidden;">
 	<div class="alert-box"></div>
 	<div id="divAlertArea"></div>
 </div>

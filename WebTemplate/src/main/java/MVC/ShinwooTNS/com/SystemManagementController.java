@@ -46,7 +46,7 @@ public class SystemManagementController {
 		HttpSession session = request.getSession(true);
 		System.out.println(session.getAttribute("login_chk"));
 		if (session.getAttribute("login_chk") == null)
-			return "redirect:login";
+			return "redirect:/login";
 		
 		return parentPath + "blackListSetting";
 	}
