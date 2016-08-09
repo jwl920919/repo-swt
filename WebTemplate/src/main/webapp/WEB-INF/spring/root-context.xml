@@ -73,11 +73,19 @@
 	<bean id="systemUserGroupInfoService" class="Common.ServiceImpl.SYSTEM_USER_GROUP_INFO_Service_Impl">
 		<property name="SYSTEM_USER_GROUP_INFO_dao" ref="systemUserGroupInfoDao" />
 	</bean>
-
+	
 	<bean id="systemUserGroupInfoDao" class="Common.DAOImpl.SYSTEM_USER_GROUP_INFO_Impl">
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
 
+	<bean id="systemManagementService" class="Common.ServiceImpl.SYSTEM_MANAGEMENT_Service_Impl">
+		<property name="SYSTEM_MANAGEMENT_dao" ref="systemManagementDao" />
+	</bean>
+	
+	<bean id="systemManagementDao" class="Common.DAOImpl.SYSTEM_MANAGEMENT_Impl">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	
 	<bean id="siteInfoService" class="Common.ServiceImpl.SITE_INFO_Service_Impl">
 		<property name="SITE_INFO_dao" ref="siteInfoDao" />
 	</bean>
@@ -101,9 +109,11 @@
 	<bean id="authMenuDao" class="Common.DAOImpl.AUTH_MENU_Impl">
 		<property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
 	</bean>
+	
 	<bean id="accessPolicyService" class="Common.ServiceImpl.ACCESS_POLICY_Service_Impl">
 		<property name="ACCESS_POLICY_dao" ref="accessPolicyDao"></property>
 	</bean>
+	
 	<bean id="accessPolicyDao" class="Common.DAOImpl.ACCESS_POLICY_Impl">
 		<property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
 	</bean>

@@ -7,7 +7,12 @@ function getWindowPoint() {
 };
 
 function modalShow(id) {
-	$("#" + id).css("display","block");
+	try {
+		$("#" + id).css("display","block");
+		$("#layDiv").css("visibility","visible");
+	} catch (e) {
+		console.log(e.message);
+	}
 
 	getWindowPoint();
     var alertPositionHeight = (windowHeight / 2 + scrollTop - 60 - ($('div[name=modalContent]').innerHeight() / 2)) + 'px';
@@ -17,7 +22,6 @@ function modalShow(id) {
     $("#" + id).css('top', alertPositionHeight);    
     $("#" + id).css('left', alertPositionWidth + " !important");
 
-	$("#layDiv").css("visibility","visible");
     
     $('input[name=modalClose]').click(function(){
     	modalClose(id);

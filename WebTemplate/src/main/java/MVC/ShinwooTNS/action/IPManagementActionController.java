@@ -390,7 +390,7 @@ public class IPManagementActionController {
 			String siteID = session.getAttribute("site_id").toString();
 			if (!siteID.equals("")) {
 				parameters.put("siteid", Integer.parseInt(siteID));
-				dataList = ipManagementService.select_IP_MANAGEMENT_BLACKLIST_STATUS_DATA(parameters);
+				//dataList = ipManagementService.select_IP_MANAGEMENT_BLACKLIST_STATUS_DATA(parameters);
 
 				if (dataList.size() > 0) {
 					totalCount = Integer.parseInt(((Map<String, Object>) dataList.get(0)).get("allCount").toString());
