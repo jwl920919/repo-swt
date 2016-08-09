@@ -651,9 +651,12 @@
 	<!-- Controller : MVC.ShinwooTNS.action.PolicyManagementActionController -->
 	<select id="select_POLICY_DEVICE_TYPE_SEARCH"
 		parameterType="hashmap" resultType="java.util.HashMap">
-		SELECT DISTINCT COALESCE(device_type,'') as device_type 
-		FROM view_client_info <if test="searchValue != null">
-		WHERE AND device_type LIKE CONCAT('%', #{searchValue}, '%')</if> ORDER BY device_type;
+		SELECT DISTINCT device_type 
+		FROM view_client_info 
+		WHERE device_type IS NOT NULL AND device_type != '' 
+		<if test="searchValue != null">
+		 AND device_type LIKE CONCAT('%', #{searchValue}, '%')
+		</if> ORDER BY device_type;
 	</select>
 		
 
