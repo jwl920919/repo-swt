@@ -14,6 +14,21 @@
 		LIMIT 10
 	</select>
 	
+	<!-- ############################ Guest IP Status ############################ -->
+	<select id="selectGuestIpCount" resultType="com.shinwootns.data.entity.IpCount">
+		<![CDATA[
+		SELECT COUNT(ip.ipaddr) used_count, rg.ip_count total_count
+		FROM dhcp_range rg
+		LEFT OUTER JOIN view_ip_status ip 
+			ON rg.start_num <= ip.ip_num AND ip.ip_num <= rg.end_num
+			AND COALESCE(ip.ip_status,'') != ''
+		WHERE upper(rg.comment) IN ('GUEST', '게스트')
+		]]>
+		<if test="site_id != null">
+			AND rg.site_id = #{site_id}
+		</if>
+		GROUP BY rg.ip_count
+	</select>
 	
 	<!-- ############################ Lease IP Status ############################ -->
 	

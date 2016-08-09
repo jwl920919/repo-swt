@@ -14,6 +14,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import com.google.gson.JsonArray;
 import com.shinwootns.common.utils.JsonUtils;
 import com.shinwootns.data.entity.DeviceDhcp;
+import com.shinwootns.data.entity.IpCount;
 import com.shinwootns.data.entity.SiteInfo;
 import com.shinwootns.data.entity.ViewLeaseIpStatus;
 import com.shinwootns.data.entity.ViewNetworkIpStatus;
@@ -23,6 +24,7 @@ import com.shinwootns.data.status.DhcpCounter;
 import com.shinwootns.data.status.DhcpDeviceStatus;
 import com.shinwootns.data.status.DhcpVrrpStatus;
 import com.shinwootns.data.status.DnsCounter;
+import com.shinwootns.data.status.GuestIpStatus;
 import com.shinwootns.data.status.LeaseIpStatus;
 import com.shinwootns.ipm.SpringBeanProvider;
 import com.shinwootns.ipm.WorkerManager;
@@ -89,20 +91,40 @@ public class MasterJobWoker implements Runnable {
 		
 		_logger.info("UpdateDashboardData()... Start");
 		
-		// Network IP Status
-		UpdateNetworkIpStatus(dahsboardMapper, redis, listSite);
-		
-		// Lease IP Status (IPv4, IPv6)
-		UpdateLeaseIpStatus(dahsboardMapper, redis, listSite, "IPV4", RedisKeys.KEY_DASHBOARD_LEASE_IPV4);
-		UpdateLeaseIpStatus(dahsboardMapper, redis, listSite, "IPV6", RedisKeys.KEY_DASHBOARD_LEASE_IPV6);
-
-		redis.close();
+		try
+		{
+			// Network IP Status
+			UpdateNetworkIpStatus(dahsboardMapper, redis, listSite);
+			
+			if (Thread.currentThread().isInterrupted())
+				return;
+			
+			// Lease IP Status (IPv4)
+			UpdateLeaseIpStatus(dahsboardMapper, redis, listSite, "IPV4", RedisKeys.KEY_DASHBOARD_LEASE_IPV4);
+			
+			if (Thread.currentThread().isInterrupted())
+				return;
+			
+			// Lease IP Status (Pv6)
+			UpdateLeaseIpStatus(dahsboardMapper, redis, listSite, "IPV6", RedisKeys.KEY_DASHBOARD_LEASE_IPV6);
+			
+			if (Thread.currentThread().isInterrupted())
+				return;
+			
+			// Guest IP Status
+			UpdateGuestIPCount(dahsboardMapper, redis, listSite, RedisKeys.KEY_DASHBOARD_GUEST_IP);
+			
+		}catch(Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+		}finally {
+			redis.close();
+		}
 		
 		_logger.info("UpdateDashboardData()... end");
 	}
 	//endregion
 	
-	//region [FUNC] Update Network IP Status
+	//region Update Network IP Status
 	private void UpdateNetworkIpStatus(DashboardMapper dahsboardMapper, Jedis redis, List<SiteInfo> listSite) {
 		
 		try
@@ -165,7 +187,7 @@ public class MasterJobWoker implements Runnable {
 	}
 	//endregion
 	
-	//region [FUNC] Update Lease IP Status
+	//region Update Lease IP Status
 	private void UpdateLeaseIpStatus(DashboardMapper dahsboardMapper, Jedis redis, List<SiteInfo> listSite, String ip_type, String redisKey) {
 		
 		try
@@ -208,6 +230,66 @@ public class MasterJobWoker implements Runnable {
 				// Serialize to Json
 				String json = JsonUtils.serialize(ipStatus);
 				
+				// Set value
+				redis.set((new StringBuilder())
+						.append(redisKey)
+						.append(":").append(site.getSiteId())
+						.toString()
+						, json
+				);
+			}
+			
+			_logger.info("UpdateLeaseIpStatus()... ok");
+		}
+		catch(Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+		}
+	}
+	//endregion
+	
+	//region Update Guest IP Count
+	private void UpdateGuestIPCount(DashboardMapper dahsboardMapper, Jedis redis, List<SiteInfo> listSite, String redisKey) {
+	
+		try
+		{
+			IpCount ipCount = dahsboardMapper.selectGuestIpCount(null);
+			if (ipCount != null ) {
+
+				GuestIpStatus ipStatus = new GuestIpStatus(); 
+				ipStatus.GUEST_IP.used = ipCount.getUsedCount();
+				ipStatus.GUEST_IP.totoal = ipCount.getTotalCount();
+				
+				// Serialize to Json
+				String json = JsonUtils.serialize(ipStatus);
+				
+				// Set value
+				redis.set((new StringBuilder())
+						.append(redisKey).toString()
+						, json
+				);
+			}
+			
+			if (listSite == null)
+				return;
+			
+			for(SiteInfo site : listSite) {
+				
+				ipCount = dahsboardMapper.selectGuestIpCount(site.getSiteId());
+
+				GuestIpStatus ipStatus = new GuestIpStatus();
+				
+				if (ipCount != null ) {
+					ipStatus.GUEST_IP.used = ipCount.getUsedCount();
+					ipStatus.GUEST_IP.totoal = ipCount.getTotalCount();
+				}
+				else {
+					ipStatus.GUEST_IP.used = 0;
+					ipStatus.GUEST_IP.totoal = 0;
+				}
+				
+				// Serialize to Json
+				String json = JsonUtils.serialize(ipStatus);
+
 				// Set value
 				redis.set((new StringBuilder())
 						.append(redisKey)
