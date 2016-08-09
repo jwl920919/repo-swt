@@ -132,6 +132,8 @@ public class SyslogServer extends Thread {
 					syslog.setFacility(nFacility);
 					syslog.setRecvTime(System.currentTimeMillis());
 					
+
+					
 					//System.out.println(String.format("[%s, %s] - %s", syslog.getHost(), TimeUtils.convertToStringTime(syslog.getRecvTime()), syslog.getData()));
 					//LogUtils.WriteLog(_logger, Level.DEBUG , String.format("[%s, %s] - %s", syslog.getHost(), TimeUtils.convertToStringTime(syslog.getRecvTime()), syslog.getData()));
 					

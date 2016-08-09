@@ -7,7 +7,7 @@ ipm:
   license: TEST000000
   cluster:
     mode: slave       # master, slave
-    slave-index: 1     # 0 ~ 999
+    slave-index: 2     # 0 ~ 999
   redis:
     host: shinwootnskr.iptime.org
     port: 6379

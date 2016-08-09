@@ -87,7 +87,7 @@ public class SharedData {
 	//endregion
 
 	//region [FUNC] Pop Syslog Data
-	public List<SyslogEntity> popSyslogList(int popCount, int timeout) {
+	public List<SyslogEntity> popSyslogList(int popCount, int timeout) throws InterruptedException {
 		
 		List<SyslogEntity> resultList = new ArrayList<SyslogEntity>();
 		
@@ -112,10 +112,7 @@ public class SharedData {
 				if ( TimeUtils.currentTimeMilis() - startTime > timeout )
 					break;
 				
-				try {
-					Thread.sleep(100);
-				} catch (InterruptedException e) {
-				}
+				Thread.sleep(100);
 			}
 		}
 		

@@ -22,45 +22,69 @@
 		<div class="modal-header">
 			<input type="button" class="close" name="modalClose"
 				data-dismiss="modal" aria-label="Close" value="&times;" />
-			<h4 class="modal-title">Primary Modal</h4>
+			<h4 class="modal-title">정책 수정</h4>
 		</div>
 		<div class="modal-body">
-			<div id="modify-area">
-				<div>
-					<label class="modify-label">우선순위</label><input type="text"
-						id="priority" class="modify-text" />
+			<div class="input-group modal-input-group">
+				<span class="input-group-addon modal-content-header">우선순위</span>
+				<div class="modal-content-body">
+					<input type="text" id="priority" class="modify-text" />
 				</div>
-				<div>
-					<label class="modify-label">사업장</label><select id="site_eq"
-						class="form-control select2"></select>
+			</div>
+			<div class="input-group modal-input-group">
+				<span class="input-group-addon modal-content-header">사업장</span>
+				<div class="modal-content-body">
+					<select id="site_eq" class="form-control select2"></select>
 				</div>
-				<div>
-					<label class="modify-label">벤더</label><select id="vendor_eq"
-						class="form-control select2"></select>
+			</div>
+			<div class="input-group modal-input-group">
+				<span class="input-group-addon modal-content-header">벤더</span>
+				<div class="modal-content-body">
+					<select id="vendor_eq" class="form-control select2"></select>
 				</div>
-				<div>
-					<label class="modify-label">모델</label><select id="model_eq"
-						class="form-control select2"></select><a class="custom-btn custom-btn-app" id="model-mode-change"><i class="fa fa-exchange"></i></a>
+			</div>
+			<div class="input-group modal-input-group">
+				<span class="input-group-addon modal-content-header">모델</span>
+				<div class="modal-content-body">
+					<select id="model_eq" class="form-control select2"></select><a
+						class="custom-btn custom-btn-app" id="model-mode-change"><i
+						class="fa fa-exchange"></i></a>
 				</div>
-				<div>
-					<label class="modify-label">장비종류</label><select id="device-type_eq"
-						class="form-control select2"></select><a class="custom-btn custom-btn-app" id="device-type-mode-change"><i class="fa fa-exchange"></i></a>
+			</div>
+			<div class="input-group modal-input-group">
+				<span class="input-group-addon modal-content-header">장비종류</span>
+				<div class="modal-content-body">
+					<select id="device-type_eq" class="form-control select2"></select><a
+						class="custom-btn custom-btn-app" id="device-type-mode-change"><i
+						class="fa fa-exchange"></i></a>
 				</div>
-				<div>
-					<label class="modify-label">OS</label><select id="os_eq"
-						class="form-control select2"></select><a class="custom-btn custom-btn-app" id="os-mode-change"><i class="fa fa-exchange"></i></a>
+			</div>
+			<div class="input-group modal-input-group">
+				<span class="input-group-addon modal-content-header">OS</span>
+				<div class="modal-content-body">
+					<select id="os_eq" class="form-control select2"></select><a
+						class="custom-btn custom-btn-app" id="os-mode-change"><i
+						class="fa fa-exchange"></i></a>
 				</div>
-				<div>
-					<label class="modify-label">Hostname</label><select
-						id="hostname_eq" class="form-control select2"></select><a class="custom-btn custom-btn-app" id="hostname-mode-change"><i class="fa fa-exchange"></i></a>
+			</div>
+			<div class="input-group modal-input-group">
+				<span class="input-group-addon modal-content-header">Hostname</span>
+				<div class="modal-content-body">
+					<select id="hostname_eq" class="form-control select2"></select><a
+						class="custom-btn custom-btn-app" id="hostname-mode-change"><i
+						class="fa fa-exchange"></i></a>
 				</div>
-				<div>
-					<label class="modify-label">설명</label><input type="text" id="desc"
-						class="modify-text" />
+			</div>
+			<div class="input-group modal-input-group">
+				<span class="input-group-addon modal-content-header">설명</span>
+				<div class="modal-content-body">
+					<input type="text" id="desc" class="modify-text" />
 				</div>
-				<div>
-					<label class="modify-label">정책</label><select class="form-control select2"
-						id="policy">
+			</div>
+			<div class="input-group modal-input-group">
+				<span class="input-group-addon modal-content-header">정책</span>
+				<div class="modal-content-body">
+					<select class="form-control select2" id="policy">
 						<option>Permit</option>
 						<option>Deny</option>
 					</select>
