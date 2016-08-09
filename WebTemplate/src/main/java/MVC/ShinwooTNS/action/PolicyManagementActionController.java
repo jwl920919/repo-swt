@@ -242,8 +242,11 @@ public class PolicyManagementActionController {
 			parameters.put("access_policy_id", Integer.parseInt(parameters.get("access_policy_id").toString()));
 			parameters.put("priority", Integer.parseInt(parameters.get("priority").toString()));
 			parameters.put("site_id", Integer.parseInt(parameters.get("site_id").toString()));
-			System.out.println("parameters :: "+parameters);
-			result.result = true;
+			int cnt = accessPolicy.update_ACCESS_POLICY_INFORM(parameters);
+			if (cnt > -1)
+				result.result = true;
+			else
+				result.result = false;
 			return gson.toJson(result);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -253,20 +256,6 @@ public class PolicyManagementActionController {
 
 	}
 	// endregion
-	
-	@RequestMapping(value = "sample", method = RequestMethod.GET, produces = "application/text; charset=utf8")
-	public @ResponseBody Object getInfobloxdatas(HttpServletRequest request, HttpSession session) {
-		logger.info("sample : " + request.getLocalAddr());
-		init();
-		try {
-			result.result = true;
-			return gson.toJson(result);
-		} catch (Exception e) {
-			e.printStackTrace();
-			result.result = false;
-			return gson.toJson(result);
-		}
-	}
 
 	private void init() {
 		result.data = null;

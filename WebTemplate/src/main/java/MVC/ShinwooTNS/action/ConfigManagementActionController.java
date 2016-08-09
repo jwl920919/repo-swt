@@ -139,10 +139,8 @@ public class ConfigManagementActionController {
 			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
 					new TypeToken<HashMap<String, Object>>() {
 					}.getType());
-			int group_id = Integer.parseInt(parameters.get("group_id").toString());
 			String time_zone = parameters.get("time_zone").toString();
-			parameters.remove("group_id");
-			parameters.put("group_id", group_id);
+			parameters.put("group_id", Integer.parseInt(parameters.get("group_id").toString()));
 			parameters.put("site_id", Integer.parseInt(session.getAttribute("site_id").toString()));
 
 			int cnt = userInfoService.update_SYSTEM_USER_INFO_ONE_RECORD(parameters);

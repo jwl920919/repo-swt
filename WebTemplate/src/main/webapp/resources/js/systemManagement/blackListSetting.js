@@ -1,12 +1,8 @@
 var table;
 var popupClass;
 var initParam;
-$(document).ready(function() {
-	
-	
-	//$("#layDiv").css("visibility","hidden");
+$(document).ready(function() {	
 
-	//modalShow("modal");
 	modalClose("modal");
 	
 //	//세그먼트 Selectbox change 이벤트
@@ -200,13 +196,21 @@ fnShowEvent = function(){
 	try {
 		if (popupClass == "add") {
 			//추가 팝업 초기화
+			$("#selectSite").val(siteid);
+			console.log("radio[name=rEnable] : " + $(":input:radio[name=rEnable]:checked").val());
+			$('input:radio[name=rEnable]:input[value='+ true +']').attr("checked", true);
+			$("#inputFilter").val("");
+			$("#selectTime").val(60);
+			$("#txtareaDesc").val("");
 			
 			$('#btnSave').unbind( "click" );		
 			$('#btnSave').click(function() {
 				//추가 기능 수행
-	
-				modalClose("modal");
-	
+				
+				if (checkVaridation()) {
+					
+					modalClose("modal");	
+				}
 			});	
 		}
 		else if (popupClass == "modify") {
@@ -263,4 +267,29 @@ fnSiteInfoSearch = function(){
         complete: function(data) {
         }
     });
+}
+
+checkVaridation = function(){
+	var ret = true;
+	if ($("#selectSite").val() == "") {
+		systemAlertNotify("divAlertArea", "alert-warning", getLanguage("warning"), $("#hiddenError").text());
+		ret = false;
+	}
+	else if ($(":input:radio[name=rEnable]:checked").val() == "") {
+
+		ret = false;
+	}
+	else if ($("#inputFilter").val() == "") {
+
+		ret = false;
+	}
+	else if ($("#selectTime").val() == "") {
+
+		ret = false;
+	}
+	else if ($("#txtareaDesc").val() == "") {
+
+		ret = false;
+	}
+	return ret;
 }

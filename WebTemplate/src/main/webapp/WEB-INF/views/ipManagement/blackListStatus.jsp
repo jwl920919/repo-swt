@@ -17,7 +17,7 @@
 <script src="resources/plugins/datatables/jszip.min.js"></script>
 <script src="resources/js/common/Datatable-Essential.js"></script>
 <script src="resources/js/common/modalPopup.js"></script>
-<script src="resources/js/systemManagement/blackListSetting.js"></script>
+<script src="resources/js/ipManagement/blackListStatus.js"></script>
 <script type="text/javascript">
 var siteid;
 var siteMaster;

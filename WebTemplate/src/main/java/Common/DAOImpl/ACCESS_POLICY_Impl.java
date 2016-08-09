@@ -89,4 +89,17 @@ public class ACCESS_POLICY_Impl extends SqlSessionDaoSupport implements ACCESS_P
 		return select_POLICY_DEVICE_TYPE_SEARCHList;
 	}
 
+	@Override
+	public int update_ACCESS_POLICY_INFORM(HashMap<String, Object> parameters) {
+		int cnt = -1;
+		try {
+			System.out.println(getSqlSession());
+			cnt = getSqlSession().update("UI_Query.update_ACCESS_POLICY_INFORM", parameters);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e.getMessage());
+		}
+		return cnt;
+	}
+
 }
