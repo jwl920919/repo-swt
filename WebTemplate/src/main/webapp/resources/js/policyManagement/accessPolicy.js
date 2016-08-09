@@ -318,3 +318,13 @@ function changeHostname() {
         }
     });
 }
+
+fnShowEvent = function(){
+    if (popupClass == "add") {
+            console.log("add");
+    }
+    else if (popupClass == "modify") {
+            console.log("modify");
+    }
+    popupClass = "";
+}
