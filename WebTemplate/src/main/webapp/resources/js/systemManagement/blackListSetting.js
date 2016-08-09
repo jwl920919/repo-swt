@@ -63,7 +63,7 @@ $(document).ready(function() {
 									{"data" : "blacklist_filter_name"},	//4
 									{"data" : "blacklist_time_sec",
 										"render":function(data,type,full,meta){	                              
-											return data + getLanguage("second");
+											return data + " " + getLanguage("second");
 										}},	//5
 									{"data" : "description"},
                                     {"data" : "button",

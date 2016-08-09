@@ -1,7 +1,7 @@
 var table;
 $(document).ready(function() {
 	
-	$("#layDiv").css("visibility","hidden");
+//	$("#layDiv").css("visibility","hidden");
 
 	var prevday = 1;
 	var currentdate = new Date();

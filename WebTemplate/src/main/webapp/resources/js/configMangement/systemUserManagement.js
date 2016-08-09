@@ -1,4 +1,4 @@
-$("#layDiv").css("visibility", "hidden");
+//$("#layDiv").css("visibility", "hidden");
 var table;
 $(document)
         .ready(

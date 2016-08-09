@@ -11,7 +11,7 @@
 <!-- Select2 -->
 <link rel="stylesheet" href="resources/plugins/select2/select2.min.css">
 <!-- Alert Start -->
-<div id="layDiv">
+<div id="layDiv" style="visibility : hidden;">
 	<div class="alert-box"></div>
 	<div id="divAlertArea"></div>
 </div>

@@ -10,7 +10,7 @@ $(document).ready(function() {
 //	$("#layDiv").css("top", Math.max(0, (($(window).height() - $("#layDiv").outerHeight()) / 2) + $(window).scrollTop()) + "px");
 //	$("#layDiv").css("left", Math.max(0, (($(window).width() - $("#layDiv").outerWidth()) / 2) + $(window).scrollLeft()) + "px");
 //	$("#layDiv").attr("style", "visibility: hidden");
-	$("#layDiv").css("visibility","hidden");
+//	$("#layDiv").css("visibility","hidden");
 
 	//쿠키에 언어 설정이 되어 있지 않다면 기본적으로 한국어로 radio 버튼 체크
 	if (getCookie("Language") != "undefined") {

@@ -11,7 +11,7 @@
 <script src="resources/js/ipManagement/leaseIPStatus.js"></script>
 
 <!-- Alert Start -->
-<div id="layDiv">
+<div id="layDiv" style="visibility : hidden;">iv">
 	<div class="alert-box"></div>
 	<div id="divAlertArea"></div>
 </div>

@@ -109,11 +109,11 @@ $(document).ready(function() {
 								<tr>
 									<th width="0%" style="display:none;">blacklist_id</th>
 									<th width="0%" style="display:none;">site_id</th>
-									<th width="20%"><%=LanguageHelper.GetLanguage("site")%></th>
+									<th width="15%"><%=LanguageHelper.GetLanguage("site")%></th>
 									<th width="10%"><%=LanguageHelper.GetLanguage("usedclass")%></th>
 									<th width="20%"><%=LanguageHelper.GetLanguage("filtername")%></th>
 									<th width="10%"><%=LanguageHelper.GetLanguage("datetime")%></th>
-									<th width="40%"><%=LanguageHelper.GetLanguage("desctription")%></th>
+									<th width="45%"><%=LanguageHelper.GetLanguage("desctription")%></th>
 									<th width="20%"></th>
 								</tr>
 							</thead>
