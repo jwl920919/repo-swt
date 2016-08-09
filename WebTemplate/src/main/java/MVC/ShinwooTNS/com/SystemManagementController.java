@@ -28,7 +28,7 @@ public class SystemManagementController {
 	@RequestMapping(value = "infobloxStatus", method = RequestMethod.GET)
 	public String systemUserManagement(Locale locale, Model model, HttpServletRequest request, HttpServletResponse response) {
 		logger.info("infobloxStatus : " + request.getLocalAddr());
-		System.out.println("infobloxStatus Controller");
+		System.out.println("SystemManagenentController infobloxStatus");
 		// Session에 로그인 정보가 있는지 체크
 		HttpSession session = request.getSession(true);
 		System.out.println(session.getAttribute("login_chk"));
@@ -36,5 +36,18 @@ public class SystemManagementController {
 			return "redirect:/login";
 		
 		return parentPath + "infobloxStatus";
+	}
+	
+	@RequestMapping(value = "blackListSetting", method = RequestMethod.GET)
+	public String blackListSetting(Locale locale, Model model, HttpServletRequest request, HttpServletResponse response) {
+		logger.info("blackListSetting : " + request.getLocalAddr());
+		System.out.println("SystemManagenentController blackListSetting");
+		// Session에 로그인 정보가 있는지 체크
+		HttpSession session = request.getSession(true);
+		System.out.println(session.getAttribute("login_chk"));
+		if (session.getAttribute("login_chk") == null)
+			return "redirect:login";
+		
+		return parentPath + "blackListSetting";
 	}
 }

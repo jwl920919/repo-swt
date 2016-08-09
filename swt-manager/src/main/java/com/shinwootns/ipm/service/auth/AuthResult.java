@@ -3,6 +3,8 @@ package com.shinwootns.ipm.service.auth;
 public class AuthResult {
 	
 	// result
+	private String authType;
+	private String setupName;
 	private boolean is_check;
 	private boolean is_login;
 	private String message;
@@ -24,5 +26,28 @@ public class AuthResult {
 	}
 	public void setMessage(String message) {
 		this.message = message;
+	}
+	public String getAuthType() {
+		return authType;
+	}
+	public void setAuthType(String authType) {
+		this.authType = authType;
+	}
+	public String getSetupName() {
+		return setupName;
+	}
+	public void setSetupName(String setupName) {
+		this.setupName = setupName;
+	}
+	
+	@Override
+	public String toString() {
+		return (new StringBuilder())
+			.append("AuthType=").append(authType)
+			.append(",Name=").append(setupName)
+			.append(",is_check=").append(is_check)
+			.append(",is_login=").append(is_login)
+			.append(",message=").append(message)
+			.toString();
 	}
 }

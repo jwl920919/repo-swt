@@ -68,6 +68,7 @@
 	"userCertifySetting":							"사용자 인증 설정",
 	"infobloxStatus":								"Infoblox현황정보",
 	"dhcp/dnsSetting":								"DHCP/DNS설정",
+	"blackListSetting":								"Black List 기능 설정",
 	"operatingReport":								"운영현황",
 	"userCertifyReport":							"사용자 인증 정보",
 	"useStatusReport":								"HW, OS, 서비스별 사용현황",

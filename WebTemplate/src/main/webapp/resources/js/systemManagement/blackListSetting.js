@@ -136,7 +136,7 @@ $(document).ready(function() {
 		    d_wrap.prepend(d_filter);
 		});
 	} catch (e) {
-		console.log("ipCertifyStatus.js fnSelectData Error Log : " + e.message);
+		console.log("blackListSetting.js document.ready Error Log : " + e.message);
 	}
 
 //

@@ -634,9 +634,9 @@
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
 	<!-- Insert Date : 2016-08-08 -->
 	<!-- Insert User : KCM -->
-	<!-- Description : IP관리 > black list 현황  데이터 -->
-	<!-- Controller : MVC.ShinwooTNS.action.IPManagementActionController -->
-	<select id="select_IP_MANAGEMENT_BLACKLIST_STATUS_DATA" resultType="java.util.HashMap">
+	<!-- Description : 시스템관리 > black list기능 설정  데이터 -->
+	<!-- Controller : MVC.ShinwooTNS.action.SystemManagementActionController -->
+	<select id="select_SYSTEM_MANAGEMENT_BLACKLIST_SETTING_DATA" resultType="java.util.HashMap">
 		SELECT "black"."blacklist_id",
 	   		   "black"."site_id",
 	   		   "site"."site_name",

@@ -113,31 +113,53 @@ public class MasterJobWoker implements Runnable {
 			return;
 		
 		DhcpHandler handler = new DhcpHandler();
-		if ( handler.Connect(dhcp.getHost(), dhcp.getWapiUserid(), dhcp.getWapiPassword(), dhcp.getSnmpCommunity()) ) {
-			
-			
-			_logger.info("collectDhcp()... Start");
-			
-			// Collect Network
-			LinkedList<DhcpNetwork> listNetwork = collectDhcpNetwork(handler);
-			
-			// Collect Range
-			collectDhcpRange(handler);
 
-			// Collect Filter
-			collectMacFilter(handler);
-			
-			// Collect Fixed IP
-			collectFixedIP(handler);
-			
-			// Collect IP Status
-			for(DhcpNetwork network : listNetwork) {
-				collectDhcpIpSatus(handler, network);
+		_logger.info("collectDhcp()... Start");
+		
+		try
+		{
+			if ( handler.Connect(dhcp.getHost(), dhcp.getWapiUserid(), dhcp.getWapiPassword(), dhcp.getSnmpCommunity()) ) {
+				
+				// Collect Network
+				LinkedList<DhcpNetwork> listNetwork = collectDhcpNetwork(handler);
+				
+				if (Thread.currentThread().isInterrupted())
+					return;
+				
+				// Collect Range
+				collectDhcpRange(handler);
+	
+				if (Thread.currentThread().isInterrupted())
+					return;
+				
+				// Collect Filter
+				collectMacFilter(handler);
+				
+				if (Thread.currentThread().isInterrupted())
+					return;
+				
+				// Collect Fixed IP
+				collectFixedIP(handler);
+				
+				if (Thread.currentThread().isInterrupted())
+					return;
+				
+				// Collect IP Status
+				for(DhcpNetwork network : listNetwork) {
+					
+					if (Thread.currentThread().isInterrupted())
+						return;
+					
+					collectDhcpIpSatus(handler, network);
+				}
 			}
-			
-			_logger.info("collectDhcp()... End");
+		} catch(Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+		} finally {
+			handler.close();
 		}
-		handler.close();
+		
+		_logger.info("collectDhcp()... End");
 	}
 	//endregion
 	
@@ -383,15 +405,31 @@ public class MasterJobWoker implements Runnable {
 		Jedis client = RedisHandler.getInstance().getRedisClient();
 		if(client == null)
 			return;
-		
+
 		DhcpHandler handler = new DhcpHandler();
-		if ( handler.Connect(dhcp.getHost(), dhcp.getWapiUserid(), dhcp.getWapiPassword(), dhcp.getSnmpCommunity()) ) {
 		
-			updateDhcpMemberInfo(handler, client);
-			updateDhcpCounter(handler, client);
-			updateDnsCounter(handler, client);
+		try
+		{
+			if ( handler.Connect(dhcp.getHost(), dhcp.getWapiUserid(), dhcp.getWapiPassword(), dhcp.getSnmpCommunity()) ) {
+			
+				updateDhcpMemberInfo(handler, client);
+				
+				if (Thread.currentThread().isInterrupted())
+					return;
+				
+				updateDhcpCounter(handler, client);
+				
+				if (Thread.currentThread().isInterrupted())
+					return;
+				
+				updateDnsCounter(handler, client);
+			}
+			
+		}catch(Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+		} finally {
+			handler.close();
 		}
-		handler.close();
 		
 		client.close();
 	}

@@ -1,5 +1,6 @@
 package MVC.ShinwooTNS.action;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
@@ -28,10 +30,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
 
 import Common.DTO.AjaxResult;
 import Common.Helper.CommonHelper;
+import Common.ServiceInterface.SYSTEM_MANAGEMENT_Service_Interface;;
 
 @Controller
 @RequestMapping(value = "/systemManagement/")
@@ -40,7 +44,10 @@ public class SystemManagementActionController {
 			"yyyy-MM-dd HH:mm:ss");
 	private static final Logger logger = LoggerFactory.getLogger(SystemManagementActionController.class);
 	private Gson gson = new Gson();
-	private AjaxResult result = new AjaxResult();
+	private AjaxResult result = null;
+	
+	@Autowired
+	private SYSTEM_MANAGEMENT_Service_Interface systemManagementService;
 
 	// redisTemplate를 쓰기위해 Autowired 해준다.
 	@Autowired
@@ -53,6 +60,7 @@ public class SystemManagementActionController {
 	@RequestMapping(value = "getInfobloxdatas", method = RequestMethod.GET, produces = "application/text; charset=utf8")
 	public @ResponseBody Object getInfobloxdatas(HttpServletRequest request, HttpSession session) {
 		logger.info("getInfobloxdatas : " + request.getLocalAddr());
+		result = new AjaxResult();
 		init();
 		try {
 			// json 형식의 데이터를 String 타입으로 받아온다.
@@ -185,6 +193,50 @@ public class SystemManagementActionController {
 	}
 	// endregion
 	
+	//region Black List 기능설정  -> 데이터 조회
+	@RequestMapping(value = "blackListSetting_Data_Select", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+	public void blackListSetting_Data_Select(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		System.out.println("blackListSetting_Data_Select");
+		logger.info("blackListSetting_Data_Select : " + request.getLocalAddr());
+		HttpSession session = request.getSession(true);
+		List<Map<String, Object>> dataList = null;
+		JsonArray jsonArray = null;
+		result = new AjaxResult();
+		int totalCount = 0;
+
+		try {
+			String[] columns = { "blacklist_id", "site_id", "site_name", "blacklist_enable", "blacklist_filter_name", "blacklist_time_sec", "description" };
+
+			HashMap<String, Object> parameters = Common.Helper.DatatableHelper.getDatatableParametas(request, columns, 0);
+
+			String siteID = session.getAttribute("site_id").toString();
+			if (!siteID.equals("")) {
+				parameters.put("siteid", Integer.parseInt(siteID));
+				dataList = systemManagementService.select_SYSTEM_MANAGEMENT_BLACKLIST_SETTING_DATA(parameters);
+
+				if (dataList.size() > 0) {
+					totalCount = Integer.parseInt(((Map<String, Object>) dataList.get(0)).get("allCount").toString());
+				}
+
+				jsonArray = gson.toJsonTree(dataList).getAsJsonArray();
+				response.setContentType("Application/json;charset=utf-8");
+			} else {
+				result.result = false;
+				result.errorMessage = "Site id is Null in Session!";
+			}
+		} catch (Exception e) {
+			result.result = false;
+			result.errorMessage = e.getMessage();
+			e.printStackTrace();
+			logger.error(e.getMessage());
+		} finally {
+			response.getWriter().println(Common.Helper.DatatableHelper.makeCallback(request, jsonArray, totalCount));
+			response.getWriter().flush();
+			response.getWriter().close();
+		}
+	}
+	//endregion
+	
 	/** 
 	 * result 객체에 data, resultValue를 모두 담아서 전송하는 경우는 상관이 없으나
 	 * 한가지만 보낼 경우 이전 페이지 또는 이전에 사용하였던 데이터가 남아서 같이
@@ -195,8 +247,4 @@ public class SystemManagementActionController {
 		result.data = null;
 		result.resultValue = null;
 	}
-	
-	
-	
-	
 }

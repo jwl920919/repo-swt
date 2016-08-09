@@ -7,17 +7,21 @@ function getWindowPoint() {
 };
 
 function modalShow(id) {
-	$("#" + id).css("display","block");
+	try {
+		$("#" + id).css("display","block");
+		$("#layDiv").css("visibility","visible");
+	} catch (e) {
+		console.log(e.message);
+	}
 
 	getWindowPoint();
     var alertPositionHeight = (windowHeight / 2 + scrollTop - 60 - ($('div[name=modalContent]').innerHeight() / 2)) + 'px';
     var alertPositionWidth = (windowWidth / 2 - ($('div[name=modalContent]').innerWidth() / 2))+ 'px';
-    console.log($('input[name=modalContent]').innerHeight());
+    //console.log($('input[name=modalContent]').innerHeight());
     
     $("#" + id).css('top', alertPositionHeight);    
     $("#" + id).css('left', alertPositionWidth + " !important");
 
-	$("#layDiv").css("visibility","visible");
     
     $('input[name=modalClose]').click(function(){
     	modalClose(id);
@@ -30,7 +34,7 @@ function modalShow(id) {
             $(t[t2]).css("height",$(t[t2]).parent().height());
         }
     } catch (e) {
-	console.log(e.message);
+    	console.log(e.message);
     }
 }
 function modalClose(id) {
