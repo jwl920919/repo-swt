@@ -757,6 +757,7 @@ table td[class*="col-"], table th[class*="col-"] {
 	line-height: 1.42857143;
 	border: 1px solid #ccc;
 	border-color: #d2d6de;
+	padding-left: 2px !important;
 }
 
 .select2-selection {
