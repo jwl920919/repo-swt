@@ -8,8 +8,8 @@ insight:
   version: 0.1.1
   license: TEST000000
   cluster:
-    mode: master      # master, slave
-    index: 1       # 0 ~ 999
+    mode: slave      # master, slave
+    index: 10       # 0 ~ 999
   redis:
     host: shinwootnskr.iptime.org
     port: 6379

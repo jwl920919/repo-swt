@@ -47,61 +47,66 @@ public class SyslogPutter implements Runnable {
 		if ( _logger != null)
 			_logger.info( (new StringBuilder()).append("Syslog Producer#").append(this._index).append("... start.").toString());
 		
-		List<SyslogEntity> listSyslog = SharedData.getInstance().popSyslogList(1000, 500);
+		List<SyslogEntity> listSyslog = null;
 		
 		String redisKey = RedisKeys.KEY_DATA_SYSLOG + ":" + SharedData.getInstance().getSiteID();
 		
 		while(!Thread.currentThread().isInterrupted())
 		{
-			listSyslog = SharedData.getInstance().popSyslogList(100, 100);
-			
-			if (listSyslog != null && listSyslog.size() > 0)
-			{
-				
-				// to Redis
-				Jedis redis = RedisHandler.getInstance().getRedisClient();
-				if (redis == null)
-					return;
-				
-				for(SyslogEntity syslog : listSyslog)
+			try {
+				listSyslog = SharedData.getInstance().popSyslogList(100, 100);
+
+				if (listSyslog != null && listSyslog.size() > 0)
 				{
-					// Remove Carriage-Return & Line-Feed
-					syslog.setData( syslog.getData().replaceAll("\\r\\n|\\r|\\n|\\t", " ").trim() );
 					
-					// Put to Redis
-					redis.zadd(redisKey, syslog.getRecvTime()/1000, JsonUtils.serialize(syslog).toString());
+					// to Redis
+					Jedis redis = RedisHandler.getInstance().getRedisClient();
+					if (redis == null)
+						return;
+					
+					for(SyslogEntity syslog : listSyslog)
+					{
+						// Remove Carriage-Return & Line-Feed
+						syslog.setData( syslog.getData().replaceAll("\\r\\n|\\r|\\n|\\t", " ").trim() );
+						
+						// Put to Redis
+						redis.zadd(redisKey, syslog.getRecvTime()/1000, JsonUtils.serialize(syslog).toString());
+					}
+					
+					redis.close();
+					
+					/*
+					int count = listSyslog.size();
+					
+					for(SyslogEntity syslog : listSyslog)
+					{
+						if (syslog == null)
+							continue;
+						
+						String rawData = syslog.getData();
+		
+						// Remove Carriage-Return & Line-Feed
+						rawData = rawData.replaceAll("\\r\\n|\\r|\\n", " ");
+						
+						// Trim
+						rawData = rawData.trim();
+						
+						JsonObject jobj = new JsonObject();
+						jobj.addProperty("host", syslog.getHost());
+						jobj.addProperty("facility", syslog.getFacility());
+						jobj.addProperty("severity", syslog.getSeverity());
+						jobj.addProperty("recv_time", syslog.getRecvTime());
+						jobj.addProperty("message", rawData);
+						
+						//RabbitmqSender.SendData(jobj, _logger);
+					}
+					
+					listSyslog.clear();
+					*/
 				}
 				
-				redis.close();
-				
-				/*
-				int count = listSyslog.size();
-				
-				for(SyslogEntity syslog : listSyslog)
-				{
-					if (syslog == null)
-						continue;
-					
-					String rawData = syslog.getData();
-	
-					// Remove Carriage-Return & Line-Feed
-					rawData = rawData.replaceAll("\\r\\n|\\r|\\n", " ");
-					
-					// Trim
-					rawData = rawData.trim();
-					
-					JsonObject jobj = new JsonObject();
-					jobj.addProperty("host", syslog.getHost());
-					jobj.addProperty("facility", syslog.getFacility());
-					jobj.addProperty("severity", syslog.getSeverity());
-					jobj.addProperty("recv_time", syslog.getRecvTime());
-					jobj.addProperty("message", rawData);
-					
-					//RabbitmqSender.SendData(jobj, _logger);
-				}
-				
-				listSyslog.clear();
-				*/
+			} catch (InterruptedException e) {
+				break;
 			}
 		}
 		

@@ -22,8 +22,10 @@ public class AuthCheckHandler {
 	}
 	
 	public AuthResult checkLogin(AuthParam param) {
+
 		AuthResult result = new AuthResult();
 		
+		// AuthMapper
 		AuthMapper authMapper = SpringBeanProvider.getInstance().getAuthMapper();
 		if (authMapper == null) {
 			result.setIsCheck(false);
@@ -31,6 +33,7 @@ public class AuthCheckHandler {
 			return result;
 		}
 		
+		// Load AuthSetup list
 		List<AuthSetup> listAuthSetup = authMapper.selectAuthSetup();
 		if (listAuthSetup == null || listAuthSetup.size() == 0) {
 			result.setIsCheck(false);
@@ -39,39 +42,71 @@ public class AuthCheckHandler {
 		}
 		
 		// Check Auth
+		int index = 0;
+		int total = listAuthSetup.size();
+		
 		for(AuthSetup setup : listAuthSetup) {
 			
-			// Glolbal
+			result.setAuthType(setup.getAuthType());
+			result.setSetupName(setup.getSetupName());
+			
+			++index;
+			
+			// Global Setup
 			if (setup.getSiteId() == 0) {
 				
 				// ldap
 				if (setup.getAuthType().toLowerCase().equals("ldap")) {
-					CheckLdap(authMapper, setup, param, result);
+					checkLdap(authMapper, setup, param, result);
 				}
 				// radius
 				else if (setup.getAuthType().toLowerCase().equals("radius")) {
-					//AuthSetupRadius setupRadius = authMapper.selectAuthSetupRadius(setup.getSetupId());
-					// ...
+					checkRadius(authMapper, setup, param, result);
 				}
 				// esb
 				else if (setup.getAuthType().toLowerCase().equals("esb")) {
-					//AuthSetupEsb setupEsb = authMapper.selectAuthSetupEsb(setup.getSetupId());
-					// ...
+					checkEsb(authMapper, setup, param, result);
 				}
-				
+
+				// Check Result
+				if (result.isIsCheck() == true && result.isIsLogin() == true) {
+					return result;
+				}
 			}
-			// Site
+			// Site Setup
 			else if (setup.getSiteId() > 0) {
 				
+				// Get Master Insight
+				
 				// ...
+				
+				// ldap
+				if (setup.getAuthType().toLowerCase().equals("ldap")) {
+					//checkLdap(authMapper, setup, param, result);
+				}
+				// radius
+				else if (setup.getAuthType().toLowerCase().equals("radius")) {
+					//checkRadius(authMapper, setup, param, result);
+				}
+				// esb
+				else if (setup.getAuthType().toLowerCase().equals("esb")) {
+					//checkEsb(authMapper, setup, param, result);
+				}
+
+				// Check Result
+				if (result.isIsCheck() == true && result.isIsLogin() == true) {
+					return result;
+				}
 			}
 		}
 		
 		return result;
 	}
 	
-	private void CheckLdap(AuthMapper authMapper, AuthSetup setup, AuthParam param, AuthResult result) {
+	//region Check Ldap
+	private void checkLdap(AuthMapper authMapper, AuthSetup setup, AuthParam param, AuthResult result) {
 
+		// Get AuthSetupLdap
 		AuthSetupLdap setupLdap = authMapper.selectAuthSetupLdap(setup.getSetupId());
 		
 		if (setupLdap == null) {
@@ -145,4 +180,48 @@ public class AuthCheckHandler {
 			result.setMessage(ex.getMessage());
 		}
 	}
+	//endregion
+	
+	//region Check Radius
+	private void checkRadius(AuthMapper authMapper, AuthSetup setup, AuthParam param, AuthResult result) {
+
+		// Get AuthSetupRadius
+		AuthSetupRadius setupRadius = authMapper.selectAuthSetupRadius(setup.getSetupId());
+		
+		if (setupRadius == null) {
+			result.setIsCheck(false);
+			result.setMessage(
+				(new StringBuilder())
+				.append("Failed load radius Setup. setup_id=").append(setup.getSetupId())
+				.toString()
+			);
+			return;
+		}
+		
+		
+		// ...
+	}
+	//endregion
+
+
+	//region Check ESB
+	private void checkEsb(AuthMapper authMapper, AuthSetup setup, AuthParam param, AuthResult result) {
+
+		// Get AuthSetupEsb
+		AuthSetupEsb setupEsb = authMapper.selectAuthSetupEsb(setup.getSetupId());
+		
+		if (setupEsb == null) {
+			result.setIsCheck(false);
+			result.setMessage(
+				(new StringBuilder())
+				.append("Failed load radius Setup. setup_id=").append(setup.getSetupId())
+				.toString()
+			);
+			return;
+		}
+		
+		
+		// ...
+	}
+	//endregion
 }

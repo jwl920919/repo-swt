@@ -81,7 +81,7 @@ public class WorkerManager {
 	{
 		synchronized(this) 
 		{
-			if (_masterJobThread != null) {
+			if (_masterJobThread != null && _masterJobThread.isAlive()) {
 				try {
 					_masterJobThread.interrupt();
 					_masterJobThread.join();
@@ -94,7 +94,7 @@ public class WorkerManager {
 			
 			// Stop Scheduller
 			try {
-				if (_scheduler != null) {
+				if (_scheduler != null && _scheduler.isAlive()) {
 					_scheduler.interrupt();
 					_scheduler.join();
 				}
@@ -106,7 +106,7 @@ public class WorkerManager {
 			// Stop Syslog Worker
 			for(int i=0; i<SYSLOG_PUTTER_COUNT; i++) {
 				try {
-					if (_syslogWorker[i] != null) {
+					if (_syslogWorker[i] != null && _syslogWorker[i].isAlive()) {
 						_syslogWorker[i].interrupt();
 						_syslogWorker[i].join();
 					}
