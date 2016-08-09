@@ -151,6 +151,7 @@ public class SyslogPublisher implements Runnable {
 		eventData.setEventType("syslog");
 		eventData.setSeverity(syslog.getSeverity());
 		eventData.setCollectTime( new Timestamp(syslog.getRecvTime()) );
+		
 		eventData.setMessage(syslog.getData());
 		
 		// Send to RabbitMQ
