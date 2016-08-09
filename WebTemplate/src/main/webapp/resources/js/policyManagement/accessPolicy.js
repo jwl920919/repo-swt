@@ -120,9 +120,14 @@ $(document)
                         var d_filter = $('#accessPolicyTable_wrapper .row:first .col-sm-6:eq(1)');
                         d_length.append(d_filter);
                         d_wrap.prepend(d_filter);
-                        // 삭제버튼 위치변경
-                        $('#accessPolicyTable_paginate').parent().prepend(
-                                $('#delete-button').parent());
+                        // 테이블 하단 페이지 부분 좌우에 버튼 위치 지정
+                        $accessPolicyTable_paginate_parent = $(
+                                '#accessPolicyTable_paginate').parent();
+                        $('#page-box').append($('#accessPolicyTable_paginate'));
+                        $accessPolicyTable_paginate_parent
+                                .append($('#bottom-btn-row'));
+                        $('#bottom-btn-row').parent().removeClass();
+                        $('#bottom-btn-row').parent().addClass("col-sm-12");
                     });
                 });
 
@@ -145,10 +150,11 @@ function modifyBtnClickEvent(t) {
     device_type = tr.eq(5).text();
     os = tr.eq(6).text();
     hostname = tr.eq(7).text();
-    createModifyPopup();
-    modifyPopupSetting();
+    createModifyPopup(function() {
+        modifyPopupSetting();
+    });
 }
-function createModifyPopup() {
+function createModifyPopup(callback) {
     var html = '<div class="input-group modal-input-group"><span class="input-group-addon modal-content-header">우선순위';
     html += '</span><div class="modal-content-body"><input type="text" id="priority" class="form-control modify-text" />';
     html += '</div></div><div class="input-group modal-input-group"><span class="input-group-addon modal-content-header">';
@@ -159,7 +165,7 @@ function createModifyPopup() {
     if (model_like) {
         html += '<input type="text" id="model-like" class="form-control modify-text" />';
     } else {
-        html += '<select id="model_eq" class="form-control select2"></select>';
+        html += '<select id="model_eq" class="form-control select2" style="display: none;"></select>';
     }
 
     html += '<a class="custom-btn custom-btn-app" id="model-mode-change" onclick="modelToggleEvent(this)"><i class="fa fa-exchange"></i></a></div></div>';
@@ -168,7 +174,7 @@ function createModifyPopup() {
     if (device_type_like) {
         html += '<input type="text" id="device-type-like" class="form-control modify-text" />';
     } else {
-        html += '<select id="device-type_eq" class="form-control select2"></select>';
+        html += '<select id="device-type_eq" class="form-control select2" style="display: none;"></select>';
     }
 
     html += '<a class="custom-btn custom-btn-app" id="device-type-mode-change" onclick="deviceTypeToggleEvent(this)"><i class="fa fa-exchange"></i></a></div></div>';
@@ -177,7 +183,7 @@ function createModifyPopup() {
     if (os_like) {
         html += '<input type="text" id="os-like" class="form-control modify-text" />';
     } else {
-        html += '<select id="os_eq" class="form-control select2"></select>';
+        html += '<select id="os_eq" class="form-control select2" style="display: none;"></select>';
     }
 
     html += '<a class="custom-btn custom-btn-app" id="os-mode-change" onclick="osToggleEvent(this)"><i class="fa fa-exchange"></i></a></div></div>';
@@ -186,7 +192,7 @@ function createModifyPopup() {
     if (hostname_like) {
         html += '<input type="text" id="hostname-like" class="form-control modify-text" />';
     } else {
-        html += '<select id="hostname_eq" class="form-control select2"></select>';
+        html += '<select id="hostname_eq" class="form-control select2" style="display: none;"></select>';
     }
 
     html += '<a class="custom-btn custom-btn-app" id="hostname-mode-change" onclick="hostnameToggleEvent(this)"><i class="fa fa-exchange"></i></a></div></div>';
@@ -197,7 +203,11 @@ function createModifyPopup() {
     html += '<div class="modal-content-body"><select class="form-control select2" id="policy"><option>Permit</option>';
     html += '<option>Deny</option></select></div></div>';
     $("#modify-body").html(html);
-    selectInit();
+    selectInit(function() {
+        if (typeof callback === 'function') {
+            callback();
+        }
+    });
 }
 function modifyPopupSetting() {
     $("#priority").val(tr.eq(1).text());
@@ -206,21 +216,62 @@ function modifyPopupSetting() {
     $("#policy").val(tr.eq(15).text());
     changeSiteNames(site_id);
     changeVendorNames();
-    changeModelNames(vendor);
-    changeDeviceType();
-    changeOs();
-    changeHostname();
+    changeModelNames(vendor,function() {
+        if (model_like) {
+            $("#model-like").val(model);
+        } else {
+            var model_length = $("#model_eq").length;
+            if (model_length > 1) {
+                $("#select2-model_eq-container").text(model);
+            } else if (model_length == 1) {
+                $("#select2-model_eq-container").text( $("#model_eq option:selected").val())
+            }
+        }
+    });
+    changeDeviceType(function() {
+        if (device_type_like) {
+            $("#device-type-like").val(device_type);
+        } else {
+            var device_type_length = $("#device-type_eq").length;
+            if (device_type_length > 1) {
+                $("#select2-device-type_eq-container").text(device_type);
+            } else if (device_type_length == 1) {
+                $("#select2-device-type_eq-container").text( $("#device-type_eq option:selected").val())
+            }
+        }
+    });
+    changeOs(function() {
+        if (os_like) {
+            $("#os-like").val(os);
+        } else {
+            var os_length = $("#os_eq").length;
+            if (os_length > 1) {
+                $("#select2-os_eq-container").text(os);
+            } else if (os_length == 1) {
+                $("#select2-os_eq-container").text( $("#os_eq option:selected").val())
+            }
+        }
+    });
+    changeHostname(function() {
+        if (hostname_like) {
+            $("#hostname-like").val(hostname);
+        } else {
+            var hostname_length = $("#hostname_eq").length;
+            if (hostname_length > 1) {
+                $("#select2-hostname_eq-container").text(hostname);
+            } else if (hostname_length == 1) {
+                $("#select2-hostname_eq-container").text( $("#hostname_eq option:selected").val())
+            }
+        }
+    });
     $("#select2-site_eq-container").text(site_name);
     $("#select2-vendor_eq-container").text(vendor);
-    $("#select2-model_eq-container").text(model);
-    $("#select2-device-type_eq-container").text(device_type);
-    $("#select2-os_eq-container").text(os);
-    $("#select2-hostname_eq-container").text(hostname);
+    
     popupClass = "modify";
     modalShow("modify-modal");
 }
 // init default select to select2 object
-function selectInit() {
+function selectInit(callback) {
     $("#site_eq").select2();
     $("#vendor_eq").select2();
     if (!model_like)
@@ -232,8 +283,11 @@ function selectInit() {
     if (!hostname_like)
         $("#hostname_eq").select2();
     $("#policy").select2();
+    if (typeof callback === 'function') {
+        callback();
+    }
 }
-function changeSiteNames(index) {
+function changeSiteNames(index,callback) {
     $.ajax({
         url : "policyManagement/getSiteNames",
         type : "POST",
@@ -242,13 +296,13 @@ function changeSiteNames(index) {
             if (jsonObj.result == true) {
                 $('#site_eq').find('option').remove().end();
                 for (var i = 0; i < jsonObj.data.length; i++) {
-                    if (jsonObj.data[i].site_id == index) {
+                    if (jsonObj.data[i].site_id == index
+                            || jsonObj.data.length == 1) {
                         $('#site_eq').append(
                                 '<option selected="selected" value='
                                         + jsonObj.data[i].site_id + '>'
                                         + jsonObj.data[i].site_name
                                         + '</option>');
-
                     } else {
                         $('#site_eq').append(
                                 '<option value=' + jsonObj.data[i].site_id
@@ -256,11 +310,14 @@ function changeSiteNames(index) {
                                         + '</option>');
                     }
                 }
+                if (typeof callback === 'function') {
+                    callback();
+                }
             }
         }
     });
 }
-function changeVendorNames() {
+function changeVendorNames(callback) {
     $
             .ajax({
                 url : "policyManagement/getVendor",
@@ -270,7 +327,8 @@ function changeVendorNames() {
                     if (jsonObj.result == true) {
                         $('#vendor_eq').find('option').remove().end();
                         for (var i = 0; i < jsonObj.data.length; i++) {
-                            if (vendor == jsonObj.data[i].vendor) {
+                            if (vendor == jsonObj.data[i].vendor
+                                    || jsonObj.data.length == 1) {
                                 $('#vendor_eq').append(
                                         '<option selected="selected">'
                                                 + jsonObj.data[i].vendor
@@ -281,11 +339,14 @@ function changeVendorNames() {
                                                 + '</option>');
                             }
                         }
+                        if (typeof callback === 'function') {
+                            callback();
+                        }
                     }
                 }
             });
 }
-function changeModelNames(v) {
+function changeModelNames(v, callback) {
     var obj = new Object();
     obj.vendor = v;
     $.ajax({
@@ -298,20 +359,25 @@ function changeModelNames(v) {
             if (jsonObj.result == true) {
                 $('#model_eq').find('option').remove().end();
                 for (var i = 0; i < jsonObj.data.length; i++) {
-                    if (model == jsonObj.data[i].model)
+                    if (model == jsonObj.data[i].model
+                            || jsonObj.data.length == 1) {
                         $('#model_eq').append(
                                 '<option selected="selected">'
                                         + jsonObj.data[i].model + '</option>');
-                    else
+                    } else {
                         $('#model_eq').append(
                                 '<option>' + jsonObj.data[i].model
                                         + '</option>');
+                    }
+                }
+                if (typeof callback === 'function') {
+                    callback();
                 }
             }
         }
     });
 }
-function changeDeviceType() {
+function changeDeviceType(callback) {
     $.ajax({
         url : "policyManagement/getDeviceType",
         type : "POST",
@@ -320,21 +386,26 @@ function changeDeviceType() {
             if (jsonObj.result == true) {
                 $('#device-type_eq').find('option').remove().end();
                 for (var i = 0; i < jsonObj.data.length; i++) {
-                    if (device_type == jsonObj.data[i].device_type)
+                    if (device_type == jsonObj.data[i].device_type
+                            || jsonObj.data.length == 1) {
                         $('#device-type_eq').append(
                                 '<option selected="selected">'
                                         + jsonObj.data[i].device_type
                                         + '</option>');
-                    else
+                    } else {
                         $('#device-type_eq').append(
                                 '<option>' + jsonObj.data[i].device_type
                                         + '</option>');
+                    }
+                }
+                if (typeof callback === 'function') {
+                    callback();
                 }
             }
         }
     });
 }
-function changeOs() {
+function changeOs(callback) {
     $.ajax({
         url : "policyManagement/getOs",
         type : "POST",
@@ -343,19 +414,23 @@ function changeOs() {
             if (jsonObj.result == true) {
                 $('#os_eq').find('option').remove().end();
                 for (var i = 0; i < jsonObj.data.length; i++) {
-                    if (os == jsonObj.data[i].os)
+                    if (os == jsonObj.data[i].os || jsonObj.data.length == 1) {
                         $('#os_eq').append(
                                 '<option selected="selected">'
                                         + jsonObj.data[i].os + '</option>');
-                    else
+                    } else {
                         $('#os_eq').append(
                                 '<option>' + jsonObj.data[i].os + '</option>');
+                    }
+                }
+                if (typeof callback === 'function') {
+                    callback();
                 }
             }
         }
     });
 }
-function changeHostname() {
+function changeHostname(callback) {
     $.ajax({
         url : "policyManagement/getHostname",
         type : "POST",
@@ -364,15 +439,20 @@ function changeHostname() {
             if (jsonObj.result == true) {
                 $('#hostname_eq').find('option').remove().end();
                 for (var i = 0; i < jsonObj.data.length; i++) {
-                    if (hostname == jsonObj.data[i].hostname)
+                    if (hostname == jsonObj.data[i].hostname
+                            || jsonObj.data.length == 1) {
                         $('#hostname_eq').append(
                                 '<option selected="selected">'
                                         + jsonObj.data[i].hostname
                                         + '</option>');
-                    else
+                    } else {
                         $('#hostname_eq').append(
                                 '<option>' + jsonObj.data[i].hostname
                                         + '</option>');
+                    }
+                }
+                if (typeof callback === 'function') {
+                    callback();
                 }
             }
         }
@@ -391,12 +471,23 @@ fnShowEvent = function() {
 function modelToggleEvent($this) {
     if (model_like) {
         removeSiblings($this);
-        prependCodeToParent($this,
-                '<select id="model_eq" class="form-control select2"></select>');
-        changeModelNames(vendor);
-        $("#model_eq").select2();
-        $("#select2-model_eq-container").text(model);
-        model_like = false;
+        prependCodeToParent(
+                $this,
+                '<select id="model_eq" class="form-control select2" style="display: none;"></select>');
+        changeModelNames(vendor, function() {
+            $("#model_eq").select2();
+
+            var model_length = $("#model_eq").length;
+            if (model_length > 1) {
+                $("#select2-model_eq-container").text(model);
+            } else if (model_length == 1) {
+                if ($("#select2-model_eq-container").text() == model) {
+                    $("#select2-model_eq-container").text(model);
+                }
+            }
+            model_like = false;
+        });
+
     } else {
         removeSiblings($this);
         prependCodeToParent($this,
@@ -409,10 +500,19 @@ function deviceTypeToggleEvent($this) {
         removeSiblings($this);
         prependCodeToParent($this,
                 '<select id="device-type_eq" class="form-control select2"></select>');
-        changeDeviceType();
-        $("#device-type_eq").select2();
-        $("#select2-device-type_eq-container").text(device_type);
-        device_type_like = false;
+        changeDeviceType(function() {
+            $("#device-type_eq").select2();
+
+            var device_type_length = $("#device-type_eq").length;
+            if (device_type_length > 1) {
+                $("#select2-device-type_eq-container").text(device_type);
+            } else if (device_type_length == 1) {
+                if ($("#select2-device-type_eq-container").text() == device_type) {
+                    $("#select2-device-type_eq-container").text(device_type);
+                }
+            }
+            device_type_like = false;
+        });
     } else {
         removeSiblings($this);
         prependCodeToParent($this,
@@ -426,10 +526,19 @@ function osToggleEvent($this) {
         removeSiblings($this);
         prependCodeToParent($this,
                 '<select id="os_eq" class="form-control select2"></select>');
-        changeOs();
-        $("#os_eq").select2();
-        $("#select2-os_eq-container").text(os);
-        os_like = false;
+        changeOs(function() {
+            $("#os_eq").select2();
+
+            var os_length = $("#os_eq").length;
+            if (os_length > 1) {
+                $("#select2-os_eq-container").text(os);
+            } else if (os_length == 1) {
+                if ($("#select2-os_eq-container").text() == os) {
+                    $("#select2-os_eq-container").text(os);
+                }
+            }
+            os_like = false;
+        });
     } else {
         removeSiblings($this);
         prependCodeToParent($this,
@@ -443,10 +552,19 @@ function hostnameToggleEvent($this) {
         removeSiblings($this);
         prependCodeToParent($this,
                 '<select id="hostname_eq" class="form-control select2"></select>');
-        changeHostname();
-        $("#hostname_eq").select2();
-        $("#select2-hostname_eq-container").text(hostname);
-        hostname_like = false;
+        changeHostname(function() {
+            $("#hostname_eq").select2();
+
+            var hostname_length = $("#hostname_eq").length;
+            if (hostname_length > 1) {
+                $("#select2-hostname_eq-container").text(hostname);
+            } else if (hostname_length == 1) {
+                if ($("#select2-hostname_eq-container").text() == hostname) {
+                    $("#select2-hostname_eq-container").text(hostname);
+                }
+            }
+            hostname_like = false;
+        });
     } else {
         removeSiblings($this);
         prependCodeToParent($this,
@@ -494,7 +612,7 @@ $('#modify-save-btn').click(function() {
         jObj.hostname = $('#select2-hostname_eq-container').text();
     }
     jObj.desc = $('#desc').val();
-    jObj.is_permit = ($('#policy').val().toLowerCase()=="permit");
+    jObj.is_permit = ($('#policy').val().toLowerCase() == "permit");
     jObj.model_like = model_like;
     jObj.device_type_like = device_type_like;
     jObj.os_like = os_like;
@@ -515,7 +633,7 @@ $('#modify-save-btn').click(function() {
     });
 });
 
-//체크박스 전체선택
+// 체크박스 전체선택
 $('#accessPolicyTable_checkbox_controller').click(function() {
     if ($(this).is(':checked')) {
         $('#accessPolicyTable>tbody>tr>td>input:checkbox').each(function() {
