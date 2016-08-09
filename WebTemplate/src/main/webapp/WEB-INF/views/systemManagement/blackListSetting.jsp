@@ -38,42 +38,42 @@ $(document).ready(function() {
 	<!-- modal-content -->
   		<div class="modal-header">
     		<input type="button" class="close" name="modalClose" data-dismiss="modal" aria-label="Close" value="&times;" />
-    		<h4 class="modal-title">Black List 추가</h4>
+    		<h4 class="modal-title"><%=LanguageHelper.GetLanguage("addblacklist")%></h4>
   		</div>
   
 	  	<div class="modal-body">
 	  		<div class="input-group modal-input-group">
-				<span class="input-group-addon modal-content-header">사업장</span>
+				<span class="input-group-addon modal-content-header"><%=LanguageHelper.GetLanguage("site")%></span>
 				<div class="modal-content-body">
 					<select class="form-control" id="selectSite" ></select>
 				</div>
 			</div>
 		  	<div class="form-group input-group modal-input-group">
-				<div class="input-group-addon modal-content-header">활성화</div>
+				<div class="input-group-addon modal-content-header"><%=LanguageHelper.GetLanguage("usedclass")%></div>
 				<div class="modal-content-body modal-content-box">
-					<input type="radio" class="minimal" name="rEnable" value="true" style="margin-left:10px"> 활성
-					<input type="radio" class="minimal" name="rEnable" value="false" style="margin-left:10px"> 비활성
+					<input type="radio" class="minimal" name="rEnable" value="true" style="margin-left:10px"> <%=LanguageHelper.GetLanguage("used")%>
+					<input type="radio" class="minimal" name="rEnable" value="false" style="margin-left:10px"> <%=LanguageHelper.GetLanguage("unused")%>
 				</div>
 			</div>
 		  	<div class="input-group modal-input-group">
-				<div class="input-group-addon modal-content-header">필터</div>
+				<div class="input-group-addon modal-content-header"><%=LanguageHelper.GetLanguage("filter")%></div>
 		  		<div class="modal-content-body">
 					<input type="text" class="form-control" id="inputFilter" placeholder="Filter">
 				</div>
 			</div>
 		  	<div class="input-group modal-input-group">
-				<span class="input-group-addon modal-content-header">시간</span>
+				<span class="input-group-addon modal-content-header"><%=LanguageHelper.GetLanguage("datetime")%></span>
 				<div class="modal-content-body">
 					<select class="form-control" id="selectTime" >
-		            	<option value='60'>60 초</option>
-		           		<option value='180'>180 초</option>
-		            	<option value='300'>300 초</option>
-		           		<option value='600'>600 초</option>
+		            	<option value='60'>60 <%=LanguageHelper.GetLanguage("second")%></option>
+		           		<option value='180'>180 <%=LanguageHelper.GetLanguage("second")%></option>
+		            	<option value='300'>300 <%=LanguageHelper.GetLanguage("second")%></option>
+		           		<option value='600'>600 <%=LanguageHelper.GetLanguage("second")%></option>
 					</select>
 				</div>
 			</div>
 		  	<div class="input-group modal-input-group" style="margin-bottom: 0px">
-				<span class="input-group-addon modal-content-header">설명</span>
+				<span class="input-group-addon modal-content-header"><%=LanguageHelper.GetLanguage("desctription")%></span>
 			
 				<div class="modal-content-body">
 					<textarea class="form-control" id="txtareaDesc" rows="3" placeholder="Enter ..."></textarea>
