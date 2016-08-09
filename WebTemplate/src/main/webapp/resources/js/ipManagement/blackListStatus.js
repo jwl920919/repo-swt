@@ -1,6 +1,8 @@
 var table;
 var popupClass;
+var initParam;
 $(document).ready(function() {
+	
 	
 	//$("#layDiv").css("visibility","hidden");
 
@@ -23,6 +25,11 @@ $(document).ready(function() {
 //        	fnSelectData(startDate, endDate, $("#sbCerifyStatus option:selected").val(), $("#txtSearch").val());
 //	    }
 //	});
+
+	//추가 버튼 클릭 이벤트
+	$('#add-row').click(function() {
+		fnAdd();
+	});
 	
 	//조회버튼을 default 버튼으로 이벤트 생성한다.
 	$(document).bind('keypress', function(e) {
@@ -93,21 +100,32 @@ $(document).ready(function() {
                                     		             row.blacklist_filter_name,
                                     		             row.blacklist_time_sec,
                                     		             row.description ];
-                                    	    console.log(jObj);
+                                    	    //console.log(jObj);
                                                 return "<div class='tools'>"+
-                                                " <i class='fa fa-plus essential-cursor-pointer' onclick='fnAdd();' data-toggle='tooltip' title='" + getLanguage("add") + "'></i>" + 
+//                                                " <i class='fa fa-plus essential-cursor-pointer' onclick='fnAdd();' data-toggle='tooltip' title='" + getLanguage("add") + "'></i>" + 
                                                 " <i class='fa fa-edit essential-cursor-pointer' onclick=\"fnModify('" + jObj + "');\" data-toggle='tooltip' title='" + getLanguage("modify") + "'></i>"+
-//                                                ' <i class="fa fa-trash-o essential-cursor-pointer" onclick="fnDelete("'+jsonString+'");" data-toggle="tooltip" title="' + getLanguage("delete") + '" ></i> </div>";
                                                 " <i class='fa fa-trash-o essential-cursor-pointer' onclick=\"fnDelete('" + jObj + "');\" data-toggle='tooltip' title='" + getLanguage("delete") + "' ></i> </div>";                                        }
                                     }],			//6	
 	                "createdRow": function( row, data, dataIndex ) {
-	                	//alert($(row).children(0).html()); 
+//	                	alert("createdRow : " + $(row).children(0).html()); 
 	                	//Datatable TR Create Event
 //		    			    if ( $(row).children(0).html() == "0" ) {
 //		    			        $(row).addClass( 'essential-tr-cursor-pointer' );
 //		    			    }
-	    			  }
-					});
+	    			},
+	    			"drawCallback": function( settings ) {
+	    				var api = this.api();
+	    				// Output the data for the visible rows to the browser's console
+	    				//console.log( api.rows( {page:'current'} ).data().length );
+//	    				if (api.rows( {page:'current'} ).data().length > 0) {
+//	    					$('#add-row').css("visibility","collapse")
+//						}
+//	    				else {
+//	    					$('#add-row').css("visibility","visible")
+//						}
+	    			}
+
+				});
 		
 		//검색, 엔트리 위치 정렬
 		$(function() {
@@ -121,14 +139,20 @@ $(document).ready(function() {
 		console.log("ipCertifyStatus.js fnSelectData Error Log : " + e.message);
 	}
 
-
-	//세그먼트 Selectbox change 이벤트
-	$('#btnSave').click(function() {
-		console.log("fnSave");
-		modalClose("modal");
-	});
-
+//
+//	//세그먼트 Selectbox change 이벤트
+//	$('#btnSave').click(function() {
+//		if (popupClass == "add") {
+//			console.log("add");
+//		}
+//		else if (popupClass == "modify") {
+//			console.log("modify");
+//		}
+//		
+//		modalClose("modal");
+//	});	
 });
+
 /**
  * tr 이벤트 핸들러
 **/
@@ -149,6 +173,7 @@ fnAdd = function(obj){
 
 fnModify = function(obj){
 	popupClass = "modify";
+	initParam = obj;
 	modalShow("modal");
 }
 
@@ -165,12 +190,55 @@ fnDelete = function(obj){
 
 fnShowEvent = function(){
 	if (popupClass == "add") {
-		console.log("add");
+		//추가 팝업 초기화
+		
+		$('#btnSave').unbind( "click" );		
+		$('#btnSave').click(function() {
+			//추가 기능 수행
+		});	
 	}
 	else if (popupClass == "modify") {
-		console.log("modify");
+		//수정 팝업 초기화
+		console.log("fnShowEvent initParam : " + initParam);
+		var res = initParam.split(",");
+		console.log("initParam[0] : " + res[0]);
+
+		
+		$('#btnSave').unbind( "click" );
+		$('#btnSave').click(function() {
+			//수정 기능 수행
+		});
 	}
+	
+	modalClose("modal");			
 	popupClass = "";
 }
 
-
+fnSiteInfoSearch = function(){
+	var tag = "";
+    $.ajax({
+        url : 'select_site_info',
+        type : "POST",
+        data : null,
+        dataType : "text",
+        success : function(data) {
+            var jsonObj = eval("(" + data + ')');
+	            if (jsonObj.result == true) {
+            	$.each(jsonObj.resultValue, function (index, obj) {   
+            		if (obj.site_id == siteid) {
+            			tag += "<option value=" + obj.site_id + " selected>" + obj.site_name + "</option>";
+					}
+            		else {
+            			tag += "<option value=" + obj.site_id + ">" + obj.site_name + "</option>";
+            		}
+        		});
+            	if (siteMaster == 'f') {
+            		$('#selectSite').attr("disabled","true");
+				}
+            	$('#selectSite').html(tag);
+            }
+        },
+        complete: function(data) {
+        }
+    });
+}
