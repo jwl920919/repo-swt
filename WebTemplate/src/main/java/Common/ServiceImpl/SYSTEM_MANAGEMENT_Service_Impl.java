@@ -21,11 +21,22 @@ public class SYSTEM_MANAGEMENT_Service_Impl implements SYSTEM_MANAGEMENT_Service
 
 	/**
 	 * <p>
-	 * IP관리 > Black List 현황 데이터 조회.
+	 * IP관리 > Black List 기능설정 데이터 조회.
 	 * </p> 
 	 **/
 	public List<Map<String,Object>> select_SYSTEM_MANAGEMENT_BLACKLIST_SETTING_DATA(HashMap<String, Object> parameters) {
 		// TODO Auto-generated method stub
 		return systemManagementDao.select_SYSTEM_MANAGEMENT_BLACKLIST_SETTING_DATA(parameters);
+	}
+
+
+	/**
+	 * <p>
+	 * IP관리 > Black List 기능설정 데이터 추가, 수정, 삭제.
+	 * </p> 
+	 **/
+	@Override
+	public int insert_update_delete_SYSTEM_MANAGEMENT_BLACKLIST_SETTING_DATA(HashMap<String, Object> parameters) {
+		return systemManagementDao.insert_update_delete_SYSTEM_MANAGEMENT_BLACKLIST_SETTING_DATA(parameters);
 	}
 }

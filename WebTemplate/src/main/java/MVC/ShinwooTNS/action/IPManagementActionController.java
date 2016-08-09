@@ -41,8 +41,7 @@ public class IPManagementActionController {
 
 	// 고정 IP 현황 -> Segment 현황 조회
 	@RequestMapping(value = "staticIPStatus_Segment_Select", method = RequestMethod.POST, produces = "application/text; charset=utf8")
-	public void staticIPStatus_Segment_Select(HttpServletRequest request, HttpServletResponse response)
-			throws IOException {
+	public void staticIPStatus_Segment_Select(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		System.out.println("staticIPStatus_Segment_Select");
 		logger.info("staticIPStatus_Segment_Select : " + request.getLocalAddr());
 		HttpSession session = request.getSession(true);
@@ -125,8 +124,7 @@ public class IPManagementActionController {
 
 	// 고정 IP 현황 -> Segment별 상세 현황 IPMap 데이터 조회
 	@RequestMapping(value = "staticIPStatus_Segment_MapData", method = RequestMethod.POST, produces = "application/text; charset=utf8")
-	public @ResponseBody Object staticIPStatus_Segment_MapData(HttpServletRequest request, HttpServletResponse response)
-			throws IOException {
+	public @ResponseBody Object staticIPStatus_Segment_MapData(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		System.out.println("staticIPStatus_Segment_MapData");
 		logger.info("staticIPStatus_Segment_MapData : " + request.getLocalAddr());
 		HttpSession session = request.getSession(true);
@@ -148,8 +146,7 @@ public class IPManagementActionController {
 				StringBuilder m_DHCP_Range = new StringBuilder();
 
 				// region DHCP Range 데이터 조회
-				List<Map<String, Object>> dhcpRange = ipManagementService
-						.select_IP_MANAGEMENT_SEGMENT_DETAIL_MAP_DHCPRANGE(parameters);
+				List<Map<String, Object>> dhcpRange = ipManagementService.select_IP_MANAGEMENT_SEGMENT_DETAIL_MAP_DHCPRANGE(parameters);
 				if (dhcpRange.size() > 0) {
 					for (Map<String, Object> dhcpRangeMap : dhcpRange) {
 						networkStartip = dhcpRangeMap.get("start_ip").toString();
@@ -206,8 +203,7 @@ public class IPManagementActionController {
 
 	// Lease IP 현황 -> 세그먼트 데이터 조회
 	@RequestMapping(value = "dhcp_Network_Select", method = RequestMethod.POST, produces = "application/text; charset=utf8")
-	public @ResponseBody Object dhcp_Network_Select(HttpServletRequest request, HttpServletResponse response)
-			throws IOException {
+	public @ResponseBody Object dhcp_Network_Select(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		System.out.println("dhcp_Network_Select");
 		logger.info("dhcp_Network_Select : " + request.getLocalAddr());
 		HttpSession session = request.getSession(true);
@@ -265,10 +261,6 @@ public class IPManagementActionController {
 		try {
 			String[] columns = {  "ipaddr", "macaddr", "host_name", "host_os", "duid", "status", "lease_state", "obj_types", "discover_status",
 							"usage", "fingerprint", "is_never_ends", "is_never_start", "lease_start_time", "lease_end_time", "last_discovered", "user_description" };
-			
-			
-			
-			
 			
 			String m_network = request.getParameter("network");
 			String m_timezone = request.getParameter("timezone");

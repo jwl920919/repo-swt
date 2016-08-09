@@ -236,6 +236,37 @@ public class SystemManagementActionController {
 		}
 	}
 	//endregion
+
+	//region Black List 기능설정  -> 추가, 수정, 삭제
+	@RequestMapping(value = "blackListSetting_Data_Insert_Update_Delete", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+	public @ResponseBody Object blackListSetting_Data_Insert_Update_Delete(HttpServletRequest request) {
+		System.out.println("blackListSetting_Data_Insert_Update_Delete");
+		logger.info("blackListSetting_Data_Insert_Update_Delete : " + request.getLocalAddr());
+		result = new AjaxResult();
+
+		try {
+			HashMap<String, Object> parameters = gson.fromJson(request.getReader(), new TypeToken<HashMap<String, Object>>() {}.getType());
+			String m_siteid = parameters.get("siteid").toString();
+			String m_filtertime = parameters.get("filtertime").toString();
+			String m_blacklistid = parameters.get("blacklistid").toString();
+
+			parameters.put("siteid", Integer.parseInt(m_siteid));
+			parameters.put("filtertime", Integer.parseInt(m_filtertime));
+			parameters.put("blacklistid", Integer.parseInt(m_blacklistid));
+						
+			if (systemManagementService.insert_update_delete_SYSTEM_MANAGEMENT_BLACKLIST_SETTING_DATA(parameters) > -1)
+				result.result = true;
+			else
+				result.result = false;
+		} catch (Exception e) {
+			result.result = false;
+			result.errorMessage = e.getMessage();
+			e.printStackTrace();
+			logger.error(e.getMessage());
+		}
+		return gson.toJson(result);
+	}
+	//endregion
 	
 	/** 
 	 * result 객체에 data, resultValue를 모두 담아서 전송하는 경우는 상관이 없으나
