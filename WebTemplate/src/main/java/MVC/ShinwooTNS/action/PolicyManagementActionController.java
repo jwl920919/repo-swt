@@ -230,7 +230,30 @@ public class PolicyManagementActionController {
 
 	}
 	// endregion
+	
+	// region access_policy_modify
+	@RequestMapping(value = "access_policy_modify", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+	public @ResponseBody Object access_policy_modify(HttpServletRequest request) {
+		logger.info("access_policy_modify : " + request.getLocalAddr());
+		try {
+			init();
+			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
+					new TypeToken<HashMap<String, Object>>() {
+					}.getType());
+			parameters.put("access_policy_id", Integer.parseInt(parameters.get("access_policy_id").toString()));
+			parameters.put("priority", Integer.parseInt(parameters.get("priority").toString()));
+			parameters.put("site_id", Integer.parseInt(parameters.get("site_id").toString()));
+			result.result = true;
+			return gson.toJson(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.result = false;
+			return gson.toJson(result);
+		}
 
+	}
+	// endregion
+	
 	@RequestMapping(value = "sample", method = RequestMethod.GET, produces = "application/text; charset=utf8")
 	public @ResponseBody Object getInfobloxdatas(HttpServletRequest request, HttpSession session) {
 		logger.info("sample : " + request.getLocalAddr());

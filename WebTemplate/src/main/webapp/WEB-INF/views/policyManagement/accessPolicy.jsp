@@ -24,78 +24,14 @@
 				data-dismiss="modal" aria-label="Close" value="&times;" />
 			<h4 class="modal-title">정책 수정</h4>
 		</div>
-		<div class="modal-body">
-			<div class="input-group modal-input-group">
-				<span class="input-group-addon modal-content-header">우선순위</span>
-				<div class="modal-content-body">
-					<input type="text" id="priority" class="modify-text" />
-				</div>
-			</div>
-			<div class="input-group modal-input-group">
-				<span class="input-group-addon modal-content-header">사업장</span>
-				<div class="modal-content-body">
-					<select id="site_eq" class="form-control select2"></select>
-				</div>
-			</div>
-			<div class="input-group modal-input-group">
-				<span class="input-group-addon modal-content-header">벤더</span>
-				<div class="modal-content-body">
-					<select id="vendor_eq" class="form-control select2"></select>
-				</div>
-			</div>
-			<div class="input-group modal-input-group">
-				<span class="input-group-addon modal-content-header">모델</span>
-				<div class="modal-content-body">
-					<select id="model_eq" class="form-control select2"></select><a
-						class="custom-btn custom-btn-app" id="model-mode-change"><i
-						class="fa fa-exchange"></i></a>
-				</div>
-			</div>
-			<div class="input-group modal-input-group">
-				<span class="input-group-addon modal-content-header">장비종류</span>
-				<div class="modal-content-body">
-					<select id="device-type_eq" class="form-control select2"></select><a
-						class="custom-btn custom-btn-app" id="device-type-mode-change"><i
-						class="fa fa-exchange"></i></a>
-				</div>
-			</div>
-			<div class="input-group modal-input-group">
-				<span class="input-group-addon modal-content-header">OS</span>
-				<div class="modal-content-body">
-					<select id="os_eq" class="form-control select2"></select><a
-						class="custom-btn custom-btn-app" id="os-mode-change"><i
-						class="fa fa-exchange"></i></a>
-				</div>
-			</div>
-			<div class="input-group modal-input-group">
-				<span class="input-group-addon modal-content-header">Hostname</span>
-				<div class="modal-content-body">
-					<select id="hostname_eq" class="form-control select2"></select><a
-						class="custom-btn custom-btn-app" id="hostname-mode-change"><i
-						class="fa fa-exchange"></i></a>
-				</div>
-			</div>
-			<div class="input-group modal-input-group">
-				<span class="input-group-addon modal-content-header">설명</span>
-				<div class="modal-content-body">
-					<input type="text" id="desc" class="modify-text" />
-				</div>
-			</div>
-			<div class="input-group modal-input-group">
-				<span class="input-group-addon modal-content-header">정책</span>
-				<div class="modal-content-body">
-					<select class="form-control select2" id="policy">
-						<option>Permit</option>
-						<option>Deny</option>
-					</select>
-				</div>
-			</div>
+		<div id="modify-body" class="modal-body">
+			
 		</div>
 		<div class="modal-footer">
 			<input type="button" class="btn btn-default pull-left"
 				name="modalClose" data-dismiss="modal"
 				value="<%=LanguageHelper.GetLanguage("close")%>" />
-			<button type="button" class="btn btn-primary" id="btnSave"><%=LanguageHelper.GetLanguage("saveandclose")%></button>
+			<button type="button" class="btn btn-primary" id="modify-save-btn"><%=LanguageHelper.GetLanguage("saveandclose")%></button>
 		</div>
 	</div>
 	<!-- /.modal-content -->
@@ -115,7 +51,8 @@
 						class="essential-table" style="width: 100%;">
 						<thead>
 							<tr>
-								<th></th>
+								<th><input name="select_all" id="accessPolicyTable_checkbox_controller"
+										type="checkbox" /></th>
 								<th>우선순위</th>
 								<th>사업장</th>
 								<th>벤더</th>
