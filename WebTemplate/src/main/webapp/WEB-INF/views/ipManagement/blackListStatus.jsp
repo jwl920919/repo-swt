@@ -1,6 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"%>
 <%@ page import="Common.Helper.LanguageHelper"%>
-
+<%
+	String userID = (String) session.getAttribute("user_id");
+	String userName = (String) session.getAttribute("user_name");
+	String siteid = (String) session.getAttribute("site_id");
+	String siteName = (String) session.getAttribute("site_name");
+	String siteMaster = (String) session.getAttribute("site_master");
+%>
 
 <script src="resources/plugins/datatables/dataTables.buttons.min.js"></script>
 <script src="resources/plugins/datatables/buttons.flash.min.js"></script>
@@ -12,7 +18,15 @@
 <script src="resources/js/common/Datatable-Essential.js"></script>
 <script src="resources/js/common/modalPopup.js"></script>
 <script src="resources/js/ipManagement/blackListStatus.js"></script>
-
+<script type="text/javascript">
+var siteid;
+var siteMaster;
+$(document).ready(function() {
+	siteid = <%=siteid%>;
+	siteMaster = '<%=siteMaster%>';
+	fnSiteInfoSearch();
+});
+</script>
     		
 <!-- Add, Edit modal -->
 <div class="modal modal-dialog" id="modal" style="width:600px">
@@ -39,8 +53,8 @@
     	<div class="input-group modal-input-group">
 			<div class="input-group-addon modal-content-header">활성화</div>
 			<div class="modal-content-body modal-content-box">
-			<input type="checkbox" class="minimal" style="margin-left:10px">활성
-			<input type="checkbox" class="minimal" style="margin-left:10px">비활성
+			<input type="checkbox" class="minimal" style="margin-left:10px"> 활성
+			<input type="checkbox" class="minimal" style="margin-left:10px"> 비활성
 			</div>
 		</div>
     	<div class="input-group modal-input-group">
@@ -145,6 +159,9 @@
 							<tbody>
 							</tbody>
 						</table>
+						<div id="add-row" style="margin-top: 5px; text-align: right;">
+							<button type="button" class="btn btn-primary" id="add-button" name="save-button"><%=LanguageHelper.GetLanguage("add")%></button>
+						</div>
 					</center>
 				</div>
 			</div>
