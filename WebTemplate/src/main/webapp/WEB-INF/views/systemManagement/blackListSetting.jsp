@@ -17,7 +17,7 @@
 <script src="resources/plugins/datatables/jszip.min.js"></script>
 <script src="resources/js/common/Datatable-Essential.js"></script>
 <script src="resources/js/common/modalPopup.js"></script>
-<script src="resources/js/ipManagement/blackListStatus.js"></script>
+<script src="resources/js/systemManagement/blackListSetting.js"></script>
 <script type="text/javascript">
 var siteid;
 var siteMaster;
@@ -34,64 +34,64 @@ $(document).ready(function() {
     		
 <!-- Add, Edit modal -->
 <div class="modal modal-dialog" id="modal" style="width:600px">
-  <div class="modal-content" name="modalContent">
-  <!-- modal-content -->
-    <div class="modal-header">
-      <input type="button" class="close" name="modalClose" data-dismiss="modal" aria-label="Close" value="&times;" />
-      <h4 class="modal-title">Black List 추가</h4>
-    </div>
-    
-    <div class="modal-body">
-    	<div class="input-group modal-input-group">
-			<span class="input-group-addon modal-content-header">사업장</span>
-			<div class="modal-content-body">
-			<select class="form-control" id="selectSite" ></select>
+	<div class="modal-content" name="modalContent">
+	<!-- modal-content -->
+  		<div class="modal-header">
+    		<input type="button" class="close" name="modalClose" data-dismiss="modal" aria-label="Close" value="&times;" />
+    		<h4 class="modal-title">Black List 추가</h4>
+  		</div>
+  
+	  	<div class="modal-body">
+	  		<div class="input-group modal-input-group">
+				<span class="input-group-addon modal-content-header">사업장</span>
+				<div class="modal-content-body">
+					<select class="form-control" id="selectSite" ></select>
+				</div>
 			</div>
-		</div>
-    	<div class="form-group input-group modal-input-group">
-			<div class="input-group-addon modal-content-header">활성화</div>
-			<div class="modal-content-body modal-content-box">
-			<input type="radio" class="minimal" name="rEnable" value="true" style="margin-left:10px"> 활성
-			<input type="radio" class="minimal" name="rEnable" value="false" style="margin-left:10px" checked> 비활성
+		  	<div class="form-group input-group modal-input-group">
+				<div class="input-group-addon modal-content-header">활성화</div>
+				<div class="modal-content-body modal-content-box">
+					<input type="radio" class="minimal" name="rEnable" value="true" style="margin-left:10px"> 활성
+					<input type="radio" class="minimal" name="rEnable" value="false" style="margin-left:10px"> 비활성
+				</div>
 			</div>
-		</div>
-    	<div class="input-group modal-input-group">
-    		<div class="input-group-addon modal-content-header">필터</div>
-    		<div class="modal-content-body">
-				<input type="text" class="form-control" id="inputFilter" placeholder="Filter">
+		  	<div class="input-group modal-input-group">
+				<div class="input-group-addon modal-content-header">필터</div>
+		  		<div class="modal-content-body">
+					<input type="text" class="form-control" id="inputFilter" placeholder="Filter">
+				</div>
 			</div>
-		</div>
-    	<div class="input-group modal-input-group">
-			<span class="input-group-addon modal-content-header">시간</span>
-			<div class="modal-content-body">
-				<select class="form-control" id="selectTime" >
-	                   <option value='60'>60 초</option>
-	                   <option value='180'>180 초</option>
-	                   <option value='300'>300 초</option>
-	                   <option value='600'>600 초</option>
-				</select>
+		  	<div class="input-group modal-input-group">
+				<span class="input-group-addon modal-content-header">시간</span>
+				<div class="modal-content-body">
+					<select class="form-control" id="selectTime" >
+		            	<option value='60'>60 초</option>
+		           		<option value='180'>180 초</option>
+		            	<option value='300'>300 초</option>
+		           		<option value='600'>600 초</option>
+					</select>
+				</div>
 			</div>
-		</div>
-    	<div class="input-group modal-input-group" style="margin-bottom: 0px">
-			<span class="input-group-addon modal-content-header">설명</span>
+		  	<div class="input-group modal-input-group" style="margin-bottom: 0px">
+				<span class="input-group-addon modal-content-header">설명</span>
 			
-			<div class="modal-content-body">
-				<textarea class="form-control" id="txtareaDesc" rows="3" placeholder="Enter ..."></textarea>
+				<div class="modal-content-body">
+					<textarea class="form-control" id="txtareaDesc" rows="3" placeholder="Enter ..."></textarea>
+				</div>
 			</div>
 		</div>
-		
-    </div>
-    <div class="modal-footer">
-      <input type="button" class="btn btn-default pull-left" name="modalClose" data-dismiss="modal" value="<%=LanguageHelper.GetLanguage("close")%>" />
-      <button type="button" class="btn btn-primary" id="btnSave"><%=LanguageHelper.GetLanguage("saveandclose")%></button>
-    </div>
-  </div>
-  <!-- /.modal-content -->
+  		<div class="modal-footer">
+    		<input type="button" class="btn btn-default pull-left" name="modalClose" data-dismiss="modal" value="<%=LanguageHelper.GetLanguage("close")%>" />
+    		<button type="button" class="btn btn-primary" id="btnSave"><%=LanguageHelper.GetLanguage("saveandclose")%></button>
+  		</div>
+	</div>
+	<!-- /.modal-content -->
 </div>
+<div id="modalbackDiv" class="mordal-back-box"></div>
 <!-- /.Add, Edit modal -->
 
 <!-- Alert Start -->
-<div id="layDiv">
+<div id="layDiv" style="visibility : hidden;">
 	<div class="alert-box"></div>
 	<div id="divAlertArea"></div>
 </div>		
