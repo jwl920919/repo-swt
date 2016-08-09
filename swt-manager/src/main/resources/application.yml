@@ -5,6 +5,9 @@ ipm:
   name: Smart IPM
   version: 0.1.1
   license: TEST000000
+  security:
+    user: admin
+    password: 7+AzHIrmzGDARTT1VaQa3Q==
   cluster:
     mode: slave       # master, slave
     slave-index: 100  # 0 ~ 9999
@@ -23,10 +26,10 @@ ipm:
 #====================================
 # Security
 #====================================
-security:
-  user:
-    name: admin
-    password: shinwoo123!
+#security:
+#  user:
+#    name: admin
+#    password: shinwoo123!
 
 #====================================
 # spring

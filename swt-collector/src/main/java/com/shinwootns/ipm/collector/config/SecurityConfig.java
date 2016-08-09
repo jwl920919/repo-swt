@@ -1,4 +1,4 @@
-package com.shinwootns.ipm.config;
+package com.shinwootns.ipm.collector.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;

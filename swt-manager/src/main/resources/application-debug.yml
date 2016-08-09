@@ -5,9 +5,12 @@ ipm:
   name: Smart IPM (Debug)
   version: 0.1.1
   license: TEST000000
+  security:
+    user: admin
+    password: 7+AzHIrmzGDARTT1VaQa3Q==
   cluster:
     mode: slave       # master, slave
-    slave-index: 2     # 0 ~ 999
+    slave-index: 100     # 0 ~ 999
   redis:
     host: shinwootnskr.iptime.org
     port: 6379
@@ -31,10 +34,10 @@ ipm:
 #====================================
 # Security
 #====================================
-security:
-  user:
-    name: admin
-    password: shinwoo123!
+#security:
+#  user:
+#    name: admin
+#    password: shinwoo123!
     
 #====================================
 # spring
@@ -53,7 +56,6 @@ spring:
     hibernate:
       ddlAuto: none
       naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
- 
   mvc:
     view:
       prefix: /WEB-INF/jsp/

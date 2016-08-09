@@ -1,6 +1,7 @@
 package com.shinwootns.ipm.controller;
 
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -20,7 +21,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.JsonObject;
 import com.shinwootns.common.auth.AuthCheckerLDAP;
 import com.shinwootns.common.auth.LdapUserGroupAttr;
+import com.shinwootns.common.utils.CryptoUtils;
 import com.shinwootns.common.utils.JsonUtils;
+import com.shinwootns.data.auth.AuthParam;
+import com.shinwootns.data.auth.AuthResult;
 import com.shinwootns.data.entity.AuthSetup;
 import com.shinwootns.data.entity.AuthSetupEsb;
 import com.shinwootns.data.entity.AuthSetupLdap;
@@ -29,8 +33,6 @@ import com.shinwootns.ipm.data.SharedData;
 import com.shinwootns.ipm.data.mapper.AuthMapper;
 import com.shinwootns.ipm.data.mapper.DataMapper;
 import com.shinwootns.ipm.service.auth.AuthCheckHandler;
-import com.shinwootns.ipm.service.auth.AuthParam;
-import com.shinwootns.ipm.service.auth.AuthResult;
 
 
 @RestController
@@ -44,20 +46,21 @@ public class APIController {
 			@RequestParam(value="password") String password,
 			@RequestParam(value="macaddr", defaultValue="") String macaddr) 
 	{
-		JsonObject json = new JsonObject();
+		AuthResult result = new AuthResult();
 		
-		//json.addProperty("userid", userid);
-		//json.addProperty("result", true);
-		
-		
-		AuthParam param = new AuthParam();
-		param.setUserId(userid);
-		param.setPassword(password);
-		param.setMacAddr(macaddr);
-		
-		AuthCheckHandler handler = new AuthCheckHandler();
-
-		AuthResult result = handler.checkLogin(param);
+		try
+		{
+			AuthParam param = new AuthParam();
+			param.setUserId(userid);
+			param.setPassword(CryptoUtils.Decode_AES128(password));
+			param.setMacAddr(macaddr);
+			
+			AuthCheckHandler handler = new AuthCheckHandler();
+			handler.checkLogin(param, result);
+		}
+		catch(Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+		}
 		
 		return JsonUtils.serialize(result).toString();
 	}

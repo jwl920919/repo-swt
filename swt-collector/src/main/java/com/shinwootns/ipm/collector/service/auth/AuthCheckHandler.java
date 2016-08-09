@@ -1,4 +1,4 @@
-package com.shinwootns.ipm.service.auth;
+package com.shinwootns.ipm.collector.service.auth;
 
 import java.util.List;
 
@@ -7,20 +7,14 @@ import org.slf4j.LoggerFactory;
 
 import com.shinwootns.common.auth.AuthCheckerLDAP;
 import com.shinwootns.common.auth.LdapUserGroupAttr;
-import com.shinwootns.common.http.HttpClient;
-import com.shinwootns.common.utils.CryptoUtils;
 import com.shinwootns.data.auth.AuthParam;
 import com.shinwootns.data.auth.AuthResult;
 import com.shinwootns.data.entity.AuthSetup;
 import com.shinwootns.data.entity.AuthSetupEsb;
 import com.shinwootns.data.entity.AuthSetupLdap;
 import com.shinwootns.data.entity.AuthSetupRadius;
-import com.shinwootns.data.entity.DeviceInsight;
-import com.shinwootns.ipm.SpringBeanProvider;
-import com.shinwootns.ipm.config.ApplicationProperty;
-import com.shinwootns.ipm.data.SharedData;
-import com.shinwootns.ipm.data.mapper.AuthMapper;
-import com.shinwootns.ipm.data.mapper.DataMapper;
+import com.shinwootns.ipm.collector.SpringBeanProvider;
+import com.shinwootns.ipm.collector.data.mapper.AuthMapper;
 
 public class AuthCheckHandler {
 
@@ -40,120 +34,35 @@ public class AuthCheckHandler {
 			return result;
 		}
 		
-		// DataMapper
-		DataMapper dataMapper = SpringBeanProvider.getInstance().getDataMapper();
-		if (dataMapper == null) {
+		AuthSetup setup = authMapper.selectAuthSetup(param.getSetupId());
+		if (setup == null) {
 			result.setIsCheck(false);
-			result.setMessage("[ERROR] DataMapper is null.");
+			result.setMessage("[ERROR] Failed get AutuSetup, etup_id=" + param.getSetupId());
 			return result;
 		}
-		
-		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
-		if (appProperty == null) {
-			result.setIsCheck(false);
-			result.setMessage("[ERROR] ApplicationProperty is null.");
-			return result;
-		}
-		
-		// Load AuthSetup list
-		List<AuthSetup> listAuthSetup = authMapper.selectAuthSetup();
-		if (listAuthSetup == null || listAuthSetup.size() == 0) {
-			result.setIsCheck(false);
-			result.setMessage("[ERROR] AuthSetup is empty.");
-			return result;
-		}
-		
-		// Check Auth
-		int index = 0;
-		int total = listAuthSetup.size();
-		
-		for(AuthSetup setup : listAuthSetup) {
-			
-			result.setAuthType(setup.getAuthType());
-			result.setSetupName(setup.getSetupName());
-			
-			
-			
-			//{{ DEBUG
-			setup.setSiteId(1);
-			//}} DEBUG
-			
-			
-			++index;
-			
-			// Global Setup
-			if (setup.getSiteId() == 0) {
 				
-				// ldap
-				if (setup.getAuthType().toLowerCase().equals("ldap")) {
-					checkLdap(authMapper, setup, param, result);
-				}
-				// radius
-				else if (setup.getAuthType().toLowerCase().equals("radius")) {
-					checkRadius(authMapper, setup, param, result);
-				}
-				// esb
-				else if (setup.getAuthType().toLowerCase().equals("esb")) {
-					checkEsb(authMapper, setup, param, result);
-				}
+		// ldap
+		if (setup.getAuthType().toLowerCase().equals("ldap")) {
+			checkLdap(authMapper, setup, param, result);
+		}
+		// radius
+		else if (setup.getAuthType().toLowerCase().equals("radius")) {
+			checkRadius(authMapper, setup, param, result);
+		}
+		// esb
+		else if (setup.getAuthType().toLowerCase().equals("esb")) {
+			checkEsb(authMapper, setup, param, result);
+		}
 
-				// Check Result
-				if (result.isIsCheck() == true && result.isIsLogin() == true) {
-					return result;
-				}
-			}
-			// Site Setup
-			else if (setup.getSiteId() > 0) {
-				
-				// Find Master Insight
-				DeviceInsight insight = dataMapper.selectInsightMaster(setup.getSiteId());
-				
-				if (insight != null) {
-
-					StringBuilder url = new StringBuilder();
-					url.append("http://").append(insight.getIpaddr()).append(":").append(insight.getPort()).append("/api/auth");
-					
-					HttpClient restClient = new HttpClient();
-					try {
-						
-						if (restClient.Connect_Https(url.toString(), appProperty.security_user, CryptoUtils.Decode_AES128(appProperty.security_password)) == false) {
-							
-							result.setIsCheck(false);
-							result.setMessage(
-									(new StringBuilder())
-									.append("[ERROR] Failed connect master insight. ")
-									.append(insight.getHost())
-									.append("(").append(insight.getIpaddr()).append(")")
-									.toString());
-							
-							return result;
-						}
-						
-					} catch (Exception e) {
-						_logger.error(e.getMessage(), e);
-						result.setIsCheck(false);
-						result.setMessage(e.getMessage());
-						return result; 
-					}
-					
-					// ...
-	
-					// Check Result
-					if (result.isIsCheck() == true && result.isIsLogin() == true) {
-						return result;
-					}
-				}
-				else {
-					result.setIsCheck(false);
-					result.setMessage("[ERROR] AuthSetup is empty.");
-					return result;
-				}
-			}
+		// Check Result
+		if (result.isIsCheck() == true && result.isIsLogin() == true) {
+			return result;
 		}
 		
 		return result;
 	}
 	//endregion
+
 	
 	//region Check Ldap
 	private void checkLdap(AuthMapper authMapper, AuthSetup setup, AuthParam param, AuthResult result) {

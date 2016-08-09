@@ -24,6 +24,14 @@
 		</if>
 	</select>
 	
+	<select id="selectInsightMaster" resultType="com.shinwootns.data.entity.DeviceInsight">
+		SELECT * 
+		FROM device_insight
+		WHERE site_id = #{site_id}
+		ORDER BY is_master DESC, cluster_index 
+		LIMIT 1
+	</select>
+	
 
 	<!-- ############################ DHCP ############################ -->
 	<select id="selectDhcp" resultType="com.shinwootns.data.entity.DeviceDhcp">

@@ -14,7 +14,7 @@ import com.shinwootns.data.entity.AuthSetupRadius;
 public interface AuthMapper {
 	
 	// Auth
-	List<AuthSetup> selectAuthSetup();
+	AuthSetup selectAuthSetup(@Param("setup_id")int setup_id);
 	AuthSetupLdap selectAuthSetupLdap(@Param("setup_id")int setup_id);
 	AuthSetupRadius selectAuthSetupRadius(@Param("setup_id")int setup_id);
 	AuthSetupEsb selectAuthSetupEsb(@Param("setup_id")int setup_id);
