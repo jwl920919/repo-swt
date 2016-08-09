@@ -200,6 +200,11 @@ fnShowEvent = function(){
 	try {
 		if (popupClass == "add") {
 			//추가 팝업 초기화
+			$("#selectSite").val(0);
+			$('input:radio[name=rEnable]:input[value='+res[3]+']').attr("checked", true);
+			$("#inputFilter").val('');
+			$("#selectTime").val(60);
+			$("#txtareaDesc").val('');
 			
 			$('#btnSave').unbind( "click" );		
 			$('#btnSave').click(function() {
@@ -211,9 +216,7 @@ fnShowEvent = function(){
 		}
 		else if (popupClass == "modify") {
 			//수정 팝업 초기화
-			console.log("fnShowEvent initParam : " + initParam);
 			var res = initParam.split(",");
-			console.log("initParam[0] : " + res[0]);
 			
 			var blacklist_id = res[0];
 			$("#selectSite").val(res[1]);

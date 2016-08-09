@@ -90,7 +90,7 @@
 									</select>
 								</div>
 								<div id="pob-row" class="send-row">
-									<label class="send-label"><%=LanguageHelper.GetLanguage("placeOfBusiness")%></label>
+									<label class="send-label"><%=LanguageHelper.GetLanguage("site")%></label>
 									<input type="text" id="pobTxt" name="pobTxt" readonly="readonly" />
 								</div>
 								<div id="dept-row" class="send-row">

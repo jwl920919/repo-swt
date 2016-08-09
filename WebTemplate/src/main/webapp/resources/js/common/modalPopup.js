@@ -9,7 +9,7 @@ function getWindowPoint() {
 function modalShow(id) {
 	try {
 		$("#" + id).css("display","block");
-		$("#layDiv").css("visibility","visible");
+		$("#modalbackDiv").css("visibility","visible");
 	} catch (e) {
 		console.log(e.message);
 	}
@@ -39,5 +39,5 @@ function modalShow(id) {
 }
 function modalClose(id) {
 	$("#" + id).css("display","none");
-	$("#layDiv").css("visibility","hidden");
+	$("#modalbackDiv").css("visibility","hidden");
 }

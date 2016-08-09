@@ -4,6 +4,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.util.Arrays;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,6 +95,7 @@ public class SyslogServer extends Thread {
 			while (this.getStopFlag() == false) {
 				
 				// Initialize
+				Arrays.fill(buff, (byte)0);
 				receivePacket.setLength(buff.length);
 				
 				// Receive
@@ -131,8 +133,6 @@ public class SyslogServer extends Thread {
 					syslog.setSeverity(nSeverity);
 					syslog.setFacility(nFacility);
 					syslog.setRecvTime(System.currentTimeMillis());
-					
-
 					
 					//System.out.println(String.format("[%s, %s] - %s", syslog.getHost(), TimeUtils.convertToStringTime(syslog.getRecvTime()), syslog.getData()));
 					//LogUtils.WriteLog(_logger, Level.DEBUG , String.format("[%s, %s] - %s", syslog.getHost(), TimeUtils.convertToStringTime(syslog.getRecvTime()), syslog.getData()));

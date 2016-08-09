@@ -116,7 +116,6 @@
 	"second":										"초",
 	"am":											"오전",
 	"pm":											"오후",
-	"placeOfBusiness":								"사업장",
 	"add":											"추가",
 	"modify":										"수정",
 	"delete":										"삭제",

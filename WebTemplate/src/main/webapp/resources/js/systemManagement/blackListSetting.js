@@ -1,12 +1,8 @@
 var table;
 var popupClass;
 var initParam;
-$(document).ready(function() {
-	
-	
-	//$("#layDiv").css("visibility","hidden");
+$(document).ready(function() {	
 
-	//modalShow("modal");
 	modalClose("modal");
 	
 //	//세그먼트 Selectbox change 이벤트
@@ -196,17 +192,26 @@ fnDelete = function(obj){
 //  description
 }
 
+//추가,수정 모달 팝업 Show 이벤트 핸들러
 fnShowEvent = function(){
 	try {
 		if (popupClass == "add") {
 			//추가 팝업 초기화
+			$("#selectSite").val(siteid);
+			console.log("radio[name=rEnable] : " + $(":input:radio[name=rEnable]:checked").val());
+			$('input:radio[name=rEnable]:input[value='+ true +']').attr("checked", true);
+			$("#inputFilter").val("");
+			$("#selectTime").val(60);
+			$("#txtareaDesc").val("");
 			
 			$('#btnSave').unbind( "click" );		
 			$('#btnSave').click(function() {
 				//추가 기능 수행
-	
-				modalClose("modal");
-	
+				
+				if (checkVaridation()) {
+					
+					modalClose("modal");	
+				}
 			});	
 		}
 		else if (popupClass == "modify") {
@@ -236,6 +241,7 @@ fnShowEvent = function(){
 	}
 }
 
+//사업장 정보 조회
 fnSiteInfoSearch = function(){
 	var tag = "";
     $.ajax({
@@ -263,4 +269,30 @@ fnSiteInfoSearch = function(){
         complete: function(data) {
         }
     });
+}
+
+//저장 전 항목 체크
+checkVaridation = function(){
+	var ret = true;
+	if ($("#selectSite").val() == "") {
+		systemAlertNotify("divAlertArea", "alert-warning", getLanguage("warning"), getLanguage("selectsite"));
+		ret = false;
+	}
+	else if ($(":input:radio[name=rEnable]:checked").val() == "") {
+		systemAlertNotify("divAlertArea", "alert-warning", getLanguage("warning"), getLanguage("selectwhetherornottouse"));
+		ret = false;
+	}
+	else if ($("#inputFilter").val() == "") {
+		systemAlertNotify("divAlertArea", "alert-warning", getLanguage("warning"), getLanguage("enterthefiltername"));
+		ret = false;
+	}
+	else if ($("#selectTime").val() == "") {
+		systemAlertNotify("divAlertArea", "alert-warning", getLanguage("warning"), getLanguage("selectthefiltertime"));
+		ret = false;
+	}
+	else if ($("#txtareaDesc").val() == "") {
+		systemAlertNotify("divAlertArea", "alert-warning", getLanguage("warning"), getLanguage("enterdescriptionoftheregisterfilter"));
+		ret = false;
+	}
+	return ret;
 }
