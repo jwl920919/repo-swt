@@ -27,7 +27,7 @@ import com.shinwootns.data.status.DnsCounter;
 import com.shinwootns.ipm.collector.SpringBeanProvider;
 import com.shinwootns.ipm.collector.data.SharedData;
 import com.shinwootns.ipm.collector.data.mapper.ClientMapper;
-import com.shinwootns.ipm.collector.data.mapper.DataMapper;
+import com.shinwootns.ipm.collector.data.mapper.DhcpMapper;
 import com.shinwootns.ipm.collector.service.cluster.ClusterManager;
 import com.shinwootns.ipm.collector.service.infoblox.DhcpHandler;
 import com.shinwootns.ipm.collector.service.redis.RedisHandler;
@@ -172,18 +172,18 @@ public class MasterJobWoker implements Runnable {
 		LinkedList<DhcpNetwork> listNetwork = handler.getDhcpNetwork(SharedData.getInstance().getSiteID());
 		
 		if (listNetwork != null) {
-			DataMapper dataMapper = SpringBeanProvider.getInstance().getDataMapper();
-			if (dataMapper == null)
+			DhcpMapper dhcpMapper = SpringBeanProvider.getInstance().getDhcpMapper();
+			if (dhcpMapper == null)
 				return null;
 			
 			try
 			{
 				for(DhcpNetwork network : listNetwork) {
 					if (network != null && network.getNetwork().isEmpty() == false) {
-						int affected = dataMapper.updateDhcpNetwork(network);
+						int affected = dhcpMapper.updateDhcpNetwork(network);
 						
 						if (affected == 0)
-							affected = dataMapper.insertDhcpNetwork(network);
+							affected = dhcpMapper.insertDhcpNetwork(network);
 					}
 				}
 				
@@ -205,8 +205,8 @@ public class MasterJobWoker implements Runnable {
 		LinkedList<DhcpRange> listRange = handler.getDhcpRange(SharedData.getInstance().getSiteID());
 		
 		if (listRange != null) {
-			DataMapper dataMapper = SpringBeanProvider.getInstance().getDataMapper();
-			if (dataMapper == null)
+			DhcpMapper dhcpMapper = SpringBeanProvider.getInstance().getDhcpMapper();
+			if (dhcpMapper == null)
 				return;
 				
 			try
@@ -214,10 +214,10 @@ public class MasterJobWoker implements Runnable {
 				for(DhcpRange range : listRange) {
 					if (range != null && range.getNetwork().isEmpty() == false) {
 						
-						int affected = dataMapper.updateDhcpRange(range);
+						int affected = dhcpMapper.updateDhcpRange(range);
 						
 						if (affected == 0)
-							affected = dataMapper.insertDhcpRange(range);
+							affected = dhcpMapper.insertDhcpRange(range);
 					}
 				}
 				
@@ -237,8 +237,8 @@ public class MasterJobWoker implements Runnable {
 		LinkedList<DhcpMacFilter> listFilter = handler.getDhcpMacFilter(SharedData.getInstance().getSiteID());
 		
 		if (listFilter != null) {
-			DataMapper dataMapper = SpringBeanProvider.getInstance().getDataMapper();
-			if (dataMapper == null)
+			DhcpMapper dhcpMapper = SpringBeanProvider.getInstance().getDhcpMapper();
+			if (dhcpMapper == null)
 				return;
 			
 			try
@@ -247,10 +247,10 @@ public class MasterJobWoker implements Runnable {
 
 					if (filter != null && filter.getFilterName().isEmpty() == false) {
 					
-						int affected = dataMapper.updateDhcpFilter(filter);
+						int affected = dhcpMapper.updateDhcpFilter(filter);
 						
 						if (affected == 0)
-							affected = dataMapper.insertDhcpFilter(filter);
+							affected = dhcpMapper.insertDhcpFilter(filter);
 					}
 				}
 				
@@ -270,8 +270,8 @@ public class MasterJobWoker implements Runnable {
 		LinkedList<DhcpFixedIp> listFilter = handler.getDhcpFixedIP(SharedData.getInstance().getSiteID());
 		
 		if (listFilter != null) {
-			DataMapper dataMapper = SpringBeanProvider.getInstance().getDataMapper();
-			if (dataMapper == null)
+			DhcpMapper dhcpMapper = SpringBeanProvider.getInstance().getDhcpMapper();
+			if (dhcpMapper == null)
 				return;
 				
 			try
@@ -279,10 +279,10 @@ public class MasterJobWoker implements Runnable {
 				for(DhcpFixedIp fixedIp : listFilter) {
 				
 					if (fixedIp != null && fixedIp.getIpaddr().isEmpty() == false) {
-						int affected = dataMapper.updateDhcpFixedIp(fixedIp);
+						int affected = dhcpMapper.updateDhcpFixedIp(fixedIp);
 						
 						if (affected == 0)
-							affected = dataMapper.insertDhcpFixedIp(fixedIp);
+							affected = dhcpMapper.insertDhcpFixedIp(fixedIp);
 					}
 				}
 				
@@ -299,15 +299,14 @@ public class MasterJobWoker implements Runnable {
 	//region [FUNC] Collect IP Status
 	private void collectDhcpIpSatus(DhcpHandler handler, DhcpNetwork network) {
 		
-		DataMapper dataMapper = SpringBeanProvider.getInstance().getDataMapper();
-		if (dataMapper == null)
+		DhcpMapper dhcpMapper = SpringBeanProvider.getInstance().getDhcpMapper();
+		if (dhcpMapper == null)
 			return;
+
+		HashSet<String> setPrevIPAddr = new HashSet<String>();
 		
 		// Previous IP Status
-		List<DhcpIpStatus> listPrevData = dataMapper.selectDhcpIpStatusByNetwork(SharedData.getInstance().getSiteID(), network.getNetwork());
-		
-		HashSet<String> setPrevIPAddr = new HashSet<String>(); 
-
+		List<DhcpIpStatus> listPrevData = dhcpMapper.selectDhcpIpStatusByNetwork(SharedData.getInstance().getSiteID(), network.getNetwork());
 		for(DhcpIpStatus prevIp : listPrevData) {
 			if (setPrevIPAddr.contains(prevIp.getIpaddr()) == false )
 				setPrevIPAddr.add(prevIp.getIpaddr());
@@ -339,17 +338,17 @@ public class MasterJobWoker implements Runnable {
 					{
 						// Delete when previous data exist
 						if (setPrevIPAddr.contains(ipStatus.getIpaddr())) {
-							dataMapper.deleteDhcpIpStatus(ipStatus.getSiteId(), ipStatus.getIpaddr());
+							dhcpMapper.deleteDhcpIpStatus(ipStatus.getSiteId(), ipStatus.getIpaddr());
 						}
 					}
 					else {
 						// Update or Insert
 						if (ipStatus.getIpaddr().isEmpty() == false) {
 							
-							int affected = dataMapper.updateDhcpIpStatus(ipStatus);
+							int affected = dhcpMapper.updateDhcpIpStatus(ipStatus);
 							
 							if (affected == 0)
-								affected = dataMapper.insertDhcpIpStatus(ipStatus);
+								affected = dhcpMapper.insertDhcpIpStatus(ipStatus);
 						}
 						
 						// Update Client Info

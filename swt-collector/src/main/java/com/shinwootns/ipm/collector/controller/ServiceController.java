@@ -24,7 +24,8 @@ import com.shinwootns.ipm.collector.SpringBeanProvider;
 import com.shinwootns.ipm.collector.WorkerManager;
 import com.shinwootns.ipm.collector.config.ApplicationProperty;
 import com.shinwootns.ipm.collector.data.SharedData;
-import com.shinwootns.ipm.collector.data.mapper.DataMapper;
+import com.shinwootns.ipm.collector.data.mapper.DhcpMapper;
+import com.shinwootns.ipm.collector.data.mapper.DeviceMapper;
 import com.shinwootns.ipm.collector.service.amqp.RabbitMQHandler;
 import com.shinwootns.ipm.collector.service.redis.RedisHandler;
 import com.shinwootns.ipm.collector.service.syslog.SyslogReceiveHandlerImpl;
@@ -39,9 +40,6 @@ public class ServiceController {
 	
 	@Autowired
 	private ApplicationContext context;
-	
-	@Autowired
-	private DataMapper dataMapper;
 	
 	@PostConstruct
 	public void startService() {
@@ -106,16 +104,17 @@ public class ServiceController {
 	
 	public boolean LoadConfig() {
 		
-		DataMapper dataMapper = SpringBeanProvider.getInstance().getDataMapper();
-		if (dataMapper == null) {
-			_logger.error("LoadConfig.. failed (dataMapper is null");
+		DhcpMapper dataMapper = SpringBeanProvider.getInstance().getDhcpMapper();
+		DeviceMapper deviceMapper = SpringBeanProvider.getInstance().getDeviceMapper();
+		if (dataMapper == null || deviceMapper == null) {
+			_logger.error("LoadConfig.. failed. (Mapper is null)");
 			return false;
 		}
 		
 		try
 		{
 			// Load Site Info
-			SiteInfo siteInfo = dataMapper.selectSiteInfoByCode(appProperty.siteCode);
+			SiteInfo siteInfo = deviceMapper.selectSiteInfoByCode(appProperty.siteCode);
 			if (siteInfo == null) {
 				_logger.error( (new StringBuilder())
 						.append("Failed get site info, SiteCode=").append(appProperty.siteCode)
@@ -133,7 +132,7 @@ public class ServiceController {
 			SharedData.getInstance().setsiteInfo( siteInfo );
 			
 			// Load DHCP
-			DeviceDhcp dhcpInfo = dataMapper.selectDeviceDhcp(siteInfo.getSiteId());
+			DeviceDhcp dhcpInfo = deviceMapper.selectDeviceDhcp(siteInfo.getSiteId());
 			if (dhcpInfo != null) {
 				
 				_logger.info( (new StringBuilder())
@@ -151,7 +150,7 @@ public class ServiceController {
 			}
 			
 			// Load Dhcp IP
-			List<DeviceIp> listDeviceIp = dataMapper.selectDeviceIP(siteInfo.getSiteId());
+			List<DeviceIp> listDeviceIp = deviceMapper.selectDeviceIP(siteInfo.getSiteId());
 			SharedData.getInstance().setDeviceId(listDeviceIp);
 
 			// Get System Info
@@ -203,7 +202,7 @@ public class ServiceController {
 				insight.setClusterIndex(appProperty.clusterIndex);
 				
 				// Update
-				int affected = dataMapper.updateInsight(insight);
+				int affected = deviceMapper.updateInsight(insight);
 				if ( affected > 0) {
 
 					// Update OK
@@ -218,7 +217,7 @@ public class ServiceController {
 				}
 				else {
 					// Insert New
-					affected = dataMapper.insertInsight(insight);
+					affected = deviceMapper.insertInsight(insight);
 					
 					if ( affected > 0) {
 						// Insert OK

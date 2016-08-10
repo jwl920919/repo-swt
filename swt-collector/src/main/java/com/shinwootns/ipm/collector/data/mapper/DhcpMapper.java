@@ -17,15 +17,8 @@ import com.shinwootns.data.entity.DhcpRange;
 import com.shinwootns.data.entity.SiteInfo;
 
 @Mapper
-public interface DataMapper {
+public interface DhcpMapper {
 
-	// Site Info
-	SiteInfo selectSiteInfoByCode(@Param("site_code")String site_code);
-	
-	// Device DHCP
-	DeviceDhcp selectDeviceDhcp(@Param("site_id")int site_id);
-	List<DeviceIp>selectDeviceIP(@Param("site_id")int site_id);
-	
 	// DHCP Network
 	List<DhcpNetwork> selectDhcpNetworkBySiteId(@Param("site_id")int site_id);
 	int insertDhcpNetwork(DhcpNetwork network);
@@ -55,10 +48,4 @@ public interface DataMapper {
 	int insertDhcpIpStatus(DhcpIpStatus ip);
 	int updateDhcpIpStatus(DhcpIpStatus ip);
 	int deleteDhcpIpStatus(@Param("site_id")int site_id, @Param("ipaddr")String ipaddr);
-	
-	// Insight
-	DeviceInsight selectInsightByHost(@Param("host")String host);
-	int insertInsight(DeviceInsight insight);
-	int updateInsight(DeviceInsight insight);
-	void updateInsightMaster(@Param("site_id")int site_id, @Param("host")String host);
 }

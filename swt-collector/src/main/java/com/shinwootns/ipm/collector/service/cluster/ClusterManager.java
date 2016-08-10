@@ -21,7 +21,8 @@ import com.shinwootns.ipm.collector.SpringBeanProvider;
 import com.shinwootns.ipm.collector.WorkerManager;
 import com.shinwootns.ipm.collector.config.ApplicationProperty;
 import com.shinwootns.ipm.collector.data.SharedData;
-import com.shinwootns.ipm.collector.data.mapper.DataMapper;
+import com.shinwootns.ipm.collector.data.mapper.DhcpMapper;
+import com.shinwootns.ipm.collector.data.mapper.DeviceMapper;
 import com.shinwootns.ipm.collector.service.redis.RedisHandler;
 
 import redis.clients.jedis.Jedis;
@@ -308,9 +309,9 @@ public class ClusterManager {
 			if (this.isMasterNode) {
 				
 				// Update To DB
-				DataMapper dataMapper = SpringBeanProvider.getInstance().getDataMapper();
-				if (dataMapper != null && SharedData.getInstance().getSiteID() >= 0) {
-					dataMapper.updateInsightMaster(SharedData.getInstance().getSiteID(), SystemUtils.getHostName());
+				DeviceMapper deviceMapper = SpringBeanProvider.getInstance().getDeviceMapper();
+				if (deviceMapper != null && SharedData.getInstance().getSiteID() >= 0) {
+					deviceMapper.updateInsightMaster(SharedData.getInstance().getSiteID(), SystemUtils.getHostName());
 				}
 				
 				// Start MasterJobWorker

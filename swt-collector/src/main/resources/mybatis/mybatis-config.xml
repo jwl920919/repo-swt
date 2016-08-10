@@ -12,7 +12,8 @@
     
     <mappers>
     	<mapper resource="mybatis/mapper/AuthMapper.xml"/>
-    	<mapper resource="mybatis/mapper/DataMapper.xml"/>
+    	<mapper resource="mybatis/mapper/DeviceMapper.xml"/>
+    	<mapper resource="mybatis/mapper/DhcpMapper.xml"/>
     	<mapper resource="mybatis/mapper/ClientMapper.xml"/>
     </mappers>
  

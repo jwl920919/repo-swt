@@ -25,7 +25,7 @@ public class MainApplication implements CommandLineRunner {
 			
 			_logger.error(ex.getMessage(), ex);
 			
-			//WorkerManager.getInstance().TerminateApplication();
+			WorkerManager.getInstance().TerminateApplication();
 		}
 	}
 	

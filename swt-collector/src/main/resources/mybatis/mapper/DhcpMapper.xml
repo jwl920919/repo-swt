@@ -1,14 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
         
-<mapper namespace="com.shinwootns.ipm.collector.data.mapper.DataMapper">
+<mapper namespace="com.shinwootns.ipm.collector.data.mapper.DeviceMapper">
 
-	<!-- ############################ Site ############################ -->
-    <select id="selectSiteInfoByCode" resultType="com.shinwootns.data.entity.SiteInfo">
-        SELECT * FROM site_info WHERE site_code=#{site_code}
-    </select>
-    
-    
     <!-- ############################ DHCP ############################ -->
     <select id="selectDeviceDhcp" resultType="com.shinwootns.data.entity.DeviceDhcp">
         SELECT * FROM device_dhcp WHERE site_id=#{site_id} ORDER BY device_id LIMIT 1
@@ -201,37 +195,5 @@
 			WHERE site_id=#{site_id} AND ipaddr=#{ipaddr}
 		]]>
 	</delete>
-    
-    <!-- ############################ Insight ############################ -->
-    
-    <select id="selectInsightByHost" resultType="com.shinwootns.data.entity.DeviceInsight">
-		SELECT * FROM device_insight WHERE host = #{host}
-	</select>
-    
-    <insert id="insertInsight" parameterType="com.shinwootns.data.entity.DeviceInsight">
-		<![CDATA[
-			INSERT INTO device_insight (site_id, host, ipaddr, port, version, cluster_mode, cluster_index, insert_time, update_time)
-			VALUES ( #{site_id}, #{host}, #{ipaddr}, #{port}, #{version}, #{cluster_mode}, #{cluster_index}, now(), now() ) 
-		]]>
-	</insert>
-	
-	<update id="updateInsight" parameterType="com.shinwootns.data.entity.DeviceInsight">
-		UPDATE device_insight
-		SET site_id=#{site_id}, host=#{host}
-			<if test="ipaddr != null">
-			, ipaddr=#{ipaddr}
-			</if>
-			, port=#{port}, version=#{version}
-			, cluster_mode=#{cluster_mode}, cluster_index=#{cluster_index}
-			, update_time=now()
-		WHERE host=#{host}
-	</update>
-	
-	<update id="updateInsightMaster" parameterType="com.shinwootns.data.entity.DeviceInsight">
-		<![CDATA[
-			UPDATE device_insight SET is_master=true WHERE host = #{host} AND site_id = #{site_id};
-			UPDATE device_insight SET is_master=false WHERE host != #{host} AND site_id = #{site_id};
-		]]>
-	</update>
     
 </mapper>

@@ -8,7 +8,8 @@ import org.springframework.stereotype.Component;
 import com.shinwootns.ipm.collector.config.ApplicationProperty;
 import com.shinwootns.ipm.collector.data.mapper.AuthMapper;
 import com.shinwootns.ipm.collector.data.mapper.ClientMapper;
-import com.shinwootns.ipm.collector.data.mapper.DataMapper;
+import com.shinwootns.ipm.collector.data.mapper.DhcpMapper;
+import com.shinwootns.ipm.collector.data.mapper.DeviceMapper;
 
 @Component
 public class SpringBeanProvider {
@@ -58,24 +59,24 @@ public class SpringBeanProvider {
     }
     //endregion
     
-    //region [FUNC] getDataMapper
-    public DataMapper getDataMapper() {
+    //region [FUNC] getDhcpMapper
+    public DhcpMapper getDhcpMapper() {
     	
     	if (_context == null)
     		return null;
     	
-    	DataMapper dataMapper = null;
+    	DhcpMapper mapper = null;
     	
     	try
     	{
-    		dataMapper = _context.getBean("dataMapper", DataMapper.class);
+    		mapper = _context.getBean("dhcpMapper", DhcpMapper.class);
     	}
     	catch(Exception ex) {
     		_logger.error("SpringBeanProvider.getDhcpMapper().... failed");
     		_logger.error(ex.getMessage(), ex);
     	}
     	
-    	return dataMapper;
+    	return mapper;
     }
     //endregion
     
@@ -85,18 +86,18 @@ public class SpringBeanProvider {
     	if (_context == null)
     		return null;
     	
-    	ClientMapper clientMapper = null;
+    	ClientMapper mapper = null;
     	
     	try
     	{
-    		clientMapper = _context.getBean("clientMapper", ClientMapper.class);
+    		mapper = _context.getBean("clientMapper", ClientMapper.class);
     	}
     	catch(Exception ex) {
     		_logger.error("SpringBeanProvider.getClientMapper().... failed");
     		_logger.error(ex.getMessage(), ex);
     	}
     	
-    	return clientMapper;
+    	return mapper;
     }
     //endregion
     
@@ -106,20 +107,40 @@ public class SpringBeanProvider {
     	if (_context == null)
     		return null;
     	
-    	AuthMapper authMapper = null;
+    	AuthMapper mapper = null;
     	
     	try
     	{
-    		authMapper = _context.getBean("authMapper", AuthMapper.class);
+    		mapper = _context.getBean("authMapper", AuthMapper.class);
     	}
     	catch(Exception ex) {
     		_logger.error("SpringBeanProvider.getAuthMapper().... failed");
     		_logger.error(ex.getMessage(), ex);
     	}
     	
-    	return authMapper;
+    	return mapper;
     }
     //endregion
 	
+	//region [FUNC] getDeviceMapper
+	public DeviceMapper getDeviceMapper() {
+    	
+    	if (_context == null)
+    		return null;
+    	
+    	DeviceMapper mapper = null;
+    	
+    	try
+    	{
+    		mapper = _context.getBean("deviceMapper", DeviceMapper.class);
+    	}
+    	catch(Exception ex) {
+    		_logger.error("SpringBeanProvider.getDeviceMapper().... failed");
+    		_logger.error(ex.getMessage(), ex);
+    	}
+    	
+    	return mapper;
+    }
+	//endregion
 	
 }
