@@ -739,6 +739,33 @@
 				model=#{model},is_permit=#{is_permit}, "desc"=#{desc} 
 		WHERE 	access_policy_id = #{access_policy_id};
 	</update>
+	
+	<!-- Query Type : Insert(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-08-10 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : policyManagement.jsp policy insert -->
+	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
+	<insert id="insert_ACCESS_POLICY_INFORM_ONE_RECORD"
+		parameterType="hashmap">
+		INSERT INTO "public"."access_policy" 
+		("vendor", "model", "os", "device_type", "hostname", "desc", "is_permit", "site_id") 
+		VALUES 
+		(#{vendor}, #{model}, #{os}, #{device_type}, #{hostname}, #{desc}, #{is_permit}, #{site_id});
+	</insert>
+	
+	<!-- Query Type : Delete(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-08-10 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : policyManagement.jsp policy delete -->
+	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
+	<delete id="delete_ACCESS_POLICY_INFORM_RECORDS" parameterType="hashmap">
+		DELETE FROM "public"."access_policy" 
+		WHERE "access_policy_id" 
+		IN (
+			<foreach collection="list" item="item" separator=" , ">#{item}
+			</foreach>
+		);
+	</delete>
 </mapper>
 
 

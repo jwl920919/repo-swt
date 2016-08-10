@@ -217,65 +217,72 @@ function modifyPopupSetting() {
     $("#site_eq").val(site_id);
     $("#desc").val(tr.eq(8).text());
     $("#policy").val(tr.eq(15).text());
-    changeSiteNames(site_id);
-    changeVendorNames();
-    changeModelNames(vendor, function() {
-        if (model_like) {
-            $("#model-like").val(model);
-        } else {
-            var model_length = $("#model_eq").length;
-            if (model_length > 1) {
-                $("#select2-model_eq-container").text(model);
-            } else if (model_length == 1) {
-                $("#select2-model_eq-container").text(
-                        $("#model_eq option:selected").val())
-            }
-        }
+    changeSiteNames(site_id,function() {
+        changeVendorNames(function() {
+            changeModelNames(vendor, function() {
+                if (model_like) {
+                    $("#model-like").val(model);
+                } else {
+                    var model_length = $("#model_eq").length;
+                    if (model_length > 1) {
+                        $("#select2-model_eq-container").text(model);
+                    } else if (model_length == 1) {
+                        $("#select2-model_eq-container").text(
+                                $("#model_eq option:selected").val())
+                    }
+                }
+                changeDeviceType(function() {
+                    if (device_type_like) {
+                        $("#device-type-like").val(device_type);
+                    } else {
+                        var device_type_length = $("#device-type_eq").length;
+                        if (device_type_length > 1) {
+                            $("#select2-device-type_eq-container").text(device_type);
+                        } else if (device_type_length == 1) {
+                            $("#select2-device-type_eq-container").text(
+                                    $("#device-type_eq option:selected").val())
+                        }
+                    }
+                    changeOs(function() {
+                        if (os_like) {
+                            $("#os-like").val(os);
+                        } else {
+                            var os_length = $("#os_eq").length;
+                            if (os_length > 1) {
+                                $("#select2-os_eq-container").text(os);
+                            } else if (os_length == 1) {
+                                $("#select2-os_eq-container").text(
+                                        $("#os_eq option:selected").val())
+                            }
+                        }
+                        changeHostname(function() {
+                            if (hostname_like) {
+                                $("#hostname-like").val(hostname);
+                            } else {
+                                var hostname_length = $("#hostname_eq").length;
+                                if (hostname_length > 1) {
+                                    $("#select2-hostname_eq-container").text(hostname);
+                                } else if (hostname_length == 1) {
+                                    $("#select2-hostname_eq-container").text(
+                                            $("#hostname_eq option:selected").val())
+                                }
+                            }
+                        });
+                    });
+                });
+            });
+        });
     });
-    changeDeviceType(function() {
-        if (device_type_like) {
-            $("#device-type-like").val(device_type);
-        } else {
-            var device_type_length = $("#device-type_eq").length;
-            if (device_type_length > 1) {
-                $("#select2-device-type_eq-container").text(device_type);
-            } else if (device_type_length == 1) {
-                $("#select2-device-type_eq-container").text(
-                        $("#device-type_eq option:selected").val())
-            }
-        }
-    });
-    changeOs(function() {
-        if (os_like) {
-            $("#os-like").val(os);
-        } else {
-            var os_length = $("#os_eq").length;
-            if (os_length > 1) {
-                $("#select2-os_eq-container").text(os);
-            } else if (os_length == 1) {
-                $("#select2-os_eq-container").text(
-                        $("#os_eq option:selected").val())
-            }
-        }
-    });
-    changeHostname(function() {
-        if (hostname_like) {
-            $("#hostname-like").val(hostname);
-        } else {
-            var hostname_length = $("#hostname_eq").length;
-            if (hostname_length > 1) {
-                $("#select2-hostname_eq-container").text(hostname);
-            } else if (hostname_length == 1) {
-                $("#select2-hostname_eq-container").text(
-                        $("#hostname_eq option:selected").val())
-            }
-        }
-    });
+    
+    
+    
+    
+    
     $("#select2-site_eq-container").text(site_name);
     $("#select2-vendor_eq-container").text(vendor);
 
     popupClass = "modify";
-    modalShow("modify-modal",function() {
+    modalShow("modify-modal", function() {
         $('#modify-body').html('');
     });
 }
@@ -297,10 +304,18 @@ function changeSiteNames(index, callback) {
                                         + jsonObj.data[i].site_name
                                         + '</option>');
                     } else {
-                        $('#site_eq').append(
-                                '<option value=' + jsonObj.data[i].site_id
-                                        + '>' + jsonObj.data[i].site_name
-                                        + '</option>');
+                        if (index == '' && i == 0) {
+                            $('#site_eq').append(
+                                    '<option selected="selected" value='
+                                            + jsonObj.data[i].site_id + '>'
+                                            + jsonObj.data[i].site_name
+                                            + '</option>');
+                        } else {
+                            $('#site_eq').append(
+                                    '<option value=' + jsonObj.data[i].site_id
+                                            + '>' + jsonObj.data[i].site_name
+                                            + '</option>');
+                        }
                     }
                 }
                 if (typeof callback === 'function') {
@@ -327,9 +342,16 @@ function changeVendorNames(callback) {
                                                 + jsonObj.data[i].vendor
                                                 + '</option>');
                             } else {
-                                $('#vendor_eq').append(
-                                        '<option>' + jsonObj.data[i].vendor
-                                                + '</option>');
+                                if (i == 0 && vendor == '') {
+                                    $('#vendor_eq').append(
+                                            '<option selected="selected">'
+                                                    + jsonObj.data[i].vendor
+                                                    + '</option>');
+                                } else {
+                                    $('#vendor_eq').append(
+                                            '<option>' + jsonObj.data[i].vendor
+                                                    + '</option>');
+                                }
                             }
                         }
                         if (typeof callback === 'function') {
@@ -358,9 +380,16 @@ function changeModelNames(v, callback) {
                                 '<option selected="selected">'
                                         + jsonObj.data[i].model + '</option>');
                     } else {
-                        $('#model_eq').append(
-                                '<option>' + jsonObj.data[i].model
-                                        + '</option>');
+                        if (i == 0 && model == '') {
+                            $('#model_eq').append(
+                                    '<option selected="selected">'
+                                            + jsonObj.data[i].model
+                                            + '</option>');
+                        } else {
+                            $('#model_eq').append(
+                                    '<option>' + jsonObj.data[i].model
+                                            + '</option>');
+                        }
                     }
                 }
                 if (typeof callback === 'function') {
@@ -386,9 +415,16 @@ function changeDeviceType(callback) {
                                         + jsonObj.data[i].device_type
                                         + '</option>');
                     } else {
-                        $('#device-type_eq').append(
-                                '<option>' + jsonObj.data[i].device_type
-                                        + '</option>');
+                        if (i == 0 && device_type == '') {
+                            $('#device-type_eq').append(
+                                    '<option selected="selected">'
+                                            + jsonObj.data[i].device_type
+                                            + '</option>');
+                        } else {
+                            $('#device-type_eq').append(
+                                    '<option>' + jsonObj.data[i].device_type
+                                            + '</option>');
+                        }
                     }
                 }
                 if (typeof callback === 'function') {
@@ -399,29 +435,40 @@ function changeDeviceType(callback) {
     });
 }
 function changeOs(callback) {
-    $.ajax({
-        url : "policyManagement/getOs",
-        type : "POST",
-        success : function(data) {
-            var jsonObj = eval("(" + data + ')');
-            if (jsonObj.result == true) {
-                $('#os_eq').find('option').remove().end();
-                for (var i = 0; i < jsonObj.data.length; i++) {
-                    if (os == jsonObj.data[i].os || jsonObj.data.length == 1) {
-                        $('#os_eq').append(
-                                '<option selected="selected">'
-                                        + jsonObj.data[i].os + '</option>');
-                    } else {
-                        $('#os_eq').append(
-                                '<option>' + jsonObj.data[i].os + '</option>');
+    $
+            .ajax({
+                url : "policyManagement/getOs",
+                type : "POST",
+                success : function(data) {
+                    var jsonObj = eval("(" + data + ')');
+                    if (jsonObj.result == true) {
+                        $('#os_eq').find('option').remove().end();
+                        for (var i = 0; i < jsonObj.data.length; i++) {
+                            if (os == jsonObj.data[i].os
+                                    || jsonObj.data.length == 1) {
+                                $('#os_eq').append(
+                                        '<option selected="selected">'
+                                                + jsonObj.data[i].os
+                                                + '</option>');
+                            } else {
+                                if (i == 0 && os == '') {
+                                    $('#os_eq').append(
+                                            '<option selected="selected">'
+                                                    + jsonObj.data[i].os
+                                                    + '</option>');
+                                } else {
+                                    $('#os_eq').append(
+                                            '<option>' + jsonObj.data[i].os
+                                                    + '</option>');
+                                }
+                            }
+                        }
+                        if (typeof callback === 'function') {
+                            callback();
+                        }
                     }
                 }
-                if (typeof callback === 'function') {
-                    callback();
-                }
-            }
-        }
-    });
+            });
 }
 function changeHostname(callback) {
     $.ajax({
@@ -439,9 +486,16 @@ function changeHostname(callback) {
                                         + jsonObj.data[i].hostname
                                         + '</option>');
                     } else {
-                        $('#hostname_eq').append(
-                                '<option>' + jsonObj.data[i].hostname
-                                        + '</option>');
+                        if (i == 0 && hostname == '') {
+                            $('#hostname_eq').append(
+                                    '<option selected="selected">'
+                                            + jsonObj.data[i].hostname
+                                            + '</option>');
+                        } else {
+                            $('#hostname_eq').append(
+                                    '<option>' + jsonObj.data[i].hostname
+                                            + '</option>');
+                        }
                     }
                 }
                 if (typeof callback === 'function') {
@@ -612,15 +666,61 @@ $('#modify-save-btn').click(function() {
         }
     });
 });
-$('#add-button').click(function() {
-   createAddPopup(function() {
-       popupClass = "add";
-       //closeCallback 사용
-       modalShow("add-modal",function() {
-           $('#add-body').html('');
-       });
-   });
-});
+$('#add-button').click(
+        function() {
+            createAddPopup(function() {
+                popupClass = "add";
+                $("#priority").val(100);
+                $("#desc").val('');
+                $("#policy").val('Permit');
+                site_id = '';
+                site_name = '';
+                vendor = '';
+                device_type = '';
+                os = '';
+                hostname = '';
+                changeSiteNames('', function() {
+                    if ($("#site_eq").length == 1) {
+                        $("#select2-site_eq-container").text(
+                                $("#site_eq option:selected").text())
+                    }
+                    changeVendorNames(function() {
+                        if ($("#vendor_eq").length == 1) {
+                            $("#select2-vendor_eq-container").text(
+                                    $("#vendor_eq option:selected").val())
+                            changeModelNames($("#select2-vendor_eq-container")
+                                    .text(), function() {
+                                if ($("#model_eq").length == 1) {
+                                    $("#select2-model_eq-container").text(
+                                            $("#model_eq option:selected").val())
+                                }
+                                changeDeviceType(function() {
+                                    if ($("#device-type_eq").length == 1) {
+                                        $("#select2-device-type_eq-container").text(
+                                                $("#device-type_eq option:selected").val())
+                                    }
+                                    changeOs(function() {
+                                        if ($("#os_eq").length == 1) {
+                                            $("#select2-os_eq-container").text(
+                                                    $("#os_eq option:selected").val())
+                                        }
+                                        changeHostname(function() {
+                                            if ($("#hostname_eq").length == 1) {
+                                                $("#select2-hostname_eq-container").text(
+                                                        $("#hostname_eq option:selected").val())
+                                            }
+                                            modalShow("add-modal", function() {
+                                                $('#add-body').html('');
+                                            });
+                                        });
+                                    });
+                                });
+                            });
+                        }
+                    });
+                });
+            });
+        });
 
 function createAddPopup(callback) {
     var html = '<div class="input-group modal-input-group"><span class="input-group-addon modal-content-header">우선순위';
@@ -658,7 +758,7 @@ function createAddPopup(callback) {
     });
 }
 
-//init default select to select2 object
+// init default select to select2 object
 function selectInit(callback) {
     $("#site_eq").select2();
     $("#vendor_eq").select2();
@@ -686,7 +786,6 @@ function prependCodeToParent(obj, code) {
     var parent = $(obj).parent();
     parent.prepend(code);
 }
-
 
 // 체크박스 전체선택
 $('#accessPolicyTable_checkbox_controller').click(function() {
