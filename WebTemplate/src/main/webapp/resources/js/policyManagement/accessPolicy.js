@@ -662,9 +662,44 @@ $('#modify-save-btn').click(function() {
             if (jsonObj.result == true) {
                 accessPolicyTable.ajax.reload();
             }
-            modalClose("modify-modal");
+            modalClose("modify-modal",function() {
+                $('#modify-body').html('');
+            });
         }
     });
+});
+$('#add-save-btn').click(function() {
+    var jObj = new Object();
+    jObj.priority = $('#priority').val();
+    jObj.site_id = $('#site_eq').val();
+    jObj.vendor = $('#vendor_eq').val();
+    if (model_like) {
+        jObj.model = $('#model-like').val();
+    } else {
+        jObj.model = $('#select2-model_eq-container').text();
+    }
+    if (device_type_like) {
+        jObj.device_type = $('#device-type-like').val();
+    } else {
+        jObj.device_type = $('#select2-device-type_eq-container').text();
+    }
+    if (os_like) {
+        jObj.os = $('#os-like').val();
+    } else {
+        jObj.os = $('#select2-os_eq-container').text();
+    }
+    if (hostname_like) {
+        jObj.hostname = $('#hostname-like').val();
+    } else {
+        jObj.hostname = $('#select2-hostname_eq-container').text();
+    }
+    jObj.desc = $('#desc').val();
+    jObj.is_permit = ($('#policy').val().toLowerCase() == "permit");
+    jObj.model_like = model_like;
+    jObj.device_type_like = device_type_like;
+    jObj.os_like = os_like;
+    jObj.hostname_like = hostname_like;
+    console.log(JSON.stringify(jObj));
 });
 $('#add-button').click(
         function() {
@@ -676,6 +711,7 @@ $('#add-button').click(
                 site_id = '';
                 site_name = '';
                 vendor = '';
+                model ='';
                 device_type = '';
                 os = '';
                 hostname = '';

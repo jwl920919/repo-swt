@@ -748,9 +748,15 @@
 	<insert id="insert_ACCESS_POLICY_INFORM_ONE_RECORD"
 		parameterType="hashmap">
 		INSERT INTO "public"."access_policy" 
-		("vendor", "model", "os", "device_type", "hostname", "desc", "is_permit", "site_id") 
+		(
+			"vendor", "model", "os", "device_type", "hostname", "desc", "is_permit", 
+			"site_id", "priority","os_like","device_type_like","hostname_like","model_like"
+		) 
 		VALUES 
-		(#{vendor}, #{model}, #{os}, #{device_type}, #{hostname}, #{desc}, #{is_permit}, #{site_id});
+		(
+			#{vendor}, #{model}, #{os}, #{device_type}, #{hostname}, #{desc}, #{is_permit}, 
+			#{site_id},#{priority},#{os_like},{device_type_like},#{hostname_like},#{model_like}
+		);
 	</insert>
 	
 	<!-- Query Type : Delete(Select, Insert, Update, Delete) -->
