@@ -3,13 +3,17 @@
 #====================================
 insight:
   site-code: SWT
+  local_ip: 192.168.1.50
   
   name: Smart Insight (Debug)
   version: 0.1.1
   license: TEST000000
+  security:
+    user: admin
+    password: 7+AzHIrmzGDARTT1VaQa3Q==
   cluster:
     mode: slave      # master, slave
-    index: 10       # 0 ~ 999
+    index: 100       # 0 ~ 999
   redis:
     host: shinwootnskr.iptime.org
     port: 6379
@@ -39,10 +43,10 @@ server:
 #====================================
 # Security
 #====================================
-security:
-  user:
-    name: admin
-    password: shinwoo123!
+#security:
+#  user:
+#    name: admin
+#    password: shinwoo123!
 
 #====================================
 # spring
@@ -61,7 +65,11 @@ spring:
     hibernate:
       ddlAuto: none
       naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
-
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
+      
 #====================================
 # banner
 #====================================

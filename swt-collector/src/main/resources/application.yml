@@ -3,10 +3,14 @@
 #====================================
 insight:
   site-code: SWT
+  local_ip: 
   
   name: Smart Insight
   version: 0.1.1
   license: TEST000000
+  security:
+    user: admin
+    password: 7+AzHIrmzGDARTT1VaQa3Q==
   cluster:
     mode: slave       # master, slave
     index: 100        # 0 ~ 999
@@ -55,7 +59,10 @@ spring:
     hibernate:
       ddlAuto: none
       naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
-
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
 #====================================
 # banner
 #====================================

@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
 import com.shinwootns.data.entity.DeviceInsight;
 import com.shinwootns.data.entity.SiteInfo;
 
@@ -15,6 +17,7 @@ public interface DataMapper {
 	
 	// Insight
 	List<DeviceInsight> selectInsight(HashMap<String, Object> paramMap);
+	DeviceInsight selectInsightMaster(@Param("site_id")int site_id);
 	
 	// DHCP
 	//List<DeviceDhcp> selectDhcp();

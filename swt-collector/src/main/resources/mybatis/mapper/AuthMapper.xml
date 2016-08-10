@@ -5,7 +5,9 @@
 
 	<!-- ############################ Auth ############################ -->
 	<select id="selectAuthSetup" resultType="com.shinwootns.data.entity.AuthSetup">
-		SELECT * FROM auth_setup WHERE disable = false ORDER BY order_num
+		SELECT * FROM auth_setup 
+		WHERE disable = false 
+		AND setup_id = #{setup_id} 
 	</select>
 	
 	<select id="selectAuthSetupLdap" resultType="com.shinwootns.data.entity.AuthSetupLdap">

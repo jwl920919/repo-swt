@@ -1,6 +1,6 @@
 var table;
 $(document).ready(function() {
-    $("#layDiv").css("visibility", "hidden");
+//    $("#layDiv").css("visibility", "hidden");
     $('#table-load-area').load('/configManagement/getAuthorityTable');
 });
 

@@ -13,7 +13,7 @@
 <script src="resources/js/ipManagement/ipCertifyStatus.js"></script>
 
 <!-- Alert Start -->
-<div id="layDiv">
+<div id="layDiv" style="visibility : hidden;">ayDiv">
 	<div class="alert-box"></div>
 	<div id="divAlertArea"></div>
 </div>		

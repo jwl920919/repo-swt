@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.shinwootns.common.network.SyslogManager;
 import com.shinwootns.common.utils.CryptoUtils;
 import com.shinwootns.common.utils.SystemUtils;
+import com.shinwootns.common.utils.SystemUtils.InterfaceIP;
+import com.shinwootns.common.utils.SystemUtils.InterfaceInfo;
 import com.shinwootns.data.entity.DeviceDhcp;
 import com.shinwootns.data.entity.DeviceIp;
 import com.shinwootns.data.entity.DeviceInsight;
@@ -160,7 +162,40 @@ public class ServiceController {
 			
 				// Device Insight
 				DeviceInsight insight = new DeviceInsight();
+				
+				// Set Host name
 				insight.setHost(hostName);
+				
+				// Get IP from config
+				String localIP = SpringBeanProvider.getInstance().getApplicationProperty().local_ip;
+				if (localIP != null && localIP.trim().length() > 0)
+				{
+					insight.setIpaddr(localIP);
+				}
+				else {
+					
+					// Get IP from interface
+					List<InterfaceInfo> listInf = SystemUtils.getInterfaceInfo();
+					if (listInf != null) {
+						
+						for(InterfaceInfo inf : listInf) {
+							for(InterfaceIP ifip : inf.listIPAddr)  {
+	
+								if (ifip.ipaddr != null 
+										&& ifip.ipaddr.length() > 0 
+										&& ifip.ipaddr.indexOf("127.") != 0)
+								{
+									insight.setIpaddr(ifip.ipaddr);
+									break;
+								}
+							}
+							
+							if (insight.getIpaddr() != null && insight.getIpaddr().length() > 0)
+								break;
+						}
+					}
+				}
+				
 				insight.setSiteId(siteInfo.getSiteId());
 				insight.setPort(appProperty.serverPort);
 				insight.setVersion(appProperty.version);

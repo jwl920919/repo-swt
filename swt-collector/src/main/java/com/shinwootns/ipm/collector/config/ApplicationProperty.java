@@ -7,14 +7,18 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(locations={"application.yml"}, prefix="insight")
 public class ApplicationProperty {
+
+	@Value("${insight.site-code}")
+	public String siteCode;
+	
+	@Value("${insight.local_ip}")
+	public String local_ip;
 	
 	@Value("${server.port}")
 	public int serverPort;
+	
 	@Value("${server.session.timeout}")
 	public int sessionTimeout;
-	
-	@Value("${insight.site-code}")
-	public String siteCode;
 	
 	@Value("${insight.name}")
 	public String name;
@@ -24,6 +28,12 @@ public class ApplicationProperty {
 	
 	@Value("${insight.license}")
 	public String license;
+	
+	@Value("${insight.security.user}")
+	public String security_user;
+	
+	@Value("${insight.security.password}")
+	public String security_password;
 	
 	// Cluster info
 	@Value("${insight.cluster.mode}")
@@ -78,6 +88,9 @@ public class ApplicationProperty {
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append( "\n------------------------------------------------------------\n" );
+		sb.append( String.format("%-30s = %s\n", "insight.site-code", this.siteCode ) );
+		sb.append( String.format("%-30s = %s\n", "insight.local_ip", this.local_ip ) );
+		
 		sb.append( String.format("%-30s = %s\n", "server.port", this.serverPort ) );
 		sb.append( String.format("%-30s = %s\n", "server.session.timeout", this.sessionTimeout ) );
 		

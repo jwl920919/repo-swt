@@ -6,6 +6,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import com.shinwootns.ipm.collector.config.ApplicationProperty;
+import com.shinwootns.ipm.collector.data.mapper.AuthMapper;
 import com.shinwootns.ipm.collector.data.mapper.ClientMapper;
 import com.shinwootns.ipm.collector.data.mapper.DataMapper;
 
@@ -99,4 +100,26 @@ public class SpringBeanProvider {
     }
     //endregion
     
+	//region [FUNC] getAuthMapper
+	public AuthMapper getAuthMapper() {
+    	
+    	if (_context == null)
+    		return null;
+    	
+    	AuthMapper authMapper = null;
+    	
+    	try
+    	{
+    		authMapper = _context.getBean("authMapper", AuthMapper.class);
+    	}
+    	catch(Exception ex) {
+    		_logger.error("SpringBeanProvider.getAuthMapper().... failed");
+    		_logger.error(ex.getMessage(), ex);
+    	}
+    	
+    	return authMapper;
+    }
+    //endregion
+	
+	
 }

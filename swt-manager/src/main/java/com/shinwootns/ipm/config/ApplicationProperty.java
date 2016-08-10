@@ -17,6 +17,12 @@ public class ApplicationProperty {
 	@Value("${ipm.license}")
 	public String license;
 	
+	@Value("${ipm.security.user}")
+	public String security_user;
+	
+	@Value("${ipm.security.password}")
+	public String security_password;
+	
 	// Cluster info
 	@Value("${ipm.cluster.mode}")
 	public String clusterMode;

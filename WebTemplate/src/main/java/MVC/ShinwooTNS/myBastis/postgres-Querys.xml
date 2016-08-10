@@ -529,7 +529,7 @@
                  WHERE "apply"."user_site_id" = "usersite"."site_id"
                    AND "apply"."apply_site_id" = "applysite"."site_id"
 				<choose>
-					<when test="siteid != 0"> AND "apply"."apply_site_id" = #{siteid} </when>
+					<when test="siteid > 1"> AND "apply"."apply_site_id" = #{siteid} </when>
 				</choose>
 				<choose>
 					<when test="settlementstatus >= 0"> AND "apply"."settlement_status" = #{settlementstatus} </when> 
@@ -546,7 +546,7 @@
 		 WHERE "apply"."user_site_id" = "usersite"."site_id"
 		   AND "apply"."apply_site_id" = "applysite"."site_id"
 		<choose>
-			<when test="siteid != 0"> AND "apply"."apply_site_id" = #{siteid} </when> 
+			<when test="siteid > 1"> AND "apply"."apply_site_id" = #{siteid} </when> 
 		</choose>
 		<choose>
 			<when test="settlementstatus >= 0"> AND "apply"."settlement_status" = #{settlementstatus} </when> 
@@ -658,7 +658,6 @@
 		 AND device_type LIKE CONCAT('%', #{searchValue}, '%')
 		</if> ORDER BY device_type;
 	</select>
-		
 
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
 	<!-- Insert Date : 2016-08-08 -->
@@ -675,14 +674,57 @@
 	   		   COALESCE("black"."description", '') AS "description",
 	   		   "rowCount"."allCount"
           FROM "site_blacklist_info" AS "black", "site_info" AS "site", 
-               (SELECT COUNT("black".*) AS "allCount" FROM "site_blacklist_info" AS "black" WHere "site_id" = #{siteid}) AS "rowCount"
-         WHERE "black"."site_id" = "site"."site_id"
-           AND "black"."site_id" = #{siteid}           
+               (SELECT COUNT("black".*) AS "allCount" FROM "site_blacklist_info" AS "black"
+                 WHERE 1=1
+				<choose>
+					<when test="siteid > 1"> AND "site_id" = #{siteid} </when>
+				</choose>                   
+               ) AS "rowCount"
+         WHERE "black"."site_id" = "site"."site_id"         
+		<choose>
+			<when test="siteid > 1"> AND "black"."site_id" = #{siteid} </when>
+		</choose>         
            AND ("site"."site_name" like CONCAT('%', #{searchValue}, '%') OR "black"."blacklist_filter_name" like CONCAT('%', #{searchValue}, '%') OR
                 to_char("black"."blacklist_time_sec", '999') like CONCAT('%', #{searchValue}, '%') OR "black"."description" like CONCAT('%', #{searchValue}, '%'))  
 		 ORDER BY ${orderColumn} ${orderType}
 		OFFSET #{startIndex} LIMIT #{length};
 	</select>
+
+	<!-- Query Type : Insert(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-08-09 -->
+	<!-- Insert User : KCM -->
+	<!-- Description : 시스템관리 > black list기능 설정 추가 -->
+	<!-- Controller : MVC.ShinwooTNS.action.SystemManagementActionController -->
+	<insert id="insert_SYSTEM_MANAGEMENT_BLACKLIST_SETTING_DATA" parameterType="hashmap">
+		SET TIMEZONE TO '${time_zone}';
+		INSERT INTO public.site_blacklist_info(
+            		site_id, blacklist_enable, blacklist_filter_name, 
+            		blacklist_time_sec, description, insert_time)
+    	VALUES (#{siteid} , ${blackenable}, #{filtername}, #{filtertime}, #{description}, now());
+	</insert>
+
+	<!-- Query Type : Update(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-08-09 -->
+	<!-- Insert User : KCM -->
+	<!-- Description : 시스템관리 > black list기능 설정 수정 -->
+	<!-- Controller : MVC.ShinwooTNS.action.SystemManagementActionController -->
+	<update id="update_SYSTEM_MANAGEMENT_BLACKLIST_SETTING_DATA" parameterType="hashmap">
+		SET TIMEZONE TO '${time_zone}';
+		UPDATE public.site_blacklist_info
+   		   SET site_id=#{siteid}, blacklist_enable=${blackenable}, blacklist_filter_name=#{filtername}, 
+       		   blacklist_time_sec=#{filtertime}, description=#{description}, update_time=now()
+ 		 WHERE blacklist_id = #{blacklistid};
+	</update>
+
+	<!-- Query Type : Delete(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-08-09 -->
+	<!-- Insert User : KCM -->
+	<!-- Description : 시스템관리 > black list기능 설정 삭제 -->
+	<!-- Controller : MVC.ShinwooTNS.action.SystemManagementActionController -->
+	<delete id="delete_SYSTEM_MANAGEMENT_BLACKLIST_SETTING_DATA" parameterType="hashmap">
+		DELETE FROM public.site_blacklist_info
+ 		 WHERE blacklist_id = #{blacklistid};
+	</delete>
 	
 	<!-- Query Type : Update(Select, Insert, Update, Delete) -->
 	<!-- Insert Date : 2016-08-09 -->

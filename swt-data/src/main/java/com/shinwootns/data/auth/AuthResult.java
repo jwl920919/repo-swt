@@ -1,13 +1,26 @@
-package com.shinwootns.ipm.service.auth;
+package com.shinwootns.data.auth;
 
 public class AuthResult {
 	
 	// result
-	private String authType;
-	private String setupName;
+	private String auth_type;
+	private String setup_name;
+	private String user_id;
 	private boolean is_check;
 	private boolean is_login;
 	private String message;
+
+	@Override
+	public String toString() {
+		return (new StringBuilder())
+			.append("user_id=").append(user_id)
+			.append("auth_type=").append(auth_type)
+			.append(",setup_name=").append(setup_name)
+			.append(",is_check=").append(is_check)
+			.append(",is_login=").append(is_login)
+			.append(",message=").append(message)
+			.toString();
+	}
 	
 	public boolean isIsCheck() {
 		return is_check;
@@ -28,26 +41,21 @@ public class AuthResult {
 		this.message = message;
 	}
 	public String getAuthType() {
-		return authType;
+		return auth_type;
 	}
 	public void setAuthType(String authType) {
-		this.authType = authType;
+		this.auth_type = authType;
 	}
 	public String getSetupName() {
-		return setupName;
+		return setup_name;
 	}
 	public void setSetupName(String setupName) {
-		this.setupName = setupName;
+		this.setup_name = setupName;
 	}
-	
-	@Override
-	public String toString() {
-		return (new StringBuilder())
-			.append("AuthType=").append(authType)
-			.append(",Name=").append(setupName)
-			.append(",is_check=").append(is_check)
-			.append(",is_login=").append(is_login)
-			.append(",message=").append(message)
-			.toString();
+	public String getUserId() {
+		return user_id;
+	}
+	public void setUserId(String user_id) {
+		this.user_id = user_id;
 	}
 }

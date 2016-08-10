@@ -56,7 +56,7 @@ $(document).ready(function() {
 				</div>
 			</div>
 		  	<div class="input-group modal-input-group">
-				<div class="input-group-addon modal-content-header"><%=LanguageHelper.GetLanguage("filter")%></div>
+				<div class="input-group-addon modal-content-header"><%=LanguageHelper.GetLanguage("filtername")%></div>
 		  		<div class="modal-content-body">
 					<input type="text" class="form-control" id="inputFilter" placeholder="Filter">
 				</div>
@@ -102,42 +102,6 @@ $(document).ready(function() {
 	<div class="row" id="defaultDiv">
 		<div class="col-lg-12">
 			<div class="box box-primary">
-<!-- 				<div class="pagebox-header with-border">				 -->
-<!-- 				<div class="box-header"> -->
-<!-- 					<div>						 -->
-<!-- 		                select -->
-<!-- 		                <table> -->
-<!-- 		                	<tr> -->
-<!-- 		                		<td> -->
-<%-- 		                			<label style="width:80px; margin-right:10px; text-align:right"><%=LanguageHelper.GetLanguage("inquiryTime")%> : </label> --%>
-<!-- 		                		</td> -->
-<!-- 		                		<td class="input-group date"> -->
-<!-- 									Date and time range	 -->
-<!-- 									<input style="width:330px;" type="text" class="form-control" id="reservationtime" name="reservationtime"> -->
-<!-- 									/.Date and time range -->
-<!-- 		                		</td> -->
-<!-- 		                		<td> -->
-<%-- 		                			<label style="width:80px; margin-right:10px; text-align:right"><%=LanguageHelper.GetLanguage("status")%> : </label> --%>
-<!-- 		                		</td> -->
-<!-- 		                		<td> -->
-<!-- 			                		<select id="sbCerifyStatus" class="form-control selectoption_grey_color" style="width:120px"> -->
-<%-- 			                			<option value="ALL" selected><%=LanguageHelper.GetLanguage("all")%></option> --%>
-<%-- 			                			<option value="0"><%=LanguageHelper.GetLanguage("requestApproval")%></option> --%>
-<%-- 			                			<option value="1"><%=LanguageHelper.GetLanguage("approval")%></option> --%>
-<%-- 			                			<option value="2"><%=LanguageHelper.GetLanguage("return")%></option> --%>
-<!-- 									</select> -->
-<!-- 		                		</td> -->
-<!-- 		                		<td> -->
-<!-- 		                			<input type="text" style="width:250px; margin-left:15px;" class="form-control" id="txtSearch" -->
-<%-- 										placeholder="<%=LanguageHelper.GetLanguage("inputSearchWord")%>"> --%>
-<!-- 		                		</td> -->
-<!-- 		                		<td style="width:100%; text-align:right; padding-right:10px"> -->
-<%-- 		                			<button type="button" class="btn btn-primary" id="btnSearch"><%=LanguageHelper.GetLanguage("inquiry")%></button> --%>
-<!-- 		                		</td> -->
-<!-- 		                	</tr> -->
-<!-- 		                </table> -->
-<!-- 					</div> -->
-<!-- 				</div> -->
 				<div class="box-header">
 					<center>
 						<table id="datatable" name="datatable" class="essential-table" style="width: 98%">
@@ -145,11 +109,11 @@ $(document).ready(function() {
 								<tr>
 									<th width="0%" style="display:none;">blacklist_id</th>
 									<th width="0%" style="display:none;">site_id</th>
-									<th width="20%"><%=LanguageHelper.GetLanguage("site")%></th>
-									<th width="20%">blacklist_enable</th>
-									<th width="20%">blacklist_filter_name</th>
-									<th width="20%">blacklist_time_sec</th>
-									<th width="20%">description</th>
+									<th width="15%"><%=LanguageHelper.GetLanguage("site")%></th>
+									<th width="10%"><%=LanguageHelper.GetLanguage("usedclass")%></th>
+									<th width="20%"><%=LanguageHelper.GetLanguage("filtername")%></th>
+									<th width="10%"><%=LanguageHelper.GetLanguage("datetime")%></th>
+									<th width="45%"><%=LanguageHelper.GetLanguage("desctription")%></th>
 									<th width="20%"></th>
 								</tr>
 							</thead>

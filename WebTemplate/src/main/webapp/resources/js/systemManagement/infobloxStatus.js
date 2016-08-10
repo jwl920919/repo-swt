@@ -1,4 +1,4 @@
-$("#layDiv").css("visibility", "hidden");
+//$("#layDiv").css("visibility", "hidden");
 var m_hardwareStateAjaxCall;
 var m_redundancyStateAjaxCall;
 var m_DchpMessageAjaxCall;

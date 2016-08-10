@@ -11,6 +11,7 @@ public class DeviceInsight implements Serializable {
 	private Integer device_id;
 	private Integer site_id;
 	private String host;
+	private String ipaddr;
 	private Integer port;
 	private String version;
 	private Boolean is_master;
@@ -18,7 +19,6 @@ public class DeviceInsight implements Serializable {
 	private Integer cluster_index;
 	private Timestamp insert_time;
 	private Timestamp update_time;
-	
 
 	public DeviceInsight() {
 	}
@@ -101,6 +101,14 @@ public class DeviceInsight implements Serializable {
 
 	public void setClusterIndex(Integer cluster_index) {
 		this.cluster_index = cluster_index;
+	}
+
+	public String getIpaddr() {
+		return ipaddr;
+	}
+
+	public void setIpaddr(String ipaddr) {
+		this.ipaddr = ipaddr;
 	}
 
 }

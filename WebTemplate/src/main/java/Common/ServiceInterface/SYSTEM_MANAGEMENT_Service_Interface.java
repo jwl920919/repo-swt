@@ -11,4 +11,6 @@ import java.util.Map;
  **/
 public interface SYSTEM_MANAGEMENT_Service_Interface {
 	public List<Map<String, Object>> select_SYSTEM_MANAGEMENT_BLACKLIST_SETTING_DATA(HashMap<String, Object> parameters);
+
+	public int insert_update_delete_SYSTEM_MANAGEMENT_BLACKLIST_SETTING_DATA(HashMap<String, Object> parameters);
 }
