@@ -1,5 +1,6 @@
 //$("#layDiv").css("visibility", "hidden");
 var accessPolicyTable;
+
 $(document)
         .ready(
                 function() {
@@ -154,6 +155,7 @@ function modifyBtnClickEvent(t) {
         modifyPopupSetting();
     });
 }
+
 function createModifyPopup(callback) {
     var html = '<div class="input-group modal-input-group"><span class="input-group-addon modal-content-header">우선순위';
     html += '</span><div class="modal-content-body"><input type="text" id="priority" class="form-control modify-text" />';
@@ -203,13 +205,13 @@ function createModifyPopup(callback) {
     html += '<div class="modal-content-body"><select class="form-control select2" id="policy"><option>Permit</option>';
     html += '<option>Deny</option></select></div></div>';
     $("#modify-body").html(html);
-    console.log(html);
     selectInit(function() {
         if (typeof callback === 'function') {
             callback();
         }
     });
 }
+
 function modifyPopupSetting() {
     $("#priority").val(tr.eq(1).text());
     $("#site_eq").val(site_id);
@@ -217,7 +219,7 @@ function modifyPopupSetting() {
     $("#policy").val(tr.eq(15).text());
     changeSiteNames(site_id);
     changeVendorNames();
-    changeModelNames(vendor,function() {
+    changeModelNames(vendor, function() {
         if (model_like) {
             $("#model-like").val(model);
         } else {
@@ -225,7 +227,8 @@ function modifyPopupSetting() {
             if (model_length > 1) {
                 $("#select2-model_eq-container").text(model);
             } else if (model_length == 1) {
-                $("#select2-model_eq-container").text( $("#model_eq option:selected").val())
+                $("#select2-model_eq-container").text(
+                        $("#model_eq option:selected").val())
             }
         }
     });
@@ -237,7 +240,8 @@ function modifyPopupSetting() {
             if (device_type_length > 1) {
                 $("#select2-device-type_eq-container").text(device_type);
             } else if (device_type_length == 1) {
-                $("#select2-device-type_eq-container").text( $("#device-type_eq option:selected").val())
+                $("#select2-device-type_eq-container").text(
+                        $("#device-type_eq option:selected").val())
             }
         }
     });
@@ -249,7 +253,8 @@ function modifyPopupSetting() {
             if (os_length > 1) {
                 $("#select2-os_eq-container").text(os);
             } else if (os_length == 1) {
-                $("#select2-os_eq-container").text( $("#os_eq option:selected").val())
+                $("#select2-os_eq-container").text(
+                        $("#os_eq option:selected").val())
             }
         }
     });
@@ -261,34 +266,21 @@ function modifyPopupSetting() {
             if (hostname_length > 1) {
                 $("#select2-hostname_eq-container").text(hostname);
             } else if (hostname_length == 1) {
-                $("#select2-hostname_eq-container").text( $("#hostname_eq option:selected").val())
+                $("#select2-hostname_eq-container").text(
+                        $("#hostname_eq option:selected").val())
             }
         }
     });
     $("#select2-site_eq-container").text(site_name);
     $("#select2-vendor_eq-container").text(vendor);
-    
+
     popupClass = "modify";
-    modalShow("modify-modal");
+    modalShow("modify-modal",function() {
+        $('#modify-body').html('');
+    });
 }
-// init default select to select2 object
-function selectInit(callback) {
-    $("#site_eq").select2();
-    $("#vendor_eq").select2();
-    if (!model_like)
-        $("#model_eq").select2();
-    if (!device_type_like)
-        $("#device-type_eq").select2();
-    if (!os_like)
-        $("#os_eq").select2();
-    if (!hostname_like)
-        $("#hostname_eq").select2();
-    $("#policy").select2();
-    if (typeof callback === 'function') {
-        callback();
-    }
-}
-function changeSiteNames(index,callback) {
+
+function changeSiteNames(index, callback) {
     $.ajax({
         url : "policyManagement/getSiteNames",
         type : "POST",
@@ -574,18 +566,6 @@ function hostnameToggleEvent($this) {
     }
 }
 
-function removeSiblings(obj) {
-    var siblings = $(obj).siblings();
-    for (i = 0; i < siblings.length; i++) {
-        $(siblings[i]).remove();
-    }
-}
-
-function prependCodeToParent(obj, code) {
-    var parent = $(obj).parent();
-    parent.prepend(code);
-}
-
 $('#modify-save-btn').click(function() {
     var jObj = new Object();
     jObj.access_policy_id = access_policy_id;
@@ -618,7 +598,6 @@ $('#modify-save-btn').click(function() {
     jObj.device_type_like = device_type_like;
     jObj.os_like = os_like;
     jObj.hostname_like = hostname_like;
-    console.log(jObj);
     $.ajax({
         url : "policyManagement/access_policy_modify",
         type : "POST",
@@ -630,10 +609,84 @@ $('#modify-save-btn').click(function() {
                 accessPolicyTable.ajax.reload();
             }
             modalClose("modify-modal");
-            $('#modify-body').html('');
         }
     });
 });
+$('#add-button').click(function() {
+   createAddPopup(function() {
+       popupClass = "add";
+       //closeCallback 사용
+       modalShow("add-modal",function() {
+           $('#add-body').html('');
+       });
+   });
+});
+
+function createAddPopup(callback) {
+    var html = '<div class="input-group modal-input-group"><span class="input-group-addon modal-content-header">우선순위';
+    html += '</span><div class="modal-content-body"><input type="text" id="priority" class="form-control modify-text" />';
+    html += '</div></div><div class="input-group modal-input-group"><span class="input-group-addon modal-content-header">';
+    html += '사업장</span><div class="modal-content-body"><select id="site_eq" class="form-control select2"></select></div></div>';
+    html += '<div class="input-group modal-input-group"><span class="input-group-addon modal-content-header">벤더</span>';
+    html += '<div class="modal-content-body"><select id="vendor_eq" class="form-control select2"></select></div></div>';
+    html += '<div class="input-group modal-input-group"><span class="input-group-addon modal-content-header">모델</span><div class="modal-content-body">';
+    html += '<select id="model_eq" class="form-control select2" style="display: none;"></select>';
+    html += '<a class="custom-btn custom-btn-app" id="model-mode-change" onclick="modelToggleEvent(this)"><i class="fa fa-exchange"></i></a></div></div>';
+    html += '<div class="input-group modal-input-group"><span class="input-group-addon modal-content-header">장비종류</span><div class="modal-content-body">';
+    html += '<select id="device-type_eq" class="form-control select2" style="display: none;"></select>';
+    html += '<a class="custom-btn custom-btn-app" id="device-type-mode-change" onclick="deviceTypeToggleEvent(this)"><i class="fa fa-exchange"></i></a></div></div>';
+    html += '<div class="input-group modal-input-group"><span class="input-group-addon modal-content-header">OS</span><div class="modal-content-body">';
+    html += '<select id="os_eq" class="form-control select2" style="display: none;"></select>';
+    html += '<a class="custom-btn custom-btn-app" id="os-mode-change" onclick="osToggleEvent(this)"><i class="fa fa-exchange"></i></a></div></div>';
+    html += '<div class="input-group modal-input-group"><span class="input-group-addon modal-content-header">Hostname</span><div class="modal-content-body">';
+    html += '<select id="hostname_eq" class="form-control select2" style="display: none;"></select>';
+    html += '<a class="custom-btn custom-btn-app" id="hostname-mode-change" onclick="hostnameToggleEvent(this)"><i class="fa fa-exchange"></i></a></div></div>';
+    html += '<div class="input-group modal-input-group"><span class="input-group-addon modal-content-header">설명</span>';
+    html += '<div class="modal-content-body"><input type="text" id="desc" class="form-control modify-text" /></div></div>';
+    html += '<div class="input-group modal-input-group"><span class="input-group-addon modal-content-header">정책</span>';
+    html += '<div class="modal-content-body"><select class="form-control select2" id="policy"><option>Permit</option>';
+    html += '<option>Deny</option></select></div></div>';
+    $("#add-body").html(html);
+    os_like = false;
+    device_type_like = false;
+    hostname_like = false;
+    model_like = false;
+    selectInit(function() {
+        if (typeof callback === 'function') {
+            callback();
+        }
+    });
+}
+
+//init default select to select2 object
+function selectInit(callback) {
+    $("#site_eq").select2();
+    $("#vendor_eq").select2();
+    if (!model_like)
+        $("#model_eq").select2();
+    if (!device_type_like)
+        $("#device-type_eq").select2();
+    if (!os_like)
+        $("#os_eq").select2();
+    if (!hostname_like)
+        $("#hostname_eq").select2();
+    $("#policy").select2();
+    if (typeof callback === 'function') {
+        callback();
+    }
+}
+function removeSiblings(obj) {
+    var siblings = $(obj).siblings();
+    for (i = 0; i < siblings.length; i++) {
+        $(siblings[i]).remove();
+    }
+}
+
+function prependCodeToParent(obj, code) {
+    var parent = $(obj).parent();
+    parent.prepend(code);
+}
+
 
 // 체크박스 전체선택
 $('#accessPolicyTable_checkbox_controller').click(function() {
