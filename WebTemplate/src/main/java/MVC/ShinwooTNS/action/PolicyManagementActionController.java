@@ -52,14 +52,15 @@ public class PolicyManagementActionController {
 
 	// region getAccessPolicyTableDatas
 	@RequestMapping(value = "getAccessPolicyTableDatas", method = RequestMethod.POST)
-	public void getSystemUserManagementDatatableDatas(Locale locale, Model model, HttpServletRequest request,
+	public void getAccessPolicyTableDatas(Locale locale, Model model, HttpServletRequest request,
 			HttpServletResponse response, HttpSession session) {
 		logger.info("getAccessPolicyTableDatas : " + request.getLocalAddr());
 		System.out.println("getAccessPolicyTableDatas Controller");
 		try {
 			init();
-			String[] columns = { "access_policy_id", "site_name", "vendor", "model", "os", "device_type", "hostname",
-					"desc", "is_permit", "site_id" };
+			String[] columns = { "priority", "site_name", "vendor", "model", "device_type", "os", "hostname", "desc",
+					"access_policy_id", "site_id", "os_like", "device_type_like", "hostname_like", "model_like",
+					"vendor_like", "is_permit" };
 			HashMap<String, Object> parameters = Common.Helper.DatatableHelper.getDatatableParametas(request, columns,
 					1);
 			parameters.put("site_id", Integer.parseInt(session.getAttribute("site_id").toString()));
@@ -82,6 +83,7 @@ public class PolicyManagementActionController {
 				jObj.put("device_type_like", accessPolicyData.get("device_type_like"));
 				jObj.put("hostname_like", accessPolicyData.get("hostname_like"));
 				jObj.put("model_like", accessPolicyData.get("model_like"));
+				jObj.put("vendor_like", accessPolicyData.get("vendor_like"));
 				jObj.put("active", 1);
 				jsonArray.add(jObj);
 			}
@@ -154,7 +156,7 @@ public class PolicyManagementActionController {
 			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
 					new TypeToken<HashMap<String, Object>>() {
 					}.getType());
-			result.data = accessPolicy.select_POLICY_MODEL_SEARCH_REF_VENDOR(parameters);
+			result.data = accessPolicy.select_POLICY_MODEL_SEARCH(parameters);
 			result.result = true;
 			return gson.toJson(result);
 		} catch (Exception e) {
@@ -229,11 +231,11 @@ public class PolicyManagementActionController {
 
 	}
 	// endregion
-	
+
 	// region access_policy_modify
-	@RequestMapping(value = "access_policy_modify", method = RequestMethod.POST, produces = "application/text; charset=utf8")
-	public @ResponseBody Object access_policy_modify(HttpServletRequest request) {
-		logger.info("access_policy_modify : " + request.getLocalAddr());
+	@RequestMapping(value = "accessPolicyModify", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+	public @ResponseBody Object accessPolicyModify(HttpServletRequest request) {
+		logger.info("accessPolicyModify : " + request.getLocalAddr());
 		try {
 			init();
 			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
@@ -254,6 +256,61 @@ public class PolicyManagementActionController {
 			return gson.toJson(result);
 		}
 
+	}
+	// endregion
+
+	// region access_policy_insert
+	@RequestMapping(value = "accessPolicyInsert", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+	public @ResponseBody Object accessPolicyInsert(HttpServletRequest request) {
+		logger.info("accessPolicyInsert : " + request.getLocalAddr());
+		try {
+			init();
+			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
+					new TypeToken<HashMap<String, Object>>() {
+					}.getType());
+			parameters.put("priority", Integer.parseInt(parameters.get("priority").toString()));
+			parameters.put("site_id", Integer.parseInt(parameters.get("site_id").toString()));
+			int cnt = accessPolicy.insert_ACCESS_POLICY_INFORM_ONE_RECORD(parameters);
+			if (cnt > -1)
+				result.result = true;
+			else
+				result.result = false;
+			return gson.toJson(result);
+		} catch (Exception e) {
+			result.result = false;
+			return gson.toJson(result);
+		}
+
+	}
+	// endregion
+
+	// region accessPolicyDelete
+	@RequestMapping(value = "accessPolicyDelete", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+	public @ResponseBody Object accessPolicyDelete(HttpServletRequest request) {
+		logger.info("accessPolicyDelete : " + request.getLocalAddr());
+		try {
+			init();
+			List<HashMap<String, Object>> jArray = gson.fromJson(request.getReader(),
+					new TypeToken<List<HashMap<String, Object>>>() {
+					}.getType());
+
+			ArrayList<Integer> accessPolicyIdList = new ArrayList<Integer>();
+			for (HashMap<String, Object> map : jArray) {
+				accessPolicyIdList.add(Integer.parseInt(map.get("access_policy_id").toString()));
+			}
+			HashMap<String, Object> parameter = new HashMap<>();
+			parameter.put("list", accessPolicyIdList);
+			int cnt = accessPolicy.delete_ACCESS_POLICY_INFORM_RECORDS(parameter);
+			if (cnt > -1)
+				result.result = true;
+			else
+				result.result = false;
+			return gson.toJson(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.result = false;
+			return gson.toJson(result);
+		}
 	}
 	// endregion
 

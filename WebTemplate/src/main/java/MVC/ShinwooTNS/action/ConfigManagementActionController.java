@@ -474,9 +474,9 @@ public class ConfigManagementActionController {
 			return gson.toJson(result);
 		} catch (Exception e) {
 			e.printStackTrace();
+			result.result = false;
+			return gson.toJson(result);
 		}
-
-		return null;
 	}
 	// endregion
 
