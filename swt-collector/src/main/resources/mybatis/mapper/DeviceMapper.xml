@@ -8,7 +8,23 @@
         SELECT * FROM site_info WHERE site_code=#{site_code}
     </select>
     
-    <!-- ############################ Insight ############################ -->
+    
+    <!-- ############################ Device (SNMP) ############################ -->
+    <select id="selectDeviceSnmp" resultType="com.shinwootns.data.entity.DeviceSnmp">
+		SELECT DISTINCT nw.site_id, nw.device_id, nw.host, nw.snmp_community, nw.snmp_version
+			, COALESCE(nw.fix_insight, false) fix_insight, ins.device_id insight_id, ins.host insight_host
+		FROM device_network nw
+		LEFT OUTER JOIN device_insight ins ON nw.insight_id = ins.device_id
+		WHERE 1=1
+		<if test="site_id != null">
+		AND nw.site_id = #{site_id}
+		</if>
+		<if test="ipaddr != null">
+		AND ins.host = #{insight_host}
+		</if>
+	</select>
+    
+    <!-- ############################ Device Insight ############################ -->
     
     <select id="selectInsightByHost" resultType="com.shinwootns.data.entity.DeviceInsight">
 		SELECT * FROM device_insight WHERE host = #{host}

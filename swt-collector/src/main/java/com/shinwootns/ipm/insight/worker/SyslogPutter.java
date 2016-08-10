@@ -5,7 +5,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gson.JsonObject;
 import com.shinwootns.common.network.SyslogEntity;
 import com.shinwootns.common.utils.JsonUtils;
 import com.shinwootns.data.key.RedisKeys;
