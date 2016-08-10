@@ -1,5 +1,5 @@
 ﻿{	
-	"Title":										"스마트 IPM",
+	"Title":										"Smart IPM+",
 	"Login":										"로그인",
 	"Sign out":										"로그아웃",
 	"ID":											"아이디",
