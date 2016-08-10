@@ -1,4 +1,4 @@
-package com.shinwootns.ipm;
+package com.shinwootns.ipm.insight;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +28,7 @@ public class MainApplication implements CommandLineRunner {
 			WorkerManager.getInstance().TerminateApplication();
 		}
 	}
-	
+
 	@Override
 	public void run(String... arg0) throws Exception {
 	}
