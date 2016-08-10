@@ -5,8 +5,6 @@ import org.slf4j.LoggerFactory;
 
 public class TestWAPI {
 
-	private final Logger _logger = LoggerFactory.getLogger(getClass());
-	
 	/*
 	@Test
 	public void testWAPI_Info() {

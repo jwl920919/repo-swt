@@ -43,7 +43,7 @@
 <body class="hold-transition login-page">
 		
 	<!-- Alert Start -->
-	<div id="layDiv" style="visibility : hidden;">ayDiv" >
+	<div id="layDiv" style="visibility : hidden;">
 		<div class="alert-box" ></div>
 		<div id="divAlertArea"></div>
 	</div>
@@ -52,12 +52,14 @@
 	
 	<div class="login-box">
 		<div class="login-logo">
-			<a href="#"><b><%=LanguageHelper.GetLanguage("Login")%></b></a>
+<%-- 			<a href="#"><b><%=LanguageHelper.GetLanguage("Login")%></b></a> --%>
+			<b>Smart  IPM+</b>
+			
 		</div>
 		<!-- /.login-logo -->
 		<div class="login-box-body">
 			<p class="login-box-msg"><%=LanguageHelper.GetLanguage("Signintostartyoursession")%></p>
-
+			
 			<form id="loginForm" method="post">
 				<div class="form-group has-feedback">
 					<!-- 					<input type="email" class="form-control" -->
@@ -88,9 +90,9 @@
 				</div>
 			</form>
 
-			<a href="#"><%=LanguageHelper.GetLanguage("Iforgotmypassword")%></a><br>
-			<a href="register.html" class="text-center"><%=LanguageHelper.GetLanguage("Registermembership")%></a>
-			<br/>
+<%-- 			<a href="#"><%=LanguageHelper.GetLanguage("Iforgotmypassword")%></a><br> --%>
+<%-- 			<a href="register.html" class="text-center"><%=LanguageHelper.GetLanguage("Registermembership")%></a><br> --%>
+			
 			<input name="rLanguage" type="radio" value="ko-KR"> <%=LanguageHelper.GetLanguage("ko-KR")%>
 			<input name="rLanguage" type="radio" value="en-US"> <%=LanguageHelper.GetLanguage("en-US")%>
 

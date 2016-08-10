@@ -19,6 +19,7 @@ import redis.clients.jedis.Jedis;
 
 public class TestSyslog {
 
+	/*
 	@Test
 	public void testDHCParsing() {
 		
@@ -120,6 +121,7 @@ public class TestSyslog {
 			}
 		}
 	}
+	*/
 	
 	/*
 	@Test

@@ -8,12 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.shinwootns.common.redis.RedisManager.RedisPoolStatus;
-import com.shinwootns.common.utils.JsonUtils;
-import com.shinwootns.data.entity.DeviceDhcp;
-import com.shinwootns.ipm.insight.WorkerManager;
 import com.shinwootns.ipm.insight.service.cluster.ClusterManager;
 import com.shinwootns.ipm.insight.service.redis.RedisHandler;
-import com.shinwootns.data.status.DhcpDeviceStatus;
 
 public class SchedulerWorker implements Runnable {
 	
@@ -105,4 +101,5 @@ public class SchedulerWorker implements Runnable {
 		}
 	}
 	//endregion
+
 }
