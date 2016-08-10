@@ -203,6 +203,7 @@ function createModifyPopup(callback) {
     html += '<div class="modal-content-body"><select class="form-control select2" id="policy"><option>Permit</option>';
     html += '<option>Deny</option></select></div></div>';
     $("#modify-body").html(html);
+    console.log(html);
     selectInit(function() {
         if (typeof callback === 'function') {
             callback();
@@ -629,6 +630,7 @@ $('#modify-save-btn').click(function() {
                 accessPolicyTable.ajax.reload();
             }
             modalClose("modify-modal");
+            $('#modify-body').html('');
         }
     });
 });

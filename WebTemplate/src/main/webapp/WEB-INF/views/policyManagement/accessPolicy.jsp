@@ -35,6 +35,25 @@
 	<!-- /.modal-content -->
 </div>
 <!-- /.Add, Edit modal -->
+<!-- Add, Edit modal -->
+<div class="modal modal-dialog" id="add-modal" style="width: 600px">
+	<div class="modal-content" name="modalContent">
+		<div class="modal-header">
+			<input type="button" class="close" name="modalClose"
+				data-dismiss="modal" aria-label="Close" value="&times;" />
+			<h4 class="modal-title">정책 수정</h4>
+		</div>
+		<div id="add-body" class="modal-body"></div>
+		<div class="modal-footer">
+			<input type="button" class="btn btn-default pull-left"
+				name="modalClose" data-dismiss="modal"
+				value="<%=LanguageHelper.GetLanguage("close")%>" />
+			<button type="button" class="btn btn-primary" id="add-save-btn"><%=LanguageHelper.GetLanguage("saveandclose")%></button>
+		</div>
+	</div>
+	<!-- /.modal-content -->
+</div>
+<!-- /.Add, Edit modal -->
 <section class="white-paper" style="text-align: center">
 	<div class="row">
 		<div class="col-xs-12"
