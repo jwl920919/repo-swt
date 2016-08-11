@@ -11,8 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,13 +22,13 @@ import com.google.gson.Gson;
 
 import Common.DTO.AjaxResult;
 import Common.DTO.SITE_INFO_DTO;
+import Common.Helper.ErrorLoggingHelper;
 import Common.ServiceInterface.SITE_INFO_Service_interface;
 
 @Controller
 public class PageActionController {
-	private final static java.text.SimpleDateFormat SIMPLE_DATE_FORMAT = new java.text.SimpleDateFormat(
-			"yyyy-MM-dd HH:mm:ss");
-	private static final Logger logger = LoggerFactory.getLogger(PageActionController.class);
+	private final static java.text.SimpleDateFormat SIMPLE_DATE_FORMAT = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private static final Logger logger = Logger.getLogger(PageActionController.class);
 	private Gson gson = new Gson();		
 	private AjaxResult result = new AjaxResult();
 		
@@ -70,7 +69,7 @@ public class PageActionController {
 			result.result = false;
 			result.errorMessage = e.getMessage();
 			e.printStackTrace();
-			logger.error(e.getMessage());
+			ErrorLoggingHelper.log(logger, "set_Sesstion", e);
 		}
 		return gson.toJson(result);
 	}
@@ -92,7 +91,7 @@ public class PageActionController {
 
 		}  catch (Exception e) {
 			e.printStackTrace();
-			logger.error(e.getMessage());
+			ErrorLoggingHelper.log(logger, "session_Maintain", e);
 			return "redirect:login";
 		}
 		return gson.toJson(result);
@@ -113,7 +112,7 @@ public class PageActionController {
 			result.result = false;
 			result.errorMessage = e.getMessage();
 			e.printStackTrace();
-			logger.error(e.getMessage());
+			ErrorLoggingHelper.log(logger, "select_site_info", e);
 		}
 		return gson.toJson(result);
 	}
@@ -123,7 +122,7 @@ public class PageActionController {
 	@RequestMapping(value = "/ajaxPollingTest.do", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object isAnonymous(HttpServletRequest request) {
 		System.out.println("ajaxPollingTest.do");
-		
+				
 	 	String param1 = request.getParameter("param1");
 	 	String param2 = request.getParameter("param2");
 	 	System.out.println("param1 : " + param1);

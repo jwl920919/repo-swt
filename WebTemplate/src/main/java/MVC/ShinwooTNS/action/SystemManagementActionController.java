@@ -1,16 +1,12 @@
 package MVC.ShinwooTNS.action;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,10 +15,8 @@ import javax.servlet.http.HttpSession;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +29,7 @@ import com.google.gson.reflect.TypeToken;
 
 import Common.DTO.AjaxResult;
 import Common.Helper.CommonHelper;
+import Common.Helper.ErrorLoggingHelper;
 import Common.ServiceInterface.SYSTEM_MANAGEMENT_Service_Interface;;
 
 @Controller
@@ -42,7 +37,7 @@ import Common.ServiceInterface.SYSTEM_MANAGEMENT_Service_Interface;;
 public class SystemManagementActionController {
 	private final static java.text.SimpleDateFormat SIMPLE_DATE_FORMAT = new java.text.SimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss");
-	private static final Logger logger = LoggerFactory.getLogger(SystemManagementActionController.class);
+	private static final Logger logger = Logger.getLogger(SystemManagementActionController.class);
 	private Gson gson = new Gson();
 	private AjaxResult result = null;
 	
@@ -59,7 +54,7 @@ public class SystemManagementActionController {
 	 * */
 	@RequestMapping(value = "getInfobloxdatas", method = RequestMethod.GET, produces = "application/text; charset=utf8")
 	public @ResponseBody Object getInfobloxdatas(HttpServletRequest request, HttpSession session) {
-		logger.info("getInfobloxdatas : " + request.getLocalAddr());
+		//logger.info("getInfobloxdatas : " + request.getLocalAddr());
 		result = new AjaxResult();
 		init();
 		try {
@@ -187,6 +182,7 @@ public class SystemManagementActionController {
 			return gson.toJson(result);
 		} catch (Exception e) {
 			e.printStackTrace();
+			ErrorLoggingHelper.log(logger, "getInfobloxdatas", e);
 			result.result = false;
 			return gson.toJson(result);
 		}
@@ -197,7 +193,7 @@ public class SystemManagementActionController {
 	@RequestMapping(value = "blackListSetting_Data_Select", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public void blackListSetting_Data_Select(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		System.out.println("blackListSetting_Data_Select");
-		logger.info("blackListSetting_Data_Select : " + request.getLocalAddr());
+		//logger.info("blackListSetting_Data_Select : " + request.getLocalAddr());
 		HttpSession session = request.getSession(true);
 		List<Map<String, Object>> dataList = null;
 		JsonArray jsonArray = null;
@@ -228,7 +224,7 @@ public class SystemManagementActionController {
 			result.result = false;
 			result.errorMessage = e.getMessage();
 			e.printStackTrace();
-			logger.error(e.getMessage());
+			ErrorLoggingHelper.log(logger, "blackListSetting_Data_Select", e);
 		} finally {
 			response.getWriter().println(Common.Helper.DatatableHelper.makeCallback(request, jsonArray, totalCount));
 			response.getWriter().flush();
@@ -241,7 +237,7 @@ public class SystemManagementActionController {
 	@RequestMapping(value = "blackListSetting_Data_Insert_Update_Delete", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object blackListSetting_Data_Insert_Update_Delete(HttpServletRequest request) {
 		System.out.println("blackListSetting_Data_Insert_Update_Delete");
-		logger.info("blackListSetting_Data_Insert_Update_Delete : " + request.getLocalAddr());
+		//logger.info("blackListSetting_Data_Insert_Update_Delete : " + request.getLocalAddr());
 		result = new AjaxResult();
 
 		try {
@@ -262,7 +258,7 @@ public class SystemManagementActionController {
 			result.result = false;
 			result.errorMessage = e.getMessage();
 			e.printStackTrace();
-			logger.error(e.getMessage());
+			ErrorLoggingHelper.log(logger, "blackListSetting_Data_Insert_Update_Delete", e);
 		}
 		return gson.toJson(result);
 	}

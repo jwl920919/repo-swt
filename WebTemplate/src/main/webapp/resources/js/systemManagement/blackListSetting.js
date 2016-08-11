@@ -222,9 +222,9 @@ fnShowEvent = function(){
 				        dataType : "text",
 				        success : function(data) {
 				            var jsonObj = eval("(" + data + ')');
-				            alert("저장 : " +jsonObj.result);
 				            if (jsonObj.result == true) {
 				            	table.ajax.reload(); //데이터 제 조회
+				            	systemAlertNotify("divAlertArea", "alert-success", getLanguage("add"), getLanguage("saved"));
 				            }
 				        },
 				        complete: function(data) {
@@ -265,9 +265,9 @@ fnShowEvent = function(){
 				        dataType : "text",
 				        success : function(data) {
 				            var jsonObj = eval("(" + data + ')');
-				            alert("수정 : " +jsonObj.result);
 				            if (jsonObj.result == true) {
 				            	table.ajax.reload(); //데이터 제 조회
+				            	systemAlertNotify("divAlertArea", "alert-success", getLanguage("modify"), getLanguage("changed"));
 				            }
 				        },
 				        complete: function(data) {
@@ -291,7 +291,6 @@ fnDeleteEvent = function(){
 	var param = Object();
 	var res = initParam.split(",");	
 	param.functionclass = "delete";
-	console.log("fnDeleteEvent ; " + res[0]);
 	param.blacklistid = res[0];
 	param.siteid = "0";
 	param.filtertime = "0";
@@ -304,9 +303,9 @@ fnDeleteEvent = function(){
 	        dataType : "text",
 	        success : function(data) {
 	            var jsonObj = eval("(" + data + ')');
-	            alert("삭제 : " +jsonObj.result);
 	            if (jsonObj.result == true) {
 	            	table.ajax.reload(); //데이터 제 조회
+	            	systemAlertNotify("divAlertArea", "alert-success", getLanguage("delete"), getLanguage("Removed"));
 	            }
 	        },
 	        complete: function(data) {
