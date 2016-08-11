@@ -225,6 +225,58 @@ Optional extensions on the jquery.inputmask base
                                 }
                             }
                         },
+                        /** ipv6 pattern make code
+                         * static int MAX = 8;
+                           static LinkedList<String> testList = new LinkedList<>();
+                         * public static void main(String[] args) throws Exception {
+                                makePattern("x");
+                                makePattern("y");
+
+                                for(String s: testList) {
+                                    StringBuffer sb = new StringBuffer();
+                                    sb.append('"');
+                                    for (int i = 0; i < s.length(); i++) {
+                                        if(i<s.length()-1) {
+                                            sb.append(s.charAt(i));
+                                            sb.append(':');
+                                        } else {
+                                            sb.append(s.charAt(i));
+                                        }
+                                    }
+                                    System.out.println(sb+"/j[j]\",");
+                                    System.out.println(sb+"/kmj\",");
+                                    System.out.println(sb+"/kzn\",");
+
+                                }
+                            }
+                                
+                           * public static String makePattern(String s) {
+                                if(s.length() == MAX) {
+                                    testList.add(s);
+                                    return null;
+                                }
+                                if(checkString(makePattern(addX(s)))){
+                                    return makePattern(addY(s));
+                                }
+                                return makePattern(addX(s));
+                            }
+                           * public static boolean checkString (String s ) {
+                                for(String s2 : testList) {
+                                    if (s2.equals(s)){
+                                        return false;
+                                    }
+                                }
+                                return true;
+                            }
+                           * public static String addX (String s) {
+                                s+="x";
+                                return s;
+                            }
+                           * public static String addY (String s) {
+                                s+="y";
+                                return s;
+                            }
+                         * */
                         "ipv6_subnet" : {
                             mask : [ "x:x:x:x:x:x:x:x/j[j]",
                                      "x:x:x:x:x:x:x:x/kmj",
