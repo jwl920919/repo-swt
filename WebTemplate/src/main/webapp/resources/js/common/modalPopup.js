@@ -54,7 +54,7 @@ function modalClose(id, closeCallback) {
 
 
 //region mouse move event
-var box = $('#div_mordal_header');
+var box = $('[div_mordal_header]');
 box.offset({
 });
 
@@ -75,13 +75,14 @@ box.mouseover(function(e){
 
 box.mousedown(function(e) {
     if (!drag.state) {
-        drag.elem = $('#modal');
+        drag.elem = $(this).parent().parent();
         drag.x = e.pageX;
         drag.y = e.pageY;
         drag.state = true;
     }
     return false;
 });
+
 
 $(document).mousemove(function(e) {
     if (drag.state) {

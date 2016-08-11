@@ -28,7 +28,7 @@ public class PolicyManagementController {
 	private AjaxResult result = new AjaxResult();
 	
 	@RequestMapping(value = "accessPolicy", method = RequestMethod.GET)
-	public String systemGroupManagementNotIntegration(Locale locale, Model model, HttpServletRequest request, HttpServletResponse response) {
+	public String accessPolicy(Locale locale, Model model, HttpServletRequest request, HttpServletResponse response) {
 		logger.info("accessPolicy : " + request.getLocalAddr());
 		System.out.println("accessPolicy Controller");
 		// Session에 로그인 정보가 있는지 체크

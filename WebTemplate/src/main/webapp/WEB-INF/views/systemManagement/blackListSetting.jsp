@@ -57,7 +57,7 @@ $(document).ready(function() {
 <div class="modal modal-dialog" id="modal">
 	<div class="modal-content" name="modalContent" id="modalContent">
 	<!-- modal-content -->
-  		<div class="modal-header" id="div_mordal_header">
+  		<div class="modal-header" id="div_mordal_header" div_mordal_header>
     		<input type="button" class="close" name="modalClose" data-dismiss="modal" aria-label="Close" value="&times;" />
     		<h4 class="modal-title"><%=LanguageHelper.GetLanguage("addblacklist")%></h4>
   		</div>

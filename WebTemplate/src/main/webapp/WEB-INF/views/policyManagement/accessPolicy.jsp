@@ -17,9 +17,9 @@
 </div>
 
 <!-- Add, Edit modal -->
-<div class="modal modal-dialog" id="modify-modal" style="width: 600px">
+<div class="modal modal-dialog" id="modify-modal">
 	<div class="modal-content" name="modalContent">
-		<div class="modal-header">
+		<div class="modal-header" div_mordal_header>
 			<input type="button" class="close" name="modalClose"
 				data-dismiss="modal" aria-label="Close" value="&times;" />
 			<h4 class="modal-title">정책 수정</h4>
@@ -37,9 +37,9 @@
 
 <!-- /.Add, Edit modal -->
 <!-- Add, Edit modal -->
-<div class="modal modal-dialog" id="add-modal" style="width: 600px">
+<div class="modal modal-dialog" id="add-modal">
 	<div class="modal-content" name="modalContent">
-		<div class="modal-header">
+		<div class="modal-header" div_mordal_header>
 			<input type="button" class="close" name="modalClose"
 				data-dismiss="modal" aria-label="Close" value="&times;" />
 			<h4 class="modal-title">정책 추가</h4>
@@ -56,9 +56,9 @@
 </div>
 <!-- /.Add, Edit modal -->
 <!-- Add, Edit modal -->
-<div class="modal modal-dialog" id="delete-modal" style="width: 600px">
+<div class="modal modal-dialog" id="delete-modal">
 	<div class="modal-content" name="modalContent">
-		<div class="modal-header">
+		<div class="modal-header" div_mordal_header>
 			<input type="button" class="close" name="modalClose"
 				data-dismiss="modal" aria-label="Close" value="&times;" />
 			<h4 class="modal-title">정책 삭제</h4>
