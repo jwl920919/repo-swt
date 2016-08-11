@@ -22,7 +22,7 @@ public class IPManagementController {
 	private final static java.text.SimpleDateFormat SIMPLE_DATE_FORMAT = new java.text.SimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss");
 	private final static String parentPath = "/ipManagement/";
-	private static final Logger logger = LoggerFactory.getLogger(PageController.class);
+	private static final Logger logger = LoggerFactory.getLogger(IPManagementController.class);
 	private Gson gson = new Gson();		
 	private AjaxResult result = new AjaxResult();
 	

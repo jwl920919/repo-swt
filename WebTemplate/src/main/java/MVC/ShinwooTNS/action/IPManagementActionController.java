@@ -10,8 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +23,7 @@ import com.google.gson.reflect.TypeToken;
 
 import Common.DTO.AjaxResult;
 import Common.Helper.CommonHelper;
+import Common.Helper.ErrorLoggingHelper;
 import Common.Helper.LanguageHelper;
 import Common.ServiceInterface.IP_MANAGEMENT_Service_Interface;
 
@@ -32,7 +32,7 @@ import Common.ServiceInterface.IP_MANAGEMENT_Service_Interface;
 public class IPManagementActionController {
 	private final static java.text.SimpleDateFormat SIMPLE_DATE_FORMAT = new java.text.SimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss");
-	private static final Logger logger = LoggerFactory.getLogger(PageActionController.class);
+	private static final Logger logger = Logger.getLogger(IPManagementActionController.class);
 	private Gson gson = new Gson();
 	private AjaxResult result = null;
 
@@ -43,7 +43,7 @@ public class IPManagementActionController {
 	@RequestMapping(value = "staticIPStatus_Segment_Select", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public void staticIPStatus_Segment_Select(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		System.out.println("staticIPStatus_Segment_Select");
-		logger.info("staticIPStatus_Segment_Select : " + request.getLocalAddr());
+		//logger.info("staticIPStatus_Segment_Select : " + request.getLocalAddr());
 		HttpSession session = request.getSession(true);
 		List<Map<String, Object>> dataList = null;
 		JsonArray jsonArray = null;
@@ -66,7 +66,7 @@ public class IPManagementActionController {
 			result.result = false;
 			result.errorMessage = e.getMessage();
 			e.printStackTrace();
-			logger.error(e.getMessage());
+			ErrorLoggingHelper.log(logger, "staticIPStatus_Segment_Select", e);
 		} finally {
 			response.getWriter().println(Common.Helper.DatatableHelper.makeCallback(request, jsonArray, totalCount));
 			response.getWriter().flush();
@@ -78,7 +78,7 @@ public class IPManagementActionController {
 	@RequestMapping(value = "staticIPStatus_Segment_Detail_Select", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public void staticIPStatus_Segment_Detail_Select(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		System.out.println("staticIPStatus_Segment_Detail_Select");
-		logger.info("staticIPStatus_Segment_Detail_Select : " + request.getLocalAddr());
+		//logger.info("staticIPStatus_Segment_Detail_Select : " + request.getLocalAddr());
 		HttpSession session = request.getSession(true);
 		List<Map<String, Object>> dataList = null;
 		JsonArray jsonArray = null;
@@ -114,7 +114,7 @@ public class IPManagementActionController {
 			result.result = false;
 			result.errorMessage = e.getMessage();
 			e.printStackTrace();
-			logger.error(e.getMessage());
+			ErrorLoggingHelper.log(logger, "staticIPStatus_Segment_Detail_Select", e);
 		} finally {
 			response.getWriter().println(Common.Helper.DatatableHelper.makeCallback(request, jsonArray, totalCount));
 			response.getWriter().flush();
@@ -126,7 +126,7 @@ public class IPManagementActionController {
 	@RequestMapping(value = "staticIPStatus_Segment_MapData", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object staticIPStatus_Segment_MapData(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		System.out.println("staticIPStatus_Segment_MapData");
-		logger.info("staticIPStatus_Segment_MapData : " + request.getLocalAddr());
+		//logger.info("staticIPStatus_Segment_MapData : " + request.getLocalAddr());
 		HttpSession session = request.getSession(true);
 		List<Map<String, Object>> dataList = new ArrayList<Map<String, Object>>();
 		result = new AjaxResult();
@@ -196,7 +196,7 @@ public class IPManagementActionController {
 			result.result = false;
 			result.errorMessage = e.getMessage();
 			e.printStackTrace();
-			logger.error(e.getMessage());
+			ErrorLoggingHelper.log(logger, "staticIPStatus_Segment_MapData", e);
 		}
 		return gson.toJson(result);
 	}
@@ -205,7 +205,7 @@ public class IPManagementActionController {
 	@RequestMapping(value = "dhcp_Network_Select", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object dhcp_Network_Select(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		System.out.println("dhcp_Network_Select");
-		logger.info("dhcp_Network_Select : " + request.getLocalAddr());
+		//logger.info("dhcp_Network_Select : " + request.getLocalAddr());
 		HttpSession session = request.getSession(true);
 		result = new AjaxResult();
 
@@ -243,7 +243,7 @@ public class IPManagementActionController {
 			result.result = false;
 			result.errorMessage = e.getMessage();
 			e.printStackTrace();
-			logger.error(e.getMessage());
+			ErrorLoggingHelper.log(logger, "dhcp_Network_Select", e);
 		}
 		return gson.toJson(result);
 	}
@@ -252,7 +252,7 @@ public class IPManagementActionController {
 	@RequestMapping(value = "leaseIPStatus_Data_Select", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public void leaseIPStatus_Data_Select(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		System.out.println("leaseIPStatus_Data_Select");
-		logger.info("leaseIPStatus_Data_Select : " + request.getLocalAddr());
+		//logger.info("leaseIPStatus_Data_Select : " + request.getLocalAddr());
 		HttpSession session = request.getSession(true);
 		List<Map<String, Object>> dataList = null;
 		JsonArray jsonArray = null;
@@ -288,7 +288,7 @@ public class IPManagementActionController {
 			result.result = false;
 			result.errorMessage = e.getMessage();
 			e.printStackTrace();
-			logger.error(e.getMessage());
+			ErrorLoggingHelper.log(logger, "leaseIPStatus_Data_Select", e);
 		} finally {
 			response.getWriter().println(Common.Helper.DatatableHelper.makeCallback(request, jsonArray, totalCount));
 			response.getWriter().flush();
@@ -300,7 +300,7 @@ public class IPManagementActionController {
 	@RequestMapping(value = "ipCertifyStatus_Data_Select", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public void ipCertifyStatus_Data_Select(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		System.out.println("ipCertifyStatus_Data_Select");
-		logger.info("ipCertifyStatus_Data_Select : " + request.getLocalAddr());
+		//logger.info("ipCertifyStatus_Data_Select : " + request.getLocalAddr());
 		HttpSession session = request.getSession(true);
 		List<Map<String, Object>> dataList = null;
 		JsonArray jsonArray = null;
@@ -356,7 +356,7 @@ public class IPManagementActionController {
 			result.result = false;
 			result.errorMessage = e.getMessage();
 			e.printStackTrace();
-			logger.error(e.getMessage());
+			ErrorLoggingHelper.log(logger, "ipCertifyStatus_Data_Select", e);
 		} finally {
 			response.getWriter().println(Common.Helper.DatatableHelper.makeCallback(request, jsonArray, totalCount));
 			response.getWriter().flush();
@@ -368,7 +368,7 @@ public class IPManagementActionController {
 	@RequestMapping(value = "blackListStatus_Data_Select", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public void blackListStatus_Data_Select(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		System.out.println("blackListStatus_Data_Select");
-		logger.info("blackListStatus_Data_Select : " + request.getLocalAddr());
+		//logger.info("blackListStatus_Data_Select : " + request.getLocalAddr());
 		HttpSession session = request.getSession(true);
 		List<Map<String, Object>> dataList = null;
 		JsonArray jsonArray = null;
@@ -398,7 +398,7 @@ public class IPManagementActionController {
 			result.result = false;
 			result.errorMessage = e.getMessage();
 			e.printStackTrace();
-			logger.error(e.getMessage());
+			ErrorLoggingHelper.log(logger, "blackListStatus_Data_Select", e);
 		} finally {
 			response.getWriter().println(Common.Helper.DatatableHelper.makeCallback(request, jsonArray, totalCount));
 			response.getWriter().flush();
