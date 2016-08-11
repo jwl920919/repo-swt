@@ -14,8 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
@@ -30,6 +29,7 @@ import com.google.gson.reflect.TypeToken;
 import Common.DTO.AjaxResult;
 import Common.DTO.SITE_INFO_DTO;
 import Common.DTO.SYSTEM_USER_INFO_DTO;
+import Common.Helper.ErrorLoggingHelper;
 import Common.ServiceInterface.ACCESS_POLICY_Service_interface;
 import Common.ServiceInterface.SITE_INFO_Service_interface;
 
@@ -38,7 +38,7 @@ import Common.ServiceInterface.SITE_INFO_Service_interface;
 public class PolicyManagementActionController {
 	private final static java.text.SimpleDateFormat SIMPLE_DATE_FORMAT = new java.text.SimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss");
-	private static final Logger logger = LoggerFactory.getLogger(PolicyManagementActionController.class);
+	private static final Logger logger = Logger.getLogger(PolicyManagementActionController.class);
 	private Gson gson = new Gson();
 	private AjaxResult result = new AjaxResult();
 
@@ -54,8 +54,6 @@ public class PolicyManagementActionController {
 	@RequestMapping(value = "getAccessPolicyTableDatas", method = RequestMethod.POST)
 	public void getAccessPolicyTableDatas(Locale locale, Model model, HttpServletRequest request,
 			HttpServletResponse response, HttpSession session) {
-		logger.info("getAccessPolicyTableDatas : " + request.getLocalAddr());
-		System.out.println("getAccessPolicyTableDatas Controller");
 		try {
 			init();
 			String[] columns = { "priority", "site_name", "vendor", "model", "device_type", "os", "hostname", "desc",
@@ -94,9 +92,9 @@ public class PolicyManagementActionController {
 			response.getWriter().flush();
 			response.getWriter().close();
 		} catch (IOException e) {
-			logger.error(e.getMessage());
+			ErrorLoggingHelper.log(logger, "getAccessPolicyTableDatas", e);
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			ErrorLoggingHelper.log(logger, "getAccessPolicyTableDatas", e);
 		}
 	}
 	// endregion
@@ -104,7 +102,6 @@ public class PolicyManagementActionController {
 	// region getSiteNames
 	@RequestMapping(value = "getSiteNames", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object getSiteNames(HttpServletRequest request) {
-		logger.info("getSiteNames : " + request.getLocalAddr());
 		try {
 			init();
 			List<SITE_INFO_DTO> sitesInfoList = siteInfoService.select_SITE_INFO();
@@ -119,7 +116,7 @@ public class PolicyManagementActionController {
 			result.result = true;
 			return gson.toJson(result);
 		} catch (Exception e) {
-			e.printStackTrace();
+			ErrorLoggingHelper.log(logger, "getSiteNames", e);
 			result.result = false;
 			return gson.toJson(result);
 		}
@@ -129,7 +126,6 @@ public class PolicyManagementActionController {
 	// region getVendor
 	@RequestMapping(value = "getVendor", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object getVendor(HttpServletRequest request) {
-		logger.info("getVendor : " + request.getLocalAddr());
 		try {
 			init();
 			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
@@ -139,7 +135,7 @@ public class PolicyManagementActionController {
 			result.result = true;
 			return gson.toJson(result);
 		} catch (Exception e) {
-			e.printStackTrace();
+			ErrorLoggingHelper.log(logger, "getVendor", e);
 			result.result = false;
 			return gson.toJson(result);
 		}
@@ -150,7 +146,6 @@ public class PolicyManagementActionController {
 	// region getModel
 	@RequestMapping(value = "getModel", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object getModel(HttpServletRequest request) {
-		logger.info("getModel : " + request.getLocalAddr());
 		try {
 			init();
 			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
@@ -160,7 +155,7 @@ public class PolicyManagementActionController {
 			result.result = true;
 			return gson.toJson(result);
 		} catch (Exception e) {
-			e.printStackTrace();
+			ErrorLoggingHelper.log(logger, "getModel", e);
 			result.result = false;
 			return gson.toJson(result);
 		}
@@ -171,7 +166,6 @@ public class PolicyManagementActionController {
 	// region getOs
 	@RequestMapping(value = "getOs", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object getOs(HttpServletRequest request) {
-		logger.info("getOs : " + request.getLocalAddr());
 		try {
 			init();
 			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
@@ -181,7 +175,7 @@ public class PolicyManagementActionController {
 			result.result = true;
 			return gson.toJson(result);
 		} catch (Exception e) {
-			e.printStackTrace();
+			ErrorLoggingHelper.log(logger, "getOs", e);
 			result.result = false;
 			return gson.toJson(result);
 		}
@@ -193,7 +187,6 @@ public class PolicyManagementActionController {
 	// region getHostname
 	@RequestMapping(value = "getHostname", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object getHostname(HttpServletRequest request) {
-		logger.info("getHostname : " + request.getLocalAddr());
 		try {
 			init();
 			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
@@ -203,7 +196,7 @@ public class PolicyManagementActionController {
 			result.result = true;
 			return gson.toJson(result);
 		} catch (Exception e) {
-			e.printStackTrace();
+			ErrorLoggingHelper.log(logger, "getHostname", e);
 			result.result = false;
 			return gson.toJson(result);
 		}
@@ -214,7 +207,6 @@ public class PolicyManagementActionController {
 	// region getDeviceType
 	@RequestMapping(value = "getDeviceType", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object getDeviceType(HttpServletRequest request) {
-		logger.info("getDeviceType : " + request.getLocalAddr());
 		try {
 			init();
 			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
@@ -224,7 +216,7 @@ public class PolicyManagementActionController {
 			result.result = true;
 			return gson.toJson(result);
 		} catch (Exception e) {
-			e.printStackTrace();
+			ErrorLoggingHelper.log(logger, "getDeviceType", e);
 			result.result = false;
 			return gson.toJson(result);
 		}
@@ -235,7 +227,6 @@ public class PolicyManagementActionController {
 	// region access_policy_modify
 	@RequestMapping(value = "accessPolicyModify", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object accessPolicyModify(HttpServletRequest request) {
-		logger.info("accessPolicyModify : " + request.getLocalAddr());
 		try {
 			init();
 			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
@@ -251,7 +242,7 @@ public class PolicyManagementActionController {
 				result.result = false;
 			return gson.toJson(result);
 		} catch (Exception e) {
-			e.printStackTrace();
+			ErrorLoggingHelper.log(logger, "accessPolicyModify", e);
 			result.result = false;
 			return gson.toJson(result);
 		}
@@ -262,7 +253,6 @@ public class PolicyManagementActionController {
 	// region access_policy_insert
 	@RequestMapping(value = "accessPolicyInsert", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object accessPolicyInsert(HttpServletRequest request) {
-		logger.info("accessPolicyInsert : " + request.getLocalAddr());
 		try {
 			init();
 			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
@@ -277,6 +267,7 @@ public class PolicyManagementActionController {
 				result.result = false;
 			return gson.toJson(result);
 		} catch (Exception e) {
+			ErrorLoggingHelper.log(logger, "accessPolicyInsert", e);
 			result.result = false;
 			return gson.toJson(result);
 		}
@@ -287,7 +278,6 @@ public class PolicyManagementActionController {
 	// region accessPolicyDelete
 	@RequestMapping(value = "accessPolicyDelete", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object accessPolicyDelete(HttpServletRequest request) {
-		logger.info("accessPolicyDelete : " + request.getLocalAddr());
 		try {
 			init();
 			List<HashMap<String, Object>> jArray = gson.fromJson(request.getReader(),
@@ -307,7 +297,7 @@ public class PolicyManagementActionController {
 				result.result = false;
 			return gson.toJson(result);
 		} catch (Exception e) {
-			e.printStackTrace();
+			ErrorLoggingHelper.log(logger, "accessPolicyDelete", e);
 			result.result = false;
 			return gson.toJson(result);
 		}

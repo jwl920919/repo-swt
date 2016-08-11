@@ -12,10 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,6 +30,7 @@ import Common.DTO.AjaxResult;
 import Common.DTO.SITE_INFO_DTO;
 import Common.DTO.SYSTEM_USER_GROUP_DTO;
 import Common.DTO.SYSTEM_USER_INFO_DTO;
+import Common.Helper.ErrorLoggingHelper;
 import Common.Helper.LanguageHelper;
 import Common.ServiceInterface.AUTH_MENU_Service_interface;
 import Common.ServiceInterface.SITE_INFO_Service_interface;
@@ -42,7 +42,7 @@ import Common.ServiceInterface.SYSTEM_USER_INFO_Service_Interface;
 public class ConfigManagementActionController {
 	private final static java.text.SimpleDateFormat SIMPLE_DATE_FORMAT = new java.text.SimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss");
-	private static final Logger logger = LoggerFactory.getLogger(ConfigManagementActionController.class);
+	private static final Logger logger = Logger.getLogger(ConfigManagementActionController.class);
 	private Gson gson = new Gson();
 	private AjaxResult result = new AjaxResult();
 
@@ -64,8 +64,6 @@ public class ConfigManagementActionController {
 	@RequestMapping(value = "getSystemUserManagementDatatableDatas", method = RequestMethod.POST)
 	public void getSystemUserManagementDatatableDatas(Locale locale, Model model, HttpServletRequest request,
 			HttpServletResponse response, HttpSession session) {
-		logger.info("getSystemUserManagementDatatableDatas : " + request.getLocalAddr());
-		System.out.println("getSystemUserManagementDatatableDatas Controller");
 		try {
 			init();
 			String[] columns = { "user_id", "user_name" };
@@ -90,9 +88,9 @@ public class ConfigManagementActionController {
 			response.getWriter().flush();
 			response.getWriter().close();
 		} catch (IOException e) {
-			logger.error(e.getMessage());
+			ErrorLoggingHelper.log(logger, "getSystemUserManagementDatatableDatas", e);
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			ErrorLoggingHelper.log(logger, "getSystemUserManagementDatatableDatas", e);
 		}
 	}
 	// endregion
@@ -100,8 +98,6 @@ public class ConfigManagementActionController {
 	// region getUserInfo
 	@RequestMapping(value = "getUserInfo", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object getUserInfo(HttpServletRequest request) {
-		logger.info("getUserInfo : " + request.getLocalAddr());
-		System.out.println("getUserInfo Controller");
 		try {
 			init();
 			SYSTEM_USER_INFO_DTO systemUserInfo = userInfoService.select_SYSTEM_USER_INFO_ONE_SEARCH(
@@ -123,7 +119,7 @@ public class ConfigManagementActionController {
 			result.data = list;
 			return gson.toJson(result);
 		} catch (IOException e1) {
-			e1.printStackTrace();
+			ErrorLoggingHelper.log(logger, "getUserInfo", e1);
 			result.result = false;
 			return gson.toJson(result);
 		}
@@ -133,7 +129,6 @@ public class ConfigManagementActionController {
 	// region updateUserInfo
 	@RequestMapping(value = "updateUserInfo", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object updateUserInfo(HttpServletRequest request, HttpSession session) {
-		logger.info("updateUserInfo : " + request.getLocalAddr());
 		try {
 			init();
 			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
@@ -150,7 +145,7 @@ public class ConfigManagementActionController {
 				result.result = false;
 			return gson.toJson(result);
 		} catch (Exception e) {
-			e.printStackTrace();
+			ErrorLoggingHelper.log(logger, "updateUserInfo", e);
 			result.result = false;
 			return gson.toJson(result);
 		}
@@ -160,7 +155,6 @@ public class ConfigManagementActionController {
 	// region checkId
 	@RequestMapping(value = "checkId", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object checkId(HttpServletRequest request) {
-		logger.info("checkId : " + request.getLocalAddr());
 		try {
 			init();
 			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
@@ -177,7 +171,7 @@ public class ConfigManagementActionController {
 			}
 			return gson.toJson(result);
 		} catch (Exception e) {
-			e.printStackTrace();
+			ErrorLoggingHelper.log(logger, "checkId", e);
 			result.result = false;
 			return gson.toJson(result);
 		}
@@ -188,7 +182,6 @@ public class ConfigManagementActionController {
 	// region addUser
 	@RequestMapping(value = "addUser", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object addUser(HttpServletRequest request,HttpSession session) {
-		logger.info("addUser : " + request.getLocalAddr());
 		try {
 			init();
 			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
@@ -205,7 +198,7 @@ public class ConfigManagementActionController {
 				result.result = false;
 			return gson.toJson(result);
 		} catch (Exception e) {
-			e.printStackTrace();
+			ErrorLoggingHelper.log(logger, "addUser", e);
 			result.result = false;
 			return gson.toJson(result);
 		}
@@ -215,7 +208,6 @@ public class ConfigManagementActionController {
 	// region deleteUser
 	@RequestMapping(value = "deleteUsers", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object deleteUsers(HttpServletRequest request) {
-		logger.info("deleteUsers : " + request.getLocalAddr());
 		try {
 			init();
 			List<HashMap<String, Object>> jArray = gson.fromJson(request.getReader(),
@@ -236,7 +228,7 @@ public class ConfigManagementActionController {
 				result.result = false;
 			return gson.toJson(result);
 		} catch (Exception e) {
-			e.printStackTrace();
+			ErrorLoggingHelper.log(logger, "deleteUsers", e);
 			result.result = false;
 			return gson.toJson(result);
 		}
@@ -246,7 +238,6 @@ public class ConfigManagementActionController {
 	// region getGroupNames
 	@RequestMapping(value = "getGroupNames", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object getGroupNames(HttpServletRequest request) {
-		logger.info("getGroupNames : " + request.getLocalAddr());
 		try {
 			init();
 			List<SYSTEM_USER_GROUP_DTO> groupsInfoList = groupInfoService.select_SYSTEM_USER_GROUP_INFO();
@@ -261,7 +252,7 @@ public class ConfigManagementActionController {
 			result.result = true;
 			return gson.toJson(result);
 		} catch (Exception e) {
-			e.printStackTrace();
+			ErrorLoggingHelper.log(logger, "getGroupNames", e);
 			result.result = false;
 			return gson.toJson(result);
 		}
@@ -277,8 +268,6 @@ public class ConfigManagementActionController {
 	@RequestMapping(value = "getPlaceOfBusinessDatatableDatas", method = RequestMethod.POST)
 	public void getPlaceOfBusinessDatatableDatas(Locale locale, Model model, HttpServletRequest request,
 			HttpServletResponse response) {
-		logger.info("getPlaceOfBusinessDatatableDatas : " + request.getLocalAddr());
-		System.out.println("getPlaceOfBusinessDatatableDatas Controller");
 		try {
 			init();
 			String[] columns = { "site_name", "site_code", "description", "site_id" };
@@ -304,9 +293,9 @@ public class ConfigManagementActionController {
 			response.getWriter().flush();
 			response.getWriter().close();
 		} catch (IOException e) {
-			logger.error(e.getMessage());
+			ErrorLoggingHelper.log(logger, "getPlaceOfBusinessDatatableDatas", e);
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			ErrorLoggingHelper.log(logger, "getPlaceOfBusinessDatatableDatas", e);
 		}
 	}
 	// endregion
@@ -315,8 +304,6 @@ public class ConfigManagementActionController {
 	@RequestMapping(value = "getUserGroupDatatableDatas", method = RequestMethod.POST)
 	public void getUserGroupDatatableDatas(Locale locale, Model model, HttpServletRequest request,
 			HttpServletResponse response,HttpSession session) {
-		logger.info("getUserGroupDatatableDatas : " + request.getLocalAddr());
-		System.out.println("getUserGroupDatatableDatas Controller");
 		try {
 			init();
 			String[] columns = { "site_name", "group_name", "group_desc", "group_id" };
@@ -338,7 +325,7 @@ public class ConfigManagementActionController {
 			response.getWriter().flush();
 			response.getWriter().close();
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			ErrorLoggingHelper.log(logger, "getUserGroupDatatableDatas", e);
 		}
 	}
 	// endregion
@@ -346,7 +333,6 @@ public class ConfigManagementActionController {
 	// region addSite
 	@RequestMapping(value = "addSite", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object addSite(HttpServletRequest request) {
-		logger.info("addSite : " + request.getLocalAddr());
 		try {
 			init();
 			// site_name, site_code, description
@@ -359,7 +345,7 @@ public class ConfigManagementActionController {
 				result.result = false;
 			return gson.toJson(result);
 		} catch (Exception e) {
-			e.printStackTrace();
+			ErrorLoggingHelper.log(logger, "addSite", e);
 			result.result = false;
 			return gson.toJson(result);
 		}
@@ -369,7 +355,6 @@ public class ConfigManagementActionController {
 	// region addGroup
 	@RequestMapping(value = "addGroup", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object addGroup(HttpServletRequest request) {
-		logger.info("addGroup : " + request.getLocalAddr());
 		try {
 			init();
 			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
@@ -386,7 +371,7 @@ public class ConfigManagementActionController {
 				result.result = false;
 			return gson.toJson(result);
 		} catch (Exception e) {
-			e.printStackTrace();
+			ErrorLoggingHelper.log(logger, "addGroup", e);
 			result.result = false;
 			return gson.toJson(result);
 		}
@@ -396,7 +381,6 @@ public class ConfigManagementActionController {
 	// region updateSite
 	@RequestMapping(value = "updateSite", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object updateSite(HttpServletRequest request) {
-		logger.info("updateSite : " + request.getLocalAddr());
 		try {
 			init();
 			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
@@ -413,6 +397,7 @@ public class ConfigManagementActionController {
 				result.result = false;
 			return gson.toJson(result);
 		} catch (Exception e) {
+			ErrorLoggingHelper.log(logger, "updateSite", e);
 			result.result = false;
 			return gson.toJson(result);
 		}
@@ -423,7 +408,6 @@ public class ConfigManagementActionController {
 	// region updateGroup
 	@RequestMapping(value = "updateGroup", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object updateGroup(HttpServletRequest request) {
-		logger.info("updateGroup : " + request.getLocalAddr());
 		try {
 			init();
 			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
@@ -443,7 +427,7 @@ public class ConfigManagementActionController {
 				result.result = false;
 			return gson.toJson(result);
 		} catch (Exception e) {
-			e.printStackTrace();
+			ErrorLoggingHelper.log(logger, "updateGroup", e);
 			result.result = false;
 			return gson.toJson(result);
 		}
@@ -453,7 +437,6 @@ public class ConfigManagementActionController {
 	// region deleteSites
 	@RequestMapping(value = "deleteSites", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object deleteSites(HttpServletRequest request) {
-		logger.info("deleteSites : " + request.getLocalAddr());
 		try {
 			init();
 			List<HashMap<String, Object>> jArray = gson.fromJson(request.getReader(),
@@ -473,7 +456,7 @@ public class ConfigManagementActionController {
 				result.result = false;
 			return gson.toJson(result);
 		} catch (Exception e) {
-			e.printStackTrace();
+			ErrorLoggingHelper.log(logger, "deleteSites", e);
 			result.result = false;
 			return gson.toJson(result);
 		}
@@ -483,7 +466,6 @@ public class ConfigManagementActionController {
 	// region deleteGroups
 	@RequestMapping(value = "deleteGroups", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object deleteGroups(HttpServletRequest request) {
-		logger.info("deleteGroups : " + request.getLocalAddr());
 		try {
 			init();
 			List<HashMap<String, Object>> jArray = gson.fromJson(request.getReader(),
@@ -503,7 +485,7 @@ public class ConfigManagementActionController {
 				result.result = false;
 			return gson.toJson(result);
 		} catch (Exception e) {
-			e.printStackTrace();
+			ErrorLoggingHelper.log(logger, "deleteGroups", e);
 			result.result = false;
 			return gson.toJson(result);
 		}
@@ -520,8 +502,6 @@ public class ConfigManagementActionController {
 	@RequestMapping(value = "getAuthorityTable", method = RequestMethod.GET, produces = "application/text; charset=utf8")
 	public void getAuthorityTable(Locale locale, Model model, HttpServletRequest request,
 			HttpServletResponse response) {
-		logger.info("getAuthorityTable : " + request.getLocalAddr());
-		System.out.println("getAuthorityTable Controller");
 		try {
 			init();
 			HttpSession session = request.getSession(true);
@@ -629,8 +609,7 @@ public class ConfigManagementActionController {
 				response.getWriter().close();
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error(e.getMessage());
+			ErrorLoggingHelper.log(logger, "getAuthorityTable", e);
 		}
 	}
 
@@ -639,7 +618,6 @@ public class ConfigManagementActionController {
 	// region changeGroupsAuthority
 	@RequestMapping(value = "changeGroupsAuthority", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object changeGroupsAuthority(HttpServletRequest request) {
-		logger.info("changeGroupsAuthority : " + request.getLocalAddr());
 		try {
 			init();
 			List<HashMap<String, Object>> jArray = gson.fromJson(request.getReader(),
@@ -671,7 +649,7 @@ public class ConfigManagementActionController {
 			result.result = true;
 			return gson.toJson(result);
 		} catch (Exception e) {
-			e.printStackTrace();
+			ErrorLoggingHelper.log(logger, "changeGroupsAuthority", e);
 			result.result = false;
 			return gson.toJson(result);
 		}
@@ -683,7 +661,6 @@ public class ConfigManagementActionController {
 	// region getSiteNames
 	@RequestMapping(value = "getSiteNames", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object getSiteNames(HttpServletRequest request) {
-		logger.info("getSiteNames : " + request.getLocalAddr());
 		try {
 			init();
 			List<SITE_INFO_DTO> sitesInfoList = siteInfoService.select_SITE_INFO();
@@ -698,7 +675,7 @@ public class ConfigManagementActionController {
 			result.result = true;
 			return gson.toJson(result);
 		} catch (Exception e) {
-			e.printStackTrace();
+			ErrorLoggingHelper.log(logger, "getSiteNames", e);
 			result.result = false;
 			return gson.toJson(result);
 		}
@@ -708,7 +685,6 @@ public class ConfigManagementActionController {
 	// region getCurrentSiteInfo
 	@RequestMapping(value = "getCurrentSiteInfo", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object getCurrentSiteInfo(HttpServletRequest request, HttpSession session) {
-		logger.info("getCurrentSiteInfo : " + request.getLocalAddr());
 		try {
 			init();
 			SITE_INFO_DTO sid = siteInfoService
@@ -720,7 +696,7 @@ public class ConfigManagementActionController {
 			result.result = true;
 			return gson.toJson(result);
 		} catch (Exception e) {
-			e.printStackTrace();
+			ErrorLoggingHelper.log(logger, "getCurrentSiteInfo", e);
 			result.result = false;
 			return gson.toJson(result);
 		}
