@@ -51,3 +51,59 @@ function modalClose(id, closeCallback) {
             }
 	}
 }
+
+
+//region mouse move event
+var box = $('#div_mordal_header');
+box.offset({
+});
+
+var drag = {
+    elem: null,
+    x: 0,
+    y: 0,
+    state: false
+};
+var delta = {
+    x: 0,
+    y: 0
+};
+
+box.mouseover(function(e){
+	box.css('cursor','move');
+});
+
+box.mousedown(function(e) {
+    if (!drag.state) {
+        drag.elem = $('#modal');
+        drag.x = e.pageX;
+        drag.y = e.pageY;
+        drag.state = true;
+    }
+    return false;
+});
+
+$(document).mousemove(function(e) {
+    if (drag.state) {
+        delta.x = e.pageX - drag.x;
+        delta.y = e.pageY - drag.y;
+
+        var cur_offset = $(drag.elem).offset();
+
+        $(drag.elem).offset({
+            left: (cur_offset.left + delta.x),
+            top: (cur_offset.top + delta.y)
+        });
+
+        drag.x = e.pageX;
+        drag.y = e.pageY;
+    }
+});
+
+$(document).mouseup(function() {
+    if (drag.state) {
+        drag.state = false;
+    }
+	box.css('cursor','default');
+});
+//endregion mouse move event

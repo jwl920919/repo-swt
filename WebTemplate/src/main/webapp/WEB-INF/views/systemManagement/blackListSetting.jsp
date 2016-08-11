@@ -29,14 +29,35 @@ $(document).ready(function() {
 	} catch (e) {
 		console.log(e.message);
 	}
+	
+// 	var mouseStatus="UP";
+// 	$( "#div_mordal_header" )
+// 	  .mouseup(function() {
+// 		  mouseStatus="UP";
+// 		  $( "#modal" ).droppable({ accept: "not(.notdragabble)" });
+// 	  })
+// 	  .mousedown(function() {
+// 		  mouseStatus="DOWN";
+// 	  });
+	
+// 	$( "#div_mordal_header" )
+// 	  .mouseenter(function() {
+// 		  if(mouseStatus == "DOWN")
+// 		  	$( "#modal" ).draggable();
+// 	  })
+// 	  .mouseleave(function() {
+// 		  $( "#modal" ).droppable({ accept: "not(.notdragabble)" });
+// 	  });
+
+
 });
 </script>
-    		
+
 <!-- Add, Edit modal -->
-<div class="modal modal-dialog" id="modal" style="width:600px">
-	<div class="modal-content" name="modalContent">
+<div class="modal modal-dialog" id="modal">
+	<div class="modal-content" name="modalContent" id="modalContent">
 	<!-- modal-content -->
-  		<div class="modal-header">
+  		<div class="modal-header" id="div_mordal_header">
     		<input type="button" class="close" name="modalClose" data-dismiss="modal" aria-label="Close" value="&times;" />
     		<h4 class="modal-title"><%=LanguageHelper.GetLanguage("addblacklist")%></h4>
   		</div>
