@@ -617,11 +617,11 @@
 	<!-- Insert User : 이재원 -->
 	<!-- Description : policyManagement.jsp Model Search -->
 	<!-- Controller : MVC.ShinwooTNS.action.PolicyManagementActionController -->
-	<select id="select_POLICY_MODEL_SEARCH_REF_VENDOR"
+	<select id="select_POLICY_MODEL_SEARCH"
 		parameterType="hashmap" resultType="java.util.HashMap">
 		SELECT DISTINCT model 
 		FROM view_client_info 
-		WHERE vendor = #{vendor} AND model IS NOT NULL AND model != ''
+		WHERE model IS NOT NULL AND model != ''
 			<if test="searchValue != null"> 
 				AND model like CONCAT('%', #{searchValue}, '%')
 			</if> 
@@ -736,7 +736,7 @@
 		SET		os=#{os}, device_type=#{device_type},priority=#{priority}, os_like=#{os_like}, 
 				hostname_like=#{hostname_like}, device_type_like=#{device_type_like}, 
 				hostname=#{hostname}, vendor=#{vendor}, site_id=#{site_id}, model_like=#{model_like}, 
-				model=#{model},is_permit=#{is_permit}, "desc"=#{desc} 
+				model=#{model},is_permit=#{is_permit}, "desc"=#{desc} ,update_time=now()
 		WHERE 	access_policy_id = #{access_policy_id};
 	</update>
 	
@@ -747,16 +747,21 @@
 	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
 	<insert id="insert_ACCESS_POLICY_INFORM_ONE_RECORD"
 		parameterType="hashmap">
-		INSERT INTO "public"."access_policy" 
+<!-- 		INSERT into -->
+<!-- 		system_user_group (site_id, -->
+<!-- 		group_name, group_desc) -->
+<!-- 		VALUES (#{site_id}, #{group_name}, -->
+<!-- 		#{group_desc}); -->
+		INSERT INTO access_policy
 		(
-			"vendor", "model", "os", "device_type", "hostname", "desc", "is_permit", 
-			"site_id", "priority","os_like","device_type_like","hostname_like","model_like"
+			vendor, model, os, device_type, hostname, "desc", is_permit, 
+			site_id, priority,os_like,device_type_like,hostname_like,model_like,vendor_like
 		) 
 		VALUES 
 		(
 			#{vendor}, #{model}, #{os}, #{device_type}, #{hostname}, #{desc}, #{is_permit}, 
-			#{site_id},#{priority},#{os_like},{device_type_like},#{hostname_like},#{model_like}
-		);
+			#{site_id},#{priority},#{os_like},#{device_type_like},#{hostname_like},#{model_like},#{vendor_like}
+		)
 	</insert>
 	
 	<!-- Query Type : Delete(Select, Insert, Update, Delete) -->

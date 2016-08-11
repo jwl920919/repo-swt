@@ -21,8 +21,6 @@ import com.shinwootns.data.entity.DhcpNetwork;
 import com.shinwootns.data.entity.DhcpRange;
 import com.shinwootns.data.key.RedisKeys;
 import com.shinwootns.data.status.DhcpCounter;
-import com.shinwootns.data.status.DhcpDeviceStatus;
-import com.shinwootns.data.status.DhcpVrrpStatus;
 import com.shinwootns.data.status.DnsCounter;
 import com.shinwootns.ipm.insight.SpringBeanProvider;
 import com.shinwootns.ipm.insight.data.SharedData;

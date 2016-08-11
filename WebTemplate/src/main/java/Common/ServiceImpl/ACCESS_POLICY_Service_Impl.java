@@ -30,8 +30,8 @@ private ACCESS_POLICY_interface accessPolicyDao;
 	}
 
 	@Override
-	public List<Map<String, Object>> select_POLICY_MODEL_SEARCH_REF_VENDOR(HashMap<String, Object> parameters) {
-		return accessPolicyDao.select_POLICY_MODEL_SEARCH_REF_VENDOR(parameters);
+	public List<Map<String, Object>> select_POLICY_MODEL_SEARCH(HashMap<String, Object> parameters) {
+		return accessPolicyDao.select_POLICY_MODEL_SEARCH(parameters);
 	}
 
 	@Override
@@ -48,6 +48,15 @@ private ACCESS_POLICY_interface accessPolicyDao;
 	public int update_ACCESS_POLICY_INFORM(HashMap<String, Object> parameters) {
 		return accessPolicyDao.update_ACCESS_POLICY_INFORM(parameters);
 	}
-
+	
+	@Override
+	public int insert_ACCESS_POLICY_INFORM_ONE_RECORD(HashMap<String, Object> parameters) {
+		return accessPolicyDao.insert_ACCESS_POLICY_INFORM_ONE_RECORD(parameters);
+	}
+	
+	@Override
+	public int delete_ACCESS_POLICY_INFORM_RECORDS(HashMap<String, Object> parameters) {
+		return accessPolicyDao.delete_ACCESS_POLICY_INFORM_RECORDS(parameters);
+	}
 
 }

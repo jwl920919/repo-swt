@@ -55,6 +55,27 @@
 	<!-- /.modal-content -->
 </div>
 <!-- /.Add, Edit modal -->
+<!-- Add, Edit modal -->
+<div class="modal modal-dialog" id="delete-modal" style="width: 600px">
+	<div class="modal-content" name="modalContent">
+		<div class="modal-header">
+			<input type="button" class="close" name="modalClose"
+				data-dismiss="modal" aria-label="Close" value="&times;" />
+			<h4 class="modal-title">정책 삭제</h4>
+		</div>
+		<div id="delete-body" class="modal-body">
+			선택하신 정책을 삭제 하시겠습니까?
+		</div>
+		<div class="modal-footer">
+			<input type="button" class="btn btn-default pull-left"
+				name="modalClose" data-dismiss="modal"
+				value="<%=LanguageHelper.GetLanguage("close")%>" />
+			<button type="button" class="btn btn-primary" id="delete-save-btn"><%=LanguageHelper.GetLanguage("delete")%></button>
+		</div>
+	</div>
+	<!-- /.modal-content -->
+</div>
+<!-- /.Add, Edit modal -->
 <!-- modalbackDiv -->
 <div id="modalbackDiv" class="mordal-back-box"></div>
 <!-- /.modalbackDiv -->
@@ -82,12 +103,13 @@
 								<th>OS</th>
 								<th>Hostname</th>
 								<th>설명</th>
-								<th></th>
-								<th></th>
-								<th></th>
-								<th></th>
-								<th></th>
-								<th></th>
+								<th>access_policy_id</th>
+								<th>site_id</th>
+								<th>os_like</th>
+								<th>device_type_like</th>
+								<th>hostname_like</th>
+								<th>model_like</th>
+								<th>vendor_like</th>
 								<th>정책</th>
 								<th></th>
 							</tr>

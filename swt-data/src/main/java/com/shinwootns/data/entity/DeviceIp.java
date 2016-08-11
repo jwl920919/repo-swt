@@ -1,7 +1,6 @@
 package com.shinwootns.data.entity;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 
 public class DeviceIp implements Serializable {
 	

@@ -1,7 +1,5 @@
 package com.shinwootns.ipm.insight.service.syslog;
 
-import com.google.gson.JsonObject;
-
 public class SyslogHandler {
 	
 	public DhcpMessage processSyslog(String rawMessage)
@@ -154,8 +152,6 @@ public class SyslogHandler {
 	
 	private DhcpMessage processDHCPREQUEST(String message)
     {
-        String sIP = "", sMac = "";
-
         // [DHCPREQUEST]
         // DHCPREQUEST for 192.168.1.169 from 20:55:31:89:89:ed (android - 11c2831a49d6d571) via eth1 uid 01:20:55:31:89:89:ed(RENEW)
         // DHCPREQUEST for 192.168.1.114 (192.168.1.254) from 00:0c:29:8a:bb:a7 via eth1 : unknown lease 192.168.1.114.
@@ -252,8 +248,6 @@ public class SyslogHandler {
 
 	private DhcpMessage processEXPIRE(String message)
     {
-        String sIP = "", sMac = "";
-
         // [DHCPEXPIRE]
         // on 192.168.1.19 to 30:52:cb:0c:f8:17
 

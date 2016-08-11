@@ -60,6 +60,7 @@ CREATE TABLE device_dhcp
   CONSTRAINT device_dhcp_host_unique UNIQUE (host)
 );
 
+
 -- DEVICE_NETWORK
 CREATE TABLE device_network
 (
@@ -76,12 +77,39 @@ CREATE TABLE device_network
   sys_oid character varying(256),
   sys_location character varying(256),
   description character varying(512),
+
+  insight_id integer,
+  fix_insight boolean DEFAULT false,
+  snmp_result boolean,
+  check_time timestamp with time zone,
+  
   insert_time timestamp with time zone DEFAULT current_timestamp,
   update_time timestamp with time zone DEFAULT current_timestamp,
   CONSTRAINT device_network_pkey PRIMARY KEY (device_id),
   CONSTRAINT device_network_ip_unique UNIQUE (host)
 );
 COMMENT ON COLUMN device_network.device_type IS 'L2, L3, SWITCH, FIREWALL, ...';
+
+
+
+-- DEVICE_OUI
+CREATE TABLE device_oui
+(
+  oui character varying(10) NOT NULL,
+  vendor character varying(256) NOT NULL,
+  CONSTRAINT device_oui_pkey PRIMARY KEY (oui)
+);
+COMMENT ON COLUMN device_oui.oui IS 'Uper Case (ex. AA:AA:AA)';
+
+-- DEVICE_SYSOID
+CREATE TABLE device_sysoid
+(
+  sysoid character varying(256) NOT NULL,
+  vendor character varying(64) NOT NULL,
+  model character varying(128) NOT NULL,
+  CONSTRAINT device_sysoid_pkey PRIMARY KEY (sysoid)
+);
+
 
 --==========================================================================================
 -- INTERFACE

@@ -23,35 +23,12 @@ import com.shinwootns.data.entity.DhcpIpStatus;
 import com.shinwootns.data.entity.DhcpMacFilter;
 import com.shinwootns.data.entity.DhcpNetwork;
 import com.shinwootns.data.entity.DhcpRange;
+import com.shinwootns.data.key.SnmpOIDs;
 import com.shinwootns.data.status.DhcpCounter;
-import com.shinwootns.data.status.DhcpDeviceStatus;
-import com.shinwootns.data.status.DhcpVrrpStatus;
 import com.shinwootns.data.status.DnsCounter;
+import com.shinwootns.ipm.insight.service.snmp.SnmpHandler;
 
 public class DhcpHandler {
-	
-	private final static String OID_sysObjectID = "1.3.6.1.2.1.1.2.0";
-	private final static String OID_sysName = "1.3.6.1.2.1.1.5.0";
-	
-	private final static String OID_ibHardwareType = "1.3.6.1.4.1.7779.3.1.1.2.1.4.0";
-	private final static String OID_ibSerialNumber = "1.3.6.1.4.1.7779.3.1.1.2.1.6.0";
-	private final static String OID_ibNiosVersion = "1.3.6.1.4.1.7779.3.1.1.2.1.7.0";
-	private final static String OID_ibDHCPStatistics = ".1.3.6.1.4.1.7779.3.1.1.4.1.3";				// DHCP Counter
-	private final static String OID_ibZoneStatisticsEntry = ".1.3.6.1.4.1.7779.3.1.1.3.1.1.1";		// DNS Counter
-	private final static String OID_ibSystemMonitorCpuUsage = "1.3.6.1.4.1.7779.3.1.1.2.1.8.1.1.0";
-	private final static String OID_ibSystemMonitorMemUsage = "1.3.6.1.4.1.7779.3.1.1.2.1.8.2.1.0";
-	private final static String OID_ibMemberServiceStatusEntry = "1.3.6.1.4.1.7779.3.1.1.2.1.9.1";
-	//ibServiceName		1.3.6.1.4.1.7779.3.1.1.2.1.9.1.1
-	//ibServiceStatus	1.3.6.1.4.1.7779.3.1.1.2.1.9.1.2
-	//ibServiceDesc		s1.3.6.1.4.1.7779.3.1.1.2.1.9.1.3
-	private final static String OID_ibMemberNode1ServiceStatusEntry = "1.3.6.1.4.1.7779.3.1.1.2.1.10.1";
-	//ibNode1ServiceName	1.3.6.1.4.1.7779.3.1.1.2.1.10.1.1
-	//ibNode1ServiceStatus	1.3.6.1.4.1.7779.3.1.1.2.1.10.1.2
-	//ibNode1ServiceDesc	1.3.6.1.4.1.7779.3.1.1.2.1.10.1.3
-	private final static String OID_ibMemberNode2ServiceStatusEntry = "1.3.6.1.4.1.7779.3.1.1.2.1.11.1";
-	//ibNode2ServiceName	1.3.6.1.4.1.7779.3.1.1.2.1.11.1.1
-	//ibNode2ServiceStatus	1.3.6.1.4.1.7779.3.1.1.2.1.11.1.2
-	//ibNode2ServiceDesc	1.3.6.1.4.1.7779.3.1.1.2.1.11.1.3
 	
 	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
@@ -84,7 +61,7 @@ public class DhcpHandler {
 			_logger.info( (new StringBuilder().append(host).append(", Connect WAPI... OK")).toString() );
 			
 			// Check SNMP
-			if ( checkSnmp() == false ) {
+			if ( SnmpHandler.checkSnmp(this.host, this.snmpCommunity ) == false ) {
 				_logger.error( (new StringBuilder().append(host).append(", Connect SNMP... failed")).toString() );
 				return false;
 			}
@@ -110,29 +87,8 @@ public class DhcpHandler {
 	}
 	//endregion
 	
-	//region [SNMP] Check snmp
-	public boolean checkSnmp() {
-
-		try {
-			//SNMP Handler
-			SnmpUtil snmpUtil = new SnmpUtil(this.host, this.snmpCommunity);
-			
-			SnmpResult result = snmpUtil.snmpGet(1, OID_sysObjectID, 1000, 3);
-	
-			if (result != null) {
-				return true;
-			}
-		}
-		catch(Exception ex) {
-			_logger.error(ex.getMessage(), ex);
-		}
-		
-		return false;
-	}
-	//endregion
-	
 	//region [SNMP] Get sysName
-	public String getSysName() {
+	/*public String getSysName() {
 		
 		try {
 			SnmpUtil snmpUtil = new SnmpUtil(this.host, this.snmpCommunity);
@@ -146,7 +102,7 @@ public class DhcpHandler {
 		}
 		
 		return null;
-	}
+	}*/
 	//endregion
 	
 	//region [SNMP] Get SysUptime
@@ -172,7 +128,7 @@ public class DhcpHandler {
 		
 		try {
 			SnmpUtil snmpUtil = new SnmpUtil(this.host, this.snmpCommunity);
-			SnmpResult result = snmpUtil.snmpGet(1, OID_ibNiosVersion, 1000, 3);
+			SnmpResult result = snmpUtil.snmpGet(1, SnmpOIDs.OG_ibNiosVersion, 1000, 3);
 	
 			if (result != null)
 				return result.getValueString();
@@ -430,7 +386,6 @@ public class DhcpHandler {
 			LinkedList<DhcpIpStatus> listIPStatus = new LinkedList<DhcpIpStatus>();
 			
 			int splitCount = 100;
-			int ipCount = 0;
 			
 			HashMap<String, DhcpIpStatus> mapIp = new HashMap<String, DhcpIpStatus>();
 			
@@ -643,8 +598,8 @@ public class DhcpHandler {
 	}
 	//endregion
 	
-	/*
 	//region [FUNC] Get Device Status
+	/*
 	public DhcpDeviceStatus getDeviceStatus() {
 		
 		if (wapiHandler == null)
@@ -698,9 +653,11 @@ public class DhcpHandler {
 		
 		return null;
 	}
+	*/
 	//endregion
 	
 	//region [FUNC] getVRRPStatus
+	/*
 	public DhcpVrrpStatus getVRRPStatus() {
 		
 		if (wapiHandler == null)
@@ -748,8 +705,8 @@ public class DhcpHandler {
 		
 		return null;
 	}
-	//endregion
 	*/
+	//endregion
 	
 	//region [FUNC] getDhcpCounter
 	public DhcpCounter getDhcpCounter() {
@@ -760,7 +717,7 @@ public class DhcpHandler {
 			counter.collect_time = TimeUtils.currentTimeMilis() / 1000;
 			
 			SnmpUtil snmpUtil = new SnmpUtil(this.host, this.snmpCommunity);
-			LinkedList<SnmpResult> listResult = snmpUtil.snmpWalk(1, OID_ibDHCPStatistics, 1000, 3);
+			LinkedList<SnmpResult> listResult = snmpUtil.snmpWalk(1, SnmpOIDs.OW_ibDHCPStatistics, 1000, 3);
 			
 			if (listResult != null) {
 				for(SnmpResult result : listResult) {
@@ -804,7 +761,7 @@ public class DhcpHandler {
 			counter.collect_time = TimeUtils.currentTimeMilis() / 1000;
 			
 			SnmpUtil snmpUtil = new SnmpUtil(this.host, this.snmpCommunity);
-			LinkedList<SnmpResult> listResult = snmpUtil.snmpWalk(1, OID_ibZoneStatisticsEntry, 1000, 3);
+			LinkedList<SnmpResult> listResult = snmpUtil.snmpWalk(1, SnmpOIDs.OW_ibZoneStatisticsEntry, 1000, 3);
 			
 			if (listResult != null) {
 				for(SnmpResult result : listResult) {
@@ -837,7 +794,7 @@ public class DhcpHandler {
 	//endregion
 	
 	//region Extract Node Info
-	private void extractNodeInfo(DhcpDeviceStatus dhcpStatus, JsonArray jNodeArray) {
+	/*private void extractNodeInfo(DhcpDeviceStatus dhcpStatus, JsonArray jNodeArray) {
 		
 		if (dhcpStatus == null || jNodeArray == null)
 			return;
@@ -992,9 +949,11 @@ public class DhcpHandler {
 			}
 		}
 	}
+	*/
 	//endregion
 
 	//region Extract License Info
+	/*
 	private void extractLicenseInfo(DhcpDeviceStatus dhcpStatus, JsonArray jLicenseArray) {
 		
 		if (dhcpStatus == null || jLicenseArray == null)
@@ -1010,9 +969,11 @@ public class DhcpHandler {
 				dhcpStatus.addLicense(type, expireDate);
 		}
 	}
+	*/
 	//endregion
 	
 	//region Extract Service Enabled
+	/*
 	private void extractServiceEnableInfo(DhcpDeviceStatus dhcpStatus, JsonArray jServiceArray) {
 		
 		if (dhcpStatus == null || jServiceArray == null)
@@ -1037,6 +998,7 @@ public class DhcpHandler {
 			dhcpStatus.service_status.enable_dhcp_on_ipv6_lan2 = enable_dhcp_on_ipv6_lan2;
 		}
 	}
+	*/
 	//endregion
 
 }

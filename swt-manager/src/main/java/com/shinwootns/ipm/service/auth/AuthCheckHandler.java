@@ -72,13 +72,6 @@ public class AuthCheckHandler {
 			result.setAuthType(setup.getAuthType());
 			result.setSetupName(setup.getSetupName());
 			
-			
-			
-			//{{ DEBUG
-			setup.setSiteId(1);
-			//}} DEBUG
-			
-			
 			++index;
 			
 			// Global Setup
