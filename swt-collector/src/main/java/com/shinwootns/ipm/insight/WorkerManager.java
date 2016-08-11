@@ -7,6 +7,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import com.shinwootns.common.stp.PoolStatus;
 import com.shinwootns.common.stp.SmartThreadPool;
 import com.shinwootns.ipm.insight.worker.MasterJobWoker;
+import com.shinwootns.ipm.insight.worker.NetworkDeviceCollctor;
 import com.shinwootns.ipm.insight.worker.SchedulerWorker;
 import com.shinwootns.ipm.insight.worker.SyslogPutter;
 
@@ -18,15 +19,17 @@ public class WorkerManager {
 	private static final int SYSLOG_PUTTER_COUNT = 2;
 	
 	// Task Count
-	private static final int TASK_MIN_COUNT = 32;
-	private static final int TASK_MAX_COUNT = 32;
-	private static final int TASK_LIMIT_COUNT = 32;
+	private static final int TASK_MIN_COUNT = 4;
+	private static final int TASK_MAX_COUNT = 4;
+	private static final int TASK_LIMIT_COUNT = 4;
 	
 	// Task Pool
 	private SmartThreadPool _taskPool = new SmartThreadPool();
 
 	Thread _scheduler = null;									// Scheduler Thread
 	Thread _masterJobThread = null;								// Master Job Thread
+	Thread _networkDeviceCollector = null;						// Network Device Collctor
+	
 	Thread[] _syslogWorker = new Thread[SYSLOG_PUTTER_COUNT];	// Syslog Thread
 	
 	//region Singleton
@@ -54,6 +57,11 @@ public class WorkerManager {
 				_scheduler.start();
 			}
 			
+			if (_networkDeviceCollector == null) {
+				_networkDeviceCollector = new Thread(new NetworkDeviceCollctor(), "NetworkDeviceCollctor");
+				_networkDeviceCollector.start();
+			}
+			
 			// Start Syslog Putter
 			for(int i=0; i<SYSLOG_PUTTER_COUNT; i++) {
 				if (_syslogWorker[i] == null) {
@@ -79,6 +87,17 @@ public class WorkerManager {
 	{
 		synchronized(this) 
 		{
+			if (_networkDeviceCollector != null && _networkDeviceCollector.isAlive()) {
+				try {
+					_networkDeviceCollector.interrupt();
+					_networkDeviceCollector.join();
+				} catch(Exception ex) {
+				} finally {
+					_networkDeviceCollector = null;
+				}
+				
+			}
+			
 			if (_masterJobThread != null && _masterJobThread.isAlive()) {
 				try {
 					_masterJobThread.interrupt();

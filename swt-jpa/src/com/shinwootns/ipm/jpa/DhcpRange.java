@@ -19,6 +19,10 @@ public class DhcpRange implements Serializable {
 	@EmbeddedId
 	private DhcpRangePK id;
 
+	private String comment;
+
+	private Boolean disable;
+
 	@Column(name="end_num")
 	private BigDecimal endNum;
 
@@ -46,6 +50,22 @@ public class DhcpRange implements Serializable {
 
 	public void setId(DhcpRangePK id) {
 		this.id = id;
+	}
+
+	public String getComment() {
+		return this.comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
+	public Boolean getDisable() {
+		return this.disable;
+	}
+
+	public void setDisable(Boolean disable) {
+		this.disable = disable;
 	}
 
 	public BigDecimal getEndNum() {

@@ -18,6 +18,8 @@ public class ClientDeviceTypePK implements Serializable {
 
 	private String os;
 
+	private String hostname;
+
 	public ClientDeviceTypePK() {
 	}
 	public String getVendor() {
@@ -38,6 +40,12 @@ public class ClientDeviceTypePK implements Serializable {
 	public void setOs(String os) {
 		this.os = os;
 	}
+	public String getHostname() {
+		return this.hostname;
+	}
+	public void setHostname(String hostname) {
+		this.hostname = hostname;
+	}
 
 	public boolean equals(Object other) {
 		if (this == other) {
@@ -50,7 +58,8 @@ public class ClientDeviceTypePK implements Serializable {
 		return 
 			this.vendor.equals(castOther.vendor)
 			&& this.model.equals(castOther.model)
-			&& this.os.equals(castOther.os);
+			&& this.os.equals(castOther.os)
+			&& this.hostname.equals(castOther.hostname);
 	}
 
 	public int hashCode() {
@@ -59,6 +68,7 @@ public class ClientDeviceTypePK implements Serializable {
 		hash = hash * prime + this.vendor.hashCode();
 		hash = hash * prime + this.model.hashCode();
 		hash = hash * prime + this.os.hashCode();
+		hash = hash * prime + this.hostname.hashCode();
 		
 		return hash;
 	}

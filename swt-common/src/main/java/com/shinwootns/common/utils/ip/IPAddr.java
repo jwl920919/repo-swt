@@ -5,8 +5,6 @@ import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 
 public class IPAddr {
 	
@@ -80,6 +78,13 @@ public class IPAddr {
 	// Only IPv4
 	public long getNumberToLong() {
 		
+		byte[] bytes = _ipAddr.getAddress();
+		
+		BigInteger bip = new BigInteger(bytes);
+		
+		return bip.longValue();
+		
+		/*
 		boolean isLittleEndian = false;
 		
 		byte[] bytes = _ipAddr.getAddress();
@@ -89,6 +94,7 @@ public class IPAddr {
 	    	bb.order(ByteOrder.LITTLE_ENDIAN);
 	    
 	    return bb.getLong();
+	    */
 	}
 	
 	@Override

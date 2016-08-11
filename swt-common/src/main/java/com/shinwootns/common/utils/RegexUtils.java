@@ -31,7 +31,6 @@ public class RegexUtils {
             + "|(2[0-4]|1\\d|[1-9])?\\d)(\\.|$)){4}|[0-9A-F]{1,4}:[0-9A-F]{1,"
             + "4})(?<![^:]:|\\.)\\z", Pattern.CASE_INSENSITIVE);
 	
-	
 	//region checkRegexPattern
 	public boolean checkRegexPattern(String data, Pattern pattern) {
 		
