@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import Common.Helper.DBHelper;
+import Common.Helper.ErrorLoggingHelper;
 import Common.Helper.LanguageHelper;
 
 @Controller
@@ -92,6 +93,7 @@ public class LoginController {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			ErrorLoggingHelper.log(logger, "Login", e);
 		} finally {
 			dbHelper.close();
 		}
