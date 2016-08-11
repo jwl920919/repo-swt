@@ -789,6 +789,7 @@
 			) 
 		AS ci left join site_info AS si 
 		ON ci.site_id = si.site_id
+		<!-- where ci.lease_end_time > NOW() - INTERVAL '30 days' -->
 	</select>
 </mapper>
 
