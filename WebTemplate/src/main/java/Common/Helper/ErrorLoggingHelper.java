@@ -18,7 +18,7 @@ public class ErrorLoggingHelper {
 	static public void log(Logger logger, String MethodName, Exception err) {
 		StringWriter stack = new StringWriter();
 		err.printStackTrace(new PrintWriter(stack));
-		logger.info("ERROR - [" + MethodName + "] : " + stack.toString());
+		logger.error("ERROR - [" + MethodName + "] : " + stack.toString());
 	}
 	
 }
