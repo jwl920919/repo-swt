@@ -747,11 +747,6 @@
 	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
 	<insert id="insert_ACCESS_POLICY_INFORM_ONE_RECORD"
 		parameterType="hashmap">
-<!-- 		INSERT into -->
-<!-- 		system_user_group (site_id, -->
-<!-- 		group_name, group_desc) -->
-<!-- 		VALUES (#{site_id}, #{group_name}, -->
-<!-- 		#{group_desc}); -->
 		INSERT INTO access_policy
 		(
 			vendor, model, os, device_type, hostname, "desc", is_permit, 
@@ -777,6 +772,25 @@
 			</foreach>
 		);
 	</delete>
+	
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-08-11 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : Client Node Information Search -->
+	<!-- Controller : 미정 -->
+	<select id="select_CLIENT_NODE_INFORMATION_SEARCH" parameterType="hashmap" resultType="java.util.HashMap">
+		SELECT ci.*, si.site_name 
+		FROM 
+			(
+				SELECT 
+				vci.*,vis.site_id,vis.network,vis.ip_num,vis.is_range,vis.ip_status,vis.lease_start_time,vis.lease_end_time 
+				FROM view_client_info AS vci left join view_ip_status AS vis 
+				ON vci.macaddr = vis.macaddr
+			) 
+		AS ci left join site_info AS si 
+		ON ci.site_id = si.site_id
+		<!-- where ci.lease_end_time > NOW() - INTERVAL '30 days' -->
+	</select>
 </mapper>
 
 

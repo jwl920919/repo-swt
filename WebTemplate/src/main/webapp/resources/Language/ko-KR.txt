@@ -194,5 +194,8 @@
     "enterthefiltername":							"필터명을 입력해주세요.",    
     "selectthefiltertime":							"필터 시간을 선택해주세요.",    
     "enterdescriptionoftheregisterfilter":			"등록할 필터에 대한 설명을 입력해주세요.",    
-    "areyousureyouwanttodelete":					"삭제하시겠습니까?"
+    "areyousureyouwanttodelete":					"삭제하시겠습니까?",    
+    "Removed":										"삭제되었습니다.",    
+    "changed":										"수정되었습니다.",
+    "saved":										"저장되었습니다."
 }

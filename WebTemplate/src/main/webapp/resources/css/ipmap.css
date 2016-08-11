@@ -1,5 +1,5 @@
 #holder {
-	height: 200px;
+	height: 623px;
 	width: 623px;
 	background-color: #F5F5F5;
 	border: 1px solid #A4A4A4;
@@ -35,8 +35,8 @@
 
 #place .rectangle {
 	background: url("../images/ipmap/unused.png") no-repeat scroll 0 0 transparent;
-	height: 19px;
-	width: 19px;
+	height: 35px;
+	width: 35px;
 	display: block;
 /* 	background-color: red; */
 }

@@ -273,7 +273,7 @@ function mapDataCall(network){
 	            			//DHCP의 IP대역대 Stat, End영역과 Range 영역 설정을 위한 데이터
 							startipNumber = ipToNumber(obj.Network_Start);
 							endipNumber = ipToNumber(obj.Network_End);
-							var row = Math.ceil((endipNumber - startipNumber + 1)/32); //0~255까지인데 255에서 0을 빼니까 항상 1을 더해줘야 256이 된다.
+							var row = Math.ceil((endipNumber - startipNumber + 1)/16); //0~255까지인데 255에서 0을 빼니까 항상 1을 더해줘야 256이 된다.
 							//console.log("startipNumber: " + obj.Network_Start + ", endipNumber: " + obj.Network_End + ", row: " + row);
 							ipMapSettings.rows = row; //ip영역에 따라 Row를 변경해준다.
 							
@@ -371,12 +371,16 @@ function dClassIPHelper(stringIP){
 var ipMapSettings;
 function fnIPMapSetting(){
     ipMapSettings = {
-        rows: 8,
-        cols: 32,
+//        rows: 8,
+//        cols: 32,
+        rows: 16,
+        cols: 16,
         rowCssPrefix: 'row-',
         colCssPrefix: 'col-',
-        rectangleWidth: 19,
-        rectangleHeight: 19,
+//        rectangleWidth: 19,35
+//        rectangleHeight: 19,
+        rectangleWidth: 35,
+        rectangleHeight: 35,
         rectangleCss: 'rectangle',
         selectingCss: 'selecting',
         dhcpRangeCss: 'dhcpRange',
@@ -682,6 +686,7 @@ function fnIPMapDraw(startipNumber, DHCP_RangeArr, BROADCAST_Arr, NETWORK_Arr, U
 		            			  html += '</table>\"';
 		            			  html += 'style="top:' + (i * ipMapSettings.rectangleHeight).toString() + 'px;left:' + (j * ipMapSettings.rectangleWidth).toString() + 'px"';
 		            			  html += 'onclick=rectangleClick(this); align=center>';
+		            			  html += '<a title="' + ipNo + '" style=\"line-height:50px\">' + ipNo + '</a>';
 		            			  html += '</li>';
 		            
 		                          

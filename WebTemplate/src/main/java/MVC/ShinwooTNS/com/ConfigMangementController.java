@@ -6,8 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,14 +22,11 @@ public class ConfigMangementController {
 	private final static java.text.SimpleDateFormat SIMPLE_DATE_FORMAT = new java.text.SimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss");
 	private final static String parentPath = "/configManagement/";
-	private static final Logger logger = LoggerFactory.getLogger(ConfigMangementController.class);
-	private Gson gson = new Gson();
-	private AjaxResult result = new AjaxResult();
-
+	private static final Logger logger = Logger.getLogger(ConfigMangementController.class);
 	
 	@RequestMapping(value = "systemUserManagement", method = RequestMethod.GET)
 	public String systemUserManagement(Locale locale, Model model, HttpServletRequest request, HttpServletResponse response) {
-		logger.info("systemUserManagement : " + request.getLocalAddr());
+		//logger.info("systemUserManagement : " + request.getLocalAddr());
 		System.out.println("systemUserManagement Controller");
 		// Session에 로그인 정보가 있는지 체크
 		HttpSession session = request.getSession(true);
@@ -43,7 +39,7 @@ public class ConfigMangementController {
 	
 	@RequestMapping(value = "systemGroupManagement", method = RequestMethod.GET)
 	public String systemGroupManagement(Locale locale, Model model, HttpServletRequest request, HttpServletResponse response) {
-		logger.info("systemGroupManagement : " + request.getLocalAddr());
+		//logger.info("systemGroupManagement : " + request.getLocalAddr());
 		System.out.println("systemGroupManagement Controller");
 		// Session에 로그인 정보가 있는지 체크
 		HttpSession session = request.getSession(true);
@@ -56,7 +52,7 @@ public class ConfigMangementController {
 	
 	@RequestMapping(value = "systemMenuAuthorityManagement", method = RequestMethod.GET)
 	public String systemMenuAuthorityManagement(Locale locale, Model model, HttpServletRequest request, HttpServletResponse response) {
-		logger.info("systemMenuAuthorityManagement : " + request.getLocalAddr());
+		//logger.info("systemMenuAuthorityManagement : " + request.getLocalAddr());
 		System.out.println("systemMenuAuthorityManagement Controller");
 		// Session에 로그인 정보가 있는지 체크
 		HttpSession session = request.getSession(true);
@@ -68,7 +64,7 @@ public class ConfigMangementController {
 	}
 	@RequestMapping(value = "systemGroupManagementIntegration", method = RequestMethod.GET)
 	public String systemGroupManagementIntegration(Locale locale, Model model, HttpServletRequest request, HttpServletResponse response) {
-		logger.info("systemGroupManagementIntegration : " + request.getLocalAddr());
+		//logger.info("systemGroupManagementIntegration : " + request.getLocalAddr());
 		System.out.println("systemGroupManagementIntegration Controller");
 		// Session에 로그인 정보가 있는지 체크
 		HttpSession session = request.getSession(true);
@@ -84,7 +80,7 @@ public class ConfigMangementController {
 	}
 	@RequestMapping(value = "systemGroupManagementNotIntegration", method = RequestMethod.GET)
 	public String systemGroupManagementNotIntegration(Locale locale, Model model, HttpServletRequest request, HttpServletResponse response) {
-		logger.info("systemGroupManagementNotIntegration : " + request.getLocalAddr());
+		//logger.info("systemGroupManagementNotIntegration : " + request.getLocalAddr());
 		System.out.println("systemGroupManagementNotIntegration Controller");
 		// Session에 로그인 정보가 있는지 체크
 		HttpSession session = request.getSession(true);
@@ -94,6 +90,4 @@ public class ConfigMangementController {
 		
 		return parentPath + "systemGroupManagementNotIntegration";
 	}
-	
-	
 }

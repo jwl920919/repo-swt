@@ -6,8 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,16 +19,13 @@ import Common.DTO.AjaxResult;
 @Controller
 @RequestMapping(value = "/policyManagement/")
 public class PolicyManagementController {
-	private final static java.text.SimpleDateFormat SIMPLE_DATE_FORMAT = new java.text.SimpleDateFormat(
-			"yyyy-MM-dd HH:mm:ss");
+	private final static java.text.SimpleDateFormat SIMPLE_DATE_FORMAT = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	private final static String parentPath = "/policyManagement/";
-	private static final Logger logger = LoggerFactory.getLogger(PolicyManagementController.class);
-	private Gson gson = new Gson();
-	private AjaxResult result = new AjaxResult();
+	private static final Logger logger = Logger.getLogger(PolicyManagementController.class);
 	
 	@RequestMapping(value = "accessPolicy", method = RequestMethod.GET)
-	public String systemGroupManagementNotIntegration(Locale locale, Model model, HttpServletRequest request, HttpServletResponse response) {
-		logger.info("accessPolicy : " + request.getLocalAddr());
+	public String accessPolicy(Locale locale, Model model, HttpServletRequest request, HttpServletResponse response) {
+		//logger.info("accessPolicy : " + request.getLocalAddr());
 		System.out.println("accessPolicy Controller");
 		// Session에 로그인 정보가 있는지 체크
 		HttpSession session = request.getSession(true);
@@ -38,6 +34,5 @@ public class PolicyManagementController {
 			return "redirect:/login";
 		
 		return parentPath + "accessPolicy";
-	}
-	
+	}	
 }

@@ -1,22 +1,13 @@
 package MVC.ShinwooTNS.action;
 
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
@@ -29,7 +20,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import Common.DTO.AjaxResult;
-import Common.Helper.CommonHelper;
+import Common.Helper.ErrorLoggingHelper;
 
 @Controller
 @RequestMapping(value="/dashboard/")
@@ -37,12 +28,12 @@ public class DashboardActionController {
 	private final static String parentPath = "/dashboard/";
 	private final static java.text.SimpleDateFormat SIMPLE_DATE_FORMAT = new java.text.SimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss");
-	private static final Logger logger = LoggerFactory.getLogger(PageActionController.class);
+	private static final Logger logger = Logger.getLogger(DashboardActionController.class);
 	private Gson gson = new Gson();
 	
 	@RequestMapping(value = "select", method = RequestMethod.POST)
 	public String Main(Locale locale, Model model, HttpServletRequest request, HttpServletResponse response) {
-		logger.info("dashboard : " + request.getLocalAddr());
+		//logger.info("dashboard : " + request.getLocalAddr());
 		System.out.println("dashboard Controller");			
 		AjaxResult result = new AjaxResult();
 		
@@ -94,6 +85,7 @@ public class DashboardActionController {
 				return gson.toJson(result);
 			} catch (Exception e) {
 				e.printStackTrace();
+				ErrorLoggingHelper.log(logger, "segmentLeasingIPAssigned_Data", e);
 				result.result = false;
 				return gson.toJson(result);
 			}
@@ -107,7 +99,7 @@ public class DashboardActionController {
 		// region assignmentIPv4Status_Data
 		@RequestMapping(value = "assignmentIPv4Status_Data", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 		public @ResponseBody Object assignmentIPv4Status_Data(HttpServletRequest request, HttpSession session) {
-			logger.info("assignmentIPv4Status_Data : " + request.getLocalAddr());			
+			//logger.info("assignmentIPv4Status_Data : " + request.getLocalAddr());			
 			AjaxResult result = new AjaxResult();
 			
 			try {
@@ -136,6 +128,7 @@ public class DashboardActionController {
 				return gson.toJson(result);
 			} catch (Exception e) {
 				e.printStackTrace();
+				ErrorLoggingHelper.log(logger, "assignmentIPv4Status_Data", e);
 				result.result = false;
 				return gson.toJson(result);
 			}
@@ -148,7 +141,7 @@ public class DashboardActionController {
 		// region assignmentIPv6Status_Data
 		@RequestMapping(value = "assignmentIPv6Status_Data", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 		public @ResponseBody Object assignmentIPv6Status_Data(HttpServletRequest request, HttpSession session) {
-			logger.info("assignmentIPv6Status_Data : " + request.getLocalAddr());
+			//logger.info("assignmentIPv6Status_Data : " + request.getLocalAddr());
 			AjaxResult result = new AjaxResult();
 			
 			try {
@@ -177,6 +170,7 @@ public class DashboardActionController {
 				return gson.toJson(result);
 			} catch (Exception e) {
 				e.printStackTrace();
+				ErrorLoggingHelper.log(logger, "assignmentIPv6Status_Data", e);
 				result.result = false;
 				return gson.toJson(result);
 			}

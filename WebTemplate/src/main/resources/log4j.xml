@@ -28,26 +28,26 @@
 	</logger>
 	
  	<!-- 3rdparty Loggers -->
-<!-- 	<logger name="org.springframework.core"> -->
-<!-- 		<level value="info" /> -->
-<!-- 	</logger> -->
+	<logger name="org.springframework.core">
+		<level value="info" />
+	</logger>
 	
-<!-- 	<logger name="org.springframework.beans"> -->
-<!-- 		<level value="info" /> -->
-<!-- 	</logger> -->
+	<logger name="org.springframework.beans">
+		<level value="info" />
+	</logger>
 	
-<!-- 	<logger name="org.springframework.context"> -->
-<!-- 		<level value="info" /> -->
-<!-- 	</logger> -->
+	<logger name="org.springframework.context">
+		<level value="info" />
+	</logger>
 
-<!-- 	<logger name="org.springframework.web"> -->
-<!-- 		<level value="info" /> -->
-<!-- 	</logger> -->
+	<logger name="org.springframework.web">
+		<level value="info" />
+	</logger>
 
-<!-- 	<logger name="first" additivity="false"> -->
-<!--         <level value="debug" /> -->
-<!--         <appender-ref ref="console"/> -->
-<!--     </logger> -->
+	<logger name="first" additivity="false">
+        <level value="debug" />
+        <appender-ref ref="console"/>
+    </logger>
      
     <!-- Query Loggers -->
     <logger name="jdbc.sqlonly" additivity="false">  

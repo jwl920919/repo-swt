@@ -10,25 +10,26 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.*;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import Common.Helper.DBHelper;
+import Common.Helper.ErrorLoggingHelper;
 import Common.Helper.LanguageHelper;
 
 @Controller
 public class LoginController {
-	private final static java.text.SimpleDateFormat SIMPLE_DATE_FORMAT = new java.text.SimpleDateFormat(
-			"yyyy-MM-dd HH:mm:ss");
-	private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
+	private final static java.text.SimpleDateFormat SIMPLE_DATE_FORMAT = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private static final Logger logger = Logger.getLogger(LoginController.class);
 
 	@RequestMapping(value = "/login", method = { RequestMethod.GET, RequestMethod.POST })
 	public String Login(Locale locale, Model model, HttpServletRequest request, HttpServletResponse response) {
-		logger.info("Login : " + request.getLocalAddr());
+//		logger.info("Login : " + request.getLocalAddr());
+		
 		System.out.println("Login Controller");
 
 		HttpSession session = request.getSession(true);
@@ -63,6 +64,7 @@ public class LoginController {
 						System.out.println("user_info dateTime : " + sdf.format(date));
 						
 						if (rs.getString("user_pw").trim().equals(pw)) {
+							logger.info("Login ID(site) : " + rs.getString("user_id") + "(" + rs.getString("site_name") + ")");
 							session.setAttribute("login_chk", true);// Session에 "login_chk"로 값을 저장.
 							session.setAttribute("site_id", rs.getString("site_id").trim());// Session에 "login_chk"로 값을 저장.
 							session.setAttribute("site_name", rs.getString("site_name").trim());// Session에 "login_chk"로 값을 저장.
@@ -91,6 +93,7 @@ public class LoginController {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			ErrorLoggingHelper.log(logger, "Login", e);
 		} finally {
 			dbHelper.close();
 		}
@@ -104,10 +107,11 @@ public class LoginController {
 
 	@RequestMapping(value = "/signOut", method = { RequestMethod.GET, RequestMethod.POST })
 	public String SignOut(Locale locale, Model model, HttpServletRequest request, HttpServletResponse response) {
-		logger.info("SignOut : " + request.getLocalAddr());
+		//logger.info("SignOut : " + request.getLocalAddr());
 		System.out.println("SignOut Controller");
 
 		HttpSession session = request.getSession(true);
+		logger.info("SignOut ID(site) : " + session.getAttribute("user_id") + "(" + session.getAttribute("site_name") + ")");
 		session.removeAttribute("login_chk");// Session에 "login_chk"로 값 삭제.
 		session.removeAttribute("site_id");// Session에 "login_chk"로 값 삭제.
 		session.removeAttribute("site_name");// Session에 "login_chk"로 값을 삭제.
