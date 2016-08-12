@@ -27,7 +27,7 @@ public class NetworkData {
             switch(startIp.compareTo(anotherStartIp)) {
                 case -1:
                 case 0:
-                    return true;
+                    return true; 
             }
         }
         return false;
