@@ -6,13 +6,13 @@ import java.sql.Timestamp;
 
 
 /**
- * The persistent class for the client_connection_history database table.
+ * The persistent class for the client_location_history database table.
  * 
  */
 @Entity
-@Table(name="client_connection_history")
-@NamedQuery(name="ClientConnectionHistory.findAll", query="SELECT c FROM ClientConnectionHistory c")
-public class ClientConnectionHistory implements Serializable {
+@Table(name="client_location_history")
+@NamedQuery(name="ClientLocationHistory.findAll", query="SELECT c FROM ClientLocationHistory c")
+public class ClientLocationHistory implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -27,15 +27,16 @@ public class ClientConnectionHistory implements Serializable {
 	@Column(name="ip_type")
 	private String ipType;
 
-	private String port;
+	@Column(name="port_name")
+	private String portName;
 
 	@Column(name="site_id")
 	private Integer siteId;
 
-	@Column(name="switch")
-	private String switch_;
+	@Column(name="switch_name")
+	private String switchName;
 
-	public ClientConnectionHistory() {
+	public ClientLocationHistory() {
 	}
 
 	public String getMacaddr() {
@@ -70,12 +71,12 @@ public class ClientConnectionHistory implements Serializable {
 		this.ipType = ipType;
 	}
 
-	public String getPort() {
-		return this.port;
+	public String getPortName() {
+		return this.portName;
 	}
 
-	public void setPort(String port) {
-		this.port = port;
+	public void setPortName(String portName) {
+		this.portName = portName;
 	}
 
 	public Integer getSiteId() {
@@ -86,12 +87,12 @@ public class ClientConnectionHistory implements Serializable {
 		this.siteId = siteId;
 	}
 
-	public String getSwitch_() {
-		return this.switch_;
+	public String getSwitchName() {
+		return this.switchName;
 	}
 
-	public void setSwitch_(String switch_) {
-		this.switch_ = switch_;
+	public void setSwitchName(String switchName) {
+		this.switchName = switchName;
 	}
 
 }

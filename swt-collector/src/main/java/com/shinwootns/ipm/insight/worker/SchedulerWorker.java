@@ -1,5 +1,6 @@
 package com.shinwootns.ipm.insight.worker;
 
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -8,6 +9,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.shinwootns.common.redis.RedisManager.RedisPoolStatus;
+import com.shinwootns.common.utils.SystemUtils;
+import com.shinwootns.data.entity.DeviceSnmp;
+import com.shinwootns.ipm.insight.SpringBeanProvider;
+import com.shinwootns.ipm.insight.data.SharedData;
+import com.shinwootns.ipm.insight.data.mapper.DeviceMapper;
 import com.shinwootns.ipm.insight.service.cluster.ClusterManager;
 import com.shinwootns.ipm.insight.service.redis.RedisHandler;
 
@@ -101,5 +107,4 @@ public class SchedulerWorker implements Runnable {
 		}
 	}
 	//endregion
-
 }

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
         
-<mapper namespace="com.shinwootns.ipm.collector.data.mapper.DeviceMapper">
+<mapper namespace="com.shinwootns.ipm.insight.data.mapper.DeviceMapper">
 
 	<!-- ############################ Site ############################ -->
     <select id="selectSiteInfoByCode" resultType="com.shinwootns.data.entity.SiteInfo">
-        SELECT * FROM site_info WHERE site_code=#{site_code}
+        SELECT * FROM site_info WHERE site_code = #{site_code}
     </select>
     
     
@@ -19,7 +19,7 @@
 		<if test="site_id != null">
 		AND nw.site_id = #{site_id}
 		</if>
-		<if test="ipaddr != null">
+		<if test="insight_host != null">
 		AND ins.host = #{insight_host}
 		</if>
 	</select>

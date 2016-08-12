@@ -19,10 +19,16 @@ public class DeviceNetwork implements Serializable {
 	@Column(name="device_id")
 	private Integer deviceId;
 
+	@Column(name="check_time")
+	private Timestamp checkTime;
+
 	private String description;
 
 	@Column(name="device_type")
 	private String deviceType;
+
+	@Column(name="fix_insight")
+	private Boolean fixInsight;
 
 	private String host;
 
@@ -31,6 +37,9 @@ public class DeviceNetwork implements Serializable {
 
 	@Column(name="insert_time")
 	private Timestamp insertTime;
+
+	@Column(name="insight_id")
+	private Integer insightId;
 
 	private String model;
 
@@ -42,6 +51,9 @@ public class DeviceNetwork implements Serializable {
 
 	@Column(name="snmp_community")
 	private String snmpCommunity;
+
+	@Column(name="snmp_result")
+	private Boolean snmpResult;
 
 	@Column(name="snmp_version")
 	private Integer snmpVersion;
@@ -68,6 +80,14 @@ public class DeviceNetwork implements Serializable {
 		this.deviceId = deviceId;
 	}
 
+	public Timestamp getCheckTime() {
+		return this.checkTime;
+	}
+
+	public void setCheckTime(Timestamp checkTime) {
+		this.checkTime = checkTime;
+	}
+
 	public String getDescription() {
 		return this.description;
 	}
@@ -82,6 +102,14 @@ public class DeviceNetwork implements Serializable {
 
 	public void setDeviceType(String deviceType) {
 		this.deviceType = deviceType;
+	}
+
+	public Boolean getFixInsight() {
+		return this.fixInsight;
+	}
+
+	public void setFixInsight(Boolean fixInsight) {
+		this.fixInsight = fixInsight;
 	}
 
 	public String getHost() {
@@ -106,6 +134,14 @@ public class DeviceNetwork implements Serializable {
 
 	public void setInsertTime(Timestamp insertTime) {
 		this.insertTime = insertTime;
+	}
+
+	public Integer getInsightId() {
+		return this.insightId;
+	}
+
+	public void setInsightId(Integer insightId) {
+		this.insightId = insightId;
 	}
 
 	public String getModel() {
@@ -138,6 +174,14 @@ public class DeviceNetwork implements Serializable {
 
 	public void setSnmpCommunity(String snmpCommunity) {
 		this.snmpCommunity = snmpCommunity;
+	}
+
+	public Boolean getSnmpResult() {
+		return this.snmpResult;
+	}
+
+	public void setSnmpResult(Boolean snmpResult) {
+		this.snmpResult = snmpResult;
 	}
 
 	public Integer getSnmpVersion() {

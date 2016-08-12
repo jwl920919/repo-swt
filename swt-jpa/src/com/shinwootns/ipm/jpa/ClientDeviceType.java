@@ -17,6 +17,9 @@ public class ClientDeviceType implements Serializable {
 	@EmbeddedId
 	private ClientDeviceTypePK id;
 
+	@Column(name="compare_type_hostname")
+	private String compareTypeHostname;
+
 	@Column(name="compare_type_model")
 	private String compareTypeModel;
 
@@ -38,6 +41,14 @@ public class ClientDeviceType implements Serializable {
 
 	public void setId(ClientDeviceTypePK id) {
 		this.id = id;
+	}
+
+	public String getCompareTypeHostname() {
+		return this.compareTypeHostname;
+	}
+
+	public void setCompareTypeHostname(String compareTypeHostname) {
+		this.compareTypeHostname = compareTypeHostname;
 	}
 
 	public String getCompareTypeModel() {

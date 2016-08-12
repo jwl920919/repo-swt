@@ -10,6 +10,19 @@ public class SystemEntry {
 	private String sysLocation;
 	private Integer sysServices;
 	
+	@Override
+	public String toString() {
+		return (new StringBuilder())
+				.append("sysName=").append(sysName)
+				.append(", sysObjectID=").append(sysObjectID)
+				.append(", sysUpTimeSec=").append(sysUpTimeSec)
+				.append(", sysContact=").append(sysContact)
+				.append(", sysLocation=").append(sysLocation)
+				.append(", sysServices=").append(sysServices)
+				.append(", sysDescr=").append(sysDescr)
+				.toString();
+	}
+	
 	public String getSysDescr() {
 		return sysDescr;
 	}
