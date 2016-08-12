@@ -1,6 +1,6 @@
 #holder {
-	height: 623px;
-	width: 623px;
+	height: 630px;
+	width: 600px;
 	background-color: #F5F5F5;
 	border: 1px solid #A4A4A4;
 	margin-left: 10px;
@@ -8,7 +8,7 @@
 
 #holder-bottom {
 	height: 40px;
-	width: 623px;
+	width: 600px;
 	background-color: #F5F5F5;
 	border: 1px solid #A4A4A4;
 	margin-left: 10px;
@@ -17,6 +17,8 @@
 
 #place {
 	position: relative;
+	top: 10px;
+	left: 10px;
 	margin: 7px;
 }
 
@@ -72,6 +74,9 @@
 #place .used {
 	background-image: url("../images/ipmap/used.png");
 }
+#place .abandoned {
+	background-image: url("../images/ipmap/abandoned.png");
+}
 
 
 
@@ -99,6 +104,9 @@
 #place .dhcp_used {
 	background-image: url("../images/ipmap/dhcp-used.png");
 }
+#place .dhcp_abandoned {
+	background-image: url("../images/ipmap/dhcp-abandoned.png");
+}
 
 
 #place .selected_unused {
@@ -125,6 +133,9 @@
 #place .selected_used {
 	background-image: url("../images/ipmap/selected-used.png");
 }
+#place .selected_abandoned {
+	background-image: url("../images/ipmap/selected-abandoned.png");
+}
 
 
 #place .row-3, #place .row-4 {
@@ -133,7 +144,11 @@
 
 
 .li_Label {	
-	padding-bottom: 20px;
+    display: block;
+    height: 37px;
+    line-height: 37px;
+    vertical-align: middle;
+
 }
 .li_Selecting {	
 	list-style-image: url("../images/ipmap/selected-unused.png");
@@ -143,7 +158,6 @@
 }
 .li_network {
 	list-style-image: url("../images/ipmap/network.png");
-	margin-bottom: 5px;
 }
 .li_broadcast {
 	list-style-image: url("../images/ipmap/broadcast.png");
