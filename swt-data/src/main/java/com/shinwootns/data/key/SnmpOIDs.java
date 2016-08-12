@@ -85,9 +85,10 @@ public class SnmpOIDs {
 	// Cisco
 	//===================================================================================
 	// CDP
-	public final static String OW_cdpCacheDeviceId		= "1.3.6.1.4.1.9.9.23.1.2.1.1.6";	// cdpCacheDeviceId.[IfIndex].[nNBRIfIndex] : [NeighborDevice] 
+	public final static String OW_cdpCacheDeviceId		= "1.3.6.1.4.1.9.9.23.1.2.1.1.6";	// cdpCacheDeviceId.[IfIndex].[nNBRIfIndex] : [Neighbor Name] 
+	public final static String OW_cdpCacheDevicePort	= "1.3.6.1.4.1.9.9.23.1.2.1.1.7";	// cdpCacheDeviceId.[IfIndex].[nNBRIfIndex] : [Neighbor IfName]
 	
-	public final static String OW_vtpVlanIfIndex		= "1.3.6.1.4.1.9.9.46.1.3.1.1.18";	// 1.3.6.1.4.1.9.9.46.1.3.1.1.18.[?].[vlanNum] = [IfIndex]
+	public final static String OW_vtpVlanIfIndex		= "1.3.6.1.4.1.9.9.46.1.3.1.1.18";	// 1.3.6.1.4.1.9.9.46.1.3.1.1.18.[?].[vlanNum] = [?]
 	
 	//===================================================================================
 	// Infoblox

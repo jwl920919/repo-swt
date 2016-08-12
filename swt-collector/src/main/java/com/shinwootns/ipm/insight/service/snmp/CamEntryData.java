@@ -14,6 +14,7 @@ public class CamEntryData {
 	public HashMap<Integer, Integer> mapDot1dIfIndex = new HashMap<Integer, Integer>();
 	public HashMap<String, Integer> mapMacDot1d = new HashMap<String, Integer>();
 	public HashSet<Integer> setRootDot1d = new HashSet<Integer>();
+	public HashMap<Integer, String> setDot1dPortState = new HashMap<Integer, String>();
 
 	//region Make Cam Table
 	

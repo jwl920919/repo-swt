@@ -17,10 +17,22 @@ public class DhcpNetwork implements Serializable {
 	private BigInteger end_num;
 	private BigInteger ip_count;
 	private String comment;
-	private Timestamp insert_time;
-	private Timestamp update_time;
 
 	public DhcpNetwork() {
+	}
+	
+	@Override
+	public String toString() {
+		return (new StringBuilder())
+				.append("[DhcpNetwork]")
+				.append(" network=").append(network)
+				.append(", ip_type=").append(ip_type)
+				.append(", start_ip=").append(start_ip)
+				.append(", end_ip=").append(end_ip)
+				.append(", start_num=").append(start_num)
+				.append(", end_num=").append(end_num)
+				.append(", comment=").append(comment)
+				.toString();
 	}
 
 	public String getComment() {
@@ -39,28 +51,12 @@ public class DhcpNetwork implements Serializable {
 		this.end_ip = endIp;
 	}
 
-	public Timestamp getInsertTime() {
-		return this.insert_time;
-	}
-
-	public void setInsertTime(Timestamp insertTime) {
-		this.insert_time = insertTime;
-	}
-
 	public String getStartIp() {
 		return this.start_ip;
 	}
 
 	public void setStartIp(String startIp) {
 		this.start_ip = startIp;
-	}
-
-	public Timestamp getUpdateTime() {
-		return this.update_time;
-	}
-
-	public void setUpdateTime(Timestamp updateTime) {
-		this.update_time = updateTime;
 	}
 
 	public Integer getSiteId() {

@@ -2,7 +2,7 @@ package com.shinwootns.data.entity;
 
 import java.io.Serializable;
 
-public class DeviceSnmp implements Serializable {
+public class DeviceSnmp implements Serializable, Cloneable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -17,6 +17,11 @@ public class DeviceSnmp implements Serializable {
 	private String insight_host;
 
 	public DeviceSnmp() {
+	}
+	
+	public DeviceSnmp clone() throws CloneNotSupportedException {
+		DeviceSnmp a = (DeviceSnmp)super.clone();
+	  return a;
 	}
 
 	public Integer getDeviceId() {
