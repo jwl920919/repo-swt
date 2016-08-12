@@ -143,42 +143,50 @@
 }
 
 
-.li_Label {	
-    display: block;
-    height: 37px;
-    line-height: 37px;
-    vertical-align: middle;
-
+.ul_legend {		
+/* 	list-style-image: url("../images/ipmap/selected-unused.png"); */
+	margin-left: -50px;
 }
-.li_Selecting {	
-	list-style-image: url("../images/ipmap/selected-unused.png");
+.li_Label {
+	margin: 10px;
+}
+.li_legend {
+	list-style-type: none;
+	padding: 0;
+    margin: 5px 0px;
+}
+.li_Selecting {		
+/* 	list-style-image: url("../images/ipmap/selected-unused.png"); */
 }
 .li_unused {
-	list-style-image: url("../images/ipmap/unused.png");
+/* 	list-style-image: url("../images/ipmap/unused.png"); */
 }
 .li_network {
-	list-style-image: url("../images/ipmap/network.png");
+/* 	ist-style-image: url("../images/ipmap/network.png"); */
 }
 .li_broadcast {
-	list-style-image: url("../images/ipmap/broadcast.png");
+/* 	list-style-image: url("../images/ipmap/broadcast.png"); */
+}
+.li_abandoned {
+/* 	list-style-image: url("../images/ipmap/abandoned.png"); */
 }
 .li_fixed {
-	list-style-image: url("../images/ipmap/fixed.png");
+/* 	list-style-image: url("../images/ipmap/fixed.png"); */
 }
 .li_reservation {
-	list-style-image: url("../images/ipmap/reservation.png");
+/* 	list-style-image: url("../images/ipmap/reservation.png"); */
 }
 .li_conflict {
-	list-style-image: url("../images/ipmap/conflict.png");
+/* 	list-style-image: url("../images/ipmap/conflict.png"); */
 }
 .li_lease {
-	list-style-image: url("../images/ipmap/lease.png");
+/* 	list-style-image: url("../images/ipmap/lease.png"); */
 }
 .li_used {
-	list-style-image: url("../images/ipmap/used.png");
+/* 	list-style-image: url("../images/ipmap/used.png"); */
 }
 .li_range {
-	list-style-image: url("../images/ipmap/dhcp-unused.png");
+/* 	list-style-image: url("../images/ipmap/dhcp-unused.png"); */
 }
 
 .ipmap-legend {
