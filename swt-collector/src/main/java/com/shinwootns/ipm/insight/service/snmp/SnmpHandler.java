@@ -375,6 +375,7 @@ public class SnmpHandler {
 					
 					collectCAMInfo_Dot1dIfIndex(snmpDot1dUtil, camEntry);
 					collectCAMInfo_MacDot1d(snmpDot1dUtil, camEntry);
+					CollectCAMInfo_StpRootPort(snmpDot1dUtil, camEntry);
 					CollectCAMInfo_StpPortState(snmpDot1dUtil, camEntry);
 				}
 			}
@@ -384,6 +385,7 @@ public class SnmpHandler {
 				
 				collectCAMInfo_Dot1dIfIndex(snmpUtil, camEntry);
 				collectCAMInfo_MacDot1d(snmpUtil, camEntry);
+				CollectCAMInfo_StpRootPort(snmpUtil, camEntry);
 				CollectCAMInfo_StpPortState(snmpUtil, camEntry); 
 			}
 			
@@ -536,6 +538,27 @@ public class SnmpHandler {
 	}
 	//endregion
 	
+	//region Collect CAM - StpRootPort
+	private boolean CollectCAMInfo_StpRootPort(SnmpUtil snmpUtil, CamEntryData camEntry) {
+		
+		LinkedList<SnmpResult> listResult = snmpUtil.snmpWalk(1, SnmpOIDs.OW_dot1dStpRootPort, 1000, 3);
+
+		if (listResult == null)
+			return false;
+		
+		for(SnmpResult snmpResult : listResult) {
+			
+			// dot1dStpRootPort (1.3.6.1.2.1.17.2.7)
+            // 1.3.6.1.2.1.17.2.7.0 = [dot1d]
+			
+			camEntry.setRootDot1d.add(snmpResult.getValueNumber().intValue());
+		}
+		
+		listResult.clear();
+		
+		return true;
+	}
+	
 	//region Collect CAM - StpPortState
 	private boolean CollectCAMInfo_StpPortState(SnmpUtil snmpUtil, CamEntryData camEntry) {
 		
@@ -546,14 +569,26 @@ public class SnmpHandler {
 		
 		for(SnmpResult snmpResult : listResult) {
 			
-			// dot1dStpRootPort (1.3.6.1.2.1.17.2.7)
-            // 1.3.6.1.2.1.17.2.7.0 = [dot1d]
+			// dot1dStpPortState (1.3.6.1.2.1.17.2.15.1.3)
+            // disabled(1), blocking(2), listening(3), learning(4), forwarding(5), broken(6)
 			OID oid = snmpResult.getOid();
-			int dot1d = snmpResult.getValueNumber().intValue();
+			int dot1d = oid.get(oid.size()-1);
+			int state = snmpResult.getValueNumber().intValue();
 			
-			if (camEntry.setRootDot1d.contains(dot1d) == false) {
-				camEntry.setRootDot1d.add(dot1d);
-			}
+			if (state == 1)
+				camEntry.setDot1dPortState.put(dot1d, "disabled");
+			else if (state == 2)
+				camEntry.setDot1dPortState.put(dot1d, "blocking");
+			else if (state == 3)
+				camEntry.setDot1dPortState.put(dot1d, "listening");
+			else if (state == 4)
+				camEntry.setDot1dPortState.put(dot1d, "learning");
+			else if (state == 5)
+				camEntry.setDot1dPortState.put(dot1d, "forwarding");
+			else if (state == 6)
+				camEntry.setDot1dPortState.put(dot1d, "broken");
+			else
+				camEntry.setDot1dPortState.put(dot1d, "");
 		}
 		
 		listResult.clear();

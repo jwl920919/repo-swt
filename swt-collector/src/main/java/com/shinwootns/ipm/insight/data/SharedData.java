@@ -9,12 +9,16 @@ import com.shinwootns.common.network.SyslogEntity;
 import com.shinwootns.common.utils.TimeUtils;
 import com.shinwootns.data.entity.DeviceDhcp;
 import com.shinwootns.data.entity.DeviceIp;
+import com.shinwootns.data.entity.DeviceSysOID;
 import com.shinwootns.data.entity.SiteInfo;
 
 public class SharedData {
 	
 	// Syslog Queue
 	public java.util.Queue<SyslogEntity> syslogQueue = new ConcurrentLinkedQueue<SyslogEntity>();
+	
+	// SysOID 
+	private HashMap<String, DeviceSysOID> mapSysOID = new HashMap<String, DeviceSysOID>();
 	
 	// Dhcp Info
 	public DeviceDhcp dhcpDevice = null;
@@ -142,4 +146,45 @@ public class SharedData {
 	}
 	//endregion
 	
+	//region [public] Set SysOID
+	public void SetSysOID(List<DeviceSysOID> listSysOID) {
+
+		synchronized(mapSysOID)
+		{
+			for(DeviceSysOID sysOID :listSysOID ) {
+				mapSysOID.put(sysOID.getSysoid(), sysOID);
+			}
+		}
+	}
+	//endregion
+	
+	//region [public] Find Vendor & Model
+	public DeviceSysOID FindVendorAndModel(String sysOid) {
+
+		String key = sysOid;
+		
+		synchronized(mapSysOID)
+		{
+			DeviceSysOID data = mapSysOID.get(key);
+			if ( data != null)
+				return data;
+			
+			while(true) {
+
+				int index = key.lastIndexOf(".");
+				if (index <= 0)
+					break;
+				
+				key = key.substring(0, index);
+				
+				data = mapSysOID.get(key+".%");
+			
+				if ( data != null)
+					return data;
+			}
+		}
+		
+		return null;
+	}
+	//endregion
 }

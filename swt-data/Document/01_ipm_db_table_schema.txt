@@ -106,7 +106,7 @@ CREATE TABLE device_sysoid
 (
   sysoid character varying(256) NOT NULL,
   vendor character varying(64) NOT NULL,
-  model character varying(128) NOT NULL,
+  model character varying(128),
   CONSTRAINT device_sysoid_pkey PRIMARY KEY (sysoid)
 );
 

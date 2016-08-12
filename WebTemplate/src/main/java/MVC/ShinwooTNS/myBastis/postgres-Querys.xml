@@ -777,8 +777,8 @@
 	<!-- Insert Date : 2016-08-11 -->
 	<!-- Insert User : 이재원 -->
 	<!-- Description : Client Node Information Search -->
-	<!-- Controller : 미정 -->
-	<select id="select_CLIENT_NODE_INFORMATION_SEARCH" parameterType="hashmap" resultType="java.util.HashMap">
+	<!-- Controller :  -->
+	<select id="select_CLIENT_NODE_INFO_SEARCH" parameterType="hashmap" resultType="java.util.HashMap">
 		SELECT ci.*, si.site_name 
 		FROM 
 			(
@@ -791,6 +791,18 @@
 		ON ci.site_id = si.site_id
 		<!-- where ci.lease_end_time > NOW() - INTERVAL '30 days' -->
 	</select>
+	
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-08-12 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : Network Information Search -->
+	<!-- Controller :  -->
+	<select id="select_SEARCHED_NETWORK_INFO" parameterType="hashmap" resultType="java.util.HashMap">
+		SELECT site_id,network,ip_type,update_time 
+		FROM dhcp_network;
+	</select>
+	
+	
 </mapper>
 
 
