@@ -23,18 +23,38 @@
 <link rel="stylesheet" href="/resources/css/essential.css">
 <!-- default style -->
 <link rel="stylesheet" href="/resources/css/default.css">
+<!-- jstree -->
+<link rel="stylesheet"
+	href="/resources/plugins/jstree/themes/default/style.min.css">
 </head>
 <body>
 	<section class="white-paper" style="text-align: center">
 		<div class="row">
 			<div class="col-xs-6">
-				<div class="box box-danger">
-					<div class="box-header">
-						<h3 class="box-title">Input masks</h3>
+				<div class="box box-primary">
+					<div class="box-header" style="text-align: left;">
+						<i class="fa fa-cog"></i>
+						<h3 class="box-title-small">IP 기준</h3>
 					</div>
 					<div class="box-body">
+						<div id="container" style="text-align:left;">
+							<ul>
+								<li>Root node
+									<ul>
+										<li>Child node 1</li>
+										<li>Child node 2</li>
+									</ul>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
 
-						<!-- IPv4 mask -->
+
+	<!-- 
 						<div class="form-group">
 							<label>IPv4 mask:</label>
 							<div class="input-group">
@@ -44,10 +64,7 @@
 								<input type="text" class="form-control"
 									data-inputmask="'alias': 'ipv4_subnet'" ipv4>
 							</div>
-							<!-- /.input group -->
 						</div>
-						<!-- /.form group -->
-						<!-- IPv6 mask -->
 						<div class="form-group">
 							<label>IPv6 mask:</label>
 							<div class="input-group">
@@ -57,27 +74,9 @@
 								<input type="text" class="form-control"
 									data-inputmask="'alias': 'ipv6_subnet'" ipv6>
 							</div>
-							<!-- /.input group -->
 						</div>
-						<!-- /.form group -->
 
-					</div>
-					<!-- /.box-body -->
-				</div>
-				<!-- /.box -->
-			</div>
-			<div class="col-xs-6">
-				<div class="box box-primary">
-					<div class="box-header" style="text-align: left;">
-						<i class="fa fa-cog"></i>
-						<h3 class="box-title-small">IP 기준</h3>
-					</div>
-					<div class="box-body"></div>
-				</div>
-			</div>
-		</div>
-	</section>
-
+ -->
 
 </body>
 <!-- jQuery 2.2.0 -->
@@ -96,14 +95,17 @@
 <script src="/resources/dist/js/app.min.js"></script>
 <!-- iCheck 1.0.1 -->
 <script src="/resources/plugins/iCheck/icheck.min.js"></script>
-
+<script src="/resources/plugins/jstree/jstree.min.js"></script>
 <script src="/resources/plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="/resources/plugins/datatables/dataTables.bootstrap.min.js"></script>
 <script src="/resources/js/common/Datatable-Essential.js"></script>
 <script>
+    //     $(function() {
+    //         var ipv4 = $("[ipv4]").inputmask();
+    //         var ipv6 = $("[ipv6]").inputmask();
+    //     });
     $(function() {
-        var ipv4 = $("[ipv4]").inputmask();
-        var ipv6 = $("[ipv6]").inputmask();
+        $('#container').jstree();
     });
 </script>
 
