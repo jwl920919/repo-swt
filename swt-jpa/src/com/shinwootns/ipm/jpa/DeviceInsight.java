@@ -30,6 +30,8 @@ public class DeviceInsight implements Serializable {
 	@Column(name="insert_time")
 	private Timestamp insertTime;
 
+	private String ipaddr;
+
 	@Column(name="is_master")
 	private Boolean isMaster;
 
@@ -84,6 +86,14 @@ public class DeviceInsight implements Serializable {
 
 	public void setInsertTime(Timestamp insertTime) {
 		this.insertTime = insertTime;
+	}
+
+	public String getIpaddr() {
+		return this.ipaddr;
+	}
+
+	public void setIpaddr(String ipaddr) {
+		this.ipaddr = ipaddr;
 	}
 
 	public Boolean getIsMaster() {

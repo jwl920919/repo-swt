@@ -2,6 +2,7 @@ package com.shinwootns.ipm.jpa;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 
@@ -38,6 +39,12 @@ public class InterfaceInfo implements Serializable {
 
 	@Column(name="insert_time")
 	private Timestamp insertTime;
+
+	@Column(name="last_octet")
+	private BigDecimal lastOctet;
+
+	@Column(name="last_octet_update")
+	private Timestamp lastOctetUpdate;
 
 	@Column(name="oper_stauts")
 	private Integer operStauts;
@@ -113,6 +120,22 @@ public class InterfaceInfo implements Serializable {
 
 	public void setInsertTime(Timestamp insertTime) {
 		this.insertTime = insertTime;
+	}
+
+	public BigDecimal getLastOctet() {
+		return this.lastOctet;
+	}
+
+	public void setLastOctet(BigDecimal lastOctet) {
+		this.lastOctet = lastOctet;
+	}
+
+	public Timestamp getLastOctetUpdate() {
+		return this.lastOctetUpdate;
+	}
+
+	public void setLastOctetUpdate(Timestamp lastOctetUpdate) {
+		this.lastOctetUpdate = lastOctetUpdate;
 	}
 
 	public Integer getOperStauts() {

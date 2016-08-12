@@ -46,9 +46,12 @@
 		<class>com.shinwootns.ipm.jpa.AuthSetupLdapGroup</class>
 		<class>com.shinwootns.ipm.jpa.AuthSetupLdapGroupPK</class>
 		<class>com.shinwootns.ipm.jpa.UserApplyIpInfo</class>
-		<class>com.shinwootns.ipm.jpa.ClientConnectionHistory</class>
 		<class>com.shinwootns.ipm.jpa.ClientDeviceType</class>
 		<class>com.shinwootns.ipm.jpa.ClientDeviceTypePK</class>
 		<class>com.shinwootns.ipm.jpa.ClientInfo</class>
+		<class>com.shinwootns.ipm.jpa.AccessPolicy</class>
+		<class>com.shinwootns.ipm.jpa.ClientLocationHistory</class>
+		<class>com.shinwootns.ipm.jpa.DeviceOui</class>
+		<class>com.shinwootns.ipm.jpa.DeviceSysoid</class>
 	</persistence-unit>
 </persistence>

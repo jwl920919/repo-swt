@@ -61,7 +61,14 @@ public class SnmpOIDs {
 	public final static String OW_ifHCOutMulticastPkts	= "1.3.6.1.2.1.31.1.1.1.12";
 	public final static String OW_ifHCOutBroadcastPkts	= "1.3.6.1.2.1.31.1.1.1.13";
 	public final static String OW_ifHighSpeed			= "1.3.6.1.2.1.31.1.1.1.15";
+	public final static String OW_ifAlias				= "1.3.6.1.2.1.31.1.1.1.18";
 	
+	
+	//===================================================================================
+	// ipAddrEntry
+	//===================================================================================
+	public final static String OW_ipAdEntIfIndex		= "1.3.6.1.2.1.4.20.1.2";			// 1.3.6.1.2.1.4.20.1.2.[IP] = [IfIndex]
+	public final static String OW_ipAdEntNetMask		= "1.3.6.1.2.1.4.20.1.3";			// 1.3.6.1.2.1.4.20.1.2.[IP] = [NetMask]
 	
 	//===================================================================================
 	// dot1dBridge
@@ -80,7 +87,6 @@ public class SnmpOIDs {
 	// CDP
 	public final static String OW_cdpCacheDeviceId		= "1.3.6.1.4.1.9.9.23.1.2.1.1.6";	// cdpCacheDeviceId.[IfIndex].[nNBRIfIndex] : [NeighborDevice] 
 	
-	public final static String OW_cviRoutedVlanIfIndex	= "1.3.6.1.4.1.9.9.128.1.1.1.1.3";	// 1.3.6.1.4.1.9.9.128.1.1.1.1.3.[VlanNum].0 = [IfIndex]
 	public final static String OW_vtpVlanIfIndex		= "1.3.6.1.4.1.9.9.46.1.3.1.1.18";	// 1.3.6.1.4.1.9.9.46.1.3.1.1.18.[?].[vlanNum] = [IfIndex]
 	
 	//===================================================================================

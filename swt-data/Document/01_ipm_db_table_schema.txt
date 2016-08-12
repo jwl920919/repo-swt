@@ -126,6 +126,8 @@ CREATE TABLE interface_info
   if_alias character varying(128),
   admin_stauts integer DEFAULT 0,
   oper_stauts integer DEFAULT 0,
+  last_octet numeric,
+  last_octet_update timestamp with time zone,
   user_desc character varying(256),
   insert_time timestamp with time zone DEFAULT current_timestamp,
   update_time timestamp with time zone DEFAULT current_timestamp,

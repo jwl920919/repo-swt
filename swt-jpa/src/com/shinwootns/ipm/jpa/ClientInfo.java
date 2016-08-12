@@ -18,8 +18,6 @@ public class ClientInfo implements Serializable {
 	@Id
 	private String macaddr;
 
-	private String comment;
-
 	private String duid;
 
 	private String hostname;
@@ -30,12 +28,24 @@ public class ClientInfo implements Serializable {
 	@Column(name="last_ip")
 	private String lastIp;
 
+	@Column(name="last_port")
+	private String lastPort;
+
+	@Column(name="last_switch")
+	private String lastSwitch;
+
 	private String model;
 
 	private String os;
 
+	@Column(name="position_update")
+	private Timestamp positionUpdate;
+
 	@Column(name="update_time")
 	private Timestamp updateTime;
+
+	@Column(name="user_comment")
+	private String userComment;
 
 	private String vendor;
 
@@ -48,14 +58,6 @@ public class ClientInfo implements Serializable {
 
 	public void setMacaddr(String macaddr) {
 		this.macaddr = macaddr;
-	}
-
-	public String getComment() {
-		return this.comment;
-	}
-
-	public void setComment(String comment) {
-		this.comment = comment;
 	}
 
 	public String getDuid() {
@@ -90,6 +92,22 @@ public class ClientInfo implements Serializable {
 		this.lastIp = lastIp;
 	}
 
+	public String getLastPort() {
+		return this.lastPort;
+	}
+
+	public void setLastPort(String lastPort) {
+		this.lastPort = lastPort;
+	}
+
+	public String getLastSwitch() {
+		return this.lastSwitch;
+	}
+
+	public void setLastSwitch(String lastSwitch) {
+		this.lastSwitch = lastSwitch;
+	}
+
 	public String getModel() {
 		return this.model;
 	}
@@ -106,12 +124,28 @@ public class ClientInfo implements Serializable {
 		this.os = os;
 	}
 
+	public Timestamp getPositionUpdate() {
+		return this.positionUpdate;
+	}
+
+	public void setPositionUpdate(Timestamp positionUpdate) {
+		this.positionUpdate = positionUpdate;
+	}
+
 	public Timestamp getUpdateTime() {
 		return this.updateTime;
 	}
 
 	public void setUpdateTime(Timestamp updateTime) {
 		this.updateTime = updateTime;
+	}
+
+	public String getUserComment() {
+		return this.userComment;
+	}
+
+	public void setUserComment(String userComment) {
+		this.userComment = userComment;
 	}
 
 	public String getVendor() {
