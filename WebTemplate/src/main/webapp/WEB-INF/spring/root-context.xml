@@ -117,4 +117,11 @@
 	<bean id="accessPolicyDao" class="Common.DAOImpl.ACCESS_POLICY_Impl">
 		<property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
 	</bean>
+	<bean id="networkService" class="Common.ServiceImpl.NETWORK_Service_Impl">
+		<property name="NETWORK_dao" ref="networkDao"></property>
+	</bean>
+	
+	<bean id="networkDao" class="Common.DAOImpl.NETWORK_Impl">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
+	</bean>
 </beans>
