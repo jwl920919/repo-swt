@@ -249,7 +249,7 @@ function mapDataCall(network){
 		//console.log("mapDataCall : "+network);
 		var DHCP_RangeArr = [];	
 		var BROADCAST_Arr = [], NETWORK_Arr = [];
-		var UNUSED_Arr = [], FIXED_Arr = [], RESERVATION_Arr = [], CONFLICT_Arr = [], LEASE_Arr = [], USED_Arr = [], ETC_Arr = [];
+		var UNUSED_Arr = [], FIXED_Arr = [], RESERVATION_Arr = [], CONFLICT_Arr = [], LEASE_Arr = [], USED_Arr = [], ABANDONED_Arr = [], ETC_Arr = [];
 		var startipNumber, endipNumber;
 		var jObj = Object();
 	    jObj.network = network;
@@ -314,12 +314,15 @@ function mapDataCall(network){
 						else if (obj.ip_status ==  "USED") {
 							USED_Arr.push(classData); 
 						}
+						else if (obj.ip_status ==  "ABANDONED") {
+							ABANDONED_Arr.push(classData); 
+						}
 						else {
 							ETC_Arr.push(classData); 
 						}
 		            });
 	            	
-	            	fnIPMapDraw(startipNumber, DHCP_RangeArr, BROADCAST_Arr, NETWORK_Arr, UNUSED_Arr, FIXED_Arr, RESERVATION_Arr, CONFLICT_Arr, LEASE_Arr, USED_Arr, ETC_Arr);
+	            	fnIPMapDraw(startipNumber, DHCP_RangeArr, BROADCAST_Arr, NETWORK_Arr, UNUSED_Arr, FIXED_Arr, RESERVATION_Arr, CONFLICT_Arr, LEASE_Arr, USED_Arr, ABANDONED_Arr, ETC_Arr);
 	            }
 	        },
 	        complete: function(data) {
@@ -377,7 +380,7 @@ function fnIPMapSetting(){
         cols: 16,
         rowCssPrefix: 'row-',
         colCssPrefix: 'col-',
-//        rectangleWidth: 19,35
+//        rectangleWidth: 19,
 //        rectangleHeight: 19,
         rectangleWidth: 35,
         rectangleHeight: 35,
@@ -393,6 +396,7 @@ function fnIPMapSetting(){
         conflictCss: 'conflict',
         leaseCss: 'lease',
         usedCss: 'used',
+        abandonedCss: 'abandoned',
         
         dhcp_unusedCss: 'dhcp_unused',
         dhcp_networkCss: 'dhcp_network',
@@ -402,6 +406,7 @@ function fnIPMapSetting(){
         dhcp_conflictCss: 'dhcp_conflict',
         dhcp_leaseCss: 'dhcp_lease',
         dhcp_usedCss: 'dhcp_used',
+        dhcp_abandonedCss: 'dhcp_abandoned',
                 
         selected_unusedCss: 'selected_unused',
         selected_networkCss: 'selected_network',
@@ -410,23 +415,26 @@ function fnIPMapSetting(){
         selected_reservationCss: 'selected_reservation',
         selected_conflictCss: 'selected_conflict',
         selected_leaseCss: 'selected_lease',
-        selected_usedCss: 'selected_used'
+        selected_usedCss: 'selected_used',
+        selected_abandonedCss: 'selected_abandoned'
     }
 }
 
-function fnIPMapDraw(startipNumber, DHCP_RangeArr, BROADCAST_Arr, NETWORK_Arr, UNUSED_Arr, FIXED_Arr, RESERVATION_Arr, CONFLICT_Arr, LEASE_Arr, USED_Arr, ETC_Arr){
+function fnIPMapDraw(startipNumber, DHCP_RangeArr, BROADCAST_Arr, NETWORK_Arr, UNUSED_Arr, FIXED_Arr, RESERVATION_Arr, CONFLICT_Arr, LEASE_Arr, USED_Arr, ABANDONED_Arr, ETC_Arr){
 	try
 	{
 		var str = [], ipNo = -1, className;
 		var ipNumber = parseInt(startipNumber,10);
-	
+        var fontcolor = "";
+        
 		if (!isNaN(ipNumber)) {
 		    //console.log("org : " + ipNumber);
 		    
 		    for (i = 0; i < ipMapSettings.rows; i++) {
 		        for (j = 0; j < ipMapSettings.cols; j++) {
 		            ipNo += 1;
-		            var address, status, conflict, usage, lease_state, fingerprint;
+		            fontcolor = "";
+		            var address, mac, status, hostname, hostos, desc;
 		            className = ipMapSettings.rectangleCss + ' ' + ipMapSettings.rowCssPrefix + i.toString() + ' ' + ipMapSettings.colCssPrefix + j.toString();
 		
 		            // IP대역 설정 및 DHCP Range설정 시작            
@@ -461,11 +469,11 @@ function fnIPMapDraw(startipNumber, DHCP_RangeArr, BROADCAST_Arr, NETWORK_Arr, U
 		                		
 		                		className = className.replace(' ' + ipMapSettings.dhcpRangeCss, '').replace(' ' + ipMapSettings.unusedCss, '');
 		                		address = BROADCAST_Arr[index].ipaddr; 
+		                		mac = BROADCAST_Arr[index].macaddr;
 		                		status = BROADCAST_Arr[index].ip_status;
-//		                		conflict = BROADCAST_Arr[index].is_conflict;
-//		                		usage = BROADCAST_Arr[index].usage;
-//		                		lease_state = BROADCAST_Arr[index].lease_state;
-//		                		fingerprint = BROADCAST_Arr[index].fingerprint;
+		                		hostname = BROADCAST_Arr[index].host_name;
+		                		hostos = BROADCAST_Arr[index].fingerprint;
+		                		desc = BROADCAST_Arr[index].user_description;
 		                		BROADCAST_Arr.splice(index, 1);
 		                		break;
 		            		}
@@ -485,11 +493,11 @@ function fnIPMapDraw(startipNumber, DHCP_RangeArr, BROADCAST_Arr, NETWORK_Arr, U
 								}
 		                		className = className.replace(' ' + ipMapSettings.dhcpRangeCss, '').replace(' ' + ipMapSettings.unusedCss, '');
 		                		address = NETWORK_Arr[index].ipaddr; 
+		                		mac = NETWORK_Arr[index].macaddr;
 		                		status = NETWORK_Arr[index].ip_status;
-//		                		conflict = NETWORK_Arr[index].is_conflict;
-//		                		usage = NETWORK_Arr[index].usage;
-//		                		lease_state = NETWORK_Arr[index].lease_state;
-//		                		fingerprint = NETWORK_Arr[index].fingerprint;
+		                		hostname = NETWORK_Arr[index].host_name;
+		                		hostos = NETWORK_Arr[index].fingerprint;
+		                		desc = NETWORK_Arr[index].user_description;
 		    	                NETWORK_Arr.splice(index, 1);
 		    	                break;
 		    	            }
@@ -510,11 +518,11 @@ function fnIPMapDraw(startipNumber, DHCP_RangeArr, BROADCAST_Arr, NETWORK_Arr, U
 								}
 		                		className = className.replace(' ' + ipMapSettings.dhcpRangeCss, '');
 		                		address = UNUSED_Arr[index].ipaddr; 
+		                		mac = UNUSED_Arr[index].macaddr;
 		                		status = UNUSED_Arr[index].ip_status;
-//		                		conflict = UNUSED_Arr[index].is_conflict;
-//		                		usage = UNUSED_Arr[index].usage;
-//		                		lease_state = UNUSED_Arr[index].lease_state;
-//		                		fingerprint = UNUSED_Arr[index].fingerprint;
+		                		hostname = UNUSED_Arr[index].host_name;
+		                		hostos = UNUSED_Arr[index].fingerprint;
+		                		desc = UNUSED_Arr[index].user_description;
 		    	                UNUSED_Arr.splice(index, 1);
 		    	                break;
 		    	            }
@@ -534,12 +542,13 @@ function fnIPMapDraw(startipNumber, DHCP_RangeArr, BROADCAST_Arr, NETWORK_Arr, U
 								}
 		                		className = className.replace(' ' + ipMapSettings.dhcpRangeCss, '').replace(' ' + ipMapSettings.unusedCss, '');
 		                		address = FIXED_Arr[index].ipaddr; 
+		                		mac = FIXED_Arr[index].macaddr;
 		                		status = FIXED_Arr[index].ip_status;
-//		                		conflict = FIXED_Arr[index].is_conflict;
-//		                		usage = FIXED_Arr[index].usage;
-//		                		lease_state = FIXED_Arr[index].lease_state;
-//		                		fingerprint = FIXED_Arr[index].fingerprint;
+		                		hostname = FIXED_Arr[index].host_name;
+		                		hostos = FIXED_Arr[index].fingerprint;
+		                		desc = FIXED_Arr[index].user_description;
 		    	                FIXED_Arr.splice(index, 1);
+		    	                fontcolor = "color:white;";
 		    	                break;
 		    	            }
 						}
@@ -558,12 +567,13 @@ function fnIPMapDraw(startipNumber, DHCP_RangeArr, BROADCAST_Arr, NETWORK_Arr, U
 								}
 		                		className = className.replace(' ' + ipMapSettings.dhcpRangeCss, '').replace(' ' + ipMapSettings.unusedCss, '');
 		                		address = RESERVATION_Arr[index].ipaddr; 
+		                		mac = RESERVATION_Arr[index].macaddr;
 		                		status = RESERVATION_Arr[index].ip_status;
-//		                		conflict = RESERVATION_Arr[index].is_conflict;
-//		                		usage = RESERVATION_Arr[index].usage;
-//		                		lease_state = RESERVATION_Arr[index].lease_state;
-//		                		fingerprint = RESERVATION_Arr[index].fingerprint;
+		                		hostname = RESERVATION_Arr[index].host_name;
+		                		hostos = RESERVATION_Arr[index].fingerprint;
+		                		desc = RESERVATION_Arr[index].user_description;
 		    	                RESERVATION_Arr.splice(index, 1);
+		    	                fontcolor = "color:white;";
 		    	                break;
 		    	            }
 						}
@@ -582,12 +592,13 @@ function fnIPMapDraw(startipNumber, DHCP_RangeArr, BROADCAST_Arr, NETWORK_Arr, U
 								}
 		                		className = className.replace(' ' + ipMapSettings.dhcpRangeCss, '').replace(' ' + ipMapSettings.unusedCss, '');
 		                		address = CONFLICT_Arr[index].ipaddr; 
+		                		mac = CONFLICT_Arr[index].macaddr;
 		                		status = CONFLICT_Arr[index].ip_status;
-//		                		conflict = CONFLICT_Arr[index].is_conflict;
-//		                		usage = CONFLICT_Arr[index].usage;
-//		                		lease_state = CONFLICT_Arr[index].lease_state;
-//		                		fingerprint = CONFLICT_Arr[index].fingerprint;
+		                		hostname = CONFLICT_Arr[index].host_name;
+		                		hostos = CONFLICT_Arr[index].fingerprint;
+		                		desc = CONFLICT_Arr[index].user_description;
 		    	                CONFLICT_Arr.splice(index, 1);
+		    	                fontcolor = "color:white;";
 		    	                break;
 		    	            }
 						}
@@ -606,12 +617,13 @@ function fnIPMapDraw(startipNumber, DHCP_RangeArr, BROADCAST_Arr, NETWORK_Arr, U
 								}
 		                		className = className.replace(' ' + ipMapSettings.dhcpRangeCss, '').replace(' ' + ipMapSettings.unusedCss, '');
 		                		address = LEASE_Arr[index].ipaddr; 
+		                		mac = LEASE_Arr[index].macaddr;
 		                		status = LEASE_Arr[index].ip_status;
-//		                		conflict = LEASE_Arr[index].is_conflict;
-//		                		usage = LEASE_Arr[index].usage;
-//		                		lease_state = LEASE_Arr[index].lease_state;
-//		                		fingerprint = LEASE_Arr[index].fingerprint;
+		                		hostname = LEASE_Arr[index].host_name;
+		                		hostos = LEASE_Arr[index].fingerprint;
+		                		desc = LEASE_Arr[index].user_description;
 		    	                LEASE_Arr.splice(index, 1);
+		    	                fontcolor = "color:white;";
 		    	                break;
 		    	            }
 						}
@@ -630,12 +642,36 @@ function fnIPMapDraw(startipNumber, DHCP_RangeArr, BROADCAST_Arr, NETWORK_Arr, U
 								}
 		                		className = className.replace(' ' + ipMapSettings.dhcpRangeCss, '').replace(' ' + ipMapSettings.unusedCss, '');
 		                		address = USED_Arr[index].ipaddr; 
+		                		mac = USED_Arr[index].macaddr;
 		                		status = USED_Arr[index].status;
-//		                		conflict = USED_Arr[index].is_conflict;
-//		                		usage = USED_Arr[index].usage;
-//		                		lease_state = USED_Arr[index].lease_state;
-//		                		fingerprint = USED_Arr[index].fingerprint;
+		                		hostname = USED_Arr[index].host_name;
+		                		hostos = USED_Arr[index].fingerprint;
+		                		desc = USED_Arr[index].user_description;
 		    	                USED_Arr.splice(index, 1);
+		    	                break;
+		    	            }
+						}
+		            }
+		            		            
+		            if (ABANDONED_Arr.length > 0) {
+		            	for (var index = ABANDONED_Arr.length - 1; index >= 0; index--) {					
+		                	var USED_dClassIP = dClassIPHelper(ABANDONED_Arr[index].ipaddr);
+		
+		                	if (ipNo == parseInt(USED_dClassIP,10)) {
+		                		if (className.indexOf(ipMapSettings.dhcpRangeCss) > 0) {
+	                    			className += ' ' + ipMapSettings.dhcp_abandonedCss;
+								}
+		                		else {
+	                    			className += ' ' + ipMapSettings.abandonedCss;
+								}
+		                		className = className.replace(' ' + ipMapSettings.dhcpRangeCss, '').replace(' ' + ipMapSettings.unusedCss, '');
+		                		address = ABANDONED_Arr[index].ipaddr; 
+		                		mac = ABANDONED_Arr[index].macaddr;
+		                		status = ABANDONED_Arr[index].status;
+		                		hostname = ABANDONED_Arr[index].host_name;
+		                		hostos = ABANDONED_Arr[index].fingerprint;
+		                		desc = ABANDONED_Arr[index].user_description;
+		                		ABANDONED_Arr.splice(index, 1);
 		    	                break;
 		    	            }
 						}
@@ -655,11 +691,11 @@ function fnIPMapDraw(startipNumber, DHCP_RangeArr, BROADCAST_Arr, NETWORK_Arr, U
 								}
 		                		className = className.replace(' ' + ipMapSettings.dhcpRangeCss, '');
 		                		address = ETC_Arr[index].ipaddr; 
+		                		mac = ETC_Arr[index].macaddr;
 		                		status = ETC_Arr[index].ip_status;
-//		                		conflict = ETC_Arr[index].is_conflict;
-//		                		usage = ETC_Arr[index].usage;
-//		                		lease_state = ETC_Arr[index].lease_state;
-//		                		fingerprint = ETC_Arr[index].fingerprint;
+		                		hostname = ETC_Arr[index].host_name;
+		                		hostos = ETC_Arr[index].fingerprint;
+		                		desc = ETC_Arr[index].user_description;
 		    	                ETC_Arr.splice(index, 1);
 		    	                break;
 		    	            }
@@ -668,25 +704,26 @@ function fnIPMapDraw(startipNumber, DHCP_RangeArr, BROADCAST_Arr, NETWORK_Arr, U
 		            
 		            var html = '<li class="' + className + '" data-toggle=\"tooltip\" data-html=\"true\"' +
 		            			  'data-title=\"<table><tr><td style=\'text-align:left;\'>IP Address: ' + address + '</td></tr>';
-		            			  if (status != "") {
-		            				  html += '<tr><td style=\'text-align:left;\'>Ststus : ' + status + '</td></tr>';
+						          if (mac != "") {
+				      				  html += '<tr><td style=\'text-align:left;\'>MAC: ' + mac + '</td></tr>';
+				      			  }
+						           if (status != "") {
+		            				  html += '<tr><td style=\'text-align:left;\'>Ststus: ' + status + '</td></tr>';
 		            			  }
-		            			  if (conflict != "") {
-		            				  html += '<tr><td style=\'text-align:left;\'>Conflict : ' + conflict + '</td></tr>';
+		            			  if (hostname != "") {
+		            				  html += '<tr><td style=\'text-align:left;\'>Host name: ' + hostname + '</td></tr>';
 		            			  }
-		            			  if (usage != "") {
-		            				  html += '<tr><td style=\'text-align:left;\'>Usage : ' + usage + '</td></tr>';
+		            			  if (hostos != "") {
+		            				  html += '<tr><td style=\'text-align:left;\'>Host OS: ' + hostos + '</td></tr>';
 		            			  }
-		            			  if (lease_state != "") {
-		            				  html += '<tr><td style=\'text-align:left;\'>Lease state : ' + lease_state + '</td></tr>';
-		            			  }
-		            			  if (fingerprint != "") {
-		            				  html += '<tr><td style=\'text-align:left;\'>Fingerprint : ' + fingerprint + '</td></tr>';
+		            			  if (desc != "") {
+		            				  html += '<tr><td style=\'text-align:left;\'>Description: ' + desc + '</td></tr>';
 		            			  }
 		            			  html += '</table>\"';
-		            			  html += 'style="top:' + (i * ipMapSettings.rectangleHeight).toString() + 'px;left:' + (j * ipMapSettings.rectangleWidth).toString() + 'px"';
-		            			  html += 'onclick=rectangleClick(this); align=center>';
-		            			  html += '<a title="' + ipNo + '" style=\"line-height:50px\">' + ipNo + '</a>';
+		            			  html += 'style="top:' + (i * ipMapSettings.rectangleHeight + 1).toString() + 'px;left:' + (j * ipMapSettings.rectangleWidth + 1).toString() + 'px;';
+		            			  html += 'text-align:center; vertical-align:middle;"';
+		            			  html += 'onclick=rectangleClick(this);>';
+		            			  html += '<a title="' + ipNo + '" style=\"' + fontcolor + ' line-height:25px\">' + ipNo + '</a>';
 		            			  html += '</li>';
 		            
 		                          
@@ -821,6 +858,20 @@ rectangleClick = function (obj) {
 	    }
 	    else if ($(obj).hasClass(ipMapSettings.dhcp_usedCss+ "ORG")) {
 	    	$(obj).removeClass(ipMapSettings.selected_usedCss).removeClass(ipMapSettings.dhcp_usedCss+ "ORG").addClass(ipMapSettings.dhcp_usedCss);
+	    }
+	    
+	    //abandonedCss
+	    else if ($(obj).hasClass(ipMapSettings.abandonedCss)) {
+	    	$(obj).removeClass(ipMapSettings.abandonedCss).addClass(ipMapSettings.abandonedCss+ "ORG").addClass(ipMapSettings.selected_abandonedCss);
+	    }
+	    else if ($(obj).hasClass(ipMapSettings.dhcp_usedCss)) {
+	    	$(obj).removeClass(ipMapSettings.dhcp_abandonedCss).addClass(ipMapSettings.dhcp_abandonedCss+ "ORG").addClass(ipMapSettings.selected_abandonedCss);
+	    }
+	    else if ($(obj).hasClass(ipMapSettings.abandonedCss+ "ORG")) {
+	    	$(obj).removeClass(ipMapSettings.selected_abandonedCss).removeClass(ipMapSettings.abandonedCss+ "ORG").addClass(ipMapSettings.abandonedCss);
+	    }
+	    else if ($(obj).hasClass(ipMapSettings.dhcp_abandonedCss+ "ORG")) {
+	    	$(obj).removeClass(ipMapSettings.selected_abandonedCss).removeClass(ipMapSettings.dhcp_abandonedCss+ "ORG").addClass(ipMapSettings.dhcp_abandonedCss);
 	    }
 	} catch (e) {
 		console.log("staticIPStatus.js rectangleClick() Error Log : " + e.message);

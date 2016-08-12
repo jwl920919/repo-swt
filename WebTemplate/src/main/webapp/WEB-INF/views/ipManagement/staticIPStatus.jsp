@@ -116,10 +116,10 @@
 										</div>
 								    </div>
 									<div id="holder-bottom">
-										<button type="button" class="btn btn-info btn-sm" style="margin: 4px 8px;" onclick="mapRefresh();">
+										<button type="button" class="btn btn-info btn-sm" style="margin: 4px 20px;" onclick="mapRefresh();">
 											<i class="fa fa-refresh"></i>
 										</button>
-								        <LABEL id="segmentLabel" style="font-size: 12px; float:right; margin: 10px;">
+								        <LABEL id="segmentLabel" style="font-size: 12px; float:right; margin: 10px 20px 10px 10px;">
 											<!--192.168.1.0 - 192.168.1.255 -->
 								        </LABEL>
 								    </div>
