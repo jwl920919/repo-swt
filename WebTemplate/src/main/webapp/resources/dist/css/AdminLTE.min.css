@@ -2010,11 +2010,6 @@ deg
 	color: #fff
 }
 
-.box.box-solid>.box-header>.box-tools .btn {
-	border: 0;
-	box-shadow: none
-}
-
 .box.box-solid[class*='bg']>.box-header {
 	color: #fff
 }
@@ -2081,6 +2076,11 @@ deg
 
 .box-header.with-border {
 	border-bottom: 1px solid #f4f4f4
+}
+
+.box-header.with-border-lightgray {
+	border-bottom: 1px solid #f4f4f4;
+	background: #f5f5f5
 }
 
 .collapsed-box .box-header.with-border {

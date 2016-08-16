@@ -138,10 +138,10 @@ function tdClickEvent(obj){
 			//탭 숨기기
 			if ($(obj).parent().children().eq(1).html() == "IPV6") {
 				console.log($(obj).parent().children().eq(1).html());
-				$("#tapheader").css("visibility","collapse");
+				$("#detailtapheader").css("visibility","collapse");
 			}
 			else{
-				$("#tapheader").css("visibility","visible");
+				$("#detailtapheader").css("visibility","visible");
 			} 
 			
 			$("#defaultDiv").css("display","none");
