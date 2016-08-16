@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="UI_Query">
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-08-16 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : custom group information Search -->
+	<!-- Controller : -->
+	<select id="select_CUSTOM_GROUP_INFO" parameterType="hashmap"
+		resultType="java.util.HashMap">
+		SELECT cg.group_id,COALESCE(cg.group_name,'') AS
+		group_name, dn."network" AS key,
+		COALESCE(cg."type",'N') AS "type",dn.site_id,dn.ip_type
+		FROM dhcp_network AS dn LEFT JOIN custom_group AS cg
+		ON dn."network" = cg.key and cg."type" = 'N'
+		WHERE (dn."network" like CONCAT('%', #{searchValue}, '%') 
+			OR cg.group_name like CONCAT('%', #{searchValue}, '%'))
+			AND dn.ip_type=#{ip_type}
+		ORDER BY ${orderColumn} ${orderType} OFFSET #{startIndex} LIMIT #{length}
+	</select>
+
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-08-16 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : Network Information 행 개수 조회 -->
+	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
+	<select id="select_CUSTOM_GROUP_INFO_TOTAL_COUNT"
+		parameterType="hashmap" resultType="Integer">
+		SELECT count(*) AS total
+		FROM dhcp_network AS dn LEFT JOIN custom_group AS cg 
+		ON dn."network" = cg.key and cg."type" = 'N'
+		WHERE (dn."network" like CONCAT('%', #{searchValue}, '%') 
+			OR cg.group_name like CONCAT('%', #{searchValue}, '%'))
+			AND dn.ip_type=#{ip_type}
+	</select>
+</mapper>
+

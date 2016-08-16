@@ -3,6 +3,7 @@
 <configuration>
 	<mappers>
 		<mapper resource="MVC/ShinwooTNS/myBastis/postgres-Querys.xml" />
+		<mapper resource="MVC/ShinwooTNS/myBastis/postgres-Management-Querys.xml" />
 	</mappers>
 </configuration>
 

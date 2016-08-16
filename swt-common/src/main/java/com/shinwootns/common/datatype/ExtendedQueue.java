@@ -81,7 +81,7 @@ public class ExtendedQueue<T> {
 		return listData;
 	}
 	
-	public LinkedList<T> pop(int popCount, int waitTime) {
+	public LinkedList<T> pop(int popCount, int waitTime) throws InterruptedException {
 		
 		LinkedList<T> listData = new LinkedList<T>();
 		
@@ -92,11 +92,7 @@ public class ExtendedQueue<T> {
 		{
 			T data;
 			
-			try {
-				data = _queue.poll(100, TimeUnit.MILLISECONDS);
-			} catch (InterruptedException e) {
-				break;
-			}
+			data = _queue.poll(100, TimeUnit.MILLISECONDS);
 			
 			if (data != null)
 			{

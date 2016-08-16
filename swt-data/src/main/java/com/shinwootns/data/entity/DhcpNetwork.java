@@ -2,7 +2,6 @@ package com.shinwootns.data.entity;
 
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.sql.Timestamp;
 
 public class DhcpNetwork implements Serializable {
 

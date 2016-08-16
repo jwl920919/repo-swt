@@ -34,9 +34,11 @@
 	</delete>
     
     <!-- ############################ DHCP RANGE ############################ -->
-	<select id="selectDhcpRangeBySiteId" resultType="com.shinwootns.data.entity.DhcpRange">
+	<select id="selectDhcpRange" resultType="com.shinwootns.data.entity.DhcpRange">
 		<![CDATA[
-			SELECT * FROM dhcp_range WHERE site_id=#{site_id}
+			SELECT * FROM dhcp_range 
+			WHERE site_id=#{site_id}
+			AND disable = false
 		]]>
 	</select>
 	
@@ -63,8 +65,18 @@
 		]]>
 	</delete>
 	
+	<select id="selectDhcpGuestRange" resultType="com.shinwootns.data.entity.DhcpRange">
+		<![CDATA[
+			SELECT rg.* 
+			FROM dhcp_range rg, site_guest_range guest
+			WHERE rg.site_id=#{site_id}
+			AND rg.comment = guest.range_comment
+			AND rg.disable = false
+		]]>
+	</select>
+	
 	<!-- ############################ DHCP Filter ############################ -->
-	<select id="selectDhcpFilterBySiteId" resultType="com.shinwootns.data.entity.DhcpMacFilter">
+	<select id="selectDhcpFilter" resultType="com.shinwootns.data.entity.DhcpMacFilter">
 		<![CDATA[
 			SELECT * FROM dhcp_mac_filter WHERE site_id=#{site_id}
 		]]>
@@ -92,6 +104,18 @@
 			WHERE site_id=#{site_id} AND filter_name=#{filter_name}
 		]]>
 	</delete>
+	
+	<select id="selectDhcpBlacklistFilter" resultType="com.shinwootns.data.entity.DhcpMacFilter">
+		<![CDATA[
+			SELECT ft.* 
+			FROM dhcp_mac_filter ft, site_blacklist_info bk
+			WHERE ft.site_id=#{site_id}
+			AND ft.site_id = bk.site_id
+			AND ft.filter_name = bk.blacklist_filter_name
+			AND ft.disable = false
+			AND bk.blacklist_enable = true
+		]]>
+	</select>
 	
 	<!-- ############################ DHCP Fixed IP ############################ -->
 	<select id="selectDhcpFixedIpBySiteId" resultType="com.shinwootns.data.entity.DhcpFixedIp">

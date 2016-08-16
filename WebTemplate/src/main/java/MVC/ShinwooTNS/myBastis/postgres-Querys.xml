@@ -802,6 +802,16 @@
 		FROM dhcp_network;
 	</select>
 	
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-08-16 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : Network Information 행 개수 조회 -->
+	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
+	<select id="select_SEARCHED_NETWORK_INFO_TOTAL_COUNT"
+		parameterType="hashmap" resultType="Integer">
+		SELECT count(*) AS total
+		FROM dhcp_network
+	</select>
 	
 </mapper>
 

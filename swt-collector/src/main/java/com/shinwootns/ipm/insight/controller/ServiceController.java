@@ -118,51 +118,16 @@ public class ServiceController {
 		
 		try
 		{
-			// Load Site Info
-			SiteInfo siteInfo = deviceMapper.selectSiteInfoByCode(appProperty.siteCode);
-			if (siteInfo == null) {
-				_logger.error( (new StringBuilder())
-						.append("Failed get site info, SiteCode=").append(appProperty.siteCode)
-						.toString()
-				);
+			if ( SharedData.getInstance().LoadsiteInfo(deviceMapper, appProperty.siteCode) == false )
 				return false;
-			}
 			
-			_logger.info( (new StringBuilder())
-					.append("[Site Info] SiteID=").append(siteInfo.getSiteId())
-					.append(", SiteCode=").append(siteInfo.getSiteCode()) 
-					.append(", SiteName=").append(siteInfo.getSiteName())
-					.toString()
-			);
-			SharedData.getInstance().setsiteInfo( siteInfo );
-			
-			// Load DHCP
-			DeviceDhcp dhcpInfo = deviceMapper.selectDeviceDhcp(siteInfo.getSiteId());
-			if (dhcpInfo != null) {
-				
-				_logger.info( (new StringBuilder())
-						.append("[DHCP Info] host=").append(dhcpInfo.getHost())
-						.append(", WAPI user=").append(dhcpInfo.getWapiUserid()) 
-						.toString()
-				);
-				
-				// Decrypt password
-				if ( dhcpInfo.getWapiPassword().isEmpty() == false ) {
-					dhcpInfo.setWapiPassword( CryptoUtils.Decode_AES128(dhcpInfo.getWapiPassword()));
-				}
-				
-				SharedData.getInstance().dhcpDevice = dhcpInfo;
-			}
-			
-			// Load Dhcp IP
-			List<DeviceIp> listDeviceIp = deviceMapper.selectDeviceIP(siteInfo.getSiteId());
-			SharedData.getInstance().setDeviceId(listDeviceIp);
+			SharedData.getInstance().LoadConfigAll();
 
 			// Get System Info
 			String hostName = SystemUtils.getHostName();
 			
 			// Regist Insight Info
-			if (hostName.isEmpty() == false && siteInfo.getSiteId() > 0) {
+			if (hostName.isEmpty() == false && SharedData.getInstance().getSiteID() > 0) {
 			
 				// Device Insight
 				DeviceInsight insight = new DeviceInsight();
@@ -200,7 +165,7 @@ public class ServiceController {
 					}
 				}
 				
-				insight.setSiteId(siteInfo.getSiteId());
+				insight.setSiteId(SharedData.getInstance().getSiteID());
 				insight.setPort(appProperty.serverPort);
 				insight.setVersion(appProperty.version);
 				insight.setClusterMode(appProperty.clusterMode);

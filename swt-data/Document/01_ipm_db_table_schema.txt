@@ -175,8 +175,8 @@ CREATE TABLE interface_cam_history
 --==========================================================================================
 
 -- SITE_INFO
-CREATE SEQUENCE public.site_info_id_seq;
-CREATE TABLE public.site_info
+CREATE SEQUENCE site_info_id_seq;
+CREATE TABLE site_info
 (
   site_id integer NOT NULL DEFAULT nextval('site_info_id_seq'::regclass),
   site_name character varying(128) NOT NULL,
@@ -185,8 +185,8 @@ CREATE TABLE public.site_info
   CONSTRAINT site_info_pkey PRIMARY KEY (site_id)
 );
 
-CREATE SEQUENCE public.site_blacklist_id_seq;
-CREATE TABLE public.site_blacklist_info
+CREATE SEQUENCE site_blacklist_id_seq;
+CREATE TABLE site_blacklist_info
 (
   blacklist_id integer NOT NULL DEFAULT nextval('site_blacklist_id_seq'::regclass),
   site_id integer NOT NULL,
@@ -199,6 +199,15 @@ CREATE TABLE public.site_blacklist_info
   CONSTRAINT site_blacklist_info_pkey PRIMARY KEY (blacklist_id)
 );
 
+-- SITE_GUEST_RANGE
+CREATE TABLE site_guest_range
+(
+  site_id integer NOT NULL,
+  range_comment character varying(128) NOT NULL,
+  insert_time timestamp with time zone DEFAULT current_timestamp,
+  update_time timestamp with time zone DEFAULT current_timestamp,
+  CONSTRAINT site_guest_range_pkey PRIMARY KEY (site_id, range_comment)
+);
 
 --==========================================================================================
 -- EVENT

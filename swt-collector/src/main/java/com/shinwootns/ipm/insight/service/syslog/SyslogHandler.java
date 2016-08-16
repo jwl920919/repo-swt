@@ -2,6 +2,7 @@ package com.shinwootns.ipm.insight.service.syslog;
 
 public class SyslogHandler {
 	
+	//region [public] Process Syslog
 	public DhcpMessage processSyslog(String rawMessage)
 	{
     	// ex) Feb 24 17:38:33 192.168.1.11 dhcpd[22231]: DHCPREQUEST for 192.168.1.12 from 6c:29:95:05:38:a4 (BJPARK) via eth1 uid 01:6c:29:95:05:38:a4 (RENEW)
@@ -66,7 +67,9 @@ public class SyslogHandler {
         
         return result;
 	}
+	//endregion
 	
+	//region Extract Data
 	private SyslogExtractData ExtractData(String message, int startIndex, String startToken, String endToken)
     {
 		SyslogExtractData result = new SyslogExtractData();
@@ -102,7 +105,9 @@ public class SyslogHandler {
 
         return result;
     }
+	//endregion
 	
+	//region - DISCORVER
 	private DhcpMessage processDISCOVER(String message) {
 
 		// [DHCPDISCOVER]
@@ -124,7 +129,9 @@ public class SyslogHandler {
         
         return result;
     }
+	//endregion
 
+	//region - OFFER
 	private DhcpMessage processOFFER(String message) {
 
 		// [DHCPOFFER]
@@ -149,7 +156,9 @@ public class SyslogHandler {
         
         return result;
 	}
+	//endregion
 	
+	//region - REQUEST
 	private DhcpMessage processDHCPREQUEST(String message)
     {
         // [DHCPREQUEST]
@@ -175,7 +184,9 @@ public class SyslogHandler {
         
         return result;
     }
+	//endregion
 	
+	//region - ACK
 	private DhcpMessage processDHCPACK(String message)
     {
         // [DHCPACK]
@@ -203,7 +214,9 @@ public class SyslogHandler {
 
 		return result;
     }
+	//endregion
 
+	//region - NACK
 	private DhcpMessage processNACK(String message)
     {
         // [DHCPNAK]
@@ -226,7 +239,9 @@ public class SyslogHandler {
 		
 		return result;
     }
+	//endregion
 
+	//region - INFORM
 	private DhcpMessage processINFORM(String message)
     {
         // [DHCPINFORM]
@@ -245,7 +260,9 @@ public class SyslogHandler {
         
         return result;
     }
+	//endregion
 
+	//region - EXPIRE
 	private DhcpMessage processEXPIRE(String message)
     {
         // [DHCPEXPIRE]
@@ -268,7 +285,9 @@ public class SyslogHandler {
         
         return result;
     }
+	//endregion
 
+	//region - RELEASE
 	private DhcpMessage processRELEASE(String message)
     {
         // [DHCPRELEASE]
@@ -291,7 +310,9 @@ public class SyslogHandler {
         
         return result;
     }
+	//endregion
 	
+	//region [class] SyslogExtractData
 	public class SyslogExtractData {
 		private boolean isFindFlag = false;
 		private String value = "";
@@ -316,4 +337,5 @@ public class SyslogHandler {
 			this.lastIndex = lastIndex;
 		}
 	}
+	//endregion
 }

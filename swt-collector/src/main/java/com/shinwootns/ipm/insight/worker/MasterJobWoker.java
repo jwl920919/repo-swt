@@ -107,7 +107,7 @@ public class MasterJobWoker implements Runnable {
 		if (SharedData.getInstance().getSiteID() <= 0)
 			return;
 		
-		DeviceDhcp dhcp = SharedData.getInstance().dhcpDevice;
+		DeviceDhcp dhcp = SharedData.getInstance().GetDhcpDevice();
 		if (dhcp == null)
 			return;
 		
@@ -240,7 +240,7 @@ public class MasterJobWoker implements Runnable {
 		
 		HashMap<String, DhcpRange> setRemoved = new HashMap<String, DhcpRange>();
 		// Load previous data
-		List<DhcpRange> listPrev = dhcpMapper.selectDhcpRangeBySiteId(SharedData.getInstance().getSiteID());
+		List<DhcpRange> listPrev = dhcpMapper.selectDhcpRange(SharedData.getInstance().getSiteID());
 		for(DhcpRange prev : listPrev) {
 			setRemoved.put(prev.getStartIp(), prev);
 		}
@@ -305,7 +305,7 @@ public class MasterJobWoker implements Runnable {
 		
 		HashSet<String> setRemoved = new HashSet<String>();
 		// Load previous data
-		List<DhcpMacFilter> listPrev = dhcpMapper.selectDhcpFilterBySiteId(SharedData.getInstance().getSiteID());
+		List<DhcpMacFilter> listPrev = dhcpMapper.selectDhcpFilter(SharedData.getInstance().getSiteID());
 		if (listPrev != null) {
 			for(DhcpMacFilter prev : listPrev) {
 				setRemoved.add(prev.getFilterName());
@@ -507,7 +507,7 @@ public class MasterJobWoker implements Runnable {
 		if ( ClusterManager.getInstance().isMaster() == false)
 			return;
 		
-		DeviceDhcp dhcp = SharedData.getInstance().dhcpDevice;
+		DeviceDhcp dhcp = SharedData.getInstance().GetDhcpDevice();
 		if (dhcp == null)
 			return;
 		
