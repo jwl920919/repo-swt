@@ -24,4 +24,18 @@ public class NETWORK_Impl extends SqlSessionDaoSupport implements NETWORK_interf
 		return select_SEARCHED_NETWORK_INFOList;
 	}
 
+	@Override
+	public int select_SEARCHED_NETWORK_INFO_TOTAL_COUNT(HashMap<String, Object> parameters) {
+		int total = -1;
+		try {
+			System.out.println(getSqlSession());
+			total = getSqlSession().selectOne("UI_Query.select_SEARCHED_NETWORK_INFO_TOTAL_COUNT",
+					parameters);
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e.getMessage());
+		}
+		return total;
+	}
+
 }

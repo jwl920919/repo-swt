@@ -1,0 +1,23 @@
+package Common.ServiceImpl;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import Common.DAOInterface.MANAGEMENT_interface;
+import Common.DAOInterface.NETWORK_interface;
+import Common.ServiceInterface.MANAGEMENT_Service_interface;
+import Common.ServiceInterface.NETWORK_Service_interface;
+
+public class MANAGEMENT_Service_Impl implements MANAGEMENT_Service_interface {
+private MANAGEMENT_interface mgmtMenuDao;
+	
+	public void setMANAGEMENT_dao(MANAGEMENT_interface mgmtMenuDao){
+		this.mgmtMenuDao = mgmtMenuDao;
+	}
+
+	@Override
+	public List<Map<String, Object>> select_CUSTOM_GROUP_INFO(HashMap<String, Object> parameters) {
+		return mgmtMenuDao.select_CUSTOM_GROUP_INFO(parameters);
+	}
+}

@@ -36,47 +36,31 @@
 						<i class="fa fa-cog"></i>
 						<h3 class="box-title-small">IP 기준</h3>
 					</div>
-					<div class="box-body">
-						<div id="container" style="text-align:left;">
-							<ul>
-								<li>Root node
-									<ul>
-										<li>Child node 1</li>
-										<li>Child node 2</li>
-									</ul>
-								</li>
-							</ul>
-						</div>
+					<div class="box-body" style="margin: 0px 5px;">
+						<table name="datatable" id="ip-table" class="essential-table"
+							style="width: 100%;">
+							<thead>
+								<tr>
+									<th>Network</th>
+									<th>그룹명</th>
+									<!-- 								<th></th> -->
+								</tr>
+							</thead>
+						</table>
 					</div>
+				</div>
+			</div>
+			<div class="col-xs-6">
+				<div class="box box-primary">
+					<div class="box-header" style="text-align: left;">
+						<i class="fa fa-cog"></i>
+						<h3 class="box-title-small">사용자 기준</h3>
+					</div>
+					<div class="box-body"></div>
 				</div>
 			</div>
 		</div>
 	</section>
-
-
-	<!-- 
-						<div class="form-group">
-							<label>IPv4 mask:</label>
-							<div class="input-group">
-								<div class="input-group-addon">
-									<i class="fa fa-laptop"></i>
-								</div>
-								<input type="text" class="form-control"
-									data-inputmask="'alias': 'ipv4_subnet'" ipv4>
-							</div>
-						</div>
-						<div class="form-group">
-							<label>IPv6 mask:</label>
-							<div class="input-group">
-								<div class="input-group-addon">
-									<i class="fa fa-laptop"></i>
-								</div>
-								<input type="text" class="form-control"
-									data-inputmask="'alias': 'ipv6_subnet'" ipv6>
-							</div>
-						</div>
-
- -->
 
 </body>
 <!-- jQuery 2.2.0 -->
@@ -95,18 +79,18 @@
 <script src="/resources/dist/js/app.min.js"></script>
 <!-- iCheck 1.0.1 -->
 <script src="/resources/plugins/iCheck/icheck.min.js"></script>
+
+<script src="/resources/js/base/jstz-1.0.4.min.js"></script>
+<script src="/resources/js/common/Common.js"></script>
+<script src="/resources/js/common/multyLanguages.js"></script>
+
 <script src="/resources/plugins/jstree/jstree.min.js"></script>
 <script src="/resources/plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="/resources/plugins/datatables/dataTables.bootstrap.min.js"></script>
 <script src="/resources/js/common/Datatable-Essential.js"></script>
+<script src="/resources/js/management/customGroupSetting.js"></script>
 <script>
-    //     $(function() {
-    //         var ipv4 = $("[ipv4]").inputmask();
-    //         var ipv6 = $("[ipv6]").inputmask();
-    //     });
-    $(function() {
-        $('#container').jstree();
-    });
+    
 </script>
 
 </html>

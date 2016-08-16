@@ -4,17 +4,17 @@
 //<script src="../resources/js/main/main.js"></script>
 function getLanguage(key_cd) {
 	
-  var url = "resources/Language/ko-KR.txt";
+  var url = "/resources/Language/ko-KR.txt";
 
 //  alert("multyLanguage");
 //  alert(getCookie("Language"));
   if (getCookie("Language") == "en-US")
-      url = "resources/Language/en-US.txt";
+      url = "/resources/Language/en-US.txt";
   else if (getCookie("Language") == "ch-CN") {
-      url = "resources/Language/ch-CN.txt";
+      url = "/resources/Language/ch-CN.txt";
   }
   else {
-      url = "resources/Language/ko-KR.txt";
+      url = "/resources/Language/ko-KR.txt";
   }
   var rtn_data;
 
