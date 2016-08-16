@@ -50,6 +50,8 @@ public class SyslogPutter implements Runnable {
 		
 		String redisKey = RedisKeys.KEY_DATA_SYSLOG + ":" + SharedData.getInstance().getSiteID();
 		
+		Jedis redis = null;
+		
 		while(!Thread.currentThread().isInterrupted())
 		{
 			try {
@@ -59,9 +61,13 @@ public class SyslogPutter implements Runnable {
 				{
 					
 					// to Redis
-					Jedis redis = RedisHandler.getInstance().getRedisClient();
 					if (redis == null)
-						return;
+						redis = RedisHandler.getInstance().getRedisClient();
+					
+					if (redis == null) {
+						Thread.sleep(3000);
+						continue;
+					}
 					
 					for(SyslogEntity syslog : listSyslog)
 					{
@@ -71,43 +77,29 @@ public class SyslogPutter implements Runnable {
 						// Put to Redis
 						redis.zadd(redisKey, syslog.getRecvTime()/1000, JsonUtils.serialize(syslog).toString());
 					}
-					
-					redis.close();
-					
-					/*
-					int count = listSyslog.size();
-					
-					for(SyslogEntity syslog : listSyslog)
-					{
-						if (syslog == null)
-							continue;
-						
-						String rawData = syslog.getData();
-		
-						// Remove Carriage-Return & Line-Feed
-						rawData = rawData.replaceAll("\\r\\n|\\r|\\n", " ");
-						
-						// Trim
-						rawData = rawData.trim();
-						
-						JsonObject jobj = new JsonObject();
-						jobj.addProperty("host", syslog.getHost());
-						jobj.addProperty("facility", syslog.getFacility());
-						jobj.addProperty("severity", syslog.getSeverity());
-						jobj.addProperty("recv_time", syslog.getRecvTime());
-						jobj.addProperty("message", rawData);
-						
-						//RabbitmqSender.SendData(jobj, _logger);
-					}
-					
-					listSyslog.clear();
-					*/
 				}
 				
 			} catch (InterruptedException e) {
 				break;
+			} catch (Exception ex ) {
+				_logger.error(ex.getMessage(), ex);
+				
+				try {
+					if (redis != null && redis.ping() == null) {
+						redis.close();
+						redis = null;
+					}
+				}catch(Exception e2) {
+					if (redis != null)
+						redis.close();
+					redis = null;
+				}
 			}
 		}
+		
+		if (redis != null)
+			redis.close();
+		redis = null;
 		
 		if ( this._logger != null)
 			_logger.info( (new StringBuilder()).append("Syslog Producer#").append(this._index).append("... end.").toString());

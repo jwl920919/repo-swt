@@ -52,22 +52,28 @@ public class EventWorker implements Runnable {
 		
 		while(!Thread.currentThread().isInterrupted())
 		{
-			listEvent = SharedData.getInstance().eventQueue.pop(500, 100);
-			if (listEvent == null)
-				continue;
-			
-			for(EventData event : listEvent)
-			{
-				if (event == null) 
+			try {
+				
+				listEvent = SharedData.getInstance().eventQueue.pop(500, 100);
+				if (listEvent == null)
 					continue;
 				
-				try {
-					// Insert to db
-					eventMapper.insertEventLog(event);
+				for(EventData event : listEvent)
+				{
+					if (event == null) 
+						continue;
+					
+					try {
+						// Insert to db
+						eventMapper.insertEventLog(event);
+					}
+					catch (Exception ex) {
+						_logger.error(ex.getMessage(), ex);
+					}
 				}
-				catch (Exception ex) {
-					_logger.error(ex.getMessage(), ex);
-				}
+			}
+			catch(InterruptedException ex) {
+				break;
 			}
 		}
 	

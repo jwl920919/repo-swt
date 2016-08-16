@@ -864,7 +864,7 @@ rectangleClick = function (obj) {
 	    else if ($(obj).hasClass(ipMapSettings.abandonedCss)) {
 	    	$(obj).removeClass(ipMapSettings.abandonedCss).addClass(ipMapSettings.abandonedCss+ "ORG").addClass(ipMapSettings.selected_abandonedCss);
 	    }
-	    else if ($(obj).hasClass(ipMapSettings.dhcp_usedCss)) {
+	    else if ($(obj).hasClass(ipMapSettings.dhcp_abandonedCss)) {
 	    	$(obj).removeClass(ipMapSettings.dhcp_abandonedCss).addClass(ipMapSettings.dhcp_abandonedCss+ "ORG").addClass(ipMapSettings.selected_abandonedCss);
 	    }
 	    else if ($(obj).hasClass(ipMapSettings.abandonedCss+ "ORG")) {

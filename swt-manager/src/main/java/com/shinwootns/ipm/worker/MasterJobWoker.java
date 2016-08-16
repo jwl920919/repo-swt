@@ -7,27 +7,16 @@ import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.SpringApplication;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ConfigurableApplicationContext;
-
-import com.google.gson.JsonArray;
 import com.shinwootns.common.utils.JsonUtils;
-import com.shinwootns.data.entity.DeviceDhcp;
 import com.shinwootns.data.entity.IpCount;
 import com.shinwootns.data.entity.SiteInfo;
 import com.shinwootns.data.entity.ViewLeaseIpStatus;
 import com.shinwootns.data.entity.ViewNetworkIpStatus;
 import com.shinwootns.data.key.RedisKeys;
 import com.shinwootns.data.status.NetworkIpStatus;
-import com.shinwootns.data.status.DhcpCounter;
-import com.shinwootns.data.status.DhcpDeviceStatus;
-import com.shinwootns.data.status.DhcpVrrpStatus;
-import com.shinwootns.data.status.DnsCounter;
 import com.shinwootns.data.status.GuestIpStatus;
 import com.shinwootns.data.status.LeaseIpStatus;
 import com.shinwootns.ipm.SpringBeanProvider;
-import com.shinwootns.ipm.WorkerManager;
 import com.shinwootns.ipm.data.mapper.DashboardMapper;
 import com.shinwootns.ipm.data.mapper.DataMapper;
 import com.shinwootns.ipm.service.redis.RedisHandler;
