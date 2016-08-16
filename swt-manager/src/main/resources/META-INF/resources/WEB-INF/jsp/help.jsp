@@ -7,14 +7,14 @@
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
-<title>API documentation</title>
+<title>Smart IPM Plus</title>
 </head>
 
 <body>
 
-	<h1>API documentation</h1>
+	<h1>Smart IPM Plus - API documentation</h1>
 	
-    <table  cellpadding=5 cellspacing=0 border=1 style='border-collapse:collapse; border:1px gray solid;font-size:9pt;' width='100%'>
+    <table  cellpadding=5 cellspacing=0 border=1 style='border-collapse:collapse; border:1px gray solid;font-size:10pt;' width='100%'>
         
         <tr style='background-color: cyan; font-weight: bold;'>
 	        <td width='80' align='center'>Type</td>
@@ -30,7 +30,7 @@
 	    <c:forEach items="${contents}" var="item">
 	     <tr>
 	     	<td style='font-weight: bold;' align='center'>${item.typeName}</td>
-	     	<td>${item.url}</td>
+	     	<td style='font-weight: bold;'>${item.url}</td>
 	     	<td align='center'>
 	     		<c:if test="${fn:contains(item.exec, 'R')}">O</c:if>
 	     	</td>

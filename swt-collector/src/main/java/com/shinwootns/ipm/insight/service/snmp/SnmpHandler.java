@@ -221,6 +221,8 @@ public class SnmpHandler {
 							inf.setLastOctet( new BigDecimal(snmpResult.getValueNumber()) );
 					}
 				}
+				
+				Thread.sleep(300);
             }
 			
 			
@@ -264,6 +266,8 @@ public class SnmpHandler {
 							inf.setIfAlias(snmpResult.getValueString("UTF-8"));
 					}
 				}
+				
+				Thread.sleep(300);
             }
 			return mapInf;
 		}
@@ -332,6 +336,8 @@ public class SnmpHandler {
 					
 				}
 				listResult.clear();
+				
+				Thread.sleep(300);
             }
 			
 			return new ArrayList<InterfaceIp> (mapIfIp.values());
@@ -374,8 +380,17 @@ public class SnmpHandler {
 					SnmpUtil snmpDot1dUtil = new SnmpUtil(this._host, dotCommunity.toString());
 					
 					collectCAMInfo_Dot1dIfIndex(snmpDot1dUtil, camEntry);
+					
+					Thread.sleep(300);
+					
 					collectCAMInfo_MacDot1d(snmpDot1dUtil, camEntry);
+					
+					Thread.sleep(300);
+					
 					CollectCAMInfo_StpRootPort(snmpDot1dUtil, camEntry);
+					
+					Thread.sleep(300);
+					
 					CollectCAMInfo_StpPortState(snmpDot1dUtil, camEntry);
 				}
 			}
@@ -384,8 +399,17 @@ public class SnmpHandler {
 				SnmpUtil snmpUtil = new SnmpUtil(this._host, this._snmpCommunity);
 				
 				collectCAMInfo_Dot1dIfIndex(snmpUtil, camEntry);
+				
+				Thread.sleep(300);
+				
 				collectCAMInfo_MacDot1d(snmpUtil, camEntry);
+				
+				Thread.sleep(300);
+				
 				CollectCAMInfo_StpRootPort(snmpUtil, camEntry);
+				
+				Thread.sleep(300);
+				
 				CollectCAMInfo_StpPortState(snmpUtil, camEntry); 
 			}
 			
@@ -558,6 +582,7 @@ public class SnmpHandler {
 		
 		return true;
 	}
+	//endregion
 	
 	//region Collect CAM - StpPortState
 	private boolean CollectCAMInfo_StpPortState(SnmpUtil snmpUtil, CamEntryData camEntry) {

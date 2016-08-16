@@ -23,7 +23,6 @@ import com.shinwootns.data.entity.InterfaceIp;
 import com.shinwootns.ipm.insight.SpringBeanProvider;
 import com.shinwootns.ipm.insight.data.SharedData;
 import com.shinwootns.ipm.insight.data.mapper.DeviceMapper;
-import com.shinwootns.ipm.insight.service.cluster.ClusterManager;
 import com.shinwootns.ipm.insight.service.snmp.SnmpHandler;
 import com.shinwootns.ipm.insight.service.snmp.SystemEntry;
 
@@ -31,18 +30,12 @@ public class NetworkDeviceCollctor implements Runnable {
 
 	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
-	 
-	private HashMap<Integer, DeviceSnmp> mapDevice = new HashMap<Integer, DeviceSnmp>();
-	
 	private ScheduledExecutorService schedulerService = Executors.newScheduledThreadPool(1);
 	
 	@Override
 	public void run() {
 		
 		_logger.info("NetworkDeviceCollctor... start.");
-		
-		LoadSysOID();
-		loadNetworkDevice();
 		
 		// Collect System & Interface
 		schedulerService.scheduleWithFixedDelay(
@@ -57,9 +50,6 @@ public class NetworkDeviceCollctor implements Runnable {
 		
 		// wait termination
 		while(!Thread.currentThread().isInterrupted()) {
-			
-			collectStart();
-			
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
@@ -69,98 +59,6 @@ public class NetworkDeviceCollctor implements Runnable {
 		
 		_logger.info("NetworkDeviceCollctor... end.");
 	}
-
-	//region Load NetworkDevice
-	private void loadNetworkDevice() {
-		
-		DeviceMapper deviceMapper = SpringBeanProvider.getInstance().getDeviceMapper();
-		if (deviceMapper == null)
-			return;
-		
-		String hostName = SystemUtils.getHostName();
-		
-		List<DeviceSnmp> listDevice = deviceMapper.selectDeviceSnmp(SharedData.getInstance().getSiteID(), hostName);
-		if (listDevice == null)
-			return;
-		
-		_logger.info( (new StringBuilder()).append("Load Network Device.... Count:").append(listDevice.size()).toString() );
-		
-		synchronized(this.mapDevice)
-		{
-			HashSet<Integer> setPrev = new HashSet<Integer>();
-			
-			// Old Data
-			for(DeviceSnmp oldDevice : this.mapDevice.values())
-				setPrev.add(oldDevice.getDeviceId());
-
-			// Update & Insert
-			for(DeviceSnmp device : listDevice) {
-				
-				// For check removed
-				setPrev.remove(device.getDeviceId());
-				
-				if (mapDevice.containsKey(device.getDeviceId()) == false) {
-					
-					_logger.info( (new StringBuilder())
-							.append("Add device. (id=").append(device.getDeviceId()).append(", host=").append(device.getHost()).append(")")
-							.toString());
-					
-					// Insert
-					mapDevice.put(device.getDeviceId(), device);
-				}
-				else {
-					// Update
-					mapDevice.put(device.getDeviceId(), device);
-				}
-			}
-			
-			// Delete removed device
-			for(int deleted : setPrev) {
-				
-				DeviceSnmp remDevice = mapDevice.get(deleted);
-				if (remDevice != null) {
-					_logger.info( (new StringBuilder())
-							.append("Delete device. (id=").append(remDevice.getDeviceId()).append(", host=").append(remDevice.getHost()).append(")")
-							.toString());
-				}
-				mapDevice.remove(deleted);
-			}
-		}
-	}
-	//endregion
-	
-	//region Load SysOID
-	
-	private void LoadSysOID() {
-	
-		DeviceMapper deviceMapper = SpringBeanProvider.getInstance().getDeviceMapper();
-		if (deviceMapper == null)
-			return;
-		
-		List<DeviceSysOID> listSysOID = deviceMapper.selectSysOID();
-		
-		_logger.info( (new StringBuilder()).append("Load SysOID.... Count:").append(listSysOID.size()).toString() );
-
-		SharedData.getInstance().SetSysOID(listSysOID);
-	}
-	
-	//endregion
-	
-	//region Get Device List
-	private List<DeviceSnmp> getDeviceList() throws CloneNotSupportedException
-	{
-		List<DeviceSnmp> listDevice = new LinkedList<DeviceSnmp>();
-		
-		synchronized(mapDevice) 
-		{
-			for(DeviceSnmp device : this.mapDevice.values()) {
-				listDevice.add( device.clone() );
-			}
-		}
-		
-		return listDevice;
-	}
-	//endregion
 	
 	//region Collect Start
 	private void collectStart() {
@@ -172,7 +70,7 @@ public class NetworkDeviceCollctor implements Runnable {
 		
 		// Get Device
 		try {
-			listDevice = getDeviceList();
+			listDevice = SharedData.getInstance().getDeviceList();
 		} catch(Exception ex) {
 			_logger.error(ex.getMessage(), ex);
 			return;
@@ -196,12 +94,22 @@ public class NetworkDeviceCollctor implements Runnable {
 					// Collect Interface Info
 					collectInterfaceInfo(handler, device, deviceMapper);
 					
+					Thread.sleep(1000);
+					
 					// Collect Interface IP
 					collectInterfaceIp(handler, device, deviceMapper);
 					
+					Thread.sleep(1000);
+					
 					// Interface CAM
 					collectInterfaceCAM(handler, device, deviceMapper);
+
 				}
+				else {
+					_logger.info( (new StringBuilder()).append("SNMP failed - ").append(device.getHost()).toString() );
+				}
+				
+				Thread.sleep(5000);
 				
 			} catch(Exception ex) {
 				_logger.error(ex.getMessage(), ex);
