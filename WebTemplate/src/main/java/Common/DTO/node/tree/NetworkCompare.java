@@ -1,4 +1,4 @@
-package Common.DTO.node;
+package Common.DTO.node.tree;
 
 import java.util.Comparator;
 

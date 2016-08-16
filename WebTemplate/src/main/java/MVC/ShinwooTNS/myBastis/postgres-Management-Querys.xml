@@ -6,13 +6,30 @@
 	<!-- Insert Date : 2016-08-16 -->
 	<!-- Insert User : 이재원 -->
 	<!-- Description : custom group information Search -->
-	<!-- Controller :  -->
-	<select id="select_CUSTOM_GROUP_INFO" parameterType="hashmap" resultType="java.util.HashMap">
-		SELECT 	cg.group_id,COALESCE(cg.group_name,'') AS group_name, dn."network" AS key, 
-				COALESCE(cg."type",'N') AS "type",dn.site_id,dn.ip_type
-		FROM 	dhcp_network AS dn LEFT JOIN custom_group AS cg 
-				ON dn."network" = cg.key and cg."type" = 'N' 
+	<!-- Controller : -->
+	<select id="select_CUSTOM_GROUP_INFO" parameterType="hashmap"
+		resultType="java.util.HashMap">
+		SELECT cg.group_id,COALESCE(cg.group_name,'') AS
+		group_name, dn."network" AS key,
+		COALESCE(cg."type",'N') AS "type",dn.site_id,dn.ip_type
+		FROM dhcp_network AS dn LEFT JOIN
+		custom_group AS cg
+		ON dn."network" = cg.key and cg."type" = 'N'
 		ORDER BY ${orderColumn} ${orderType} OFFSET #{startIndex} LIMIT #{length}
+	</select>
+
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-08-16 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : Network Information 행 개수 조회 -->
+	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
+	<select id="select_SEARCHED_NETWORK_INFO_TOTAL_COUNT"
+		parameterType="hashmap" resultType="Integer">
+		SELECT count(*) AS total
+		FROM dhcp_network
+		<!-- WHERE (user_id like CONCAT('%', #{searchValue}, '%') OR -->
+		<!-- user_name -->
+		<!-- like CONCAT('%', #{searchValue}, '%')) and site_id=#{site_id} -->
 	</select>
 </mapper>
 

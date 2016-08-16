@@ -41,9 +41,9 @@
 							style="width: 100%;">
 							<thead>
 								<tr>
-									<th>Network</th>
-									<th>그룹명</th>
-									<!-- 								<th></th> -->
+									<th width=50%>Network</th>
+									<th width=50%>그룹명</th>
+									<th></th>
 								</tr>
 							</thead>
 						</table>

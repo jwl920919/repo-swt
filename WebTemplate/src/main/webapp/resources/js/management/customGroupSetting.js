@@ -30,6 +30,13 @@ $(document)
                                             "data" : "network"
                                         }, {
                                             "data" : "group_name"
+                                        }, {
+                                            'searchable' : false,
+                                            'orderable' : false,
+                                            'render' : function(type,
+                                                    row) {
+                                                return '<i class="fa fa-edit essential-cursor-pointer" onclick="ipModifyBtnClickEvent(this)" data-toggle="tooltip" title="" data-original-title="수정"></i>';
+                                            }
                                         }]
                                     });
                     $(function() {
@@ -45,5 +52,8 @@ $(document)
 
 
 function trClickEvent(tr) {
-    console.log(tr);
+}
+function ipModifyBtnClickEvent(t) {
+    var $this = $(t);
+    console.log($this);
 }

@@ -811,9 +811,6 @@
 		parameterType="hashmap" resultType="Integer">
 		SELECT count(*) AS total
 		FROM dhcp_network
-<!-- 		WHERE (user_id like CONCAT('%', #{searchValue}, '%') OR -->
-<!-- 		user_name -->
-<!-- 		like CONCAT('%', #{searchValue}, '%')) and site_id=#{site_id}  -->
 	</select>
 	
 </mapper>
