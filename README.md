@@ -75,7 +75,7 @@ docker run \
 docker run \
  --name=ipm-manager \
  -itd \
- -p 8080:8080 \
+ -p 8000:8000 \
  -v /logs/ipm-manager:/logs \
  --restart always \
  ipm-base:0.1 \
@@ -88,7 +88,7 @@ docker run \
  --name=ipm-insight \
  -itd \
  -p 514:514/udp \
- -p 8081:8081 \
+ -p 8001:8001 \
  -v /logs/ipm-insight:/logs \
  --restart always \
  ipm-base:0.1 \
