@@ -288,7 +288,7 @@ public class MasterJobWoker implements Runnable {
 				);
 			}
 			
-			_logger.info("UpdateLeaseIpStatus()... ok");
+			_logger.info("UpdateGuestIPCount()... ok");
 		}
 		catch(Exception ex) {
 			_logger.error(ex.getMessage(), ex);
