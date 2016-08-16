@@ -137,7 +137,6 @@
 		</div>
 	</div>
 </section>
-<!-- Select2 -->
 <script src="resources/js/common/modalPopup.js"></script>
 <script src="resources/plugins/select2/select2.full.min.js"></script>
 <script src="resources/js/common/Datatable-Essential.js"></script>

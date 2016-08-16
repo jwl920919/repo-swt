@@ -26,4 +26,19 @@ public class MANAGEMENT_Impl extends SqlSessionDaoSupport implements MANAGEMENT_
 		return select_CUSTOM_GROUP_INFOList;
 	}
 
+	@Override
+	public int select_CUSTOM_GROUP_INFO_TOTAL_COUNT(HashMap<String, Object> parameters) {
+		int total = -1;
+		try {
+			System.out.println(getSqlSession());
+			total = getSqlSession().selectOne("UI_Query.select_CUSTOM_GROUP_INFO_TOTAL_COUNT",
+					parameters);
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e.getMessage());
+		}
+		return total;
+	}
+	
+
 }

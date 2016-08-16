@@ -1,7 +1,9 @@
 package MVC.ShinwooTNS.action;
 
 import java.io.IOException;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -43,17 +45,16 @@ public class ManagementActionController {
 	StringRedisTemplate redisTemplate;
 	@Autowired
 	MANAGEMENT_Service_interface managementService;
-	@Autowired
-	NETWORK_Service_interface networkService;
 	
 	@RequestMapping(value = "getIpTableDatas", method = RequestMethod.POST)
 	public void getAccessPolicyTableDatas(Locale locale, Model model, HttpServletRequest request,
 			HttpServletResponse response, HttpSession session) {
 		try {
-			init();
 			String[] columns = { "network", "group_name" };
 			HashMap<String, Object> parameters = Common.Helper.DatatableHelper.getDatatableParametas(request, columns,
-					0);
+				0);
+			
+			parameters.put("ip_type", request.getParameter("ip_type"));
 //			parameters.put("site_id", Integer.parseInt(session.getAttribute("site_id").toString()));
 			List<Map<String, Object>> ipDataList = managementService.select_CUSTOM_GROUP_INFO(parameters);
 			JSONArray jsonArray = new JSONArray();
@@ -61,12 +62,12 @@ public class ManagementActionController {
 				JSONObject jObj = new JSONObject();
 				jObj.put("site_id", ipData.get("site_id"));
 				jObj.put("network", ipData.get("key"));
-				jObj.put("ip_type", ipData.get("ip_type"));
-//				jObj.put("update_time", ipData.get("update_time"));
+//				jObj.put("ip_type", ipData.get("ip_type"));
 				jObj.put("group_name", ipData.get("group_name"));
+				jObj.put("group_id", ipData.get("group_id"));
 				jsonArray.add(jObj);
 			}
-			String callback = Common.Helper.DatatableHelper.makeCallback(request, jsonArray, networkService.select_SEARCHED_NETWORK_INFO_TOTAL_COUNT(parameters));
+			String callback = Common.Helper.DatatableHelper.makeCallback(request, jsonArray, managementService.select_CUSTOM_GROUP_INFO_TOTAL_COUNT(parameters));
 			response.setContentType("Application/json;charset=utf-8");
 			response.getWriter().println(callback);
 			response.getWriter().flush();

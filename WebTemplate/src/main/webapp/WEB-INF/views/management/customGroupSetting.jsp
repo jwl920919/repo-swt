@@ -27,7 +27,46 @@
 <link rel="stylesheet"
 	href="/resources/plugins/jstree/themes/default/style.min.css">
 </head>
+<style type="text/css">
+.hidden {
+	visibility: hidden;
+}
+</style>
 <body>
+	<!-- Add, Edit modal -->
+	<div class="modal modal-dialog" id="modify-modal">
+		<div class="modal-content" name="modalContent">
+			<div class="modal-header" div_mordal_header>
+				<input type="button" class="close" name="modalClose"
+					data-dismiss="modal" aria-label="Close" value="&times;" />
+				<h4 class="modal-title">Network Name Modify</h4>
+			</div>
+			<div id="modify-body" class="modal-body">
+				<div class="input-group modal-input-group">
+					<div class="input-group-addon modal-content-header">Network</div>
+					<div class="modal-content-body">
+						<input type="text" class="form-control" id="network-txt" readOnly>
+					</div>
+				</div>
+				<div class="input-group modal-input-group">
+					<div class="input-group-addon modal-content-header">Name</div>
+					<div class="modal-content-body">
+						<input type="text" class="form-control" id="name-txt"
+							placeholder="Name">
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<input type="button" class="btn btn-default pull-left"
+					name="modalClose" data-dismiss="modal"
+					value="<%=LanguageHelper.GetLanguage("close")%>" />
+				<button type="button" class="btn btn-primary" id="modify-save-btn"><%=LanguageHelper.GetLanguage("saveandclose")%></button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- modalbackDiv -->
+	<div id="modalbackDiv" class="mordal-back-box"></div>
 	<section class="white-paper" style="text-align: center">
 		<div class="row">
 			<div class="col-xs-6">
@@ -37,12 +76,18 @@
 						<h3 class="box-title-small">IP 기준</h3>
 					</div>
 					<div class="box-body" style="margin: 0px 5px;">
+						<select id=ip-table_select
+							style="vertical-align: bottom; height: 30px; visibility: hidden;">
+							<option value=4 selected>IPV4</option>
+							<option value=6>IPV6</option>
+						</select>
 						<table name="datatable" id="ip-table" class="essential-table"
 							style="width: 100%;">
 							<thead>
 								<tr>
 									<th width=50%>Network</th>
-									<th width=50%>그룹명</th>
+									<th width=50%>Name</th>
+									<th class="hidden"></th>
 									<th></th>
 								</tr>
 							</thead>
@@ -88,6 +133,7 @@
 <script src="/resources/plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="/resources/plugins/datatables/dataTables.bootstrap.min.js"></script>
 <script src="/resources/js/common/Datatable-Essential.js"></script>
+<script src="/resources/js/common/modalPopup.js"></script>
 <script src="/resources/js/management/customGroupSetting.js"></script>
 <script>
     
