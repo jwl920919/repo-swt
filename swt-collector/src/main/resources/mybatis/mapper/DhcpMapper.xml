@@ -1,35 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
         
-<mapper namespace="com.shinwootns.ipm.insight.data.mapper.DeviceMapper">
+<mapper namespace="com.shinwootns.ipm.insight.data.mapper.DhcpMapper">
 
-    <!-- ############################ DHCP ############################ -->
-    <select id="selectDeviceDhcp" resultType="com.shinwootns.data.entity.DeviceDhcp">
-        SELECT * FROM device_dhcp WHERE site_id=#{site_id} ORDER BY device_id LIMIT 1
-    </select>
-    
-    <select id="selectDeviceIP" resultType="com.shinwootns.data.entity.DeviceIp">
-        SELECT ipaddr, device_id
-		FROM
-		(
-			SELECT ipaddr, device_id, priority, RANK() OVER (PARTITION BY ipaddr ORDER BY priority) rank
-			FROM 
-			(
-				SELECT device_id, host ipaddr, 1 priority 
-				FROM device_dhcp 
-				WHERE site_id = #{site_id}
-				UNION
-				SELECT ifip.device_id, ifip.if_ipaddr, CASE WHEN inf.oper_stauts = 1 THEN 2 ELSE 3 END priority 
-				FROM device_dhcp dhcp, interface_info inf, interface_ip ifip
-				WHERE dhcp.device_id = ifip.device_id
-				AND dhcp.device_id = inf.device_id
-				AND inf.if_number = ifip.if_number
-				AND site_id = #{site_id}
-			) ip
-		) result
-		WHERE rank = 1
-    </select>
-    
     <!-- ############################ DHCP NETWORK ############################ -->
 	<select id="selectDhcpNetworkBySiteId" resultType="com.shinwootns.data.entity.DhcpNetwork">
 		<![CDATA[

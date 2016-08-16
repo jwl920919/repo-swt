@@ -23,8 +23,41 @@
 		AND ins.host = #{insight_host}
 		</if>
 	</select>
+	
+	<!-- ############################ DHCP ############################ -->
+    <select id="selectDeviceDhcp" resultType="com.shinwootns.data.entity.DeviceDhcp">
+        SELECT * FROM device_dhcp WHERE site_id=#{site_id} ORDER BY device_id LIMIT 1
+    </select>
     
-    <!-- ############################ Device Insight ############################ -->
+    <select id="selectDeviceIP" resultType="com.shinwootns.data.entity.DeviceIp">
+        SELECT ipaddr, device_id
+		FROM
+		(
+			SELECT ipaddr, device_id, priority, RANK() OVER (PARTITION BY ipaddr ORDER BY priority) rank
+			FROM 
+			(
+				SELECT device_id, host ipaddr, 1 priority 
+				FROM device_dhcp 
+				WHERE site_id = #{site_id}
+				UNION
+				SELECT ifip.device_id, ifip.if_ipaddr, CASE WHEN inf.oper_stauts = 1 THEN 2 ELSE 3 END priority 
+				FROM device_dhcp dhcp, interface_info inf, interface_ip ifip
+				WHERE dhcp.device_id = ifip.device_id
+				AND dhcp.device_id = inf.device_id
+				AND inf.if_number = ifip.if_number
+				AND site_id = #{site_id}
+			) ip
+		) result
+		WHERE rank = 1
+    </select>
+    
+    <!-- ############################ SysOID ############################ -->
+    <select id="selectSysOID" resultType="com.shinwootns.data.entity.DeviceSysOID">
+		SELECT * FROM device_sysoid
+	</select>
+    
+    
+    <!-- ############################ Insight ############################ -->
     
     <select id="selectInsightByHost" resultType="com.shinwootns.data.entity.DeviceInsight">
 		SELECT * FROM device_insight WHERE host = #{host}
@@ -55,5 +88,99 @@
 			UPDATE device_insight SET is_master=false WHERE host != #{host} AND site_id = #{site_id};
 		]]>
 	</update>
+	
+	
+	<!-- ############################ Network ############################ -->
+    
+    <update id="updateNetworkDevice" parameterType="com.shinwootns.data.entity.DeviceNetwork">
+		UPDATE device_network
+		SET host_name=#{host_name}, vendor=#{vendor}
+			, model=#{model}, service_type=#{service_type}
+			, sys_oid=#{sys_oid}, sys_location=#{sys_location}
+			, description=#{description}
+			, update_time = now()
+		WHERE device_id = #{device_id}
+	</update>
+	
+	
+	<!-- ############################ Interface Info ############################ -->
+	
+	<select id="selectInterfaceInfo" resultType="com.shinwootns.data.entity.InterfaceInfo">
+		SELECT * FROM interface_info WHERE device_id=#{device_id}
+	</select>
+	
+	<insert id="insertInterfaceInfo" parameterType="com.shinwootns.data.entity.InterfaceInfo">
+		<![CDATA[
+			INSERT INTO interface_info 
+				(device_id, if_number, if_name, if_desc, if_speed, if_macaddr, if_alias, admin_stauts, oper_stauts, last_octet
+				, last_octet_update, insert_time, update_time)
+			VALUES ( #{device_id}, #{if_number}, #{if_name}, #{if_desc}, #{if_speed}, #{if_macaddr}, #{if_alias}
+			, #{admin_stauts}, #{oper_stauts}, #{last_octet}, #{last_octet_update}, now(), now() ) 
+		]]>
+	</insert>
+	
+	<update id="updateInterfaceInfo" parameterType="com.shinwootns.data.entity.InterfaceInfo">
+	
+		UPDATE interface_info
+	   		SET if_name=#{if_name}, if_desc=#{if_desc}, if_speed=#{if_speed}, if_macaddr=#{if_macaddr}
+	   		, if_alias=#{if_alias}, admin_stauts=#{admin_stauts}, oper_stauts=#{oper_stauts}
+			, last_octet=#{last_octet}    	   	
+    	   	<if test="last_octet_update != null">
+    	   	, last_octet_update=now()
+    	   	</if>
+    	   	, update_time = now()
+       WHERE device_id=#{device_id} AND if_number = #{if_number}
+       
+	</update>
+
+	<delete id="deleteInterfaceInfo" parameterType="com.shinwootns.data.entity.InterfaceInfo">
+		DELETE FROM interface_info 
+		WHERE device_id=#{device_id} AND if_number = #{if_number}
+	</delete>
+	
+	<!-- ############################ Interface IP ############################ -->
+	
+	<select id="selectInterfaceIp" resultType="com.shinwootns.data.entity.InterfaceIp">
+		SELECT * FROM interface_ip WHERE device_id=#{device_id}
+	</select>
+	
+	<insert id="insertInterfaceIp" parameterType="com.shinwootns.data.entity.InterfaceIp">
+		INSERT INTO interface_ip
+			(device_id, if_number, if_ipaddr, network_ip, network_mask, insert_time, update_time)
+		VALUES ( #{device_id}, #{if_number}, #{if_ipaddr}, #{network_ip}, #{network_mask}, now(), now()) 
+	</insert>
+
+	<update id="updateInterfaceIp" parameterType="com.shinwootns.data.entity.InterfaceIp">
+		UPDATE interface_ip
+    	   	SET network_ip=#{network_ip}, network_mask=#{network_mask}, update_time = now()
+       WHERE device_id=#{device_id} AND if_number = #{if_number} AND if_ipaddr = #{if_ipaddr}; 
+	</update>
+	
+	<delete id="deleteInterfaceIp" parameterType="com.shinwootns.data.entity.InterfaceIp">
+		DELETE FROM interface_ip 
+		WHERE device_id=#{device_id} AND if_number = #{if_number} AND if_ipaddr = #{if_ipaddr};
+	</delete>
+	
+	<!-- ############################ CAM Info ############################ -->
+    
+    <select id="selectInterfaceCam" resultType="com.shinwootns.data.entity.InterfaceCam">
+		SELECT * FROM interface_cam WHERE device_id=#{device_id}
+	</select>
+	
+	<insert id="insertInterfaceCam" parameterType="com.shinwootns.data.entity.InterfaceCam">
+		INSERT INTO interface_cam (device_id, if_number, macaddr, ipaddr, update_time)
+		VALUES ( #{device_id}, #{if_number}, #{macaddr}, #{ipaddr}, now()); 
+	</insert>
+
+	<update id="updateInterfaceCam" parameterType="com.shinwootns.data.entity.InterfaceCam">
+		UPDATE interface_cam
+    	   	SET ipaddr=#{ipaddr}, update_time=now()
+       WHERE device_id=#{device_id} AND if_number=#{if_number} AND macaddr=#{macaddr}; 
+	</update>
+	
+	<delete id="deleteInterfaceCam" parameterType="com.shinwootns.data.entity.InterfaceCam">
+		DELETE FROM interface_cam 
+		WHERE device_id=#{device_id} AND if_number=#{if_number} AND macaddr=#{macaddr};
+	</delete>
     
 </mapper>

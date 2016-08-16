@@ -76,7 +76,7 @@ logging:
   file: /logs/ipm-manager.log
   level:
     org.springframework: INFO
-    com.shinwootns: DEBUG
+    com.shinwootns: INFO
     root: INFO
 
 #====================================

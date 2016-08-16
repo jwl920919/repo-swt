@@ -1,5 +1,6 @@
 package com.shinwootns.ipm.insight.worker;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -167,31 +168,64 @@ public class MasterJobWoker implements Runnable {
 		if (SharedData.getInstance().getSiteID() <= 0)
 			return null;
 		
+		DhcpMapper dhcpMapper = SpringBeanProvider.getInstance().getDhcpMapper();
+		if (dhcpMapper == null)
+			return null;
+		
+		// Collect DHCP Network
 		LinkedList<DhcpNetwork> listNetwork = handler.getDhcpNetwork(SharedData.getInstance().getSiteID());
 		
-		if (listNetwork != null) {
-			DhcpMapper dhcpMapper = SpringBeanProvider.getInstance().getDhcpMapper();
-			if (dhcpMapper == null)
-				return null;
+		if (listNetwork == null && listNetwork.size() == 0)
+			return null;
+		
+		HashSet<String> setRemoved = new HashSet<String>();
+		
+		// Load previous data
+		List<DhcpNetwork> listPrev = dhcpMapper.selectDhcpNetworkBySiteId(SharedData.getInstance().getSiteID());
+		for(DhcpNetwork prev : listPrev) {
+			setRemoved.add(prev.getNetwork());
+		}
+		
+		// Update to DB
+		for(DhcpNetwork network : listNetwork) {
+			
+			setRemoved.remove(network.getNetwork());
 			
 			try
 			{
-				for(DhcpNetwork network : listNetwork) {
-					if (network != null && network.getNetwork().isEmpty() == false) {
-						int affected = dhcpMapper.updateDhcpNetwork(network);
+				if (network != null && network.getNetwork().isEmpty() == false) {
+
+					int affected = dhcpMapper.updateDhcpNetwork(network);
+					
+					if (affected == 0) {
+						affected = dhcpMapper.insertDhcpNetwork(network);
 						
-						if (affected == 0)
-							affected = dhcpMapper.insertDhcpNetwork(network);
+						_logger.info((new StringBuilder())
+								.append("[INSERT] Insert DHCP Network")
+								.append(" (site_id=").append(network.getSiteId())
+								.append(", network=").append(network.getNetwork())
+								.append(")")
+								.toString());
 					}
 				}
-				
-				_logger.info("collectDhcpNetwork()... OK");
 			}
 			catch(Exception ex) {
-				_logger.error("collectDhcpNetwork()... Failed");
 				_logger.error(ex.getMessage(), ex);
+				_logger.error(network.toString());
 			}
 		}
+		
+		// Delete removed network
+		for(String removed : setRemoved) {
+			dhcpMapper.deleteDhcpNetwork(SharedData.getInstance().getSiteID(), removed);
+			
+			_logger.info((new StringBuilder())
+					.append("[DELETE] Delete DHCP Network ")
+					.append(" (network=").append(removed).append(")")
+					.toString());
+		}
+		
+		_logger.info("collectDhcpNetwork()... OK");
 		
 		return listNetwork;
 	}
@@ -200,31 +234,64 @@ public class MasterJobWoker implements Runnable {
 	//region [FUNC] Collect DHCP Range
 	private void collectDhcpRange(DhcpHandler handler) {
 		
-		LinkedList<DhcpRange> listRange = handler.getDhcpRange(SharedData.getInstance().getSiteID());
+		DhcpMapper dhcpMapper = SpringBeanProvider.getInstance().getDhcpMapper();
+		if (dhcpMapper == null)
+			return;
 		
-		if (listRange != null) {
-			DhcpMapper dhcpMapper = SpringBeanProvider.getInstance().getDhcpMapper();
-			if (dhcpMapper == null)
-				return;
-				
+		HashMap<String, DhcpRange> setRemoved = new HashMap<String, DhcpRange>();
+		// Load previous data
+		List<DhcpRange> listPrev = dhcpMapper.selectDhcpRangeBySiteId(SharedData.getInstance().getSiteID());
+		for(DhcpRange prev : listPrev) {
+			setRemoved.put(prev.getStartIp(), prev);
+		}
+		
+		// Collect DHCP Range
+		LinkedList<DhcpRange> listRange = handler.getDhcpRange(SharedData.getInstance().getSiteID());
+		if (listRange == null || listRange.size() == 0)
+			return;
+		
+		// Update to DB
+		for(DhcpRange range : listRange) {
+
 			try
 			{
-				for(DhcpRange range : listRange) {
-					if (range != null && range.getNetwork().isEmpty() == false) {
+				setRemoved.remove(range.getStartIp());
+				
+				if (range != null && range.getNetwork().isEmpty() == false) {
+					
+					int affected = dhcpMapper.updateDhcpRange(range);
+					if (affected == 0) {
+						affected = dhcpMapper.insertDhcpRange(range);
 						
-						int affected = dhcpMapper.updateDhcpRange(range);
-						
-						if (affected == 0)
-							affected = dhcpMapper.insertDhcpRange(range);
+						_logger.info((new StringBuilder())
+								.append("[INSERT] Insert DHCP Range")
+								.append(" (site_id=").append(range.getSiteId())
+								.append(", network=").append(range.getNetwork())
+								.append(", start=").append(range.getStartIp())
+								.append(", end=").append(range.getEndIp())
+								.append(")")
+								.toString());
 					}
 				}
-				
-				_logger.info("collectDhcpRange()... OK");
 			}
 			catch(Exception ex) {
-				_logger.error("collectDhcpRange()... Failed");
 				_logger.error(ex.getMessage(), ex);
 			}
+		}
+		
+		_logger.info("collectDhcpRange()... OK");
+
+		// Delete removed range
+		for(DhcpRange removed : setRemoved.values()) {
+			dhcpMapper.deleteDhcpRange(SharedData.getInstance().getSiteID(), removed.getNetwork(), removed.getStartIp());
+			
+			_logger.info((new StringBuilder())
+					.append("[DELETE] Delete DHCP Range ")
+					.append(" (site_id:").append(removed.getSiteId())
+					.append(", network=").append(removed.getNetwork())
+					.append(", start_ip=").append(removed.getStartIp())
+					.append(")")
+					.toString());
 		}
 	}
 	//endregion
@@ -232,33 +299,70 @@ public class MasterJobWoker implements Runnable {
 	//region [FUNC] Collect Mac Filter
 	private void collectMacFilter(DhcpHandler handler) {
 		
-		LinkedList<DhcpMacFilter> listFilter = handler.getDhcpMacFilter(SharedData.getInstance().getSiteID());
+		DhcpMapper dhcpMapper = SpringBeanProvider.getInstance().getDhcpMapper();
+		if (dhcpMapper == null)
+			return;
 		
-		if (listFilter != null) {
-			DhcpMapper dhcpMapper = SpringBeanProvider.getInstance().getDhcpMapper();
-			if (dhcpMapper == null)
-				return;
+		HashSet<String> setRemoved = new HashSet<String>();
+		// Load previous data
+		List<DhcpMacFilter> listPrev = dhcpMapper.selectDhcpFilterBySiteId(SharedData.getInstance().getSiteID());
+		if (listPrev != null) {
+			for(DhcpMacFilter prev : listPrev) {
+				setRemoved.add(prev.getFilterName());
+			}
+		}
+		
+		// Collect Mac Filter
+		LinkedList<DhcpMacFilter> listFilter = handler.getDhcpMacFilter(SharedData.getInstance().getSiteID());
+		if (listFilter == null) 
+			return;
+		
+
+		// Update to DB
+		for(DhcpMacFilter filter : listFilter) {
+
+			setRemoved.remove(filter.getFilterName());
 			
 			try
 			{
-				for(DhcpMacFilter filter : listFilter) {
-
-					if (filter != null && filter.getFilterName().isEmpty() == false) {
+				if (filter != null && filter.getFilterName().isEmpty() == false) {
+				
+					int affected = dhcpMapper.updateDhcpFilter(filter);
 					
-						int affected = dhcpMapper.updateDhcpFilter(filter);
+					if (affected == 0) {
+						affected = dhcpMapper.insertDhcpFilter(filter);
 						
-						if (affected == 0)
-							affected = dhcpMapper.insertDhcpFilter(filter);
+						_logger.info((new StringBuilder())
+								.append("[INSERT] Insert DHCP Mac filter")
+								.append(" (site_id=").append(filter.getSiteId())
+								.append(", name=").append(filter.getFilterName())
+								.append(", desc=").append(filter.getFilterDesc())
+								.append(")")
+								.toString());
 					}
 				}
-				
-				_logger.info("collectMacFilter()... OK");
 			}
 			catch(Exception ex) {
 				_logger.error("collectMacFilter()... Failed");
 				_logger.error(ex.getMessage(), ex);
 			}
 		}
+		
+		_logger.info("collectMacFilter()... OK");
+		
+		// Delete removed filter
+		for(String removed : setRemoved) {
+			
+			dhcpMapper.deleteDhcpFilter(SharedData.getInstance().getSiteID(), removed);
+			
+			_logger.info((new StringBuilder())
+					.append("[DELETE] Delete Mac Filter ")
+					.append(" (site_id:").append(SharedData.getInstance().getSiteID())
+					.append(", filter_name=").append(removed)
+					.append(")")
+					.toString());
+		}
+		
 	}
 	//endregion
 
@@ -279,8 +383,17 @@ public class MasterJobWoker implements Runnable {
 					if (fixedIp != null && fixedIp.getIpaddr().isEmpty() == false) {
 						int affected = dhcpMapper.updateDhcpFixedIp(fixedIp);
 						
-						if (affected == 0)
+						if (affected == 0) {
 							affected = dhcpMapper.insertDhcpFixedIp(fixedIp);
+							
+							_logger.info((new StringBuilder())
+									.append("[INSERT] Insert DHCP Fixed IP")
+									.append(" (ip=").append(fixedIp.getIpaddr())
+									.append(", ip_type=").append(fixedIp.getIpType())
+									.append(", comment=").append(fixedIp.getComment())
+									.append(")")
+									.toString());
+						}
 					}
 				}
 				
@@ -344,9 +457,9 @@ public class MasterJobWoker implements Runnable {
 						if (ipStatus.getIpaddr().isEmpty() == false) {
 							
 							int affected = dhcpMapper.updateDhcpIpStatus(ipStatus);
-							
-							if (affected == 0)
+							if (affected == 0) {
 								affected = dhcpMapper.insertDhcpIpStatus(ipStatus);
+							}
 						}
 						
 						// Update Client Info
@@ -372,7 +485,6 @@ public class MasterJobWoker implements Runnable {
 								clientInfo.setDuid(ipStatus.getDuid());
 							
 							int affected = clientMapper.updateClientInfo(clientInfo);
-							
 							if (affected == 0)
 								affected = clientMapper.insertClientInfo(clientInfo);
 						}

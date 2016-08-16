@@ -2,6 +2,7 @@ package com.shinwootns.data.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 
 public class InterfaceInfo implements Serializable {
 
@@ -17,6 +18,7 @@ public class InterfaceInfo implements Serializable {
 	private Integer admin_stauts;
 	private Integer oper_stauts;
 	private BigDecimal last_octet;
+	private Timestamp last_octet_update;
 
 	public InterfaceInfo() {
 	}
@@ -114,6 +116,14 @@ public class InterfaceInfo implements Serializable {
 
 	public void setIfNumber(Integer if_number) {
 		this.if_number = if_number;
+	}
+
+	public Timestamp getLastOctetUpdate() {
+		return last_octet_update;
+	}
+
+	public void setLastOctetUpdate(Timestamp last_octet_update) {
+		this.last_octet_update = last_octet_update;
 	}
 
 }
