@@ -67,6 +67,7 @@
 	</div>
 	<!-- modalbackDiv -->
 	<div id="modalbackDiv" class="mordal-back-box"></div>
+
 	<section class="white-paper" style="text-align: center">
 		<div class="row">
 			<div class="col-xs-6">
@@ -76,32 +77,8 @@
 						<h3 class="box-title-small">IP 기준</h3>
 					</div>
 					<div class="box-body" style="margin: 0px 5px;">
-						<select id=ip-table_select
-							style="vertical-align: bottom; height: 30px; visibility: hidden;">
-							<option value=4 selected>IPV4</option>
-							<option value=6>IPV6</option>
-						</select>
-						<table name="datatable" id="ip-table" class="essential-table"
-							style="width: 100%;">
-							<thead>
-								<tr>
-									<th width=50%>Network</th>
-									<th width=50%>Name</th>
-									<th class="hidden"></th>
-									<th></th>
-								</tr>
-							</thead>
-						</table>
+						<div id="container"></div>
 					</div>
-				</div>
-			</div>
-			<div class="col-xs-6">
-				<div class="box box-primary">
-					<div class="box-header" style="text-align: left;">
-						<i class="fa fa-cog"></i>
-						<h3 class="box-title-small">사용자 기준</h3>
-					</div>
-					<div class="box-body"></div>
 				</div>
 			</div>
 		</div>
@@ -134,9 +111,34 @@
 <script src="/resources/plugins/datatables/dataTables.bootstrap.min.js"></script>
 <script src="/resources/js/common/Datatable-Essential.js"></script>
 <script src="/resources/js/common/modalPopup.js"></script>
-<script src="/resources/js/management/customGroupSetting.js"></script>
+<script src="/resources/js/management/viewNodeInfo.js"></script>
 <script>
-    
+    var jt = $('#container').jstree({
+        'core' : {
+            'data' : [ {
+                "id" : "1",
+                "text" : "Root node",
+                "children" : [ {
+                    "id" : "2",
+                    "name" : "2",
+                    "text" : "Child node 1",
+                    "a_attr" : {
+                        "href" : "_blank"
+                    }
+                }, {
+                    "id" : "192.168.1.10/24",
+                    "text" : "Child node 2"
+                }, {
+                    "text" : "Child node 3"
+                } ]
+            } ]
+        }
+    });
+    var cnt = 1;
+    jt.delegate("a", "click", function(event, data) {
+        event.preventDefault();
+        console.log($(this).attr('id'));
+    })
 </script>
 
 </html>

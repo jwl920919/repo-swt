@@ -1,10 +1,10 @@
-var table;
+var ipTable;
 $(document)
         .ready(
                 function() {
                     // alert screen 감추기
 
-                    table = $('#ip-table')
+                    ipTable = $('#ip-table')
                             .DataTable(
                                     {
                                         "destroy" : true,
@@ -67,7 +67,7 @@ $(document)
                 });
 
 $('#ip-table_select').change(function() {
-    table.ajax.reload();
+    ipTable.ajax.reload();
 });
 var isMadeRecord = false;
 var $tr;
@@ -102,7 +102,7 @@ $("#modify-save-btn").click(function() {
             success : function(data) {
                 var jsonObj = eval("(" + data + ')');
                 if (jsonObj.result == true) {
-                    accessPolicyTable.ajax.reload();
+                    ipTable.ajax.reload();
                 }
             }
         });
@@ -110,18 +110,19 @@ $("#modify-save-btn").click(function() {
         jObj.network = $("#network-txt").val();
         jObj.group_name = $("#name-txt").val();
         $.ajax({
-            url : "/management/modifyIpCustomGroup",
+            url : "/management/insertIpCustomGroup",
             type : "POST",
             dataType : "text",
             data : JSON.stringify(jObj),
             success : function(data) {
                 var jsonObj = eval("(" + data + ')');
                 if (jsonObj.result == true) {
-                    accessPolicyTable.ajax.reload();
+                    ipTable.ajax.reload();
                 }
             }
         });
     }
+    modalClose("modify-modal");
 });
 fnShowEvent = function() {
     // if (popupClass == "modify") {

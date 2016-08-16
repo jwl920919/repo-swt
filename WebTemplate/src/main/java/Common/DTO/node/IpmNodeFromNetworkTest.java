@@ -10,6 +10,9 @@ import Common.DTO.node.tree.NetworkTree;
 import java.io.*;
 import java.util.*;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 public class IpmNodeFromNetworkTest {
     public static void main(String... args) throws Exception {
         File networkJson = new File("network.json");
@@ -28,8 +31,9 @@ public class IpmNodeFromNetworkTest {
             }
             else ipv6List.add(nd);
         }
-        Collections.sort(ipv4List, new NetworkCompare());
-        Collections.sort(ipv6List, new NetworkCompare());
+        Common.DTO.node.tree.NetworkCompare netCompare = new Common.DTO.node.tree.NetworkCompare();
+        Collections.sort(ipv4List, netCompare);
+        Collections.sort(ipv6List, netCompare);
         NetworkTree ipv4NetworkTree = new NetworkTree(new NetworkData(new IPNetwork("0.0.0.0/0")));
         NetworkTree ipv6NetworkTree = new NetworkTree(new NetworkData(new IPNetwork("::/0")));
         NetworkTree.Node node;
@@ -49,23 +53,17 @@ public class IpmNodeFromNetworkTest {
                 node.addChildren(new NetworkTree.Node(nd));
             }
         }
-        StringBuffer ipv4StringBuffer = new StringBuffer();
-        StringBuffer ipv6StringBuffer = new StringBuffer();
-        ipv4NetworkTree.getRoot().getNodeJsonInfo(ipv4StringBuffer);
-        System.out.println(ipv4StringBuffer.toString()) ;
-        ipv6NetworkTree.getRoot().getNodeJsonInfo(ipv6StringBuffer);
-        System.out.println(ipv6StringBuffer.toString());
-    }
-
-    static class NetworkCompare implements Comparator<NetworkData> {
-        @Override
-        public int compare(NetworkData nd1, NetworkData nd2) {
-            int c = nd1.getIpNetwork().getStartIP().getNumberToBigInteger().compareTo(nd2.getIpNetwork().getStartIP().getNumberToBigInteger());
-            if( c==0) {
-                return nd2.getIpNetwork().getEndIP().getNumberToBigInteger().compareTo(nd1.getIpNetwork().getEndIP().getNumberToBigInteger());
-            }
-            return c;
-        }
+        StringBuffer ipStrBuf = new StringBuffer();
+        StringBuffer ipv4StrBuf = new StringBuffer();
+        StringBuffer ipv6StrBuf = new StringBuffer();
+        ipStrBuf.append("[");
+        ipv4NetworkTree.getRoot().getNodeJsonInfo(ipv4StrBuf);
+        ipStrBuf.append(ipv4StrBuf.toString().replaceAll("0.0.0.0/0", "IPV4")) ;
+        ipStrBuf.append(",");
+        ipv6NetworkTree.getRoot().getNodeJsonInfo(ipv6StrBuf);
+        ipStrBuf.append(ipv6StrBuf.toString().replaceAll("0:0:0:0:0:0:0:0/0", "IPV6"));
+        ipStrBuf.append("]");
+        System.out.println(ipStrBuf);
     }
 
 }

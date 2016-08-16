@@ -39,5 +39,16 @@ public class ManagementController {
 //		
 		return parentPath + "customGroupSetting";
 	}
+	@RequestMapping(value = "viewNodeInfo", method = RequestMethod.GET)
+	public String viewNodeInfo(Locale locale, Model model, HttpServletRequest request, HttpServletResponse response) {
+		logger.info("viewNodeInfo : " + request.getLocalAddr());
+		// Session에 로그인 정보가 있는지 체크
+//		HttpSession session = request.getSession(true);
+//		System.out.println(session.getAttribute("login_chk"));
+//		if (session.getAttribute("login_chk") == null)
+//			return "redirect:/login";
+//		
+		return parentPath + "viewNodeInfo";
+	}
 	
 }
