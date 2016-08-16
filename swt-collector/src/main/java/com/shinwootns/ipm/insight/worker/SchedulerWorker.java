@@ -14,6 +14,7 @@ import com.shinwootns.data.entity.DeviceSnmp;
 import com.shinwootns.ipm.insight.SpringBeanProvider;
 import com.shinwootns.ipm.insight.data.SharedData;
 import com.shinwootns.ipm.insight.data.mapper.DeviceMapper;
+import com.shinwootns.ipm.insight.data.mapper.DhcpMapper;
 import com.shinwootns.ipm.insight.service.cluster.ClusterManager;
 import com.shinwootns.ipm.insight.service.redis.RedisHandler;
 
@@ -45,17 +46,6 @@ public class SchedulerWorker implements Runnable {
 				,0 ,5 ,TimeUnit.SECONDS
 		);
 		
-		// 10 Seconds
-		schedulerService.scheduleWithFixedDelay(
-				new Runnable() {
-					@Override
-					public void run() {
-						run10SecCycle();
-					}
-				}
-				,0, 10 , TimeUnit.SECONDS
-		);
-		
 		// 30 Seconds
 		schedulerService.scheduleWithFixedDelay(
 				new Runnable() {
@@ -65,6 +55,17 @@ public class SchedulerWorker implements Runnable {
 					}
 				}
 				,0, 30 , TimeUnit.SECONDS
+		);
+		
+		// 300 Seconds
+		schedulerService.scheduleWithFixedDelay(
+				new Runnable() {
+					@Override
+					public void run() {
+						run300SecCycle();
+					}
+				}
+				,0, 300 , TimeUnit.SECONDS
 		);
 		
 		// wait termination
@@ -82,15 +83,27 @@ public class SchedulerWorker implements Runnable {
 		_logger.info("SchedulerWorker... end.");
 	}
 	
-	// 10 Seconds
-	private void run10SecCycle() {
-		// ...
-	}
-	
 	// 30 Seconds
 	private void run30SecCycle() {
 		
 		displayStatus();
+	}
+	
+	// 300 Seconds
+	private void run300SecCycle() {
+		
+		DeviceMapper deviceMapper = SpringBeanProvider.getInstance().getDeviceMapper();
+		if (deviceMapper != null) {
+			SharedData.getInstance().LoadDhcpDevice(deviceMapper);
+			SharedData.getInstance().LoadDeviceIP(deviceMapper);
+			SharedData.getInstance().LoadSysOID(deviceMapper);
+		}
+		
+		DhcpMapper dhcpMapper = SpringBeanProvider.getInstance().getDhcpMapper();
+		if (dhcpMapper != null) {
+			SharedData.getInstance().LoadGuestRange(dhcpMapper);
+		}
+		
 	}
 	
 	//region [FUNC] Display Status

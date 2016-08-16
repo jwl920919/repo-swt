@@ -12,7 +12,11 @@ import com.shinwootns.common.utils.CryptoUtils;
 import com.shinwootns.common.utils.JsonUtils;
 import com.shinwootns.data.auth.AuthParam;
 import com.shinwootns.data.auth.AuthResult;
+import com.shinwootns.ipm.insight.SpringBeanProvider;
 import com.shinwootns.ipm.insight.WorkerManager;
+import com.shinwootns.ipm.insight.data.SharedData;
+import com.shinwootns.ipm.insight.data.mapper.DeviceMapper;
+import com.shinwootns.ipm.insight.data.mapper.DhcpMapper;
 import com.shinwootns.ipm.insight.service.auth.AuthCheckHandler;
 
 @RestController
@@ -42,6 +46,47 @@ public class APIController {
 			})).start();
 			
 			return json.toString();
+		}
+		else if (command.toUpperCase().equals("LOAD_ALL")) {
+			
+			SharedData.getInstance().LoadConfigAll();
+			
+			json.addProperty("command", command);
+			json.addProperty("result", "OK");
+		}
+		else if (command.toUpperCase().equals("LOAD_DEVICE")) {
+			
+			DeviceMapper deviceMapper = SpringBeanProvider.getInstance().getDeviceMapper();
+			if (deviceMapper != null) {
+				SharedData.getInstance().LoadDhcpDevice(deviceMapper);
+				SharedData.getInstance().LoadNetworkDevice(deviceMapper);
+				SharedData.getInstance().LoadDeviceIP(deviceMapper);
+				
+				json.addProperty("command", command);
+				json.addProperty("result", "OK");
+			}
+			else {
+				json.addProperty("command", command);
+				json.addProperty("result", "Failed");
+			}
+		}
+		else if (command.toUpperCase().equals("LOAD_CONFIGS")) {
+			
+			DeviceMapper deviceMapper = SpringBeanProvider.getInstance().getDeviceMapper();
+			DhcpMapper dhcpMapper = SpringBeanProvider.getInstance().getDhcpMapper();
+			
+			if (deviceMapper != null && dhcpMapper != null) {
+				SharedData.getInstance().LoadDhcpDevice(deviceMapper);
+				SharedData.getInstance().LoadGuestRange(dhcpMapper);
+				SharedData.getInstance().LoadBlacklistMacFilter(dhcpMapper);
+				
+				json.addProperty("command", command);
+				json.addProperty("result", "OK");
+			}
+			else {
+				json.addProperty("command", command);
+				json.addProperty("result", "Failed");
+			}
 		}
 		
 		return json.toString();

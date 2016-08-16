@@ -2,7 +2,6 @@ package com.shinwootns.data.entity;
 
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.sql.Timestamp;
 
 public class DhcpRange implements Serializable {
 	
@@ -18,26 +17,17 @@ public class DhcpRange implements Serializable {
 	private BigInteger start_num;
 	private BigInteger end_num;
 	private BigInteger ip_count;
-	private Timestamp insert_time;
-	private Timestamp update_time;
 
 	public DhcpRange() {
 	}
-
-	public Timestamp getInsertTime() {
-		return this.insert_time;
-	}
-
-	public void setInsertTime(Timestamp insertTime) {
-		this.insert_time = insertTime;
-	}
-
-	public Timestamp getUpdateTime() {
-		return this.update_time;
-	}
-
-	public void setUpdateTime(Timestamp updateTime) {
-		this.update_time = updateTime;
+	
+	@Override
+	public String toString() {
+		return (new StringBuilder())
+				.append("[DhcpRange] start_ip=").append(start_ip)
+				.append(", etart_ip=").append(end_ip)
+				.append(", comment=").append(comment)
+				.toString();
 	}
 
 	public Integer getSiteId() {

@@ -1,5 +1,6 @@
 package com.shinwootns.ipm.insight.worker;
 
+import java.net.UnknownHostException;
 import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.Comparator;
@@ -10,11 +11,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Set;
 
 import com.shinwootns.common.network.SyslogEntity;
 import com.shinwootns.common.utils.JsonUtils;
 import com.shinwootns.common.utils.TimeUtils;
+import com.shinwootns.common.utils.ip.IPAddr;
 import com.shinwootns.data.entity.EventData;
 import com.shinwootns.data.key.RedisKeys;
 import com.shinwootns.ipm.insight.data.SharedData;
@@ -27,9 +33,11 @@ import redis.clients.jedis.Jedis;
 
 public class SyslogPublisher implements Runnable {
 
+	private final Logger _logger = LoggerFactory.getLogger(getClass());
+	
 	private Jedis _redis = null;
 	
-	SyslogHandler syslogHandler = new SyslogHandler();
+	private SyslogHandler syslogHandler = new SyslogHandler();
 	
 	//region [public] run
 	@Override
@@ -107,7 +115,7 @@ public class SyslogPublisher implements Runnable {
 					for(Entry<String, SyslogEntity> entry : sortedMap.entrySet()) {
 						
 						// Get Device ID
-						Integer deviceId = SharedData.getInstance().getDeviceId( entry.getValue().getHost() );
+						Integer deviceId = SharedData.getInstance().getDeviceIDByIP( entry.getValue().getHost() );
 						
 						// DHCP Message Parsing
 						DhcpMessage dhcpMsg = syslogHandler.processSyslog(entry.getValue().getData());
@@ -115,7 +123,24 @@ public class SyslogPublisher implements Runnable {
 						if (dhcpMsg != null) {
 							// DHCP
 							
-							// ...
+							if (dhcpMsg.getDhcpType().equals("DHCPACK")) {
+								
+								try {
+									IPAddr ipAddr = new IPAddr(dhcpMsg.getIp());
+									
+									if ( SharedData.getInstance().isGuestRange(ipAddr.getNumberToBigInteger()) ) {
+										// Guest Range
+										// ...
+									}
+									else {
+										//
+									}
+									
+								} catch (UnknownHostException e) {
+									_logger.error(e.getMessage(), e);
+								}
+							}
+							
 
 							System.out.println(entry.getValue().toString());
 							System.out.println(dhcpMsg.toString());

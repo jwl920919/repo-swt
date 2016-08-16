@@ -21,16 +21,22 @@ public interface DhcpMapper {
 	int deleteDhcpNetwork(@Param("site_id")int site_id, @Param("network")String network);
 	
 	// DHCP Range
-	List<DhcpRange> selectDhcpRangeBySiteId(@Param("site_id")int site_id);
+	List<DhcpRange> selectDhcpRange(@Param("site_id")int site_id);
 	int insertDhcpRange(DhcpRange range);
 	int updateDhcpRange(DhcpRange range);
 	int deleteDhcpRange(@Param("site_id")int site_id, @Param("network")String network, @Param("start_ip")String start_ip);
+	
+	// Guest Range
+	List<DhcpRange> selectDhcpGuestRange(@Param("site_id")int site_id);
 
 	// DHCP Mac Filter
-	List<DhcpMacFilter> selectDhcpFilterBySiteId(@Param("site_id")int site_id);
+	List<DhcpMacFilter> selectDhcpFilter(@Param("site_id")int site_id);
 	int insertDhcpFilter(DhcpMacFilter range);
 	int updateDhcpFilter(DhcpMacFilter range);
 	int deleteDhcpFilter(@Param("site_id")int site_id, @Param("filter_name")String filter_name);
+	
+	// Blacklist Filter
+	List<DhcpMacFilter> selectDhcpBlacklistFilter(@Param("site_id")int site_id);
 	
 	// DHCP Fixed IP
 	List<DhcpFixedIp> selectDhcpFixedIpBySiteId(@Param("site_id")int site_id);

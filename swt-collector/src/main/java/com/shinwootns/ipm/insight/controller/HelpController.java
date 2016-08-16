@@ -25,7 +25,14 @@ public class HelpController {
 	public ModelAndView help(final HttpServletRequest req, final HttpServletResponse resp) {
 		
 		List<HelpContent> contents = new LinkedList<HelpContent>(); 
-		contents.add(new HelpContent("HELP", "/api/help", "R", "", "Help ducumentation"));
+		contents.add(new HelpContent("HELP", "/api/help", "R", "", "Help documentation"));
+		contents.add(new HelpContent("AUTH", "/api/cmd", "R", "command"
+				, (new StringBuilder()).append("* Command List")
+				.append("<BR>").append("<B>LOAD_ALL</B> : Load setup all (Device & Configs)")
+				.append("<BR>").append("<B>LOAD_DEVICES</B> : Load device lists.")
+				.append("<BR>").append("<B>LOAD_CONFIGS</B> : Load config setups.")
+				.toString()
+		));
 		contents.add(new HelpContent("AUTH", "/api/auth", "R", "setupid, userid, password, [macaddr]", "User Authentification (Site)"));
 		//contents.add(new HelpContent("STATUS", "/api/status/dhcp/{SiteId}", "R", "", "DHCP device status"));
 		//contents.add(new HelpContent("STATUS", "/api/status/lease_ip/{SiteId}", "R", "", "DHCP Lease IP status"));
