@@ -36,7 +36,7 @@ insight:
 # server
 #====================================
 server:
-  port: 8081
+  port: 8001
   session:
     timeout: 3000
     
