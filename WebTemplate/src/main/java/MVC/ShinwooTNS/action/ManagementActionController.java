@@ -79,6 +79,53 @@ public class ManagementActionController {
 		}
 	}
 	
+	// region modifyIpCustomGroup
+		@RequestMapping(value = "modifyIpCustomGroup", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+		public @ResponseBody Object accessPolicyModify(HttpServletRequest request) {
+			try {
+				init();
+				HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
+						new TypeToken<HashMap<String, Object>>() {
+						}.getType());
+				parameters.put("group_id", Integer.parseInt(parameters.get("group_id").toString()));
+				int cnt = managementService.update_CUSTOM_GROUP_INFO(parameters);
+				if (cnt > -1)
+					result.result = true;
+				else
+					result.result = false;
+				return gson.toJson(result);
+			} catch (Exception e) {
+				ErrorLoggingHelper.log(logger, "modifyIpCustomGroup", e);
+				result.result = false;
+				return gson.toJson(result);
+			}
+
+		}
+		// endregion
+
+		// region insertIpCustomGroup
+		@RequestMapping(value = "insertIpCustomGroup", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+		public @ResponseBody Object accessPolicyInsert(HttpServletRequest request) {
+			try {
+				init();
+				HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
+						new TypeToken<HashMap<String, Object>>() {
+						}.getType());
+				int cnt = managementService.insert_CUSTOM_GROUP_INFO(parameters);
+				if (cnt > 0)
+					result.result = true;
+				else
+					result.result = false;
+				return gson.toJson(result);
+			} catch (Exception e) {
+				ErrorLoggingHelper.log(logger, "insertIpCustomGroup", e);
+				result.result = false;
+				return gson.toJson(result);
+			}
+
+		}
+		// endregion
+	
 	private void init() {
 		result.data = null;
 		result.resultValue = null;

@@ -39,6 +39,34 @@ public class MANAGEMENT_Impl extends SqlSessionDaoSupport implements MANAGEMENT_
 		}
 		return total;
 	}
+
+	@Override
+	public int update_CUSTOM_GROUP_INFO(HashMap<String, Object> parameters) {
+		int total = -1;
+		try {
+			System.out.println(getSqlSession());
+			total = getSqlSession().update("UI_Query.update_CUSTOM_GROUP_INFO",
+					parameters);
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e.getMessage());
+		}
+		return total;
+	}
+
+	@Override
+	public int insert_CUSTOM_GROUP_INFO(HashMap<String, Object> parameters) {
+		int total = -1;
+		try {
+			System.out.println(getSqlSession());
+			total = getSqlSession().insert("UI_Query.insert_CUSTOM_GROUP_INFO",
+					parameters);
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e.getMessage());
+		}
+		return total;
+	}
 	
 
 }

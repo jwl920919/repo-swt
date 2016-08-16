@@ -6,9 +6,8 @@
 	<!-- Insert Date : 2016-08-16 -->
 	<!-- Insert User : 이재원 -->
 	<!-- Description : custom group information Search -->
-	<!-- Controller : -->
-	<select id="select_CUSTOM_GROUP_INFO" parameterType="hashmap"
-		resultType="java.util.HashMap">
+	<!-- Controller : MVC.ShinwooTNS.action.ManagementActionController-->
+	<select id="select_CUSTOM_GROUP_INFO" parameterType="hashmap" resultType="java.util.HashMap">
 		SELECT cg.group_id,COALESCE(cg.group_name,'') AS
 		group_name, dn."network" AS key,
 		COALESCE(cg."type",'N') AS "type",dn.site_id,dn.ip_type
@@ -24,9 +23,8 @@
 	<!-- Insert Date : 2016-08-16 -->
 	<!-- Insert User : 이재원 -->
 	<!-- Description : Network Information 행 개수 조회 -->
-	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
-	<select id="select_CUSTOM_GROUP_INFO_TOTAL_COUNT"
-		parameterType="hashmap" resultType="Integer">
+	<!-- Controller : MVC.ShinwooTNS.action.ManagementActionController -->
+	<select id="select_CUSTOM_GROUP_INFO_TOTAL_COUNT" parameterType="hashmap" resultType="Integer">
 		SELECT count(*) AS total
 		FROM dhcp_network AS dn LEFT JOIN custom_group AS cg 
 		ON dn."network" = cg.key and cg."type" = 'N'
@@ -34,5 +32,26 @@
 			OR cg.group_name like CONCAT('%', #{searchValue}, '%'))
 			AND dn.ip_type=#{ip_type}
 	</select>
+
+	<!-- Query Type : Update(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-08-16 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : Network Information Record Modify -->
+	<!-- Controller : MVC.ShinwooTNS.action.ManagementActionController -->
+	<update id="update_CUSTOM_GROUP_INFO" parameterType="hashmap">
+		UPDATE custom_group 
+		SET group_name=#{group_name} 
+		WHERE group_id=#{group_id};
+	</update>
+	
+	<!-- Query Type : Insert(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-08-16 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : Network Information Record Modify -->
+	<!-- Controller : MVC.ShinwooTNS.action.ManagementActionController -->
+	<insert id="insert_CUSTOM_GROUP_INFO" parameterType="hashmap">
+		INSERT INTO custom_group ("key", "group_name", "type") 
+		VALUES (#{network}, #{group_name}, 'N');
+	</insert>
 </mapper>
 

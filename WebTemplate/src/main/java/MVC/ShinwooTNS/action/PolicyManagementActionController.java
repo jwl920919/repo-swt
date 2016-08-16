@@ -261,7 +261,7 @@ public class PolicyManagementActionController {
 			parameters.put("priority", Integer.parseInt(parameters.get("priority").toString()));
 			parameters.put("site_id", Integer.parseInt(parameters.get("site_id").toString()));
 			int cnt = accessPolicy.insert_ACCESS_POLICY_INFORM_ONE_RECORD(parameters);
-			if (cnt > -1)
+			if (cnt > 0)
 				result.result = true;
 			else
 				result.result = false;
