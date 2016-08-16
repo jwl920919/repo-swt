@@ -70,7 +70,9 @@ $('#ip-table_select').change(function() {
     table.ajax.reload();
 });
 var isMadeRecord = false;
+var $tr;
 function trClickEvent(tr) {
+    $tr = $(tr);
 }
 function ipModifyBtnClickEvent(t) {
     var $this = $(t);
@@ -87,8 +89,42 @@ function ipModifyBtnClickEvent(t) {
         $("#name-txt").val('');
     }
 }
+$("#modify-save-btn").click(function() {
+    var jObj = new Object();
+    if (isMadeRecord) {
+        jObj.group_name = $("#name-txt").val();
+        jObj.group_id = $tr.children().eq(2).text();
+        $.ajax({
+            url : "/management/modifyIpCustomGroup",
+            type : "POST",
+            dataType : "text",
+            data : JSON.stringify(jObj),
+            success : function(data) {
+                var jsonObj = eval("(" + data + ')');
+                if (jsonObj.result == true) {
+                    accessPolicyTable.ajax.reload();
+                }
+            }
+        });
+    } else {
+        jObj.network = $("#network-txt").val();
+        jObj.group_name = $("#name-txt").val();
+        $.ajax({
+            url : "/management/modifyIpCustomGroup",
+            type : "POST",
+            dataType : "text",
+            data : JSON.stringify(jObj),
+            success : function(data) {
+                var jsonObj = eval("(" + data + ')');
+                if (jsonObj.result == true) {
+                    accessPolicyTable.ajax.reload();
+                }
+            }
+        });
+    }
+});
 fnShowEvent = function() {
-//    if (popupClass == "modify") {
-//    }
-//    popupClass = "";
+    // if (popupClass == "modify") {
+    // }
+    // popupClass = "";
 }

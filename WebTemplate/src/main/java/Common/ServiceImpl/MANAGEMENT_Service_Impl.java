@@ -25,4 +25,14 @@ private MANAGEMENT_interface mgmtMenuDao;
 	public int select_CUSTOM_GROUP_INFO_TOTAL_COUNT(HashMap<String, Object> parameters) {
 		return mgmtMenuDao.select_CUSTOM_GROUP_INFO_TOTAL_COUNT(parameters);
 	}
+
+	@Override
+	public int update_CUSTOM_GROUP_INFO(HashMap<String, Object> parameters) {
+		return mgmtMenuDao.update_CUSTOM_GROUP_INFO(parameters);
+	}
+
+	@Override
+	public int insert_CUSTOM_GROUP_INFO(HashMap<String, Object> parameters) {
+		return mgmtMenuDao.insert_CUSTOM_GROUP_INFO(parameters);
+	}
 }
