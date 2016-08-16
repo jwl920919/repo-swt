@@ -12,7 +12,7 @@ import com.shinwootns.common.utils.CryptoUtils;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
+	
 	@Autowired
 	ApplicationProperty appProperty;
 	

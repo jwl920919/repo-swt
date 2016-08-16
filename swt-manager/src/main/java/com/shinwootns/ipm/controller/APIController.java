@@ -29,6 +29,7 @@ import com.shinwootns.data.entity.AuthSetup;
 import com.shinwootns.data.entity.AuthSetupEsb;
 import com.shinwootns.data.entity.AuthSetupLdap;
 import com.shinwootns.data.entity.AuthSetupRadius;
+import com.shinwootns.ipm.WorkerManager;
 import com.shinwootns.ipm.data.SharedData;
 import com.shinwootns.ipm.data.mapper.AuthMapper;
 import com.shinwootns.ipm.data.mapper.DataMapper;
@@ -40,6 +41,35 @@ public class APIController {
 	
 	private final Logger _logger = LoggerFactory.getLogger(this.getClass());
 	
+	//region /api/cmd
+	@RequestMapping(value="/api/cmd", method=RequestMethod.GET)
+	public String exec_command(@RequestParam(value="command") String command) {
+		
+		JsonObject json = new JsonObject();
+		
+		if (command.toUpperCase().equals("SHUTDOWN")) {
+			json.addProperty("command", command);
+			json.addProperty("result", "OK");
+			
+			(new Thread( new Runnable() {
+				@Override
+				public void run() {
+					try {
+						Thread.sleep(3000);
+					} catch (InterruptedException e) {
+					}
+					WorkerManager.getInstance().TerminateApplication();					
+				}
+			})).start();
+			
+			return json.toString();
+		}
+		
+		return json.toString();
+	}
+	//endregion
+	
+	//region /api/auth
 	@RequestMapping(value="/api/auth", method=RequestMethod.GET)
 	public String checkAuth(
 			@RequestParam(value="userid") String userid, 
@@ -64,6 +94,7 @@ public class APIController {
 		
 		return JsonUtils.serialize(result).toString();
 	}
+	//endregion
 	
 	/*
 	@RequestMapping(value="/api/device/dhcp", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
