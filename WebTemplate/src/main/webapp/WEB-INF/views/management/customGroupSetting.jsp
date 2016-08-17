@@ -33,7 +33,7 @@
 }
 </style>
 <body>
-	<!-- Add, Edit modal -->
+	<!-- Edit modal -->
 	<div class="modal modal-dialog" id="modify-modal">
 		<div class="modal-content" name="modalContent">
 			<div class="modal-header" div_mordal_header>
@@ -65,8 +65,61 @@
 		</div>
 		<!-- /.modal-content -->
 	</div>
+	<!-- Edit modal -->
+	<div class="modal modal-dialog" id="add-modal">
+		<div class="modal-content" name="modalContent">
+			<div class="modal-header" div_mordal_header>
+				<input type="button" class="close" name="modalClose"
+					data-dismiss="modal" aria-label="Close" value="&times;" />
+				<h4 class="modal-title">Network Name Add</h4>
+			</div>
+			<div id="modify-body" class="modal-body">
+				<div class="input-group modal-input-group">
+					<div class="input-group-addon modal-content-header">Network</div>
+					<div class="modal-content-body">
+						<input type="text" class="form-control" id="add-network-txt">
+					</div>
+				</div>
+				<div class="input-group modal-input-group">
+					<div class="input-group-addon modal-content-header">Name</div>
+					<div class="modal-content-body">
+						<input type="text" class="form-control" id="add-name-txt"
+							placeholder="Name">
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<input type="button" class="btn btn-default pull-left"
+					name="modalClose" data-dismiss="modal"
+					value="<%=LanguageHelper.GetLanguage("close")%>" />
+				<button type="button" class="btn btn-primary" id="modify-save-btn"><%=LanguageHelper.GetLanguage("add")%></button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- DELETE modal -->
+	<div class="modal modal-dialog" id="delete-modal">
+		<div class="modal-content" name="modalContent">
+			<div class="modal-header" div_mordal_header>
+				<input type="button" class="close" name="modalClose"
+					data-dismiss="modal" aria-label="Close" value="&times;" />
+				<h4 class="modal-title">Network Name Delete</h4>
+			</div>
+			<div id="delete-body" class="modal-body">선택하신 그룹정보를 삭제 하시겠습니까?</div>
+			<div class="modal-footer">
+				<input type="button" class="btn btn-default pull-left"
+					name="modalClose" data-dismiss="modal"
+					value="<%=LanguageHelper.GetLanguage("close")%>" />
+				<button type="button" class="btn btn-primary" id="delete-save-btn"><%=LanguageHelper.GetLanguage("delete")%></button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.DELETE modal -->
 	<!-- modalbackDiv -->
 	<div id="modalbackDiv" class="mordal-back-box"></div>
+	
+	
 	<section class="white-paper" style="text-align: center">
 		<div class="row">
 			<div class="col-xs-6">
@@ -88,10 +141,23 @@
 									<th width=50%>Network</th>
 									<th width=50%>Name</th>
 									<th class="hidden"></th>
+									<th class="hidden"></th>
 									<th></th>
 								</tr>
 							</thead>
 						</table>
+						<div id="bottom-btn-row" class='row'>
+							<div class='col-sm-1'
+								style='padding-left: 14px; margin-top: 4px;'>
+							</div>
+							<div class='col-sm-10' id='page-box'></div>
+							<div class='col-sm-1'
+								style='padding-right: 14px; margin-top: 4px;'>
+								<input id='add-button' class='btn btn-primary'
+									style="float: right;" type="button"
+									value="<%=LanguageHelper.GetLanguage("add")%>" />
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

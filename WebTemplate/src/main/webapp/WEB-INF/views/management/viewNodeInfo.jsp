@@ -65,6 +65,7 @@
 		</div>
 		<!-- /.modal-content -->
 	</div>
+	
 	<!-- modalbackDiv -->
 	<div id="modalbackDiv" class="mordal-back-box"></div>
 
@@ -77,7 +78,7 @@
 						<h3 class="box-title-small">IP 기준</h3>
 					</div>
 					<div class="box-body" style="margin: 0px 5px;">
-						<div id="container"></div>
+						<div id="container" style="text-align: left;"></div>
 					</div>
 				</div>
 			</div>
@@ -113,32 +114,27 @@
 <script src="/resources/js/common/modalPopup.js"></script>
 <script src="/resources/js/management/viewNodeInfo.js"></script>
 <script>
-    var jt = $('#container').jstree({
-        'core' : {
-            'data' : [ {
-                "id" : "1",
-                "text" : "Root node",
-                "children" : [ {
-                    "id" : "2",
-                    "name" : "2",
-                    "text" : "Child node 1",
-                    "a_attr" : {
-                        "href" : "_blank"
-                    }
-                }, {
-                    "id" : "192.168.1.10/24",
-                    "text" : "Child node 2"
-                }, {
-                    "text" : "Child node 3"
-                } ]
-            } ]
-        }
+    $(function() {
+        $.ajax({
+            url : "/management/getIpTreeNode",
+            type : "POST",
+            success : function(data) {
+                var jsonObj = eval("(" + data + ')');
+                if (jsonObj.result == true) {
+                    $('#container').jstree({
+                        'core' : {
+                            'data' : eval(jsonObj.resultValue)
+                        }
+                    });
+
+                }
+            }
+        });
     });
-    var cnt = 1;
-    jt.delegate("a", "click", function(event, data) {
-        event.preventDefault();
-        console.log($(this).attr('id'));
-    })
+    //     jt.delegate("a", "click", function(event, data) {
+    //         event.preventDefault();
+    //         console.log($(this).attr('id'));
+    //     })
 </script>
 
 </html>

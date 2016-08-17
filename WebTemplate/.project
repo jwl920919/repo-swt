@@ -3,6 +3,7 @@
 	<name>WebTemplate</name>
 	<comment></comment>
 	<projects>
+		<project>swt-common</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

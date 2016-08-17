@@ -16,7 +16,7 @@
 	<div id="divAlertArea"></div>
 </div>
 
-<!-- Add, Edit modal -->
+<!-- Modify modal -->
 <div class="modal modal-dialog" id="modify-modal">
 	<div class="modal-content" name="modalContent">
 		<div class="modal-header" div_mordal_header>
@@ -35,8 +35,7 @@
 	<!-- /.modal-content -->
 </div>
 
-<!-- /.Add, Edit modal -->
-<!-- Add, Edit modal -->
+<!-- Add modal -->
 <div class="modal modal-dialog" id="add-modal">
 	<div class="modal-content" name="modalContent">
 		<div class="modal-header" div_mordal_header>
@@ -54,8 +53,8 @@
 	</div>
 	<!-- /.modal-content -->
 </div>
-<!-- /.Add, Edit modal -->
-<!-- Add, Edit modal -->
+<!-- /.Add modal -->
+<!-- DELETE modal -->
 <div class="modal modal-dialog" id="delete-modal">
 	<div class="modal-content" name="modalContent">
 		<div class="modal-header" div_mordal_header>
@@ -73,7 +72,7 @@
 	</div>
 	<!-- /.modal-content -->
 </div>
-<!-- /.Add, Edit modal -->
+<!-- /.DELETE modal -->
 <!-- modalbackDiv -->
 <div id="modalbackDiv" class="mordal-back-box"></div>
 <!-- /.modalbackDiv -->

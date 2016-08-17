@@ -72,7 +72,7 @@ public class ConfigMangementController {
 		if (session.getAttribute("login_chk") == null)
 			return "redirect:/login";
 		
-		if (!session.getAttribute("site_master").equals("t")){
+		if (!session.getAttribute("site_master").toString().toLowerCase().equals("t")){
 			return "redirect:/login";
 		}
 		
