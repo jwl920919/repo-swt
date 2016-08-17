@@ -773,45 +773,7 @@
 		);
 	</delete>
 	
-	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
-	<!-- Insert Date : 2016-08-11 -->
-	<!-- Insert User : 이재원 -->
-	<!-- Description : Client Node Information Search -->
-	<!-- Controller :  -->
-	<select id="select_CLIENT_NODE_INFO_SEARCH" parameterType="hashmap" resultType="java.util.HashMap">
-		SELECT ci.*, si.site_name 
-		FROM 
-			(
-				SELECT 
-				vci.*,vis.site_id,vis.network,vis.ip_num,vis.is_range,vis.ip_status,vis.lease_start_time,vis.lease_end_time 
-				FROM view_client_info AS vci left join view_ip_status AS vis 
-				ON vci.macaddr = vis.macaddr
-			) 
-		AS ci left join site_info AS si 
-		ON ci.site_id = si.site_id
-		<!-- where ci.lease_end_time > NOW() - INTERVAL '30 days' -->
-	</select>
 	
-	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
-	<!-- Insert Date : 2016-08-12 -->
-	<!-- Insert User : 이재원 -->
-	<!-- Description : Network Information Search -->
-	<!-- Controller :  -->
-	<select id="select_SEARCHED_NETWORK_INFO" parameterType="hashmap" resultType="java.util.HashMap">
-		SELECT site_id,network,ip_type,update_time 
-		FROM dhcp_network;
-	</select>
-	
-	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
-	<!-- Insert Date : 2016-08-16 -->
-	<!-- Insert User : 이재원 -->
-	<!-- Description : Network Information 행 개수 조회 -->
-	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
-	<select id="select_SEARCHED_NETWORK_INFO_TOTAL_COUNT"
-		parameterType="hashmap" resultType="Integer">
-		SELECT count(*) AS total
-		FROM dhcp_network
-	</select>
 	
 </mapper>
 

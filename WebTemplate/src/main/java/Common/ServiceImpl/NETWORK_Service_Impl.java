@@ -15,12 +15,12 @@ private NETWORK_interface networkMenuDao;
 	}
 
 	@Override
-	public List<Map<String, Object>> select_SEARCHED_NETWORK_INFO(HashMap<String, Object> parameters) {
-		return networkMenuDao.select_SEARCHED_NETWORK_INFO(parameters);
+	public List<Map<String, Object>> select_SEARCHED_NETWORK_INFO() {
+		return networkMenuDao.select_SEARCHED_NETWORK_INFO();
 	}
 
 	@Override
-	public int select_SEARCHED_NETWORK_INFO_TOTAL_COUNT(HashMap<String, Object> parameters) {
-		return networkMenuDao.select_SEARCHED_NETWORK_INFO_TOTAL_COUNT(parameters);
+	public int select_SEARCHED_NETWORK_INFO_TOTAL_COUNT() {
+		return networkMenuDao.select_SEARCHED_NETWORK_INFO_TOTAL_COUNT();
 	}
 }
