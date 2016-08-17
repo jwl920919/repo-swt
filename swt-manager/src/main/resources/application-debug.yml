@@ -32,14 +32,6 @@ ipm:
     force_start_cluster_master: false
     
 #====================================
-# Security
-#====================================
-#security:
-#  user:
-#    name: admin
-#    password: shinwoo123!
-    
-#====================================
 # spring
 #====================================
 spring:
