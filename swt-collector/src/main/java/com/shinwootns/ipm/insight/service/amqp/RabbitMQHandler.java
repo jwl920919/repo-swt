@@ -109,20 +109,17 @@ public class RabbitMQHandler {
 		if (bytes == null)
 			return false;
 		
-		if (this._client == null) {
-			this._client = createClient();
-			
-			if (this._client == null)
-				return false;
-			
-			// Delcare Queue
-			this._client.DeclareQueue_WorkQueueMode(QueueNames.EVENT_QUEUE_NAME);
-		}
-		
 		synchronized(this)
 		{
-			if ( this._client == null )
-				return false;
+			if (this._client == null) {
+				this._client = createClient();
+				
+				if (this._client == null)
+					return false;
+				
+				// Delcare Queue
+				this._client.DeclareQueue_WorkQueueMode(QueueNames.EVENT_QUEUE_NAME);
+			}
 			
 			try {
 
