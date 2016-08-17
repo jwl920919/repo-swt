@@ -53,5 +53,9 @@
 		<class>com.shinwootns.ipm.jpa.ClientLocationHistory</class>
 		<class>com.shinwootns.ipm.jpa.DeviceOui</class>
 		<class>com.shinwootns.ipm.jpa.DeviceSysoid</class>
+		<class>com.shinwootns.ipm.jpa.CustomGroup</class>
+		<class>com.shinwootns.ipm.jpa.DhcpLog</class>
+		<class>com.shinwootns.ipm.jpa.SiteGuestRange</class>
+		<class>com.shinwootns.ipm.jpa.SiteGuestRangePK</class>
 	</persistence-unit>
 </persistence>

@@ -12,18 +12,25 @@ public class ExtendedQueue<T> {
 	// Thread safe.
 	private LinkedBlockingQueue<T> _queue = null;
 
+	//region - Constructor
 	public ExtendedQueue(int maxSize) {
 		_queue = new LinkedBlockingQueue<T>(maxSize);
 	}
+	//endregion
 	
+	//region - put
 	public boolean put(T data) {
 		return _queue.add(data);
 	}
+	//endregion
 	
+	//region - put All
 	public boolean putAll(Collection<T> col) {
 		return _queue.addAll(col);
 	}
+	//endregion
 	
+	//region - pop (Only one)
 	public Object pop() {
 		
 		try {
@@ -32,7 +39,9 @@ public class ExtendedQueue<T> {
 			return null;
 		}
 	}
+	//endregion
 	
+	//region - pop All
 	public LinkedList<T> popAll() {
 		
 		LinkedList<T> listData = new LinkedList<T>();
@@ -55,7 +64,9 @@ public class ExtendedQueue<T> {
 		
 		return listData;
 	}
+	//endregion
 	
+	//region - pop (Multiple)
 	public LinkedList<T> pop(int popCount) {
 		
 		LinkedList<T> listData = new LinkedList<T>();
@@ -80,7 +91,9 @@ public class ExtendedQueue<T> {
 		
 		return listData;
 	}
+	//endregion
 	
+	//region - pop (Multiple, Timeout)
 	public LinkedList<T> pop(int popCount, int waitTime) throws InterruptedException {
 		
 		LinkedList<T> listData = new LinkedList<T>();
@@ -112,4 +125,5 @@ public class ExtendedQueue<T> {
 		
 		return listData;
 	}
+	//endregion
 }
