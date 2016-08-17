@@ -25,7 +25,7 @@ import com.shinwootns.data.entity.EventData;
 import com.shinwootns.data.key.RedisKeys;
 import com.shinwootns.ipm.insight.data.SharedData;
 import com.shinwootns.ipm.insight.service.amqp.RabbitMQHandler;
-import com.shinwootns.ipm.insight.service.redis.RedisHandler;
+import com.shinwootns.ipm.insight.service.redis.RedisManager;
 import com.shinwootns.ipm.insight.service.syslog.DhcpMessage;
 import com.shinwootns.ipm.insight.service.syslog.SyslogHandler;
 
@@ -42,8 +42,7 @@ public class SyslogPublisher implements Runnable {
 	//region [public] run
 	@Override
 	public void run() {
-		
-		
+
 		long curTime = TimeUtils.currentTimeSecs();
 		long prevTime = curTime;
 		
@@ -66,12 +65,12 @@ public class SyslogPublisher implements Runnable {
 			if (prevTime != curTime) {
 				prevTime = curTime; 
 				
-				connectRedis();
-				
 				Set<String> dataSet = null;
 				
 				try
 				{
+					connectRedis();
+					
 					if (this._redis != null) {
 						
 						// Get Range by Score 
@@ -84,6 +83,8 @@ public class SyslogPublisher implements Runnable {
 				catch(Exception ex) {
 					closeRedis();
 					connectRedis();
+					
+					continue;
 				}
 				
 				if (dataSet != null) {
@@ -162,7 +163,7 @@ public class SyslogPublisher implements Runnable {
 	}
 	//endregion
 	
-	//region SendEventMQ
+	//region [private] SendEventMQ
 	private void SendEventMQ(Integer deviceId, SyslogEntity syslog) {
 
 		//Send Event
@@ -180,7 +181,7 @@ public class SyslogPublisher implements Runnable {
 	}
 	//endregion
 	
-	//region sortBySyslogRecvTime
+	//region [private] sortBySyslogRecvTime
 	private LinkedHashMap<String, SyslogEntity> sortBySyslogRecvTime(Map<String, SyslogEntity> map) {
 		
 	    List<Entry<String, SyslogEntity>> list = new LinkedList<Entry<String, SyslogEntity>>(map.entrySet());
@@ -205,15 +206,15 @@ public class SyslogPublisher implements Runnable {
 	}
 	//endregion
 	
-	//region Connect Redis
+	//region [private] Connect Redis
 	private void connectRedis() {
 		
 		if (this._redis == null)
-			this._redis = RedisHandler.getInstance().getRedisClient();
+			this._redis = RedisManager.getInstance().getRedisClient();
 	}
 	//endregion
 	
-	//region Close Redis
+	//region [private] Close Redis
 	private void closeRedis() {
 		
 		try {
@@ -221,7 +222,7 @@ public class SyslogPublisher implements Runnable {
 				this._redis.close();
 		} catch(Exception ex) {
 		} finally {
-			this._redis = null;;
+			this._redis = null;
 		}
 	}
 	//endregion

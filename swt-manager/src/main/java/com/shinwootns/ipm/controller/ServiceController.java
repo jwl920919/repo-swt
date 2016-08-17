@@ -17,7 +17,7 @@ import com.shinwootns.ipm.WorkerManager;
 import com.shinwootns.ipm.config.ApplicationProperty;
 import com.shinwootns.ipm.service.amqp.RabbitMQHandler;
 import com.shinwootns.ipm.service.cluster.ClusterManager;
-import com.shinwootns.ipm.service.redis.RedisHandler;
+import com.shinwootns.ipm.service.redis.RedisManager;
 
 @RestController
 public class ServiceController {
@@ -60,7 +60,7 @@ public class ServiceController {
 		}
 		
 		// Connect Redis
-		if (RedisHandler.getInstance().connect() == false ) {
+		if (RedisManager.getInstance().connect() == false ) {
 			_logger.error("RedisHandler connect()... Failed.");
 			WorkerManager.getInstance().TerminateApplication();
 			return;

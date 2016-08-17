@@ -1,30 +1,31 @@
-package com.shinwootns.ipm.insight.service.redis;
+package com.shinwootns.ipm.service.redis;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.shinwootns.common.redis.RedisManager;
-import com.shinwootns.common.redis.RedisManager.RedisPoolStatus;
+import com.shinwootns.common.redis.RedisHandler;
+import com.shinwootns.common.redis.RedisHandler.RedisPoolStatus;
 import com.shinwootns.common.utils.CryptoUtils;
-import com.shinwootns.ipm.insight.SpringBeanProvider;
-import com.shinwootns.ipm.insight.config.ApplicationProperty;
+import com.shinwootns.ipm.SpringBeanProvider;
+import com.shinwootns.ipm.config.ApplicationProperty;
 
 import redis.clients.jedis.Jedis;
 
-public class RedisHandler {
+public class RedisManager {
+	
 	
 	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
 	//RedisManager 
-	RedisManager rm = null;
+	RedisHandler rm = null;
 	
 	//region Singleton
-	private static RedisHandler _instance = null;
-	private RedisHandler() {}
-	public static synchronized RedisHandler getInstance() {
+	private static RedisManager _instance = null;
+	private RedisManager() {}
+	public static synchronized RedisManager getInstance() {
 
 		if (_instance == null) {
-			_instance = new RedisHandler();
+			_instance = new RedisManager();
 		}
 		return _instance;
 	}
@@ -36,7 +37,7 @@ public class RedisHandler {
 		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
 		if (appProperty == null)
 			return false;
-
+		
 		synchronized(this)
 		{
 			try {
@@ -50,7 +51,7 @@ public class RedisHandler {
 			
 			try
 			{
-				rm = new RedisManager(
+				rm = new RedisHandler(
 						appProperty.redisHost
 						, appProperty.redisPort
 						, CryptoUtils.Decode_AES128(appProperty.redisPassword)

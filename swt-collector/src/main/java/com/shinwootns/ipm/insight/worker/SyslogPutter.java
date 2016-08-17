@@ -11,7 +11,7 @@ import com.shinwootns.data.key.RedisKeys;
 import com.shinwootns.ipm.insight.SpringBeanProvider;
 import com.shinwootns.ipm.insight.config.ApplicationProperty;
 import com.shinwootns.ipm.insight.data.SharedData;
-import com.shinwootns.ipm.insight.service.redis.RedisHandler;
+import com.shinwootns.ipm.insight.service.redis.RedisManager;
 
 import redis.clients.jedis.Jedis;
 
@@ -62,7 +62,7 @@ public class SyslogPutter implements Runnable {
 					
 					// to Redis
 					if (redis == null)
-						redis = RedisHandler.getInstance().getRedisClient();
+						redis = RedisManager.getInstance().getRedisClient();
 					
 					if (redis == null) {
 						Thread.sleep(3000);

@@ -19,7 +19,7 @@ import com.shinwootns.data.status.LeaseIpStatus;
 import com.shinwootns.ipm.SpringBeanProvider;
 import com.shinwootns.ipm.data.mapper.DashboardMapper;
 import com.shinwootns.ipm.data.mapper.DataMapper;
-import com.shinwootns.ipm.service.redis.RedisHandler;
+import com.shinwootns.ipm.service.redis.RedisManager;
 
 import redis.clients.jedis.Jedis;
 
@@ -74,7 +74,7 @@ public class MasterJobWoker implements Runnable {
 		
 		List<SiteInfo> listSite = dataMapper.selectSiteInfo();
 		
-		Jedis redis = RedisHandler.getInstance().getRedisClient();
+		Jedis redis = RedisManager.getInstance().getRedisClient();
 		if(redis == null)
 			return;
 		

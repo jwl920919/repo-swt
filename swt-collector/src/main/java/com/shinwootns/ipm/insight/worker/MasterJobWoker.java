@@ -29,7 +29,7 @@ import com.shinwootns.ipm.insight.data.mapper.ClientMapper;
 import com.shinwootns.ipm.insight.data.mapper.DhcpMapper;
 import com.shinwootns.ipm.insight.service.cluster.ClusterManager;
 import com.shinwootns.ipm.insight.service.infoblox.DhcpHandler;
-import com.shinwootns.ipm.insight.service.redis.RedisHandler;
+import com.shinwootns.ipm.insight.service.redis.RedisManager;
 
 import redis.clients.jedis.Jedis;
 
@@ -511,7 +511,7 @@ public class MasterJobWoker implements Runnable {
 		if (dhcp == null)
 			return;
 		
-		Jedis client = RedisHandler.getInstance().getRedisClient();
+		Jedis client = RedisManager.getInstance().getRedisClient();
 		if(client == null)
 			return;
 

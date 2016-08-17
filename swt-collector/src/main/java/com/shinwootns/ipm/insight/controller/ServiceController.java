@@ -27,7 +27,7 @@ import com.shinwootns.ipm.insight.data.SharedData;
 import com.shinwootns.ipm.insight.data.mapper.DeviceMapper;
 import com.shinwootns.ipm.insight.data.mapper.DhcpMapper;
 import com.shinwootns.ipm.insight.service.amqp.RabbitMQHandler;
-import com.shinwootns.ipm.insight.service.redis.RedisHandler;
+import com.shinwootns.ipm.insight.service.redis.RedisManager;
 import com.shinwootns.ipm.insight.service.syslog.SyslogReceiveHandlerImpl;
 
 @RestController
@@ -65,7 +65,7 @@ public class ServiceController {
 		}
 		
 		// Connect Redis
-		if (RedisHandler.getInstance().connect() == false ) {
+		if (RedisManager.getInstance().connect() == false ) {
 			_logger.error("RedisHandler connect()... Failed.");
 			WorkerManager.getInstance().TerminateApplication();
 			return;

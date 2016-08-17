@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 import org.junit.Test;
 
 import com.mysql.fabric.xmlrpc.base.Data;
-import com.shinwootns.common.redis.RedisManager;
+import com.shinwootns.common.redis.RedisHandler;
 import com.shinwootns.common.utils.TimeUtils;
 
 import redis.clients.jedis.Jedis;

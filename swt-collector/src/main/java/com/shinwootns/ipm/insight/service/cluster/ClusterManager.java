@@ -19,7 +19,7 @@ import com.shinwootns.ipm.insight.WorkerManager;
 import com.shinwootns.ipm.insight.config.ApplicationProperty;
 import com.shinwootns.ipm.insight.data.SharedData;
 import com.shinwootns.ipm.insight.data.mapper.DeviceMapper;
-import com.shinwootns.ipm.insight.service.redis.RedisHandler;
+import com.shinwootns.ipm.insight.service.redis.RedisManager;
 
 import redis.clients.jedis.Jedis;
 
@@ -57,7 +57,7 @@ public class ClusterManager {
 			if (SharedData.getInstance().getSiteID() <= 0)
 				return;
 	
-			Jedis redis = RedisHandler.getInstance().getRedisClient();
+			Jedis redis = RedisManager.getInstance().getRedisClient();
 			if (redis == null)
 				return;
 	
@@ -107,7 +107,7 @@ public class ClusterManager {
 			if (SharedData.getInstance().getSiteID() <= 0)
 				return;
 			
-			Jedis redis = RedisHandler.getInstance().getRedisClient();
+			Jedis redis = RedisManager.getInstance().getRedisClient();
 			if (redis == null)
 				return;
 			
@@ -181,7 +181,7 @@ public class ClusterManager {
 	//region [FUNC] Get MasterName
 	public String getMasterName() {
 
-		Jedis redis = RedisHandler.getInstance().getRedisClient();
+		Jedis redis = RedisManager.getInstance().getRedisClient();
 		if (redis == null)
 			return "";
 		
@@ -217,7 +217,7 @@ public class ClusterManager {
 		if (appProperty == null)
 			return false;
 		
-		Jedis redis = RedisHandler.getInstance().getRedisClient();
+		Jedis redis = RedisManager.getInstance().getRedisClient();
 		if (redis == null)
 			return false;
 		
@@ -254,7 +254,7 @@ public class ClusterManager {
 		if (appProperty == null)
 			return;
 
-		Jedis redis = RedisHandler.getInstance().getRedisClient();
+		Jedis redis = RedisManager.getInstance().getRedisClient();
 		if (redis == null)
 			return;
 		

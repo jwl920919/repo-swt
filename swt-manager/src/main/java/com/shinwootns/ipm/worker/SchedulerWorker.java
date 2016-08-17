@@ -7,9 +7,9 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.shinwootns.common.redis.RedisManager.RedisPoolStatus;
+import com.shinwootns.common.redis.RedisHandler.RedisPoolStatus;
 import com.shinwootns.ipm.service.cluster.ClusterManager;
-import com.shinwootns.ipm.service.redis.RedisHandler;
+import com.shinwootns.ipm.service.redis.RedisManager;
 
 public class SchedulerWorker implements Runnable {
 	
@@ -95,7 +95,7 @@ public class SchedulerWorker implements Runnable {
 	private void displayStatus() {
 		
 		// Redis
-		RedisPoolStatus status = RedisHandler.getInstance().getPoolStatus();
+		RedisPoolStatus status = RedisManager.getInstance().getPoolStatus();
 		
 		if (status != null) {
 			_logger.info((new StringBuilder())
