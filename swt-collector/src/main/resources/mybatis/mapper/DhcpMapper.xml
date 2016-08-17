@@ -192,5 +192,17 @@
 			WHERE site_id=#{site_id} AND ipaddr=#{ipaddr}
 		]]>
 	</delete>
+	
+	
+	<!-- ############################ DHCP Long ############################ -->
+	
+	<insert id="insertDhcpLog" parameterType="com.shinwootns.data.entity.DhcpLog">
+		<![CDATA[
+			INSERT INTO dhcp_log 
+				(site_id, device_id, dhcp_ip, dhcp_type, ip_type, client_ip, client_mac, client_duid, collect_time)
+			VALUES 
+			(#{site_id}, #{device_id}, #{dhcp_ip}, #{dhcp_type}, #{ip_type}, #{client_ip}, #{client_mac}, #{client_duid}, #{collect_time} ) 
+		]]>
+	</insert>
     
 </mapper>

@@ -12,8 +12,8 @@ insight:
     user: admin
     password: 7+AzHIrmzGDARTT1VaQa3Q==
   cluster:
-    mode: slave      # master, slave
-    index: 100       # 0 ~ 999
+    mode: master      # master, slave
+    index: 1       # 0 ~ 999
   redis:
     host: shinwootnskr.iptime.org
     port: 6379
