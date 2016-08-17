@@ -95,6 +95,13 @@ docker run \
  /bin/bash
 ```
 
+* Timezone 설정
+```
+rm /etc/localtime
+
+ln -s /usr/share/zoneinfo/Asia/Seoul /etc/localtime
+```
+
 ## ipm-base 이미지 생성
 
  * 기본 container 생성
