@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -13,7 +12,6 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.shinwootns.common.utils.SystemUtils;
 import com.shinwootns.data.entity.DeviceNetwork;
 import com.shinwootns.data.entity.DeviceSnmp;
 import com.shinwootns.data.entity.DeviceSysOID;

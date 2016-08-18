@@ -242,10 +242,15 @@ CREATE TABLE dhcp_log
   device_id integer,
   dhcp_ip character varying(40),
   dhcp_type character varying(16) NOT NULL,
-  ip_type character varying(8),
+  is_renew boolean DEFAULT false,
+  is_guest_range boolean DEFAULT false,
+  duration integer,
+  client_ip_type character varying(8),
   client_ip character varying(40),
+  client_ip_num numeric,
   client_mac character varying(18),
   client_duid character varying(64),
+  client_hostname character varying(64),
   collect_time timestamp with time zone DEFAULT current_timestamp,
   CONSTRAINT dhcp_log_id_pkey PRIMARY KEY (dhcp_log_id)
 );

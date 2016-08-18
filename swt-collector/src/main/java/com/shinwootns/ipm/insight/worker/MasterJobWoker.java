@@ -41,18 +41,19 @@ public class MasterJobWoker implements Runnable {
 	
 	private ScheduledExecutorService schedulerService = Executors.newScheduledThreadPool(SCHEDULER_THREAD_COUNT);
 	
-	private Thread _syslogPublisher = null;
+	//private Thread _syslogAggrWorker = null;
 	
 	@Override
 	public void run() {
 		
 		_logger.info("MasterJobWoker... start.");
 		
+		/*
 		// Start syslogPublisher
-		if (_syslogPublisher == null) {
-			_syslogPublisher = new Thread(new SyslogPublisher(), "SyslogPublisher");
-			_syslogPublisher.start();
-		}
+		if (_syslogAggrWorker == null) {
+			_syslogAggrWorker = new Thread(new SyslogAggrWorker(), "SyslogAggrWorker");
+			_syslogAggrWorker.start();
+		}*/
 		
 		// collectDhcp info (60 sec)
 		schedulerService.scheduleWithFixedDelay(
@@ -86,15 +87,17 @@ public class MasterJobWoker implements Runnable {
 		}
 		
 		// End syslogPublisher
-		if (_syslogPublisher != null) {
+		/*
+		if (_syslogAggrWorker != null) {
 			try {
-				_syslogPublisher.interrupt();
-				_syslogPublisher.join();
+				_syslogAggrWorker.interrupt();
+				_syslogAggrWorker.join();
 			}catch(Exception ex ) {
 			}finally{
-				_syslogPublisher = null;
+				_syslogAggrWorker = null;
 			}
 		}
+		*/
 		
 		schedulerService.shutdown();
 		

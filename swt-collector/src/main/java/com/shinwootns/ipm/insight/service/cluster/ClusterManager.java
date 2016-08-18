@@ -9,10 +9,8 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gson.JsonObject;
 import com.shinwootns.common.utils.CollectionUtils;
 import com.shinwootns.common.utils.SystemUtils;
-import com.shinwootns.common.utils.TimeUtils;
 import com.shinwootns.data.key.RedisKeys;
 import com.shinwootns.ipm.insight.SpringBeanProvider;
 import com.shinwootns.ipm.insight.WorkerManager;
@@ -45,141 +43,140 @@ public class ClusterManager {
 	}
 	//endregion
 
-	//region [FUNC] Update Member
+	//region [public] Update Member
 	public void updateMember() {
 		
-		synchronized(this)
-		{
-			ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
-			if (appProperty == null)
-				return;
+		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
+		if (appProperty == null)
+			return;
+		
+		if (SharedData.getInstance().getSiteID() <= 0)
+			return;
+
+		Jedis redis = RedisManager.getInstance().getRedisClient();
+		if (redis == null)
+			return;
+
+		try {
+			// rank
+			String clusterMode = appProperty.clusterMode;
+			int rank = 0;
+			if (clusterMode.toLowerCase().equals("master"))
+				rank = 1;
+			else if (clusterMode.toLowerCase().equals("slave"))
+				rank = 10000;
+			else
+				rank = 20000;
+
+			rank += appProperty.clusterIndex;
+
+			// Update Member
+			_updateMember(redis, rank);
 			
-			if (SharedData.getInstance().getSiteID() <= 0)
-				return;
-	
-			Jedis redis = RedisManager.getInstance().getRedisClient();
-			if (redis == null)
-				return;
-	
-			try {
-				// rank
-				String clusterMode = appProperty.clusterMode;
-				int rank = 0;
-				if (clusterMode.toLowerCase().equals("master"))
-					rank = 1;
-				else if (clusterMode.toLowerCase().equals("slave"))
-					rank = 10000;
-				else
-					rank = 20000;
-	
-				rank += appProperty.clusterIndex;
-	
-				// Key
-				StringBuilder key = new StringBuilder();
-				key.append(RedisKeys.KEY_INSIGHT_CLUSTER_MEMBER)
-					.append(":").append(SharedData.getInstance().getSiteID())
-					.append(":").append(SystemUtils.getHostName());
-	
-				// Set Value
-				redis.set(key.toString(), String.format("%d", rank));
-	
-				// Expire Time
-				redis.expire(key.toString(), EXPIRE_TIME_MEMBER);
-				
-			} catch (Exception ex) {
-				_logger.error(ex.getMessage(), ex);
-			}finally {
-				redis.close();
-			}
+			// Update MasterNode
+			if (this.isMasterNode != null && this.isMasterNode)
+				_updateMasterNode(redis);
+			
+		} catch (Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+		}finally {
+			redis.close();
 		}
 	}
 	//endregion
 
-	//region [FUNC] Check Cluster Master
+	//region [public] Check Cluster Master
 	public void checkMaster() {
 		
-		synchronized(this)
-		{
-			ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
-			if ( appProperty == null ) 
-				return;
-			
-			if (SharedData.getInstance().getSiteID() <= 0)
-				return;
-			
-			Jedis redis = RedisManager.getInstance().getRedisClient();
-			if (redis == null)
-				return;
-			
-			try
-			{
-				// Key
-				StringBuilder keyPattern = new StringBuilder();
-				keyPattern.append(RedisKeys.KEY_INSIGHT_CLUSTER_MEMBER)
-					.append(":").append(SharedData.getInstance().getSiteID())
-					.append(":*");
-				
-				// Get Keys
-				Set<String> keys = redis.keys(keyPattern.toString());
-				
-				// Get Values
-				HashMap<String, Integer> mapMember = new HashMap<String, Integer>();
-				for(String key : keys) {
-					mapMember.put(key, Integer.parseInt(redis.get(key)));
-				}
-				
-				// Sort by valuse
-				LinkedHashMap<String, Integer> sortMap = CollectionUtils.sortMapByValue(mapMember);
-				//System.out.println(sortMap);
-				
-				Iterator<Entry<String, Integer>> iter = sortMap.entrySet().iterator();
-				
-				if (iter != null && iter.hasNext()) {
-					
-					Entry<String, Integer> entry = iter.next();
-					
-					// Top 1
-					String masterKey = entry.getKey();
-					String hostName = SystemUtils.getHostName();
+		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
+		if ( appProperty == null ) 
+			return;
 		
-					// check Master
-					int index = masterKey.lastIndexOf(":");
-					
-					if (index > 0 && masterKey.length() > index+1 ) {
-						
-						String masterName = masterKey.substring(index+1);
-						
-						// is Master node
-						if (masterName.isEmpty() == false && masterName.equals(hostName)) {
-							
-							// Set Master
-							ClusterManager.getInstance().setMasterNode(true);
-							
-							// Key
-							StringBuilder key = new StringBuilder();
-							key.append(RedisKeys.KEY_INSIGHT_CLUSTER_MASTER)
-								.append(":").append(SharedData.getInstance().getSiteID());
-							
-							// Set value
-							redis.set(key.toString(), hostName);
-							 
-						} else { 
-							// Set Slave
-							ClusterManager.getInstance().setMasterNode(false); 
-						}
-					}	
-				}
-			} catch(Exception ex) {
-				_logger.error(ex.getMessage(), ex);
-			} finally {
-				redis.close();
+		if (SharedData.getInstance().getSiteID() <= 0)
+			return;
+		
+		Jedis redis = RedisManager.getInstance().getRedisClient();
+		if (redis == null)
+			return;
+		
+		try
+		{
+			// Key
+			StringBuilder keyPattern = new StringBuilder();
+			keyPattern.append(RedisKeys.KEY_INSIGHT_CLUSTER_MEMBER)
+				.append(":").append(SharedData.getInstance().getSiteID())
+				.append(":*");
+			
+			// Get Keys
+			Set<String> keys = redis.keys(keyPattern.toString());
+			
+			// Get Values
+			HashMap<String, Integer> mapMember = new HashMap<String, Integer>();
+			for(String key : keys) {
+				mapMember.put(key, Integer.parseInt(redis.get(key)));
 			}
+			
+			// Sort by valuse
+			LinkedHashMap<String, Integer> sortMap = CollectionUtils.sortMapByValue(mapMember);
+			//System.out.println(sortMap);
+			
+			Iterator<Entry<String, Integer>> iter = sortMap.entrySet().iterator();
+			
+			if (iter != null && iter.hasNext()) {
+				
+				Entry<String, Integer> entry = iter.next();
+				
+				// Top 1
+				String masterKey = entry.getKey();
+				String hostName = SystemUtils.getHostName();
+	
+				// check Master
+				int index = masterKey.lastIndexOf(":");
+				
+				if (index > 0 && masterKey.length() > index+1 ) {
+					
+					String masterName = masterKey.substring(index+1);
+					
+					// is Master node
+					if (masterName.isEmpty() == false && masterName.equals(hostName)) {
+						
+						// Set Master
+						_setMasterNode(true);
+						
+						// Key
+						StringBuilder key = new StringBuilder();
+						key.append(RedisKeys.KEY_INSIGHT_CLUSTER_MASTER)
+							.append(":").append(SharedData.getInstance().getSiteID());
+						
+						// Set value
+						redis.set(key.toString(), hostName);
+						 
+					} else { 
+						// Set Slave
+						_setMasterNode(false); 
+					}
+				}	
+			}
+		} catch(Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+		} finally {
+			redis.close();
 		}
 	}
 	//endregion
+
+	//region [public] is Master
+	public boolean isMaster() {
+		if (isMasterNode != null && isMasterNode == true)
+			return true;
+		
+		return false;
+	}
+	//endregion
 	
-	//region [FUNC] Get MasterName
-	public String getMasterName() {
+	/*
+	//region [private] Get MasterName
+	private String getMasterName() {
 
 		Jedis redis = RedisManager.getInstance().getRedisClient();
 		if (redis == null)
@@ -209,7 +206,9 @@ public class ClusterManager {
 		return "";
 	}
 	//endregion
-
+	*/
+	
+	/*
 	//region [FUNC] is Master
 	public boolean isMaster() {
 
@@ -246,76 +245,54 @@ public class ClusterManager {
 		return false;
 	}
 	//endregion
-
-	//region [FUNC] UpdateMasterJob
-	public void updateMasterJob(String status, String jobName, int currentStep, int totalStep, long startTime) {
-		
-		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
-		if (appProperty == null)
-			return;
-
-		Jedis redis = RedisManager.getInstance().getRedisClient();
-		if (redis == null)
-			return;
-		
-		try {
-			
-			JsonObject jObj = new JsonObject();
-			jObj.addProperty("host", SystemUtils.getHostName());
-			jObj.addProperty("jon", jobName);
-			jObj.addProperty("current_step", currentStep);
-			jObj.addProperty("total_count", totalStep);
-			jObj.addProperty("startTime", startTime);
-			jObj.addProperty("updateTime", (TimeUtils.currentTimeMilis()/1000));
-
-			// Key
-			StringBuilder key = new StringBuilder();
-			key.append(RedisKeys.KEY_INSIGHT_CLUSTER_JOB)
-				.append(":").append(SharedData.getInstance().getSiteID())
-				.append(":").append(SystemUtils.getHostName());
-			
-			// Set value
-			redis.set(key.toString(), jObj.toString());
-			
-		}catch(Exception ex) {
-			_logger.error(ex.getMessage(), ex);
-		}finally {
-			redis.close();
-		}
-	}
-	//endregion
+	*/
 	
-	//region [FUNC] set Master Node
-	private void setMasterNode(boolean isMasterNode) {
+	//region [private] _setMasterNode
+	private void _setMasterNode(boolean isMasterNode) {
 
 		// If changed cluster mode.
 		if (this.isMasterNode == null || this.isMasterNode != isMasterNode) {
 
-			_logger.info( (new StringBuilder())
-					.append("************************************")
-					.append(" Cluster Mode = ")
-					.append((isMasterNode) ? "MASTER " : "SLAVE ")
-					.append("************************************")
-					.toString()
-			);
-
-			this.isMasterNode = isMasterNode;
-			
 			// MASTER
-			if (this.isMasterNode) {
+			if (isMasterNode) {
 				
-				// Update To DB
-				DeviceMapper deviceMapper = SpringBeanProvider.getInstance().getDeviceMapper();
-				if (deviceMapper != null && SharedData.getInstance().getSiteID() >= 0) {
-					deviceMapper.updateInsightMaster(SharedData.getInstance().getSiteID(), SystemUtils.getHostName());
+				// Wait for other master's termination
+				Jedis redis = RedisManager.getInstance().getRedisClient();
+
+				if (_isRunningOtherMasterNode(redis) == false)
+				{
+					this.isMasterNode = isMasterNode;
+					
+					_logger.info( (new StringBuilder())
+							.append("************************************")
+							.append(" Cluster Mode = ")
+							.append((isMasterNode) ? "MASTER " : "SLAVE ")
+							.append("************************************")
+							.toString()
+					);
+					
+					// Update To DB
+					DeviceMapper deviceMapper = SpringBeanProvider.getInstance().getDeviceMapper();
+					if (deviceMapper != null && SharedData.getInstance().getSiteID() >= 0) {
+						deviceMapper.updateInsightMaster(SharedData.getInstance().getSiteID(), SystemUtils.getHostName());
+					}
+					
+					// Start MasterJobWorker
+					WorkerManager.getInstance().startMasterJobWorker();
 				}
-				
-				// Start MasterJobWorker
-				WorkerManager.getInstance().startMasterJobWorker();
-				
 			}
 			// SLAVE
 			else {
+				
+				this.isMasterNode = isMasterNode;
+				
+				_logger.info( (new StringBuilder())
+						.append("************************************")
+						.append(" Cluster Mode = ")
+						.append((isMasterNode) ? "MASTER " : "SLAVE ")
+						.append("************************************")
+						.toString()
+				);
 				
 				// Debug Mode - force_start_cluster_master
 				ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
@@ -327,8 +304,87 @@ public class ClusterManager {
 					// Stop MasterJobWorker
 					WorkerManager.getInstance().stopMasterJobWorker();
 				}
+				
+				// Update slave mode
+				Jedis redis = RedisManager.getInstance().getRedisClient();
+				_removeMasterNode(redis);
 			}
 
+		}
+	}
+	//endregion
+	
+	//region [redis] _updateMember
+	private void _updateMember(Jedis redis, int rank)
+	{
+		if (redis != null) {
+			// Key
+			StringBuilder key = new StringBuilder();
+			key.append(RedisKeys.KEY_INSIGHT_CLUSTER_MEMBER)
+				.append(":").append(SharedData.getInstance().getSiteID())
+				.append(":").append(SystemUtils.getHostName());
+	
+			// Set Value
+			redis.set(key.toString(), String.format("%d", rank));
+	
+			// Expire Time
+			redis.expire(key.toString(), EXPIRE_TIME_MEMBER);
+		}
+	}
+	//endregion
+	
+	//region [redis] _updateMasterNode
+	private void _updateMasterNode(Jedis redis)
+	{
+		if (redis != null)
+		{
+			StringBuilder key = new StringBuilder();
+			key.append(RedisKeys.KEY_INSIGHT_CLUSTER_MASTER)
+				.append(":").append(SharedData.getInstance().getSiteID())
+				.append(":").append(SystemUtils.getHostName());
+			
+			redis.set(key.toString(), SystemUtils.getHostName());
+			redis.expire(key.toString(), EXPIRE_TIME_MEMBER);
+		}
+	}
+	//endregion
+	
+	//region [redis] _isRunningOtherMasterNode
+	private boolean _isRunningOtherMasterNode(Jedis redis) {
+		
+		if (redis != null) {
+		
+			StringBuilder searchKey = new StringBuilder();
+			searchKey.append(RedisKeys.KEY_INSIGHT_CLUSTER_MASTER)
+				.append(":").append(SharedData.getInstance().getSiteID())
+				.append(":*");
+			
+			Set<String> setMasterNode = redis.keys(searchKey.toString());
+			
+			for(String masterNode : setMasterNode) {
+				if ( masterNode.equals( SystemUtils.getHostName() ) == false ) {
+					return true;
+				}
+			}
+			
+			return false;
+		}
+		
+		return true;
+	}
+	//endregion
+	
+	//region [redis] _removeMasterNode
+	private void _removeMasterNode(Jedis redis)
+	{
+		if (redis != null) {
+			
+			StringBuilder key = new StringBuilder();
+			key.append(RedisKeys.KEY_INSIGHT_CLUSTER_MASTER)
+				.append(":").append(SharedData.getInstance().getSiteID())
+				.append(":").append(SystemUtils.getHostName());
+			
+			redis.del(key.toString());
 		}
 	}
 	//endregion

@@ -1,6 +1,7 @@
 package com.shinwootns.data.entity;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.sql.Timestamp;
 
 
@@ -12,13 +13,34 @@ public class DhcpLog implements Serializable {
 	private Integer device_id;
 	private String dhcp_ip;
 	private String dhcp_type;
-	private String ip_type;
+	private Boolean is_renew;
+	private Boolean is_guest_range;
+	private Integer duration;
+	private String client_ip_type;
 	private String client_ip;
+	private BigInteger client_ip_num;
 	private String client_mac;
 	private String client_duid;
+	private String client_hostname;
 	private Timestamp collect_time;
 
 	public DhcpLog() {
+	}
+	
+	@Override
+	public String toString() {
+		return (new StringBuilder())
+				.append("[DhcpLog]")
+				.append(" site_id=").append(site_id)
+				.append(", device_id=").append(device_id)
+				.append(", dhcp_type=").append(dhcp_type)
+				.append(", is_renew=").append(is_renew)
+				.append(", is_guest=").append(is_guest_range)
+				.append(", duration=").append(duration)
+				.append(", ip=").append(client_ip)
+				.append(", mac=").append(client_mac)
+				.append(", hostname=").append(client_hostname)
+				.toString();
 	}
 
 	public String getClientDuid() {
@@ -77,12 +99,12 @@ public class DhcpLog implements Serializable {
 		this.dhcp_type = dhcpType;
 	}
 
-	public String getIpType() {
-		return this.ip_type;
+	public String getClientIpType() {
+		return this.client_ip_type;
 	}
 
-	public void setIpType(String ipType) {
-		this.ip_type = ipType;
+	public void setClientIpType(String ipType) {
+		this.client_ip_type = ipType;
 	}
 
 	public Integer getSiteId() {
@@ -91,6 +113,46 @@ public class DhcpLog implements Serializable {
 
 	public void setSiteId(Integer siteId) {
 		this.site_id = siteId;
+	}
+
+	public Boolean getIsRenew() {
+		return is_renew;
+	}
+
+	public void setIsRenew(Boolean is_renew) {
+		this.is_renew = is_renew;
+	}
+
+	public BigInteger getClientIpNum() {
+		return client_ip_num;
+	}
+
+	public void setClientIpNum(BigInteger client_ip_num) {
+		this.client_ip_num = client_ip_num;
+	}
+
+	public Boolean getIsGuestRange() {
+		return is_guest_range;
+	}
+
+	public void setIsGuestRange(Boolean is_guest_range) {
+		this.is_guest_range = is_guest_range;
+	}
+
+	public String getClientHostname() {
+		return client_hostname;
+	}
+
+	public void setClientHostname(String client_hostname) {
+		this.client_hostname = client_hostname;
+	}
+
+	public Integer getDuration() {
+		return duration;
+	}
+
+	public void setDuration(Integer duration) {
+		this.duration = duration;
 	}
 
 }
