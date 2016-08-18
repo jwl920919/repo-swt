@@ -26,6 +26,7 @@ $(document).ready(function() {
 //	    }
 //	});
 
+	return;
 	//추가 버튼 클릭 이벤트
 	$('#add-row').click(function() {
 		fnAdd();

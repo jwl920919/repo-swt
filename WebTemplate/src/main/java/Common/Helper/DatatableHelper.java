@@ -17,7 +17,7 @@ public class DatatableHelper {
 					searchValue = request.getParameter("search[value]");
 			int startIndex = Integer.parseInt(request.getParameter("start")),
 					length = Integer.parseInt(request.getParameter("length"));
-			HashMap<String, Object> parameters = new HashMap<>();
+			HashMap<String, Object> parameters = new HashMap<String, Object>();
 			parameters.put("searchValue", searchValue);
 			parameters.put("orderColumn", orderColumn);
 			parameters.put("orderType", orderType);

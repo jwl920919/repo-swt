@@ -276,7 +276,7 @@ function Format_comma(val){
 		//console.log("Format_Input : " + val+"");
 		if (val != "0") {
 			if (val >= 1000000) {
-				console.log("val :" + val);
+				//console.log("val :" + val);
 				return fnConvertNumberToUnitValue(val);
 			}
 			var newValue = val+""; //숫자를 문자열로 변환

@@ -21,9 +21,9 @@ public class IpmNodeFromNetworkTest {
         List<Map<String, Object>> list = gson.fromJson(isr,
                 new TypeToken<List<Map<String, Object>>>() {
                 }.getType());
-        List<NetworkData> ipv4List = new ArrayList<>();
+        List<NetworkData> ipv4List = new ArrayList<NetworkData>();
 
-        List<NetworkData> ipv6List = new ArrayList<>();
+        List<NetworkData> ipv6List = new ArrayList<NetworkData>();
         for (int i = 0; i < list.size(); i++) {
             NetworkData nd = new NetworkData(new IPNetwork(list.get(i).get("network").toString()));
             if (list.get(i).get("ip_type").equals("IPV4")) {

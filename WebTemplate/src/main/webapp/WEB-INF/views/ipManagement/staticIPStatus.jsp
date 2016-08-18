@@ -34,13 +34,13 @@
 				<!-- Custom Tabs -->
 					<div class="nav-tabs-custom">
 						<ul class="nav nav-tabs" id="tapheader">
-							<li class="active"><a href="#tab_1" data-toggle="tab">List</a></li>
-							<li><a href="#tab_2" data-toggle="tab">Map</a></li>
+							<li class="active" name="ListTap"><a href="#tab_1" data-toggle="tab">List</a></li>
+							<li name="MapTap"><a href="#tab_2" data-toggle="tab">Map</a></li>
 						</ul>
 						<!-- tab-content -->
 						<div class="tab-content">
 							<!-- tab_1-pane -->
-							<div class="tab-pane active" id="tab_1">
+							<div class="tab-pane active" id="tab_1" name="ListTap">
 								<center>
 									<table id="datatable" name="datatable" class="essential-table" style="width: 98%">
 										<thead>
@@ -69,57 +69,51 @@
 							</div>
 							<!-- /.tab_1-pane -->
 							<!-- tab_2-pane -->
-							<div class="tab-pane" id="tab_2">
-								<div class="row">
+							<div class="tab-pane" id="tab_2" name="MapTap">
+								<div class="row" id="segmentHolder" style="padding: 0px 10px">
 									<!-- /segmentHolderbox -->
-									<div class="col-md-20-minwidth-200" id="segmentHolder">
-										<div class="box box-success essential-cursor-pointer">		
-											<!-- /box-header -->
-											<div class="box-header with-border-lightgray">
-												<h3 class="box-title"><small>192.168.1.0/24</small></h3>
-												<div class="box-tools pull-right">
-													<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-												</div>
-											</div>
-											<!-- /box-body -->
-											<div class="box-body">
-												<div class="progress-group">
-													<small>
-														<table style="width: 100%">
-															<tr>
-																<td><span>start</span></td>
-																<td>
-																	<span>192.168.1.0</span>
-																</td>
-															</tr>															
-															<tr>
-																<td><span>end</span></td>
-																<td>
-																	<span>192.168.1.255</span>
-																</td>
-															</tr>
-															<tr>
-																<td colspan="2" style="height: 40px">
-																	<span>사용률</span>
-																	<span class="progress-number"><b>480</b>/800</span>
-																	<div class="progress sm" style="height: 6px">
-																		<div class="progress-bar progress-bar-green" style="width: 80%"></div>
-																	</div>
-																</td>
-															</tr>
-															<tr>
-																<td><span>commont :</span></td>
-																<td>
-																	<span>isolation</span>
-																</td>
-															</tr>
-														</table>														
-													</small>
-												</div>
-											</div>
-										</div>
-										<!-- /.segmentHolderbox -->
-									</div>
+<!-- 									<div class="col-md-20-minwidth-200" onclick="tdClickEvent('192.168.1.0/24,IPV4,192.168.1.0,192.168.1.255');"> -->
+<!-- 										<div class="box box-success essential-cursor-pointer">		 -->
+<!-- 											/box-header -->
+<!-- 											<div class="box-header with-border-lightgray"> -->
+<!-- 												<h3 class="box-title"><small>192.168.1.0/24</small></h3> -->
+<!-- 												<div class="box-tools pull-right"> -->
+<!-- 													<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button> -->
+<!-- 												</div> -->
+<!-- 											</div> -->
+<!-- 											/box-body -->
+<!-- 											<div class="box-body-blackLine"> -->
+<!-- 												<div class="progress-group"> -->
+<!-- 													<small> -->
+<!-- 														<table style="width: 100%"> -->
+<!-- 															<tr> -->
+<!-- 																<td><span>start</span></td> -->
+<!-- 																<td><span>192.168.1.0</span></td> -->
+<!-- 															</tr>															 -->
+<!-- 															<tr> -->
+<!-- 																<td><span>end</span></td> -->
+<!-- 																<td><span>192.168.1.255</span></td> -->
+<!-- 															</tr> -->
+<!-- 															<tr> -->
+<!-- 																<td colspan="2" style="height: 40px"> -->
+<!-- 																	<span>사용률</span> -->
+<!-- 																	<span class="progress-number"><b>480</b>/800</span> -->
+<!-- 																	<div class="progress sm" style="height: 6px"> -->
+<!-- 																		<div class="progress-bar progress-bar-green" style="width: 80%"></div> -->
+<!-- 																	</div> -->
+<!-- 																</td> -->
+<!-- 															</tr> -->
+<!-- 															<tr> -->
+<!-- 																<td><span>commont :</span></td> -->
+<!-- 																<td><span>isolation</span></td> -->
+<!-- 															</tr> -->
+<!-- 														</table>														 -->
+<!-- 													</small> -->
+<!-- 												</div> -->
+<!-- 											</div> -->
+<!-- 										</div> -->
+<!-- 									</div> -->
+									<!-- /.segmentHolderbox -->
 								</div>
 							</div>
 						</div>						
@@ -132,24 +126,24 @@
 	<div class="row" id="detailDiv" style="display: none;">
 		<div class="col-lg-12">
 			<div class="box box-primary">
-				<div class="box-header" style="margin-bottom: -10px">
-					<h1 class="box-title-small">
+				<div class="pagebox-header with-border">
+					<h2 class="pagebox-title-small">
 						<LABEL><a href="javascript:void(0)"
 							onclick="contentLoad('/ipManagement/staticIPStatus');">default</a></LABEL>
 						<LABEL> > </LABEL> <LABEL id="selectSegment"></LABEL>
-						</h2>
+					</h2>
 				</div>
 				<div class="box-body">
 					<!-- Custom Tabs -->
 					<div class="nav-tabs-custom">
 						<ul class="nav nav-tabs" id="detailtapheader">
-							<li class="active"><a href="#tab_1" data-toggle="tab">List</a></li>
-							<li><a href="#tab_2" data-toggle="tab">Map</a></li>
+							<li class="active" name="ListTap"><a href="#tab_1_detail" data-toggle="tab">List</a></li>
+							<li name="MapTap"><a href="#tab_2_detail" data-toggle="tab">Map</a></li>
 						</ul>
 						<!-- tab-content -->
 						<div class="tab-content">
-							<!-- tab_1-pane -->
-							<div class="tab-pane active" id="tab_1">
+							<!-- tab_1_detail-pane -->
+							<div class="tab-pane active" id="tab_1_detail" name="ListTap">
 								<center>
 									<table id="datatable_detail" name="datatable" class="essential-table" style="width: 98%">
 										<thead>
@@ -171,15 +165,15 @@
 									</table>
 								</center>
 							</div>
-							<!-- /.tab_1-pane -->
-							<!-- tab_2-pane -->
-							<div class="tab-pane" id="tab_2">
+							<!-- /.tab_1_detail-pane -->
+							<!-- tab_2_detail-pane -->
+							<div class="tab-pane" id="tab_2_detail" name="MapTap">
 								<div class="row">
-									<section class="col-lg-6-noPadding" style="width: 650px">
+									<section class="col-lg-6-noPadding" style="width: 620px; margin-right: 30px">
 										<div id="holder">
 									        <ul id="place">
 									        </ul>
-										    <div id="divLoading" class="overlay" style="visibility: hidden;" >
+										    <div id="divLoading" class="overlay" style="visibility: hidden;">
 												<i class="fa fa-refresh fa-spin"></i>
 											</div>
 									    </div>
@@ -223,7 +217,7 @@
 							        </section>
 								</div>
 							</div>
-							<!-- /.tab_2-pane -->
+							<!-- /.tab_2_detail-pane -->
 						</div>
 						<!-- /.tab-content -->
 					</div>

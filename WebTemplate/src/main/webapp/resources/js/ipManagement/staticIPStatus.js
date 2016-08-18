@@ -3,7 +3,8 @@ $(document).ready(function() {
 	try
 	{
 		//console.log($('#datatable'));
-//		$("#layDiv").css("visibility","hidden");		
+//		$("#layDiv").css("visibility","hidden");
+		var html = "";
 		table = $('#datatable').DataTable(
 	            {
 	                "destroy" : true,
@@ -84,8 +85,95 @@ $(document).ready(function() {
 	
 		//datatable 첫번째 td 클릭 이벤트 바인딩
 		$('#datatable').delegate('tbody>tr>td:first-child', 'click', function() {
-		    tdClickEvent(this);
+		    //tdClickEvent(this);
+			var Arr = [$(this).parent().children().eq(0).html(), $(this).parent().children().eq(1).html(),
+                       $(this).parent().children().eq(2).html(), $(this).parent().children().eq(3).html()];
+			tdClickEvent(Arr);
 		});
+		
+		//Segment Map 데이터 조회
+	    $.ajax({
+	        url : 'ipManagement/staticIPStatus_Segment_MapData',
+	        type : "POST",
+	        success : function(data) {
+	            var jsonObj = eval("(" + data + ')');
+		            if (jsonObj.result == true) {		            	
+	            	$.each(jsonObj.data, function (index, obj) {
+	            		    var sobj = [obj.network, obj.ip_type, obj.start_ip, obj.end_ip];
+	            			var html = "";
+	            			html += "<div class=\"col-md-20-minwidth-200\" onclick=\"tdClickEvent('"+sobj+"');\">";
+	    			        html += '<div class="box box-primary essential-cursor-pointer">';
+	    			        html += '<div class="box-header with-border-lightgray">';
+	    			        html += '<h3 class="box-title"><small>'+ obj.network +'</small></h3>';
+	    			        html += '<div class="box-tools pull-right">';
+	    			        html += '<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>';
+	    			        html += '</div></div>';
+	    			        html += '<div class="box-body-blackLine" style="background: #f4f4f4;">';
+	    			        html += '<div class="progress-group"><small>';
+	    			        html += '<table style="width: 100%">';
+	    			        html += '<tr><td><span>'+ getLanguage("type") +' : </span></td><td><span>'+ obj.ip_type +'</span></td></tr>';
+	    			        html += '<tr><td><span>'+ getLanguage("start") +' : </span></td><td><span>'+ obj.start_ip +'</span></td></tr>';
+	    			        html += '<tr><td><span>'+ getLanguage("last") +' : </span></td><td><span>'+ obj.end_ip +'</span></td></tr>';
+	    			        html += '<tr><td colspan="2" style="height: 40px">';
+	    			        html += '<span>'+ getLanguage("utilization") +' </span>';
+	    			        if (obj.ip_type == "IPV4") {
+	    			        	html += '<span class="progress-number"><b>'+ obj.ip_usage +'%</b>('+ Format_comma(obj.used_ip) +'/'+ Format_comma(obj.ip_total) +')</span>';
+							}
+	    			        else {
+	    			        	html += '<span class="progress-number">'+ obj.ip_usage +'%</span>';
+							}
+	    			        html += '	<div class="progress sm" style="height: 6px">';
+	    			        html += '<div class="progress-bar progress-bar-green" style="width: '+ obj.ip_usage +'%"></div>';
+	    			        html += '</div></td></tr>';
+	    			        html += '<tr><td><span>'+ getLanguage("desctription") +' : </span></td><td><span>'+ obj.comment +'</span></td>';
+	    			        html += '</tr></table></small></div></div></div></div>';
+	    			        $('#segmentHolder').append(html);
+		            });
+	            }
+	        },
+	        complete: function(data) {
+//	        	console.log("jsonOb complete " + data);
+            	
+	        }
+	    });
+		//Segment Map 데이터 조회
+	    
+	    //Tap Click Event
+	    $("#tapheader a").click(function(e) {
+	    	if ($(this).tab().html() == "List") {
+	    		setCookie("IPStatusSelectTapType", "", -1);
+	    		setCookie("IPStatusSelectTapType", "List", 1);
+			}
+	    	else{
+	    		setCookie("IPStatusSelectTapType", "", -1);
+	    		setCookie("IPStatusSelectTapType", "Map", 1);
+	    	}
+	    });
+	    $("#detailtapheader a").click(function(e) {
+	    	if ($(this).tab().html() == "List") {
+	    		setCookie("IPStatusSelectTapType", "", -1);
+	    		setCookie("IPStatusSelectTapType", "List", 1);
+			}
+	    	else{
+	    		setCookie("IPStatusSelectTapType", "", -1);
+	    		setCookie("IPStatusSelectTapType", "Map", 1);
+	    	}
+	    });
+	    
+	    if (getCookie("IPStatusSelectTapType") == "Map") {
+	    	$('li[name=ListTap]').each(function() {
+    			$(this).removeClass("active");
+    		});
+    		$('li[name=MapTap]').each(function() {
+    			$(this).addClass("active");
+    		});
+    		$('div[name=ListTap]').each(function() {
+    			$(this).removeClass("active");
+    		});
+    		$('div[name=MapTap]').each(function() {
+    			$(this).addClass("active");
+    		});
+		}
 	} catch (e) {
 		console.log("staticIPStatus.js $(document).ready Error Log : " + e.message);
 	}
@@ -117,36 +205,68 @@ var selectedRow;
 function tdClickEvent(obj){
 	try
 	{
-		//systemAlertNotify("divAlertArea", "alert-danger", getLanguage("warning"), $(obj).html());
-		//alert($(obj).html().trim());
 		if (obj != "") {
+			if (typeof obj === "string") {
+				//segment Map 클릭 시 Array를 Stirng으로 넘겨주기 때문에 다시 Array로 변환해준다.
+				obj = obj.split(",");
+			}			
 			selectedRow = obj;
-	//		
-	//		var arrIp = $(obj).html().trim().split( "/" );
-	//		if (checkIPv4(arrIp[0])){
-	//			arrIps = arrIp[0].split( "." );
-	//			var ipCClass = String.format("{0}.{1}.{2}.0 ~ {0}.{1}.{2}.255", arrIps[0], arrIps[1], arrIps[2]);
-	//			$("#segmentLabel").text(ipCClass);
-	//		}
-	//		alert("Parent1 : " + $(obj).parent().children().eq(2).html());
-	
 			
-			var ipCClass = String.format("{0} ~ {1}", $(obj).parent().children().eq(2).html(), $(obj).parent().children().eq(3).html());
+			var ipCClass = String.format("{0} ~ {1}", obj[2], obj[3]);
 			$("#segmentLabel").text(ipCClass);
-			var network = $(obj).parent().children().eq(0).html();
+			var network = obj[0];
 
 			//탭 숨기기
-			if ($(obj).parent().children().eq(1).html() == "IPV6") {
-				console.log($(obj).parent().children().eq(1).html());
+			if (obj[1] == "IPV6") {
+				//console.log($(obj).parent().children().eq(1).html());
 				$("#detailtapheader").css("visibility","collapse");
+				$("#detailtapheader").css("margin-top","-45px");
+
+				$('div[name=ListTap]').each(function() {
+					$(this).addClass("active");
+				});
+				$('div[name=MapTap]').each(function() {
+					$(this).removeClass("active");
+				});
 			}
 			else{
 				$("#detailtapheader").css("visibility","visible");
+				$("#detailtapheader").css("margin-top","0px");
+				
+				if (getCookie("IPStatusSelectTapType") == "Map") {
+					$('li[name=ListTap]').each(function() {
+						$(this).removeClass("active");
+					});
+					$('li[name=MapTap]').each(function() {
+						$(this).addClass("active");
+					});
+					$('div[name=ListTap]').each(function() {
+						$(this).removeClass("active");
+					});
+					$('div[name=MapTap]').each(function() {
+						$(this).addClass("active");
+					});
+				}
+				else {
+					$('li[name=ListTap]').each(function() {
+						$(this).addClass("active");
+					});
+					$('li[name=MapTap]').each(function() {
+						$(this).removeClass("active");
+					});
+					$('div[name=ListTap]').each(function() {
+						$(this).addClass("active");
+					});
+					$('div[name=MapTap]').each(function() {
+						$(this).removeClass("active");
+					});
+				}
 			} 
 			
 			$("#defaultDiv").css("display","none");
 			$("#detailDiv").css("display","block");
 			$("#selectSegment").text(network);
+		    
 			//console.log("ipCClass : " + ipCClass);
 			//console.log("network : " + network);
 			
@@ -258,7 +378,7 @@ function mapDataCall(network){
 	    $('#divLoading').attr("style","visibility: visible");
 	    
 	    $.ajax({
-	        url : 'ipManagement/staticIPStatus_Segment_MapData',
+	        url : 'ipManagement/staticIPStatus_Segment_Detail_MapData',
 	        type : "POST",
 	        data : JSON.stringify(jObj),
 	        dataType : "text",
@@ -457,9 +577,9 @@ function fnIPMapDraw(startipNumber, DHCP_RangeArr, BROADCAST_Arr, NETWORK_Arr, U
 		                	var BROADCAST_dClassIP = dClassIPHelper(BROADCAST_Arr[index].ipaddr);
 		
 		                	if (ipNo == parseInt(BROADCAST_dClassIP,10)) {
-		                		console.log("1 : " + ipMapSettings.dhcpRangeCss);
-		                		console.log("2 : " + className);
-		                		console.log("3 : " + className.indexOf(ipMapSettings.dhcpRangeCss) > 0);
+//		                		console.log("1 : " + ipMapSettings.dhcpRangeCss);
+//		                		console.log("2 : " + className);
+//		                		console.log("3 : " + className.indexOf(ipMapSettings.dhcpRangeCss) > 0);
 		                		if (className.indexOf(ipMapSettings.dhcpRangeCss) > 0) {
 	                    			className += ' ' + ipMapSettings.dhcp_broadcastCss;
 								}
@@ -475,6 +595,7 @@ function fnIPMapDraw(startipNumber, DHCP_RangeArr, BROADCAST_Arr, NETWORK_Arr, U
 		                		hostos = BROADCAST_Arr[index].fingerprint;
 		                		desc = BROADCAST_Arr[index].user_description;
 		                		BROADCAST_Arr.splice(index, 1);
+		                		fontcolor = "color:white;";
 		                		break;
 		            		}
 						}
@@ -648,6 +769,7 @@ function fnIPMapDraw(startipNumber, DHCP_RangeArr, BROADCAST_Arr, NETWORK_Arr, U
 		                		hostos = USED_Arr[index].fingerprint;
 		                		desc = USED_Arr[index].user_description;
 		    	                USED_Arr.splice(index, 1);
+		    	                fontcolor = "color:white;";
 		    	                break;
 		    	            }
 						}
@@ -746,7 +868,7 @@ function fnIPMapDraw(startipNumber, DHCP_RangeArr, BROADCAST_Arr, NETWORK_Arr, U
 rectangleClick = function (obj) {
 	try
 	{
-		console.log("map click : " + $(obj).attr('class'));
+//		console.log("map click : " + $(obj).attr('class'));
 			
 	    //unusedCss
 	    if ($(obj).hasClass(ipMapSettings.unusedCss)) {

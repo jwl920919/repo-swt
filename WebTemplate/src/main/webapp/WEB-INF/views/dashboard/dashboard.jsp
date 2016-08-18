@@ -300,6 +300,15 @@
 <!-- 									<button type="button" class="btn btn-default btn-xs active" data-toggle="on">On</button> -->
 <!-- 									<button type="button" class="btn btn-default btn-xs" data-toggle="off">Off</button> -->
 <!-- 								</div> -->
+								<div class="btn-group" id="realtime" data-toggle="btn-toggle">
+								<button id="btnon" type="button" class="btn dashboard-box-btn btn-xs active" onclick="fnPlay('on')" data-toggle="on" data-toggle="tooltip" title="Play">
+									<i class="fa fa-play"></i>
+								</button>
+								<button id="btnoff" type="button" class="btn dashboard-box-btn btn-xs" onclick="fnPlay('off')" data-toggle="off" data-toggle="tooltip" title="Pause" style="margin-left: 5px">
+									<i class="fa fa-pause"></i>
+								</button>
+								</div>
+								
 								<button type="button" class="btn dashboard-box-btn bg-teal btn-sm"
 									data-widget="collapse">
 									<i class="fa fa-minus"></i>
