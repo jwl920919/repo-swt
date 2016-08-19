@@ -3,7 +3,7 @@
 #====================================
 ipm:
   name: Smart IPM
-  version: 0.1.1
+  version: 1.0.1
   license: TEST000000
   security:
     user: admin

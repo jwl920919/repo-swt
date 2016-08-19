@@ -11,8 +11,6 @@ public class SyslogHandlerEx {
 	//region [public] processSyslog
 	public DhcpMessage processSyslog(SyslogEntity syslog)
 	{
-		DhcpMessage result = null;
-		
 		// DHCP Message
 		Pattern dhcpPattern = Pattern.compile("dhcpd\\[\\d+\\]: (DHCP[A-Z]+) ");
 		
@@ -64,7 +62,7 @@ public class SyslogHandlerEx {
         // from 00:26:66:d1:69:69 via eth1 : network 192.168.1.0 / 24: no free leases
         // from 00:19:99:e4:ea:7f (ClickShare-ShinwooTNS-C1) via eth1 uid 01:00:19:99:e4:ea:7f
 		
-		Matcher match = RegexPatterns.PATTERN_DHCPDISCOVER.matcher(syslog.getData().substring(startPos));
+		Matcher match = RegexPatterns.DHCP_DISCOVER.matcher(syslog.getData().substring(startPos));
 		
 		if (match.find()) {
 			
@@ -83,8 +81,10 @@ public class SyslogHandlerEx {
 				dhcp.setDhcpType(dhcpType);
 				dhcp.setIpType("IPV4");
 				
+				// Mac
 				dhcp.setMac(match.group(1).replace("(", "").replace(")", ""));
 				
+				// HostName
 				if (match.group(2) != null)
 					dhcp.setHostname(match.group(2).replace("(", "").replace(")", "").trim());
 				
@@ -104,7 +104,7 @@ public class SyslogHandlerEx {
         // DHCPOFFER on 192.168.1.12 to 00:19:99:e4:ea:7f (ClickShare-ShinwooTNS-C1) via eth1 relay eth1 lease-duration 10 uid 01:00:19:99:e4:ea:7f
         // DHCPOFFER on 192.168.1.13 to d0:7e:35:7e:93:1b (LDK-PC) via eth1 relay eth1 lease-duration 120 offered-duration 10 uid 01:d0:7e:35:7e:93:1b
 		
-		Matcher match = RegexPatterns.PATTERN_DHCPOFFER.matcher(syslog.getData().substring(startPos));
+		Matcher match = RegexPatterns.DHCP_OFFER.matcher(syslog.getData().substring(startPos));
 		
 		if (match.find()) {
 			
@@ -158,7 +158,7 @@ public class SyslogHandlerEx {
         // DHCPREQUEST for 192.168.1.192 from 18:f6:43:24:06:4d via eth1 : unknown lease 192.168.1.192.
         // DHCPREQUEST for 192.168.1.101 from 98:83:89:14:4f:9e via eth1
 		
-		Matcher match = RegexPatterns.PATTERN_DHCPREQUEST.matcher(syslog.getData().substring(startPos));
+		Matcher match = RegexPatterns.DHCP_REQUEST.matcher(syslog.getData().substring(startPos));
 		
 		if (match.find()) {
 			
@@ -212,7 +212,7 @@ public class SyslogHandlerEx {
 		// to 192.168.1.115 (28:e3:47:4c:45:14) via eth1
         
         // #1. on [IP] ~ to [MAC] ~     // Inform-Ack
-		Matcher match = RegexPatterns.PATTERN_DHCPACK1.matcher(syslog.getData().substring(startPos));
+		Matcher match = RegexPatterns.DHCP_ACK1.matcher(syslog.getData().substring(startPos));
 		
 		if (match.find()) {
 			
@@ -262,7 +262,7 @@ public class SyslogHandlerEx {
 		else {
 			
 			// #2. to [IP] ~                // Request-Ack
-			match = RegexPatterns.PATTERN_DHCPACK2.matcher(syslog.getData().substring(startPos));
+			match = RegexPatterns.DHCP_ACK2.matcher(syslog.getData().substring(startPos));
 			
 			if (match.find()) {
 				
@@ -302,7 +302,7 @@ public class SyslogHandlerEx {
 		// [DHCPNAK]
         // on 192.168.1.103 to d0:7e:35:7e:93:1b via eth1
 		
-		Matcher match = RegexPatterns.PATTERN_DHCPNACK.matcher(syslog.getData().substring(startPos));
+		Matcher match = RegexPatterns.DHCP_NACK.matcher(syslog.getData().substring(startPos));
 		
 		if (match.find()) {
 			
@@ -353,7 +353,7 @@ public class SyslogHandlerEx {
 		// [DHCPINFORM]
         // from 192.168.1.115 via eth1
 		
-		Matcher match = RegexPatterns.PATTERN_DHCPINFORM.matcher(syslog.getData().substring(startPos));
+		Matcher match = RegexPatterns.DHCP_INFORM.matcher(syslog.getData().substring(startPos));
 		
 		if (match.find()) {
 			
@@ -389,7 +389,7 @@ public class SyslogHandlerEx {
 		// [DHCPEXPIRE]
         // on 192.168.1.19 to 30:52:cb:0c:f8:17
 		
-		Matcher match = RegexPatterns.PATTERN_DHCPEXPIRE.matcher(syslog.getData().substring(startPos));
+		Matcher match = RegexPatterns.DHCP_EXPIRE.matcher(syslog.getData().substring(startPos));
 		
 		if (match.find()) {
 			
@@ -434,7 +434,7 @@ public class SyslogHandlerEx {
 		// [DHCPRELEASE]
         // of 192.168.1.101 from 98:83:89:14:4f:9e (JS) via eth1 (found)uid 01:98:83:89:14:4f:9e
 		
-		Matcher match = RegexPatterns.PATTERN_DHCPRELEASE.matcher(syslog.getData().substring(startPos));
+		Matcher match = RegexPatterns.DHCP_RELEASE.matcher(syslog.getData().substring(startPos));
 		
 		if (match.find()) {
 			

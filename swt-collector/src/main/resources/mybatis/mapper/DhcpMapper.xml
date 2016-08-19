@@ -206,5 +206,34 @@
 				, #{client_ip_type}, #{client_ip}, #{client_ip_num}, #{client_mac}, #{client_duid}, #{client_hostname}, #{collect_time} ) 
 		]]>
 	</insert>
+	
+	<!-- ############################ Nmap Scan IP ############################ -->
+    <select id="selectNmapScanIP" resultType="com.shinwootns.data.entity.NmapScanIP">
+    	<![CDATA[
+			SELECT ip.site_id, ip.network, ip.ipaddr, ip.ip_num, ip.ip_type, ip.nmap_macaddr, ip.nmap_vendor, ip.nmap_os   
+			FROM dhcp_network nw
+			LEFT OUTER JOIN insight_network_mapping map ON nw.network = map.network
+			LEFT OUTER JOIN device_insight ins ON map.insight_device_id = ins.device_id
+			, dhcp_ip_status ip
+			WHERE 1=1
+			AND nw.network = ip.network
+			AND nw.start_num <= ip.ip_num AND ip.ip_num <= nw.end_num
+			AND ip.obj_types NOT LIKE '%NETWORK%'
+			AND ip.obj_types NOT LIKE '%BROADCAST%'
+		]]>
+		<if test="site_id != null">
+		AND nw.site_id = #{site_id}
+		</if>
+		<if test="insight_host != null">
+		AND ins.host = #{insight_host}
+		</if>
+	</select>
     
+    <update id="updateNmapScanIP" parameterType="com.shinwootns.data.entity.NmapScanIP">
+		<![CDATA[
+			UPDATE dhcp_ip_status
+			SET nmap_macaddr=#{nmap_macaddr}, nmap_vendor=#{nmap_vendor}, nmap_os=#{nmap_os}, nmap_update=now()
+			WHERE site_id=#{site_id} AND ipaddr=#{ipaddr}
+		]]>
+	</update>
 </mapper>

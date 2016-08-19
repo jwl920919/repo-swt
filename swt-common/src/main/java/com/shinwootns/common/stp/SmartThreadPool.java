@@ -115,7 +115,7 @@ public class SmartThreadPool {
 				return true;
 				
 			} catch (Exception ex) {
-				_logger.error(ex.getMessage(), ex);
+				//_logger.error(ex.getMessage(), ex);
 			}
 		}
 		return false;
