@@ -31,7 +31,8 @@ public class HelpController {
 		List<HelpContent> contents = new LinkedList<HelpContent>(); 
 		contents.add(new HelpContent("HELP", "/api/help", "R", "", "Help ducumentation"));
 		contents.add(new HelpContent("", "", "", "", ""));
-		contents.add(new HelpContent("API", "/api/auth", "R", "userid, password, [macaddr]", "User Authentification"));
+		contents.add(new HelpContent("API", "/api/exec_cmd", "R", "command", "Execute Command"));
+		contents.add(new HelpContent("API", "/api/check_auth", "R", "userid, password, [macaddr]", "Check User Authentification"));
 		contents.add(new HelpContent("", "", "", "", ""));
 		contents.add(new HelpContent("DASHBOARD", "/api/status/dashboard/network_ip", "R", "", "Network IP Status"));
 		contents.add(new HelpContent("DASHBOARD", "/api/status/dashboard/network_ip/{SiteID}", "R", "", "Network IP Status (Site)"));
@@ -42,7 +43,7 @@ public class HelpController {
 		contents.add(new HelpContent("DASHBOARD", "/api/status/dashboard/lease_ipv6", "R", "", "Lease IPv6 Status"));
 		contents.add(new HelpContent("DASHBOARD", "/api/status/dashboard/lease_ipv6{SiteID}", "R", "", "Lease IPv6 Status (Site)"));
 		contents.add(new HelpContent("", "", "", "", ""));
-		contents.add(new HelpContent("STATUS", "/api/status/dhcp/device_stauts/{SiteID}", "R", "", "DHCP device status (Site)"));
+		contents.add(new HelpContent("STATUS", "/api/status/dhcp/device_status/{SiteID}", "R", "", "DHCP device status (Site)"));
 		contents.add(new HelpContent("STATUS", "/api/status/dhcp/dhcp_counter/{SiteID}", "R", "", "DHCP Counter (Site)"));
 		contents.add(new HelpContent("STATUS", "/api/status/dhcp/dns_counter/{SiteID}", "R", "", "DNS Counter (Site)"));
 		
