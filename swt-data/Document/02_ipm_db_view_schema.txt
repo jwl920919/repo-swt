@@ -33,7 +33,8 @@ CREATE OR REPLACE VIEW public.view_ip_status AS
     ip.lease_end_time,
     ip.host_name,
     ip.fingerprint,
-    ip.update_time
+    ip.update_time,
+    ip.nmap_macaddr, ip.nmap_vendor, ip.nmap_os
    FROM dhcp_ip_status ip
      LEFT JOIN dhcp_range range ON range.start_num <= ip.ip_num AND ip.ip_num <= range.end_num AND disable = false
   ORDER BY ip.ip_num;

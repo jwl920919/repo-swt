@@ -129,11 +129,11 @@ public class RegexPatterns {
 	// OS details: Microsoft Windows 7, Windows Server 2012, or Windows 8.1 Update 1 
 	// ...
 	
-	// [1] MAC, [2] Vendor(OUI), [3] OS
+	// [1] MAC, [2] Vendor(OUI), [3], [4] OS
 	public final static Pattern NMAP_FINGERPRINT = Pattern.compile(
 			(new StringBuilder())
 			.append(".*?MAC Address\\: (.*?)(\\(.*?\\))?\\r.*?")
-			.append(".*?OS details\\: (.*?)\\r.*?")		// .append(".*?Running\\: (.*?)\\r.*?")
+			.append("(.*?OS details\\: (.*?)\\r.*?)?")		// .append(".*?Running\\: (.*?)\\r.*?")
 			.toString()
 			, Pattern.DOTALL
 	);

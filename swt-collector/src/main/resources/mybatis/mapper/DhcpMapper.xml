@@ -210,16 +210,18 @@
 	<!-- ############################ Nmap Scan IP ############################ -->
     <select id="selectNmapScanIP" resultType="com.shinwootns.data.entity.NmapScanIP">
     	<![CDATA[
-			SELECT ip.site_id, ip.network, ip.ipaddr, ip.ip_num, ip.ip_type, ip.nmap_macaddr, ip.nmap_vendor, ip.nmap_os   
+			SELECT ip.site_id, ip.network, ip.ipaddr, ip.ip_num, ip.ip_type, ip.nmap_macaddr, ip.nmap_vendor, ip.nmap_os 
 			FROM dhcp_network nw
 			LEFT OUTER JOIN insight_network_mapping map ON nw.network = map.network
 			LEFT OUTER JOIN device_insight ins ON map.insight_device_id = ins.device_id
-			, dhcp_ip_status ip
+			, view_ip_status ip
 			WHERE 1=1
 			AND nw.network = ip.network
 			AND nw.start_num <= ip.ip_num AND ip.ip_num <= nw.end_num
-			AND ip.obj_types NOT LIKE '%NETWORK%'
-			AND ip.obj_types NOT LIKE '%BROADCAST%'
+			AND COALESCE(ip.ip_status, '') != ''
+			AND ip.ip_status NOT LIKE '%NETWORK%'
+			AND ip.ip_status NOT LIKE '%BROADCAST%'
+			AND COALESCE(fingerprint, '') = ''
 		]]>
 		<if test="site_id != null">
 		AND nw.site_id = #{site_id}

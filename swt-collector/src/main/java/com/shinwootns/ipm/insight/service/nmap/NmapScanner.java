@@ -69,7 +69,7 @@ public class NmapScanner implements Runnable {
 					}
 					
 					// OS
-					newip.setNmapOs( match.group(3) );
+					newip.setNmapOs( match.group(4) );
 					
 					// Update to DB
 					UpdateToDB(newip);

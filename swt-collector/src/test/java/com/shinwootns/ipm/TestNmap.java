@@ -27,8 +27,8 @@ public class TestNmap {
 		
 		System.out.println("START !!!");
 
-		int start = 1;
-		int end = 255;
+		int start = 209;
+		int end = 209;
 		
 		int index = start;
 		while(true) {
@@ -87,8 +87,8 @@ public class TestNmap {
 					
 					if (match.groupCount() > 0) {
 						
-						//for(int t=0; t<=match.groupCount(); t++)
-						//	System.out.println(String.format("[%d] %s", t, match.group(t)));
+						for(int t=0; t<=match.groupCount(); t++)
+							System.out.println(String.format("[%d] %s", t, match.group(t)));
 						
 						// MAC
 						mac = match.group(1);
@@ -99,7 +99,7 @@ public class TestNmap {
 							vendor = vendor.replace("(", "").replace(")", "").trim();
 						
 						// OS
-						os = match.group(3);
+						os = match.group(4);
 					}
 				}
 			}
@@ -108,5 +108,5 @@ public class TestNmap {
 		}
 	}
 }
-
 */
+
