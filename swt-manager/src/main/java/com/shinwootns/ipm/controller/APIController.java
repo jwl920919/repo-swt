@@ -14,11 +14,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.shinwootns.common.auth.AuthCheckerLDAP;
 import com.shinwootns.common.auth.LdapUserGroupAttr;
@@ -30,11 +32,15 @@ import com.shinwootns.data.entity.AuthSetup;
 import com.shinwootns.data.entity.AuthSetupEsb;
 import com.shinwootns.data.entity.AuthSetupLdap;
 import com.shinwootns.data.entity.AuthSetupRadius;
+import com.shinwootns.data.key.RedisKeys;
 import com.shinwootns.ipm.WorkerManager;
 import com.shinwootns.ipm.data.SharedData;
 import com.shinwootns.ipm.data.mapper.AuthMapper;
 import com.shinwootns.ipm.data.mapper.DataMapper;
 import com.shinwootns.ipm.service.auth.AuthCheckHandler;
+import com.shinwootns.ipm.service.redis.RedisManager;
+
+import redis.clients.jedis.Jedis;
 
 
 @RestController
@@ -44,7 +50,7 @@ public class APIController {
 	
 	//region /api/cmd
 	@RequestMapping(value="/api/cmd", method=RequestMethod.GET)
-	public String exec_command(@RequestParam(value="command") String command) {
+	public String ApiExecuteCommand(@RequestParam(value="command") String command) {
 		
 		JsonObject json = new JsonObject();
 		
@@ -72,7 +78,7 @@ public class APIController {
 	
 	//region /api/auth
 	@RequestMapping(value="/api/auth", method=RequestMethod.GET)
-	public String checkAuth(
+	public String ApiCheckAuthentication(
 			@RequestParam(value="userid") String userid, 
 			@RequestParam(value="password") String password,
 			@RequestParam(value="macaddr", defaultValue="") String macaddr) 
@@ -100,34 +106,84 @@ public class APIController {
 	}
 	//endregion
 	
-	/*
-	@RequestMapping(value="/api/device/dhcp", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
-	public List<DeviceDhcp> getDeviceDhcp(
-			@RequestParam(value="device_type", defaultValue="") String device_type ) 
+	//region /api/status/dhcp/device_status/
+	@RequestMapping(value="/api/status/dhcp/device_status/{site_id}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+	public String ApiDhcpDeviceStatus(
+			@PathVariable(value="site_id") Integer site_id ) 
 	{
+		Jedis redis = RedisManager.getInstance().getRedisClient();
+		if(redis != null)
+		try
+		{
+			String result = redis.get((new StringBuilder())
+					.append(RedisKeys.KEY_STATUS_DEVICE)
+					.append(":").append(site_id).toString()
+			);
+			
+			if (result != null && result.length() > 0)
+				return result;
+			
+		} catch (Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+		} finally {
+			redis.close();
+		}
 		
-		List<DeviceDhcp> listDhcp = deviceMapper.selectDeviceDhcp();
-		
-		return listDhcp;
-	}*/
-
-	/*
-	@RequestMapping(value="/api/device/{device_id}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
-	public DeviceEntity getDevice(
-			@PathVariable(value="device_id") int deviceId ) {
-		
-		DeviceEntity device = deviceMapper.selectDeviceById(deviceId);
-		
-		return device;
+		return (new JsonArray()).toString();
 	}
-	*/
+	//endregion
 	
-	/*
-	@RequestMapping("/api/device")
-	public List<DeviceInfo> device() {
+	//region /api/status/dhcp/dhcp_counter/
+	@RequestMapping(value="/api/status/dhcp/dhcp_counter/{site_id}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+	public String ApiDhcpCounter(
+			@PathVariable(value="site_id") Integer site_id ) 
+	{
+		Jedis redis = RedisManager.getInstance().getRedisClient();
+		if(redis != null)
+		try
+		{
+			String result = redis.get((new StringBuilder())
+					.append(RedisKeys.KEY_STATUS_DHCP_COUNTER)
+					.append(":").append(site_id).toString()
+			);
+			
+			if (result != null && result.length() > 0)
+				return result;
+			
+		} catch (Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+		} finally {
+			redis.close();
+		}
 		
-		List<DeviceInfo> listDevice = deviceMapper.selectDevice();
+		return (new JsonObject()).toString();
+	}
+	//endregion
+	
+	//region /api/status/dhcp/dns_counter/
+	@RequestMapping(value="/api/status/dhcp/dns_counter/{site_id}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+	public String ApiDnsCounter(
+			@PathVariable(value="site_id") Integer site_id ) 
+	{
+		Jedis redis = RedisManager.getInstance().getRedisClient();
+		if(redis != null)
+		try
+		{
+			String result = redis.get((new StringBuilder())
+					.append(RedisKeys.KEY_STATUS_DNS_COUNTER)
+					.append(":").append(site_id).toString()
+			);
+			
+			if (result != null && result.length() > 0)
+				return result;
+			
+		} catch (Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+		} finally {
+			redis.close();
+		}
 		
-		return listDevice;
-	}*/
+		return (new JsonObject()).toString();
+	}
+	//endregion
 }
