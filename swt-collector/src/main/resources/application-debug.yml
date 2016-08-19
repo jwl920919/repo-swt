@@ -23,7 +23,7 @@ insight:
     host: shinwootnskr.iptime.org
     port: 5672
     username: admin
-    password: 7+AzHIrmzGDARTT1VaQa3Q==s
+    password: 7+AzHIrmzGDARTT1VaQa3Q==
     virtual-host: /
   
   # debug mode

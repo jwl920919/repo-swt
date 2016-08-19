@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URLDecoder;
 import java.util.List;
 
+import javax.crypto.IllegalBlockSizeException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -87,6 +88,9 @@ public class APIController {
 			
 			AuthCheckHandler handler = new AuthCheckHandler();
 			handler.checkLogin(param, result);
+		}
+		catch(IllegalBlockSizeException ex) {
+			_logger.error(ex.getMessage());
 		}
 		catch(Exception ex) {
 			_logger.error(ex.getMessage(), ex);

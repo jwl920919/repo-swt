@@ -1,5 +1,7 @@
 package com.shinwootns.ipm.insight.controller;
 
+import javax.crypto.IllegalBlockSizeException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -113,6 +115,9 @@ public class APIController {
 			
 			AuthCheckHandler handler = new AuthCheckHandler();
 			handler.checkLogin(param, result);
+		}
+		catch(IllegalBlockSizeException ex) {
+			_logger.error(ex.getMessage());
 		}
 		catch(Exception ex) {
 			_logger.error(ex.getMessage(), ex);

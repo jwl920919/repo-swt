@@ -199,9 +199,11 @@
 	<insert id="insertDhcpLog" parameterType="com.shinwootns.data.entity.DhcpLog">
 		<![CDATA[
 			INSERT INTO dhcp_log 
-				(site_id, device_id, dhcp_ip, dhcp_type, ip_type, client_ip, client_mac, client_duid, collect_time)
+				(site_id, device_id, dhcp_ip, dhcp_type, is_renew, is_guest_range, duration
+				, client_ip_type, client_ip, client_ip_num, client_mac, client_duid, client_hostname, collect_time)
 			VALUES 
-			(#{site_id}, #{device_id}, #{dhcp_ip}, #{dhcp_type}, #{ip_type}, #{client_ip}, #{client_mac}, #{client_duid}, #{collect_time} ) 
+				( #{site_id}, #{device_id}, #{dhcp_ip}, #{dhcp_type}, #{is_renew}, #{is_guest_range}, #{duration}
+				, #{client_ip_type}, #{client_ip}, #{client_ip_num}, #{client_mac}, #{client_duid}, #{client_hostname}, #{collect_time} ) 
 		]]>
 	</insert>
     

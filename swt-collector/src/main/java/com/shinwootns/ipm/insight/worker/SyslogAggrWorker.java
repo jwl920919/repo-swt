@@ -1,8 +1,9 @@
 package com.shinwootns.ipm.insight.worker;
 
+/*
+
 import java.net.UnknownHostException;
 import java.sql.Timestamp;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -32,17 +33,17 @@ import com.shinwootns.ipm.insight.data.mapper.DhcpMapper;
 import com.shinwootns.ipm.insight.service.amqp.RabbitMQHandler;
 import com.shinwootns.ipm.insight.service.redis.RedisManager;
 import com.shinwootns.ipm.insight.service.syslog.DhcpMessage;
-import com.shinwootns.ipm.insight.service.syslog.SyslogHandler;
+import com.shinwootns.ipm.insight.service.syslog.SyslogHandlerEx;
 
 import redis.clients.jedis.Jedis;
 
-public class SyslogPublisher implements Runnable {
+public class SyslogAggrWorker implements Runnable {
 
 	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
 	private Jedis _redis = null;
 	
-	private SyslogHandler syslogHandler = new SyslogHandler();
+	private SyslogHandlerEx syslogHandler = new SyslogHandlerEx();
 	
 	//region [public] run
 	@Override
@@ -143,75 +144,70 @@ public class SyslogPublisher implements Runnable {
 		// Get Device ID
 		Integer deviceId = SharedData.getInstance().getDeviceIDByIP( syslog.getHost() );
 		
+		boolean isInsertDhcpLog = false;
+		
 		// DHCP Message Parsing
-		DhcpMessage dhcpMsg = syslogHandler.processSyslog(syslog.getData());
+		DhcpMessage dhcpMsg = syslogHandler.processSyslog(syslog);
 		
 		if (dhcpMsg != null) {
 			
-			// Send Dhcp MQ
-			_sendDhcpLogMQ(deviceId, syslog, dhcpMsg);
+			try {
 			
-			// DHCPACK
-			if (dhcpMsg.getDhcpType().equals("DHCPACK")) {
+				IPAddr ipAddr = new IPAddr(dhcpMsg.getIp());
 				
-				try {
-					IPAddr ipAddr = new IPAddr(dhcpMsg.getIp());
-					
-					if ( SharedData.getInstance().isGuestRange(ipAddr.getNumberToBigInteger()) ) {
-						// Guest Range
-						// ...
-					}
-					else {
-						//
-					}
-					
-				} catch (UnknownHostException e) {
-					_logger.error(e.getMessage(), e);
-				}
+				Boolean isGuestRange = SharedData.getInstance().isGuestRange(ipAddr.getNumberToBigInteger()); 
+				
+				// Save DHCP log
+				isInsertDhcpLog = _saveDhcpLog(deviceId, syslog, dhcpMsg, ipAddr, isGuestRange);
+				
+				// DHCPACK
+				//if (dhcpMsg.getDhcpType().equals("DHCPACK")) {
+					// ...
+				//}
+				
+			} catch (UnknownHostException e) {
+				_logger.error(e.getMessage(), e);
 			}
+		}
+		
 
-			//System.out.println(syslog.toString());
-			//System.out.println(dhcpMsg.toString());
-		}
-		else
-		{
-			// Send Event MQ
+		// Send to Event MQ
+		//if (isInsertDhcpLog == false)
 			_sendEventLogMQ(deviceId, syslog);
-		}
 	}
 	//endregion
 	
-	/*
-	private void increaseSyslogCounter(long recvTime) {
-		Timestamp time = new Timestamp(recvTime);
-		@SuppressWarnings("deprecation")
-		int time10Sec = time.getSeconds() / 10;
-		
-		// Increase Syslog Counter
-		StringBuilder syslogKey = new StringBuilder();
-		syslogKey.append(RedisKeys.KEY_COUNTER_SYSLOG)
-			.append(":").append(SharedData.getInstance().getSiteID())
-			.append(":").append(time10Sec);
-		
-		if (this._redis != null)
-			this._redis.incr(syslogKey.toString());
-	}
 	
-	private void increaseDhcpCounter(long recvTime, String dhcp_type) {
-		Timestamp time = new Timestamp(recvTime);
-		@SuppressWarnings("deprecation")
-		int time10Sec = time.getSeconds() / 10;
-		
-		// Increase DHCP MSG Counter
-		StringBuilder dhcpKey = new StringBuilder();
-		dhcpKey.append(RedisKeys.KEY_COUNTER_DHCP)
-			.append(":").append(SharedData.getInstance().getSiteID())
-			.append(":").append(time10Sec);
-		
-		if (this._redis != null)
-			this._redis.zincrby(dhcpKey.toString(), 1, dhcp_type);
-	}
-	*/
+//	private void increaseSyslogCounter(long recvTime) {
+//		Timestamp time = new Timestamp(recvTime);
+//		@SuppressWarnings("deprecation")
+//		int time10Sec = time.getSeconds() / 10;
+//		
+//		// Increase Syslog Counter
+//		StringBuilder syslogKey = new StringBuilder();
+//		syslogKey.append(RedisKeys.KEY_COUNTER_SYSLOG)
+//			.append(":").append(SharedData.getInstance().getSiteID())
+//			.append(":").append(time10Sec);
+//		
+//		if (this._redis != null)
+//			this._redis.incr(syslogKey.toString());
+//	}
+//	
+//	private void increaseDhcpCounter(long recvTime, String dhcp_type) {
+//		Timestamp time = new Timestamp(recvTime);
+//		@SuppressWarnings("deprecation")
+//		int time10Sec = time.getSeconds() / 10;
+//		
+//		// Increase DHCP MSG Counter
+//		StringBuilder dhcpKey = new StringBuilder();
+//		dhcpKey.append(RedisKeys.KEY_COUNTER_DHCP)
+//			.append(":").append(SharedData.getInstance().getSiteID())
+//			.append(":").append(time10Sec);
+//		
+//		if (this._redis != null)
+//			this._redis.zincrby(dhcpKey.toString(), 1, dhcp_type);
+//	}
+	
 	
 	//region [private] Send EventLog
 	private void _sendEventLogMQ(Integer deviceId, SyslogEntity syslog) {
@@ -231,30 +227,44 @@ public class SyslogPublisher implements Runnable {
 	}
 	//endregion
 	
-	//region [private] Send DhcpLog
-	private void _sendDhcpLogMQ(Integer deviceId, SyslogEntity syslog, DhcpMessage dhcp) {
+	//region [private] Save DHCP Log
+	private boolean _saveDhcpLog(Integer deviceId, SyslogEntity syslog, DhcpMessage dhcp, IPAddr ipAddr, Boolean isGuestRange) {
 
 		DhcpMapper dhcpMapper = SpringBeanProvider.getInstance().getDhcpMapper();
 		if (dhcpMapper == null)
-			return;
-		
-		// DhcpLog
+			return false;
+
 		DhcpLog dhcpLog = new DhcpLog();
-		dhcpLog.setSiteId(SharedData.getInstance().getSiteID());
-		dhcpLog.setDhcpIp(syslog.getHost());
-		dhcpLog.setDeviceId(deviceId);
-		dhcpLog.setDhcpType(dhcp.getDhcpType());
-		dhcpLog.setIpType(dhcp.getIpType());
-		dhcpLog.setClientIp(dhcp.getIp());
-		dhcpLog.setClientMac(dhcp.getMac());
-		dhcpLog.setCollectTime(new Timestamp(syslog.getRecvTime()));
-		dhcpLog.setClientDuid(dhcp.getDuid());
 		
-		// Send to RabbitMQ
-		//RabbitMQHandler.getInstance().SendDataToMQ(QueueNames.DHCP_QUEUE_NAME,  JsonUtils.serialize(dhcpLog).getBytes() );
+		try
+		{
+			// DhcpLog
+			dhcpLog.setSiteId(SharedData.getInstance().getSiteID());
+			dhcpLog.setDhcpIp(syslog.getHost());
+			dhcpLog.setDeviceId(deviceId);
+			dhcpLog.setDhcpType(dhcp.getDhcpType());
+			dhcpLog.setIsRenew(dhcp.getRenew());
+			dhcpLog.setDuration(dhcp.getDuration());
+			dhcpLog.setClientIpType(dhcp.getIpType());
+			dhcpLog.setClientIpNum(ipAddr.getNumberToBigInteger());
+			dhcpLog.setClientIp(dhcp.getIp());
+			dhcpLog.setClientMac(dhcp.getMac());
+			dhcpLog.setClientHostname(dhcp.getHostname());
+			dhcpLog.setCollectTime(new Timestamp(syslog.getRecvTime()));
+			dhcpLog.setClientDuid(dhcp.getDuid());
+			dhcpLog.setIsGuestRange(isGuestRange);
+			
+			// Insert to DB
+			dhcpMapper.insertDhcpLog(dhcpLog);
+			
+			return true;
+		}
+		catch(Exception ex) {
+			_logger.error(ex.getMessage());
+			_logger.error(dhcp.toString());
+		}
 		
-		// Insert to DB
-		dhcpMapper.insertDhcpLog(dhcpLog);
+		return false;
 	}
 	//endregion
 	
@@ -304,3 +314,5 @@ public class SyslogPublisher implements Runnable {
 	}
 	//endregion
 }
+
+*/
