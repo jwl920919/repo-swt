@@ -273,7 +273,7 @@ function changeSiteNames() {
 function getSiteName(site_id, handleData) {
     var jObj = new Object();
     jObj.site_id = site_id;
-    console.log($.ajax({
+    $.ajax({
         url : "/management/getSiteName",
         type : "POST",
         dataType : "text",
@@ -284,75 +284,46 @@ function getSiteName(site_id, handleData) {
                 handleData(jsonObj.resultValue.site_name);
             }
         }
-    }));
+    });
 }
 
 var uploadedMigrationData;
-var progress = $('#percent');
 
 var openFile = function(event) {
     var input = event.target;
-//    progress.style.width = '0%';
-//    progress.textContent = '0%';
     var reader = new FileReader();
-    reader.onerror = errorHandler;
-//    reader.onprogress = updateProgress;
-    reader.onabort = function(e) {
-      alert('File read cancelled');
-    };
-    reader.onloadstart = function(e) {
-//      document.getElementById('progress_bar').className = 'loading';
-    };
     reader.onload = function() {
-//        progress.style.width = '100%';
-//        progress.textContent = '100%';
         uploadedMigrationData = csvJSON(reader.result, function() {
-            $("#file-status").html('upload complete');
+            $("#migration-overlay").addClass('hidden');
         });
-        console.log(uploadedMigrationData!='');
-//        setTimeout("document.getElementById('progress_bar').className='';", 2000);
     };
-    reader.readAsText(input.files[0]);
+    $("#migration-overlay").removeClass('hidden');
+    try {
+        reader.readAsText(input.files[0]);
+    } catch (e) {
+        $("#migration-overlay").addClass('hidden');
+    }
 };
-
-function abortRead() {
-    reader.abort();
-}
-
-function errorHandler(evt) {
-    switch (evt.target.error.code) {
-    case evt.target.error.NOT_FOUND_ERR:
-        alert('File Not Found!');
-        break;
-    case evt.target.error.NOT_READABLE_ERR:
-        alert('File is not readable');
-        break;
-    case evt.target.error.ABORT_ERR:
-        break; // noop
-    default:
-        alert('An error occurred reading this file.');
-    }
-}
-
-function updateProgress(evt) {
-    // evt is an ProgressEvent.
-    if (evt.lengthComputable) {
-        var percentLoaded = Math.round((evt.loaded / evt.total) * 100);
-        // Increase the progress bar length.
-        if (percentLoaded < 100) {
-            progress.style.width = percentLoaded + '%';
-            progress.textContent = percentLoaded + '%';
-        }
-    }
-}
 
 $('#migration-btn').click(function() {
     console.log(uploadedMigrationData);
+    $.ajax({
+        url: "/management/migrationAction",
+        type: "POST",
+        dataType: "text",
+        data : uploadedMigrationData,
+        success : function(data) {
+            var jsonObj = eval("(" + data + ')');
+            if (jsonObj.result == true) {
+                ipTable.ajax.reload();
+            } else {
+                console.log(false);
+            }
+        }
+    });
 });
+
 function csvJSON(csv, finEvt) {
-    progressToggle();
-    progress.css('width','0%');
-    progress.html('0%');
     var lines = csv.split("\n");
 
     var result = [];
@@ -364,28 +335,37 @@ function csvJSON(csv, finEvt) {
         var currentline = lines[i].split(",");
         if (headers.length == currentline.length) {
             for (var j = 0; j < headers.length; j++) {
-                obj[headers[j].replace(/\r/g, "").toLowerCase()] = currentline[j]
-                        .replace(/\r/g, "");
+                obj[headers[j].replace(/\r/g, "")] = currentline[j].replace(/\r/g, "");
             }
             result.push(obj);
         }
-        var percentLoaded = Math.round((i / (lines.length-1)) * 100);
-        // Increase the progress bar length.
-        if (percentLoaded < 100 && prev != percentLoaded) {
-            progress.css('width',percentLoaded + '%');
-            progress.html(percentLoaded + '%');
-            console.log(i +' / '+(lines.length-1) +'  '+percentLoaded+'%');
-            prev = percentLoaded;
-        }
-        
     }
     var jsonStr = JSON.stringify(result);
     finEvt();
-//    progress.css('width','100%');
-//    progress.html('100%');
-//    setTimeout(progressToggle, 2000);
     return jsonStr; // JSON
 }
-progressToggle = function progressToggle(){
-    $('#progress_bar').toggleClass('loading');
+
+function backupFileDown() {
+    window.location.assign('/management/backupData.csv');
 }
+function deleteAllPopupEvt() {
+    modalShow("delete-all-modal");
+}
+function allNodeDelEvt() {
+    $.ajax({
+        url: "/management/deleteAllCustomIpGroupInfo",
+        type: "POST",
+        success : function(data) {
+            var jsonObj = eval("(" + data + ')');
+            if (jsonObj.result == true) {
+                ipTable.ajax.reload();
+                modalClose("delete-all-modal");
+            } else {
+                console.log(false);
+            }
+        }
+    });
+}
+$("#delete-add-save-btn").click(function() {
+    allNodeDelEvt();
+});
