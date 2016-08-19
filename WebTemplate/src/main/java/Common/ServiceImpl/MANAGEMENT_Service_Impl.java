@@ -43,9 +43,23 @@ private MANAGEMENT_interface mgmtMenuDao;
 	public int delete_CUSTOM_IP_GROUP_INFO(HashMap<String, Object> parameters) {
 		return mgmtMenuDao.delete_CUSTOM_IP_GROUP_INFO(parameters);
 	}
+	@Override
+	public int delete_ALL_CUSTOM_IP_GROUP_INFO(HashMap<String, Object> parameters) {
+		return mgmtMenuDao.delete_ALL_CUSTOM_IP_GROUP_INFO(parameters);
+	}
 
 	@Override
 	public List<Map<String, Object>> select_EXIST_CUSTOM_IP_GROUP_INFO(HashMap<String, Object> parameters) {
 		return mgmtMenuDao.select_EXIST_CUSTOM_IP_GROUP_INFO(parameters);
+	}
+
+	@Override
+	public int insert_PLURAL_CUSTOM_IP_GROUP_INFO(HashMap<String, Object> parameter) {
+		return mgmtMenuDao.insert_PLURAL_CUSTOM_IP_GROUP_INFO(parameter);
+	}
+
+	@Override
+	public List<Map<String, Object>> select_CUSTOM_IP_GROUP_INFO_FOR_BACKUP(HashMap<String, Object> parameters) {
+		return mgmtMenuDao.select_CUSTOM_IP_GROUP_INFO_FOR_BACKUP(parameters);
 	}
 }

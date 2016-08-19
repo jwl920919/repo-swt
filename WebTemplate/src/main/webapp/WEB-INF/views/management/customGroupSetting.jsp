@@ -39,27 +39,6 @@
 	background: #f9b2b2;
 }
 
-#progress_bar {
-	margin: 10px 0;
-	padding: 3px;
-	border: 1px solid #000;
-	font-size: 14px;
-	clear: both;
-	opacity: 0;
-	-moz-transition: opacity 1s linear;
-	-o-transition: opacity 1s linear;
-	-webkit-transition: opacity 1s linear;
-}
-
-#progress_bar.loading {
-	opacity: 1.0;
-}
-
-#progress_bar #percent {
-	background-color: #99ccff;
-	height: auto;
-	width: 0%;
-}
 </style>
 <script>
 	var siteMaster = "<%=siteMaster%>";
@@ -165,6 +144,25 @@
 		<!-- /.modal-content -->
 	</div>
 	<!-- /.DELETE modal -->
+	<!-- DELETE modal -->
+	<div class="modal modal-dialog" id="delete-all-modal">
+		<div class="modal-content" name="modalContent">
+			<div class="modal-header" div_mordal_header>
+				<input type="button" class="close" name="modalClose"
+					data-dismiss="modal" aria-label="Close" value="&times;" />
+				<h4 class="modal-title">All Network Name Delete</h4>
+			</div>
+			<div id="delete-body" class="modal-body">모든 그룹정보를 삭제 하시겠습니까?</div>
+			<div class="modal-footer">
+				<input type="button" class="btn btn-default pull-left"
+					name="modalClose" data-dismiss="modal"
+					value="<%=LanguageHelper.GetLanguage("close")%>" />
+				<button type="button" class="btn btn-primary" id="delete-add-save-btn"><%=LanguageHelper.GetLanguage("delete")%></button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.DELETE modal -->
 	<!-- modalbackDiv -->
 	<div id="modalbackDiv" class="mordal-back-box"></div>
 
@@ -218,12 +216,17 @@
 					</div>
 					<div class="box-body">
 						<div style="text-align: left;">
-							<input type="file" id="file" name="file" onchange='openFile(event)' /> 
-							<div id="progress_bar"><div id="percent">0%</div></div>
-							<input type="button" id="migration-btn" value="Migration" />
+							<input type="file" id="file" name="file"
+								onchange='openFile(event)' accept=".csv" />
+							<div style="text-align: right;">
+								<input type="button" id="back-dn-btn" value="백업" onclick="backupFileDown()" />
+								<input type="button" id="all-node-del-btn" value="노드전체삭제" onclick="deleteAllPopupEvt()" />
+								<input type="button" id="migration-btn" value="Migration" />
+							</div>
 						</div>
-						<div id="gbgBody">
-						</div>
+						<div class="overlay hidden" id="migration-overlay">
+		                	<i class="fa fa-refresh fa-spin"></i>
+		                </div>
 					</div>
 				</div>
 			</div>
@@ -259,7 +262,7 @@
 <script src="/resources/js/common/modalPopup.js"></script>
 <script src="/resources/js/management/customGroupSetting.js"></script>
 <script type="text/javascript">
-
+    
 </script>
 
 </html>

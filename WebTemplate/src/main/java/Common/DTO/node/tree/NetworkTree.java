@@ -50,6 +50,34 @@ public class NetworkTree extends Tree {
 			}
 			return this.data.hasNetwork(new IPNetwork(network)) | hasData;
 		}
+		
+		public boolean isSameData(String network) throws UnknownHostException {
+			boolean isSameData = false;
+			if (this.children != null) {
+				for (Node child : this.children) {
+					if (child.isSameData(network)) {
+						isSameData = true;
+						break;
+					}
+				}
+			}
+			return this.data.isSameNetwork(new IPNetwork(network)) | isSameData;
+		}
+		
+		public Node getNode(String network) throws UnknownHostException {
+			if (this.children != null) {
+				for (Node n1 : this.children) {
+					if (n1.hasData(network)) {
+						if (n1.isSameData(network)) {
+							return n1;
+						} else {
+							return n1.getNode(network);
+						}
+					}
+				}
+			}
+			return null;
+		}
 
 		public Node getParentNode(String network) throws UnknownHostException {
 			if (this.children != null) {

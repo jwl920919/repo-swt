@@ -174,14 +174,65 @@
 		VALUES (#{network}, #{group_name}, 'N',#{site_id}, #{ip_type});
 	</insert>
 	
-	<!-- Query Type : Update(Select, Insert, Update, Delete) -->
+	<!-- Query Type : Delete(Select, Insert, Update, Delete) -->
 	<!-- Insert Date : 2016-08-16 -->
 	<!-- Insert User : 이재원 -->
-	<!-- Description : Network Information Record Modify -->
-	<!-- Controller : MVC.ShinwooTNS.action.ManagementActionController -->
+	<!-- Description :  -->
+	<!-- Controller :  -->
 	<delete id="delete_CUSTOM_IP_GROUP_INFO" parameterType="hashmap">
 		DELETE FROM custom_group 
 		WHERE group_id=#{group_id};
 	</delete>
+	
+	<!-- Query Type : Delete(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-08-19 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description :  -->
+	<!-- Controller :  -->
+	<delete id="delete_ALL_CUSTOM_IP_GROUP_INFO" parameterType="hashmap">
+		DELETE FROM custom_group 
+		<if test='site_master == "f"'>
+			WHERE site_id = #{site_id} 
+		</if>
+	</delete>
+	
+	<!-- Query Type : Insert(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-08-19 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : -->
+	<!-- Controller :  -->
+	<insert id="insert_PLURAL_CUSTOM_IP_GROUP_INFO" parameterType="hashmap">
+		INSERT INTO custom_group ("key", "group_name", "type", "site_id", "ip_type") 
+		VALUES 
+		<foreach collection="list" item="item" separator=" , ">
+		(#{item.network}, #{item.group_name}, 'N',
+<!-- 			<choose> -->
+<!-- 				<when test="site_master=='t'"> -->
+					<choose>
+						<when test="item.site_id==-1">#{site_id}</when>
+						<when test="item.site_id!=-1">#{item.site_id}</when>
+					</choose>
+<!-- 				</when> -->
+<!-- 				<when test="site_master!='t'"> -->
+<!-- 					#{site_id} -->
+<!-- 				</when> -->
+<!-- 			</choose> -->
+			, #{item.ip_type})
+		</foreach>;
+	</insert>
+	
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-08-19 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description :  -->
+	<!-- Controller :  -->
+	<select id="select_CUSTOM_IP_GROUP_INFO_FOR_BACKUP" parameterType="hashmap" resultType="java.util.HashMap">
+		SELECT key,group_name,ip_type,site_id
+		FROM custom_group
+		<if test='site_master == "f"'>
+			WHERE site_id = #{site_id} 
+		</if>
+	</select>
+	
 </mapper>
 

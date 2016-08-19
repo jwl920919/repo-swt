@@ -16,8 +16,20 @@ public class NetworkData {
     public IPNetwork getIpNetwork() {
         return ipNetwork;
     }
-
-
+    
+    public boolean isSameNetwork (IPNetwork anotherIPNetwork) throws UnknownHostException {
+    	BigInteger startIp =  ipNetwork.getStartIP().getNumberToBigInteger();
+        BigInteger endIp =  ipNetwork.getEndIP().getNumberToBigInteger();
+        BigInteger anotherStartIp =  anotherIPNetwork.getStartIP().getNumberToBigInteger();
+        BigInteger anotherEndIp =  anotherIPNetwork.getEndIP().getNumberToBigInteger();
+        if(endIp.compareTo(anotherEndIp) == 0){
+        	if(startIp.compareTo(anotherStartIp) == 0){
+        		return true;
+        	}
+        }
+    	return false;
+    }
+    
     public boolean hasNetwork(IPNetwork anotherIPNetwork) throws UnknownHostException {
         BigInteger startIp =  ipNetwork.getStartIP().getNumberToBigInteger();
         BigInteger endIp =  ipNetwork.getEndIP().getNumberToBigInteger();
