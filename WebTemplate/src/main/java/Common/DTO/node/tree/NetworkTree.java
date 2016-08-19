@@ -91,7 +91,9 @@ public class NetworkTree extends Tree {
 			boolean isExist = false;
 			for(Map<String,Object> existRecord :existList) {
 				if(ipStr.toUpperCase().equals(existRecord.get("key").toString().toUpperCase())){
-					sb.append(existRecord.get("group_name"));
+					if(!existRecord.get("group_name").toString().trim().equals(""))
+						sb.append(existRecord.get("group_name"));
+					else sb.append(ipStr);
 					isExist = true;
 					break;
 				}
@@ -100,7 +102,7 @@ public class NetworkTree extends Tree {
 				sb.append(ipStr);
 			}
 			sb.append("\",");
-			sb.append("\"li_attr\":{\"value\":\"");
+			sb.append("\"a_attr\":{\"value\":\"");
 			sb.append(ipStr);
 			sb.append("\"}");
 			

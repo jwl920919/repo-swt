@@ -11,4 +11,5 @@ public interface MANAGEMENT_interface {
 	public int select_EXIST_CUSTOM_IP_GROUP_INFO_TOTAL_COUNT(HashMap<String, Object> parameters);
 	public int update_CUSTOM_IP_GROUP_INFO(HashMap<String, Object> parameters);
 	public int insert_CUSTOM_IP_GROUP_INFO(HashMap<String, Object> parameters);
+	public int delete_CUSTOM_IP_GROUP_INFO(HashMap<String, Object> parameters);
 }

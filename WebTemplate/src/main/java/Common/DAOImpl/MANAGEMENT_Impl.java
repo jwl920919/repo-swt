@@ -80,6 +80,20 @@ public class MANAGEMENT_Impl extends SqlSessionDaoSupport implements MANAGEMENT_
 		}
 		return total;
 	}
+	
+	@Override
+	public int delete_CUSTOM_IP_GROUP_INFO(HashMap<String, Object> parameters) {
+		int total = -1;
+		try {
+			System.out.println(getSqlSession());
+			total = getSqlSession().delete("UI_Query.delete_CUSTOM_IP_GROUP_INFO",
+					parameters);
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e.getMessage());
+		}
+		return total;
+	}
 
 	@Override
 	public int insert_CUSTOM_IP_GROUP_INFO(HashMap<String, Object> parameters) {

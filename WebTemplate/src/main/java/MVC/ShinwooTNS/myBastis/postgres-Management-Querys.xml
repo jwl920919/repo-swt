@@ -26,9 +26,12 @@
 	<!-- Insert User : 이재원 -->
 	<!-- Description : Network Information Search -->
 	<!-- Controller :  -->
-	<select id="select_SEARCHED_NETWORK_INFO" resultType="java.util.HashMap">
+	<select id="select_SEARCHED_NETWORK_INFO" parameterType="hashmap" resultType="java.util.HashMap">
 		SELECT site_id,network,ip_type,update_time 
-		FROM dhcp_network;
+		FROM dhcp_network
+		<if test='site_master == "f"'>
+			WHERE union_table.site_id = #{site_id} 
+		</if>
 	</select>
 	
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
@@ -36,9 +39,12 @@
 	<!-- Insert User : 이재원 -->
 	<!-- Description : Network Information 행 개수 조회 -->
 	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
-	<select id="select_SEARCHED_NETWORK_INFO_TOTAL_COUNT" resultType="Integer">
+	<select id="select_SEARCHED_NETWORK_INFO_TOTAL_COUNT" parameterType="hashmap" resultType="Integer">
 		SELECT count(*) AS total
 		FROM dhcp_network
+		<if test='site_master == "f"'>
+			WHERE union_table.site_id = #{site_id} 
+		</if>
 	</select>
 
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
@@ -68,9 +74,12 @@
 				OR group_name like CONCAT('%', #{searchValue}, '%'))
 				AND ip_type=#{ip_type}
 		) as union_table 
+		<if test='site_master == "f"'>
+			WHERE union_table.site_id = #{site_id} 
+		</if>
 		ORDER BY 
 			<choose>
-				<when test="orderColumn == 'network'">union_table.key </when>
+				<when test="orderColumn == 'network'">inet(union_table.key) </when>
 				<when test="orderColumn != 'network'">union_table.${orderColumn} </when>
 			</choose>${orderType} OFFSET #{startIndex} LIMIT #{length}
 		
@@ -90,6 +99,9 @@
 			AND (key like CONCAT('%', #{searchValue}, '%') 
 			OR group_name like CONCAT('%', #{searchValue}, '%'))
 		</if>
+		<if test='site_master == "f"'>
+			AND union_table.site_id = #{site_id} 
+		</if>
 	</select>
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
 	<!-- Insert Date : 2016-08-17 -->
@@ -103,6 +115,9 @@
 		<if test="searchValue != null">
 			AND (key like CONCAT('%', #{searchValue}, '%') 
 			OR group_name like CONCAT('%', #{searchValue}, '%'))
+		</if>
+		<if test='site_master == "f"'>
+			AND union_table.site_id = #{site_id} 
 		</if>
 	</select>
 
@@ -133,6 +148,9 @@
 				OR group_name like CONCAT('%', #{searchValue}, '%'))
 				AND ip_type=#{ip_type}
 		) as union_table
+		<if test='site_master == "f"'>
+			WHERE union_table.site_id = #{site_id} 
+		</if>
 	</select>
 
 	<!-- Query Type : Update(Select, Insert, Update, Delete) -->
@@ -143,7 +161,7 @@
 	<update id="update_CUSTOM_IP_GROUP_INFO" parameterType="hashmap">
 		UPDATE custom_group 
 		SET group_name=#{group_name} 
-		WHERE group_id=#{group_id};
+		WHERE group_id=#{group_id}
 	</update>
 	
 	<!-- Query Type : Insert(Select, Insert, Update, Delete) -->
@@ -155,5 +173,15 @@
 		INSERT INTO custom_group ("key", "group_name", "type", "site_id", "ip_type") 
 		VALUES (#{network}, #{group_name}, 'N',#{site_id}, #{ip_type});
 	</insert>
+	
+	<!-- Query Type : Update(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-08-16 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : Network Information Record Modify -->
+	<!-- Controller : MVC.ShinwooTNS.action.ManagementActionController -->
+	<delete id="delete_CUSTOM_IP_GROUP_INFO" parameterType="hashmap">
+		DELETE FROM custom_group 
+		WHERE group_id=#{group_id};
+	</delete>
 </mapper>
 

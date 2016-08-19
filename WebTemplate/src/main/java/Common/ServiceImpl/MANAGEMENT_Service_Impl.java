@@ -39,6 +39,10 @@ private MANAGEMENT_interface mgmtMenuDao;
 	public int insert_CUSTOM_IP_GROUP_INFO(HashMap<String, Object> parameters) {
 		return mgmtMenuDao.insert_CUSTOM_IP_GROUP_INFO(parameters);
 	}
+	@Override
+	public int delete_CUSTOM_IP_GROUP_INFO(HashMap<String, Object> parameters) {
+		return mgmtMenuDao.delete_CUSTOM_IP_GROUP_INFO(parameters);
+	}
 
 	@Override
 	public List<Map<String, Object>> select_EXIST_CUSTOM_IP_GROUP_INFO(HashMap<String, Object> parameters) {
