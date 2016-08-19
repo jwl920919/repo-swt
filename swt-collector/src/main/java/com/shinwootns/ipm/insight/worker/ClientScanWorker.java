@@ -67,6 +67,8 @@ private final Logger _logger = LoggerFactory.getLogger(getClass());
 		if (dhcpMapper == null)
 			return;
 		
+		_logger.info("Client Scan... Start.");
+		
 		List<NmapScanIP> listIP = dhcpMapper.selectNmapScanIP(SharedData.getInstance().getSiteID(), SystemUtils.getHostName());
 		
 		for(NmapScanIP ip : listIP) {
@@ -78,11 +80,14 @@ private final Logger _logger = LoggerFactory.getLogger(getClass());
 					continue;
 				}
 				
+				_logger.info("Put Scan: "+ip.getIpaddr());
+				
 			} catch (InterruptedException e) {
 				break;
 			}
 		}
 		
+		_logger.info("Client Scan... End.");
 	}
 	//endregion
 }

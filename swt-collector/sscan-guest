@@ -1,0 +1,16 @@
+# Nmap 7.12 scan initiated Fri Aug 19 15:31:02 2016 as: nmap -O -v -osscan-guest 192.168.1.80
+mass_dns: warning: Unable to determine any DNS servers. Reverse DNS is disabled. Try using --system-dns or specify valid servers with --dns-servers
+Nmap scan report for 192.168.1.80
+Host is up (0.0018s latency).
+Not shown: 994 filtered ports
+PORT     STATE  SERVICE
+53/tcp   open   domain
+139/tcp  open   netbios-ssn
+445/tcp  open   microsoft-ds
+1723/tcp closed pptp
+2869/tcp closed icslap
+5357/tcp closed wsdapi
+MAC Address: 00:0C:29:6C:63:06 (VMware)
+
+Read data files from: C:\Program Files (x86)\Nmap
+# Nmap done at Fri Aug 19 15:31:07 2016 -- 1 IP address (1 host up) scanned in 4.95 seconds
