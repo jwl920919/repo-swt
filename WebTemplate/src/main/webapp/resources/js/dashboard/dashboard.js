@@ -9,8 +9,8 @@ var m_hwUsedStatusAjaxCall;
 var m_osUsedStatusAjaxCall;
 var m_serviceUsedStatusAjaxCall;
 var m_vendorUsedStatusAjaxCall;
-var m_eventLogAjaxCall
-
+var m_eventLogAjaxCall;
+var certifyProcesstimer;
 
 var systemStatusCallTime = 5000;
 var guestIPAssignStatusCallTime = 10000;
@@ -472,14 +472,11 @@ function certifyProcessAjaxCall() {
 			var realtime = "on"; // If == to on then fetch data every x
 									// seconds. else stop fetching
 			function update() {
-
-				// Since the axes don't change, we don't need to call
-				// plot.setupGrid()
-				//console.log("getdata : " + data1.length);
-				certifyProcessChart.Line(getData(), m_lineChartOption);
-				//data1 = null, data2 = null, labels = null, totalPoints = null;
-				if (realtime === "on")
-					setTimeout(update, certifyProcessCallTime);
+				if (realtime === "on") {					
+					certifyProcessChart.Line(getData(), m_lineChartOption);
+					clearTimeout(certifyProcesstimer);
+					certifyProcesstimer = setTimeout(update, certifyProcessCallTime);
+				}
 			}
 
 			// INITIALIZE REALTIME DATA FETCHING
@@ -490,10 +487,10 @@ function certifyProcessAjaxCall() {
 			$("#realtime .btn").click(function() {
 				if ($(this).data("toggle") === "on") {
 					realtime = "on";
+					update();
 				} else {
 					realtime = "off";
 				}
-				update();
 			});
 			/*
 			 * END INTERACTIVE CHART
