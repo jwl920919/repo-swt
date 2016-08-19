@@ -221,7 +221,6 @@
 			AND COALESCE(ip.ip_status, '') != ''
 			AND ip.ip_status NOT LIKE '%NETWORK%'
 			AND ip.ip_status NOT LIKE '%BROADCAST%'
-			AND COALESCE(fingerprint, '') = ''
 		]]>
 		<if test="site_id != null">
 		AND nw.site_id = #{site_id}
