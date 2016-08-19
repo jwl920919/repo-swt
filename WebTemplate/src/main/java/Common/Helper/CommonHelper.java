@@ -117,7 +117,7 @@ public class CommonHelper {
 			return Long.parseLong(String.format("%.0f", value));
 		}
 		else if (value instanceof Integer) {
-			return (long)value;
+			return ((Integer)value).longValue();
 		}
 		
 		return Long.parseLong(value.toString());

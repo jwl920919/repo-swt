@@ -122,11 +122,44 @@ public class IPManagementActionController {
 		}
 	}
 
-	// 고정 IP 현황 -> Segment별 상세 현황 IPMap 데이터 조회
+	// 고정 IP 현황 -> Segment IPMap 데이터 조회
 	@RequestMapping(value = "staticIPStatus_Segment_MapData", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public @ResponseBody Object staticIPStatus_Segment_MapData(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		System.out.println("staticIPStatus_Segment_MapData");
 		//logger.info("staticIPStatus_Segment_MapData : " + request.getLocalAddr());
+		HttpSession session = request.getSession(true);
+		List<Map<String, Object>> dataList = new ArrayList<Map<String, Object>>();
+		result = new AjaxResult();
+
+		String siteID = session.getAttribute("site_id").toString();
+		try {
+			HashMap<String, Object> parameters = new HashMap<String, Object>();
+
+			parameters.put("searchValue", "");
+			parameters.put("siteid", Integer.parseInt(siteID));
+			parameters.put("orderColumn", "network");
+			parameters.put("orderType", "ASC");
+			parameters.put("startIndex", 0);
+			parameters.put("length", Integer.MAX_VALUE);
+			
+			dataList = ipManagementService.select_IP_MANAGEMENT_SEGMENT(parameters);
+
+			result.result = true;
+			result.data = dataList;
+		} catch (Exception e) {
+			result.result = false;
+			result.errorMessage = e.getMessage();
+			e.printStackTrace();
+			ErrorLoggingHelper.log(logger, "staticIPStatus_Segment_Detail_MapData", e);
+		}
+		return gson.toJson(result);
+	}
+
+	// 고정 IP 현황 -> Segment별 상세 현황 IPMap 데이터 조회
+	@RequestMapping(value = "staticIPStatus_Segment_Detail_MapData", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+	public @ResponseBody Object staticIPStatus_Segment_Detail_MapData(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		System.out.println("staticIPStatus_Segment_Detail_MapData");
+		//logger.info("staticIPStatus_Segment_Detail_MapData : " + request.getLocalAddr());
 		HttpSession session = request.getSession(true);
 		List<Map<String, Object>> dataList = new ArrayList<Map<String, Object>>();
 		result = new AjaxResult();
@@ -164,7 +197,7 @@ public class IPManagementActionController {
 				// endregion
 
 				// region DHCP의 IP대역대 Stat, End영역과 Range 영역 설정을 위한 데이터를 담음
-				HashMap<String, Object> ipMap = new HashMap<>();
+				HashMap<String, Object> ipMap = new HashMap<String, Object>();
 				ipMap.put("KEY", "DHCP_RANGE");
 				ipMap.put("Network_Start", networkStartip);
 				ipMap.put("Network_End", networkEndip);
@@ -196,7 +229,7 @@ public class IPManagementActionController {
 			result.result = false;
 			result.errorMessage = e.getMessage();
 			e.printStackTrace();
-			ErrorLoggingHelper.log(logger, "staticIPStatus_Segment_MapData", e);
+			ErrorLoggingHelper.log(logger, "staticIPStatus_Segment_Detail_MapData", e);
 		}
 		return gson.toJson(result);
 	}

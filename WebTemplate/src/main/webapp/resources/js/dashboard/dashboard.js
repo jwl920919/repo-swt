@@ -14,7 +14,7 @@ var m_eventLogAjaxCall
 
 var systemStatusCallTime = 5000;
 var guestIPAssignStatusCallTime = 10000;
-var certifyProcessCallTime = 1000 * 60;
+var certifyProcessCallTime = 1000;// * 60;
 var askIPStatusCallTime = 1000 * 60;
 var dnsStatusCallTime = 10000;
 var segmentLeasingIPAssignedCallTime = 1000 * 60;
@@ -397,11 +397,10 @@ function certifyProcessAjaxCall() {
 		    //- LINE CHART -
 		    //--------------
 			$("#certifyProcessChart").html('');
-			if (typeof certifyProcessChart === 'undefined') {
-				//var certifyProcessChartCanvas = $("#certifyProcessChart").get(0).getContext("2d");
-				// This will get the first returned node in the jQuery collection.
-				certifyProcessChart = new Chart($("#certifyProcessChart").get(0).getContext("2d"));
-			}
+			//var certifyProcessChartCanvas = $("#certifyProcessChart").get(0).getContext("2d");
+			// This will get the first returned node in the jQuery collection.
+			certifyProcessChart = new Chart($("#certifyProcessChart").get(0).getContext("2d"));
+				
 			var data1 = [], data2 = [], labels = [], totalPoints = 100;
 
 			if (typeof m_lineChartOption === 'undefined') {
@@ -440,6 +439,7 @@ function certifyProcessAjaxCall() {
 					// console.log("labels.length : " + labels.length + ",
 					// value0 : " + labels[0]+ ", value : " +
 					// (parseInt(labels[labels.length-1]) + 1));
+					
 					labels.push(parseInt(labels[labels.length - 1]) + 1);
 				} else {
 					// Zip the generated y values with the x values
@@ -536,9 +536,8 @@ function askIPStatusAjaxCall() {
 		    //-------------
 		    //- BAR CHART -
 		    //-------------
-			if (typeof askIPStatusBarChart === 'undefined') {
-				askIPStatusBarChart = new Chart($("#askIPStatusChart").get(0).getContext("2d"));
-			}
+			askIPStatusBarChart = new Chart($("#askIPStatusChart").get(0).getContext("2d"));
+
 			var data1 = [], data2 = [], labels = [], totalPoints = 10;
 
 			if (typeof m_barChartOptions === 'undefined') {
@@ -1359,6 +1358,26 @@ function lineChartOption() {
 		// }]
 		// },
 
+//
+//        scales: {
+//            xAxes: [{
+//                display: true,
+//                position: 'bottom',
+//                ticks: {
+//                    min: 1,
+//                    max: 100
+//                }
+//
+//
+//
+//            }]
+//        },
+//		
+		
+		
+		
+		
+		
 		// Y축 Label 출력 여부
 		scaleShowLabels : true,
 		// Boolean - 차트 눈금 표시 여부 설정
@@ -1399,8 +1418,12 @@ function lineChartOption() {
 		// Boolean - whether to make the chart responsive to window
 		// resizing
 		responsive : true,
+		showXLabels: 10
 
-		skipXLabels : 50
+//		skipXLabels : 10
+		
+		
+		
 	// DATE SCALE
 
 	// // String - scale type: "number" or "date"
@@ -1506,6 +1529,17 @@ function fnPieChartTooltipBind(chart){
 **/
 function trClickEvent (obj){
 	return false;
+}
+
+function fnPlay(state){
+	if (state == "on") {
+		$("#btnon").addClass("active");
+		$("#btnoff").removeClass("active");		
+	}
+	else {
+		$("#btnoff").addClass("active");
+		$("#btnon").removeClass("active");	
+	}
 }
 
 //========================================================//

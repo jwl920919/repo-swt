@@ -59,7 +59,7 @@ public class SystemManagementActionController {
 		init();
 		try {
 			// json 형식의 데이터를 String 타입으로 받아온다.
-			List<Map<String,Object>> obj = new ArrayList<>(); 
+			List<Map<String,Object>> obj = new ArrayList<Map<String,Object>>(); 
 			
 			//redis에 메시지를 보내 JSON 형식의 String 데이터를 받아온다.
 			String json = redisTemplate.opsForValue()

@@ -95,7 +95,7 @@ public class PageController {
 		if (session.getAttribute("login_chk") == null)
 			return "redirect:login";
 
-		List<HashMap<String, Object>> listMenu = new ArrayList<>();
+		List<HashMap<String, Object>> listMenu = new ArrayList<HashMap<String, Object>>();
 		listMenu = memuMasterService.select_UI_MENU_MASTER();
 		// listMenu = myappService.selectTestTable();
 

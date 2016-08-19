@@ -18,7 +18,7 @@ public class NetworkTree extends Tree {
 		super(rootData);
 		root = new Node(rootData);
 		root.depth = 0;
-		root.children = new ArrayList<>();
+		root.children = new ArrayList<Node>();
 	}
 
 	public static class Node {

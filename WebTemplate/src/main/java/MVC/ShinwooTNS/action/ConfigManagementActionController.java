@@ -101,6 +101,7 @@ public class ConfigManagementActionController {
 		try {
 			init();
 			SYSTEM_USER_INFO_DTO systemUserInfo = userInfoService.select_SYSTEM_USER_INFO_ONE_SEARCH(
+					(HashMap<String, Object>)
 					gson.fromJson(request.getReader(), new TypeToken<HashMap<String, Object>>() {
 					}.getType()));
 			Map<String, Object> mData = new HashMap<String, Object>();
