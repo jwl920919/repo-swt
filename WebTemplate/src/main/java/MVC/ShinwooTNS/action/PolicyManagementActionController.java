@@ -105,9 +105,9 @@ public class PolicyManagementActionController {
 		try {
 			init();
 			List<SITE_INFO_DTO> sitesInfoList = siteInfoService.select_SITE_INFO();
-			List<Map<String, Object>> mapList = new ArrayList<>();
+			List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
 			for (SITE_INFO_DTO sid : sitesInfoList) {
-				HashMap<String, Object> map = new HashMap<>();
+				HashMap<String, Object> map = new HashMap<String, Object>();
 				map.put("site_name", sid.getSite_name());
 				map.put("site_id", sid.getSite_id());
 				mapList.add(map);

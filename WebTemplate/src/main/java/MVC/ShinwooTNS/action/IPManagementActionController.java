@@ -197,7 +197,7 @@ public class IPManagementActionController {
 				// endregion
 
 				// region DHCP의 IP대역대 Stat, End영역과 Range 영역 설정을 위한 데이터를 담음
-				HashMap<String, Object> ipMap = new HashMap<>();
+				HashMap<String, Object> ipMap = new HashMap<String, Object>();
 				ipMap.put("KEY", "DHCP_RANGE");
 				ipMap.put("Network_Start", networkStartip);
 				ipMap.put("Network_End", networkEndip);
