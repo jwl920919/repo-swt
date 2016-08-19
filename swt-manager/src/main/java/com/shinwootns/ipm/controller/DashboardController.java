@@ -1,17 +1,205 @@
 package com.shinwootns.ipm.controller;
 
-/*
 import java.util.Random;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.shinwootns.data.key.RedisKeys;
+import com.shinwootns.ipm.service.redis.RedisManager;
+
+import redis.clients.jedis.Jedis;
 
 @RestController
 public class DashboardController {
 	
+	private final Logger _logger = LoggerFactory.getLogger(this.getClass());
+	
+	//region /api/status/dashboard/network_ip
+	@RequestMapping(value="/api/status/dashboard/network_ip", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+	public String ApiNetworkIpAll() 
+	{
+		return ApiNetworkIp(null);
+	}
+	
+	@RequestMapping(value="/api/status/dashboard/network_ip/{site_id}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+	public String ApiNetworkIp(
+			@PathVariable(value="site_id") Integer site_id ) 
+	{
+		Jedis redis = RedisManager.getInstance().getRedisClient();
+		if(redis != null)
+		try
+		{
+			String result;
+			if (site_id != null)
+			{
+				result = redis.get((new StringBuilder())
+						.append(RedisKeys.KEY_DASHBOARD_NETWORK_IP)
+						.append(":").append(site_id)
+						.toString()
+				);
+			}
+			else {
+				result = redis.get((new StringBuilder())
+						.append(RedisKeys.KEY_DASHBOARD_NETWORK_IP)
+						.toString()
+				);
+			}
+			
+			if (result != null && result.length() > 0)
+				return result;
+			
+		} catch (Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+		} finally {
+			redis.close();
+		}
+		
+		return (new JsonObject()).toString();
+	}
+	//endregion
+	
+	//region /api/status/dashboard/guest_ip
+	@RequestMapping(value="/api/status/dashboard/guest_ip", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+	public String ApiGuestIpStatusAll() 
+	{
+		return ApiGuestIpStatus(null);
+	}
+	
+	@RequestMapping(value="/api/status/dashboard/guest_ip/{site_id}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+	public String ApiGuestIpStatus(
+			@PathVariable(value="site_id") Integer site_id ) 
+	{
+		Jedis redis = RedisManager.getInstance().getRedisClient();
+		if(redis != null)
+		try
+		{
+			String result;
+			if (site_id != null)
+			{
+				result = redis.get((new StringBuilder())
+						.append(RedisKeys.KEY_DASHBOARD_GUEST_IP)
+						.append(":").append(site_id)
+						.toString()
+				);
+			}
+			else {
+				result = redis.get((new StringBuilder())
+						.append(RedisKeys.KEY_DASHBOARD_GUEST_IP)
+						.toString()
+				);
+			}
+			
+			if (result != null && result.length() > 0)
+				return result;
+			
+		} catch (Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+		} finally {
+			redis.close();
+		}
+		
+		return (new JsonObject()).toString();
+	}
+	//endregion
+	
+	//region /api/status/dashboard/lease_ipv4
+	@RequestMapping(value="/api/status/dashboard/lease_ipv4", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+	public String ApiLeaseIpv4All() 
+	{
+		return ApiLeaseIpv4(null);
+	}
+	
+	@RequestMapping(value="/api/status/dashboard/lease_ipv4/{site_id}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+	public String ApiLeaseIpv4(
+			@PathVariable(value="site_id") Integer site_id ) 
+	{
+		Jedis redis = RedisManager.getInstance().getRedisClient();
+		if(redis != null)
+		try
+		{
+			String result;
+			if (site_id != null)
+			{
+				result = redis.get((new StringBuilder())
+						.append(RedisKeys.KEY_DASHBOARD_LEASE_IPV4)
+						.append(":").append(site_id)
+						.toString()
+				);
+			}
+			else {
+				result = redis.get((new StringBuilder())
+						.append(RedisKeys.KEY_DASHBOARD_LEASE_IPV4)
+						.toString()
+				);
+			}
+			
+			if (result != null && result.length() > 0)
+				return result;
+			
+		} catch (Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+		} finally {
+			redis.close();
+		}
+		
+		return (new JsonObject()).toString();
+	}
+	//endregion
+	
+	//region /api/status/dashboard/lease_ipv6
+	@RequestMapping(value="/api/status/dashboard/lease_ipv6", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+	public String ApiLeaseIpv6All() 
+	{
+		return ApiLeaseIpv6(null);
+	}
+	
+	@RequestMapping(value="/api/status/dashboard/lease_ipv6/{site_id}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+	public String ApiLeaseIpv6(
+			@PathVariable(value="site_id") Integer site_id ) 
+	{
+		Jedis redis = RedisManager.getInstance().getRedisClient();
+		if(redis != null)
+		try
+		{
+			String result;
+			if (site_id != null)
+			{
+				result = redis.get((new StringBuilder())
+						.append(RedisKeys.KEY_DASHBOARD_LEASE_IPV6)
+						.append(":").append(site_id)
+						.toString()
+				);
+			}
+			else {
+				result = redis.get((new StringBuilder())
+						.append(RedisKeys.KEY_DASHBOARD_LEASE_IPV6)
+						.toString()
+				);
+			}
+			
+			if (result != null && result.length() > 0)
+				return result;
+			
+		} catch (Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+		} finally {
+			redis.close();
+		}
+		
+		return (new JsonArray()).toString();
+	}
+	//endregion
+
+	
+	/*
 	@RequestMapping("/Dashboard/Summary")
 	public String Summary() {
 		
@@ -90,5 +278,5 @@ public class DashboardController {
 		
 		return jObj.toString();
 	}
+	*/
 }
-*/

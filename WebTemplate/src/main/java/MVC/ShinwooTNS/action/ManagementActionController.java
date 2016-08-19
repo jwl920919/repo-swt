@@ -1,14 +1,9 @@
 package MVC.ShinwooTNS.action;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -30,14 +25,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.shinwootns.common.utils.ip.IPNetwork;
+import Common.ip.IPNetwork;
 
 import Common.DTO.AjaxResult;
 import Common.DTO.SITE_INFO_DTO;
 import Common.DTO.node.tree.NetworkData;
 import Common.DTO.node.tree.NetworkTree;
 import Common.Helper.ErrorLoggingHelper;
-import Common.ServiceInterface.ACCESS_POLICY_Service_interface;
 import Common.ServiceInterface.MANAGEMENT_Service_interface;
 import Common.ServiceInterface.NETWORK_Service_interface;
 import Common.ServiceInterface.SITE_INFO_Service_interface;
@@ -47,7 +41,7 @@ import Common.ServiceInterface.SITE_INFO_Service_interface;
 public class ManagementActionController {
 	private final static java.text.SimpleDateFormat SIMPLE_DATE_FORMAT = new java.text.SimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss");
-	private static final Logger logger = Logger.getLogger(ManagementActionController.class);
+	private static final Logger logger = Logger.getLogger(ManagementActionController.class);	
 	private Gson gson = new Gson();
 	private AjaxResult result = new AjaxResult();
 

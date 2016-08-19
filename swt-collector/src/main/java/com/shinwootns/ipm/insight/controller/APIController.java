@@ -26,8 +26,8 @@ public class APIController {
 	
 	private final Logger _logger = LoggerFactory.getLogger(this.getClass());
 
-	//region /api/cmd
-	@RequestMapping(value="/api/cmd", method=RequestMethod.GET)
+	//region /api/exec_cmd
+	@RequestMapping(value="/api/exec_cmd", method=RequestMethod.GET)
 	public String exec_command(@RequestParam(value="command") String command) {
 		
 		JsonObject json = new JsonObject();
@@ -95,8 +95,8 @@ public class APIController {
 	}
 	//endregion
 	
-	//region /api/auth
-	@RequestMapping(value="/api/auth", method=RequestMethod.GET)
+	//region /api/check_auth
+	@RequestMapping(value="/api/check_auth", method=RequestMethod.GET)
 	public String checkAuth(
 			@RequestParam(value="setupid") String setupId,
 			@RequestParam(value="userid") String userid, 
@@ -110,15 +110,16 @@ public class APIController {
 			AuthParam param = new AuthParam();
 			param.setSetupId(Integer.parseInt(setupId));
 			param.setUserId(userid);
-			param.setPassword(CryptoUtils.Decode_AES128(password));
+			//param.setPassword(CryptoUtils.Decode_AES128(password));
+			param.setPassword(password);
 			param.setMacAddr(macaddr);
 			
 			AuthCheckHandler handler = new AuthCheckHandler();
 			handler.checkLogin(param, result);
 		}
-		catch(IllegalBlockSizeException ex) {
-			_logger.error(ex.getMessage());
-		}
+		//catch(IllegalBlockSizeException ex) {
+		//	_logger.error(ex.getMessage());
+		//}
 		catch(Exception ex) {
 			_logger.error(ex.getMessage(), ex);
 		}

@@ -4,7 +4,7 @@ package Common.DTO.node.tree;
 import java.math.BigInteger;
 import java.net.UnknownHostException;
 
-import com.shinwootns.common.utils.ip.IPNetwork;
+import Common.ip.IPNetwork;
 
 public class NetworkData {
     private IPNetwork ipNetwork;
