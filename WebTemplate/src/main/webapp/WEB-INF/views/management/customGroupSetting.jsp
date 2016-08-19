@@ -55,10 +55,10 @@
 	opacity: 1.0;
 }
 
-#progress_bar .percent {
+#progress_bar #percent {
 	background-color: #99ccff;
 	height: auto;
-	width: 0;
+	width: 0%;
 }
 </style>
 <script>
@@ -219,8 +219,10 @@
 					<div class="box-body">
 						<div style="text-align: left;">
 							<input type="file" id="file" name="file" onchange='openFile(event)' /> 
-							<div id="progress_bar"><div class="percent">0%</div></div>
+							<div id="progress_bar"><div id="percent">0%</div></div>
 							<input type="button" id="migration-btn" value="Migration" />
+						</div>
+						<div id="gbgBody">
 						</div>
 					</div>
 				</div>

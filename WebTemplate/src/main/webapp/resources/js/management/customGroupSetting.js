@@ -288,7 +288,7 @@ function getSiteName(site_id, handleData) {
 }
 
 var uploadedMigrationData;
-var progress = document.querySelector('.percent');
+var progress = $('#percent');
 
 var openFile = function(event) {
     var input = event.target;
@@ -350,15 +350,15 @@ $('#migration-btn').click(function() {
     console.log(uploadedMigrationData);
 });
 function csvJSON(csv, finEvt) {
-    document.getElementById('progress_bar').className = 'loading';
-    progress.style.width = '0%';
-    progress.textContent = '0%';
+    progressToggle();
+    progress.css('width','0%');
+    progress.html('0%');
     var lines = csv.split("\n");
 
     var result = [];
 
     var headers = lines[0].split(",");
-    
+    var prev = 0;
     for (var i = 1; i < lines.length; i++) {
         var obj = {};
         var currentline = lines[i].split(",");
@@ -369,20 +369,23 @@ function csvJSON(csv, finEvt) {
             }
             result.push(obj);
         }
-        var percentLoaded = Math.round((i / (lines.length-2)) * 100);
+        var percentLoaded = Math.round((i / (lines.length-1)) * 100);
         // Increase the progress bar length.
-        if (percentLoaded < 100) {
-            progress.style.width = percentLoaded + '%';
-            progress.textContent = percentLoaded + '%';
-            console.log(progress.style.width);
-            console.log(progress.textContent);
+        if (percentLoaded < 100 && prev != percentLoaded) {
+            progress.css('width',percentLoaded + '%');
+            progress.html(percentLoaded + '%');
+            console.log(i +' / '+(lines.length-1) +'  '+percentLoaded+'%');
+            prev = percentLoaded;
         }
         
     }
     var jsonStr = JSON.stringify(result);
     finEvt();
-    progress.style.width = '100%';
-    progress.textContent = '100%';
-    setTimeout("document.getElementById('progress_bar').className='';", 2000);
+//    progress.css('width','100%');
+//    progress.html('100%');
+//    setTimeout(progressToggle, 2000);
     return jsonStr; // JSON
+}
+progressToggle = function progressToggle(){
+    $('#progress_bar').toggleClass('loading');
 }
