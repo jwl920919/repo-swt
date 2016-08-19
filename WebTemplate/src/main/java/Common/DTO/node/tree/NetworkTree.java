@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.shinwootns.common.utils.ip.IPAddr;
-import com.shinwootns.common.utils.ip.IPNetwork;
-import com.shinwootns.common.utils.ip.ipv6.IPv6Address;
+import Common.ip.IPAddr;
+import Common.ip.IPNetwork;
+import Common.ip.ipv6.IPv6Address;
 
 public class NetworkTree extends Tree {
 
@@ -18,7 +18,7 @@ public class NetworkTree extends Tree {
 		super(rootData);
 		root = new Node(rootData);
 		root.depth = 0;
-		root.children = new ArrayList<Node>();
+		root.children = new ArrayList<>();
 	}
 
 	public static class Node {
