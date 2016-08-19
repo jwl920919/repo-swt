@@ -62,7 +62,7 @@ public class MQEventReceiver implements Runnable {
 				break;
 			} catch (IOException e) {
 				
-				if (client != null && client.checkConnection() == false) {
+				if (client != null) {
 					client.CloseChannel();
 					client = null;
 				}

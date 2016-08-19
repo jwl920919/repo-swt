@@ -231,24 +231,32 @@ public class ClusterManager {
 			if (isMasterNode) {
 				
 				Jedis redis = RedisManager.getInstance().getRedisClient();
-
-				if (_isRunningOtherMasterNode(redis) == false)
-				{
-					synchronized(this)
-					{
-						this.isMasterNode = isMasterNode;
-					}
-	
-					_logger.info( (new StringBuilder())
-							.append("************************************")
-							.append(" Cluster Mode = ")
-							.append((isMasterNode) ? "MASTER " : "SLAVE ")
-							.append("************************************")
-							.toString()
-					);
+				if (redis == null)
+					return;
 				
-					// Start MasterJobWorker
-					WorkerManager.getInstance().startMasterJobWorker();
+				try {
+					if (_isRunningOtherMasterNode(redis) == false)
+					{
+						synchronized(this)
+						{
+							this.isMasterNode = isMasterNode;
+						}
+		
+						_logger.info( (new StringBuilder())
+								.append("************************************")
+								.append(" Cluster Mode = ")
+								.append((isMasterNode) ? "MASTER " : "SLAVE ")
+								.append("************************************")
+								.toString()
+						);
+					
+						// Start MasterJobWorker
+						WorkerManager.getInstance().startMasterJobWorker();
+					}
+				} catch(Exception ex) {
+					_logger.error(ex.getMessage(), ex);
+				} finally {
+					redis.close();
 				}
 			}
 			// SLAVE
@@ -280,7 +288,15 @@ public class ClusterManager {
 				
 				// Update slave mode
 				Jedis redis = RedisManager.getInstance().getRedisClient();
-				_removeMasterNode(redis);
+				if (redis != null) {
+					try {
+						_removeMasterNode(redis);
+					} catch(Exception ex) {
+						_logger.error(ex.getMessage(), ex);
+					} finally {
+						redis.close();
+					}
+				}
 			}
 		}
 	}

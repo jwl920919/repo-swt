@@ -256,29 +256,38 @@ public class ClusterManager {
 			// MASTER
 			if (isMasterNode) {
 				
-				// Wait for other master's termination
 				Jedis redis = RedisManager.getInstance().getRedisClient();
-
-				if (_isRunningOtherMasterNode(redis) == false)
+				if (redis == null)
+					return;
+					
+				try
 				{
-					this.isMasterNode = isMasterNode;
-					
-					_logger.info( (new StringBuilder())
-							.append("************************************")
-							.append(" Cluster Mode = ")
-							.append((isMasterNode) ? "MASTER " : "SLAVE ")
-							.append("************************************")
-							.toString()
-					);
-					
-					// Update To DB
-					DeviceMapper deviceMapper = SpringBeanProvider.getInstance().getDeviceMapper();
-					if (deviceMapper != null && SharedData.getInstance().getSiteID() >= 0) {
-						deviceMapper.updateInsightMaster(SharedData.getInstance().getSiteID(), SystemUtils.getHostName());
+					// Wait for other master's termination
+					if (_isRunningOtherMasterNode(redis) == false)
+					{
+						this.isMasterNode = isMasterNode;
+						
+						_logger.info( (new StringBuilder())
+								.append("************************************")
+								.append(" Cluster Mode = ")
+								.append((isMasterNode) ? "MASTER " : "SLAVE ")
+								.append("************************************")
+								.toString()
+						);
+						
+						// Update To DB
+						DeviceMapper deviceMapper = SpringBeanProvider.getInstance().getDeviceMapper();
+						if (deviceMapper != null && SharedData.getInstance().getSiteID() >= 0) {
+							deviceMapper.updateInsightMaster(SharedData.getInstance().getSiteID(), SystemUtils.getHostName());
+						}
+						
+						// Start MasterJobWorker
+						WorkerManager.getInstance().startMasterJobWorker();
 					}
-					
-					// Start MasterJobWorker
-					WorkerManager.getInstance().startMasterJobWorker();
+				} catch(Exception ex) {
+					_logger.error(ex.getMessage(), ex);
+				} finally {
+					redis.close();
 				}
 			}
 			// SLAVE
@@ -304,10 +313,18 @@ public class ClusterManager {
 					// Stop MasterJobWorker
 					WorkerManager.getInstance().stopMasterJobWorker();
 				}
-				
-				// Update slave mode
+
 				Jedis redis = RedisManager.getInstance().getRedisClient();
-				_removeMasterNode(redis);
+				if (redis != null) {
+					try {
+						// Update slave mode
+						_removeMasterNode(redis);
+					} catch(Exception ex) {
+						_logger.error(ex.getMessage(), ex);
+					} finally {
+						redis.close();
+					}
+				}
 			}
 
 		}
