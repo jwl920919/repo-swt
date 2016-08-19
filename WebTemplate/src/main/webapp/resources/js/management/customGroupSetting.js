@@ -116,7 +116,7 @@ function trClickEvent(tr) {
 }
 function ipModifyBtnClickEvent(t) {
     var $this = $(t);
-    if ($this.parent().siblings().eq(3).text() == '') {
+    if ($this.parent().parent().siblings().eq(3).text() == '') {
         isMadeRecord = false;
     } else {
         isMadeRecord = true;
@@ -141,18 +141,13 @@ function ipDeleteBtnClickEvent(t) {
 
     modalShow("delete-modal");
 }
-function ipDeleteBtnClickEvent(t) {
-    var $this = $(t);
-
-    modalShow("delete-modal");
-}
-$("#add-button").click(
-        function() {
-            if($("#ip-table_select option:selected").text() == 'IPV4')
-                $("#add-network-txt").attr("placeholder","ex) 192.168.1.0/24");
-            else $("#add-network-txt").attr("placeholder","ex) fe80::c0a8:100/120");
-            modalShow("add-modal");
-        });
+$("#add-button").click(function() {
+    if ($("#ip-table_select option:selected").text() == 'IPV4')
+        $("#add-network-txt").attr("placeholder", "ex) 192.168.1.0/24");
+    else
+        $("#add-network-txt").attr("placeholder", "ex) fe80::c0a8:100/120");
+    modalShow("add-modal");
+});
 
 $("#modify-save-btn").click(function() {
     var jObj = new Object();
@@ -192,8 +187,64 @@ $("#modify-save-btn").click(function() {
     }
     modalClose("modify-modal");
 });
+
+$("#add-save-btn").click(function() {
+    var jObj = new Object();
+    var patt = new RegExp(regExp);
+    if (patt.test($("#add-network-txt").val())) {
+        jObj.network = $("#add-network-txt").val();
+        jObj.ip_type = $("#ip-table_select option:selected").text();
+        jObj.group_name = $("#add-name-txt").val();
+        if (siteMaster == 't') {
+            jObj.site_id = $('#group-table-select option:selected').val();
+        } else {
+            jObj.site_id = siteID;
+        }
+        $.ajax({
+            url : "/management/addIpCustomGroup",
+            type : "POST",
+            dataType : "text",
+            data : JSON.stringify(jObj),
+            success : function(data) {
+                var jsonObj = eval("(" + data + ')');
+                if (jsonObj.result == true) {
+                    ipTable.ajax.reload();
+                    $("#add-network-txt").removeClass("test-success");
+                    $("#add-network-txt").removeClass("test-fail");
+                    $("#add-name-txt").val('');
+                    $("#add-network-txt").val('');
+                    modalClose("add-modal");
+                }
+            }
+        });
+    }
+});
 $("#delete-save-btn").click(function() {
-    console.log("del-btn clicked");
+    var jObj = new Object();
+    jObj.group_id = $tr.children().eq(3).text();
+    $.ajax({
+        url : "/management/deleteIpCustomGroup",
+        type : "POST",
+        dataType : "text",
+        data : JSON.stringify(jObj),
+        success : function(data) {
+            var jsonObj = eval("(" + data + ')');
+            if (jsonObj.result == true) {
+                ipTable.ajax.reload();
+                modalClose("delete-modal");
+            }
+        }
+    });
+});
+$("#add-network-txt").change(function() {
+    var patt = new RegExp(regExp);
+    if (patt.test($("#add-network-txt").val())) {
+        $("#add-network-txt").removeClass("test-fail");
+        $("#add-network-txt").addClass("test-success");
+    } else {
+        $("#add-network-txt").removeClass("test-success");
+        $("#add-network-txt").addClass("test-fail")
+    }
 });
 fnShowEvent = function() {
     // if (popupClass == "modify") {

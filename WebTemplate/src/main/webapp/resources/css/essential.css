@@ -1,3 +1,7 @@
+.hidden {
+	visibility: hidden;
+}
+
 .white-paper {
 	position: relative;
 	background: #fff;
