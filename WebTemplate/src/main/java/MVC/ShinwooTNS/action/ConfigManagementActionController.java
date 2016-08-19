@@ -101,7 +101,6 @@ public class ConfigManagementActionController {
 		try {
 			init();
 			SYSTEM_USER_INFO_DTO systemUserInfo = userInfoService.select_SYSTEM_USER_INFO_ONE_SEARCH(
-					(HashMap<String,Object>)
 					gson.fromJson(request.getReader(), new TypeToken<HashMap<String, Object>>() {
 					}.getType()));
 			Map<String, Object> mData = new HashMap<String, Object>();
@@ -219,7 +218,7 @@ public class ConfigManagementActionController {
 			for (HashMap<String, Object> map : jArray) {
 				userIdList.add(map.get("user_id").toString());
 			}
-			HashMap<String, Object> parameter = new HashMap<String, Object>();
+			HashMap<String, Object> parameter = new HashMap<>();
 			parameter.put("list", userIdList);
 			int cnt = userInfoService.delete_SYSTEM_USER_INFO_RECORDS(parameter);
 			System.out.println(cnt);
@@ -242,9 +241,9 @@ public class ConfigManagementActionController {
 		try {
 			init();
 			List<SYSTEM_USER_GROUP_DTO> groupsInfoList = groupInfoService.select_SYSTEM_USER_GROUP_INFO();
-			List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
+			List<Map<String, Object>> mapList = new ArrayList<>();
 			for (SYSTEM_USER_GROUP_DTO sugd : groupsInfoList) {
-				HashMap<String, Object> map = new HashMap<String, Object>();
+				HashMap<String, Object> map = new HashMap<>();
 				map.put("group_name", sugd.getGroup_name());
 				map.put("group_id", sugd.getGroup_id());
 				mapList.add(map);
@@ -338,7 +337,6 @@ public class ConfigManagementActionController {
 			init();
 			// site_name, site_code, description
 			int cnt = siteInfoService.insert_SITE_INFO_ONE_RECORD(
-					(HashMap<String,Object>)
 					gson.fromJson(request.getReader(), new TypeToken<HashMap<String, Object>>() {
 					}.getType()));
 			if (cnt > -1)
@@ -449,7 +447,7 @@ public class ConfigManagementActionController {
 			for (HashMap<String, Object> map : jArray) {
 				userIdList.add(Integer.parseInt(map.get("site_id").toString()));
 			}
-			HashMap<String, Object> parameter = new HashMap<String, Object>();
+			HashMap<String, Object> parameter = new HashMap<>();
 			parameter.put("list", userIdList);
 			int cnt = siteInfoService.delete_SITE_INFO_RECORDS(parameter);
 			if (cnt > -1)
@@ -478,7 +476,7 @@ public class ConfigManagementActionController {
 			for (HashMap<String, Object> map : jArray) {
 				groupIdList.add(Integer.parseInt(map.get("group_id").toString()));
 			}
-			HashMap<String, Object> parameter = new HashMap<String, Object>();
+			HashMap<String, Object> parameter = new HashMap<>();
 			parameter.put("list", groupIdList);
 			int cnt = groupInfoService.delete_SYSTEM_USER_GROUP_INFO_RECORDS(parameter);
 			if (cnt > -1)
@@ -507,7 +505,7 @@ public class ConfigManagementActionController {
 		try {
 			init();
 			HttpSession session = request.getSession(true);
-			HashMap<String, Object> parameters = new HashMap<String, Object>();
+			HashMap<String, Object> parameters = new HashMap<>();
 			parameters.put("site_id", Integer.parseInt(session.getAttribute("site_id").toString()));
 			List<Map<String, Object>> tableInfo = authMenuService.select_AUTH_MENU_MAKE_SEARCH_FOR_SITE(parameters);// body_info
 			List<Map<String, Object>> groupNames = authMenuService.select_AUTH_MENU_GROUP_NAMES(parameters);// header
@@ -533,12 +531,12 @@ public class ConfigManagementActionController {
 				sb.append("<tbody id='auth_table_body'>");
 				for (Map<String, Object> mm : menuMaster) {
 					count++;
-					List<Object> subRemoveList = new ArrayList<Object>();
+					List<Object> subRemoveList = new ArrayList<>();
 					StringBuffer tmp = new StringBuffer();
 
 					for (Map<String, Object> ms : menuSub) {
 						if (mm.get("master_cd").toString().equals(ms.get("master_cd").toString())) {
-							List<Object> tiRemoveList = new ArrayList<Object>();
+							List<Object> tiRemoveList = new ArrayList<>();
 							tmp.append("<tr>");
 							tmp.append("<td style='width:240px;background-color: #efefef;' name=sub_menu");
 							tmp.append(count);
@@ -666,9 +664,9 @@ public class ConfigManagementActionController {
 		try {
 			init();
 			List<SITE_INFO_DTO> sitesInfoList = siteInfoService.select_SITE_INFO();
-			List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
+			List<Map<String, Object>> mapList = new ArrayList<>();
 			for (SITE_INFO_DTO sid : sitesInfoList) {
-				HashMap<String, Object> map = new HashMap<String, Object>();
+				HashMap<String, Object> map = new HashMap<>();
 				map.put("site_name", sid.getSite_name());
 				map.put("site_id", sid.getSite_id());
 				mapList.add(map);
@@ -691,7 +689,7 @@ public class ConfigManagementActionController {
 			init();
 			SITE_INFO_DTO sid = siteInfoService
 					.select_SITE_INFO_ONE_SEARCH(Integer.parseInt(session.getAttribute("site_id").toString()));
-			HashMap<String, Object> map = new HashMap<String, Object>();
+			HashMap<String, Object> map = new HashMap<>();
 			map.put("site_name", sid.getSite_name());
 			map.put("site_id", sid.getSite_id());
 			result.resultValue = map;

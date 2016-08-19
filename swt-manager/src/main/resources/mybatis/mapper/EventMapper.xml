@@ -15,4 +15,34 @@
 		)
     </insert>
     
+    
+    <!-- ############################ Syslog Count ############################ -->
+    
+    <select id="selectSyslogCount" resultType="com.shinwootns.data.entity.EventCount">
+	    SELECT interval_time time, SUM(event_cnt) count
+		FROM
+		(
+			SELECT to_timestamp(floor((extract('epoch' from collect_time) / #{interval_sec} )) * #{interval_sec}) AT TIME ZONE 'UTC' 
+				as interval_time
+			, COUNT(*) event_cnt
+			FROM dhcp_log
+			WHERE collect_time > current_timestamp - '#{period_hour}:00:00'::time
+			AND site_id=#{site_id}
+			GROUP BY interval_time
+			UNION ALL
+			SELECT to_timestamp(floor((extract('epoch' from collect_time) / #{interval_sec} )) * #{interval_sec}) AT TIME ZONE 'UTC' 
+				as interval_time
+			, COUNT(*) event_cnt
+			FROM event_log
+			WHERE 1=1
+			AND site_id=#{site_id}
+			AND event_type = 'syslog'
+			AND collect_time > current_timestamp - '#{period_hour}:00:00'::time
+			GROUP BY interval_time
+			
+		) syslog
+		GROUP BY interval_time
+		ORDER BY interval_time DESC
+    </select>
+    
 </mapper>

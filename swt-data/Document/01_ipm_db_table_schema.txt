@@ -232,6 +232,32 @@ COMMENT ON COLUMN public.event_log.event_type IS 'syslog, ...';
 CREATE INDEX event_log_idx ON public.event_log USING btree (device_id, collect_time);
 
 
+
+CREATE SEQUENCE dhcp_log_seq;
+
+CREATE TABLE dhcp_log
+(
+  dhcp_log_id integer NOT NULL DEFAULT nextval('dhcp_log_seq'::regclass),
+  site_id integer,
+  device_id integer,
+  dhcp_ip character varying(40),
+  dhcp_type character varying(16) NOT NULL,
+  is_renew boolean DEFAULT false,
+  is_guest_range boolean DEFAULT false,
+  duration integer,
+  client_ip_type character varying(8),
+  client_ip character varying(40),
+  client_ip_num numeric,
+  client_mac character varying(18),
+  client_duid character varying(64),
+  client_hostname character varying(64),
+  collect_time timestamp with time zone DEFAULT current_timestamp,
+  CONSTRAINT dhcp_log_id_pkey PRIMARY KEY (dhcp_log_id)
+);
+
+CREATE INDEX dhcp_log_idx ON dhcp_log USING btree (dhcp_type, client_ip, collect_time);
+
+
 --==========================================================================================
 -- AUTH
 --==========================================================================================

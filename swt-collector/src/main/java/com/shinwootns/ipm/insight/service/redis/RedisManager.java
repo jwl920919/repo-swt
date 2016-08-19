@@ -21,7 +21,7 @@ public class RedisManager {
 	private String _host;
 	private int _port;
 	private String _passowrd;
-	private int _dbnum;
+	private int _dbnum = 0;
 	
 	//region Singleton
 	private static RedisManager _instance = null;
@@ -56,10 +56,8 @@ public class RedisManager {
 		synchronized(this)
 		{
 			_close();
-			_connect();
+			return _connect();
 		}
-
-		return false;
 	}
 	//endregion
 	

@@ -1,5 +1,7 @@
 package com.shinwootns.ipm.insight.worker;
 
+/*
+
 import java.net.UnknownHostException;
 import java.sql.Timestamp;
 import java.util.Collections;
@@ -21,23 +23,27 @@ import com.shinwootns.common.network.SyslogEntity;
 import com.shinwootns.common.utils.JsonUtils;
 import com.shinwootns.common.utils.TimeUtils;
 import com.shinwootns.common.utils.ip.IPAddr;
+import com.shinwootns.data.entity.DhcpLog;
 import com.shinwootns.data.entity.EventData;
+import com.shinwootns.data.key.QueueNames;
 import com.shinwootns.data.key.RedisKeys;
+import com.shinwootns.ipm.insight.SpringBeanProvider;
 import com.shinwootns.ipm.insight.data.SharedData;
+import com.shinwootns.ipm.insight.data.mapper.DhcpMapper;
 import com.shinwootns.ipm.insight.service.amqp.RabbitMQHandler;
 import com.shinwootns.ipm.insight.service.redis.RedisManager;
 import com.shinwootns.ipm.insight.service.syslog.DhcpMessage;
-import com.shinwootns.ipm.insight.service.syslog.SyslogHandler;
+import com.shinwootns.ipm.insight.service.syslog.SyslogHandlerEx;
 
 import redis.clients.jedis.Jedis;
 
-public class SyslogPublisher implements Runnable {
+public class SyslogAggrWorker implements Runnable {
 
 	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	
 	private Jedis _redis = null;
 	
-	private SyslogHandler syslogHandler = new SyslogHandler();
+	private SyslogHandlerEx syslogHandler = new SyslogHandlerEx();
 	
 	//region [public] run
 	@Override
@@ -52,7 +58,7 @@ public class SyslogPublisher implements Runnable {
 		// Redis Key
 		String redisKey = RedisKeys.KEY_DATA_SYSLOG + ":" + SharedData.getInstance().getSiteID();
 		
-		connectRedis();
+		_connectRedis();
 		
 		// Delete
 		if (this._redis != null)
@@ -69,7 +75,7 @@ public class SyslogPublisher implements Runnable {
 				
 				try
 				{
-					connectRedis();
+					_connectRedis();
 					
 					if (this._redis != null) {
 						
@@ -81,8 +87,8 @@ public class SyslogPublisher implements Runnable {
 					}
 				}
 				catch(Exception ex) {
-					closeRedis();
-					connectRedis();
+					_closeRedis();
+					_connectRedis();
 					
 					continue;
 				}
@@ -111,43 +117,12 @@ public class SyslogPublisher implements Runnable {
 					dataSet.clear();
 					
 					// 2. Sort by time
-					LinkedHashMap<String, SyslogEntity> sortedMap = sortBySyslogRecvTime(mapDupCheck);
+					LinkedHashMap<String, SyslogEntity> sortedMap = _sortBySyslogRecvTime(mapDupCheck);
 					
 					for(Entry<String, SyslogEntity> entry : sortedMap.entrySet()) {
 						
-						// Get Device ID
-						Integer deviceId = SharedData.getInstance().getDeviceIDByIP( entry.getValue().getHost() );
-						
-						// DHCP Message Parsing
-						DhcpMessage dhcpMsg = syslogHandler.processSyslog(entry.getValue().getData());
-						
-						if (dhcpMsg != null) {
-							// DHCP
-							
-							if (dhcpMsg.getDhcpType().equals("DHCPACK")) {
-								
-								try {
-									IPAddr ipAddr = new IPAddr(dhcpMsg.getIp());
-									
-									if ( SharedData.getInstance().isGuestRange(ipAddr.getNumberToBigInteger()) ) {
-										// Guest Range
-										// ...
-									}
-									else {
-										//
-									}
-									
-								} catch (UnknownHostException e) {
-									_logger.error(e.getMessage(), e);
-								}
-							}
-							
-
-							System.out.println(entry.getValue().toString());
-							System.out.println(dhcpMsg.toString());
-						}
-
-						SendEventMQ(deviceId, entry.getValue());
+						// ProcessSyslog
+						_processSyslog(entry.getValue());
 					}
 					mapDupCheck.clear();
 					sortedMap.clear();
@@ -163,8 +138,79 @@ public class SyslogPublisher implements Runnable {
 	}
 	//endregion
 	
-	//region [private] SendEventMQ
-	private void SendEventMQ(Integer deviceId, SyslogEntity syslog) {
+	//region [private] Process Syslog
+	private void _processSyslog(SyslogEntity syslog) {
+		
+		// Get Device ID
+		Integer deviceId = SharedData.getInstance().getDeviceIDByIP( syslog.getHost() );
+		
+		boolean isInsertDhcpLog = false;
+		
+		// DHCP Message Parsing
+		DhcpMessage dhcpMsg = syslogHandler.processSyslog(syslog);
+		
+		if (dhcpMsg != null) {
+			
+			try {
+			
+				IPAddr ipAddr = new IPAddr(dhcpMsg.getIp());
+				
+				Boolean isGuestRange = SharedData.getInstance().isGuestRange(ipAddr.getNumberToBigInteger()); 
+				
+				// Save DHCP log
+				isInsertDhcpLog = _saveDhcpLog(deviceId, syslog, dhcpMsg, ipAddr, isGuestRange);
+				
+				// DHCPACK
+				//if (dhcpMsg.getDhcpType().equals("DHCPACK")) {
+					// ...
+				//}
+				
+			} catch (UnknownHostException e) {
+				_logger.error(e.getMessage(), e);
+			}
+		}
+		
+
+		// Send to Event MQ
+		//if (isInsertDhcpLog == false)
+			_sendEventLogMQ(deviceId, syslog);
+	}
+	//endregion
+	
+	
+//	private void increaseSyslogCounter(long recvTime) {
+//		Timestamp time = new Timestamp(recvTime);
+//		@SuppressWarnings("deprecation")
+//		int time10Sec = time.getSeconds() / 10;
+//		
+//		// Increase Syslog Counter
+//		StringBuilder syslogKey = new StringBuilder();
+//		syslogKey.append(RedisKeys.KEY_COUNTER_SYSLOG)
+//			.append(":").append(SharedData.getInstance().getSiteID())
+//			.append(":").append(time10Sec);
+//		
+//		if (this._redis != null)
+//			this._redis.incr(syslogKey.toString());
+//	}
+//	
+//	private void increaseDhcpCounter(long recvTime, String dhcp_type) {
+//		Timestamp time = new Timestamp(recvTime);
+//		@SuppressWarnings("deprecation")
+//		int time10Sec = time.getSeconds() / 10;
+//		
+//		// Increase DHCP MSG Counter
+//		StringBuilder dhcpKey = new StringBuilder();
+//		dhcpKey.append(RedisKeys.KEY_COUNTER_DHCP)
+//			.append(":").append(SharedData.getInstance().getSiteID())
+//			.append(":").append(time10Sec);
+//		
+//		if (this._redis != null)
+//			this._redis.zincrby(dhcpKey.toString(), 1, dhcp_type);
+//	}
+	
+	
+	//region [private] Send EventLog
+	private void _sendEventLogMQ(Integer deviceId, SyslogEntity syslog) {
 
 		//Send Event
 		EventData eventData = new EventData();
@@ -177,12 +223,53 @@ public class SyslogPublisher implements Runnable {
 		eventData.setMessage(syslog.getData());
 		
 		// Send to RabbitMQ
-		RabbitMQHandler.getInstance().SendEvent( JsonUtils.serialize(eventData).getBytes() );
+		RabbitMQHandler.getInstance().SendDataToMQ(QueueNames.EVENT_QUEUE_NAME, JsonUtils.serialize(eventData).getBytes() );
+	}
+	//endregion
+	
+	//region [private] Save DHCP Log
+	private boolean _saveDhcpLog(Integer deviceId, SyslogEntity syslog, DhcpMessage dhcp, IPAddr ipAddr, Boolean isGuestRange) {
+
+		DhcpMapper dhcpMapper = SpringBeanProvider.getInstance().getDhcpMapper();
+		if (dhcpMapper == null)
+			return false;
+
+		DhcpLog dhcpLog = new DhcpLog();
+		
+		try
+		{
+			// DhcpLog
+			dhcpLog.setSiteId(SharedData.getInstance().getSiteID());
+			dhcpLog.setDhcpIp(syslog.getHost());
+			dhcpLog.setDeviceId(deviceId);
+			dhcpLog.setDhcpType(dhcp.getDhcpType());
+			dhcpLog.setIsRenew(dhcp.getRenew());
+			dhcpLog.setDuration(dhcp.getDuration());
+			dhcpLog.setClientIpType(dhcp.getIpType());
+			dhcpLog.setClientIpNum(ipAddr.getNumberToBigInteger());
+			dhcpLog.setClientIp(dhcp.getIp());
+			dhcpLog.setClientMac(dhcp.getMac());
+			dhcpLog.setClientHostname(dhcp.getHostname());
+			dhcpLog.setCollectTime(new Timestamp(syslog.getRecvTime()));
+			dhcpLog.setClientDuid(dhcp.getDuid());
+			dhcpLog.setIsGuestRange(isGuestRange);
+			
+			// Insert to DB
+			dhcpMapper.insertDhcpLog(dhcpLog);
+			
+			return true;
+		}
+		catch(Exception ex) {
+			_logger.error(ex.getMessage());
+			_logger.error(dhcp.toString());
+		}
+		
+		return false;
 	}
 	//endregion
 	
 	//region [private] sortBySyslogRecvTime
-	private LinkedHashMap<String, SyslogEntity> sortBySyslogRecvTime(Map<String, SyslogEntity> map) {
+	private LinkedHashMap<String, SyslogEntity> _sortBySyslogRecvTime(Map<String, SyslogEntity> map) {
 		
 	    List<Entry<String, SyslogEntity>> list = new LinkedList<Entry<String, SyslogEntity>>(map.entrySet());
 	    Collections.sort(list, new Comparator<Object>() {
@@ -207,7 +294,7 @@ public class SyslogPublisher implements Runnable {
 	//endregion
 	
 	//region [private] Connect Redis
-	private void connectRedis() {
+	private void _connectRedis() {
 		
 		if (this._redis == null)
 			this._redis = RedisManager.getInstance().getRedisClient();
@@ -215,7 +302,7 @@ public class SyslogPublisher implements Runnable {
 	//endregion
 	
 	//region [private] Close Redis
-	private void closeRedis() {
+	private void _closeRedis() {
 		
 		try {
 			if (this._redis != null)
@@ -227,3 +314,5 @@ public class SyslogPublisher implements Runnable {
 	}
 	//endregion
 }
+
+*/

@@ -19,6 +19,11 @@ public class RedisManager {
 	//RedisManager 
 	RedisHandler rm = null;
 	
+	private String _host;
+	private int _port;
+	private String _passowrd;
+	private int _dbnum = 0;
+	
 	//region Singleton
 	private static RedisManager _instance = null;
 	private RedisManager() {}
@@ -38,40 +43,66 @@ public class RedisManager {
 		if (appProperty == null)
 			return false;
 		
+		_host = appProperty.redisHost;
+		_port =  appProperty.redisPort;
+		_dbnum = 0;
+		
+		try {
+			_passowrd = CryptoUtils.Decode_AES128(appProperty.redisPassword);
+		} catch (Exception e) {
+			_logger.error(e.getMessage(), e);
+			return false;
+		}
+		
 		synchronized(this)
 		{
-			try {
-				if (rm != null) {
-					rm.close();
-				}
-			} catch(Exception ex) {
-			} finally {
-				rm = null;
-			}
+			_close();
+			return _connect();
+		}
+	}
+	//endregion
+	
+	//region [public] close
+	public void close() {
+		synchronized(this)
+		{
+			_close();
+		}
+	}
+	//endregion
+	
+	//region [private] _connect / _close
+	private boolean _connect() {
+		try
+		{
+			rm = new RedisHandler( _host, _port, _passowrd, 0);
 			
-			try
-			{
-				rm = new RedisHandler(
-						appProperty.redisHost
-						, appProperty.redisPort
-						, CryptoUtils.Decode_AES128(appProperty.redisPassword)
-						, 0);
-				
-				if ( rm.connect() ) {
-					_logger.info("Redis connection... OK");
-					return true;
-				}
-				else {
-					_logger.info("Redis connection... Failed");
-					return false;
-				}
+			if ( rm.connect() ) {
+				_logger.info("Redis connection... OK");
+				return true;
 			}
-			catch(Exception ex) {
-				_logger.error(ex.getMessage(), ex);
+			else {
+				_logger.info("Redis connection... Failed");
+				return false;
 			}
 		}
-
+		catch(Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+		}
+		
+		_close();
+		
 		return false;
+	}
+	
+	private void _close() {
+		try {
+			if (rm != null)
+				rm.close();
+		} catch(Exception ex) {
+		} finally {
+			rm = null;
+		}
 	}
 	//endregion
 	

@@ -7,7 +7,9 @@ public class DhcpMessage {
 	private String ip;			// IP Address (IPv4 or IPv6)
 	private String mac;
 	private String duid;
+	private String hostname;
 	private Boolean renew;
+	private Integer duration;
 	
 	@Override
 	public String toString() {
@@ -16,7 +18,10 @@ public class DhcpMessage {
 		.append(" ip_type=").append(ip_type)
 		.append(", ip=").append(ip)
 		.append(", mac=").append(mac)
+		.append(", hostname=").append(hostname)
+		.append(", duid=").append(duid)
 		.append(", renew=").append(renew)
+		.append(", duration=").append(duration)
 
 		.toString();
 	}
@@ -56,5 +61,21 @@ public class DhcpMessage {
 	}
 	public void setRenew(Boolean renew) {
 		this.renew = renew;
+	}
+
+	public String getHostname() {
+		return hostname;
+	}
+
+	public void setHostname(String hostname) {
+		this.hostname = hostname;
+	}
+
+	public Integer getDuration() {
+		return duration;
+	}
+
+	public void setDuration(Integer duration) {
+		this.duration = duration;
 	}
 }

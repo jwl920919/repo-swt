@@ -103,30 +103,27 @@ public class RabbitMQHandler {
 	}
 	//endregion
 	
-	//region SendEvent
-	public boolean SendEvent(byte[] bytes) {
+	//region SendDatatoMQ
+	public boolean SendDataToMQ(String queueName, byte[] bytes) {
 		
 		if (bytes == null)
 			return false;
 		
-		if (this._client == null) {
-			this._client = createClient();
-			
-			if (this._client == null)
-				return false;
-			
-			// Delcare Queue
-			this._client.DeclareQueue_WorkQueueMode(QueueNames.EVENT_QUEUE_NAME);
-		}
-		
 		synchronized(this)
 		{
-			if ( this._client == null )
-				return false;
+			if (this._client == null) {
+				this._client = createClient();
+				
+				if (this._client == null)
+					return false;
+				
+				// Delcare Queue
+				this._client.DeclareQueue_WorkQueueMode(queueName);
+			}
 			
 			try {
 
-				return this._client.SendData(QueueNames.EVENT_QUEUE_NAME, bytes);
+				return this._client.SendData(queueName, bytes);
 				
 			} catch (IOException e) {
 				_logger.error(e.getMessage(), e);

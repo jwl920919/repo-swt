@@ -12,8 +12,8 @@ insight:
     user: admin
     password: 7+AzHIrmzGDARTT1VaQa3Q==
   cluster:
-    mode: slave      # master, slave
-    index: 100       # 0 ~ 999
+    mode: master      # master, slave
+    index: 1       # 0 ~ 999
   redis:
     host: shinwootnskr.iptime.org
     port: 6379
@@ -23,7 +23,7 @@ insight:
     host: shinwootnskr.iptime.org
     port: 5672
     username: admin
-    password: 7+AzHIrmzGDARTT1VaQa3Q==s
+    password: 7+AzHIrmzGDARTT1VaQa3Q==
     virtual-host: /
   
   # debug mode
@@ -40,14 +40,6 @@ server:
   session:
     timeout: 3000
     
-#====================================
-# Security
-#====================================
-#security:
-#  user:
-#    name: admin
-#    password: shinwoo123!
-
 #====================================
 # spring
 #====================================

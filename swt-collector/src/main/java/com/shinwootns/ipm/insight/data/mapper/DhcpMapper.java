@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.shinwootns.data.entity.DhcpFixedIp;
 import com.shinwootns.data.entity.DhcpIpStatus;
+import com.shinwootns.data.entity.DhcpLog;
 import com.shinwootns.data.entity.DhcpMacFilter;
 import com.shinwootns.data.entity.DhcpNetwork;
 import com.shinwootns.data.entity.DhcpRange;
@@ -49,4 +50,7 @@ public interface DhcpMapper {
 	int insertDhcpIpStatus(DhcpIpStatus ip);
 	int updateDhcpIpStatus(DhcpIpStatus ip);
 	int deleteDhcpIpStatus(@Param("site_id")int site_id, @Param("ipaddr")String ipaddr);
+	
+	// DHCP Logg
+	int insertDhcpLog(DhcpLog dhcpLog);
 }

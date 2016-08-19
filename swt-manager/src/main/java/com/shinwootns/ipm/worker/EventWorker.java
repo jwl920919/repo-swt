@@ -75,6 +75,9 @@ public class EventWorker implements Runnable {
 			catch(InterruptedException ex) {
 				break;
 			}
+			catch(Exception ex) {
+				_logger.error(ex.getMessage(), ex);
+			}
 		}
 	
 		_logger.info((new StringBuilder()).append("EventWorker#").append( this._index).append("... end.").toString());

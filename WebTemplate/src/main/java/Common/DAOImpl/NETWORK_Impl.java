@@ -12,6 +12,7 @@ import Common.DAOInterface.NETWORK_interface;
 
 public class NETWORK_Impl extends SqlSessionDaoSupport implements NETWORK_interface {
 
+	@Override
 	public List<Map<String, Object>> select_SEARCHED_NETWORK_INFO(HashMap<String, Object> parameters) {
 		List<Map<String, Object>> select_SEARCHED_NETWORK_INFOList = new ArrayList<Map<String, Object>>();
 		try {
@@ -29,8 +30,7 @@ public class NETWORK_Impl extends SqlSessionDaoSupport implements NETWORK_interf
 		int total = -1;
 		try {
 			System.out.println(getSqlSession());
-			total = getSqlSession().selectOne("UI_Query.select_SEARCHED_NETWORK_INFO_TOTAL_COUNT",
-					parameters);
+			total = getSqlSession().selectOne("UI_Query.select_SEARCHED_NETWORK_INFO_TOTAL_COUNT",parameters);
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.out.println(e.getMessage());
