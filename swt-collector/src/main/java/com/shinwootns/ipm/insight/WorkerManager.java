@@ -6,6 +6,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import com.shinwootns.common.stp.PoolStatus;
 import com.shinwootns.common.stp.SmartThreadPool;
+import com.shinwootns.ipm.insight.worker.ClientScanWorker;
 import com.shinwootns.ipm.insight.worker.MasterJobWoker;
 import com.shinwootns.ipm.insight.worker.NetworkDeviceCollctor;
 import com.shinwootns.ipm.insight.worker.SchedulerWorker;
@@ -28,7 +29,8 @@ public class WorkerManager {
 
 	Thread _scheduler = null;									// Scheduler Thread
 	Thread _masterJobThread = null;								// Master Job Thread
-	Thread _networkDeviceCollector = null;						// Network Device Collctor
+	Thread _networkDeviceCollector = null;						// Network Device Collector
+	Thread _clientScanner = null;
 	
 	Thread[] _syslogWorker = new Thread[SYSLOG_WORKER_COUNT];	// Syslog Thread
 	
@@ -60,6 +62,11 @@ public class WorkerManager {
 			if (_networkDeviceCollector == null) {
 				_networkDeviceCollector = new Thread(new NetworkDeviceCollctor(), "NetworkDeviceCollctor");
 				_networkDeviceCollector.start();
+			}
+			
+			if (_clientScanner == null ) {
+				_clientScanner = new Thread(new ClientScanWorker(), "ClientScanWorker");
+				_clientScanner.start();
 			}
 			
 			// Start Syslog Putter
@@ -96,6 +103,16 @@ public class WorkerManager {
 					_networkDeviceCollector = null;
 				}
 				
+			}
+			
+			if (_clientScanner != null && _clientScanner.isAlive()) {
+				try {
+					_clientScanner.interrupt();
+					_clientScanner.join();
+				} catch(Exception ex) {
+				} finally {
+					_clientScanner = null;
+				}
 			}
 			
 			if (_masterJobThread != null && _masterJobThread.isAlive()) {

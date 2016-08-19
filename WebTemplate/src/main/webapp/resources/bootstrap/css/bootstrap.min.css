@@ -2494,7 +2494,8 @@ pre code {
 		width: 66.66666667%
 	}
 	.col-lg-7 {
-		width: 58.33333333%
+		width: 60%
+/* 		width: 58.33333333% */
 	}
 	.col-lg-6 {
 		width: 50%

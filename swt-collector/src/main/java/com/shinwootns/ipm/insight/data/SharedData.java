@@ -244,7 +244,7 @@ public class SharedData {
 		
 		String hostName = SystemUtils.getHostName();
 		
-		List<DeviceSnmp> listDevice = deviceMapper.selectDeviceSnmp(SharedData.getInstance().getSiteID(), hostName);
+		List<DeviceSnmp> listDevice = deviceMapper.selectCollectNetworkDevice(SharedData.getInstance().getSiteID(), hostName);
 		if (listDevice == null)
 			return;
 		

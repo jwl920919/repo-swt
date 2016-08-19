@@ -150,7 +150,7 @@ public class IPManagementActionController {
 			result.result = false;
 			result.errorMessage = e.getMessage();
 			e.printStackTrace();
-			ErrorLoggingHelper.log(logger, "staticIPStatus_Segment_Detail_MapData", e);
+			ErrorLoggingHelper.log(logger, "staticIPStatus_Segment_MapData", e);
 		}
 		return gson.toJson(result);
 	}
@@ -168,7 +168,8 @@ public class IPManagementActionController {
 			HashMap<String, Object> parameters = gson.fromJson(request.getReader(), new TypeToken<HashMap<String, Object>>() {}.getType());
 			String m_timezone = parameters.get("timezone").toString();
 			String m_network = parameters.get("network").toString();
-
+			String m_searchValue = parameters.get("searchValue").toString();
+			
 			String siteID = session.getAttribute("site_id").toString();
 			if (!siteID.equals("")) {
 				parameters.put("siteid", Integer.parseInt(siteID));
@@ -208,7 +209,7 @@ public class IPManagementActionController {
 
 				System.out.println("time_zone : " + m_timezone);
 				parameters.put("time_zone", m_timezone);
-				parameters.put("searchValue", "");
+				parameters.put("searchValue", m_searchValue);
 				parameters.put("siteid", Integer.parseInt(siteID));
 				parameters.put("network", m_network);
 				parameters.put("orderColumn", "ipaddr");

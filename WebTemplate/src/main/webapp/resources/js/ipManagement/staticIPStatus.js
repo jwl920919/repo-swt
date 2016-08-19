@@ -106,14 +106,14 @@ $(document).ready(function() {
 	    			        html += '<div class="box-header with-border-lightgray">';
 	    			        html += '<h3 class="box-title"><small>'+ obj.network +'</small></h3>';
 	    			        html += '<div class="box-tools pull-right">';
-	    			        html += '<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>';
+//	    			        html += '<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>';
 	    			        html += '</div></div>';
 	    			        html += '<div class="box-body-blackLine" style="background: #f4f4f4;">';
 	    			        html += '<div class="progress-group"><small>';
 	    			        html += '<table style="width: 100%">';
-	    			        html += '<tr><td><span>'+ getLanguage("type") +' : </span></td><td><span>'+ obj.ip_type +'</span></td></tr>';
-	    			        html += '<tr><td><span>'+ getLanguage("start") +' : </span></td><td><span>'+ obj.start_ip +'</span></td></tr>';
-	    			        html += '<tr><td><span>'+ getLanguage("last") +' : </span></td><td><span>'+ obj.end_ip +'</span></td></tr>';
+	    			        html += '<tr><td style="width: 40px;"><span>'+ getLanguage("type") +' : </span></td><td><span>'+ obj.ip_type +'</span></td></tr>';
+	    			        html += '<tr><td><span>Start : </span></td><td><span>'+ obj.start_ip +'</span></td></tr>';
+	    			        html += '<tr><td><span>End : </span></td><td><span>'+ obj.end_ip +'</span></td></tr>';
 	    			        html += '<tr><td colspan="2" style="height: 40px">';
 	    			        html += '<span>'+ getLanguage("utilization") +' </span>';
 	    			        if (obj.ip_type == "IPV4") {
@@ -374,6 +374,7 @@ function mapDataCall(network){
 		var jObj = Object();
 	    jObj.network = network;
 	    jObj.timezone = getClientTimeZoneName();
+	    jObj.searchValue = "";
 	
 	    $('#divLoading').attr("style","visibility: visible");
 	    
@@ -549,7 +550,6 @@ function fnIPMapDraw(startipNumber, DHCP_RangeArr, BROADCAST_Arr, NETWORK_Arr, U
         
 		if (!isNaN(ipNumber)) {
 		    //console.log("org : " + ipNumber);
-		    
 		    for (i = 0; i < ipMapSettings.rows; i++) {
 		        for (j = 0; j < ipMapSettings.cols; j++) {
 		            ipNo += 1;
@@ -764,7 +764,7 @@ function fnIPMapDraw(startipNumber, DHCP_RangeArr, BROADCAST_Arr, NETWORK_Arr, U
 		                		className = className.replace(' ' + ipMapSettings.dhcpRangeCss, '').replace(' ' + ipMapSettings.unusedCss, '');
 		                		address = USED_Arr[index].ipaddr; 
 		                		mac = USED_Arr[index].macaddr;
-		                		status = USED_Arr[index].status;
+		                		status = USED_Arr[index].ip_status;
 		                		hostname = USED_Arr[index].host_name;
 		                		hostos = USED_Arr[index].fingerprint;
 		                		desc = USED_Arr[index].user_description;
@@ -789,7 +789,7 @@ function fnIPMapDraw(startipNumber, DHCP_RangeArr, BROADCAST_Arr, NETWORK_Arr, U
 		                		className = className.replace(' ' + ipMapSettings.dhcpRangeCss, '').replace(' ' + ipMapSettings.unusedCss, '');
 		                		address = ABANDONED_Arr[index].ipaddr; 
 		                		mac = ABANDONED_Arr[index].macaddr;
-		                		status = ABANDONED_Arr[index].status;
+		                		status = ABANDONED_Arr[index].ip_status;
 		                		hostname = ABANDONED_Arr[index].host_name;
 		                		hostos = ABANDONED_Arr[index].fingerprint;
 		                		desc = ABANDONED_Arr[index].user_description;
@@ -844,7 +844,7 @@ function fnIPMapDraw(startipNumber, DHCP_RangeArr, BROADCAST_Arr, NETWORK_Arr, U
 		            			  html += '</table>\"';
 		            			  html += 'style="top:' + (i * ipMapSettings.rectangleHeight + 1).toString() + 'px;left:' + (j * ipMapSettings.rectangleWidth + 1).toString() + 'px;';
 		            			  html += 'text-align:center; vertical-align:middle;"';
-		            			  html += 'onclick=rectangleClick(this);>';
+		            			  html += "onclick=\"rectangleClick(this, '" + address + "');\">";
 		            			  html += '<a title="' + ipNo + '" style=\"' + fontcolor + ' line-height:25px\">' + ipNo + '</a>';
 		            			  html += '</li>';
 		            
@@ -865,7 +865,7 @@ function fnIPMapDraw(startipNumber, DHCP_RangeArr, BROADCAST_Arr, NETWORK_Arr, U
 /**
  * IP Map Rectangel Click Event - Class 변경해주기
 **/
-rectangleClick = function (obj) {
+rectangleClick = function (obj, ip) {
 	try
 	{
 //		console.log("map click : " + $(obj).attr('class'));
@@ -995,6 +995,45 @@ rectangleClick = function (obj) {
 	    else if ($(obj).hasClass(ipMapSettings.dhcp_abandonedCss+ "ORG")) {
 	    	$(obj).removeClass(ipMapSettings.selected_abandonedCss).removeClass(ipMapSettings.dhcp_abandonedCss+ "ORG").addClass(ipMapSettings.dhcp_abandonedCss);
 	    }
+	    	    
+	    if (ip != "" && ip != undefined) {
+	    	var jObj = Object();
+	    	jObj.network = $("#selectSegment").text();
+	    	jObj.timezone = getClientTimeZoneName();
+	    	jObj.searchValue = ip;
+	    	
+	    	$.ajax({
+		        url : 'ipManagement/staticIPStatus_Segment_Detail_MapData',
+		        type : "POST",
+		        data : JSON.stringify(jObj),
+		        success : function(data) {
+		            var jsonObj = eval("(" + data + ')');
+		            if (jsonObj.result == true) {		            	
+		            	$.each(jsonObj.resultValue, function (index, obj) {
+		            		//console.log("jsonObj.Value : " + obj.ipaddr);
+		            		
+		            		// Javascript Class에 데이터 담기
+//		            	    console.log(obj.ipaddr + ", " +obj.iptype + ", " +obj.macaddr + ", " +obj.duid + ", " +obj.ip_status + ", " +obj.host_name + ", " +obj.host_os,
+//		            	    		obj.fingerprint + ", " +obj.lease_start_time + ", " +obj.lease_end_time + ", " +obj.user_description);
+
+		            	    console.log($("#mapDetailip").text());
+		            	    $("#mapDetailip").text(obj.ipaddr);
+							$("#mapDetailduid").text(obj.duid);
+							$("#mapDetailhostname").text(obj.host_name);
+							$("#mapDetailleasestart").text(obj.lease_start_time);
+							$("#mapDetailmacaddr").text(obj.macaddr);
+							$("#mapDetailstatus").text(obj.ip_status);
+							$("#mapDetailhostos").text(obj.fingerprint);
+							$("#mapDetailleaseend").text(obj.lease_end_time);
+							$("#mapDetaildescription").text("obj.user_description");
+		            	});
+		            }
+		        },
+		        complete: function(data) {	            	
+		        }
+		    });	    	
+	    	
+		}
 	} catch (e) {
 		console.log("staticIPStatus.js rectangleClick() Error Log : " + e.message);
 	}

@@ -26,6 +26,9 @@ public class DhcpIpStatus implements Serializable {
 	private String host_name;
 	private String host_os;
 	private String fingerprint;
+	private String nmap_macaddr;
+	private String nmap_vendor;
+	private String nmap_os;
 	private Boolean is_never_ends;
 	private Boolean is_never_start;
 	private Timestamp lease_start_time;
@@ -227,6 +230,30 @@ public class DhcpIpStatus implements Serializable {
 
 	public void setIpNum(BigInteger ip_num) {
 		this.ip_num = ip_num;
+	}
+
+	public String getNmapMacaddr() {
+		return nmap_macaddr;
+	}
+
+	public void setNmapMacaddr(String nmap_macaddr) {
+		this.nmap_macaddr = nmap_macaddr;
+	}
+
+	public String getNmapVendor() {
+		return nmap_vendor;
+	}
+
+	public void setNmapVendor(String nmap_vendor) {
+		this.nmap_vendor = nmap_vendor;
+	}
+
+	public String getNmapOs() {
+		return nmap_os;
+	}
+
+	public void setNmapOs(String nmap_os) {
+		this.nmap_os = nmap_os;
 	}
 
 }

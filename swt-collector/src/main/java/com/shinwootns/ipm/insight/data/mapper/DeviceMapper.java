@@ -26,8 +26,8 @@ public interface DeviceMapper {
 	
 	List<DeviceSysOID> selectSysOID();
 	
-	// Device SNMP
-	List<DeviceSnmp> selectDeviceSnmp(@Param("site_id")int site_id, @Param("insight_host")String insight_host);
+	// Device Collect
+	List<DeviceSnmp> selectCollectNetworkDevice(@Param("site_id")int site_id, @Param("insight_host")String insight_host);
 	
 	// DHCP Device
 	DeviceDhcp selectDeviceDhcp(@Param("site_id")int site_id);

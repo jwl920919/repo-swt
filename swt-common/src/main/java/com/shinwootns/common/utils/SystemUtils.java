@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 public class SystemUtils {
 
+	//private final static Logger _logger = LoggerFactory.getLogger(SystemUtils.class);
 	private final static Logger _logger = LoggerFactory.getLogger(SystemUtils.class);
 	
 	public enum OS_Type {
@@ -50,6 +51,21 @@ public class SystemUtils {
 		public List<InterfaceIP> listIPAddr;
 	};
 	
+	public static class CommandOutput {
+		public String output;
+		public int exitCode;
+		public String errorMsg;
+		
+		@Override
+		public String toString() {
+			return (new StringBuilder())
+				.append("[Output] ExitCode=").append(exitCode)
+				.append(", Output=").append(output)
+				.append(", ErrorMsg=").append(errorMsg)
+				.toString();
+		}
+	}
+	
 	//region [FUNC] Execute Command (Async)
 	public static void executeCommandAsync(CommandLine command) {
 		
@@ -71,11 +87,11 @@ public class SystemUtils {
 	//endregion
 	
 	//region [FUNC] Execute Command
-	public static String executeCommand(CommandLine command) {
+	public static CommandOutput executeCommand(CommandLine command) {
 		
-		_logger.info(String.format("executeCommand(). command: " + command.toString()));
+		//_logger.info(String.format("executeCommand(). command: " + command.toString()));
 		
-		String result = "";
+		CommandOutput output = new CommandOutput();
 		
 		ByteArrayOutputStream baos = null;
 		
@@ -89,15 +105,15 @@ public class SystemUtils {
 			executor.setStreamHandler(streamHandler);
 			
 			// Execute Command
-			int exitCode = executor.execute(new CommandLine(command));
+			output.exitCode = executor.execute(new CommandLine(command));
+			output.output = baos.toString();
 			
-			result = baos.toString();
-			
-			_logger.debug("executeCommand() - exitCode : " + exitCode);
-			_logger.debug("executeCommand() - outputStr : " + result);
+			//_logger.debug("executeCommand() - exitCode : " + output.exitCode);
+			//_logger.debug("executeCommand() - outputStr : " + output.output);
 			
 		} catch (Exception ex) {
-			_logger.error(ex.getMessage(), ex);
+			output.errorMsg = ex.getMessage();
+			//_logger.error(ex.getMessage(), ex);
 		}
 		finally {
 			if (baos != null)
@@ -111,7 +127,7 @@ public class SystemUtils {
 			}
 		}
 		
-		return result;
+		return output;
 	}
 	//endregion
 	

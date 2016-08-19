@@ -9,6 +9,7 @@ import com.shinwootns.common.auth.AuthCheckerLDAP;
 import com.shinwootns.common.auth.LdapUserGroupAttr;
 import com.shinwootns.common.http.HttpClient;
 import com.shinwootns.common.utils.CryptoUtils;
+import com.shinwootns.common.utils.JsonUtils;
 import com.shinwootns.data.auth.AuthParam;
 import com.shinwootns.data.auth.AuthResult;
 import com.shinwootns.data.entity.AuthSetup;
@@ -104,7 +105,7 @@ public class AuthCheckHandler {
 				if (insight != null) {
 
 					StringBuilder url = new StringBuilder();
-					url.append("http://").append(insight.getIpaddr()).append(":").append(insight.getPort()).append("/api/auth");
+					url.append("http://").append(insight.getIpaddr()).append(":").append(insight.getPort()).append("/api");
 					
 					HttpClient restClient = new HttpClient();
 					try {
@@ -129,8 +130,27 @@ public class AuthCheckHandler {
 						return result; 
 					}
 					
-					// ...
-	
+					// [Site] Insight Check URL
+					StringBuilder checkUrl = new StringBuilder();
+					checkUrl.append("http://").append(insight.getIpaddr()).append(":").append(insight.getPort())
+					.append("/api/check_auth")
+					.append("?userid=").append(param.getUserId())
+					.append("&setupid=").append(setup.getSetupId());
+					
+					if (param.getMacAddr() != null)
+						checkUrl.append("&password=").append(param.getPassword());
+					
+					if (param.getMacAddr() != null)
+						checkUrl.append("&macaddr=").append(param.getMacAddr());
+					
+					// Get
+					String output = restClient.Get(checkUrl.toString());
+					
+					// Deserialize
+					result = (AuthResult)JsonUtils.deserialize(output, AuthResult.class);
+					
+					restClient.Close();
+					
 					// Check Result
 					if (result.isIsCheck() == true && result.isIsLogin() == true) {
 						return result;

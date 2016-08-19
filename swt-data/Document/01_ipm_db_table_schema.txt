@@ -77,12 +77,6 @@ CREATE TABLE device_network
   sys_oid character varying(256),
   sys_location character varying(256),
   description character varying(512),
-
-  insight_id integer,
-  fix_insight boolean DEFAULT false,
-  snmp_result boolean,
-  check_time timestamp with time zone,
-  
   insert_time timestamp with time zone DEFAULT current_timestamp,
   update_time timestamp with time zone DEFAULT current_timestamp,
   CONSTRAINT device_network_pkey PRIMARY KEY (device_id),
@@ -466,6 +460,12 @@ CREATE TABLE dhcp_ip_status
   lease_start_time timestamp with time zone,
   lease_end_time timestamp with time zone,
   last_discovered timestamp with time zone,
+  
+  nmap_macaddr character varying(18),
+  nmap_vendor character varying(64),
+  nmap_fingerprint character varying(128),
+  nmap_update timestamp with time zone,
+  
   update_time timestamp with time zone DEFAULT current_timestamp,
   user_description character varying(256),
   CONSTRAINT dhcp_ip_status_pkey PRIMARY KEY (site_id, ipaddr)
@@ -482,6 +482,35 @@ COMMENT ON COLUMN dhcp_ip_status.usage IS 'Indicates whether the IP address is c
 
 
 
+--==========================================================================================
+-- MAPPING
+--==========================================================================================
+
+-- INSIGHT_DEVICE_MAPPING
+CREATE TABLE insight_device_mapping
+(
+  insight_device_id integer NOT NULL,
+  network_device_id integer NOT NULL,
+  fix boolean DEFAULT false,
+  change_time timestamp with time zone DEFAULT current_timestamp,
+  CONSTRAINT insight_device_mapping_pkey PRIMARY KEY (network_device_id)
+);
+
+
+-- INSIGHT_NETWORK_MAPPING
+CREATE TABLE insight_network_mapping
+(
+  insight_device_id integer NOT NULL,
+  network character varying(64) NOT NULL,
+  fix boolean DEFAULT false,
+  change_time timestamp with time zone DEFAULT current_timestamp,
+  CONSTRAINT insight_network_mapping_pkey PRIMARY KEY (network)
+);
+
+
+--==========================================================================================
+-- CLIENT
+--==========================================================================================
 
 -- client_info
 CREATE TABLE client_info

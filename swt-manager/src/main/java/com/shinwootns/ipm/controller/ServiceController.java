@@ -30,6 +30,7 @@ public class ServiceController {
 	@Autowired
 	private ApplicationContext context;
 	
+	//region Start Service
 	@PostConstruct
 	public void startService() throws Exception {
 		
@@ -72,7 +73,9 @@ public class ServiceController {
 		// Start
 		WorkerManager.getInstance().start();
 	}
+	//endregion
 	
+	//region Stop Service
 	@PreDestroy
 	public void stopService() {
 		
@@ -83,4 +86,5 @@ public class ServiceController {
 		
 		_logger.info("Stop Service Controller.");
 	}
+	//endregion
 }

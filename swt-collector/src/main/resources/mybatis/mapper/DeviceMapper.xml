@@ -9,12 +9,13 @@
     </select>
     
     
-    <!-- ############################ Device (SNMP) ############################ -->
-    <select id="selectDeviceSnmp" resultType="com.shinwootns.data.entity.DeviceSnmp">
+    <!-- ############################ Device (for Collect) ############################ -->
+    <select id="selectCollectNetworkDevice" resultType="com.shinwootns.data.entity.DeviceSnmp">
 		SELECT DISTINCT nw.site_id, nw.device_id, nw.host, nw.snmp_community, nw.snmp_version
-			, COALESCE(nw.fix_insight, false) fix_insight, ins.device_id insight_id, ins.host insight_host
+			, COALESCE(map.fix, false) fix_insight, ins.device_id insight_id, ins.host insight_host
 		FROM device_network nw
-		LEFT OUTER JOIN device_insight ins ON nw.insight_id = ins.device_id
+		LEFT OUTER JOIN insight_device_mapping map ON nw.device_id = map.network_device_id
+		LEFT OUTER JOIN device_insight ins ON map.insight_device_id = ins.device_id
 		WHERE 1=1
 		<if test="site_id != null">
 		AND nw.site_id = #{site_id}

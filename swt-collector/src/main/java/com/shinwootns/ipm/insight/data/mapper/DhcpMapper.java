@@ -11,6 +11,7 @@ import com.shinwootns.data.entity.DhcpLog;
 import com.shinwootns.data.entity.DhcpMacFilter;
 import com.shinwootns.data.entity.DhcpNetwork;
 import com.shinwootns.data.entity.DhcpRange;
+import com.shinwootns.data.entity.NmapScanIP;
 
 @Mapper
 public interface DhcpMapper {
@@ -51,6 +52,10 @@ public interface DhcpMapper {
 	int updateDhcpIpStatus(DhcpIpStatus ip);
 	int deleteDhcpIpStatus(@Param("site_id")int site_id, @Param("ipaddr")String ipaddr);
 	
-	// DHCP Logg
+	// DHCP Log
 	int insertDhcpLog(DhcpLog dhcpLog);
+	
+	// Nmap Scan IP
+	List<NmapScanIP> selectNmapScanIP(@Param("site_id")int site_id, @Param("insight_host")String insight_host);
+	int updateNmapScanIP(NmapScanIP ip);
 }
