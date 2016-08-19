@@ -483,6 +483,7 @@ function certifyProcessAjaxCall() {
 			if (realtime === "on") {
 				update();
 			}
+			
 			// REALTIME TOGGLE
 			$("#realtime .btn").click(function() {
 				if ($(this).data("toggle") === "on") {

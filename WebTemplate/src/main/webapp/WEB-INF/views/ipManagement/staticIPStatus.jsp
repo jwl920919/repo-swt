@@ -169,7 +169,8 @@
 							<!-- tab_2_detail-pane -->
 							<div class="tab-pane" id="tab_2_detail" name="MapTap">
 								<div class="row">
-									<section class="col-lg-6-noPadding" style="width: 620px; margin-right: 30px">
+<!-- 									<section class="col-lg-6-noPadding" style="width: 620px; margin-right: 30px"> -->
+									<div  class="col-lg-4" style="width: 620px; margin-right: 30px">
 										<div id="holder">
 									        <ul id="place">
 									        </ul>
@@ -185,11 +186,13 @@
 												<!--192.168.1.0 - 192.168.1.255 -->
 									        </LABEL>
 									    </div>
-							        </section>
-									<section>
-							        	<table>
+								    </div>
+<!-- 							        </section> -->
+<!-- 									<section class="col-lg-7" > -->
+									<div class="col-lg-6">
+							        	<table class="col-lg-12">
 							        		<tr>
-							        			<td>
+							        			<td style="width:150px">
 										            <ul class="ul_legend">									               
 										               <li class="li_legend"><img src="../resources/images/ipmap/network.png"><span class="li_Label">Network</span></li>
 										               <li class="li_legend"><img src="../resources/images/ipmap/broadcast.png"><span class="li_Label">Broadcast</span></li>
@@ -210,11 +213,52 @@
 							        			</td>
 							        		</tr>
 							        		<tr>
-							        			<td>
+							        			<td colspan="2">
+							        				<div class="box box-primary" style="margin-top: 20px; margin-left: -8px;">
+														<div class="box-body box-profile">
+															<ul class="list-group list-group-unbordered col-xs-6" style="padding-right: 10px">
+																<li class="li_legend">
+																	<b><%=LanguageHelper.GetLanguage("ip")%></b> <a class="pull-right" id="mapDetailip"></a>
+																</li>
+																<li class="list-group-item">
+																	<b>duid</b> <a class="pull-right" id="mapDetailduid"></a>
+																</li>
+																<li class="list-group-item">
+																	<b><%=LanguageHelper.GetLanguage("hostname")%></b> <a class="pull-right" id="mapDetailhostname"></a>
+																</li>
+																<li class="list-group-item">
+																	<b><%=LanguageHelper.GetLanguage("lease")%> <%=LanguageHelper.GetLanguage("starttime")%></b>
+																	<a class="pull-right" id="mapDetailleasestart"></a>
+																</li>
+															</ul>
+															<ul class="list-group list-group-unbordered col-xs-6" style="padding-left: 10px">
+																<li class="li_legend">
+																	<b><%=LanguageHelper.GetLanguage("mac")%></b> <a class="pull-right" id="mapDetailmacaddr"></a>
+																</li>
+																<li class="list-group-item">
+																	<b><%=LanguageHelper.GetLanguage("status")%></b> <a class="pull-right" id="mapDetailstatus"></a>
+																</li>
+																<li class="list-group-item">
+																	<b><%=LanguageHelper.GetLanguage("hostos")%></b> <a class="pull-right" id="mapDetailhostos"></a>
+																</li>
+																<li class="list-group-item">
+																	<b><%=LanguageHelper.GetLanguage("lease")%> <%=LanguageHelper.GetLanguage("endtime")%></b>
+																	<a class="pull-right" id="mapDetailleaseend"></a>
+																</li>
+															</ul>
+															<ul class="list-group list-group-unbordered col-xs-12" style="margin-top: -12px; margin-bottom: 0px;">
+																<li class="li_legend">
+																	<b><%=LanguageHelper.GetLanguage("desctription")%></b>
+																	<a class="pull-right" id="mapDetaildescription"></a>
+																</li>
+															</ul>
+														</div>
+													</div>
 							        			</td>
 							        		</tr>
 							        	</table>
-							        </section>
+<!-- 							        </section> -->
+									</div>
 								</div>
 							</div>
 							<!-- /.tab_2_detail-pane -->
