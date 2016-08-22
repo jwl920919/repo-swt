@@ -62,4 +62,9 @@ private MANAGEMENT_interface mgmtMenuDao;
 	public List<Map<String, Object>> select_CUSTOM_IP_GROUP_INFO_FOR_BACKUP(HashMap<String, Object> parameters) {
 		return mgmtMenuDao.select_CUSTOM_IP_GROUP_INFO_FOR_BACKUP(parameters);
 	}
+
+	@Override
+	public List<Map<String, Object>> select_CLIENT_DEVICE_INFO() {
+		return mgmtMenuDao.select_CLIENT_DEVICE_INFO();
+	}
 }

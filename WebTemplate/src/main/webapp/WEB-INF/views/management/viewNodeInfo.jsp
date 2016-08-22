@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>사용자 정의 그룹 설정</title>
 <!-- Bootstrap 3.3.6 -->
-<link rel="stylesheet" href="/resources/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/resources/bootstrap/css/bootstrap.css">
 <!-- Font Awesome -->
 <link rel="stylesheet"
 	href="/resources/bootstrap/css/font-awesome.min.css">
@@ -79,33 +79,48 @@
 		style="margin-left: 230px; min-height: 100%;">
 		<section class="white-paper"
 			style="text-align: center; min-height: 100%; margin-top: 0px;">
-			<!-- 			<div style="width: 100%; height: 34px;"> -->
-			<!-- 				<div> -->
-			<!-- 					<select class="form-control "></select> -->
-			<!-- 				</div> -->
-			<!-- 				<div> -->
-			<!-- 					<table class="form-control "> -->
-			<!-- 						<tr> -->
-			<!-- 							<th width=>Device Search Status</th> -->
-			<!-- 							<td>Success</td> -->
-			<!-- 							<td>10</td> -->
-			<!-- 							<td>Failure</td> -->
-			<!-- 							<td>2</td> -->
-			<!-- 							<td>Total</td> -->
-			<!-- 							<td>4</td> -->
-			<!-- 						</tr> -->
-			<!-- 					</table> -->
-			<!-- 				</div> -->
-			<!-- 			</div> -->
-			<table name="datatable" id="parent-table" class="essential-table" style="width: 100%;">
-				<thead>
-					<tr>
-						<th>Network</th>
-						<th>Name</th>
-						<th>Children</th>
-					</tr>
-				</thead>
-			</table>
+			<div class="row hidden" id="defaultDiv">
+				<div class="col-lg-12">
+					<div class="box box-primary">
+						<div class="pagebox-header with-border">
+							<!-- 				<div class="box-header"> -->
+							<div>
+								<!-- select -->
+								<table>
+									<tr>
+										<td><label
+											style="width: 80px; margin-right: 10px; text-align: right">디바이스
+												: </label></td>
+										<td><select id="deviceSel"
+											class="form-control selectoption_grey_color"
+											style="width: 210px">
+										</select></td>
+										<td><input type="text"
+											style="width: 250px; margin-left: 15px;" class="form-control"
+											id="txtSearch" placeholder="검색"></td>
+										<td
+											style="width: 100%; text-align: right; padding-right: 10px">
+											<button type="button" class="btn btn-primary" id="btnSearch"><%=LanguageHelper.GetLanguage("inquiry")%></button>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+						<table name="datatable" id="parent-table" class="essential-table"
+							style="width: 98%;" align="center">
+							<thead>
+								<tr>
+									<th>IP</th>
+									<th>MAC</th>
+									<th>Hostname</th>
+									<th>OS</th>
+									<th>Device Type</th>
+								</tr>
+							</thead>
+						</table>
+					</div>
+				</div>
+			</div>
 		</section>
 	</div>
 

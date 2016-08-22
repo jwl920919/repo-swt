@@ -234,5 +234,16 @@
 		</if>
 	</select>
 	
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-08-22 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description :  -->
+	<!-- Controller :  -->
+	<select id="select_CLIENT_DEVICE_INFO" resultType="java.util.HashMap">
+		SELECT DISTINCT device_type 
+		FROM view_client_info 
+		ORDER BY device_type ;
+	</select>
+	
 </mapper>
 

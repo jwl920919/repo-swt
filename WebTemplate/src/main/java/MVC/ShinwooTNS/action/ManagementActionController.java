@@ -226,7 +226,7 @@ public class ManagementActionController {
 			} else {
 				node = ipNetworkTree.getIPv6NetworkTree().getRoot().getNode(network);
 			}
-			Node.printNode(node);
+//			Node.printNode(node);
 			result.result = true;
 			return gson.toJson(result);
 		} catch (Exception e) {
@@ -385,6 +385,29 @@ public class ManagementActionController {
 	}
 	// endregion
 
+	// region getDeviceTypes
+	@RequestMapping(value = "getDeviceTypes", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+	public @ResponseBody Object getDeviceNames(HttpServletRequest request) {
+		try {
+			init();
+			List<Map<String, Object>> list = managementService.select_CLIENT_DEVICE_INFO();
+			for(Map<String,Object> obj : list) {
+				if(obj.get("device_type").toString().trim().equals("")){
+					obj.put("device_type", "nomatch");
+				}
+			}
+			result.data= list;
+			result.result = true;
+			return gson.toJson(result);
+		} catch (Exception e) {
+			ErrorLoggingHelper.log(logger, "getDeviceTypes", e);
+			result.result = false;
+			return gson.toJson(result);
+		}
+
+	}
+	// endregion
+	
 	private void init() {
 		result.data = null;
 		result.resultValue = null;
