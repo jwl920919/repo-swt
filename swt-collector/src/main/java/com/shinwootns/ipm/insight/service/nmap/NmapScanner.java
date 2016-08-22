@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import com.shinwootns.common.utils.SystemUtils;
 import com.shinwootns.common.utils.SystemUtils.CommandOutput;
-import com.shinwootns.common.utils.SystemUtils.OS_Type;
 import com.shinwootns.data.entity.NmapScanIP;
 import com.shinwootns.data.regex.RegexPatterns;
 import com.shinwootns.ipm.insight.SpringBeanProvider;
@@ -40,28 +39,10 @@ public class NmapScanner implements Runnable {
 	//region Scan IPv4
 	private void ScanIPv4() {
 
-		//_logger.info(String.format("[NAMP] %s (%s) Start", ip.getIpaddr(), SystemUtils.GetOSName().toString()));
-
-		CommandLine cmd;
-		// Command
-		if ( SystemUtils.GetOSName() == OS_Type.WINDOWS ) {
-			StringBuilder command = new StringBuilder();
-			command.append("nmap \" -O -v ").append(ip.getIpaddr()).append("\"");
-			
-			cmd = new CommandLine(command.toString());
-		}
-		else if ( SystemUtils.GetOSName() == OS_Type.LINUX ) {
-			cmd = new CommandLine("nmap");
-			cmd.addArgument("-O");
-			cmd.addArgument("-v");
-			cmd.addArgument(ip.getIpaddr().toString(), false);
-		}
-		else {
-			StringBuilder command = new StringBuilder();
-			command.append("nmap \" -O -v ").append(ip.getIpaddr()).append("\"");
-			
-			cmd = new CommandLine(command.toString());
-		}
+		CommandLine cmd = new CommandLine("nmap");
+		cmd.addArgument("-O");
+		cmd.addArgument("-v");
+		cmd.addArgument(ip.getIpaddr().toString(), false);
 		
 		// Execute Command
 		CommandOutput result = SystemUtils.executeCommand(cmd);
@@ -82,11 +63,11 @@ public class NmapScanner implements Runnable {
 				UpdateToDB(newip);
 			}
 			else {
-				//_logger.debug(String.format("[NAMP-DEBUG] %s - not found info.\n%s", ip.getIpaddr(), result.output));
+				//_logger.info(String.format("[NAMP-DEBUG] %s - not found info.\n%s", ip.getIpaddr(), result.output));
 			}
 		}
 		else {
-			_logger.info(String.format("[NAMP] %s (%s) - Failed to execute nmap (output is null).", ip.getIpaddr(), SystemUtils.GetOSName().toString()));
+			_logger.info(String.format("[NAMP] %s - Failed to execute nmap (output is null).", ip.getIpaddr()));
 		}
 	}
 	//endregion
