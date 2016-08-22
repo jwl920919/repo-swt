@@ -12,8 +12,8 @@
 	
 	<insert id="insertClientInfo" parameterType="com.shinwootns.data.entity.ClientInfo">
 		<![CDATA[
-			INSERT INTO client_info (macaddr, duid, hostname, vendor, model, os, ip_type, last_ip, last_switch, last_port, position_update, update_time )
-			VALUES ( #{macaddr}, #{duid}, #{hostname}, #{vendor}, #{model}, #{os}, #{ip_type}, #{last_ip}, #{last_switch}, #{last_port}, #{position_update}, now() ) 
+			INSERT INTO client_info (macaddr, duid, hostname, vendor, model, os, ip_type, last_ip, last_ip_num, last_switch, last_port, position_update, update_time )
+			VALUES ( #{macaddr}, #{duid}, #{hostname}, #{vendor}, #{model}, #{os}, #{ip_type}, #{last_ip}, #{last_ip_num}, #{last_switch}, #{last_port}, #{position_update}, now() ) 
 		]]>
 	</insert>
 	
@@ -40,6 +40,9 @@
 		</if>
 		<if test="last_ip != null">
 		, last_ip = #{last_ip}
+		</if>
+		<if test="last_ip_num != null">
+		, last_ip_num = #{last_ip_num}
 		</if>
 		<if test="last_switch != null">
 		, last_switch = #{last_switch}

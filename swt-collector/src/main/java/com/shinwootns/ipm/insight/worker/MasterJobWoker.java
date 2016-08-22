@@ -477,6 +477,7 @@ public class MasterJobWoker implements Runnable {
 							clientInfo.setMacaddr(ipStatus.getMacaddr());
 							clientInfo.setIpType(ipStatus.getIpType());
 							clientInfo.setLastIp(ipStatus.getIpaddr());
+							clientInfo.setLastIpNum(ipStatus.getIpNum());
 							
 							if (ipStatus.getFingerprint() != null && ipStatus.getFingerprint().length() > 0)
 								clientInfo.setOs(ipStatus.getFingerprint());

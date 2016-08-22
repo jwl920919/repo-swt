@@ -134,16 +134,16 @@ CREATE OR REPLACE VIEW public.view_network_ip_status AS
   ORDER BY status.site_id, status.ip_type, status.start_num;
 
 
-
+-- DROP VIEW view_client_info;
 
 CREATE OR REPLACE VIEW view_client_info AS
-
-SELECT macaddr, duid, hostname, vendor, model, os, device_type, ip_type, last_ip, last_switch, last_port, position_update, user_comment, update_time 
+SELECT macaddr, duid, hostname, vendor, model, os, device_type, ip_type, last_ip, last_ip_num, last_switch, last_port, position_update, user_comment, update_time 
 FROM
 (
 	SELECT COALESCE(rank() OVER (PARTITION BY client.macaddr ORDER BY dt.priority DESC), 0) rankNum
 		, dt.priority
-		, client.macaddr, client.duid, client.hostname, client.vendor, client.model, client.os, COALESCE(dt.device_type, '') device_type, client.ip_type, client.last_ip
+		, client.macaddr, client.duid, client.hostname, client.vendor, client.model, client.os, COALESCE(dt.device_type, '') device_type, client.ip_type
+		, client.last_ip, client.last_ip_num
 		, last_switch, last_port, position_update
 		, client.user_comment, client.update_time
 	FROM client_info client

@@ -12,13 +12,14 @@ import com.shinwootns.common.stp.SmartThreadPool;
 import com.shinwootns.common.utils.SystemUtils;
 import com.shinwootns.data.entity.NmapScanIP;
 import com.shinwootns.ipm.insight.SpringBeanProvider;
+import com.shinwootns.ipm.insight.config.ApplicationProperty;
 import com.shinwootns.ipm.insight.data.SharedData;
 import com.shinwootns.ipm.insight.data.mapper.DhcpMapper;
 import com.shinwootns.ipm.insight.service.nmap.NmapScanner;
 
 public class ClientScanWorker implements Runnable {
 
-private final Logger _logger = LoggerFactory.getLogger(getClass());
+	private final Logger _logger = LoggerFactory.getLogger(getClass());
 
 	//Task Count
 	private static final int TASK_COUNT = 10;
@@ -63,13 +64,27 @@ private final Logger _logger = LoggerFactory.getLogger(getClass());
 	//region Collect Start
 	private void collectStart() {
 	
+		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
+		if (appProperty == null)
+			return;
+		
 		DhcpMapper dhcpMapper = SpringBeanProvider.getInstance().getDhcpMapper();
 		if (dhcpMapper == null)
 			return;
 		
 		_logger.info("Client Scan... Start.");
 		
-		List<NmapScanIP> listIP = dhcpMapper.selectNmapScanIP(SharedData.getInstance().getSiteID(), SystemUtils.getHostName());
+		
+		List<NmapScanIP> listIP;
+		
+		if (appProperty.debugEnable && appProperty.test_nmap_scan) {
+			// For Debugging
+			listIP = dhcpMapper.selectNmapScanIP(SharedData.getInstance().getSiteID(), null);
+		}
+		else {
+			// By Site - Insight
+			listIP = dhcpMapper.selectNmapScanIP(SharedData.getInstance().getSiteID(), SystemUtils.getHostName());
+		}
 		
 		for(NmapScanIP ip : listIP) {
 			
@@ -80,7 +95,7 @@ private final Logger _logger = LoggerFactory.getLogger(getClass());
 					continue;
 				}
 				
-				_logger.info("Put Scan: "+ip.getIpaddr());
+				//_logger.info("Put Scan: "+ip.getIpaddr());
 				
 			} catch (InterruptedException e) {
 				break;

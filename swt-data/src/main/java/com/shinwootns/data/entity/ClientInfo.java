@@ -1,6 +1,7 @@
 package com.shinwootns.data.entity;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.sql.Timestamp;
 
 
@@ -13,6 +14,7 @@ public class ClientInfo implements Serializable {
 	private String hostname;
 	private String ip_type;
 	private String last_ip;
+	private BigInteger last_ip_num;
 	private String last_switch;
 	private String last_port;
 	private Timestamp position_update;
@@ -63,6 +65,8 @@ public class ClientInfo implements Serializable {
 	public void setLastIp(String lastIp) {
 		this.last_ip = lastIp;
 	}
+	
+	
 
 	public String getModel() {
 		return this.model;
@@ -118,6 +122,14 @@ public class ClientInfo implements Serializable {
 
 	public void setPositionUpdate(Timestamp position_update) {
 		this.position_update = position_update;
+	}
+
+	public BigInteger getLastIpNum() {
+		return last_ip_num;
+	}
+
+	public void setLastIpNum(BigInteger last_ip_num) {
+		this.last_ip_num = last_ip_num;
 	}
 
 }
