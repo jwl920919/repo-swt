@@ -148,7 +148,32 @@ public class NetworkTree extends Tree {
 					sb.append(",");
 			}
 		}
+		public static void printNode(Node node) {
+			if(node.depth==0){
+				System.out.println(node.data);
+				if(node.children!= null) {
+					for(Node c:node.children) {
+						printNode(c);
+					}
+				}
+			} else {
+				makeTab(node.depth);
+				System.out.println(node.data);
+				if(node.children!= null) {
+					for(Node c:node.children) {
+						printNode(c);
+					}
+				}
+			}
+		}
+		private static void makeTab(int cnt) {
+			for (int i = 0; i < cnt; i++) {
+				System.out.print('\t');
+			}
+		}
 	}
+	
+	
 
 	public Node getRoot() {
 		return root;
