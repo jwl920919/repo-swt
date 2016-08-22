@@ -191,6 +191,7 @@ public class ManagementActionController {
 			HashMap<String, Object> parameter = new HashMap<String, Object>();
 			parameter.put("site_id", site_id);
 			parameter.put("site_master", site_master);
+			//IPv4, IPv6 Network Tree 생성
 			IpNetworkTree ipNetworkTree = new IpNetworkTree(managementService, networkService, parameter);
 			result.resultValue = ipNetworkTree.getIPNodeJsonStr4jstree();
 			result.result = true;

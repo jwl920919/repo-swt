@@ -50,7 +50,6 @@ public class NetworkTree extends Tree {
 			}
 			return this.data.hasNetwork(new IPNetwork(network)) | hasData;
 		}
-		
 		public boolean isSameData(String network) throws UnknownHostException {
 			boolean isSameData = false;
 			if (this.children != null) {
@@ -63,7 +62,7 @@ public class NetworkTree extends Tree {
 			}
 			return this.data.isSameNetwork(new IPNetwork(network)) | isSameData;
 		}
-		
+		/** 해당 네트워크 노드 검색 */
 		public Node getNode(String network) throws UnknownHostException {
 			if (this.children != null) {
 				for (Node n1 : this.children) {
@@ -78,7 +77,7 @@ public class NetworkTree extends Tree {
 			}
 			return null;
 		}
-
+		/** 해당 네트워크의 부모노드 검색 */
 		public Node getParentNode(String network) throws UnknownHostException {
 			if (this.children != null) {
 				for (Node n1 : this.children) {
@@ -93,7 +92,7 @@ public class NetworkTree extends Tree {
 			}
 			return this;
 		}
-
+		/** 해당 네트워크가 자식 노드에 존재하는지 여부*/
 		public boolean isChildNodeHasData(String network) throws UnknownHostException {
 			if (this.children != null) {
 				for (Node child : this.children) {
@@ -104,7 +103,7 @@ public class NetworkTree extends Tree {
 			}
 			return false;
 		}
-
+		/** 노드 정보를 jstree 형식의 json 데이터로 변경해주는 메소드*/
 		public void getNodeJsonInfo(StringBuffer sb,List<Map<String,Object>> existList) throws UnknownHostException {
 			sb.append("{\"text\":");
 			sb.append('"');
@@ -148,6 +147,8 @@ public class NetworkTree extends Tree {
 					sb.append(",");
 			}
 		}
+		
+		/**자신을 포함한 하위노드 모두 출력*/
 		public static void printNode(Node node) {
 			if(node.depth==0){
 				System.out.println(node.data);
