@@ -23,6 +23,7 @@ import com.shinwootns.data.entity.DhcpMacFilter;
 import com.shinwootns.data.entity.DhcpRange;
 import com.shinwootns.data.entity.SiteInfo;
 import com.shinwootns.ipm.insight.SpringBeanProvider;
+import com.shinwootns.ipm.insight.config.ApplicationProperty;
 import com.shinwootns.ipm.insight.data.mapper.DeviceMapper;
 import com.shinwootns.ipm.insight.data.mapper.DhcpMapper;
 
@@ -241,10 +242,24 @@ public class SharedData {
 	
 	//region - Load / Get Network Device
 	public void LoadNetworkDevice(DeviceMapper deviceMapper) {
+
+		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
+		if (appProperty == null)
+			return;
 		
 		String hostName = SystemUtils.getHostName();
 		
-		List<DeviceSnmp> listDevice = deviceMapper.selectCollectNetworkDevice(SharedData.getInstance().getSiteID(), hostName);
+		List<DeviceSnmp> listDevice = null;
+		
+		if (appProperty.debugEnable && appProperty.test_collect_network_device) {
+			// For debugging
+			listDevice = deviceMapper.selectCollectNetworkDevice(SharedData.getInstance().getSiteID(), null);
+		}
+		else {
+			// By SiteID, HostName
+			listDevice = deviceMapper.selectCollectNetworkDevice(SharedData.getInstance().getSiteID(), hostName);
+		}
+		
 		if (listDevice == null)
 			return;
 		

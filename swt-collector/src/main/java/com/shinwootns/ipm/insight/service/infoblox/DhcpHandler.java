@@ -395,6 +395,8 @@ public class DhcpHandler {
 				extractIpv4Data(site_id, nextData1, mapIp);
 				
 				while(nextData1 != null && nextData1.IsExistNextPage()) {
+
+					Thread.sleep(200);
 					
 					nextData1 = wapiHandler.getIPv4AddressNext(splitCount, nextData1.nextPageID);
 					extractIpv4Data(site_id, nextData1, mapIp);
@@ -406,7 +408,9 @@ public class DhcpHandler {
 				extractIpv6Data(site_id, nextData2, mapIp);
 					
 				while(nextData2 != null && nextData2.IsExistNextPage()) {
-	
+
+					Thread.sleep(200);
+					
 					nextData2 = wapiHandler.getIPv6AddressNext(splitCount, nextData2.nextPageID);
 					extractIpv6Data(site_id, nextData2, mapIp);
 			 	}
@@ -417,6 +421,8 @@ public class DhcpHandler {
 			extractLeaseIpData(nextData3, mapIp);
 			
 			while(nextData3 != null && nextData3.IsExistNextPage()) {
+
+				Thread.sleep(200);
 				
 				nextData3 = wapiHandler.getLeaseIPNext(splitCount, nextData3.nextPageID);
 				extractLeaseIpData(nextData3, mapIp);

@@ -19,6 +19,7 @@ import com.shinwootns.data.entity.InterfaceCam;
 import com.shinwootns.data.entity.InterfaceInfo;
 import com.shinwootns.data.entity.InterfaceIp;
 import com.shinwootns.ipm.insight.SpringBeanProvider;
+import com.shinwootns.ipm.insight.config.ApplicationProperty;
 import com.shinwootns.ipm.insight.data.SharedData;
 import com.shinwootns.ipm.insight.data.mapper.DeviceMapper;
 import com.shinwootns.ipm.insight.service.snmp.SnmpHandler;

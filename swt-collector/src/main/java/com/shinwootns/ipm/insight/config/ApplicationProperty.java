@@ -52,8 +52,11 @@ public class ApplicationProperty {
 	@Value("${insight.debug.force_start_cluster_master:false}")
 	public boolean force_start_cluster_master;
 	
-	@Value("${insight.debug.test_nmap_scan:false}")
-	public boolean test_nmap_scan;
+	@Value("${insight.debug.test_collect_nmap:false}")
+	public boolean test_collect_nmap;
+	
+	@Value("${insight.debug.test_collect_network_device:false}")
+	public boolean test_collect_network_device;
 	//}} Debug Mode
 	
 	// Redis
@@ -113,7 +116,9 @@ public class ApplicationProperty {
 			sb.append( "------------------------------------------------------------\n" );
 			sb.append( String.format("%-30s = %s\n", "insight.debug.enable", (this.debugEnable)? "true":"false" ) );
 			sb.append( String.format("%-30s = %s\n", "insight.debug.enable_recv_syslog", (this.enable_recv_syslog)? "true":"false" ) );
-			sb.append( String.format("%-30s = %s\n", "insight.debug.test_nmap_scan", (this.test_nmap_scan)? "true":"false" ) );
+			sb.append( String.format("%-30s = %s\n", "insight.debug.test_collect_nmap", (this.test_collect_nmap)? "true":"false" ) );
+			sb.append( String.format("%-30s = %s\n", "insight.debug.test_collect_network_device", (this.test_collect_network_device)? "true":"false" ) );
+			sb.append( String.format("%-30s = %s\n", "insight.debug.force_start_cluster_master", (this.force_start_cluster_master)? "true":"false" ) );
 		}
 		sb.append( "------------------------------------------------------------" );
 		

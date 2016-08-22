@@ -77,7 +77,7 @@ public class ClientScanWorker implements Runnable {
 		
 		List<NmapScanIP> listIP;
 		
-		if (appProperty.debugEnable && appProperty.test_nmap_scan) {
+		if (appProperty.debugEnable && appProperty.test_collect_nmap) {
 			// For Debugging
 			listIP = dhcpMapper.selectNmapScanIP(SharedData.getInstance().getSiteID(), null);
 		}
@@ -91,7 +91,7 @@ public class ClientScanWorker implements Runnable {
 			try {
 				
 				while ( _taskPool.addTask( new NmapScanner(ip) ) == false ) {
-					Thread.sleep(500);
+					Thread.sleep(1000);
 					continue;
 				}
 				
@@ -101,6 +101,8 @@ public class ClientScanWorker implements Runnable {
 				break;
 			}
 		}
+		
+		listIP.clear();
 		
 		_logger.info("Client Scan... End.");
 	}
