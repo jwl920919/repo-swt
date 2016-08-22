@@ -27,11 +27,6 @@
 <link rel="stylesheet"
 	href="/resources/plugins/jstree/themes/default/style.min.css">
 </head>
-<style type="text/css">
-.hidden {
-	visibility: hidden;
-}
-</style>
 <body>
 	<!-- Add, Edit modal -->
 	<div class="modal modal-dialog" id="modify-modal">
@@ -65,25 +60,54 @@
 		</div>
 		<!-- /.modal-content -->
 	</div>
-	
+
 	<!-- modalbackDiv -->
 	<div id="modalbackDiv" class="mordal-back-box"></div>
-
-	<section class="white-paper" style="text-align: center">
-		<div class="row">
-			<div class="col-xs-6">
-				<div class="box box-primary">
-					<div class="box-header" style="text-align: left;">
-						<i class="fa fa-cog"></i>
-						<h3 class="box-title-small">IP 기준</h3>
-					</div>
-					<div class="box-body" style="margin: 0px 5px;">
-						<div id="container" style="text-align: left;"></div>
-					</div>
-				</div>
-			</div>
+	<div class="content-tree"
+		style="position: absolute; top: 0; left: 0; min-height: 100%; width: 230px; z-index: 810; border-radius: 3px; background: #ffffff; border-top: 3px solid #3c8dbc; box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1); white-space: nowrap; overflow: auto;">
+		<div class="treebox-header" style="margin: 6px;">
+			<i class="fa fa-cog"
+				style="display: inline-block; font-size: 18px; margin: 0; line-height: 1;"></i>
+			<h3
+				style="display: inline-block; font-size: 16px; margin: 0; line-height: 1;">Network</h3>
 		</div>
-	</section>
+		<div class="treebox-body">
+			<div id="container" style="text-align: left;"></div>
+		</div>
+	</div>
+	<div class="content-tree-wrapper"
+		style="margin-left: 230px; min-height: 100%;">
+		<section class="white-paper"
+			style="text-align: center; min-height: 100%; margin-top: 0px;">
+			<!-- 			<div style="width: 100%; height: 34px;"> -->
+			<!-- 				<div> -->
+			<!-- 					<select class="form-control "></select> -->
+			<!-- 				</div> -->
+			<!-- 				<div> -->
+			<!-- 					<table class="form-control "> -->
+			<!-- 						<tr> -->
+			<!-- 							<th width=>Device Search Status</th> -->
+			<!-- 							<td>Success</td> -->
+			<!-- 							<td>10</td> -->
+			<!-- 							<td>Failure</td> -->
+			<!-- 							<td>2</td> -->
+			<!-- 							<td>Total</td> -->
+			<!-- 							<td>4</td> -->
+			<!-- 						</tr> -->
+			<!-- 					</table> -->
+			<!-- 				</div> -->
+			<!-- 			</div> -->
+			<table name="datatable" id="parent-table" class="essential-table" style="width: 100%;">
+				<thead>
+					<tr>
+						<th>Network</th>
+						<th>Name</th>
+						<th>Children</th>
+					</tr>
+				</thead>
+			</table>
+		</section>
+	</div>
 
 </body>
 <!-- jQuery 2.2.0 -->
@@ -114,27 +138,7 @@
 <script src="/resources/js/common/modalPopup.js"></script>
 <script src="/resources/js/management/viewNodeInfo.js"></script>
 <script>
-    $(function() {
-        $.ajax({
-            url : "/management/getIpTreeNode",
-            type : "POST",
-            success : function(data) {
-                var jsonObj = eval("(" + data + ')');
-                if (jsonObj.result == true) {
-                    $('#container').jstree({
-                        'core' : {
-                            'data' : eval(jsonObj.resultValue)
-                        }
-                    });
-
-                }
-            }
-        });
-    });
-    //     jt.delegate("a", "click", function(event, data) {
-    //         event.preventDefault();
-    //         console.log($(this).attr('id'));
-    //     })
+    
 </script>
 
 </html>
