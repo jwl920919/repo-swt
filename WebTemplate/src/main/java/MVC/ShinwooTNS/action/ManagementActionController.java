@@ -3,7 +3,6 @@ package MVC.ShinwooTNS.action;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -30,13 +29,11 @@ import com.google.gson.reflect.TypeToken;
 import Common.DTO.AjaxResult;
 import Common.DTO.SITE_INFO_DTO;
 import Common.DTO.node.IpNetworkTree;
-import Common.DTO.node.tree.NetworkData;
-import Common.DTO.node.tree.NetworkTree;
+import Common.DTO.node.tree.NetworkTree.Node;
 import Common.Helper.ErrorLoggingHelper;
 import Common.ServiceInterface.MANAGEMENT_Service_interface;
 import Common.ServiceInterface.NETWORK_Service_interface;
 import Common.ServiceInterface.SITE_INFO_Service_interface;
-import Common.ip.IPAddr;
 import Common.ip.IPNetwork;
 import Common.ip.ipv6.IPv6Address;
 
@@ -193,11 +190,47 @@ public class ManagementActionController {
 			parameter.put("site_master", site_master);
 			//IPv4, IPv6 Network Tree 생성
 			IpNetworkTree ipNetworkTree = new IpNetworkTree(managementService, networkService, parameter);
+			//네트워크 트리 객체를 세션에 저장하여 다른 RequestMapping URI에서도 사용 할 수 있도록 함
+			session.setAttribute("ipNetworkTree", ipNetworkTree);
 			result.resultValue = ipNetworkTree.getIPNodeJsonStr4jstree();
 			result.result = true;
 			return gson.toJson(result);
 		} catch (Exception e) {
 			ErrorLoggingHelper.log(logger, "getIpTreeNode", e);
+			result.result = false;
+			return gson.toJson(result);
+		}
+
+	}
+	// endregion
+	
+	// region getNodeChildren
+	@RequestMapping(value = "getNodeChildren", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+	public @ResponseBody Object getNodeChildren(HttpServletRequest request) {
+		try {
+			init();
+			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
+					new TypeToken<HashMap<String, Object>>() {
+					}.getType());
+			HttpSession session = request.getSession(true);
+			int site_id = Integer.parseInt(session.getAttribute("site_id").toString());
+			String site_master = session.getAttribute("site_master").toString();
+			IpNetworkTree ipNetworkTree = (IpNetworkTree)session.getAttribute("ipNetworkTree");
+			parameters.put("site_id", site_id);
+			parameters.put("site_master", site_master);
+			String network = parameters.get("network").toString();
+			String ip_type = parameters.get("ip_type").toString();
+			Node node = null;
+			if(ip_type.toUpperCase().equals("IPV4")){
+				node = ipNetworkTree.getIPv4NetworkTree().getRoot().getNode(network);
+			} else {
+				node = ipNetworkTree.getIPv6NetworkTree().getRoot().getNode(network);
+			}
+			Node.printNode(node);
+			result.result = true;
+			return gson.toJson(result);
+		} catch (Exception e) {
+			ErrorLoggingHelper.log(logger, "getNodeChildren", e);
 			result.result = false;
 			return gson.toJson(result);
 		}

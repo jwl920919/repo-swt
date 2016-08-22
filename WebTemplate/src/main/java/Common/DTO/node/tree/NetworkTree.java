@@ -50,20 +50,16 @@ public class NetworkTree extends Tree {
 			}
 			return this.data.hasNetwork(new IPNetwork(network)) | hasData;
 		}
+
 		public boolean isSameData(String network) throws UnknownHostException {
-			boolean isSameData = false;
-			if (this.children != null) {
-				for (Node child : this.children) {
-					if (child.isSameData(network)) {
-						isSameData = true;
-						break;
-					}
-				}
-			}
-			return this.data.isSameNetwork(new IPNetwork(network)) | isSameData;
+			return this.data.isSameNetwork(new IPNetwork(network));
 		}
+
 		/** 해당 네트워크 노드 검색 */
 		public Node getNode(String network) throws UnknownHostException {
+			if (this.data.isSameNetwork(new IPNetwork(network))){
+				return this;
+			}
 			if (this.children != null) {
 				for (Node n1 : this.children) {
 					if (n1.hasData(network)) {
@@ -77,6 +73,7 @@ public class NetworkTree extends Tree {
 			}
 			return null;
 		}
+
 		/** 해당 네트워크의 부모노드 검색 */
 		public Node getParentNode(String network) throws UnknownHostException {
 			if (this.children != null) {
@@ -92,7 +89,8 @@ public class NetworkTree extends Tree {
 			}
 			return this;
 		}
-		/** 해당 네트워크가 자식 노드에 존재하는지 여부*/
+
+		/** 해당 네트워크가 자식 노드에 존재하는지 여부 */
 		public boolean isChildNodeHasData(String network) throws UnknownHostException {
 			if (this.children != null) {
 				for (Node child : this.children) {
@@ -103,78 +101,99 @@ public class NetworkTree extends Tree {
 			}
 			return false;
 		}
-		/** 노드 정보를 jstree 형식의 json 데이터로 변경해주는 메소드*/
-		public void getNodeJsonInfo(StringBuffer sb,List<Map<String,Object>> existList) throws UnknownHostException {
+
+		/** 노드 정보를 jstree 형식의 json 데이터로 변경해주는 메소드 */
+		public void getNodeJsonInfo(StringBuffer sb, List<Map<String, Object>> existList) throws UnknownHostException {
 			sb.append("{\"text\":");
 			sb.append('"');
 			String ipStr = null;
-			if(this.data.getIpNetwork().getStartIP().isIPv6()){
-				BigInteger nwip = this.data.getIpNetwork().getStartIP().getNumberToBigInteger().add(new BigInteger("0"));
+			if (this.data.getIpNetwork().getStartIP().isIPv6()) {
+				BigInteger nwip = this.data.getIpNetwork().getStartIP().getNumberToBigInteger()
+						.add(new BigInteger("0"));
 				IPv6Address nwIp = IPv6Address.fromBigInteger(nwip);
-				ipStr = (nwIp.toString().toUpperCase()+"/"+this.data.getIpNetwork().getPrefixLength());
+				ipStr = (nwIp.toString().toUpperCase() + "/" + this.data.getIpNetwork().getPrefixLength());
 			} else {
-				ipStr = (this.data.getIpNetwork().getStartIP().toString()+"/"+this.data.getIpNetwork().getPrefixLength());
+				ipStr = (this.data.getIpNetwork().getStartIP().toString() + "/"
+						+ this.data.getIpNetwork().getPrefixLength());
 			}
 			boolean isExist = false;
-			for(Map<String,Object> existRecord :existList) {
-				if(ipStr.toUpperCase().equals(existRecord.get("key").toString().toUpperCase())){
-					if(!existRecord.get("group_name").toString().trim().equals(""))
+			for (Map<String, Object> existRecord : existList) {
+				if (ipStr.toUpperCase().equals(existRecord.get("key").toString().toUpperCase())) {
+					if (!existRecord.get("group_name").toString().trim().equals(""))
 						sb.append(existRecord.get("group_name"));
-					else sb.append(ipStr);
+					else
+						sb.append(ipStr);
 					isExist = true;
 					break;
 				}
 			}
-			if(!isExist){
+			if (!isExist) {
 				sb.append(ipStr);
 			}
 			sb.append("\",");
-			sb.append("\"a_attr\":{\"value\":\"");
-			sb.append(ipStr);
-			sb.append("\"}");
 			
-			if (this.children.size() > 0)
+			sb.append("\"a_attr\":{\"network\":\"");
+			sb.append(ipStr);
+			sb.append("\",\"ip_type\":\"");
+			sb.append(this.data.getIpNetwork().getStartIP().isIPv4()?"IPV4":"IPV6");
+			sb.append("\",\"is_lastchild\":\"");
+			sb.append(this.children.size() == 0);
+			sb.append("\"}");
+
+			if (this.children.size() > 0) {
 				sb.append(",\"children\":[");
-			for (int i = 0; i < this.children.size(); i++) {
-				Node child = this.children.get(i);
-				child.getNodeJsonInfo(sb, existList);
-			}
-			if (this.children.size() > 0)
+				for (int i = 0; i < this.children.size(); i++) {
+					Node child = this.children.get(i);
+					child.getNodeJsonInfo(sb, existList);
+				}
 				sb.append("]");
+			}
 			sb.append("}");
 			if (this.parent != null) {
 				if (!(this.parent.children.indexOf(this) == this.parent.children.size() - 1))
 					sb.append(",");
 			}
 		}
-		
-		/**자신을 포함한 하위노드 모두 출력*/
+
+		/** 자신을 포함한 하위노드 모두 출력 */
 		public static void printNode(Node node) {
-			if(node.depth==0){
+			if (node.depth == 0) {
 				System.out.println(node.data);
-				if(node.children!= null) {
-					for(Node c:node.children) {
+				if (node.children != null) {
+					for (Node c : node.children) {
 						printNode(c);
 					}
 				}
 			} else {
 				makeTab(node.depth);
 				System.out.println(node.data);
-				if(node.children!= null) {
-					for(Node c:node.children) {
+				if (node.children != null) {
+					for (Node c : node.children) {
 						printNode(c);
 					}
 				}
 			}
 		}
+
 		private static void makeTab(int cnt) {
 			for (int i = 0; i < cnt; i++) {
 				System.out.print('\t');
 			}
 		}
+		public NetworkData getData() {
+			return data;
+		}
+
+		public Node getParent() {
+			return parent;
+		}
+
+		public List<Node> getChildren() {
+			return children;
+		}
+
+
 	}
-	
-	
 
 	public Node getRoot() {
 		return root;
