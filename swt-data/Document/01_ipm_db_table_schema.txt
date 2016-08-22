@@ -523,10 +523,11 @@ CREATE TABLE client_info
   os character varying(128),
   ip_type character varying(18),
   last_ip character varying(64),
+  last_ip_num numeric,
   last_switch character varying(64),
   last_port character varying(64),
-  last_update_time timestamp with time zone,
-  comment character varying(256),
+  position_update timestamp with time zone,
+  user_comment character varying(256),
   update_time timestamp with time zone DEFAULT current_timestamp,
   CONSTRAINT client_info_pkey PRIMARY KEY (macaddr)
 );

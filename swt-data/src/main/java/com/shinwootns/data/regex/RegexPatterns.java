@@ -132,8 +132,34 @@ public class RegexPatterns {
 	// [1] MAC, [2] Vendor(OUI), [3], [4] OS
 	public final static Pattern NMAP_FINGERPRINT = Pattern.compile(
 			(new StringBuilder())
-			.append(".*?MAC Address\\: (.*?)(\\(.*?\\))?\\r.*?")
-			.append("(.*?OS details\\: (.*?)\\r.*?)?")		// .append(".*?Running\\: (.*?)\\r.*?")
+			.append(".*?MAC Address\\: (.*?)(\\(.*?\\))?\\n.*?")
+			.append("(.*?OS details\\: (.*?)[\\s\\,]+\\n.*?)?")		// .append(".*?Running\\: (.*?)\\r.*?")
+			.toString()
+			, Pattern.DOTALL
+	);
+	
+	// [1] MAC, [2] Vendor(OUI)
+	public final static Pattern NMAP_FINGERPRINT_MAC = Pattern.compile(
+			(new StringBuilder())
+			.append(".*?MAC Address\\: (.*?)(\\(.*?\\))?\\n.*?")
+			.toString()
+			, Pattern.DOTALL
+	);
+	
+	// [1] OS
+	public final static Pattern NMAP_FINGERPRINT_OS_DETAIL = Pattern.compile(
+			(new StringBuilder())
+			.append(".*?OS details\\: (.*?)\\n.*?")
+			.toString()
+			, Pattern.DOTALL
+	);
+	
+	// MAC Address: 00:0B:AB:56:08:52 (Advantech Technology (china) Co.)
+	// Aggressive OS guesses: VMware ESXi Server 5.0 (96%), VMware ESXi Server 4.1 (95%), Crestron XPanel control system (92%)
+	// [1] OS Guesses
+	public final static Pattern NMAP_FINGERPRINT_OS_GUESS = Pattern.compile(
+			(new StringBuilder())
+			.append(".*?Aggressive OS guesses\\: (.*?)\\n.*?")
 			.toString()
 			, Pattern.DOTALL
 	);
