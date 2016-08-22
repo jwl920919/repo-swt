@@ -44,7 +44,7 @@ CREATE TABLE device_dhcp
 (
   device_id integer NOT NULL DEFAULT nextval('device_id_seq'::regclass),
   site_id integer NOT NULL,
-  host character varying(128),
+  host character varying(128) NOT NULL,
   device_name character varying(128),
   snmp_community character varying(64) DEFAULT '',
   snmp_version integer DEFAULT 2,
@@ -532,6 +532,7 @@ CREATE TABLE client_info
   CONSTRAINT client_info_pkey PRIMARY KEY (macaddr)
 );
 
+
 CREATE TABLE client_device_type
 (
   vendor character varying(64) NOT NULL DEFAULT '',
@@ -542,13 +543,17 @@ CREATE TABLE client_device_type
   compare_type_os character varying(18) NOT NULL DEFAULT 'EQUAL',
   hostname character varying(128) NOT NULL DEFAULT '',
   compare_type_hostname character varying(18) NOT NULL DEFAULT 'EQUAL',
-  device_type character varying(128),
+  device_type character varying(128) NOT NULL,
+  category character varying(128) NOT NULL,
   CONSTRAINT client_device_type_pkey PRIMARY KEY (vendor, model, os, hostname)
 );
 
 COMMENT ON COLUMN client_device_type.compare_type_vendor IS 'EQUAL, LIKE';
 COMMENT ON COLUMN client_device_type.compare_type_model IS 'EQUAL, LIKE';
 COMMENT ON COLUMN client_device_type.compare_type_os IS 'EQUAL, LIKE';
+COMMENT ON COLUMN client_device_type.compare_type_hostname IS 'EQUAL, LIKE';
+COMMENT ON COLUMN client_device_type.device_type IS 'Windows, Linux, Samsung Mobile, Apple Mobile, Fuji-Xerox Printer, ...';
+COMMENT ON COLUMN client_device_type.category IS 'MOBILE, PC, NETWORK, IP-PHONE, PRINTER, ETC, ...';
 
 -- client_location_history
 CREATE TABLE client_location_history
@@ -560,7 +565,7 @@ CREATE TABLE client_location_history
   switch_name character varying(64),
   port_name character varying(64),
   collect_time timestamp with time zone DEFAULT current_timestamp,
-  CONSTRAINT client_location_history_pkey PRIMARY KEY (macaddr)
+  CONSTRAINT client_location_history_pkey PRIMARY KEY (macaddr, collect_time)
 );
 
 

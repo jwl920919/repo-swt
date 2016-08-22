@@ -33,14 +33,14 @@ INSERT INTO device_network (site_id, host, device_type, snmp_community) VALUES(1
 -- Client Device Type
 --==========================================================================================
 
-INSERT INTO client_device_type (os, compare_type_os, device_type) VALUES ('Android Phone/Tablet%', 'LIKE', 'Mobile');
-INSERT INTO client_device_type (os, compare_type_os, device_type) VALUES ('%Debian%', 'LIKE', 'Linux');
-INSERT INTO client_device_type (os, compare_type_os, device_type) VALUES ('%Ubuntu%', 'LIKE', 'Linux');
-INSERT INTO client_device_type (os, compare_type_os, device_type) VALUES ('%Fedora%', 'LIKE', 'Linux');
-INSERT INTO client_device_type (os, compare_type_os, device_type) VALUES ('Microsoft Windows%', 'LIKE', 'Desktop');
-INSERT INTO client_device_type (os, compare_type_os, device_type) VALUES ('MSFT%', 'LIKE', 'Desktop');
-INSERT INTO client_device_type (os, compare_type_os, device_type) VALUES ('%SMART-TV%', 'LIKE', 'TV');
-INSERT INTO client_device_type (os, compare_type_os, device_type) VALUES ('%docsis%', 'LIKE', 'AP');
+INSERT INTO client_device_type (os, compare_type_os, device_type, category) VALUES ('Android Phone/Tablet%', 'LIKE', 'Android Mobile', 'MOBILE');
+INSERT INTO client_device_type (os, compare_type_os, device_type, category) VALUES ('%Debian%', 'LIKE', 'Linux', 'PC');
+INSERT INTO client_device_type (os, compare_type_os, device_type, category) VALUES ('%Ubuntu%', 'LIKE', 'Linux', 'PC');
+INSERT INTO client_device_type (os, compare_type_os, device_type, category) VALUES ('%Fedora%', 'LIKE', 'Linux', 'PC');
+INSERT INTO client_device_type (os, compare_type_os, device_type, category) VALUES ('Microsoft Windows%', 'LIKE', 'Desktop', 'PC');
+INSERT INTO client_device_type (os, compare_type_os, device_type, category) VALUES ('MSFT%', 'LIKE', 'Desktop', 'PC');
+INSERT INTO client_device_type (os, compare_type_os, device_type, category) VALUES ('%SMART-TV%', 'LIKE', 'TV', 'TV');
+INSERT INTO client_device_type (os, compare_type_os, device_type, category) VALUES ('%docsis%', 'LIKE', 'AP', 'NETWORK');
 
-INSERT INTO client_device_type (hostname, compare_type_hostname, device_type) VALUES ('SIPPhone%', 'LIKE', 'IP Phone');
+INSERT INTO client_device_type (hostname, compare_type_hostname, device_type, category) VALUES ('SIPPhone%', 'LIKE', 'IP Phone', 'IP-PHONE');
 
