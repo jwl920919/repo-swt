@@ -61,7 +61,7 @@ public class SyslogProcessWorker implements Runnable {
 		
 		List<SyslogEntity> listSyslog = null;
 		
-		String redisKey = RedisKeys.KEY_DATA_SYSLOG + ":" + SharedData.getInstance().getSiteID();
+		//String redisKey = RedisKeys.KEY_DATA_SYSLOG + ":" + SharedData.getInstance().getSiteID();
 		
 		Jedis redis = null;
 		

@@ -28,6 +28,18 @@ public class MANAGEMENT_Impl extends SqlSessionDaoSupport implements MANAGEMENT_
 	}
 	
 	@Override
+	public List<Map<String, Object>> select_CLIENT_DEVICE_INFO() {
+		List<Map<String, Object>> select_CLIENT_DEVICE_INFOList = new ArrayList<Map<String, Object>>();
+		try {
+			System.out.println(getSqlSession());
+			select_CLIENT_DEVICE_INFOList = getSqlSession().selectList("UI_Query.select_CLIENT_DEVICE_INFO");
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e.getMessage());
+		}
+		return select_CLIENT_DEVICE_INFOList;
+	}
+	@Override
 	public List<Map<String, Object>> select_CUSTOM_IP_GROUP_INFO(HashMap<String, Object> parameters) {
 		List<Map<String, Object>> select_CUSTOM_IP_GROUP_INFOList = new ArrayList<Map<String, Object>>();
 		try {

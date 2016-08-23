@@ -104,7 +104,7 @@ public class MasterJobWoker implements Runnable {
 		_logger.info("MasterJobWoker... end.");
 	}
 	
-	//region [FUNC] Collect Dhcp
+	//region [public] Collect Dhcp
 	public void collectDhcp() {
 		
 		if (SharedData.getInstance().getSiteID() <= 0)
@@ -125,11 +125,15 @@ public class MasterJobWoker implements Runnable {
 				// Collect Network
 				LinkedList<DhcpNetwork> listNetwork = collectDhcpNetwork(handler);
 				
+				Thread.sleep(300);
+				
 				if (Thread.currentThread().isInterrupted())
 					return;
 				
 				// Collect Range
 				collectDhcpRange(handler);
+				
+				Thread.sleep(300);
 	
 				if (Thread.currentThread().isInterrupted())
 					return;
@@ -137,11 +141,15 @@ public class MasterJobWoker implements Runnable {
 				// Collect Filter
 				collectMacFilter(handler);
 				
+				Thread.sleep(300);
+				
 				if (Thread.currentThread().isInterrupted())
 					return;
 				
 				// Collect Fixed IP
 				collectFixedIP(handler);
+				
+				Thread.sleep(300);
 				
 				if (Thread.currentThread().isInterrupted())
 					return;
@@ -152,8 +160,12 @@ public class MasterJobWoker implements Runnable {
 					if (Thread.currentThread().isInterrupted())
 						return;
 					
+					Thread.sleep(300);
+					
 					collectDhcpIpSatus(handler, network);
 				}
+				
+				listNetwork.clear();
 			}
 		} catch(Exception ex) {
 			_logger.error(ex.getMessage(), ex);
@@ -165,7 +177,7 @@ public class MasterJobWoker implements Runnable {
 	}
 	//endregion
 	
-	//region [FUNC] Collect DHCP Network
+	//region - Collect DHCP Network
 	private LinkedList<DhcpNetwork> collectDhcpNetwork(DhcpHandler handler) {
 		
 		if (SharedData.getInstance().getSiteID() <= 0)
@@ -234,7 +246,7 @@ public class MasterJobWoker implements Runnable {
 	}
 	//endregion
 	
-	//region [FUNC] Collect DHCP Range
+	//region - Collect DHCP Range
 	private void collectDhcpRange(DhcpHandler handler) {
 		
 		DhcpMapper dhcpMapper = SpringBeanProvider.getInstance().getDhcpMapper();
@@ -299,7 +311,7 @@ public class MasterJobWoker implements Runnable {
 	}
 	//endregion
 	
-	//region [FUNC] Collect Mac Filter
+	//region - Collect Mac Filter
 	private void collectMacFilter(DhcpHandler handler) {
 		
 		DhcpMapper dhcpMapper = SpringBeanProvider.getInstance().getDhcpMapper();
@@ -369,7 +381,7 @@ public class MasterJobWoker implements Runnable {
 	}
 	//endregion
 
-	//region [FUNC] Collect Fixed IP
+	//region - Collect Fixed IP
 	private void collectFixedIP(DhcpHandler handler) {
 		
 		LinkedList<DhcpFixedIp> listFilter = handler.getDhcpFixedIP(SharedData.getInstance().getSiteID());
@@ -410,7 +422,7 @@ public class MasterJobWoker implements Runnable {
 	}
 	//endregion
 	
-	//region [FUNC] Collect IP Status
+	//region - Collect IP Status
 	private void collectDhcpIpSatus(DhcpHandler handler, DhcpNetwork network) {
 		
 		DhcpMapper dhcpMapper = SpringBeanProvider.getInstance().getDhcpMapper();
@@ -436,8 +448,8 @@ public class MasterJobWoker implements Runnable {
 			{
 				for(DhcpIpStatus ipStatus : listIpStatus) {
 				
-				if (ipStatus == null)
-					continue;
+					if (ipStatus == null)
+						continue;
 				
 					// DELETE
 					if ( (ipStatus.getMacaddr() == null || ipStatus.getMacaddr().isEmpty()) &&
@@ -501,6 +513,10 @@ public class MasterJobWoker implements Runnable {
 				_logger.error((new StringBuilder()).append("collectDhcpIpSatus(").append(network.getNetwork()).append(")... Failed").toString());
 				_logger.error(ex.getMessage(), ex);
 			}
+			
+			setPrevIPAddr.clear();
+			listPrevData.clear();
+			listIpStatus.clear();
 		}
 	}
 	//endregion
@@ -548,7 +564,7 @@ public class MasterJobWoker implements Runnable {
 	}
 	//endregion
 
-	//region [FUNC] Update Member Info
+	//region - Update Member Info
 	private void updateDhcpMemberInfo(DhcpHandler handler, Jedis client) {
 
 		if (handler == null || client == null)
