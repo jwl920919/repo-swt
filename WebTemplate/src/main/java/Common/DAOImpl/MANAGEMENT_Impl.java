@@ -40,6 +40,18 @@ public class MANAGEMENT_Impl extends SqlSessionDaoSupport implements MANAGEMENT_
 		return select_CLIENT_DEVICE_INFOList;
 	}
 	@Override
+	public List<Map<String, Object>> select_VIEW_CLIENT_INFO(HashMap<String, Object> parameters) {
+		List<Map<String, Object>> select_VIEW_CLIENT_INFOList = new ArrayList<Map<String, Object>>();
+		try {
+			System.out.println(getSqlSession());
+			select_VIEW_CLIENT_INFOList = getSqlSession().selectList("UI_Query.select_VIEW_CLIENT_INFO",parameters);
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e.getMessage());
+		}
+		return select_VIEW_CLIENT_INFOList;
+	}
+	@Override
 	public List<Map<String, Object>> select_CUSTOM_IP_GROUP_INFO(HashMap<String, Object> parameters) {
 		List<Map<String, Object>> select_CUSTOM_IP_GROUP_INFOList = new ArrayList<Map<String, Object>>();
 		try {
@@ -152,6 +164,20 @@ public class MANAGEMENT_Impl extends SqlSessionDaoSupport implements MANAGEMENT_
 		try {
 			System.out.println(getSqlSession());
 			total = getSqlSession().insert("UI_Query.insert_PLURAL_CUSTOM_IP_GROUP_INFO",
+					parameters);
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e.getMessage());
+		}
+		return total;
+	}
+
+	@Override
+	public int select_VIEW_CLIENT_INFO_TOTAL_COUNT(HashMap<String, Object> parameters) {
+		int total = -1;
+		try {
+			System.out.println(getSqlSession());
+			total = getSqlSession().selectOne("UI_Query.select_VIEW_CLIENT_INFO_TOTAL_COUNT",
 					parameters);
 		} catch (Exception e) {
 			// TODO: handle exception

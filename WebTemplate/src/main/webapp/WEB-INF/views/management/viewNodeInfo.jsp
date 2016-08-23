@@ -83,44 +83,54 @@
 				<div class="col-lg-12">
 					<div class="box box-primary">
 						<div class="pagebox-header with-border">
-							<!-- 				<div class="box-header"> -->
 							<div>
-								<!-- select -->
 								<table>
 									<tr>
-										<td><label
-											style="width: 80px; margin-right: 10px; text-align: right">디바이스
-												: </label></td>
-										<td><select id="deviceSel"
-											class="form-control selectoption_grey_color"
-											style="width: 210px">
-										</select></td>
-										<td><input type="text"
-											style="width: 250px; margin-left: 15px;" class="form-control"
-											id="txtSearch" placeholder="검색"></td>
-										<td
-											style="width: 100%; text-align: right; padding-right: 10px">
-											<button type="button" class="btn btn-primary" id="btnSearch"><%=LanguageHelper.GetLanguage("inquiry")%></button>
+										<td>
+											<label id="parentNodes" style="font-size: 14px; color: #777;"></label>
+											<label id="currentNode" style="font-size: 14px;"></label>
 										</td>
 									</tr>
 								</table>
 							</div>
+							<div class="box-header">
+								<div>
+									<table>
+										<tr>
+											<td><label
+												style="width: 80px; margin-right: 10px; text-align: right">디바이스
+													: </label></td>
+											<td><select id="deviceSel"
+												class="form-control selectoption_grey_color"
+												style="width: 210px">
+											</select></td>
+											<td><input type="text"
+												style="width: 250px; margin-left: 15px;"
+												class="form-control" id="txtSearch" placeholder="검색"></td>
+											<td
+												style="width: 100%; text-align: right; padding-right: 10px">
+												<button type="button" class="btn btn-primary" id="btnSearch"><%=LanguageHelper.GetLanguage("inquiry")%></button>
+											</td>
+										</tr>
+									</table>
+								</div>
+							</div>
+							<table name="datatable" id="parent-table" class="essential-table"
+								style="width: 98%;" align="center">
+								<thead>
+									<tr>
+										<th style="min-width: 180px;">IP</th>
+										<th id="mac-or-duid"></th>
+										<th width="40%">Hostname</th>
+										<th width="40%">OS</th>
+										<th width="20%">Device</th>
+										<th style="min-width: 50px;"></th>
+									</tr>
+								</thead>
+							</table>
 						</div>
-						<table name="datatable" id="parent-table" class="essential-table"
-							style="width: 98%;" align="center">
-							<thead>
-								<tr>
-									<th>IP</th>
-									<th>MAC</th>
-									<th>Hostname</th>
-									<th>OS</th>
-									<th>Device Type</th>
-								</tr>
-							</thead>
-						</table>
 					</div>
 				</div>
-			</div>
 		</section>
 	</div>
 
