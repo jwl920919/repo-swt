@@ -58,16 +58,25 @@
 	</update>
 	-->
 	
+	
 	<update id="updateClientInfoFromIpStatus">
+	
+		-- INSERT NEW DATA
+		INSERT INTO client_info (macaddr, duid, hostname, vendor, model, os, ip_type, last_ip, last_ip_num, update_time)
+			SELECT ip.macaddr, ip.duid, ip.host_name AS hostname 
+			, ip.vendor, '' model, ip.os, ip.ip_type, ip.ipaddr AS last_ip, ip.ip_num AS last_ip_num, now() AS update_time
+		FROM view_ip_status ip 
+		WHERE 1=1
+		AND ip.macaddr NOT IN ( SELECT DISTINCT macaddr FROM client_info )
+		AND COALESCE(ip.macaddr,'') != ''
+		AND COALESCE(ip.ip_status,'') != ''
+		AND ip.site_id = #{site_id}
+		AND ip.network = #{network};
+	
+		-- UPDATE PREVIOUS DATA
 		UPDATE client_info AS c
-		SET duid = ip.duid
-		, hostname = ip.host_name
-		, vendor = ip.vendor
-		, os = ip.os
-		, ip_type = ip.ip_type
-		, last_ip = ip.ipaddr
-		, last_ip_num = ip.ip_num
-		, update_time = now()
+		SET duid = ip.duid, hostname = ip.host_name, vendor = ip.vendor, os = ip.os
+		, ip_type = ip.ip_type, last_ip = ip.ipaddr, last_ip_num = ip.ip_num, update_time = now()
 		FROM view_ip_status ip
 		WHERE COALESCE(ip.macaddr,'') != ''
 		AND COALESCE(ip.ip_status,'') != ''
@@ -82,7 +91,8 @@
 		  OR COALESCE(c.last_ip_num,0) != COALESCE(ip.ip_num,0)
 		)
 		AND ip.site_id = #{site_id}
-		AND ip.network = #{network}
+		AND ip.network = #{network};
+		
 	</update>
 
 </mapper>
