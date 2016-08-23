@@ -169,13 +169,13 @@
 	</select>
 	
 	<insert id="insertInterfaceCam" parameterType="com.shinwootns.data.entity.InterfaceCam">
-		INSERT INTO interface_cam (device_id, if_number, macaddr, ipaddr, update_time)
-		VALUES ( #{device_id}, #{if_number}, #{macaddr}, #{ipaddr}, now()); 
+		INSERT INTO interface_cam (device_id, if_number, macaddr, update_time)
+		VALUES ( #{device_id}, #{if_number}, #{macaddr}, now()); 
 	</insert>
 
 	<update id="updateInterfaceCam" parameterType="com.shinwootns.data.entity.InterfaceCam">
 		UPDATE interface_cam
-    	   	SET ipaddr=#{ipaddr}, update_time=now()
+    	   	SET update_time=now()
        WHERE device_id=#{device_id} AND if_number=#{if_number} AND macaddr=#{macaddr}; 
 	</update>
 	

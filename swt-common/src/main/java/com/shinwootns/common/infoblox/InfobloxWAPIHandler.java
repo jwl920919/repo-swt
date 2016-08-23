@@ -11,7 +11,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.shinwootns.common.http.HttpClient;
 import com.shinwootns.common.utils.JsonUtils;
-import com.shinwootns.common.utils.NetworkUtils;
 import com.shinwootns.common.utils.StringUtils;
 import com.shinwootns.common.utils.ip.IPNetwork;
 
@@ -30,7 +29,7 @@ public class InfobloxWAPIHandler {
 	public boolean connect(String host, String id, String pwd) {
 
 		this.host = host;
-		this.baseURL = ((new StringBuilder()).append("https://").append(host)).toString();
+		this.baseURL = ((new StringBuilder()).append("https://").append(this.host)).toString();
 		this.id = id;
 		this.pwd = pwd;
 		
@@ -40,7 +39,7 @@ public class InfobloxWAPIHandler {
 				restClient = new HttpClient();
 			
 			// Connect WAPI
-			if (restClient.Connect_Https(baseURL, id, pwd) == false) {
+			if (restClient.Connect_Https(baseURL, this.id, this.pwd) == false) {
 				return false;
 			}
 			

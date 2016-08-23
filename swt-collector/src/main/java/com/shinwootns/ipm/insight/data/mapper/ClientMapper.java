@@ -9,7 +9,9 @@ import com.shinwootns.data.entity.ClientInfo;
 public interface ClientMapper {
 
 	// Client Info
-	ClientInfo selectClientInfo(@Param("macaddr")String macaddr);
-	int insertClientInfo(ClientInfo clientInfo);
-	int updateClientInfo(ClientInfo clientInfo);
+	//ClientInfo selectClientInfo(@Param("macaddr")String macaddr);
+	//int insertClientInfo(ClientInfo clientInfo);
+	//int updateClientInfo(ClientInfo clientInfo);
+	
+	int updateClientInfoFromIpStatus(@Param("site_id")int site_id, @Param("network")String network);
 }
