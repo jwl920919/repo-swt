@@ -117,6 +117,7 @@ public class RedisManager {
 				_connect();
 			
 			if (rm != null) {
+				
 				redis = rm.createRedisClient();
 				
 				if (redis == null) {

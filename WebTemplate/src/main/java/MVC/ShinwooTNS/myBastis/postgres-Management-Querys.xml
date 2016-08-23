@@ -206,17 +206,10 @@
 		VALUES 
 		<foreach collection="list" item="item" separator=" , ">
 		(#{item.network}, #{item.group_name}, 'N',
-<!-- 			<choose> -->
-<!-- 				<when test="site_master=='t'"> -->
 					<choose>
 						<when test="item.site_id==-1">#{site_id}</when>
 						<when test="item.site_id!=-1">#{item.site_id}</when>
 					</choose>
-<!-- 				</when> -->
-<!-- 				<when test="site_master!='t'"> -->
-<!-- 					#{site_id} -->
-<!-- 				</when> -->
-<!-- 			</choose> -->
 			, #{item.ip_type})
 		</foreach>;
 	</insert>
@@ -243,6 +236,79 @@
 		SELECT DISTINCT device_type 
 		FROM view_client_info 
 		ORDER BY device_type ;
+	</select>
+	
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-08-23 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description :  -->
+	<!-- Controller :  -->
+	<select id="select_VIEW_CLIENT_INFO" parameterType="hashmap" resultType="java.util.HashMap">
+		SELECT 	macaddr, duid,hostname,vendor,model,COALESCE(os,'nomatch')as os,device_type,category,ip_type,last_ip,last_ip_num
+				,last_switch,last_port,position_update,user_comment,update_time 
+		FROM 	view_client_info
+		<!-- XML parser을 이용하지 않고 그대로 브라우저에 출력 -->
+		<![CDATA[
+		WHERE	last_ip_num >= #{start_ip_num} AND last_ip_num <= #{end_ip_num} 
+		]]>
+		AND ip_type=#{ip_type}
+		AND (
+				last_ip like CONCAT('%', #{searchValue}, '%') OR 
+				macaddr like CONCAT('%', #{searchValue}, '%') OR
+				hostname like CONCAT('%', #{searchValue}, '%') OR
+				os like CONCAT('%', #{searchValue}, '%')
+				<choose>
+					<when test='searchValue=="n"'>OR os is null</when>
+					<when test='searchValue=="no"'>OR os is null</when>
+					<when test='searchValue=="nom"'>OR os is null</when>
+					<when test='searchValue=="noma"'>OR os is null</when>
+					<when test='searchValue=="nomat"'>OR os is null</when>
+					<when test='searchValue=="nomatc"'>OR os is null</when>
+					<when test='searchValue=="nomatch"'>OR os is null</when>
+				</choose>
+				
+			)
+		<choose>
+			<when test='device_type=="ALL"'></when>
+			<when test="device_type=='nomatch'"> AND device_type='' </when>
+			<when test='device_type!="nomatch" and device_type!="ALL"'> AND device_type=#{device_type} </when>
+		</choose>
+		ORDER BY 
+			<choose>
+				<when test="orderColumn == 'last_ip'">inet(${orderColumn}) </when>
+				<when test="orderColumn != 'last_ip'">${orderColumn} </when>
+			</choose>
+		${orderType} OFFSET #{startIndex} LIMIT #{length}
+	</select>
+	
+	<select id="select_VIEW_CLIENT_INFO_TOTAL_COUNT" parameterType="hashmap" resultType="Integer">
+		SELECT 	count(*) AS total 
+		FROM 	view_client_info
+		<!-- XML parser을 이용하지 않고 그대로 브라우저에 출력 -->
+		<![CDATA[
+		WHERE	last_ip_num >= #{start_ip_num} AND last_ip_num <= #{end_ip_num} 
+		]]>
+		AND ip_type=#{ip_type}
+		AND (
+				last_ip like CONCAT('%', #{searchValue}, '%') OR 
+				macaddr like CONCAT('%', #{searchValue}, '%') OR
+				hostname like CONCAT('%', #{searchValue}, '%') OR
+				os like CONCAT('%', #{searchValue}, '%')
+				<choose>
+					<when test='searchValue=="n"'>OR os is null</when>
+					<when test='searchValue=="no"'>OR os is null</when>
+					<when test='searchValue=="nom"'>OR os is null</when>
+					<when test='searchValue=="noma"'>OR os is null</when>
+					<when test='searchValue=="nomat"'>OR os is null</when>
+					<when test='searchValue=="nomatc"'>OR os is null</when>
+					<when test='searchValue=="nomatch"'>OR os is null</when>
+				</choose>
+			)
+		<choose>
+			<when test='device_type=="ALL"'></when>
+			<when test="device_type=='nomatch'"> AND device_type='' </when>
+			<when test='device_type!="nomatch" and device_type!="ALL"'> AND device_type=#{device_type} </when>
+		</choose>
 	</select>
 	
 </mapper>

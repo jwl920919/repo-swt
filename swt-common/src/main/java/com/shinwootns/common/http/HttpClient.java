@@ -94,7 +94,7 @@ public class HttpClient {
 
 			// CredentialsProvider
 			CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-			credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(id, pwd));
+			credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(this._id, this._pwd));
 
 			// HttpClient
 			_httpClient = HttpClients.custom().setDefaultCredentialsProvider(credentialsProvider)
@@ -126,12 +126,10 @@ public class HttpClient {
 	//endregion
 	
 	//region Http Get
-	public String Get(String subURL, Map params) {
+	public String Get(String subURL, Map<String,String> params) {
 
 		if (_httpClient == null)
 			return null;
-
-		String value = null;
 
 		try {
 
@@ -149,7 +147,7 @@ public class HttpClient {
 			_logger.error(ex.getMessage(), ex);
 		}
 
-		return value;
+		return null;
 	}
 	
 	public String Get(String subURL) {
@@ -159,6 +157,8 @@ public class HttpClient {
 
 		String value = null;
 
+		CloseableHttpResponse response = null;
+		
 		try {
 
 			// Full URL
@@ -169,7 +169,7 @@ public class HttpClient {
 			httpGet.setHeader("User-Agent", _agent);
 
 			// Execute
-			CloseableHttpResponse response = _httpClient.execute(httpGet);
+			response = _httpClient.execute(httpGet);
 
 			if (response != null) {
 
@@ -195,13 +195,19 @@ public class HttpClient {
 				{
 					System.out.println(response.getStatusLine());
 				}
-
-				// Close
-				response.close();
 			}
 
 		} catch (Exception ex) {
 			_logger.error(ex.getMessage(), ex);
+			return null;
+		} finally {
+			
+			try {
+				 if ( response != null)
+					response.close();
+			} catch (IOException e) {}
+
+			response = null;
 		}
 
 		return value;
@@ -209,12 +215,14 @@ public class HttpClient {
 	//endregion
 
 	//region Http Post
-	public String Post(String subURL, ContentType contentType, Map params) {
+	public String Post(String subURL, ContentType contentType, Map<String,String> params) {
 		if (_httpClient == null)
 			return null;
 
 		String value = null;
 
+		CloseableHttpResponse response = null;
+		
 		try {
 			
 			// Full URL
@@ -238,7 +246,7 @@ public class HttpClient {
 			// postRequest.setEntity(inputEntity);
 
 			// Execute
-			CloseableHttpResponse response = _httpClient.execute(postRequest);
+			response = _httpClient.execute(postRequest);
 
 			if (response != null) {
 
@@ -265,13 +273,18 @@ public class HttpClient {
 				{
 					System.out.println(response.getStatusLine());
 				}
-
-				// Close
-				response.close();
 			}
 
 		} catch (Exception ex) {
 			_logger.error(ex.getMessage(), ex);
+		} finally {
+			
+			try {
+				if (response != null)
+					response.close();
+			} catch (IOException e) {}
+			
+			response = null;
 		}
 
 		return value;
@@ -279,12 +292,13 @@ public class HttpClient {
 	//endregion
 	
 	//region Http Delete
-	public String Delete(String subURL, ContentType contentType, Map params)
+	public String Delete(String subURL, ContentType contentType, Map<String,String> params)
 	{
 		if (_httpClient == null)
 			return null;
 
 		String value = null;
+		CloseableHttpResponse response = null;
 
 		try {
 			
@@ -306,7 +320,7 @@ public class HttpClient {
 			}
 	
 			// Execute
-			CloseableHttpResponse response = _httpClient.execute(deleteRequest);
+			response = _httpClient.execute(deleteRequest);
 
 			if (response != null) {
 
@@ -332,13 +346,18 @@ public class HttpClient {
 				{
 					System.out.println(response.getStatusLine());
 				}
-
-				// Close
-				response.close();
 			}
 
 		} catch (Exception ex) {
 			_logger.error(ex.getMessage(), ex);
+		} finally {
+			
+			try {
+				if (response != null)
+					response.close();
+			} catch (IOException e) {}
+			
+			response = null;
 		}
 
 		return value;
@@ -359,7 +378,7 @@ public class HttpClient {
 	//endregion
 	
 	//region Convert Parameter
-	private List<NameValuePair> convertParam(Map params) {
+	private List<NameValuePair> convertParam(Map<String,String> params) {
 		
 		List<NameValuePair> paramList = new ArrayList<NameValuePair>();
 
@@ -377,7 +396,7 @@ public class HttpClient {
 	}
 	//endregion
 
-	//region Get / Set
+	//region Get / Set Attributes
 	public int getConnect_timeout() {
 		return _connect_timeout;
 	}

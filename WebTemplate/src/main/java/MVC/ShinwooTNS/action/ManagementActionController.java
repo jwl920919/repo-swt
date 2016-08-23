@@ -203,38 +203,64 @@ public class ManagementActionController {
 
 	}
 	// endregion
-	
-	// region getNodeChildren
-	@RequestMapping(value = "getNodeChildren", method = RequestMethod.POST, produces = "application/text; charset=utf8")
-	public @ResponseBody Object getNodeChildren(HttpServletRequest request) {
+	// region getNodeTableDatas
+	@RequestMapping(value = "getNodeTableDatas", method = RequestMethod.POST)
+	public void getNodeTableDatas(Locale locale, Model model, HttpServletRequest request, HttpServletResponse response,
+			HttpSession session) {
 		try {
-			init();
-			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
-					new TypeToken<HashMap<String, Object>>() {
-					}.getType());
-			HttpSession session = request.getSession(true);
+//			int site_id = Integer.parseInt(session.getAttribute("site_id").toString());
+//			String site_master = session.getAttribute("site_master").toString();
+//			parameters.put("site_id", site_id);
+//			parameters.put("site_master", site_master);
+			String ip_type = request.getParameter("ip_type").toString();
+			String[] columns = null;
+			if(ip_type.toUpperCase().equals("IPV4")){
+				columns = new String[] { "last_ip", "macaddr", "hostname", "os", "device_type" };
+			} else {
+				columns = new String[] {"last_ip", "duid", "hostname", "os", "device_type"};
+			}
+			HashMap<String, Object> parameters = Common.Helper.DatatableHelper.getDatatableParametas(request, columns, 0);
 			int site_id = Integer.parseInt(session.getAttribute("site_id").toString());
 			String site_master = session.getAttribute("site_master").toString();
-			IpNetworkTree ipNetworkTree = (IpNetworkTree)session.getAttribute("ipNetworkTree");
 			parameters.put("site_id", site_id);
 			parameters.put("site_master", site_master);
-			String network = parameters.get("network").toString();
-			String ip_type = parameters.get("ip_type").toString();
+			String device_type = request.getParameter("device_type");
+			parameters.put("device_type", device_type.trim().equals("")?"ALL":device_type);
+			
+			String network = request.getParameter("network").toString();
+			
+			IpNetworkTree ipNetworkTree = (IpNetworkTree)session.getAttribute("ipNetworkTree");
 			Node node = null;
 			if(ip_type.toUpperCase().equals("IPV4")){
 				node = ipNetworkTree.getIPv4NetworkTree().getRoot().getNode(network);
 			} else {
 				node = ipNetworkTree.getIPv6NetworkTree().getRoot().getNode(network);
 			}
-//			Node.printNode(node);
-			result.result = true;
-			return gson.toJson(result);
+			BigInteger start_ip_num = node.getData().getIpNetwork().getStartIP().getNumberToBigInteger();
+			BigInteger end_ip_num = node.getData().getIpNetwork().getEndIP().getNumberToBigInteger();
+			parameters.put("start_ip_num", start_ip_num);
+			parameters.put("end_ip_num", end_ip_num);
+			parameters.put("ip_type",ip_type);
+			JSONArray jsonArray = new JSONArray();
+			List<Map<String, Object>> dataList = managementService.select_VIEW_CLIENT_INFO(parameters);
+			for (Map<String, Object> data : dataList) {
+				JSONObject jObj = new JSONObject();
+				for(int i=0;i<columns.length;i++){
+					jObj.put(columns[i], data.get(columns[i]));
+				}
+				jsonArray.add(jObj);
+			}
+			String callback = Common.Helper.DatatableHelper.makeCallback(request, jsonArray,
+					managementService.select_VIEW_CLIENT_INFO_TOTAL_COUNT(parameters));
+			response.setContentType("Application/json;charset=utf-8");
+			response.getWriter().println(callback);
+			response.getWriter().flush();
+			response.getWriter().close();
+		} catch (IOException e) {
+			ErrorLoggingHelper.log(logger, "getNodeTableDatas", e);
 		} catch (Exception e) {
-			ErrorLoggingHelper.log(logger, "getNodeChildren", e);
-			result.result = false;
-			return gson.toJson(result);
+			ErrorLoggingHelper.log(logger, "getNodeTableDatas", e);
 		}
-
 	}
 	// endregion
 
@@ -390,10 +416,15 @@ public class ManagementActionController {
 	public @ResponseBody Object getDeviceNames(HttpServletRequest request) {
 		try {
 			init();
-			List<Map<String, Object>> list = managementService.select_CLIENT_DEVICE_INFO();
+			List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
+			Map<String,Object> allDeviceType = new HashMap<String,Object>();
+			allDeviceType.put("device_type", "ALL");
+			list.add(allDeviceType);
+			list.addAll(managementService.select_CLIENT_DEVICE_INFO());
 			for(Map<String,Object> obj : list) {
 				if(obj.get("device_type").toString().trim().equals("")){
 					obj.put("device_type", "nomatch");
+					break;
 				}
 			}
 			result.data= list;

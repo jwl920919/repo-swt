@@ -67,4 +67,14 @@ private MANAGEMENT_interface mgmtMenuDao;
 	public List<Map<String, Object>> select_CLIENT_DEVICE_INFO() {
 		return mgmtMenuDao.select_CLIENT_DEVICE_INFO();
 	}
+
+	@Override
+	public List<Map<String, Object>> select_VIEW_CLIENT_INFO(HashMap<String, Object> parameters) {
+		return mgmtMenuDao.select_VIEW_CLIENT_INFO(parameters);
+	}
+
+	@Override
+	public int select_VIEW_CLIENT_INFO_TOTAL_COUNT(HashMap<String, Object> parameters) {
+		return mgmtMenuDao.select_VIEW_CLIENT_INFO_TOTAL_COUNT(parameters);
+	}
 }

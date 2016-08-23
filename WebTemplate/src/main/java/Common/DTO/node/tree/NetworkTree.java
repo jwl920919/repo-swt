@@ -136,8 +136,8 @@ public class NetworkTree extends Tree {
 			sb.append(ipStr);
 			sb.append("\",\"ip_type\":\"");
 			sb.append(this.data.getIpNetwork().getStartIP().isIPv4()?"IPV4":"IPV6");
-			sb.append("\",\"is_lastchild\":\"");
-			sb.append(this.children.size() == 0);
+//			sb.append("\",\"is_lastchild\":\"");
+//			sb.append(this.children.size() == 0);
 			sb.append("\"}");
 
 			if (this.children.size() > 0) {
