@@ -45,33 +45,31 @@
 					</div>
 				</div>
 				<div class="box-header">
-					<center>
-						<table id="datatable" name="datatable" class="essential-table" style="width: 98%">
+						<table id="datatable" name="datatable" class="essential-table" style="width: 98%" align="center">
 							<thead>
 								<tr>
-									<th width="4%"><%=LanguageHelper.GetLanguage("ip")%></th>
-									<th width="4%"><%=LanguageHelper.GetLanguage("mac")%></th>
-									<th width="6%"><%=LanguageHelper.GetLanguage("hostname")%></th>
-									<th width="4%"><%=LanguageHelper.GetLanguage("hostos")%></th>
-									<th width="4%">Duid</th>
-									<th width="4%"><%=LanguageHelper.GetLanguage("status")%></th>
-									<th width="4%"><%=LanguageHelper.GetLanguage("leasestatus")%></th>
-									<th width="7%">Obj types</th>
-									<th width="4%">Discover status</th>
-									<th width="4%">Usage</th>
-									<th width="7%">Fingerprint</th>
-									<th width="4%">Never ends</th>
-									<th width="4%">Never start</th>
-									<th width="5%"><%=LanguageHelper.GetLanguage("lease")%> <%=LanguageHelper.GetLanguage("starttime")%></th>
-									<th width="5%"><%=LanguageHelper.GetLanguage("lease")%> <%=LanguageHelper.GetLanguage("endtime")%></th>
-									<th width="4%">Last discovered</th>
-									<th width="6%">User description</th>
+									<th width="10%"><%=LanguageHelper.GetLanguage("ip")%></th>
+									<th width="15%"><%=LanguageHelper.GetLanguage("mac")%></th>
+									<th width="15%"><%=LanguageHelper.GetLanguage("hostname")%></th>
+									<th width="20%"><%=LanguageHelper.GetLanguage("hostos")%></th>
+									<th width="10%">Duid</th>
+									<th width="10%"><%=LanguageHelper.GetLanguage("status")%></th>
+<%-- 									<th width="4%"><%=LanguageHelper.GetLanguage("leasestatus")%></th> --%>
+<!-- 									<th width="7%">Obj types</th> -->
+<!-- 									<th width="4%">Discover status</th> -->
+<!-- 									<th width="4%">Usage</th> -->
+<!-- 									<th width="7%">Fingerprint</th> -->
+<!-- 									<th width="4%">Never ends</th> -->
+<!-- 									<th width="4%">Never start</th> -->
+									<th width="10%"><%=LanguageHelper.GetLanguage("lease")%> <%=LanguageHelper.GetLanguage("starttime")%></th>
+									<th width="10%"><%=LanguageHelper.GetLanguage("lease")%> <%=LanguageHelper.GetLanguage("endtime")%></th>
+<!-- 									<th width="4%">Last discovered</th> -->
+<!-- 									<th width="6%">User description</th> -->
 								</tr>
 							</thead>
 							<tbody>
 							</tbody>
 						</table>
-					</center>
 				</div>
 			</div>
 		</div>

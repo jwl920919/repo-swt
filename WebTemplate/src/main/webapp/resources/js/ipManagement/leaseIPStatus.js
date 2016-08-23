@@ -80,9 +80,9 @@ fnSelectData = function(value, search) {
 	                "bAutoWidth": false,
 	                "processing" : true,
 	                "serverSide" : true,
-	                "sScrollX": "100%",
-	                "sScrollXInner": "3000",
-	                "bScrollCollapse": true,
+//	                "sScrollX": "100%",
+//	                "sScrollXInner": "3000",
+//	                "bScrollCollapse": true,
 	                "ajax" : {
 	                    url : 'ipManagement/leaseIPStatus_Data_Select',
 	                    "dataType" : "jsonp",
@@ -95,26 +95,16 @@ fnSelectData = function(value, search) {
 	                        data.timezone = getClientTimeZoneName();
 	                    }
 	                },	                
-				    "columnDefs": [{ className: "essential-td-left", "targets": [ 0,2,3,7,9,10 ] },
-				                   { className: "essential-td-left", "targets": [ 11,12,16 ] }],
+				    "columnDefs": [{ className: "essential-td-left", "targets": [ 0,1,2,3,4,5 ] }],
 	                "order" : [ [ 0, 'asc' ] ],
 	                "columns" : [	{"data" : "ipaddr"},
 									{"data" : "macaddr"},
 									{"data" : "host_name"},
-									{"data" : "host_os"},
+									{"data" : "os"},
 									{"data" : "duid"},
-									{"data" : "status"},
-									{"data" : "lease_state"},
-									{"data" : "obj_types"},
-									{"data" : "discover_status"},
-									{"data" : "usage"},
-									{"data" : "fingerprint"},
-									{"data" : "is_never_ends"},
-									{"data" : "is_never_start"},
+									{"data" : "ip_status"},									
 									{"data" : "lease_start_time"},
-									{"data" : "lease_end_time"},
-									{"data" : "last_discovered"},
-									{"data" : "user_description"}]
+									{"data" : "lease_end_time"}]
 	            });
 		
 		//검색, 엔트리 위치 정렬

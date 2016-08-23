@@ -124,27 +124,25 @@ $(document).ready(function() {
 		<div class="col-lg-12">
 			<div class="box box-primary">
 				<div class="box-header">
-					<center>
-						<table id="datatable" name="datatable" class="essential-table" style="width: 98%">
-							<thead>
-								<tr>
-									<th width="0%" style="display:none;">blacklist_id</th>
-									<th width="0%" style="display:none;">site_id</th>
-									<th width="15%"><%=LanguageHelper.GetLanguage("site")%></th>
-									<th width="10%"><%=LanguageHelper.GetLanguage("usedclass")%></th>
-									<th width="20%"><%=LanguageHelper.GetLanguage("filtername")%></th>
-									<th width="10%"><%=LanguageHelper.GetLanguage("datetime")%></th>
-									<th width="45%"><%=LanguageHelper.GetLanguage("desctription")%></th>
-									<th width="20%"></th>
-								</tr>
-							</thead>
-							<tbody>
-							</tbody>
-						</table>
-						<div id="add-row" style="margin-top: 5px; text-align: right;">
-							<button type="button" class="btn btn-primary" id="add-button" name="save-button"><%=LanguageHelper.GetLanguage("add")%></button>
-						</div>
-					</center>
+					<table id="datatable" name="datatable" class="essential-table" style="width: 98%" align="center">
+						<thead>
+							<tr>
+								<th width="0%" style="display:none;">blacklist_id</th>
+								<th width="0%" style="display:none;">site_id</th>
+								<th width="15%"><%=LanguageHelper.GetLanguage("site")%></th>
+								<th width="10%"><%=LanguageHelper.GetLanguage("usedclass")%></th>
+								<th width="20%"><%=LanguageHelper.GetLanguage("filtername")%></th>
+								<th width="10%"><%=LanguageHelper.GetLanguage("datetime")%></th>
+								<th width="45%"><%=LanguageHelper.GetLanguage("desctription")%></th>
+								<th width="20%"></th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+					<div id="add-row" style="margin-top: 5px; text-align: right;">
+						<button type="button" class="btn btn-primary" id="add-button" name="save-button"><%=LanguageHelper.GetLanguage("add")%></button>
+					</div>
 				</div>
 			</div>
 		</div>

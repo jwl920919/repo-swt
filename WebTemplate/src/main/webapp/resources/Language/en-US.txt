@@ -205,5 +205,6 @@
     "entertheip":									"IP를 입력해주세요.",
     "ithasapprovedtherequest":						"승인요청 하였습니다.",
     "anerrorhasoccurredintheapprovalrequest":		"승인요청 중 오류가 발생하였습니다.",
-    "wouldyouliketochecktherequeststatus":			"요청현황을 확인하시겠습니까?"
+    "wouldyouliketochecktherequeststatus":			"요청현황을 확인하시겠습니까?",
+    "check":										"확인"
 }

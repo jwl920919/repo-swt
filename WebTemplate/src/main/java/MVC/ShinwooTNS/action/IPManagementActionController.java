@@ -216,7 +216,6 @@ public class IPManagementActionController {
 				parameters.put("orderType", "ASC");
 				parameters.put("startIndex", 0);
 				parameters.put("length", Integer.MAX_VALUE);
-				//List<Map<String, Object>> allDataList = ipManagementService.select_IP_MANAGEMENT_SEGMENT_DETAIL_MAPDATA(parameters);
 				List<Map<String, Object>> allDataList = ipManagementService.select_IP_MANAGEMENT_SEGMENT_DETAIL(parameters);
 
 				result.result = true;
