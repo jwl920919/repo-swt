@@ -736,7 +736,7 @@
 		SET		os=#{os}, device_type=#{device_type},priority=#{priority}, os_like=#{os_like}, 
 				hostname_like=#{hostname_like}, device_type_like=#{device_type_like}, 
 				hostname=#{hostname}, vendor=#{vendor}, site_id=#{site_id}, model_like=#{model_like}, 
-				model=#{model},is_permit=#{is_permit}, "desc"=#{desc} ,update_time=now()
+				model=#{model},is_permit=#{is_permit}, desc"=#{desc} ,update_time=now()
 		WHERE 	access_policy_id = #{access_policy_id};
 	</update>
 	

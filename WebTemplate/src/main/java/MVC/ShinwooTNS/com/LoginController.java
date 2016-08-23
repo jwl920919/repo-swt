@@ -47,46 +47,56 @@ public class LoginController {
 				System.out.println("Query : " + sql);
 				ResultSet rs = dbHelper.executeQuery(sql);
 				
-				rs.last();
-				System.out.println("count : " + rs.getRow());
-				
-				if (rs.getRow() > 0) {
-					rs.beforeFirst();
+				if (rs != null) {
 					
-					boolean bSignCheck = false;
-					while (rs.next()) {
-						System.out.println("DB Password : " + rs.getString("user_pw"));
-						System.out.println("UR Password : " + pw);
-						System.out.println("DB sDeptName : " + rs.getString("dept_name").trim());
-						System.out.println("DB site_master : " + rs.getString("site_master").trim());
-						Date date = rs.getTimestamp("insert_date");
-						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-						System.out.println("user_info dateTime : " + sdf.format(date));
+					rs.last();
+					System.out.println("count : " + rs.getRow());
+					
+					if (rs.getRow() > 0) {
+						rs.beforeFirst();
 						
-						if (rs.getString("user_pw").trim().equals(pw)) {
-							logger.info("Login ID(site) : " + rs.getString("user_id") + "(" + rs.getString("site_name") + ")");
-							session.setAttribute("login_chk", true);// Session에 "login_chk"로 값을 저장.
-							session.setAttribute("site_id", rs.getString("site_id").trim());// Session에 "login_chk"로 값을 저장.
-							session.setAttribute("site_name", rs.getString("site_name").trim());// Session에 "login_chk"로 값을 저장.
-							session.setAttribute("site_master", rs.getString("site_master").trim());// Session에 "login_chk"로 값을 저장.
-							session.setAttribute("user_seq", rs.getString("user_seq").trim());// Session에 "login_chk"로 값을 저장.
-							session.setAttribute("user_id", rs.getString("user_id").trim());// Session에 "login_chk"로 값을 저장.
-							session.setAttribute("user_name", rs.getString("user_name").trim());// Session에 "login_chk"로 값을 저장.							
-							bSignCheck = true;
+						boolean bSignCheck = false;
+						while (rs.next()) {
+							System.out.println("DB Password : " + rs.getString("user_pw"));
+							System.out.println("UR Password : " + pw);
+							System.out.println("DB sDeptName : " + rs.getString("dept_name").trim());
+							System.out.println("DB site_master : " + rs.getString("site_master").trim());
+							Date date = rs.getTimestamp("insert_date");
+							SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+							System.out.println("user_info dateTime : " + sdf.format(date));
+							
+							if (rs.getString("user_pw").trim().equals(pw)) {
+								logger.info("Login ID(site) : " + rs.getString("user_id") + "(" + rs.getString("site_name") + ")");
+								session.setAttribute("login_chk", true);// Session에 "login_chk"로 값을 저장.
+								session.setAttribute
+								("site_id", rs.getString("site_id").trim());// Session에 "login_chk"로 값을 저장.
+								session.setAttribute("site_name", rs.getString("site_name").trim());// Session에 "login_chk"로 값을 저장.
+								session.setAttribute("site_master", rs.getString("site_master").trim());// Session에 "login_chk"로 값을 저장.
+								session.setAttribute("user_seq", rs.getString("user_seq").trim());// Session에 "login_chk"로 값을 저장.
+								session.setAttribute("user_id", rs.getString("user_id").trim());// Session에 "login_chk"로 값을 저장.
+								session.setAttribute("user_name", rs.getString("user_name").trim());// Session에 "login_chk"로 값을 저장.							
+								bSignCheck = true;
+							}
 						}
-					}
-					if (!bSignCheck) {
-						//비밀번호가 일치하지 않습니다.
-						System.out.println("비밀번호가 일치하지 않습니다.");
-						model.addAttribute("errorMessage", LanguageHelper.GetLanguage("Passwordsdonotmatch"));
-						model.addAttribute("txtID", id);
+						if (!bSignCheck) {
+							//비밀번호가 일치하지 않습니다.
+							System.out.println("비밀번호가 일치하지 않습니다.");
+							model.addAttribute("errorMessage", LanguageHelper.GetLanguage("Passwordsdonotmatch"));
+							model.addAttribute("txtID", id);
+							return "/loginManagement/login";
+						}
+					} else {
+						//일치하는 아이디가 없습니다.
+						System.out.println("일치하는 아이디가 없습니다.");
+						model.addAttribute("errorMessage", LanguageHelper.GetLanguage("IDdonotmatch"));
+						model.addAttribute("txtID", "");
 						return "/loginManagement/login";
 					}
-				} else {
-					//일치하는 아이디가 없습니다.
-					System.out.println("일치하는 아이디가 없습니다.");
-					model.addAttribute("errorMessage", LanguageHelper.GetLanguage("IDdonotmatch"));
-					model.addAttribute("txtID", "");
+				}
+				else {
+					//서비스가 원활하지 않습니다.\n관리자에게 문의하십시오.
+					System.out.println("서비스가 원활하지 않습니다.\n관리자에게 문의하십시오.");
+					model.addAttribute("errorMessage", LanguageHelper.GetLanguage("serviceisnotnormal"));
 					return "/loginManagement/login";
 				}
 			}

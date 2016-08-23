@@ -39,6 +39,7 @@
 	"segmentByLeaseIP":								"세그먼트별 Lease IP 할당현황",
 	"leaseIPAssignment":							"Lease IP 할당 현황",
 	"certifyProcess":								"인증처리현황",
+	"askIP":										"IP신청",
 	"askIPStatus":									"IP신청현황",
 	"hardwareByUsed":								"HW별 사용 현황",
 	"osByUsed":										"OS별 사용 현황",
@@ -97,6 +98,7 @@
 	"total":										"Total",
 	"ipAssignCount":								"할당 IP 수",
 	"usingAbleIPCount":								"가용 IP 수",
+	"autoIP":										"자동 IP",
 	"staticIP":										"고정 IP",
 	"leaseIP":										"리스 IP",
 	"unUsedIP":										"미사용 IP",
@@ -197,5 +199,11 @@
     "areyousureyouwanttodelete":					"삭제하시겠습니까?",    
     "Removed":										"삭제되었습니다.",    
     "changed":										"수정되었습니다.",
-    "saved":										"저장되었습니다."
+    "saved":										"저장되었습니다.",
+    "serviceisnotnormal":							"The service is not normal.\nPlease contact your administrator.",
+    "entertheaskedinformation":						"요청내용을 입력해주세요.",
+    "entertheip":									"IP를 입력해주세요.",
+    "ithasapprovedtherequest":						"승인요청 하였습니다.",
+    "anerrorhasoccurredintheapprovalrequest":		"승인요청 중 오류가 발생하였습니다.",
+    "wouldyouliketochecktherequeststatus":			"요청현황을 확인하시겠습니까?"
 }

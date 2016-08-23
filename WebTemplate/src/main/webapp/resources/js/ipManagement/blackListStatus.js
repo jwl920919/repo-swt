@@ -18,13 +18,13 @@ $(document).ready(function() {
 //	});
 	
 	//조회 버튼 클릭 이벤트
-//	$('#btnSearch').click(function() {
-//		var startDate = new Date($('#reservationtime').data('daterangepicker').startDate.toLocaleString()).format("yyyy-MM-dd HH:mm:ss");
-//		var endDate = new Date($('#reservationtime').data('daterangepicker').endDate.toLocaleString()).format("yyyy-MM-dd HH:mm:ss");		
-//	    if ($("#sbCerifyStatus option:selected").val() != '') {
-//        	fnSelectData(startDate, endDate, $("#sbCerifyStatus option:selected").val(), $("#txtSearch").val());
-//	    }
-//	});
+	$('#btnSearch').click(function() {
+		var startDate = new Date($('#reservationtime').data('daterangepicker').startDate.toLocaleString()).format("yyyy-MM-dd HH:mm:ss");
+		var endDate = new Date($('#reservationtime').data('daterangepicker').endDate.toLocaleString()).format("yyyy-MM-dd HH:mm:ss");		
+	    if ($("#sbCerifyStatus option:selected").val() != '') {
+        	fnSelectData(startDate, endDate, $("#sbCerifyStatus option:selected").val(), $("#txtSearch").val());
+	    }
+	});
 
 	return;
 	//추가 버튼 클릭 이벤트
