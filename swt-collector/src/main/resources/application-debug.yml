@@ -32,7 +32,7 @@ insight:
     enable_recv_syslog: true
     test_collect_nmap: true
     test_collect_network_device: true
-    force_start_cluster_master: false
+    force_start_cluster_master: true
 
 #====================================
 # server

@@ -333,6 +333,7 @@ public class InfobloxWAPIHandler {
 		.append("&_return_as_object=1")
 		.append("&_return_type=json")
 		.append("&network=").append(network)							// '192.168.1.0/25'
+		.append("&status=USED")
 		.append("&_return_fields=")
 			.append("ip_address,network,mac_address,names")
 			.append(",is_conflict,conflict_types")
@@ -418,6 +419,7 @@ public class InfobloxWAPIHandler {
 			.append("?_paging=1&_return_as_object=1&_return_type=json")
 			.append("&_max_results=").append(splitCount)
 			.append("&network=").append(network)			// 2002:cafe:feed::/112
+			.append("&status=USED")
 			.append("&_return_fields=")
 				.append("ip_address,network,duid,names")
 				.append(",is_conflict")
