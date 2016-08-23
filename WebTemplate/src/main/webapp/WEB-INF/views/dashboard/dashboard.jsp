@@ -655,8 +655,8 @@
 				<!-- ./ tools -->
 			</div>
 			<div class="box-body" style="margin-bottom: 5px">
-				<center style="margin-top: -15px !important;">
-					<table id="datatable" name="eventLog" class="essential-table" style="width: 98% !important;">
+				<div style="margin-top: -15px !important;">
+					<table id="datatable" name="eventLog" class="essential-table" style="width: 98% !important;" align="center">
 						<thead>
 							<tr>
 <%-- 									<th width="10%"><%=LanguageHelper.GetLanguage("datetime")%></th> --%>
@@ -674,7 +674,7 @@
 						<tbody>
 						</tbody>
 					</table>
-				</center>
+				</div>
 			</div>
 		</div>
 	</div>

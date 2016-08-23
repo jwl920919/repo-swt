@@ -4,6 +4,7 @@
 <mapper namespace="com.shinwootns.ipm.insight.data.mapper.ClientMapper">
 
     <!-- ############################ Client Info ############################ -->
+    <!-- 
 	<select id="selectClientInfo" resultType="com.shinwootns.data.entity.ClientInfo">
 		<![CDATA[
 			SELECT * FROM client_info WHERE macaddr=#{macaddr}
@@ -54,6 +55,34 @@
 		, position_update = #{position_update}
 		</if>
 		WHERE macaddr = #{macaddr}
+	</update>
+	-->
+	
+	<update id="updateClientInfoFromIpStatus">
+		UPDATE client_info AS c
+		SET duid = ip.duid
+		, hostname = ip.host_name
+		, vendor = ip.vendor
+		, os = ip.os
+		, ip_type = ip.ip_type
+		, last_ip = ip.ipaddr
+		, last_ip_num = ip.ip_num
+		, update_time = now()
+		FROM view_ip_status ip
+		WHERE COALESCE(ip.macaddr,'') != ''
+		AND COALESCE(ip.ip_status,'') != ''
+		AND c.macaddr = ip.macaddr
+		AND ( 
+		     COALESCE(c.duid,'') != COALESCE(ip.duid,'')
+		  OR COALESCE(c.hostname,'') != COALESCE(ip.host_name,'')
+		  OR COALESCE(c.vendor,'') != COALESCE(ip.vendor,'')
+		  OR COALESCE(c.os,'') != COALESCE(ip.os,'')
+		  OR COALESCE(c.ip_type,'') != COALESCE(ip.ip_type,'')
+		  OR COALESCE(c.last_ip,'') != COALESCE(ip.ipaddr,'')
+		  OR COALESCE(c.last_ip_num,0) != COALESCE(ip.ip_num,0)
+		)
+		AND ip.site_id = #{site_id}
+		AND ip.network = #{network}
 	</update>
 
 </mapper>

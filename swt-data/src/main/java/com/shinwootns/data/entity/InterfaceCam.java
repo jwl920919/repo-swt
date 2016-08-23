@@ -10,7 +10,6 @@ public class InterfaceCam implements Serializable {
 	private Integer device_id;
 	private Integer if_number;
 	private String macaddr;
-	private String ipaddr;
 
 	public InterfaceCam() {
 	}
@@ -23,14 +22,6 @@ public class InterfaceCam implements Serializable {
 		.append(", if_number=").append(if_number)
 		.append(", macaddr=").append(macaddr)
 		.toString();
-	}
-
-	public String getIpaddr() {
-		return this.ipaddr;
-	}
-
-	public void setIpaddr(String ipaddr) {
-		this.ipaddr = ipaddr;
 	}
 
 	public Integer getDeviceId() {

@@ -90,86 +90,72 @@ public class SyslogServer extends Thread {
 		
 		_logger.info("receiveSyslog()... start.");
 
-		try {
+		while (getStopFlag() == false) {
+			
+			// Initialize
+			Arrays.fill(buff, (byte)0);
+			receivePacket.setLength(buff.length);
 
-			while (this.getStopFlag() == false) {
-				
-				// Initialize
-				Arrays.fill(buff, (byte)0);
-				receivePacket.setLength(buff.length);
-				
+			try
+			{
 				// Receive
 				_serverSocket.receive(receivePacket);
 				
-				try
+			} catch (SocketException ex1) {
+				// Socket Close
+			} catch (Exception ex2) {
+				_logger.error(ex2.getMessage(), ex2);
+			}
+			
+			try
+			{
+				// IP
+				InetAddress ipAddr = receivePacket.getAddress();
+				
+				// Raw Syslog
+				String rawSyslog = new String(receivePacket.getData()).trim();
+				
+				if (rawSyslog.isEmpty()) continue;
+				//if (rawSyslog.charAt(0) != '<') continue;
+				
+				if ( rawSyslog.charAt(0) == '<' )
 				{
-					// IP
-					InetAddress ipAddr = receivePacket.getAddress();
+					int nIndex2 = rawSyslog.indexOf('>', 1);
 					
-					// Raw Syslog
-					String rawSyslog = new String(receivePacket.getData()).trim();
-					
-					if (rawSyslog.isEmpty()) continue;
-					//if (rawSyslog.charAt(0) != '<') continue;
-					
-					if ( rawSyslog.charAt(0) == '<' )
+					if (nIndex2 > 0)
 					{
-						int nIndex2 = rawSyslog.indexOf('>', 1);
+						String priority = rawSyslog.substring(1, nIndex2);
 						
-						if (nIndex2 > 0)
-						{
-							String priority = rawSyslog.substring(1, nIndex2);
-							
-							nPriority = Integer.parseInt( priority );
-							
-							nFacility = (int)(nPriority / 7);
-							nSeverity = nPriority % 8;
-						}
+						nPriority = Integer.parseInt( priority );
+						
+						nFacility = (int)(nPriority / 7);
+						nSeverity = nPriority % 8;
 					}
-					
-					SyslogEntity syslog = new SyslogEntity();
-					syslog.setHost(ipAddr.getHostAddress().toString());
-					syslog.setData(rawSyslog);
-					syslog.setSeverity(nSeverity);
-					syslog.setFacility(nFacility);
-					syslog.setRecvTime(System.currentTimeMillis());
-					
-					//System.out.println(String.format("[%s, %s] - %s", syslog.getHost(), TimeUtils.convertToStringTime(syslog.getRecvTime()), syslog.getData()));
-					//LogUtils.WriteLog(_logger, Level.DEBUG , String.format("[%s, %s] - %s", syslog.getHost(), TimeUtils.convertToStringTime(syslog.getRecvTime()), syslog.getData()));
-					
-					if (handler != null)
-					{
-						handler.processSyslog(syslog);
-					}
-					
-					/*
-					CommonSyslog.queue_lock.lock();
-					CommonSyslog.queue.add(syslog);
-					CommonSyslog.queue_lock.unlock();
-	
-					// Update Stats
-					CommonSyslog.rcv_lock.lock();
-					if (CommonSyslog.rcv_count == 0)
-						CommonSyslog.sampleMsg = syslog.getData();
-					CommonSyslog.rcv_count++;
-					CommonSyslog.rcv_lock.unlock();
-					*/
 				}
-				catch(Exception ex) {
-					_logger.error(ex.getMessage(), ex);
+				
+				SyslogEntity syslog = new SyslogEntity();
+				syslog.setHost(ipAddr.getHostAddress().toString());
+				syslog.setData(rawSyslog);
+				syslog.setSeverity(nSeverity);
+				syslog.setFacility(nFacility);
+				syslog.setRecvTime(System.currentTimeMillis());
+				
+				//System.out.println(String.format("[%s, %s] - %s", syslog.getHost(), TimeUtils.convertToStringTime(syslog.getRecvTime()), syslog.getData()));
+				//LogUtils.WriteLog(_logger, Level.DEBUG , String.format("[%s, %s] - %s", syslog.getHost(), TimeUtils.convertToStringTime(syslog.getRecvTime()), syslog.getData()));
+				
+				if (handler != null)
+				{
+					handler.processSyslog(syslog);
 				}
 			}
-		
-		} catch (SocketException ex1) {
-			// Socket Close
-		} catch (Exception ex2) {
-			_logger.error(ex2.getMessage(), ex2);
-		} finally {
-			_logger.info("receiveSyslog()... stop.");
+			catch(Exception ex) {
+				_logger.error(ex.getMessage(), ex);
+			}
 		}
+		
+		_logger.info("receiveSyslog()... stop.");
 	}
 	
-	@Override
 	public void run() {
 		
 		setStopFlag(false);

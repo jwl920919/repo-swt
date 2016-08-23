@@ -92,6 +92,7 @@
 <script src="resources/plugins/slimScroll/jquery.slimscroll.min.js"></script>
 <!-- FastClick -->
 <script src="resources/plugins/fastclick/fastclick.js"></script>
+<script src="resources/plugins/iCheck/icheck.min.js"></script>
 <!-- AdminLTE App -->
 <script src="resources/dist/js/app.min.js"></script>
 <script src="resources/plugins/datatables/jquery.dataTables.min.js"></script>

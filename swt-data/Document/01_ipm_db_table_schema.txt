@@ -66,7 +66,7 @@ CREATE TABLE device_network
 (
   device_id integer NOT NULL DEFAULT nextval('device_id_seq'::regclass),
   site_id integer NOT NULL,
-  host character varying(128),
+  host character varying(128) NOT NULL,
   device_type character varying(32) NOT NULL,
   snmp_community character varying(64) DEFAULT '',
   snmp_version integer DEFAULT 2,
@@ -147,11 +147,9 @@ CREATE TABLE interface_cam
   device_id integer NOT NULL,
   if_number integer NOT NULL,
   macaddr character varying(18) NOT NULL DEFAULT '',
-  ipaddr character varying(40),
   update_time timestamp with time zone DEFAULT current_timestamp,
   CONSTRAINT interface_cam_pkey PRIMARY KEY (device_id, if_number, macaddr)
 );
-COMMENT ON COLUMN interface_cam.ipaddr IS 'IPv4 or IPv6';
 
 
 CREATE TABLE interface_cam_history
@@ -159,7 +157,6 @@ CREATE TABLE interface_cam_history
   device_id integer NOT NULL,
   if_number integer NOT NULL,
   macaddr character varying(18) NOT NULL,
-  ipaddr character varying(40),
   insert_time timestamp with time zone DEFAULT current_timestamp,
   CONSTRAINT interface_cam_history_pkey PRIMARY KEY (device_id, if_number, macaddr, insert_time)
 );

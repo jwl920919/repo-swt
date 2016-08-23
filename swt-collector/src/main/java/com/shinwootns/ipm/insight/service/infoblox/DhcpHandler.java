@@ -385,7 +385,7 @@ public class DhcpHandler {
 			
 			LinkedList<DhcpIpStatus> listIPStatus = new LinkedList<DhcpIpStatus>();
 			
-			int splitCount = 100;
+			int splitCount = 256;
 			
 			HashMap<String, DhcpIpStatus> mapIp = new HashMap<String, DhcpIpStatus>();
 			
@@ -394,9 +394,10 @@ public class DhcpHandler {
 				NextPageData nextData1 = wapiHandler.getIPv4AddressFirst(splitCount, network.getNetwork());
 				extractIpv4Data(site_id, nextData1, mapIp);
 				
+				int count = 1;
 				while(nextData1 != null && nextData1.IsExistNextPage()) {
 
-					Thread.sleep(200);
+					Thread.sleep(10);
 					
 					nextData1 = wapiHandler.getIPv4AddressNext(splitCount, nextData1.nextPageID);
 					extractIpv4Data(site_id, nextData1, mapIp);
@@ -409,7 +410,7 @@ public class DhcpHandler {
 					
 				while(nextData2 != null && nextData2.IsExistNextPage()) {
 
-					Thread.sleep(200);
+					Thread.sleep(10);
 					
 					nextData2 = wapiHandler.getIPv6AddressNext(splitCount, nextData2.nextPageID);
 					extractIpv6Data(site_id, nextData2, mapIp);

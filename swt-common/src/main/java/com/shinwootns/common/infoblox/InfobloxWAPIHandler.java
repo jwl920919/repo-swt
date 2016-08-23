@@ -11,7 +11,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.shinwootns.common.http.HttpClient;
 import com.shinwootns.common.utils.JsonUtils;
-import com.shinwootns.common.utils.NetworkUtils;
 import com.shinwootns.common.utils.StringUtils;
 import com.shinwootns.common.utils.ip.IPNetwork;
 
@@ -30,7 +29,7 @@ public class InfobloxWAPIHandler {
 	public boolean connect(String host, String id, String pwd) {
 
 		this.host = host;
-		this.baseURL = ((new StringBuilder()).append("https://").append(host)).toString();
+		this.baseURL = ((new StringBuilder()).append("https://").append(this.host)).toString();
 		this.id = id;
 		this.pwd = pwd;
 		
@@ -40,7 +39,7 @@ public class InfobloxWAPIHandler {
 				restClient = new HttpClient();
 			
 			// Connect WAPI
-			if (restClient.Connect_Https(baseURL, id, pwd) == false) {
+			if (restClient.Connect_Https(baseURL, this.id, this.pwd) == false) {
 				return false;
 			}
 			
@@ -334,6 +333,7 @@ public class InfobloxWAPIHandler {
 		.append("&_return_as_object=1")
 		.append("&_return_type=json")
 		.append("&network=").append(network)							// '192.168.1.0/25'
+		.append("&status=USED")
 		.append("&_return_fields=")
 			.append("ip_address,network,mac_address,names")
 			.append(",is_conflict,conflict_types")
@@ -419,6 +419,7 @@ public class InfobloxWAPIHandler {
 			.append("?_paging=1&_return_as_object=1&_return_type=json")
 			.append("&_max_results=").append(splitCount)
 			.append("&network=").append(network)			// 2002:cafe:feed::/112
+			.append("&status=USED")
 			.append("&_return_fields=")
 				.append("ip_address,network,duid,names")
 				.append(",is_conflict")

@@ -29,7 +29,6 @@ public class CamEntryData {
 		for(Entry<String, Integer> entry : mapMacDot1d.entrySet()) {
 			
 			String macAddr = entry.getKey();
-			String userIP = findUserIP(macAddr);
 			int dod1d = entry.getValue();
 			
 			// Skip Root Port
@@ -53,7 +52,6 @@ public class CamEntryData {
 					cam.setDeviceId(this.device_id);
 					cam.setIfNumber(ifNum);
 					cam.setMacaddr(macAddr);
-					cam.setIpaddr(userIP);
 					
 					mapCamTable.put(sb.toString(), cam);
 				}
@@ -107,13 +105,5 @@ public class CamEntryData {
 		return mapCamTable;
 	}*/
 	//endregion
-	
-	//region Find User IP
-	private String findUserIP(String macAddr) {
-		
-		// ...
-		
-		return "";
-	}
-	//endregion
+
 }

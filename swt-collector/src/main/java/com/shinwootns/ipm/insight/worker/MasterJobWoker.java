@@ -477,6 +477,7 @@ public class MasterJobWoker implements Runnable {
 							}
 						}
 						
+						/*
 						// Update Client Info
 						if (ipStatus.getMacaddr() != null && ipStatus.getMacaddr().length() > 0)
 						{
@@ -504,8 +505,21 @@ public class MasterJobWoker implements Runnable {
 							if (affected == 0)
 								affected = clientMapper.insertClientInfo(clientInfo);
 						}
+						*/
 					}
 				}
+				
+				
+				
+				// Update Client Info from ip_status
+				ClientMapper clientMapper = SpringBeanProvider.getInstance().getClientMapper();
+				if (clientMapper == null)
+					return;
+				
+				int affected = clientMapper.updateClientInfoFromIpStatus(network.getSiteId(), network.getNetwork());
+				
+				_logger.info((new StringBuilder()).append("Update Client Info. Count=").append(affected).toString());
+				
 				
 				_logger.info((new StringBuilder()).append("collectDhcpIpSatus(").append(network.getNetwork()).append(")... OK").toString());
 			}

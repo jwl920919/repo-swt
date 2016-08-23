@@ -5,13 +5,15 @@
 
 -- DROP VIEW view_ip_status
 
-CREATE OR REPLACE VIEW public.view_ip_status AS 
- SELECT ip.site_id,
+CREATE OR REPLACE VIEW view_ip_status AS
+  SELECT ip.site_id,
     ip.network,
     ip.ip_type,
     ip.ipaddr,
     ip.ip_num,
-    ip.macaddr,
+    CASE WHEN COALESCE(ip.nmap_macaddr, '') != '' THEN ip.nmap_macaddr ELSE ip.macaddr END macaddr,
+    CASE WHEN COALESCE(ip.nmap_vendor, '') NOT IN ('', 'Unknown') THEN ip.nmap_vendor ELSE oui.vendor END vendor,
+    CASE WHEN COALESCE(ip.fingerprint,'') NOT IN ('', 'nomatch') THEN ip.fingerprint ELSE nmap_os END os,
     ip.duid,
         CASE
             WHEN range.start_ip IS NOT NULL THEN true
@@ -32,13 +34,11 @@ CREATE OR REPLACE VIEW public.view_ip_status AS
     ip.lease_start_time,
     ip.lease_end_time,
     ip.host_name,
-    ip.fingerprint,
-    ip.update_time,
-    ip.nmap_macaddr, ip.nmap_vendor, ip.nmap_os
+    ip.update_time
    FROM dhcp_ip_status ip
      LEFT JOIN dhcp_range range ON range.start_num <= ip.ip_num AND ip.ip_num <= range.end_num AND disable = false
+     LEFT OUTER JOIN device_oui oui ON  length(macaddr) > 8 AND upper(oui.oui) = substring(macaddr, 0, 9)
   ORDER BY ip.ip_num;
-
 
 -- DROP VIEW view_lease_ip_status
 
