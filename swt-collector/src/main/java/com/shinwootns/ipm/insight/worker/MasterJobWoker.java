@@ -327,8 +327,8 @@ public class MasterJobWoker implements Runnable {
 			}
 		}
 		
-		// Collect Mac Filter
-		LinkedList<DhcpMacFilter> listFilter = handler.getDhcpMacFilter(SharedData.getInstance().getSiteID());
+		// Collect Mac Filter List
+		LinkedList<DhcpMacFilter> listFilter = handler.getDhcpMacFilterList(SharedData.getInstance().getSiteID());
 		if (listFilter == null) 
 			return;
 		

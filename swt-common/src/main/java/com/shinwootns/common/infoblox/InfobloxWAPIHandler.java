@@ -524,20 +524,16 @@ public class InfobloxWAPIHandler {
 		sb.append("&_return_as_object=1");
 		sb.append("&_return_type=json");
 		
-		//IPv4Range range = NetworkUtils.getIPV4Range(network);
-		//sb.append("&address%3E=").append(range.getStartIPToString());		// > : %3E
-		//sb.append("&address%3C=").append(range.getEndIPToString());			// < : %3C
-		
 		IPNetwork ipNetwork = new IPNetwork(network);
 		sb.append("&address%3E=").append(ipNetwork.getStartIP().toString());		// > = %3E
 		sb.append("&address%3C=").append(ipNetwork.getEndIP().toString());			// < = %3C
 
 		sb.append("&_return_fields=")
 			.append("address,network,binding_state")
-			//.append(",protocol,client_hostname,hardware,username")
 			.append(",starts,ends")
 			.append(",never_ends,never_starts")
 			.append(",ipv6_duid,ipv6_iaid,ipv6_preferred_lifetime")
+			//.append(",protocol,client_hostname,hardware,username")
 			//.append(",discovered_data.last_discovered")
 			;
 		
@@ -583,8 +579,8 @@ public class InfobloxWAPIHandler {
 		
 		sb.append("/wapi/v2.3/lease");
 		sb.append("?_return_type=json");
-		sb.append("_max_results=").append(splitCount);
-		sb.append("_page_id=").append(nextPageId);
+		sb.append("&_max_results=").append(splitCount);
+		sb.append("&_page_id=").append(nextPageId);
 
 		String value = restClient.Get(sb.toString());
 		

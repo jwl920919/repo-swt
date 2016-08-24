@@ -26,8 +26,7 @@ public class HelpController {
 	@RequestMapping(value = "/api/help", method = RequestMethod.GET)
 	public ModelAndView help(final HttpServletRequest req, final HttpServletResponse resp) {
 		
-		//return getHelpContent().toString();
-		
+		// exec = 'RCUD' (Read, Create, Update, Delete)
 		List<HelpContent> contents = new LinkedList<HelpContent>(); 
 		contents.add(new HelpContent("HELP", "/api/help", "R", "", "Help ducumentation"));
 		contents.add(new HelpContent("", "", "", "", ""));
@@ -52,6 +51,9 @@ public class HelpController {
 		mv.addObject("contents", contents);
 		
 		return mv;
+		
+		
+		//return getHelpContent().toString();
 	}
 	
 	/*
