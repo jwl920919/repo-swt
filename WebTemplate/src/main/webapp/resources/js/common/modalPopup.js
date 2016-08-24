@@ -17,11 +17,9 @@ function modalShow(id, closeCallback) {
 	getWindowPoint();
     var alertPositionHeight = (windowHeight / 2 + scrollTop - 60 - ($('#'+id+' div[name=modalContent]').innerHeight() / 2)) + 'px';
     var alertPositionWidth = (windowWidth / 2 - ($('#'+id+' div[name=modalContent]').innerWidth() / 2))+ 'px';
-    //console.log($('input[name=modalContent]').innerHeight());
     
     $("#" + id).css('top', alertPositionHeight);    
     $("#" + id).css('left', alertPositionWidth + " !important");
-
     
     $('input[name=modalClose]').click(function(){
         if(closeCallback==null){
@@ -29,7 +27,6 @@ function modalShow(id, closeCallback) {
         } else {
             modalClose(id, closeCallback);
         }
-    	
     });
     
     try {
@@ -46,10 +43,12 @@ function modalClose(id, closeCallback) {
 	$("#" + id).css("display","none");
 	$("#modalbackDiv").css("visibility","hidden");
 	if(closeCallback!=null){
-    	    if (typeof closeCallback === 'function' && closeCallback != null) {
-    	        closeCallback();
-            }
+	    if (typeof closeCallback === 'function' && closeCallback != null) {
+	        closeCallback();
+        }
 	}
+	//console.log("modalClose");
+	//$("input[name=daterangepicker]").removeClass('active');
 }
 
 

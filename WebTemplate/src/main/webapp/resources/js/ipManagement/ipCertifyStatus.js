@@ -1,7 +1,7 @@
 var table;
 $(document).ready(function() {
-	
-//	$("#layDiv").css("visibility","hidden");
+
+	modalClose("modal");
 
 	var prevday = 1;
 	var currentdate = new Date();
@@ -10,14 +10,6 @@ $(document).ready(function() {
 	$('#reservationtime').data('daterangepicker').setStartDate(previewdate);
 	$('#reservationtime').data('daterangepicker').setEndDate(currentdate);
 
-//	//세그먼트 Selectbox change 이벤트
-//	$('#sbSegment').change(function() {
-//	    if ($(this).val() != '') {
-//	    	$('#sbSegment').removeClass("selectoption_grey_color").addClass("selectoption_black_color");
-//        	fnSelectData($("#sbSegment option:selected").val(), $("#txtSearch").val());
-//	     }
-//	});
-	
 	//조회 버튼 클릭 이벤트
 	$('#btnSearch').click(function() {
 		var startDate = new Date($('#reservationtime').data('daterangepicker').startDate.toLocaleString()).format("yyyy-MM-dd HH:mm:ss");
@@ -39,7 +31,6 @@ $(document).ready(function() {
 	 * fnSelectData function
 	**/
 	fnSelectData = function(statrdatetime, enddatetime, status, searchText) {
-		console.log(statrdatetime, enddatetime, status, searchText);
 		try
 		{	    
 			table = $('#datatable').DataTable(
@@ -72,7 +63,7 @@ $(document).ready(function() {
 		                    }
 		                },	                
 					    "columnDefs": [{ className: "essential-td-left", "targets": [ 8,11,15,18 ] },
-					               	   { className: "essential-td-display_none", "targets": [ 0,3,9,13,19 ] },],
+					               	   { className: "essential-td-display_none", "targets": [ 0,3,9,13,19,21 ] },],
 		                "order" : [ [ 0, 'asc' ] ],
 		                "columns" : [	{"data" : "settlement_status"},			//0
 		                             	{"data" : "settlement_status_text"},	//1
@@ -94,7 +85,8 @@ $(document).ready(function() {
 										{"data" : "issuance_ip_type"},			//17
 										{"data" : "issuance_ipaddr"},			//18
 										{"data" : "issuance_ip_num"},			//19
-										{"data" : "issuance_use_time"}],		//20	
+										{"data" : "issuance_use_time"},			//20
+										{"data" : "seq"}],		//21	
 		                "createdRow": function( row, data, dataIndex ) {
 		                	//alert($(row).children(0).html());
 		                	//Datatable TR Create Event
@@ -124,12 +116,94 @@ $(document).ready(function() {
 /**
  * tr 이벤트 핸들러
 **/
+var initParam;
 function trClickEvent (obj){
+	initParam = obj;
 	var settlement_status = $(obj).children(':eq(0)').text();
 	if (settlement_status == 0) {
-		alert("승인 팝업 연동 준비 중입니다.");
+		//결제팝업 오픈
+		modalShow("modal");
 	}
 	else{
+		initParam = "";
 		return false;
+	}
+}
+/**
+ * 추가,수정 모달 팝업 Show 이벤트 핸들러
+**/
+fnShowEvent = function(){
+	try {
+		//추가 팝업 초기화
+		$("#txtUserName").text($(initParam).children(':eq(5)').text() + " (" + $(initParam).children(':eq(2)').text() + ")");
+		if ($(initParam).children(':eq(8)').text() == "") {
+			//자동IP요청
+			$("#txtApplyIP").text(getLanguage("autoIP"));
+			$("#txtIssuanceIP").val("");
+		}
+		else {
+			//고정IP요청
+			$("#txtApplyIP").text(getLanguage("staticIP") + " (" + $(initParam).children(':eq(8)').text() + ")");
+			$("#txtIssuanceIP").val($(initParam).children(':eq(8)').text());
+		}
+		
+		$("#txtApplyTime").text($(initParam).children(':eq(10)').text());
+
+		var datePeriod = $(initParam).children(':eq(10)').text().split(" ~ ");
+		var startdate = new Date(datePeriod[0]);
+		var enddate = new Date(datePeriod[1]);
+		$('#issuanceUseTime').daterangepicker({timePicker: false, format: 'YYYY-MM-DD'});
+		$('#issuanceUseTime').data('daterangepicker').setStartDate(startdate);
+		$('#issuanceUseTime').data('daterangepicker').setEndDate(enddate);
+		
+//		$('input:radio[name=rSettlement]:input[value=true]').prop("checked", true);		
+//		$("#inputFilter").val("");
+//		$("#selectTime").val(60);
+//		$("#txtareaDesc").val("");
+		
+		$('#btnSave').unbind( "click" );		
+		$('#btnSave').click(function() {
+			//추가 기능 수행
+			var param = Object();
+			param.timezone = getClientTimeZoneName();
+			param.seq = $(initParam).children(':eq(21)').text();
+		    if ($(":input:radio[name=rSettlement]:checked").val() == "true"){
+		    	param.settlement_status = 1;
+		    }
+		    else {
+		    	param.settlement_status = 2;
+			}
+		    param.settlement_description = $("#txtareaDesc").val();
+
+			param.issuance_ip_type = $(initParam).children(':eq(7)').text();
+			param.issuance_ipaddr = $("#txtIssuanceIP").val();
+			if ($("#txtIssuanceIP").val() == "") {
+				param.issuance_ip_num = 0;
+			}
+			else {
+				param.issuance_ip_num = ipToNumber($("#txtIssuanceIP").val()).toString();
+			}
+			param.issuance_start_time = new Date($('#issuanceUseTime').data('daterangepicker').startDate.toLocaleString()).format("yyyy-MM-dd HH:mm:ss");
+			param.issuance_end_time = new Date($('#issuanceUseTime').data('daterangepicker').endDate.toLocaleString()).format("yyyy-MM-dd HH:mm:ss");	
+				
+		    $.ajax({
+		        url : 'ipManagement/ipCertifyStatus_Data_Update',
+		        type : "POST",
+		        data : JSON.stringify(param),
+		        dataType : "text",
+		        success : function(data) {
+		            var jsonObj = eval("(" + data + ')');
+		            if (jsonObj.result == true) {
+		            	table.ajax.reload(); //데이터 제 조회
+		            	systemAlertNotify("divAlertArea", "alert-warnning", getLanguage("add"), getLanguage("saved"));
+		            }
+		        },
+		        complete: function(data) {
+		        }
+		    });
+			modalClose("modal");
+		});				
+	} catch (e) {
+		e.message
 	}
 }

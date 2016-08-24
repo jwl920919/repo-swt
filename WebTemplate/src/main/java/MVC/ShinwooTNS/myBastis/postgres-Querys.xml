@@ -491,7 +491,7 @@
 	<!-- Controller : MVC.ShinwooTNS.action.IPManagementActionController -->
 	<select id="select_IP_MANAGEMENT_CERTIFY_STATUS_DATA" resultType="java.util.HashMap">
 		SET TIMEZONE TO '${time_zone}';
-		SELECT "apply"."user_id", "apply"."user_site_id", "usersite"."site_name",
+		SELECT "apply"."seq", "apply"."user_id", "apply"."user_site_id", "usersite"."site_name",
 		       COALESCE("apply"."user_name", '') AS "user_name",
 		       COALESCE("apply"."user_phone_num", '') AS "user_phone_num", 
 		 	   "apply"."apply_site_id", "applysite"."site_name", "apply"."apply_static_ip_type",
@@ -550,12 +550,33 @@
   		   AND ("apply"."apply_time" &lt;= timestamp '${endtime}' AND "apply"."apply_time" &gt;= timestamp '${starttime}')
 		<choose>
 			<when test="orderColumn == 'settlement_status_text'"> ORDER BY "settlement_status" ${orderType} </when>
-			<when test="orderColumn == 'apply_static_ipaddr' or orderColumn == 'issuance_ipaddr'"> ORDER BY "settlement_status", inet(${orderColumn}) ${orderType} </when>
-			<when test="orderColumn != 'apply_static_ipaddr' and orderColumn != 'issuance_ipaddr'"> ORDER BY "settlement_status", ${orderColumn} ${orderType} </when>
+			<when test="orderColumn == 'apply_static_ipaddr' or orderColumn == 'issuance_ipaddr'"> ORDER BY "apply_time" desc, "settlement_status", inet(${orderColumn}) ${orderType} </when>
+			<when test="orderColumn != 'apply_static_ipaddr' and orderColumn != 'issuance_ipaddr'"> ORDER BY "apply_time" desc, "settlement_status", ${orderColumn} ${orderType} </when>
 		</choose>
 		OFFSET #{startIndex} LIMIT #{length};
-	</select>
+	</select>	
 	
+	<!-- Query Type : Update(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-08-24 -->
+	<!-- Insert User : KCM -->
+	<!-- Description : IP관리 > IP 요청/승인 결제정보 수정 -->
+	<!-- Controller : MVC.ShinwooTNS.action.IPManagementActionController -->
+	<update id="update_USER_APPLY_IP_INFO" parameterType="hashmap">
+		SET TIMEZONE TO '${time_zone}';
+		UPDATE "user_apply_ip_info" SET
+			     "settlement_status" = ${settlement_status},
+			   "settlement_chief_id" = #{settlement_chief_id},
+			 "settlement_chief_name" = #{settlement_chief_name},
+			"settlement_description" = #{settlement_description},
+			      "issuance_ip_type" = #{issuance_ip_type},
+			       "issuance_ipaddr" = #{issuance_ipaddr},
+			       "issuance_ip_num" = ${issuance_ip_num},
+			   "issuance_start_time" = timestamp '${issuance_start_time}',
+			     "issuance_end_time" = timestamp '${issuance_end_time}',
+			       "settlement_time" = now(),
+			           "modify_date" = now()
+		WHERE seq = ${seq};
+	</update>
 	
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
 	<!-- Insert Date : 2016-08-04 -->

@@ -124,4 +124,19 @@ public class IP_MANAGEMENT_Impl extends SqlSessionDaoSupport implements IP_MANAG
 		return select_IP_MANAGEMENT_CERTIFY_STATUS_DATA;
 	}
 
+	/**
+	 * <p>
+	 * IP관리 > IP 요청/승인 결제정보 수정.
+	 * </p> 
+	 **/
+	public int update_USER_APPLY_IP_INFO(HashMap<String, Object> parameters) {
+		int total = -1;
+		try {
+			System.out.println(getSqlSession());
+			total = getSqlSession().update("UI_Query.update_USER_APPLY_IP_INFO", parameters);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return total;
+	}
 }

@@ -10,10 +10,77 @@
 <script src="resources/plugins/datatables/vfs_fonts.js"></script>
 <script src="resources/plugins/datatables/jszip.min.js"></script>
 <script src="resources/js/common/Datatable-Essential.js"></script>
+<script src="resources/js/common/modalPopup.js"></script>
 <script src="resources/js/ipManagement/ipCertifyStatus.js"></script>
 
+<!-- Add, Edit modal -->
+<div class="modal modal-dialog" id="modal">
+	<div class="modal-content" name="modalContent" id="modalContent">
+	<!-- modal-content -->
+  		<div class="modal-header" id="div_mordal_header">
+    		<input type="button" class="close" name="modalClose" data-dismiss="modal" aria-label="Close" value="&times;" />
+    		<h4 class="modal-title"><%=LanguageHelper.GetLanguage("askIPsettlement")%></h4>
+  		</div>
+  
+	  	<div class="modal-body">
+	  		<div class="input-group modal-input-group">
+				<span class="input-group-addon modal-content-header"><%=LanguageHelper.GetLanguage("applicant")%></span>
+				<div class="modal-content-body modal-content-box">
+					<span id="txtUserName" style="margin-left: 10px;"></span>
+				</div>
+			</div>
+	  		<div class="input-group modal-input-group">
+				<span class="input-group-addon modal-content-header"><%=LanguageHelper.GetLanguage("applyIP")%></span>
+				<div class="modal-content-body modal-content-box">
+					<span id="txtApplyIP" style="margin-left: 10px;"></span>
+				</div>
+			</div>
+	  		<div class="input-group modal-input-group">
+				<span class="input-group-addon modal-content-header"><%=LanguageHelper.GetLanguage("applyUseTime")%></span>
+				<div class="modal-content-body modal-content-box">
+					<span id="txtApplyTime" style="margin-left: 10px;"></span>
+				</div>
+			</div>
+		  	<div class="form-group input-group modal-input-group">
+				<div class="input-group-addon modal-content-header"><%=LanguageHelper.GetLanguage("settlement")%></div>
+				<div class="modal-content-body modal-content-box">
+					<input type="radio" class="minimal" name="rSettlement" value="true" style="margin-left:10px" checked> <%=LanguageHelper.GetLanguage("approval")%>
+					<input type="radio" class="minimal" name="rSettlement" value="false" style="margin-left:10px"> <%=LanguageHelper.GetLanguage("return")%>
+				</div>
+			</div>
+		  	<div class="input-group modal-input-group">
+				<div class="input-group-addon modal-content-header"><%=LanguageHelper.GetLanguage("issuanceIP")%></div>
+		  		<div class="modal-content-body">
+					<input type="text" class="form-control" id="txtIssuanceIP" placeholder="IP ...">
+				</div>
+			</div>
+		  	<div class="input-group modal-input-group">
+				<div class="input-group-addon modal-content-header"><%=LanguageHelper.GetLanguage("issuanceUseTime")%></div>
+		  		<div class="modal-content-body">
+					<!-- Date and time range -->	
+					<input style="width:484px;" type="text" class="form-control" id="issuanceUseTime" name="daterangepicker">
+					<!-- /.Date and time range -->
+				</div>
+			</div>
+		  	<div class="input-group modal-input-group" style="margin-bottom: 0px">
+				<span class="input-group-addon modal-content-header"><%=LanguageHelper.GetLanguage("settlementDesc")%></span>			
+				<div class="modal-content-body">
+					<textarea class="form-control" id="txtareaDesc" rows="3" placeholder="Enter ..."></textarea>
+				</div>
+			</div>
+		</div>
+  		<div class="modal-footer">
+    		<input type="button" class="btn btn-default pull-left" name="modalClose" data-dismiss="modal" value="<%=LanguageHelper.GetLanguage("close")%>" />
+    		<button type="button" class="btn btn-primary" id="btnSave"><%=LanguageHelper.GetLanguage("settlement")%></button>
+  		</div>
+	</div>
+	<!-- /.modal-content -->
+</div>
+<div id="modalbackDiv" class="mordal-back-box"></div>
+<!-- /.Add, Edit modal -->
+
 <!-- Alert Start -->
-<div id="layDiv" style="visibility : hidden;">ayDiv">
+<div id="layDiv" style="visibility : hidden;">
 	<div class="alert-box"></div>
 	<div id="divAlertArea"></div>
 </div>		
@@ -23,10 +90,8 @@
 	<div class="row" id="defaultDiv">
 		<div class="col-lg-12">
 			<div class="box box-primary">
-				<div class="pagebox-header with-border">				
-<!-- 				<div class="box-header"> -->
-					<div>						
-		                <!-- select -->
+				<div class="pagebox-header with-border">	
+					<div>
 		                <table>
 		                	<tr>
 		                		<td>
