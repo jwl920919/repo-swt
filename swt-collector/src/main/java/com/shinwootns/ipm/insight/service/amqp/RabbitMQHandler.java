@@ -123,7 +123,8 @@ public class RabbitMQHandler {
 			
 			try {
 
-				return this._client.SendData(queueName, bytes);
+				if (this._client != null)
+					return this._client.SendData(queueName, bytes);
 				
 			} catch (IOException e) {
 				_logger.error(e.getMessage(), e);

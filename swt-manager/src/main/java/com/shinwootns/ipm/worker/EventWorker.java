@@ -64,6 +64,15 @@ public class EventWorker implements Runnable {
 						continue;
 					
 					try {
+						
+						// Event Filter
+						// ......
+						
+						
+						// Send SMS or Email 
+						// ......
+						
+						
 						// Insert to db
 						eventMapper.insertEventLog(event);
 					}

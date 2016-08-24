@@ -1,7 +1,4 @@
-# SinwooTNS - Github Repository
-
-
-## Docker 설정
+# Docker 설정
 
  * Rabbitmq 설치
 ```
@@ -173,6 +170,8 @@ ENTRYPOINT ["/docker-entrypoint.sh", "-D", "FOREGROUD"]
 docker build --tag ipm-base:1.0 .
 ```
 
+
+# SinwooTNS - Github Repository
 
 ### swt-common 연동 방법(Maven)
 

@@ -5,8 +5,8 @@ import org.slf4j.LoggerFactory;
 
 import com.shinwootns.common.auth.AuthCheckerLDAP;
 import com.shinwootns.common.auth.LdapUserGroupAttr;
-import com.shinwootns.data.auth.AuthParam;
-import com.shinwootns.data.auth.AuthResult;
+import com.shinwootns.data.api.AuthParam;
+import com.shinwootns.data.api.AuthResult;
 import com.shinwootns.data.entity.AuthSetup;
 import com.shinwootns.data.entity.AuthSetupEsb;
 import com.shinwootns.data.entity.AuthSetupLdap;

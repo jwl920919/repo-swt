@@ -13,6 +13,7 @@ public class MainApplication implements CommandLineRunner {
 	
 	private final static Logger _logger = LoggerFactory.getLogger(MainApplication.class);
 	
+	
 	public static void main(String[] args) {
 		
 		try

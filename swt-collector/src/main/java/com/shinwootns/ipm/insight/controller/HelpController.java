@@ -24,6 +24,7 @@ public class HelpController {
 	@RequestMapping(value = "/api/help", method = RequestMethod.GET)
 	public ModelAndView help(final HttpServletRequest req, final HttpServletResponse resp) {
 		
+		// exec = 'RCUD' (Read, Create, Update, Delete)
 		List<HelpContent> contents = new LinkedList<HelpContent>(); 
 		contents.add(new HelpContent("HELP", "/api/help", "R", "", "Help documentation"));
 		contents.add(new HelpContent("API", "/api/exec_cmd", "R", "command"
@@ -34,6 +35,7 @@ public class HelpController {
 				.toString()
 		));
 		contents.add(new HelpContent("AUTH", "/api/check_auth", "R", "setupid, userid, password, [macaddr]", "User Authentification (Site)"));
+		contents.add(new HelpContent("AUTH", "/api/macfilter", "CDR", "macaddr, [C] filtername, [C] userid", "MacFilter (Insert / Get / Delete)"));
 		
 		ModelAndView mv = new ModelAndView("contents"); 
 		mv.setViewName("help");

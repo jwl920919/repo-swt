@@ -24,7 +24,7 @@ public class SnmpOIDs {
 	//===================================================================================
 	public final static String OW_ifDescr				= "1.3.6.1.2.1.2.2.1.2";
 	public final static String OW_ifType				= "1.3.6.1.2.1.2.2.1.3";
-	public final static String OW_ifMtu					= "1.3.6.1.2.1.2.2.1.5";
+	public final static String OW_ifMtu					= "1.3.6.1.2.1.2.2.1.4";
 	public final static String OW_ifSpeed				= "1.3.6.1.2.1.2.2.1.5";
 	public final static String OW_ifPhysAddress			= "1.3.6.1.2.1.2.2.1.6";
 	public final static String OW_ifAdminStatus			= "1.3.6.1.2.1.2.2.1.7";

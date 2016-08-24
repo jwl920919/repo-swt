@@ -262,8 +262,8 @@ public class DhcpHandler {
 	}
 	//endregion
 	
-	//region [FUNC] get Mac Filter
-	public LinkedList<DhcpMacFilter> getDhcpMacFilter(int site_id) {
+	//region [FUNC] get Mac Filter List
+	public LinkedList<DhcpMacFilter> getDhcpMacFilterList(int site_id) {
 		
 		if (wapiHandler == null)
 			return null;
@@ -301,6 +301,63 @@ public class DhcpHandler {
 		return null;
 	}
 	//endregion
+	
+	//region [FUNC] getDhcp
+	public String getDhcpMacFilter(String macAddr) {
+		
+		if (wapiHandler == null)
+			return null;
+		
+		try
+		{
+			JsonArray jArray = wapiHandler.getMacFilter(macAddr);
+			
+			if (jArray != null && jArray.size() >= 0 ) {
+				
+				JsonObject jObj = (JsonObject)jArray.get(0);
+				JsonElement jEle = jObj.get("filter");
+				
+				if (jEle != null)
+					return jEle.getAsString();
+			}
+		}
+		catch(Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+		}
+		
+		return null;
+	}
+	
+	public Boolean insertDhcpMacFilter(String macAddr, String filterName, String userName) {
+		
+		if (wapiHandler == null)
+			return null;
+		
+		try
+		{
+			return wapiHandler.insertMacFilter(macAddr, filterName, userName);
+		}
+		catch(Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+		}
+		return false;
+	}
+	
+	public Boolean deleteDhcpMacFilter(String macAddr, String filterName, String userName) {
+		
+		if (wapiHandler == null)
+			return null;
+		
+		try
+		{
+			return wapiHandler.deleteMacFilter(macAddr);
+		}
+		catch(Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+		}
+		return false;
+	}
+	
 	
 	//region [FUNC] get Fixed IP
 	public LinkedList<DhcpFixedIp> getDhcpFixedIP(int site_id) {

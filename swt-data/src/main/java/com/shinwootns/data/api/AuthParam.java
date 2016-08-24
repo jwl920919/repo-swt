@@ -1,4 +1,4 @@
-package com.shinwootns.data.auth;
+package com.shinwootns.data.api;
 
 public class AuthParam {
 

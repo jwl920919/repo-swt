@@ -12,21 +12,24 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.JsonObject;
 import com.shinwootns.common.utils.CryptoUtils;
 import com.shinwootns.common.utils.JsonUtils;
-import com.shinwootns.data.auth.AuthParam;
-import com.shinwootns.data.auth.AuthResult;
+import com.shinwootns.data.api.AuthParam;
+import com.shinwootns.data.api.AuthResult;
+import com.shinwootns.data.api.ProcessResult;
+import com.shinwootns.data.entity.DeviceDhcp;
 import com.shinwootns.ipm.insight.SpringBeanProvider;
 import com.shinwootns.ipm.insight.WorkerManager;
 import com.shinwootns.ipm.insight.data.SharedData;
 import com.shinwootns.ipm.insight.data.mapper.DeviceMapper;
 import com.shinwootns.ipm.insight.data.mapper.DhcpMapper;
 import com.shinwootns.ipm.insight.service.auth.AuthCheckHandler;
+import com.shinwootns.ipm.insight.service.infoblox.DhcpHandler;
 
 @RestController
 public class APIController {
 	
 	private final Logger _logger = LoggerFactory.getLogger(this.getClass());
 
-	//region /api/exec_cmd
+	//region [GET] /api/exec_cmd
 	@RequestMapping(value="/api/exec_cmd", method=RequestMethod.GET)
 	public String exec_command(@RequestParam(value="command") String command) {
 		
@@ -95,7 +98,7 @@ public class APIController {
 	}
 	//endregion
 	
-	//region /api/check_auth
+	//region [GET] /api/check_auth
 	@RequestMapping(value="/api/check_auth", method=RequestMethod.GET)
 	public String checkAuth(
 			@RequestParam(value="setupid") String setupId,
@@ -125,6 +128,169 @@ public class APIController {
 		}
 		
 		return JsonUtils.serialize(result).toString();
+	}
+	//endregion
+	
+	//region [GET] /api/macfilter (Get)
+	@RequestMapping(value="/api/macfilter", method=RequestMethod.GET)
+	public String getMacFilter(
+			@RequestParam(value="macaddr") String macAddr) 
+	{
+		ProcessResult resultValue = new ProcessResult();
+		
+		if (SharedData.getInstance().getSiteID() <= 0) {
+			resultValue.setErrorOccurred(true);
+			resultValue.setMessage("[ERROR] SiteID is zero");
+			return JsonUtils.serialize(resultValue).toString();
+		}
+		
+		DeviceDhcp dhcp = SharedData.getInstance().GetDhcpDevice();
+		if (dhcp == null) {
+			resultValue.setErrorOccurred(true);
+			resultValue.setMessage("[ERROR] Failed get DHCP device info.");
+			return JsonUtils.serialize(resultValue).toString();
+		}
+		
+		DhcpHandler handler = new DhcpHandler();
+		try
+		{
+			if ( handler.Connect(dhcp.getHost(), dhcp.getWapiUserid(), dhcp.getWapiPassword(), dhcp.getSnmpCommunity()) ) {
+				
+				String filterName = handler.getDhcpMacFilter(macAddr);
+				
+				if (filterName != null) {
+					resultValue.setResult(true);
+					resultValue.setMessage("Registed. (" + filterName + ")");
+				}
+				else {
+					resultValue.setResult(false);
+					resultValue.setMessage("Not registed.");
+				}
+				
+				return JsonUtils.serialize(resultValue).toString();
+			}
+			else
+			{
+				resultValue.setErrorOccurred(true);
+				resultValue.setMessage("[ERROR] Failed connect DHCP device.");
+				return JsonUtils.serialize(resultValue).toString();
+			}
+		}
+		catch(Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+			
+			resultValue.setErrorOccurred(true);
+			resultValue.setMessage( ex.getMessage() );
+			return JsonUtils.serialize(resultValue).toString();
+		} finally {
+			handler.close();
+		}
+	}
+	//endregion
+	
+	//region [PUT] /api/macfilter (Insert)
+	@RequestMapping(value="/api/macfilter", method=RequestMethod.PUT)
+	public String insertMacFilter(
+			@RequestParam(value="macaddr") String macAddr,
+			@RequestParam(value="filtername") String filtername,
+			@RequestParam(value="userid") String userid) 
+	{
+		ProcessResult resultValue = new ProcessResult();
+		
+		if (SharedData.getInstance().getSiteID() <= 0) {
+			resultValue.setErrorOccurred(true);
+			resultValue.setMessage("[ERROR] SiteID is zero");
+			return JsonUtils.serialize(resultValue).toString();
+		}
+		
+		DeviceDhcp dhcp = SharedData.getInstance().GetDhcpDevice();
+		if (dhcp == null) {
+			resultValue.setErrorOccurred(true);
+			resultValue.setMessage("[ERROR] Failed get DHCP device info.");
+			return JsonUtils.serialize(resultValue).toString();
+		}
+		
+		DhcpHandler handler = new DhcpHandler();
+		try
+		{
+			if ( handler.Connect(dhcp.getHost(), dhcp.getWapiUserid(), dhcp.getWapiPassword(), dhcp.getSnmpCommunity()) ) {
+				
+				boolean result = handler.insertDhcpMacFilter(macAddr, filtername, userid);
+				
+				resultValue.setResult(result);
+				resultValue.setMessage("Insert" + ((result) ? "OK" : "Failed"));
+				
+				return JsonUtils.serialize(result).toString();
+			}
+			else
+			{
+				resultValue.setErrorOccurred(true);
+				resultValue.setMessage("[ERROR] Failed connect DHCP device.");
+				return JsonUtils.serialize(resultValue).toString();
+			}
+		}
+		catch(Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+			
+			resultValue.setErrorOccurred(true);
+			resultValue.setMessage( ex.getMessage() );
+			return JsonUtils.serialize(resultValue).toString();
+		} finally {
+			handler.close();
+		}
+	}
+	//endregion
+	
+	//region [DELETE] /api/macfilter (Delete)
+	@RequestMapping(value="/api/macfilter", method=RequestMethod.DELETE)
+	public String deleteMacFilter(
+			@RequestParam(value="macaddr") String macAddr,
+			@RequestParam(value="filtername") String filtername,
+			@RequestParam(value="userid") String userid) 
+	{
+		ProcessResult resultValue = new ProcessResult();
+		
+		if (SharedData.getInstance().getSiteID() <= 0) {
+			resultValue.setErrorOccurred(true);
+			resultValue.setMessage("[ERROR] SiteID is zero");
+			return JsonUtils.serialize(resultValue).toString();
+		}
+		
+		DeviceDhcp dhcp = SharedData.getInstance().GetDhcpDevice();
+		if (dhcp == null) {
+			resultValue.setErrorOccurred(true);
+			resultValue.setMessage("[ERROR] Failed get DHCP device info.");
+			return JsonUtils.serialize(resultValue).toString();
+		}
+		
+		DhcpHandler handler = new DhcpHandler();
+		try
+		{
+			if ( handler.Connect(dhcp.getHost(), dhcp.getWapiUserid(), dhcp.getWapiPassword(), dhcp.getSnmpCommunity()) ) {
+				
+				boolean result = handler.deleteDhcpMacFilter(macAddr, filtername, userid);
+				
+				resultValue.setResult(result);
+				resultValue.setMessage("Insert" + ((result) ? "OK" : "Failed"));
+				
+				return JsonUtils.serialize(result).toString();
+			}
+			else
+			{
+				resultValue.setErrorOccurred(true);
+				resultValue.setMessage("[ERROR] Failed connect DHCP device.");
+				return JsonUtils.serialize(resultValue).toString();
+			}
+		}
+		catch(Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+			
+			resultValue.setErrorOccurred(true);
+			resultValue.setMessage( ex.getMessage() );
+			return JsonUtils.serialize(resultValue).toString();
+		} finally {
+			handler.close();
+		}
 	}
 	//endregion
 }
