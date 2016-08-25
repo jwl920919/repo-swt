@@ -26,6 +26,38 @@
 <!-- jstree -->
 <link rel="stylesheet"
 	href="/resources/plugins/jstree/themes/default/style.min.css">
+<style type="text/css">
+#content-tree {
+	position: absolute;
+	top: 0;
+	left: 0;
+	min-height: 100%;
+	width: 230px;
+	z-index: 810;
+	background: #ffffff;
+	white-space: nowrap;
+	overflow: auto;
+}
+
+#content-tree-line {
+	position: absolute;
+	width: 3px;
+	height: 100%;
+	background: #6585e4;
+	left: 0px;
+	top: 0px;
+	z-index: 100;
+}
+
+#content-tree-line:hover {
+	cursor: e-resize;
+}
+
+#content-tree-wrapper {
+	margin-left: 230px;
+	min-height: 100%;
+}
+</style>
 </head>
 <body>
 	<!-- Add, Edit modal -->
@@ -63,22 +95,23 @@
 
 	<!-- modalbackDiv -->
 	<div id="modalbackDiv" class="mordal-back-box"></div>
-	<div class="content-tree"
-		style="position: absolute; top: 0; left: 0; min-height: 100%; width: 230px; z-index: 810; border-radius: 3px; background: #ffffff; border-top: 3px solid #3c8dbc; box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1); white-space: nowrap; overflow: auto;">
-		<div class="treebox-header" style="margin: 6px;">
-			<i class="fa fa-cog"
-				style="display: inline-block; font-size: 18px; margin: 0; line-height: 1;"></i>
-			<h3
-				style="display: inline-block; font-size: 16px; margin: 0; line-height: 1;">Network</h3>
-		</div>
-		<div class="treebox-body">
-			<div id="container" style="text-align: left;"></div>
+	<div id="content-tree">
+		<div id="content-tree-body">
+			<div class="treebox-header" style="margin: 6px;">
+				<i class="fa fa-cog"
+					style="display: inline-block; font-size: 18px; margin: 0; line-height: 1;"></i>
+				<h3
+					style="display: inline-block; font-size: 16px; margin: 0; line-height: 1;">Network</h3>
+			</div>
+			<div class="treebox-body">
+				<div id="container" style="text-align: left;"></div>
+			</div>
 		</div>
 	</div>
-	<div class="content-tree-wrapper"
-		style="margin-left: 230px; min-height: 100%;">
+	<div id="content-tree-wrapper">
 		<section class="white-paper"
 			style="text-align: center; min-height: 100%; margin-top: 0px;">
+			<div id="content-tree-line"></div>
 			<div class="row hidden" id="defaultDiv">
 				<div class="col-lg-12">
 					<div class="box box-primary">
@@ -86,10 +119,9 @@
 							<div>
 								<table>
 									<tr>
-										<td>
-											<label id="parentNodes" style="font-size: 14px; color: #777;"></label>
-											<label id="currentNode" style="font-size: 14px;"></label>
-										</td>
+										<td><label id="parentNodes"
+											style="font-size: 14px; color: #777;"></label> <label
+											id="currentNode" style="font-size: 14px;"></label></td>
 									</tr>
 								</table>
 							</div>
@@ -131,6 +163,7 @@
 						</div>
 					</div>
 				</div>
+			</div>
 		</section>
 	</div>
 

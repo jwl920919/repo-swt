@@ -5,70 +5,76 @@ var device_type = "ALL";
 var searchValue = "";
 var isFirst = true;
 function createIPv4Datatable() {
-    childrenTable = $('#parent-table').DataTable({
-        "destroy" : true,
-        "paging" : true,
-        "searching" : false,
-        "lengthChange" : true,
-        "ordering" : true,
-        "info" : false,
-        "autoWidth" : true,
-        "processing" : true,
-        "serverSide" : true,
-        "ajax" : {
-            url : '/management/getNodeTableDatas',
-            "dataType" : "jsonp",
-            "type" : "POST",
-            "jsonp" : "callback",
-            "data" : function(data, type) {
-                data.ip_type = ip_type;
-                data.network = network;
-                data.device_type = device_type;
-                data.search.value = searchValue;
-                data.search_key = data.search.value;
-            }
-        },
-        'order' : [ [ 0, 'asc' ] ],
-        "columns" : [ {
-            "data" : "last_ip"
-        }, {
-            "data" : function(data) {
-                if(data.macaddr!=undefined){
-                    return data.macaddr;
-                }
-                if(data.duid!=undefined) {
-                    return data.duid;
-                }
-                
-            }
-        }, {
-            "data" : "hostname"
-        }, {
-            "data" : "os"
-        }, {
-            "data" : function(data) {
-                if(data.device_type == '') {
-                    return 'nomatch'
-                } else {
-                    return data.device_type;
-                }
-            }
-        }, {
-            'searchable' : false,
-            'orderable' : false,
-            'render' : function(type,
-                    row) {
-                return '<div><i class="fa fa-edit essential-cursor-pointer" onclick="modifyBtnClickEvent(this)" data-toggle="tooltip" title="" data-original-title="'
-                        + getLanguage("modify")
-                        + '"></i>'
-                        + "</div>";
-            }
-        } ],
-        "drawCallback": function( settings ) {
-            console.log($('#parentNodes'));
-            console.log($('#currentNode'));
-        }
-    });
+    childrenTable = $('#parent-table')
+            .DataTable(
+                    {
+                        "destroy" : true,
+                        "paging" : true,
+                        "searching" : false,
+                        "lengthChange" : true,
+                        "ordering" : true,
+                        "info" : false,
+                        "autoWidth" : true,
+                        "processing" : true,
+                        "serverSide" : true,
+                        "ajax" : {
+                            url : '/management/getNodeTableDatas',
+                            "dataType" : "jsonp",
+                            "type" : "POST",
+                            "jsonp" : "callback",
+                            "data" : function(data, type) {
+                                data.ip_type = ip_type;
+                                data.network = network;
+                                data.device_type = device_type;
+                                data.search.value = searchValue;
+                                data.search_key = data.search.value;
+                            }
+                        },
+                        'order' : [ [ 0, 'asc' ] ],
+                        "columns" : [
+                                {
+                                    "data" : "last_ip"
+                                },
+                                {
+                                    "data" : function(data) {
+                                        if (data.macaddr != undefined) {
+                                            return data.macaddr;
+                                        }
+                                        if (data.duid != undefined) {
+                                            return data.duid;
+                                        }
+
+                                    }
+                                },
+                                {
+                                    "data" : "hostname"
+                                },
+                                {
+                                    "data" : "os"
+                                },
+                                {
+                                    "data" : function(data) {
+                                        if (data.device_type == '') {
+                                            return 'nomatch'
+                                        } else {
+                                            return data.device_type;
+                                        }
+                                    }
+                                },
+                                {
+                                    'searchable' : false,
+                                    'orderable' : false,
+                                    'render' : function(type, row) {
+                                        return '<div><i class="fa fa-edit essential-cursor-pointer" onclick="modifyBtnClickEvent(this)" data-toggle="tooltip" title="" data-original-title="'
+                                                + getLanguage("modify")
+                                                + '"></i>' + "</div>";
+                                    }
+                                } ],
+                        "drawCallback" : function(settings) {
+                            console.log($('#parentNodes'));
+                            console.log($('#currentNode'));
+                        }
+                    });
     // 검색, 엔트리 위치 정렬
     $(function() {
         var d_wrap = $('#parent-table_wrapper .row:first');
@@ -102,14 +108,14 @@ $(function() {
                     ip_type = $(this).attr('ip_type');
                     network = $(this).attr('network');
                     $('#defaultDiv').removeClass('hidden');
-                    if(ip_type=='IPV4'){
+                    if (ip_type == 'IPV4') {
                         $('#mac-or-duid').html('MAC');
-                        $('#mac-or-duid').css('min-width','180px');
-                        $('#mac-or-duid').css('width','180px');
+                        $('#mac-or-duid').css('min-width', '180px');
+                        $('#mac-or-duid').css('width', '180px');
                     } else {
                         $('#mac-or-duid').html('DUID');
-                        $('#mac-or-duid').css('min-width','360px');
-                        $('#mac-or-duid').css('width','360px');
+                        $('#mac-or-duid').css('min-width', '360px');
+                        $('#mac-or-duid').css('width', '360px');
                     }
                     if (isFirst) {
                         createIPv4Datatable();
@@ -145,7 +151,6 @@ function getDeviceNames() {
 
 function modifyBtnClickEvent(obj) {
     var $this = $(obj);
-    console.log($this);
 }
 
 /**
@@ -154,3 +159,48 @@ function modifyBtnClickEvent(obj) {
 function trClickEvent(obj) {
     return false;
 }
+var prevX;
+var currX;
+var chgStat = false;
+var line = $("#content-tree-line");
+var wrapper = $("#content-tree-wrapper");
+var tree = $("#content-tree");
+var isHover = false;
+line.offset({});
+line.mousedown(function(e) {
+    if(!chgStat) {
+        prevX = currX;
+        chgStat = true;
+    }
+});
+wrapper.mouseenter(function() {
+    isHover = true;
+});
+wrapper.mouseup(function(e) {
+    console.log(1);
+    if(isHover)
+    if(chgStat){
+        var size = $("#content-tree").width() + (currX-prevX)-3;
+        $("#content-tree").width(size);
+        $("#content-tree-wrapper").css("margin-left",size+"px");
+        chgStat = false;
+        isHover = false;
+    }
+});
+tree.mouseenter(function() {
+    isHover = true;
+});
+tree.mouseup(function(e) {
+    console.log(2);
+    if(isHover)
+    if(chgStat){
+        var size = $("#content-tree").width() + (currX-prevX)-3;
+        $("#content-tree").width(size);
+        $("#content-tree-wrapper").css("margin-left",size+"px");
+        chgStat = false;
+        isHover = false;
+    }
+});
+$(document).mousemove(function(e) {
+    currX = e.pageX;
+});
