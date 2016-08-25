@@ -50,29 +50,73 @@
 	position: absolute;
 	height: 100%;
 }
+td {
+vertical-align: middle !important;
+}
 </style>
 </head>
 <body>
-	<!-- Add, Edit modal -->
+	<!-- Edit modal -->
 	<div class="modal modal-dialog" id="modify-modal">
 		<div class="modal-content" name="modalContent">
 			<div class="modal-header" div_mordal_header>
 				<input type="button" class="close" name="modalClose"
 					data-dismiss="modal" aria-label="Close" value="&times;" />
-				<h4 class="modal-title">Network Name Modify</h4>
+				<h4 class="modal-title">Device Information</h4>
 			</div>
 			<div id="modify-body" class="modal-body">
 				<div class="input-group modal-input-group">
-					<div class="input-group-addon modal-content-header">Network</div>
+					<div class="input-group-addon modal-content-header">Site</div>
 					<div class="modal-content-body">
-						<input type="text" class="form-control" id="network-txt" readOnly>
+						<input type="text" class="form-control" readOnly>
 					</div>
 				</div>
 				<div class="input-group modal-input-group">
-					<div class="input-group-addon modal-content-header">Name</div>
+					<div class="input-group-addon modal-content-header">Vendor</div>
 					<div class="modal-content-body">
-						<input type="text" class="form-control" id="name-txt"
-							placeholder="Name">
+						<input type="text" class="form-control" readOnly>
+					</div>
+				</div>
+				<div class="input-group modal-input-group">
+					<div class="input-group-addon modal-content-header">Model</div>
+					<div class="modal-content-body">
+						<input type="text" class="form-control" readOnly>
+					</div>
+				</div>
+				<div class="input-group modal-input-group">
+					<div class="input-group-addon modal-content-header">OS</div>
+					<div class="modal-content-body">
+						<input type="text" class="form-control" readOnly>
+					</div>
+				</div>
+				<div class="input-group modal-input-group">
+					<div class="input-group-addon modal-content-header">Device Type</div>
+					<div class="modal-content-body">
+						<input type="text" class="form-control" readOnly>
+					</div>
+				</div>
+				<div class="input-group modal-input-group">
+					<div class="input-group-addon modal-content-header">Category</div>
+					<div class="modal-content-body">
+						<input type="text" class="form-control" readOnly>
+					</div>
+				</div>
+				<div class="input-group modal-input-group">
+					<div class="input-group-addon modal-content-header">Switch</div>
+					<div class="modal-content-body">
+						<input type="text" class="form-control" readOnly>
+					</div>
+				</div>
+				<div class="input-group modal-input-group">
+					<div class="input-group-addon modal-content-header">Port</div>
+					<div class="modal-content-body">
+						<input type="text" class="form-control" readOnly>
+					</div>
+				</div>
+				<div class="input-group modal-input-group">
+					<div class="input-group-addon modal-content-header">IP Status</div>
+					<div class="modal-content-body">
+						<input type="text" class="form-control" readOnly>
 					</div>
 				</div>
 			</div>

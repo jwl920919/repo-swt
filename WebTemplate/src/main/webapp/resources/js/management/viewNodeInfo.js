@@ -156,6 +156,7 @@ function getDeviceNames() {
 
 function modifyBtnClickEvent(obj) {
     var $this = $(obj);
+    modalShow("modify-modal");
 }
 
 /**
