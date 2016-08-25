@@ -12,7 +12,6 @@ function systemAlertNotify(divElement, type, title, message) {
     $("#layDiv").attr("style", "visibility: visible");
     $("#alertTitle").text(title);
     $("#alertMessage").text(message);
-
     // .alert-warning
     // .alert-danger
     // .alert-info
