@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing 
+		infrastructure -->
+
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<annotation-driven />
+
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving 
+		up static resources in the ${webappRoot}/resources directory -->
+	<resources mapping="/resources/**" location="/resources/" />
+
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources 
+		in the /WEB-INF/views directory -->
+	<beans:bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="suffix" value=".jsp" />
+	</beans:bean>
+
+	<context:component-scan base-package="MVC.ShinwooTNS.com,MVC.ShinwooTNS.action" />
+
+
+	<!-- 다국어 처리 MessageResource 사용 Start -->
+	<beans:bean id="LanguageResources"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<!-- // UTF-8로 지정하고 properties파일을 UTF-8형식으로 사용하면 한글이 정상적으로 로드됨 -->
+		<beans:property name="defaultEncoding" value="UTF-8" />
+
+		<!-- // true인 경우, locale에 해당하는 file이 없을 경우 system locale을 사용 -->
+		<beans:property name="fallbackToSystemLocale" value="false" />
+
+		<beans:property name="useCodeAsDefaultMessage">
+			<beans:value>true</beans:value>
+		</beans:property>
+		<beans:property name="basenames">
+			<beans:value>classpath:/../webapp/resources/Language/LanguageResources
+			</beans:value>
+		</beans:property>
+
+		<!-- // 60초마다 업데이트 된 properties 파일을 새로 로드함 -->
+		<beans:property name="cacheSeconds">
+			<beans:value>5</beans:value>
+		</beans:property>
+	</beans:bean>
+	<beans:bean id="localeResolver"
+		class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+		<beans:property name="defaultLocale" value="ko" />
+		<!-- // 세션에 locale 정보가 없을 경우 기본 언어 -->
+	</beans:bean>
+	<beans:bean id="/setChangeLocale.do" class="Common.Controller.SessionLocaleController" />
+	<!-- 세션에 locale 정보를 업데이트 하는 세션 컨트롤러 -->
+	<!-- 다국어 처리 MessageResource 사용 End -->
+
+</beans:beans>

@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="UI_Query">
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-07-11 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : 사업장 정보 조회 -->
+	<!-- Controller : MVC.ShinwooTNS.action.ConfigManagementActionController -->
+	<select id="select_SITE_INFO" resultType="Common.DTO.SITE_INFO_DTO">
+		SELECT site_id,
+		site_name, site_code, description, site_master FROM site_info;
+	</select>
+	
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-08-23 -->
+	<!-- Insert User : KCM -->
+	<!-- Description : IP 승인요청 데이터 조회  -->
+	<!-- Controller : MVC.ShinwooTNS.action.PageActionController -->
+	<select id="select_USER_APPLY_IP_INFO" parameterType="hashmap" resultType="java.util.HashMap">
+		SET TIMEZONE TO '${time_zone}';
+		SELECT info.seq, info.user_site_id, info.user_id, COALESCE(info.user_name,'') AS user_name, COALESCE(info.user_phone_num,'') AS user_phone_num,
+               info.apply_site_id, site.site_name as apply_site_name, info.apply_static_ip_type, COALESCE(info.apply_static_ipaddr,'') AS apply_static_ipaddr,
+               COALESCE(info.apply_static_ip_num,0) AS apply_static_ip_num, COALESCE(to_char(info.apply_start_time,'YYYY-MM-DD HH24:MI:SS'),'') AS apply_start_time,
+               COALESCE(to_char(info.apply_end_time,'YYYY-MM-DD HH24:MI:SS'),'') AS apply_end_time,
+               COALESCE(info.apply_description,'') AS apply_description, COALESCE(to_char(info.apply_time,'YYYY-MM-DD HH24:MI:SS'),'') AS apply_time,
+               COALESCE(info.settlement_status,0) AS settlement_status, COALESCE(info.settlement_chief_id,'') AS settlement_chief_id,
+               COALESCE(info.settlement_chief_name,'') AS settlement_chief_name, COALESCE(info.settlement_description,'') AS settlement_description,
+               COALESCE(to_char(info.settlement_time,'YYYY-MM-DD HH24:MI:SS'),'') AS settlement_time,
+               COALESCE(info.issuance_ip_type,'') AS issuance_ip_type, COALESCE(info.issuance_ipaddr,'') AS issuance_ipaddr,
+               COALESCE(info.issuance_ip_num,0) AS issuance_ip_num, COALESCE(to_char(info.issuance_start_time,'YYYY-MM-DD HH24:MI:SS'),'') AS issuance_start_time,
+               COALESCE(to_char(info.issuance_end_time,'YYYY-MM-DD HH24:MI:SS'),'') AS issuance_end_time,
+               COALESCE(to_char(info.insert_date,'YYYY-MM-DD HH24:MI:SS'),'') AS insert_date,
+               COALESCE(to_char(info.modify_date,'YYYY-MM-DD HH24:MI:SS'),'') AS modify_date,
+               rowcount.allcount 
+		  FROM user_apply_ip_info AS info, site_info AS site,
+		       (SELECT count(*) allcount 
+		          FROM user_apply_ip_info AS info
+		          WHERE info.user_id = #{user_id} and info.user_site_id = ${user_site_id} AND info.user_name like CONCAT('%', #{searchValue}, '%')
+		            AND info.user_phone_num like CONCAT('%', #{searchValue}, '%') AND info.apply_static_ip_type like CONCAT('%', #{searchValue}, '%')
+		            AND info.apply_static_ipaddr like CONCAT('%', #{searchValue}, '%') AND info.apply_description like CONCAT('%', #{searchValue}, '%')
+		            AND COALESCE(info.settlement_chief_id, '') like CONCAT('%', #{searchValue}, '%') 
+		            AND COALESCE(info.settlement_chief_name, '') like CONCAT('%', #{searchValue}, '%')
+		            AND COALESCE(info.settlement_description, '') like CONCAT('%', #{searchValue}, '%') 
+		            AND COALESCE(info.issuance_ip_type, '') like CONCAT('%', #{searchValue}, '%')
+		            AND COALESCE(info.issuance_ipaddr, '') like CONCAT('%', #{searchValue}, '%')
+		   ) AS rowcount
+ 		 WHERE info.user_id = #{user_id} and info.user_site_id = ${user_site_id} AND info.user_name like CONCAT('%', #{searchValue}, '%')
+		   AND info.user_phone_num like CONCAT('%', #{searchValue}, '%') AND info.apply_static_ip_type like CONCAT('%', #{searchValue}, '%')
+		   AND info.apply_static_ipaddr like CONCAT('%', #{searchValue}, '%') AND info.apply_description like CONCAT('%', #{searchValue}, '%')
+		   AND COALESCE(info.settlement_chief_id, '') like CONCAT('%', #{searchValue}, '%') 
+		   AND COALESCE(info.settlement_chief_name, '') like CONCAT('%', #{searchValue}, '%')
+		   AND COALESCE(info.settlement_description, '') like CONCAT('%', #{searchValue}, '%') 
+		   AND COALESCE(info.issuance_ip_type, '') like CONCAT('%', #{searchValue}, '%')
+		   AND COALESCE(info.issuance_ipaddr, '') like CONCAT('%', #{searchValue}, '%')
+		   AND site.site_id = info.apply_site_id
+		 ORDER BY ${orderColumn} ${orderType} offset #{startIndex} limit #{length};
+	</select>
+	
+	<!-- Query Type : Insert(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-08-23 -->
+	<!-- Insert User : KCM -->
+	<!-- Description : IP 요청 데이터 저장  -->
+	<!-- Controller : MVC.ShinwooTNS.action.PageActionController -->
+	<insert id="insert_USER_APPLY_IP_INFO" parameterType="hashmap">
+		SET TIMEZONE TO '${time_zone}';
+		INSERT INTO "user_apply_ip_info" 
+		       (user_site_id, user_id, user_name, user_phone_num, apply_site_id, apply_static_ip_type, apply_static_ipaddr,
+		        apply_static_ip_num, apply_start_time, apply_end_time, apply_description, settlement_status, apply_time, insert_date ) 
+		VALUES (#{site_id}, #{user_id}, #{user_name}, #{user_phone_num}, #{apply_site_id}, #{apply_static_ip_type}, #{apply_static_ipaddr}, #{apply_static_ip_num},
+		        timestamp '${apply_start_time}', timestamp '${apply_end_time}', #{apply_description}, 0, now(),now());
+	</insert>
+		
+	<!-- Query Type : Delete(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-08-24 -->
+	<!-- Insert User : KCM -->
+	<!-- Description : IP 요청 데이터 삭제  -->
+	<!-- Controller : MVC.ShinwooTNS.action.PageActionController -->
+	<delete id="delete_USER_APPLY_IP_INFO" parameterType="hashmap">
+		DELETE FROM "user_apply_ip_info"
+ 		 WHERE seq = ${seq};
+	</delete>
+	
+</mapper>
