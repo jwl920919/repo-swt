@@ -172,7 +172,7 @@
     "settlementTime":								"결제일시",
     "issuanceIPType":								"승인 IP 타입",
     "issuanceIP":									"승인 IP",
-    "issuanceUseTime":								"승인 기간"    
+    "issuanceUseTime":								"승인 기간",
     "count":										"갯수",
     "usedipcount":									"사용 IP 갯수",
     "totalipcount":									"총 IP 갯수",
@@ -209,5 +209,7 @@
     "check":										"확인", 
     "applyPhone":									"신청자 연락처",
     "ask":											"신청",
-    "askDesc":										"신청내용"
+    "askDesc":										"신청내용",
+	"settlement":									"결제",
+	"askIPsettlement":								"IP신청 결제"
 }
