@@ -62,8 +62,16 @@ public class WorkQueueClient extends BaseClient {
 		if (_channel == null)
 			return false;
 		
-		_channel.basicPublish("", queueName, null, bytes);
-		
+		try {
+			
+			_channel.basicPublish("", queueName, null, bytes);
+			return true;
+		}
+		catch(Exception ex)
+		{
+			_logger.error(ex.getMessage(), ex);
+		}
+	
 		return false;
 	}
 	//endregion

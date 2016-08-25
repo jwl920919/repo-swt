@@ -7,6 +7,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.rabbitmq.client.AlreadyClosedException;
 import com.shinwootns.common.network.SyslogEntity;
 import com.shinwootns.common.utils.JsonUtils;
 import com.shinwootns.common.utils.ip.IPAddr;
@@ -210,18 +211,36 @@ public class SyslogProcessWorker implements Runnable {
 	//region [private] Send EventLog
 	private void _sendEventLogMQ(Integer deviceId, SyslogEntity syslog) {
 
-		//Send Event
-		EventData eventData = new EventData();
-		eventData.setHostIp(syslog.getHost());
-		eventData.setDeviceId(deviceId);
-		eventData.setEventType("syslog");
-		eventData.setSeverity(syslog.getSeverity());
-		eventData.setCollectTime( new Timestamp(syslog.getRecvTime()) );
-		
-		eventData.setMessage(syslog.getData());
-		
-		// Send to RabbitMQ
-		RabbitMQHandler.getInstance().SendDataToMQ(QueueNames.EVENT_QUEUE_NAME, JsonUtils.serialize(eventData).getBytes() );
+		try
+		{
+			//Send Event
+			EventData eventData = new EventData();
+			eventData.setHostIp(syslog.getHost());
+			eventData.setDeviceId(deviceId);
+			eventData.setEventType("syslog");
+			eventData.setSeverity(syslog.getSeverity());
+			eventData.setCollectTime( new Timestamp(syslog.getRecvTime()) );
+			
+			eventData.setMessage(syslog.getData());
+			
+			// Send to RabbitMQ
+			if ( RabbitMQHandler.getInstance().SendDataToMQ(QueueNames.EVENT_QUEUE_NAME, JsonUtils.serialize(eventData).getBytes() ) == false ) 
+			{
+				_logger.error(
+						(new StringBuilder())
+						.append("Failed send event to MQ.\n")
+						.append(JsonUtils.serialize(eventData)
+						.toString()).toString());
+			}
+				
+		}
+		catch(AlreadyClosedException ex) {
+			// Reconnect
+			RabbitMQHandler.getInstance().connect();
+		}
+		catch(Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+		}
 	}
 	//endregion
 }

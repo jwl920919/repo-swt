@@ -20,6 +20,13 @@ public class RabbitMQHandler {
 	
 	private Thread receiver = null;
 	
+	private String _host;
+	private int _port;
+	private String _userid;
+	private String _password;
+	private String vHost;
+	private int _handshake_timeout = 5000;
+	
 	//region Singleton
 	private static RabbitMQHandler _instance = null;
 	private RabbitMQHandler() {}
@@ -32,61 +39,53 @@ public class RabbitMQHandler {
 	}
 	//endregion
 	
-	//region [FUNC] connect / close
+	//region [public] Connect / Close
 	public boolean connect() throws Exception
 	{
 		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
 		if (appProperty == null)
 			return false;
 		
-		close();
-
 		synchronized(this)
 		{
-			if (manager == null) {
-				manager = new MQManager(appProperty.rabbitmqHost, 
-						appProperty.rabbitmqPort, 
-						appProperty.rabbitmqUsername, 
-						CryptoUtils.Decode_AES128(appProperty.rabbitmqPassword), 
-						appProperty.rabbitmqVHost,
-						5000);
-			}
-		
-			if ( manager.Connect() ) {
-				
-				_logger.info((new StringBuilder())
-						.append("Succeed connect rabbitmq... amqp:\\").append(appProperty.rabbitmqHost).append(":").append(appProperty.rabbitmqPort)
-						.toString());
-				
-				startReceiveEvent();
-				
+			this._host = appProperty.rabbitmqHost; 
+			this._port = appProperty.rabbitmqPort; 
+			this._userid = appProperty.rabbitmqUsername; 
+			this._password = CryptoUtils.Decode_AES128(appProperty.rabbitmqPassword); 
+			this.vHost = appProperty.rabbitmqVHost;
+			
+			_close();
+			
+			if ( _connect() ) {
+				_logger.info(
+						(new StringBuilder())
+						.append("Successed connect rabbitmq... amqp:\\").append(this._host).append(":").append(this._port)
+						.toString()
+				);
 				return true;
 			}
-		}
-		
-		_logger.info((new StringBuilder())
-				.append("Failed connect rabbitmq... amqp:\\").append(appProperty.rabbitmqHost).append(":").append(appProperty.rabbitmqPort)
-				.toString()
+			else {
+				_logger.error(
+						(new StringBuilder())
+						.append("Failed connect rabbitmq... amqp:\\").append(this._host).append(":").append(this._port)
+						.toString()
 				);
-		
-		return false;
+				
+				return false;
+			}
+		}
 	}
 	
 	public void close()
 	{
 		synchronized(this)
 		{
-			stopReceiveEvent();
-			
-			if (manager != null) {
-				manager.Close();
-				manager = null;
-			}
+			_close();
 		}
 	}
 	//endregion
-	
-	//region [FUNC] Create Client
+
+	//region [public] Create Client
 	public WorkQueueClient createClient() {
 		
 		if (manager == null)
@@ -95,8 +94,40 @@ public class RabbitMQHandler {
 		return (WorkQueueClient)manager.createMQClient(MQClientType.WorkQueue);
 	}
 	//endregion
-
-	//region [FUNC] Start Receive Event
+	
+	//region _connect / _close
+	private boolean _connect() {
+		
+		if (manager == null) {
+			manager = new MQManager(this._host, this._port, this._userid, this._password, this.vHost, this._handshake_timeout);
+		}
+	
+		if ( manager.Connect() ) {
+			
+			_logger.info((new StringBuilder())
+					.append("Succeed connect rabbitmq... amqp:\\").append(this._host).append(":").append(this._port)
+					.toString());
+			
+			startReceiveEvent();
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	private void _close() {
+		
+		stopReceiveEvent();
+		
+		if (manager != null) {
+			manager.Close();
+			manager = null;
+		}
+	}
+	//endregion
+	
+	//region Start Receive Event
 	private boolean startReceiveEvent() {
 
 		stopReceiveEvent();
@@ -111,7 +142,7 @@ public class RabbitMQHandler {
 	}
 	//endregion
 	
-	//region [FUNC] Stop Receive Event
+	//region Stop Receive Event
 	private void stopReceiveEvent() {
 		
 		if (receiver != null) {
