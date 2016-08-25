@@ -209,8 +209,7 @@
     "check":										"확인", 
     "applyPhone":									"신청자 연락처",
     "ask":											"신청",
-    "askDesc":										"신청내용",
-    
+    "askDesc":										"신청내용",    
 	"settlement":									"결제",
 	"askIPsettlement":								"IP신청 결제"
 }
