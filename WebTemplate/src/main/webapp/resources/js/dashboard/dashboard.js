@@ -711,7 +711,7 @@ function segmentLeasingIPAssignedAjaxCall() {
 	try {
 		var jObj = Object();
 		var vCritical = "progress-bar-red";
-		var vWarnning = "progress-bar-warning";
+		var vWarning = "progress-bar-warning";
 		var vNormal = "progress-bar-aqua";
 
 	    $.ajax({
@@ -744,7 +744,7 @@ function segmentLeasingIPAssignedAjaxCall() {
 	        							vSeverity = vCritical;
 	        						}
 	        						else if (obj.value < 80 && obj.value >= 60) {
-	        							vSeverity = vWarnning;
+	        							vSeverity = vWarning;
 	        						}
 	        						
 	        						vhtml = vhtml + "<tr><td style=\"width:40%; min-width:100px; overflow: hidden; text-align:left\"><span class=\"progress-text\" style=\"font-weight: normal;\"" +

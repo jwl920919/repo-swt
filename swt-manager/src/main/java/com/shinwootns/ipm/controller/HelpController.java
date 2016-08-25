@@ -40,7 +40,7 @@ public class HelpController {
 		contents.add(new HelpContent("DASHBOARD", "/api/status/dashboard/lease_ipv4", "R", "", "Lease IPv4 Status"));
 		contents.add(new HelpContent("DASHBOARD", "/api/status/dashboard/lease_ipv4/{SiteID}", "R", "", "Lease IPv4 Status (Site)"));
 		contents.add(new HelpContent("DASHBOARD", "/api/status/dashboard/lease_ipv6", "R", "", "Lease IPv6 Status"));
-		contents.add(new HelpContent("DASHBOARD", "/api/status/dashboard/lease_ipv6{SiteID}", "R", "", "Lease IPv6 Status (Site)"));
+		contents.add(new HelpContent("DASHBOARD", "/api/status/dashboard/lease_ipv6/{SiteID}", "R", "", "Lease IPv6 Status (Site)"));
 		contents.add(new HelpContent("", "", "", "", ""));
 		contents.add(new HelpContent("STATUS", "/api/status/dhcp/device_status/{SiteID}", "R", "", "DHCP device status (Site)"));
 		contents.add(new HelpContent("STATUS", "/api/status/dhcp/dhcp_counter/{SiteID}", "R", "", "DHCP Counter (Site)"));

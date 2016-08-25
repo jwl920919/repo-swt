@@ -9,7 +9,6 @@ import com.shinwootns.common.mq.MQManager;
 import com.shinwootns.common.mq.MQManager.MQClientType;
 import com.shinwootns.common.mq.client.WorkQueueClient;
 import com.shinwootns.common.utils.CryptoUtils;
-import com.shinwootns.data.key.QueueNames;
 import com.shinwootns.ipm.insight.SpringBeanProvider;
 import com.shinwootns.ipm.insight.config.ApplicationProperty;
 
@@ -33,7 +32,7 @@ public class RabbitMQHandler {
 	}
 	//endregion
 	
-	//region [FUNC] connect / close
+	//region [public] Connect / Close
 	public boolean connect()
 	{
 		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
@@ -81,11 +80,32 @@ public class RabbitMQHandler {
 	{
 		synchronized(this)
 		{
+			if (_client != null) {
+				_client.CloseChannel();
+				_client = null;
+			}
+			
 			if (manager != null) {
 				manager.Close();
 				manager = null;
 			}
 		}
+	}
+	//endregion
+	
+	//region [public] Check Connection
+	public boolean CheckConnection() {
+		try {
+			if (manager != null && _client != null) {
+				if ( _client.checkConnection() == true )
+					return true;
+			}
+		}
+		catch(Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+		}
+		
+		return false;
 	}
 	//endregion
 	
@@ -96,6 +116,7 @@ public class RabbitMQHandler {
 		{
 			if (manager == null)
 				return null;
+				
 			
 			// Create Client
 			return (WorkQueueClient)manager.createMQClient(MQClientType.WorkQueue);

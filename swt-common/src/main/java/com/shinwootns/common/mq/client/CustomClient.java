@@ -100,6 +100,8 @@ public class CustomClient extends BaseClient {
 		try
 		{
 			_channel.basicPublish(exchangeName, routingKey, null, bytes);
+			
+			return true;
 		}
 		catch(Exception ex)
 		{
