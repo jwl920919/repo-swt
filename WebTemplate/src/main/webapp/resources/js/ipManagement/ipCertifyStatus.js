@@ -195,7 +195,7 @@ fnShowEvent = function(){
 		            var jsonObj = eval("(" + data + ')');
 		            if (jsonObj.result == true) {
 		            	table.ajax.reload(); //데이터 제 조회
-		            	systemAlertNotify("divAlertArea", "alert-warnning", getLanguage("add"), getLanguage("saved"));
+		            	systemAlertNotify("divAlertArea", "alert-warning", getLanguage("add"), getLanguage("saved"));
 		            }
 		        },
 		        complete: function(data) {
