@@ -27,35 +27,28 @@
 <link rel="stylesheet"
 	href="/resources/plugins/jstree/themes/default/style.min.css">
 <style type="text/css">
-#content-tree {
-	position: absolute;
-	top: 0;
-	left: 0;
-	min-height: 100%;
-	width: 230px;
-	z-index: 810;
-	background: #ffffff;
-	white-space: nowrap;
-	overflow: auto;
-}
-
 #content-tree-line {
-	position: absolute;
-	width: 3px;
+	width: 2px;
+	background-color: #05639a;
+	float: left;
 	height: 100%;
-	background: #6585e4;
-	left: 0px;
-	top: 0px;
-	z-index: 100;
+	position: absolute;
+	cursor: w-resize;
 }
 
-#content-tree-line:hover {
-	cursor: e-resize;
+#content-tree {
+	min-width: 230px;
+	background-color: #FFFFFF;
+	float: left;
+	height: 100%;
+	position: absolute;
 }
 
 #content-tree-wrapper {
-	margin-left: 230px;
-	min-height: 100%;
+	background-color: #FFFFFF;
+	float: left; height : 100%;
+	position: absolute;
+	height: 100%;
 }
 </style>
 </head>
@@ -108,10 +101,10 @@
 			</div>
 		</div>
 	</div>
+	<div id="content-tree-line"></div>
 	<div id="content-tree-wrapper">
-		<section class="white-paper"
+		<section class="white-paper" id="white-paper"
 			style="text-align: center; min-height: 100%; margin-top: 0px;">
-			<div id="content-tree-line"></div>
 			<div class="row hidden" id="defaultDiv">
 				<div class="col-lg-12">
 					<div class="box box-primary">
@@ -152,7 +145,7 @@
 								<thead>
 									<tr>
 										<th style="min-width: 180px;">IP</th>
-										<th id="mac-or-duid"></th>
+										<th id="mac-or-duid">MAC</th>
 										<th width="40%">Hostname</th>
 										<th width="40%">OS</th>
 										<th width="20%">Device</th>
@@ -172,14 +165,6 @@
 <script src="/resources/plugins/jQuery/jQuery-2.2.0.min.js"></script>
 <!-- Bootstrap 3.3.6 -->
 <script src="/resources/bootstrap/js/bootstrap.min.js"></script>
-<!-- InputMask -->
-<!-- <script src="/resources/plugins/input-mask/jquery.inputmask.js"></script> -->
-<!-- <script -->
-<!-- 	src="/resources/plugins/input-mask/jquery.inputmask.date.extensions.js"></script> -->
-<!-- <script -->
-<!-- 	src="/resources/plugins/input-mask/jquery.inputmask.extensions.js"></script> -->
-<!-- <script -->
-<!-- 	src="/resources/plugins/input-mask/jquery.inputmask.regex.extensions.js"></script> -->
 <!-- AdminLTE App -->
 <script src="/resources/dist/js/app.min.js"></script>
 <!-- iCheck 1.0.1 -->
@@ -195,8 +180,5 @@
 <script src="/resources/js/common/Datatable-Essential.js"></script>
 <script src="/resources/js/common/modalPopup.js"></script>
 <script src="/resources/js/management/viewNodeInfo.js"></script>
-<script>
-    
-</script>
 
 </html>

@@ -241,7 +241,7 @@
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
 	<!-- Insert Date : 2016-08-23 -->
 	<!-- Insert User : 이재원 -->
-	<!-- Description :  -->
+	<!-- Description : view_client_info의 내용 출력-->
 	<!-- Controller :  -->
 	<select id="select_VIEW_CLIENT_INFO" parameterType="hashmap" resultType="java.util.HashMap">
 		SELECT 	macaddr, duid,hostname,vendor,model,COALESCE(os,'nomatch')as os,device_type,category,ip_type,last_ip,last_ip_num
@@ -281,6 +281,11 @@
 		${orderType} OFFSET #{startIndex} LIMIT #{length}
 	</select>
 	
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-08-23 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description : view_client_info의 사이즈 -->
+	<!-- Controller :  -->
 	<select id="select_VIEW_CLIENT_INFO_TOTAL_COUNT" parameterType="hashmap" resultType="Integer">
 		SELECT 	count(*) AS total 
 		FROM 	view_client_info
@@ -309,6 +314,24 @@
 			<when test="device_type=='nomatch'"> AND device_type='' </when>
 			<when test='device_type!="nomatch" and device_type!="ALL"'> AND device_type=#{device_type} </when>
 		</choose>
+	</select>
+	
+	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
+	<!-- Insert Date : 2016-08-25 -->
+	<!-- Insert User : 이재원 -->
+	<!-- Description :  -->
+	<!-- Controller :  -->
+	<select id="select_VIEW_IP_STATUS" parameterType="hashmap" resultType="java.util.HashMap">
+		SELECT client_status.*,si.site_name 
+		FROM (
+			SELECT vci."macaddr",vci.duid,vci.hostname,vci.vendor,vci.model,vis.os
+			,vci.device_type,vci.category,vci.last_ip_num,vci.last_switch,vci.last_port
+			,vis.site_id,vis.is_range,vis.ip_status
+			FROM view_client_info AS vci LEFT OUTER JOIN view_ip_status AS vis 
+			ON vis.ipaddr = vci.last_ip AND (vis.macaddr = vci.macaddr OR vis.duid = vci.duid) 
+			WHERE vci."macaddr"=#{macaddr} AND vci.last_ip=#{ipaddr}
+		) AS client_status LEFT OUTER JOIN site_info AS si 
+		ON client_status.site_id = si.site_id;
 	</select>
 	
 </mapper>

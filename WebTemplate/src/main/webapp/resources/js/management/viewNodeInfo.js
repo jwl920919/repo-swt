@@ -36,15 +36,16 @@ function createIPv4Datatable() {
                                     "data" : "last_ip"
                                 },
                                 {
-                                    "data" : function(data) {
-                                        if (data.macaddr != undefined) {
-                                            return data.macaddr;
-                                        }
-                                        if (data.duid != undefined) {
-                                            return data.duid;
-                                        }
+                                    "data" : "macaddr"
+//                                        function(data) {
+//                                        if (data.macaddr != undefined) {
+//                                            return data.macaddr;
+//                                        }
+//                                        if (data.duid != undefined) {
+//                                            return data.duid;
+//                                        }
 
-                                    }
+//                                    }
                                 },
                                 {
                                     "data" : "hostname"
@@ -71,8 +72,12 @@ function createIPv4Datatable() {
                                     }
                                 } ],
                         "drawCallback" : function(settings) {
-                            console.log($('#parentNodes'));
-                            console.log($('#currentNode'));
+//                            console.log($('#parentNodes'));
+//                            console.log($('#currentNode'));
+                            setTimeout(function() {
+                                $("#content-tree-line").height($("#white-paper").height()+12);    
+                            },100);
+                            
                         }
                     });
     // 검색, 엔트리 위치 정렬
@@ -108,15 +113,15 @@ $(function() {
                     ip_type = $(this).attr('ip_type');
                     network = $(this).attr('network');
                     $('#defaultDiv').removeClass('hidden');
-                    if (ip_type == 'IPV4') {
-                        $('#mac-or-duid').html('MAC');
-                        $('#mac-or-duid').css('min-width', '180px');
-                        $('#mac-or-duid').css('width', '180px');
-                    } else {
-                        $('#mac-or-duid').html('DUID');
-                        $('#mac-or-duid').css('min-width', '360px');
-                        $('#mac-or-duid').css('width', '360px');
-                    }
+//                    if (ip_type == 'IPV4') {
+//                        $('#mac-or-duid').html('MAC');
+//                        $('#mac-or-duid').css('min-width', '180px');
+//                        $('#mac-or-duid').css('width', '180px');
+//                    } else {
+//                        $('#mac-or-duid').html('DUID');
+//                        $('#mac-or-duid').css('min-width', '360px');
+//                        $('#mac-or-duid').css('width', '360px');
+//                    }
                     if (isFirst) {
                         createIPv4Datatable();
                         isFirst = false;
@@ -159,48 +164,69 @@ function modifyBtnClickEvent(obj) {
 function trClickEvent(obj) {
     return false;
 }
-var prevX;
-var currX;
-var chgStat = false;
-var line = $("#content-tree-line");
-var wrapper = $("#content-tree-wrapper");
-var tree = $("#content-tree");
-var isHover = false;
-line.offset({});
-line.mousedown(function(e) {
-    if(!chgStat) {
-        prevX = currX;
-        chgStat = true;
-    }
+
+/**
+ * splitter 코드 부분
+ * */
+var splitter, cont1, cont2;
+var last_x, window_width;
+$(document).ready(function() {
+    window_width = window.innerWidth;
+    splitter = document.getElementById("content-tree-line");
+    cont1 = document.getElementById("content-tree");
+    cont2 = document.getElementById("content-tree-wrapper");
+    var dx = cont1.clientWidth;
+    splitter.style.marginLeft = dx + "px";
+    dx += splitter.clientWidth;
+    cont2.style.marginLeft = dx + "px";
+    dx = window_width - dx;
+    cont2.style.width = dx + "px";
+    splitter.addEventListener("mousedown", spMouseDown);
+
 });
-wrapper.mouseenter(function() {
-    isHover = true;
-});
-wrapper.mouseup(function(e) {
-    console.log(1);
-    if(isHover)
-    if(chgStat){
-        var size = $("#content-tree").width() + (currX-prevX)-3;
-        $("#content-tree").width(size);
-        $("#content-tree-wrapper").css("margin-left",size+"px");
-        chgStat = false;
-        isHover = false;
-    }
-});
-tree.mouseenter(function() {
-    isHover = true;
-});
-tree.mouseup(function(e) {
-    console.log(2);
-    if(isHover)
-    if(chgStat){
-        var size = $("#content-tree").width() + (currX-prevX)-3;
-        $("#content-tree").width(size);
-        $("#content-tree-wrapper").css("margin-left",size+"px");
-        chgStat = false;
-        isHover = false;
-    }
-});
-$(document).mousemove(function(e) {
-    currX = e.pageX;
-});
+resize = function() {
+    window_width = window.innerWidth;
+    splitter = document.getElementById("content-tree-line");
+    cont1 = document.getElementById("content-tree");
+    cont2 = document.getElementById("content-tree-wrapper");
+    var dx = cont1.clientWidth;
+    splitter.style.marginLeft = dx + "px";
+    dx += splitter.clientWidth;
+    cont2.style.marginLeft = dx + "px";
+    dx = window_width - dx;
+    cont2.style.width = dx + "px";
+    setTimeout(function() {
+        $("#content-tree-line").height($("#white-paper").height()+12);    
+    },100);  
+} 
+window.onresize = resize;
+
+function spMouseDown(e) {
+    splitter.removeEventListener("mousedown", spMouseDown);
+    window.addEventListener("mousemove", spMouseMove);
+    window.addEventListener("mouseup", spMouseUp);
+    last_x = e.clientX;
+}
+
+function spMouseUp(e) {
+    window.removeEventListener("mousemove", spMouseMove);
+    window.removeEventListener("mouseup", spMouseUp);
+    splitter.addEventListener("mousedown", spMouseDown);
+    resetPosition(last_x);
+}
+
+function spMouseMove(e) {
+    resetPosition(e.clientX);
+}
+
+function resetPosition(nowX) {
+    var dx = nowX - last_x;
+    dx += cont1.clientWidth;
+    cont1.style.width = dx + "px";
+    splitter.style.marginLeft = dx + "px";
+    dx += splitter.clientWidth;
+    cont2.style.marginLeft = dx + "px";
+    dx = window_width - dx;
+    cont2.style.width = dx + "px";
+    last_x = nowX;
+}

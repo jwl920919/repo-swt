@@ -213,12 +213,12 @@ public class ManagementActionController {
 //			parameters.put("site_id", site_id);
 //			parameters.put("site_master", site_master);
 			String ip_type = request.getParameter("ip_type").toString();
-			String[] columns = null;
-			if(ip_type.toUpperCase().equals("IPV4")){
-				columns = new String[] { "last_ip", "macaddr", "hostname", "os", "device_type" };
-			} else {
-				columns = new String[] {"last_ip", "duid", "hostname", "os", "device_type"};
-			}
+			String[] columns = new String[] { "last_ip", "macaddr", "hostname", "os", "device_type" };
+//			if(ip_type.toUpperCase().equals("IPV4")){
+//				columns = new String[] { "last_ip", "macaddr", "hostname", "os", "device_type" };
+//			} else {
+//				columns = new String[] {"last_ip", "duid", "hostname", "os", "device_type"};
+//			}
 			HashMap<String, Object> parameters = Common.Helper.DatatableHelper.getDatatableParametas(request, columns, 0);
 			int site_id = Integer.parseInt(session.getAttribute("site_id").toString());
 			String site_master = session.getAttribute("site_master").toString();
