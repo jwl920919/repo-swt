@@ -325,8 +325,8 @@
 		SELECT client_status.*,si.site_name 
 		FROM (
 			SELECT vci."macaddr",vci.duid,vci.hostname,vci.vendor,vci.model,vis.os
-			,vci.device_type,vci.category,vci.last_ip_num,vci.last_switch,vci.last_port
-			,vis.site_id,vis.is_range,vis.ip_status
+			,vci.device_type,vci.category,vci.last_ip as ipaddr,vci.last_ip_num as ip_num,vci.last_switch
+			,vci.last_port,vis.site_id,vis.is_range,vis.ip_status
 			FROM view_client_info AS vci LEFT OUTER JOIN view_ip_status AS vis 
 			ON vis.ipaddr = vci.last_ip AND (vis.macaddr = vci.macaddr OR vis.duid = vci.duid) 
 			WHERE vci."macaddr"=#{macaddr} AND vci.last_ip=#{ipaddr}

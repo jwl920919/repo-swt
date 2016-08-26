@@ -211,5 +211,8 @@
     "ask":											"신청",
     "askDesc":										"신청내용",
 	"settlement":									"결제",
-	"askIPsettlement":								"IP신청 결제"
+	"askIPsettlement":								"IP신청 결제",
+	"customGroupSetting":							"노드그룹관리",
+	"viewNodeInfo":									"노드정보조회",
+	"node":											"노드"
 }

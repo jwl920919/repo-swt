@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -436,6 +437,26 @@ public class ManagementActionController {
 			return gson.toJson(result);
 		}
 
+	}
+	// endregion
+	
+	// region getDeviceInfo
+	@RequestMapping (value="getDeviceInfo",method = RequestMethod.POST)
+	public @ResponseBody Object getDeviceInfo(HttpServletRequest request) {
+		try {
+			init();
+			HashMap<String, Object> parameters = gson.fromJson(request.getReader(),
+					new TypeToken<HashMap<String, Object>>() {
+					}.getType());
+			Map<String,Object> ipStatusList = networkService.select_VIEW_IP_STATUS(parameters);
+			result.resultValue = ipStatusList;
+			result.result = true;
+			return gson.toJson(result);
+		} catch (Exception e) {
+			ErrorLoggingHelper.log(logger, "getDeviceInfo", e);
+			result.result = false;
+			return gson.toJson(result);
+		}
 	}
 	// endregion
 	

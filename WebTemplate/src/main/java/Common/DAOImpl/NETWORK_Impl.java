@@ -24,6 +24,18 @@ public class NETWORK_Impl extends SqlSessionDaoSupport implements NETWORK_interf
 		}
 		return select_SEARCHED_NETWORK_INFOList;
 	}
+	@Override
+	public Map<String, Object> select_VIEW_IP_STATUS(HashMap<String, Object> parameters) {
+		Map<String, Object> select_VIEW_IP_STATUSList = null;
+		try {
+			System.out.println(getSqlSession());
+			select_VIEW_IP_STATUSList = getSqlSession().selectOne("UI_Query.select_VIEW_IP_STATUS",parameters);
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e.getMessage());
+		}
+		return select_VIEW_IP_STATUSList;
+	}
 
 	@Override
 	public int select_SEARCHED_NETWORK_INFO_TOTAL_COUNT(HashMap<String, Object> parameters) {
@@ -37,5 +49,6 @@ public class NETWORK_Impl extends SqlSessionDaoSupport implements NETWORK_interf
 		}
 		return total;
 	}
+
 
 }

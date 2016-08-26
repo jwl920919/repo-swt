@@ -74,9 +74,9 @@ function createIPv4Datatable() {
                         "drawCallback" : function(settings) {
 //                            console.log($('#parentNodes'));
 //                            console.log($('#currentNode'));
-                            setTimeout(function() {
-                                $("#content-tree-line").height($("#white-paper").height()+12);    
-                            },100);
+//                            setTimeout(function() {
+//                                $("#content-tree-line").height($("#white-paper").height()+12);    
+//                            },100);
                             
                         }
                     });
@@ -156,7 +156,31 @@ function getDeviceNames() {
 
 function modifyBtnClickEvent(obj) {
     var $this = $(obj);
-    modalShow("modify-modal");
+    var jObj = new Object();
+    jObj.ipaddr = $this.parent().parent().siblings().eq(0).text();
+    jObj.macaddr = $this.parent().parent().siblings().eq(1).text();
+    $.ajax({
+        url : '/management/getDeviceInfo',
+        type : "POST",
+        data : JSON.stringify(jObj),
+        dataType : "text",
+        success : function(data) {
+            var jsonObj = eval("(" + data + ')');
+            if (jsonObj.result == true) {
+                var rv = jsonObj.resultValue;
+                $("#site-txt").val(rv.site_name);
+                $("#vendor-txt").val(rv.vendor);
+                $("#model-txt").val(rv.model);
+                $("#os-txt").val(rv.os);
+                $("#dtype-txt").val(rv.device_type);
+                $("#category-txt").val(rv.category);
+                $("#switch-txt").val(rv.last_switch);
+                $("#port-txt").val(rv.last_port);
+                $("#ipstatus-txt").val(rv.ip_status);
+                modalShow("modify-modal");
+            }
+        }
+    });
 }
 
 /**
@@ -172,7 +196,7 @@ function trClickEvent(obj) {
 var splitter, cont1, cont2;
 var last_x, window_width;
 $(document).ready(function() {
-    window_width = window.innerWidth;
+    window_width = $("#content_frame").width();
     splitter = document.getElementById("content-tree-line");
     cont1 = document.getElementById("content-tree");
     cont2 = document.getElementById("content-tree-wrapper");
@@ -183,10 +207,15 @@ $(document).ready(function() {
     dx = window_width - dx;
     cont2.style.width = dx + "px";
     splitter.addEventListener("mousedown", spMouseDown);
-
+    $("#content-tree").css("height",window.innerHeight-148+"px");
+    $("#content-tree-line").css("height",window.innerHeight-148+"px");
+    $("#content-tree-wrapper").css("height",window.innerHeight-148+"px");
+    $("#content-tree").css("max-height",window.innerHeight-148+"px");
+    $("#content-tree-line").css("max-height",window.innerHeight-148+"px");
+    $("#content-tree-wrapper").css("max-height",window.innerHeight-148+"px");
 });
 resize = function() {
-    window_width = window.innerWidth;
+    window_width = $("#content_frame").width();
     splitter = document.getElementById("content-tree-line");
     cont1 = document.getElementById("content-tree");
     cont2 = document.getElementById("content-tree-wrapper");
@@ -196,9 +225,15 @@ resize = function() {
     cont2.style.marginLeft = dx + "px";
     dx = window_width - dx;
     cont2.style.width = dx + "px";
-    setTimeout(function() {
-        $("#content-tree-line").height($("#white-paper").height()+12);    
-    },100);  
+//    setTimeout(function() {
+//        $("#content-tree-line").height($("#white-paper").height()+12);    
+//    },100);  
+    $("#content-tree").css("height",window.innerHeight-148+"px");
+    $("#content-tree-line").css("height",window.innerHeight-148+"px");
+    $("#content-tree-wrapper").css("height",window.innerHeight-148+"px");
+    $("#content-tree").css("max-height",window.innerHeight-148+"px");
+    $("#content-tree-line").css("max-height",window.innerHeight-148+"px");
+    $("#content-tree-wrapper").css("max-height",window.innerHeight-148+"px");
 } 
 window.onresize = resize;
 
