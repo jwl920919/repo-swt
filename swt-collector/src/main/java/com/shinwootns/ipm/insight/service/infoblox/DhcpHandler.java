@@ -312,9 +312,10 @@ public class DhcpHandler {
 		{
 			JsonArray jArray = wapiHandler.getMacFilter(macAddr);
 			
-			if (jArray != null && jArray.size() >= 0 ) {
+			if (jArray != null && jArray.size() > 0 ) {
 				
 				JsonObject jObj = (JsonObject)jArray.get(0);
+				
 				JsonElement jEle = jObj.get("filter");
 				
 				if (jEle != null)
@@ -516,7 +517,7 @@ public class DhcpHandler {
 				ip.setIpNum( (new IPAddr(ip.getIpaddr()).getNumberToBigInteger()) );
 				ip.setIpType("IPV4");
 				ip.setNetwork(JsonUtils.getValueToString(jObj, "network", ""));
-				ip.setMacaddr(JsonUtils.getValueToString(jObj, "mac_address", "").toUpperCase());
+				ip.setMacaddr(JsonUtils.getValueToString(jObj, "mac_address", "").toUpperCase().trim());
 				ip.setIsConflict(JsonUtils.getValueToBoolean(jObj, "is_conflict", false));
 				ip.setStatus(JsonUtils.getValueToString(jObj, "status", ""));
 				ip.setLeaseState(JsonUtils.getValueToString(jObj, "lease_state", ""));
