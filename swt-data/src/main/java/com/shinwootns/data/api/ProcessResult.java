@@ -27,7 +27,7 @@ public class ProcessResult {
 	public void setErrorOccurred(Boolean isErrorOccurred) {
 		this.isErrorOccurred = isErrorOccurred;
 	}
-	public Boolean isResult() {
+	public Boolean getResult() {
 		return result;
 	}
 	public void setResult(Boolean result) {

@@ -21,8 +21,8 @@
 	        <td width='200' align='center'>URL</td>
 	        <td width='20' align='center'>GET<br>(Read)</td>
 	        <td width='20' align='center'>PUT<br>(Create)</td>
-	        <td width='20' align='center'>DELETE<br>(Delete)</td>
 	        <td width='20' align='center'>POST<br>(Update)</td>
+	        <td width='20' align='center'>DELETE<br>(Delete)</td>
 	        <td width='400' align='center'>Parameters</td>
 	        <td  align='center'>Description</td>
         </tr>

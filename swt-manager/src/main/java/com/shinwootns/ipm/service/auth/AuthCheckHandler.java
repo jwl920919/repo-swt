@@ -137,7 +137,7 @@ public class AuthCheckHandler {
 					.append("?userid=").append(param.getUserId())
 					.append("&setupid=").append(setup.getSetupId());
 					
-					if (param.getMacAddr() != null)
+					if (param.getPassword() != null)
 						checkUrl.append("&password=").append(param.getPassword());
 					
 					if (param.getMacAddr() != null)

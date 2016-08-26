@@ -9,6 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.http.entity.ContentType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,16 +25,22 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.shinwootns.common.auth.AuthCheckerLDAP;
 import com.shinwootns.common.auth.LdapUserGroupAttr;
+import com.shinwootns.common.http.HttpClient;
 import com.shinwootns.common.utils.CryptoUtils;
 import com.shinwootns.common.utils.JsonUtils;
 import com.shinwootns.data.api.AuthParam;
 import com.shinwootns.data.api.AuthResult;
+import com.shinwootns.data.api.ProcessResult;
 import com.shinwootns.data.entity.AuthSetup;
 import com.shinwootns.data.entity.AuthSetupEsb;
 import com.shinwootns.data.entity.AuthSetupLdap;
 import com.shinwootns.data.entity.AuthSetupRadius;
+import com.shinwootns.data.entity.DeviceDhcp;
+import com.shinwootns.data.entity.DeviceInsight;
 import com.shinwootns.data.key.RedisKeys;
+import com.shinwootns.ipm.SpringBeanProvider;
 import com.shinwootns.ipm.WorkerManager;
+import com.shinwootns.ipm.config.ApplicationProperty;
 import com.shinwootns.ipm.data.SharedData;
 import com.shinwootns.ipm.data.mapper.AuthMapper;
 import com.shinwootns.ipm.data.mapper.DataMapper;
@@ -48,7 +55,7 @@ public class APIController {
 	
 	private final Logger _logger = LoggerFactory.getLogger(this.getClass());
 	
-	//region /api/exec_cmd
+	//region [GET] /api/exec_cmd
 	@RequestMapping(value="/api/exec_cmd", method=RequestMethod.GET)
 	public String ApiExecuteCommand(@RequestParam(value="command") String command) {
 		
@@ -76,7 +83,7 @@ public class APIController {
 	}
 	//endregion
 	
-	//region /api/check_auth
+	//region [GET] /api/check_auth
 	@RequestMapping(value="/api/check_auth", method=RequestMethod.GET)
 	public String ApiCheckAuthentication(
 			@RequestParam(value="userid") String userid, 
@@ -107,7 +114,7 @@ public class APIController {
 	}
 	//endregion
 	
-	//region /api/status/dhcp/device_status/
+	//region [GET] /api/status/dhcp/device_status/
 	@RequestMapping(value="/api/status/dhcp/device_status/{site_id}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
 	public String ApiDhcpDeviceStatus(
 			@PathVariable(value="site_id") Integer site_id ) 
@@ -134,7 +141,7 @@ public class APIController {
 	}
 	//endregion
 	
-	//region /api/status/dhcp/dhcp_counter/
+	//region [GET] /api/status/dhcp/dhcp_counter/
 	@RequestMapping(value="/api/status/dhcp/dhcp_counter/{site_id}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
 	public String ApiDhcpCounter(
 			@PathVariable(value="site_id") Integer site_id ) 
@@ -161,7 +168,7 @@ public class APIController {
 	}
 	//endregion
 	
-	//region /api/status/dhcp/dns_counter/
+	//region [GET] /api/status/dhcp/dns_counter/
 	@RequestMapping(value="/api/status/dhcp/dns_counter/{site_id}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
 	public String ApiDnsCounter(
 			@PathVariable(value="site_id") Integer site_id ) 
@@ -187,4 +194,180 @@ public class APIController {
 		return (new JsonObject()).toString();
 	}
 	//endregion
+
+	//region [GET] /api/macfilter (Get)
+	@RequestMapping(value="/api/macfilter", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+	public String getMacFilter(@RequestParam(value="site_id") Integer site_id, @RequestParam(value="macaddr") String macAddr) 
+	{
+		ProcessResult resultValue = new ProcessResult();
+		
+		// Process MacFilter 
+		_processMacFilter(RequestMethod.GET, site_id, macAddr, null, null, resultValue);
+		
+		return JsonUtils.serialize(resultValue).toString();
+	}
+	//endregion
+	
+	//region [PUT] /api/macfilter (Insert)
+	@RequestMapping(value="/api/macfilter", method=RequestMethod.PUT)
+	public String insertMacFilter(
+			@RequestParam(value="site_id") Integer site_id,
+			@RequestParam(value="macaddr") String macAddr,
+			@RequestParam(value="filtername") String filtername,
+			@RequestParam(value="userid") String userid) 
+	{
+		ProcessResult resultValue = new ProcessResult();
+		
+		// Process MacFilter 
+		_processMacFilter(RequestMethod.PUT, site_id, macAddr, filtername, userid, resultValue);
+		
+		return JsonUtils.serialize(resultValue).toString();
+	}
+	//endregion
+	
+	//region [DELETE] /api/macfilter (Delete)
+	@RequestMapping(value="/api/macfilter", method=RequestMethod.DELETE)
+	public String deleteMacFilter(
+			@RequestParam(value="site_id") Integer site_id,
+			@RequestParam(value="macaddr") String macAddr)
+	{
+		ProcessResult resultValue = new ProcessResult();
+		
+		// Process MacFilter 
+		_processMacFilter(RequestMethod.DELETE, site_id, macAddr, null, null, resultValue);
+		
+		return JsonUtils.serialize(resultValue).toString();
+	}
+	//endregion
+	
+	private boolean _processMacFilter(RequestMethod reqMode, Integer site_id, String macAddr, String filtername, String userid, ProcessResult resultValue) {
+		
+		ApplicationProperty appProperty = SpringBeanProvider.getInstance().getApplicationProperty();
+		DataMapper dataMapper = SpringBeanProvider.getInstance().getDataMapper();
+
+		if (appProperty == null || dataMapper == null) {
+			resultValue.setErrorOccurred(true);
+			resultValue.setMessage("[ERROR] ApplicationProperty or DataMapper is null.");
+			return false;
+		}
+		else if (site_id == null || site_id <= 0) {
+			resultValue.setErrorOccurred(true);
+			resultValue.setMessage("[ERROR] SiteID is null.");
+			return false;
+		}
+		
+		// Get Master DeviceInsight
+		DeviceInsight insight = dataMapper.selectInsightMaster(site_id);
+		if (insight == null) {
+			resultValue.setErrorOccurred(true);
+			resultValue.setMessage("[ERROR] Failed get Master-Insight. SiteID=" + site_id);
+			return false;
+		}
+		
+		StringBuilder url = new StringBuilder();
+		url.append("http://").append(insight.getIpaddr()).append(":").append(insight.getPort()).append("/api");
+		
+		HttpClient restClient = new HttpClient();
+		
+		try {
+			
+			if (restClient.Connect_Https(
+					url.toString()
+					, appProperty.security_user
+					, CryptoUtils.Decode_AES128(appProperty.security_password)) == false ) 
+			{
+				// Failed to connect
+				resultValue.setErrorOccurred(true);
+				resultValue.setMessage(
+						(new StringBuilder())
+						.append("[ERROR] Failed connect master insight. ")
+						.append(insight.getHost())
+						.append("(").append(insight.getIpaddr()).append(")")
+						.toString());
+				
+				return false;
+			}
+			
+			StringBuilder apiUrl = new StringBuilder();
+			apiUrl.append("/macfilter")
+			.append("?macaddr=").append(macAddr);
+			
+			// GET
+			if (reqMode == RequestMethod.GET) {
+
+				// Get
+				String output = restClient.Get(apiUrl.toString());
+				
+				if (output != null) {
+					
+					// Deserialize
+					ProcessResult queryResult = (ProcessResult)JsonUtils.deserialize(output, ProcessResult.class);
+					
+					if (queryResult != null) {
+						resultValue.setResult( queryResult.getResult() );
+						resultValue.setErrorOccurred( queryResult.isErrorOccurred() );
+						resultValue.setMessage(queryResult.getMessage());
+					}
+				}
+				else {
+					resultValue.setErrorOccurred(true);
+					resultValue.setMessage("[ERROR] Failed call insight api. "+ apiUrl.toString());
+				}
+			}
+			// PUT
+			else if (reqMode == RequestMethod.PUT) {
+
+				apiUrl.append("&filtername=").append(filtername);
+				apiUrl.append("&userid=").append(userid);
+				
+				// Put
+				String output = restClient.Put(apiUrl.toString(), null, null);
+				
+				if (output != null) {
+					// Deserialize
+					ProcessResult queryResult = (ProcessResult)JsonUtils.deserialize(output, ProcessResult.class);
+					
+					if (queryResult != null) {
+						resultValue.setResult( queryResult.getResult() );
+						resultValue.setErrorOccurred( queryResult.isErrorOccurred() );
+						resultValue.setMessage(queryResult.getMessage());
+					}
+				}
+				else {
+					resultValue.setErrorOccurred(true);
+					resultValue.setMessage("[ERROR] Failed call insight api. "+ apiUrl.toString());
+				}
+			}
+			// DELETE
+			else if (reqMode == RequestMethod.DELETE) {
+				
+				// Delete
+				String output = restClient.Delete(apiUrl.toString(), null, null);
+				
+				if (output != null) {
+					// Deserialize
+					ProcessResult queryResult = (ProcessResult)JsonUtils.deserialize(output, ProcessResult.class);
+					
+					if (queryResult != null) {
+						resultValue.setResult( queryResult.getResult() );
+						resultValue.setErrorOccurred( queryResult.isErrorOccurred() );
+						resultValue.setMessage(queryResult.getMessage());
+					}
+				}
+				else {
+					resultValue.setErrorOccurred(true);
+					resultValue.setMessage("[ERROR] Failed call insight api. "+ apiUrl.toString());
+				}
+			}
+			
+		} catch (Exception e) {
+			_logger.error(e.getMessage(), e);
+			resultValue.setErrorOccurred(true);
+			resultValue.setMessage(e.getMessage());
+		} finally {
+			restClient.Close();
+		}
+		
+		return false;
+	}
 }

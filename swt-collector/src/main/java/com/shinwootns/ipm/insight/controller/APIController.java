@@ -133,8 +133,7 @@ public class APIController {
 	
 	//region [GET] /api/macfilter (Get)
 	@RequestMapping(value="/api/macfilter", method=RequestMethod.GET)
-	public String getMacFilter(
-			@RequestParam(value="macaddr") String macAddr) 
+	public String getMacFilter(@RequestParam(value="macaddr") String macAddr) 
 	{
 		ProcessResult resultValue = new ProcessResult();
 		
@@ -160,11 +159,11 @@ public class APIController {
 				
 				if (filterName != null) {
 					resultValue.setResult(true);
-					resultValue.setMessage("Registed. (" + filterName + ")");
+					resultValue.setMessage((new StringBuilder()).append("Registed. (").append(filterName).append(", ").append(macAddr).append(")").toString());
 				}
 				else {
 					resultValue.setResult(false);
-					resultValue.setMessage("Not registed.");
+					resultValue.setMessage((new StringBuilder()).append("Not registed. (").append(macAddr).append(")").toString());
 				}
 				
 				return JsonUtils.serialize(resultValue).toString();
@@ -218,9 +217,12 @@ public class APIController {
 				boolean result = handler.insertDhcpMacFilter(macAddr, filtername, userid);
 				
 				resultValue.setResult(result);
-				resultValue.setMessage("Insert" + ((result) ? "OK" : "Failed"));
+				if (result)
+					resultValue.setMessage((new StringBuilder()).append("INSERT OK. (").append(filtername).append(", ").append(macAddr).append(")").toString());
+				else
+					resultValue.setMessage((new StringBuilder()).append("INSERT failed. (").append(filtername).append(", ").append(macAddr).append(")").toString());
 				
-				return JsonUtils.serialize(result).toString();
+				return JsonUtils.serialize(resultValue).toString();
 			}
 			else
 			{
@@ -243,10 +245,7 @@ public class APIController {
 	
 	//region [DELETE] /api/macfilter (Delete)
 	@RequestMapping(value="/api/macfilter", method=RequestMethod.DELETE)
-	public String deleteMacFilter(
-			@RequestParam(value="macaddr") String macAddr,
-			@RequestParam(value="filtername") String filtername,
-			@RequestParam(value="userid") String userid) 
+	public String deleteMacFilter(@RequestParam(value="macaddr") String macAddr) 
 	{
 		ProcessResult resultValue = new ProcessResult();
 		
@@ -268,12 +267,15 @@ public class APIController {
 		{
 			if ( handler.Connect(dhcp.getHost(), dhcp.getWapiUserid(), dhcp.getWapiPassword(), dhcp.getSnmpCommunity()) ) {
 				
-				boolean result = handler.deleteDhcpMacFilter(macAddr, filtername, userid);
+				boolean result = handler.deleteDhcpMacFilter(macAddr, null, null);
 				
 				resultValue.setResult(result);
-				resultValue.setMessage("Insert" + ((result) ? "OK" : "Failed"));
+				if (result)
+					resultValue.setMessage((new StringBuilder()).append("DELETE OK. (").append(macAddr).append(")").toString());
+				else
+					resultValue.setMessage((new StringBuilder()).append("DELETE Failed. (").append(macAddr).append(")").toString());
 				
-				return JsonUtils.serialize(result).toString();
+				return JsonUtils.serialize(resultValue).toString();
 			}
 			else
 			{
