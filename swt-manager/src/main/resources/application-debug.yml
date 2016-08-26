@@ -9,8 +9,8 @@ ipm:
     user: admin
     password: 7+AzHIrmzGDARTT1VaQa3Q==
   cluster:
-    mode: slave       # master, slave
-    slave-index: 100     # 0 ~ 999
+    mode: master       # master, slave
+    slave-index: 2     # 0 ~ 999
   redis:
     host: shinwootnskr.iptime.org
     port: 6379
