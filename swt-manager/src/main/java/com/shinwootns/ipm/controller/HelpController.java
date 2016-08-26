@@ -32,6 +32,7 @@ public class HelpController {
 		contents.add(new HelpContent("", "", "", "", ""));
 		contents.add(new HelpContent("API", "/api/exec_cmd", "R", "command", "Execute Command"));
 		contents.add(new HelpContent("API", "/api/check_auth", "R", "userid, password, [macaddr]", "Check User Authentification"));
+		contents.add(new HelpContent("API", "/api/macfilter", "CDR", "site_id, macaddr, [C] filtername, [C] userid", "MacFilter (Insert / Get / Delete)"));
 		contents.add(new HelpContent("", "", "", "", ""));
 		contents.add(new HelpContent("DASHBOARD", "/api/status/dashboard/network_ip", "R", "", "Network IP Status"));
 		contents.add(new HelpContent("DASHBOARD", "/api/status/dashboard/network_ip/{SiteID}", "R", "", "Network IP Status (Site)"));

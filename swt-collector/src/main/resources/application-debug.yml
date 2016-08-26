@@ -12,8 +12,8 @@ insight:
     user: admin
     password: 7+AzHIrmzGDARTT1VaQa3Q==
   cluster:
-    mode: slave      # master, slave
-    index: 100       # 0 ~ 999
+    mode: master      # master, slave
+    index: 2       # 0 ~ 999
   redis:
     host: shinwootnskr.iptime.org
     port: 6379
@@ -27,12 +27,12 @@ insight:
     virtual-host: /
   
   # debug mode
-  debug_enable: true
+  debug_enable: false
   debug:
-    enable_recv_syslog: true
-    test_collect_nmap: true
-    test_collect_network_device: true
-    force_start_cluster_master: true
+    enable_recv_syslog: false
+    test_collect_nmap: false
+    test_collect_network_device: false
+    force_start_cluster_master: false
 
 #====================================
 # server

@@ -25,6 +25,7 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.entity.ContentType;
@@ -214,6 +215,86 @@ public class HttpClient {
 	}
 	//endregion
 
+	//region Http Put
+	public String Put(String subURL, ContentType contentType, Map<String,String> params) {
+		if (_httpClient == null)
+			return null;
+
+		String value = null;
+
+		CloseableHttpResponse response = null;
+		
+		try {
+			
+			// Full URL
+			String url = makeFullURL(subURL);
+
+			// Create HttpPost
+			HttpPut putRequest = new HttpPut(url);
+			putRequest.setHeader("User-Agent", _agent);
+			
+			if (contentType != null)
+				putRequest.setHeader("Context-Type", contentType.toString());
+			
+			if (params != null) {
+				List<NameValuePair> paramList = convertParam(params);
+				putRequest.setEntity(new UrlEncodedFormEntity(paramList, _encoding));
+			}
+			
+			// String Entity
+			// StringEntity inputEntity = new StringEntity(inputValue);
+			// inputEntity.setContentType(contentType);
+			// postRequest.setEntity(inputEntity);
+
+			// Execute
+			response = _httpClient.execute(putRequest);
+
+			if (response != null) {
+
+				// Status Code
+				int nStatusCode = response.getStatusLine().getStatusCode();
+				// System.out.println(response.getStatusLine());
+
+				// SC_OK=200, SC_ACCEPTED=202, SC_CREATED=201
+				if (nStatusCode == HttpStatus.SC_CREATED 
+					|| nStatusCode == HttpStatus.SC_ACCEPTED
+					|| nStatusCode == HttpStatus.SC_OK ) 
+				{
+
+					// HttpEntity
+					HttpEntity entity = response.getEntity();
+
+					if (entity != null) {
+
+						// Response Body
+						value = EntityUtils.toString(entity, _encoding);
+						
+						// Consume
+						EntityUtils.consume(entity);
+					}
+				}
+				else
+				{
+					System.out.println(response.getStatusLine());
+				}
+			}
+
+		} catch (Exception ex) {
+			_logger.error(ex.getMessage(), ex);
+		} finally {
+			
+			try {
+				if (response != null)
+					response.close();
+			} catch (IOException e) {}
+			
+			response = null;
+		}
+
+		return value;
+	}
+	//endregion
+	
 	//region Http Post
 	public String Post(String subURL, ContentType contentType, Map<String,String> params) {
 		if (_httpClient == null)
@@ -255,8 +336,10 @@ public class HttpClient {
 				// System.out.println(response.getStatusLine());
 
 				// SC_OK=200, SC_ACCEPTED=202, SC_CREATED=201
-				if (nStatusCode == HttpStatus.SC_CREATED) {
-
+				if (nStatusCode == HttpStatus.SC_CREATED 
+					|| nStatusCode == HttpStatus.SC_ACCEPTED
+					|| nStatusCode == HttpStatus.SC_OK )
+				{
 					// HttpEntity
 					HttpEntity entity = response.getEntity();
 

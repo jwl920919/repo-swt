@@ -97,10 +97,10 @@ public class NmapScanner implements Runnable {
 			newip.setIpType(this.ip.getIpType() );
 			
 			// MAC
-			newip.setNmapMacaddr( match.group(1) );
+			newip.setNmapMacaddr( match.group(1).trim() );
 			
 			// Vendor
-			String vendor = match.group(2);
+			String vendor = match.group(2).trim();
 			if (vendor != null) {
 				newip.setNmapVendor( vendor.replace("(", "").replace(")", "").trim() );
 			}
@@ -121,7 +121,7 @@ public class NmapScanner implements Runnable {
 			//for(int t=0; t<=match2.groupCount(); t++)
 			//	System.out.println(String.format("[%d] %s", t, match2.group(t)));
 				
-			newip.setNmapOs( match2.group(1) );
+			newip.setNmapOs( match2.group(1).trim() );
 				
 			return true; 
 		}
@@ -156,7 +156,7 @@ public class NmapScanner implements Runnable {
 					sb.append(listOS[t1].replaceAll("\\(\\d+%\\)", "").trim());
 				}
 				
-				newip.setNmapOs(sb.toString());
+				newip.setNmapOs(sb.toString().trim());
 				
 				return true;
 			}

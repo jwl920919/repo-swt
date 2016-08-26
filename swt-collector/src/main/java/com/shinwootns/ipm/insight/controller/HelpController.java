@@ -34,8 +34,8 @@ public class HelpController {
 				.append("<BR>").append("<B>LOAD_CONFIGS</B> : Load config setups.")
 				.toString()
 		));
-		contents.add(new HelpContent("AUTH", "/api/check_auth", "R", "setupid, userid, password, [macaddr]", "User Authentification (Site)"));
-		contents.add(new HelpContent("AUTH", "/api/macfilter", "CDR", "macaddr, [C] filtername, [C] userid", "MacFilter (Insert / Get / Delete)"));
+		contents.add(new HelpContent("API", "/api/check_auth", "R", "setupid, userid, password, [macaddr]", "User Authentification (Site)"));
+		contents.add(new HelpContent("API", "/api/macfilter", "CDR", "macaddr, [C] filtername, [C] userid", "MacFilter (Insert / Get / Delete)"));
 		
 		ModelAndView mv = new ModelAndView("contents"); 
 		mv.setViewName("help");

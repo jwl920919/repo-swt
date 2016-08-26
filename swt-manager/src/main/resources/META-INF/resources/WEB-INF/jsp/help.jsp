@@ -38,11 +38,11 @@
 	        	<c:if test="${fn:contains(item.exec, 'C')}">O</c:if>
 	        </td>
 	        <td align='center'>
-	        	<c:if test="${fn:contains(item.exec, 'U')}">O</c:if>
-			</td>
-	        <td align='center'>
 	        	<c:if test="${fn:contains(item.exec, 'D')}">O</c:if>
 	        </td>
+	        <td align='center'>
+	        	<c:if test="${fn:contains(item.exec, 'U')}">O</c:if>
+			</td>
 	        <td>${item.params}</td>
 	        <td>${item.desc}</td>
 	     </tr>
