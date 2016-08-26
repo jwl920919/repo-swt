@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -251,8 +250,72 @@ public class ManagementActionController {
 				}
 				jsonArray.add(jObj);
 			}
+			List<Map<String,Object>> cds = new ArrayList<Map<String,Object>>();
+			Node node4search = node;
+			StringBuffer tStr = new StringBuffer();
+			List<Map<String,Object>> existList = ipNetworkTree.getExistList();
+			String parentNodeStr = null, currentNodeStr = null;
+			tStr.insert(0, ']');
+			while((node4search=node4search.getParent())!=null){
+				tStr.insert(0, ',');
+				tStr.insert(0, '"');
+				boolean isExist = false;
+				for (Map<String, Object> existRecord : existList) {
+					if (node4search.getData().getIpNetwork().toString().toUpperCase().equals(existRecord.get("key").toString().toUpperCase())) {
+						if (!existRecord.get("group_name").toString().trim().equals("")){
+							tStr.insert(0,existRecord.get("group_name"));
+						} else {
+							tStr.insert(0, node4search.getData().getIpNetwork().getPrefixLength());
+							tStr.insert(0, '/');
+							tStr.insert(0, node4search.getData().getIpNetwork().getStartIP().toString());
+						}
+						isExist = true;
+						break;
+					}
+				}
+				if (!isExist) {
+					tStr.insert(0, node4search.getData().getIpNetwork().getPrefixLength());
+					tStr.insert(0, '/');
+					tStr.insert(0, node4search.getData().getIpNetwork().getStartIP().toString());
+				}
+				tStr.insert(0, '"');
+			}
+			tStr.insert(0, '[');
+			parentNodeStr = tStr.toString();
+			tStr = new StringBuffer();
+			{
+				boolean isExist = false;
+				for (Map<String, Object> existRecord : existList) {
+					if (node.getData().getIpNetwork().toString().toUpperCase().equals(existRecord.get("key").toString().toUpperCase())) {
+						if (!existRecord.get("group_name").toString().trim().equals("")){
+							tStr.append(existRecord.get("group_name"));
+						} else {
+							tStr.append(node.getData().getIpNetwork().getStartIP().toString());
+							tStr.append('/');
+							tStr.append(node.getData().getIpNetwork().getPrefixLength());
+						}
+						isExist = true;
+						break;
+					}
+				}
+				if (!isExist) {
+					tStr.append(node.getData().getIpNetwork().getStartIP().toString());
+					tStr.append('/');
+					tStr.append(node.getData().getIpNetwork().getPrefixLength());
+				}
+			}
+			currentNodeStr = tStr.toString();
+			Map<String,Object> cd = new HashMap<String,Object>();
+			cd.put("key", "parent_node");
+			cd.put("value",parentNodeStr);
+			cds.add(cd);
+			cd = new HashMap<String,Object>();
+			cd.put("key", "current_node");
+			cd.put("value","\""+currentNodeStr+"\"");
+			cds.add(cd);
+			
 			String callback = Common.Helper.DatatableHelper.makeCallback(request, jsonArray,
-					managementService.select_VIEW_CLIENT_INFO_TOTAL_COUNT(parameters));
+					managementService.select_VIEW_CLIENT_INFO_TOTAL_COUNT(parameters),cds);
 			response.setContentType("Application/json;charset=utf-8");
 			response.getWriter().println(callback);
 			response.getWriter().flush();

@@ -16,11 +16,12 @@ import Common.ip.IPNetwork;
 public class IpNetworkTree {
 	private NetworkTree ipv4NetworkTree, ipv6NetworkTree;
 	private StringBuffer ipStrBuf, ipv4StrBuf, ipv6StrBuf;
+	private List<Map<String, Object>> existList;
 
 	public IpNetworkTree(MANAGEMENT_Service_interface managementService, NETWORK_Service_interface networkService,
 			HashMap<String, Object> parameter) throws Exception {
 		List<Map<String, Object>> list = networkService.select_SEARCHED_NETWORK_INFO(parameter);
-		List<Map<String, Object>> existList = managementService.select_EXIST_CUSTOM_IP_GROUP_INFO(parameter);
+		existList = managementService.select_EXIST_CUSTOM_IP_GROUP_INFO(parameter);
 		List<NetworkData> ipv4List = new ArrayList<>();
 		List<NetworkData> ipv6List = new ArrayList<>();
 		for (int i = 0; i < list.size(); i++) {
@@ -117,6 +118,10 @@ public class IpNetworkTree {
 	/** IPv6 Network Tree를 기준으로 jstree 형식에 맞춰 json데이터를 만듬 */
 	public String getIPv6NodeJsonStr4jstree() {
 		return ipv6StrBuf.toString();
+	}
+
+	public List<Map<String, Object>> getExistList() {
+		return existList;
 	}
 	
 	

@@ -5,27 +5,27 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>노드 그룹 설정</title>
 <!-- Bootstrap 3.3.6 -->
-<link rel="stylesheet" href="/resources/bootstrap/css/bootstrap.min.css">
+<!-- <link rel="stylesheet" href="/resources/bootstrap/css/bootstrap.min.css"> -->
 <!-- Font Awesome -->
-<link rel="stylesheet"
-	href="/resources/bootstrap/css/font-awesome.min.css">
+<!-- <link rel="stylesheet" -->
+<!-- 	href="/resources/bootstrap/css/font-awesome.min.css"> -->
 <!-- Ionicons -->
-<link rel="stylesheet" href="/resources/bootstrap/css/ionicons.min.css">
+<!-- <link rel="stylesheet" href="/resources/bootstrap/css/ionicons.min.css"> -->
 <!-- iCheck for checkboxes and radio inputs -->
-<link rel="stylesheet" href="/resources/plugins/iCheck/all.css">
+<!-- <link rel="stylesheet" href="/resources/plugins/iCheck/all.css"> -->
 <!-- Theme style -->
-<link rel="stylesheet" href="/resources/dist/css/AdminLTE.min.css">
+<!-- <link rel="stylesheet" href="/resources/dist/css/AdminLTE.min.css"> -->
 <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
-<link rel="stylesheet"
-	href="/resources/dist/css/skins/_all-skins.min.css">
+<!-- <link rel="stylesheet" -->
+<!-- 	href="/resources/dist/css/skins/_all-skins.min.css"> -->
 <!-- page essential.css -->
-<link rel="stylesheet" href="/resources/css/essential.css">
+<!-- <link rel="stylesheet" href="/resources/css/essential.css"> -->
 <!-- default style -->
-<link rel="stylesheet" href="/resources/css/default.css">
+<!-- <link rel="stylesheet" href="/resources/css/default.css"> -->
 <!-- jstree -->
-<link rel="stylesheet"
-	href="/resources/plugins/jstree/themes/default/style.min.css">
+<!-- <link rel="stylesheet" -->
+<!-- 	href="/resources/plugins/jstree/themes/default/style.min.css"> -->
 <%
 	String siteMaster = (String) session.getAttribute("site_master");
 	String siteID = (String) session.getAttribute("site_id");
@@ -235,9 +235,9 @@
 
 </body>
 <!-- jQuery 2.2.0 -->
-<script src="/resources/plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- <script src="/resources/plugins/jQuery/jQuery-2.2.0.min.js"></script> -->
 <!-- Bootstrap 3.3.6 -->
-<script src="/resources/bootstrap/js/bootstrap.min.js"></script>
+<!-- <script src="/resources/bootstrap/js/bootstrap.min.js"></script> -->
 <!-- InputMask -->
 <!-- <script src="/resources/plugins/input-mask/jquery.inputmask.js"></script> -->
 <!-- <script -->
@@ -247,19 +247,19 @@
 <!-- <script -->
 <!-- 	src="/resources/plugins/input-mask/jquery.inputmask.regex.extensions.js"></script> -->
 <!-- AdminLTE App -->
-<script src="/resources/dist/js/app.min.js"></script>
+<!-- <script src="/resources/dist/js/app.min.js"></script> -->
 <!-- iCheck 1.0.1 -->
-<script src="/resources/plugins/iCheck/icheck.min.js"></script>
+<!-- <script src="/resources/plugins/iCheck/icheck.min.js"></script> -->
 
-<script src="/resources/js/base/jstz-1.0.4.min.js"></script>
-<script src="/resources/js/common/Common.js"></script>
-<script src="/resources/js/common/multyLanguages.js"></script>
+<!-- <script src="/resources/js/base/jstz-1.0.4.min.js"></script> -->
+<!-- <script src="/resources/js/common/Common.js"></script> -->
+<!-- <script src="/resources/js/common/multyLanguages.js"></script> -->
 
-<script src="/resources/plugins/jstree/jstree.min.js"></script>
-<script src="/resources/plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="/resources/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<!-- <script src="/resources/plugins/jstree/jstree.min.js"></script> -->
+<!-- <script src="/resources/plugins/datatables/jquery.dataTables.min.js"></script> -->
+<!-- <script src="/resources/plugins/datatables/dataTables.bootstrap.min.js"></script> -->
 <script src="/resources/js/common/Datatable-Essential.js"></script>
-<script src="/resources/js/common/modalPopup.js"></script>
+<!-- <script src="/resources/js/common/modalPopup.js"></script> -->
 <script src="/resources/js/management/customGroupSetting.js"></script>
 <script type="text/javascript">
     
