@@ -266,10 +266,10 @@
 	<select id="select_IP_MANAGEMENT_SEGMENT" resultType="java.util.HashMap">
 		SELECT * 
 		  FROM "view_network_ip_status", (SELECT count(*) allcount
-                                  FROM "view_network_ip_status") as allcount
-		                         WHERE site_id = ${siteid}
-		                           AND (network like CONCAT('%', #{searchValue}, '%') OR comment like CONCAT('%', #{searchValue}, '%')
-		                            OR start_ip like CONCAT('%', #{searchValue}, '%') OR end_ip like CONCAT('%', #{searchValue}, '%'))
+                                            FROM "view_network_ip_status") as allcount
+		                                   WHERE site_id = ${siteid}
+		                                     AND (network like CONCAT('%', #{searchValue}, '%') OR comment like CONCAT('%', #{searchValue}, '%')
+		                                      OR start_ip like CONCAT('%', #{searchValue}, '%') OR end_ip like CONCAT('%', #{searchValue}, '%'))
 		 ORDER BY
 		<choose>
 			<when test="orderColumn == 'network' or orderColumn == 'start_ip' or orderColumn == 'end_ip'"> inet(${orderColumn}) ${orderType} </when>
@@ -356,7 +356,7 @@
 		           COALESCE(to_char("lease_start_time",'YYYY-MM-DD HH24:MI:SS'),'') AS "lease_start_time",
 		           COALESCE(to_char("lease_end_time",'YYYY-MM-DD HH24:MI:SS'),'') AS "lease_end_time"
 		      FROM "dhcp_ip_status" AS "t_ip"
-		    UNION ALL
+		     UNION ALL
 		    SELECT "site_id", "network", "ipaddr", "macaddr", FALSE AS "is_conflict", '' AS  "conflict_types", 'FIXED' AS "status", 'FIXED' AS "lease_state", 
 		           '' AS "obj_types", '' AS "usage", '' AS "host_name", '' AS "host_os", '' AS "fingerprint", 
 		           FALSE AS "is_never_ends", FALSE AS "is_never_start", '' AS "lease_start_time", '' AS "lease_end_time"
@@ -564,18 +564,18 @@
 	<update id="update_USER_APPLY_IP_INFO" parameterType="hashmap">
 		SET TIMEZONE TO '${time_zone}';
 		UPDATE "user_apply_ip_info" SET
-			     "settlement_status" = ${settlement_status},
+			   "settlement_status" = ${settlement_status},
 			   "settlement_chief_id" = #{settlement_chief_id},
-			 "settlement_chief_name" = #{settlement_chief_name},
-			"settlement_description" = #{settlement_description},
-			      "issuance_ip_type" = #{issuance_ip_type},
-			       "issuance_ipaddr" = #{issuance_ipaddr},
-			       "issuance_ip_num" = ${issuance_ip_num},
+			   "settlement_chief_name" = #{settlement_chief_name},
+			   "settlement_description" = #{settlement_description},
+			   "issuance_ip_type" = #{issuance_ip_type},
+			   "issuance_ipaddr" = #{issuance_ipaddr},
+			   "issuance_ip_num" = ${issuance_ip_num},
 			   "issuance_start_time" = timestamp '${issuance_start_time}',
-			     "issuance_end_time" = timestamp '${issuance_end_time}',
-			       "settlement_time" = now(),
-			           "modify_date" = now()
-		WHERE seq = ${seq};
+			   "issuance_end_time" = timestamp '${issuance_end_time}',
+			   "settlement_time" = now(),
+			   "modify_date" = now()
+		 WHERE seq = ${seq};
 	</update>
 	
 	<!-- Query Type : Select(Select, Insert, Update, Delete) -->
