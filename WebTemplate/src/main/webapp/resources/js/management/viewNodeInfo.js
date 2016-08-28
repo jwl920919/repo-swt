@@ -72,11 +72,17 @@ function createIPv4Datatable() {
                                     }
                                 } ],
                         "drawCallback" : function(settings) {
-//                            console.log($('#parentNodes'));
-//                            console.log($('#currentNode'));
-//                            setTimeout(function() {
-//                                $("#content-tree-line").height($("#white-paper").height()+12);    
-//                            },100);
+                            var parentNodeStr = '';
+                            for(i=0 ;i< settings.json.parent_node.length; i++){
+                                parentNodeStr += settings.json.parent_node[i]+' > ';
+                            };
+                            if(parentNodeStr.length>0){
+                                $("#depth-title").css("margin-left","4px");
+                            } else {
+                                $("#depth-title").css("margin-left","0px");
+                            }
+                            $('#parentNodes').text(parentNodeStr);
+                            $('#currentNode').text(settings.json.current_node);
                             
                         }
                     });
@@ -168,6 +174,7 @@ function modifyBtnClickEvent(obj) {
             var jsonObj = eval("(" + data + ')');
             if (jsonObj.result == true) {
                 var rv = jsonObj.resultValue;
+                console.log(rv);
                 $("#site-txt").val(rv.site_name);
                 $("#vendor-txt").val(rv.vendor);
                 $("#model-txt").val(rv.model);
@@ -207,12 +214,14 @@ $(document).ready(function() {
     dx = window_width - dx;
     cont2.style.width = dx + "px";
     splitter.addEventListener("mousedown", spMouseDown);
-    $("#content-tree").css("height",window.innerHeight-148+"px");
-    $("#content-tree-line").css("height",window.innerHeight-148+"px");
-    $("#content-tree-wrapper").css("height",window.innerHeight-148+"px");
-    $("#content-tree").css("max-height",window.innerHeight-148+"px");
-    $("#content-tree-line").css("max-height",window.innerHeight-148+"px");
-    $("#content-tree-wrapper").css("max-height",window.innerHeight-148+"px");
+//    $("#content-tree").css("height",window.innerHeight-148+"px");
+//    $("#content-tree-line").css("height",window.innerHeight-148+"px");
+//    $("#content-tree-wrapper").css("height",window.innerHeight-148+"px");
+//    $("#content-tree").css("max-height",window.innerHeight-148+"px");
+//    $("#content-tree-line").css("max-height",window.innerHeight-148+"px");
+//    $("#content-tree-wrapper").css("max-height",window.innerHeight-148+"px");
+    $(".tree-warper").css("max-height",window.innerHeight-152+"px");
+    $(".tree-warper").css("max-height",window.innerHeight-152+"px");
 });
 resize = function() {
     window_width = $("#content_frame").width();
@@ -228,12 +237,14 @@ resize = function() {
 //    setTimeout(function() {
 //        $("#content-tree-line").height($("#white-paper").height()+12);    
 //    },100);  
-    $("#content-tree").css("height",window.innerHeight-148+"px");
-    $("#content-tree-line").css("height",window.innerHeight-148+"px");
-    $("#content-tree-wrapper").css("height",window.innerHeight-148+"px");
-    $("#content-tree").css("max-height",window.innerHeight-148+"px");
-    $("#content-tree-line").css("max-height",window.innerHeight-148+"px");
-    $("#content-tree-wrapper").css("max-height",window.innerHeight-148+"px");
+//    $("#content-tree").css("height",window.innerHeight-148+"px");
+//    $("#content-tree-line").css("height",window.innerHeight-148+"px");
+//    $("#content-tree-wrapper").css("height",window.innerHeight-148+"px");
+//    $("#content-tree").css("max-height",window.innerHeight-148+"px");
+//    $("#content-tree-line").css("max-height",window.innerHeight-148+"px");
+//    $("#content-tree-wrapper").css("max-height",window.innerHeight-148+"px");
+    $(".tree-warper").css("max-height",window.innerHeight-152+"px");
+    $(".tree-warper").css("max-height",window.innerHeight-152+"px");
 } 
 window.onresize = resize;
 

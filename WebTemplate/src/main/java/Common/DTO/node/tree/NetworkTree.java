@@ -119,9 +119,12 @@ public class NetworkTree extends Tree {
 			boolean isExist = false;
 			for (Map<String, Object> existRecord : existList) {
 				if (ipStr.toUpperCase().equals(existRecord.get("key").toString().toUpperCase())) {
-					if (!existRecord.get("group_name").toString().trim().equals(""))
+					if (!existRecord.get("group_name").toString().trim().equals("")){
 						sb.append(existRecord.get("group_name"));
-					else
+						sb.append('(');
+						sb.append(ipStr);
+						sb.append(')');
+					}else
 						sb.append(ipStr);
 					isExist = true;
 					break;
