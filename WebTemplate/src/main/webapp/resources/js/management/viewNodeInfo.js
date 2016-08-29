@@ -139,6 +139,7 @@ $(function() {
             }
         }
     });
+   
 });
 
 function getDeviceNames() {
@@ -171,7 +172,7 @@ function modifyBtnClickEvent(obj) {
         data : JSON.stringify(jObj),
         dataType : "text",
         success : function(data) {
-            var jsonObj = eval("(" + data + ')');
+            var jsonObj = eval('(' + data + ')');
             if (jsonObj.result == true) {
                 var rv = jsonObj.resultValue;
                 console.log(rv);
