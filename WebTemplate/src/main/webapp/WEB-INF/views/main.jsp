@@ -440,8 +440,7 @@ function sessionMaintainAjaxCall() {
 							class="menu-icon fa fa-envelope-o bg-light-blue"></i>
 
 							<div class="menu-info">
-								<h4 class="control-sidebar-subheading">Nora Joined Mailing
-									List</h4>
+								<h4 class="control-sidebar-subheading">Nora Joined Mailing List</h4>
 
 								<p>nora@example.com</p>
 							</div>
