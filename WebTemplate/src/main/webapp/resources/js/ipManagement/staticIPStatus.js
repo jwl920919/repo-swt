@@ -541,6 +541,9 @@ function fnIPMapSetting(){
     }
 }
 
+/**
+ * Map Draw function
+**/
 function fnIPMapDraw(startipNumber, DHCP_RangeArr, BROADCAST_Arr, NETWORK_Arr, UNUSED_Arr, FIXED_Arr, RESERVATION_Arr, CONFLICT_Arr, LEASE_Arr, USED_Arr, ABANDONED_Arr, ETC_Arr){
 	try
 	{
@@ -1063,6 +1066,9 @@ function MapDataClass (ipaddr, iptype, macaddr, duid, ip_status, host_name, host
     this.user_description = user_description;
 }
 
+/**
+ * UNUSED
+**/
 function excelExport(){
 	console.log("excelExport");
 	console.log(table.dataTableSettings[0]);	

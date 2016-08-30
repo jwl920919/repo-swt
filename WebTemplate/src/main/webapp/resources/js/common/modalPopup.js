@@ -6,6 +6,9 @@ function getWindowPoint() {
 	scrollTop = $(document).scrollTop();
 };
 
+/**
+ * 모달 팝업 Show
+**/
 function modalShow(id, closeCallback) {
 	try {
 		$("#" + id).css("display","block");
@@ -39,6 +42,9 @@ function modalShow(id, closeCallback) {
     	console.log(e.message);
     }
 }
+/**
+ * 모달 팝업 Close
+**/
 function modalClose(id, closeCallback) {
 	$("#" + id).css("display","none");
 	$("#modalbackDiv").css("visibility","hidden");

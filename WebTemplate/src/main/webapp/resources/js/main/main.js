@@ -75,6 +75,9 @@ changeframe = function(url, acticeid, masterKey, subKey) {
 	}
 }
 
+/**
+ * Content Load function
+**/
 contentLoad = function(url){
 //	alert("url : " + url);
 //	alert("$(#content_frame) : " + $("#content_frame"));

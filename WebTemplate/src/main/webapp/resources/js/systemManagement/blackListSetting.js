@@ -190,6 +190,7 @@ fnDelete = function(obj){
 
 /**
  * 추가,수정 모달 팝업 Show 이벤트 핸들러
+ * popupClass에 따라 추가, 수정으로 나뉨
 **/
 fnShowEvent = function(){
 	var param = Object();
