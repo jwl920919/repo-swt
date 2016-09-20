@@ -171,7 +171,7 @@ docker build --tag ipm-base:1.0 .
 ```
 
 
-# SinwooTNS - Github Repository
+# Github Repository
 
 ### swt-common 연동 방법(Maven)
 
