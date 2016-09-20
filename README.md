@@ -10,7 +10,7 @@ docker run \
  -p 5672:5672 \
  -p 15672:15672 \
  -e RABBITMQ_DEFAULT_USER=admin \
- -e RABBITMQ_DEFAULT_PASS=shinwoo123! \
+ -e RABBITMQ_DEFAULT_PASS=$password \
  --restart always \
  rabbitmq:3-management
 ```
@@ -36,7 +36,7 @@ port 6379
 tcp-keepalive 300
 
 # Password
-requirepass shinwoo123!
+requirepass $password
 ```
 
  * Redis 설치
@@ -61,7 +61,7 @@ docker run \
  --name=myPostgres \
  -d \
  -p 5432:5432 \
- -e POSTGRES_PASSWORD=shinwoo123! \
+ -e POSTGRES_PASSWORD=$password \
  -v /db_data/pgdata:/pgdata \
  --restart always \
  postgres
